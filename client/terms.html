@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1A0B2E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231A0B2E'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='900' fill='%23EC4899' text-anchor='middle'>C</text></svg>">
+<title>الشروط والأحكام — CHIZEN</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg-deep:#1A0B2E;--bg-card:#372254;--bg-elev:#422663;--pink-hot:#EC4899;--pink-light:#F472B6;--orange-sunset:#FB923C;--purple-vibrant:#A855F7;--mint:#5EEAD4;--cream:#FEF3E2;--muted:#B8A5D4;--muted-2:#6E5A8A;--warning:#F59E0B;--nav-border:#3A2560;}
+  html[data-theme="light"]{--bg-deep:#FAF7F2;--bg-card:#FFFFFF;--bg-elev:#F0E8DC;--nav-border:#E5D9C8;--cream:#2A1F3D;--muted:#7A6B95;--muted-2:#A895BF;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{height:100%;}
+  body{height:100%;overflow:hidden;font-family:'Cairo',sans-serif;background:var(--bg-deep);color:var(--cream);}
+  #app{width:100%;height:100vh;height:100dvh;max-width:600px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg-deep);overflow:hidden;position:relative;}
+  .header{padding:14px 20px;display:flex;align-items:center;gap:12px;background:var(--bg-deep);border-bottom:1px solid var(--nav-border);flex-shrink:0;}
+  .back-btn{width:42px;height:42px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .back-btn svg{width:20px;height:20px;stroke:#FFD1F0;stroke-width:2.5;fill:none;}
+  .page-title{font-size:18px;font-weight:900;color:var(--cream);}
+  .content{flex:1;overflow-y:auto;padding:20px;padding-bottom:60px;-webkit-overflow-scrolling:touch;}
+  .content::-webkit-scrollbar{display:none;}
+
+  .hero{padding:24px;background:linear-gradient(135deg,rgba(251,146,60,0.15),rgba(236,72,153,0.1));border:1px solid rgba(251,146,60,0.3);border-radius:20px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;}
+  .hero-icon{font-size:44px;margin-bottom:10px;position:relative;z-index:2;}
+  .hero-title{font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;position:relative;z-index:2;}
+  .hero-date{font-size:11px;color:var(--muted);position:relative;z-index:2;}
+
+  .highlight{background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(251,146,60,0.1));border:1px solid rgba(245,158,11,0.3);border-radius:14px;padding:16px;margin-bottom:20px;}
+  .highlight-title{font-size:13px;font-weight:900;color:var(--warning);display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .highlight p{font-size:13px;color:var(--cream);line-height:1.8;margin:0;}
+
+  .section{margin-bottom:22px;}
+  .section-title{font-size:15px;font-weight:900;color:var(--cream);display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--nav-border);}
+  .section-num{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;background:linear-gradient(135deg,var(--pink-hot),var(--purple-vibrant));border-radius:7px;color:white;font-size:12px;font-weight:900;padding:0 6px;flex-shrink:0;}
+  .section p{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:10px;}
+  .section ul{padding-right:20px;margin-bottom:10px;list-style:none;}
+  .section li{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:8px;position:relative;padding-right:18px;}
+  .section li::before{content:'✦';position:absolute;right:0;color:var(--pink-light);font-size:11px;top:3px;}
+  .section strong{color:var(--cream);font-weight:900;}
+
+  .footer{text-align:center;padding:30px 0;color:var(--muted-2);font-size:11px;line-height:1.7;}
+  .footer-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot),var(--purple-vibrant));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:6px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="header">
+    <button class="back-btn" onclick="goBack()">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <div class="page-title">الشروط والأحكام</div>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <div class="hero-icon">📋</div>
+      <div class="hero-title">الشروط والأحكام</div>
+      <div class="hero-date">آخر تحديث: يناير 2025</div>
+    </div>
+
+    <div class="highlight">
+      <div class="highlight-title">⚠️ مهم</div>
+      <p>باستخدامك تطبيق CHIZEN، فأنت توافق على الشروط أدناه. إذا لم توافق، نرجو عدم استخدام التطبيق.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">1</span> قبول الشروط</div>
+      <p>عند إنشاء حساب أو استخدام التطبيق، فإنك تقر بأنك قرأت هذه الشروط وفهمتها ووافقت عليها. إذا كنت دون 18 عاماً، يجب أن يكون استخدامك بإشراف والد أو ولي أمر.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">2</span> حسابك</div>
+      <p>أنت مسؤول عن:</p>
+      <ul>
+        <li>صحة المعلومات التي تسجّلها (الاسم، البريد، الجوال)</li>
+        <li>الحفاظ على سرية كلمة المرور</li>
+        <li>كل نشاط يحدث من خلال حسابك</li>
+      </ul>
+      <p>إذا لاحظت أي استخدام غير مصرح به لحسابك، تواصل معنا فوراً.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">3</span> الطلبات</div>
+      <p>عند تأكيد أي طلب، يمر بالمراحل التالية:</p>
+      <ul>
+        <li><strong>قيد المعالجة</strong> — نتحقق من الحوالة</li>
+        <li><strong>في الطريق</strong> — الطلب في مرحلة التوصيل</li>
+        <li><strong>مكتمل</strong> — استلمت الطلب</li>
+      </ul>
+      <p>نحتفظ بالحق في إلغاء أي طلب لأسباب مثل: عدم توفر المنتج، خطأ في السعر، أو شك في صحة الحوالة. عند الإلغاء، يُعاد المبلغ كاملاً.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">4</span> الأسعار والدفع</div>
+      <p>جميع الأسعار بالريال السعودي، وتشمل الضريبة إن وُجدت. طريقة الدفع الأساسية:</p>
+      <ul>
+        <li>حوالة بنكية لأحد البنوك المعتمدة في التطبيق</li>
+        <li>الدفع النقدي عند التسليم (في حال توفره)</li>
+      </ul>
+      <p>لا نقبل بطاقات الائتمان حالياً. لا نحتفظ ببيانات بنكية.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">5</span> الشحن والتسليم</div>
+      <p>نوصّل إلى نقاط تسليم محددة في كل مدينة. المدة:</p>
+      <ul>
+        <li>داخل المدينة: 1-2 أيام عمل</li>
+        <li>مدن أخرى: 2-5 أيام عمل</li>
+      </ul>
+      <p>التأخير لأسباب خارجة عن إرادتنا (طقس، إغلاق طرق) لا يُلزمنا بتعويض.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">6</span> الإرجاع والاستبدال</div>
+      <p>يمكنك إرجاع المنتج خلال <strong>7 أيام</strong> من الاستلام إذا:</p>
+      <ul>
+        <li>المنتج بحالته الأصلية</li>
+        <li>العلبة والتغليف سليمين</li>
+        <li>لم يُستخدم المنتج</li>
+      </ul>
+      <p><strong>لا يُقبل الإرجاع</strong> في: المنتجات المفتوحة لأسباب صحية (عطور، مستحضرات تجميل، ملابس داخلية)، والمنتجات المُخصصة حسب الطلب.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">7</span> نقاط الولاء</div>
+      <p>تحصل على <strong>نقطة واحدة لكل 10 ر.س</strong> تنفقها. النقاط:</p>
+      <ul>
+        <li>لا تُصرف نقداً</li>
+        <li>لا تُنقل بين الحسابات</li>
+        <li>تنتهي إذا حُذف الحساب</li>
+      </ul>
+      <p>نحتفظ بالحق في تعديل نظام النقاط مع إشعار مسبق.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">8</span> السلوك المحظور</div>
+      <p>يُمنع استخدام التطبيق في:</p>
+      <ul>
+        <li>أي نشاط غير قانوني</li>
+        <li>محاولات اختراق أو تعديل التطبيق</li>
+        <li>إساءة استخدام نظام النقاط</li>
+        <li>انتحال شخصية أو تقديم معلومات كاذبة</li>
+      </ul>
+      <p>في حال المخالفة، قد نُعلّق حسابك أو نحذفه نهائياً.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">9</span> حد مسؤوليتنا</div>
+      <p>نقدّم التطبيق "كما هو". لا نتحمل مسؤولية:</p>
+      <ul>
+        <li>انقطاع الخدمة لأسباب تقنية خارجة عن إرادتنا</li>
+        <li>أي خسارة ناتجة عن سوء استخدامك للحساب</li>
+        <li>جودة المنتجات من أطراف خارجية</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">10</span> التعديلات على الشروط</div>
+      <p>قد نُحدّث هذه الشروط من وقت لآخر. التحديثات تسري فور نشرها في التطبيق. استمرارك في الاستخدام يعني موافقتك.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">11</span> القانون المطبق</div>
+      <p>تخضع هذه الشروط للقوانين المعمول بها في بلد إقامة مالك التطبيق. أي نزاع يُحلّ ودياً، وإلا فيُحال للجهات المختصة.</p>
+    </div>
+
+    <div class="footer">
+      <div class="footer-logo">CHIZEN</div>
+      <div>© 2025 CHIZEN — جميع الحقوق محفوظة</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function goBack() {
+  if (window.history.length > 1) window.history.back();
+  else window.location.href = 'chizen.html';
+}
+
+(function() {
+  try {
+    var st = localStorage.getItem('chizen_state');
+    if (st) {
+      var p = JSON.parse(st);
+      if (p.theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.lang = p.lang || 'ar';
+      document.documentElement.dir = (p.lang === 'ar' ? 'rtl' : 'ltr');
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

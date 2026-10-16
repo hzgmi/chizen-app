@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1A0B2E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231A0B2E'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='900' fill='%23EC4899' text-anchor='middle'>C</text></svg>">
+<title>عن التطبيق — CHIZEN</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg-deep:#1A0B2E;--bg-card:#372254;--bg-elev:#422663;--pink-hot:#EC4899;--pink-light:#F472B6;--orange-sunset:#FB923C;--purple-vibrant:#A855F7;--blue-sky:#38BDF8;--mint:#5EEAD4;--cream:#FEF3E2;--muted:#B8A5D4;--muted-2:#6E5A8A;--nav-border:#3A2560;}
+  html[data-theme="light"]{--bg-deep:#FAF7F2;--bg-card:#FFFFFF;--bg-elev:#F0E8DC;--nav-border:#E5D9C8;--cream:#2A1F3D;--muted:#7A6B95;--muted-2:#A895BF;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{height:100%;}
+  body{height:100%;overflow:hidden;font-family:'Cairo',sans-serif;background:var(--bg-deep);color:var(--cream);}
+  #app{width:100%;height:100vh;height:100dvh;max-width:600px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg-deep);overflow:hidden;position:relative;}
+  .header{padding:14px 20px;display:flex;align-items:center;gap:12px;background:var(--bg-deep);border-bottom:1px solid var(--nav-border);flex-shrink:0;}
+  .back-btn{width:42px;height:42px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .back-btn svg{width:20px;height:20px;stroke:#FFD1F0;stroke-width:2.5;fill:none;}
+  .page-title{font-size:18px;font-weight:900;color:var(--cream);}
+  .content{flex:1;overflow-y:auto;padding:20px;padding-bottom:60px;-webkit-overflow-scrolling:touch;}
+  .content::-webkit-scrollbar{display:none;}
+
+  .logo-hero{text-align:center;padding:30px 0 24px;}
+  .logo{font-family:'Playfair Display',serif;font-size:58px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot),var(--purple-vibrant),var(--blue-sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:6px;line-height:1;}
+  .tagline{font-size:12px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:8px;font-weight:700;}
+  .version{display:inline-block;padding:4px 12px;background:rgba(236,72,153,0.15);border:1px solid rgba(236,72,153,0.3);border-radius:20px;font-size:10px;color:var(--pink-light);font-weight:700;margin-top:12px;letter-spacing:1px;}
+
+  .card{background:var(--bg-card);border:1px solid var(--nav-border);border-radius:16px;padding:18px;margin-bottom:14px;}
+  .card-title{font-size:15px;font-weight:900;color:var(--cream);display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .card-title::before{content:'';width:3px;height:18px;background:linear-gradient(180deg,var(--orange-sunset),var(--pink-hot));border-radius:2px;flex-shrink:0;}
+  .card p{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:8px;}
+  .card p:last-child{margin-bottom:0;}
+  .card strong{color:var(--cream);font-weight:900;}
+
+  .features{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .feature{background:var(--bg-elev);border:1px solid var(--nav-border);border-radius:12px;padding:14px 10px;text-align:center;}
+  .feature-icon{font-size:26px;margin-bottom:6px;}
+  .feature-name{font-size:11px;font-weight:700;color:var(--cream);line-height:1.3;}
+
+  .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+  .stat{background:var(--bg-card);border:1px solid var(--nav-border);border-radius:12px;padding:14px 8px;text-align:center;}
+  .stat-num{font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .stat-label{font-size:10px;color:var(--muted);margin-top:4px;font-weight:600;}
+
+  .contact-row{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-elev);border:1px solid var(--nav-border);border-radius:12px;margin-bottom:10px;text-decoration:none;color:inherit;cursor:pointer;}
+  .contact-icon{width:42px;height:42px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(168,85,247,0.15));border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
+  .contact-text{flex:1;}
+  .contact-label{font-size:11px;color:var(--muted);font-weight:700;}
+  .contact-value{font-size:13px;color:var(--cream);font-weight:700;margin-top:2px;font-family:monospace;direction:ltr;text-align:right;}
+
+  .thanks{background:linear-gradient(135deg,rgba(251,146,60,0.15),rgba(236,72,153,0.1));border:1px solid rgba(236,72,153,0.3);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;}
+  .thanks-icon{font-size:36px;margin-bottom:10px;}
+  .thanks-text{font-size:14px;color:var(--cream);font-weight:700;line-height:1.8;}
+
+  .footer{text-align:center;padding:20px 0;color:var(--muted-2);font-size:11px;line-height:1.7;}
+
+  .social-row{display:flex;gap:10px;margin-top:10px;}
+  .social-btn{flex:1;padding:12px;background:var(--bg-elev);border:1px solid var(--nav-border);border-radius:12px;text-align:center;cursor:pointer;text-decoration:none;color:var(--cream);font-size:12px;font-weight:700;transition:all .2s;}
+  .social-btn:active{transform:scale(.96);border-color:var(--pink-hot);}
+  .social-icon{font-size:20px;display:block;margin-bottom:4px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="header">
+    <button class="back-btn" onclick="goBack()">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <div class="page-title">عن التطبيق</div>
+  </div>
+
+  <div class="content">
+    <div class="logo-hero">
+      <div class="logo">CHIZEN</div>
+      <div class="tagline">Everything You Need</div>
+      <div class="version">الإصدار 1.0.0</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="stat-products">0</div><div class="stat-label">منتج</div></div>
+      <div class="stat"><div class="stat-num" id="stat-users">0</div><div class="stat-label">مستخدم</div></div>
+      <div class="stat"><div class="stat-num" id="stat-cats">0</div><div class="stat-label">قسم</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">من نحن</div>
+      <p>CHIZEN تطبيق تسوق يهدف إلى جمع كل ما تحتاجه في مكان واحد — من الأدوات المنزلية إلى الإلكترونيات، ومن مستحضرات التجميل إلى المستلزمات المدرسية.</p>
+      <p>بدأنا بمجموعة صغيرة من المنتجات، ونكبر خطوة بخطوة. هدفنا ليس التوسع السريع، بل تقديم تجربة نظيفة وسريعة ومحترمة للمستخدم.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ما يميزنا</div>
+      <div class="features">
+        <div class="feature"><div class="feature-icon">🚚</div><div class="feature-name">توصيل لأقرب نقطة</div></div>
+        <div class="feature"><div class="feature-icon">💳</div><div class="feature-name">دفع عند الاستلام</div></div>
+        <div class="feature"><div class="feature-icon">💎</div><div class="feature-name">نقاط ولاء</div></div>
+        <div class="feature"><div class="feature-icon">📱</div><div class="feature-name">يعمل أوفلاين</div></div>
+        <div class="feature"><div class="feature-icon">🔔</div><div class="feature-name">إشعارات فورية</div></div>
+        <div class="feature"><div class="feature-icon">💬</div><div class="feature-name">دعم مباشر</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">رؤيتنا</div>
+      <p>نؤمن أن التسوق عبر التطبيقات يجب أن يكون <strong>بسيطاً وشفافاً</strong>. لا نستخدم تقنيات مبالغ فيها، ولا نضغط على المستخدم بعروض مضللة.</p>
+      <p>ما تراه هو ما تحصل عليه — سعر، صورة، توصيل، وانتهى.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">تواصل معنا</div>
+      <div id="contact-info"></div>
+      <div class="social-row">
+        <a class="social-btn" id="wa-btn" href="#">
+          <span class="social-icon">💬</span>
+          واتساب
+        </a>
+        <a class="social-btn" id="tel-btn" href="#">
+          <span class="social-icon">📞</span>
+          اتصال
+        </a>
+        <a class="social-btn" id="mail-btn" href="#">
+          <span class="social-icon">✉️</span>
+          البريد
+        </a>
+      </div>
+    </div>
+
+    <div class="thanks">
+      <div class="thanks-icon">💜</div>
+      <div class="thanks-text">
+        شكراً لاستخدامك CHIZEN<br>
+        <span style="font-size:12px;color:var(--muted);font-weight:600;">صُنع بعناية لأجلك</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      © 2025 CHIZEN — جميع الحقوق محفوظة
+    </div>
+  </div>
+</div>
+
+<script>
+function goBack() {
+  if (window.history.length > 1) window.history.back();
+  else window.location.href = 'chizen.html';
+}
+
+(function() {
+  var c = {phone:'+967 77 123 4567', whatsapp:'967771234567', email:'support@chizen.com'};
+  try {
+    var s = localStorage.getItem('chizen_contact');
+    if (s) c = Object.assign(c, JSON.parse(s));
+  } catch(e) {}
+
+  var el = document.getElementById('contact-info');
+  if (el) {
+    el.innerHTML =
+      '<div class="contact-row"><div class="contact-icon">📱</div><div class="contact-text"><div class="contact-label">الهاتف</div><div class="contact-value">' + c.phone + '</div></div></div>' +
+      '<div class="contact-row"><div class="contact-icon">💬</div><div class="contact-text"><div class="contact-label">واتساب</div><div class="contact-value">+' + c.whatsapp + '</div></div></div>' +
+      '<div class="contact-row"><div class="contact-icon">✉️</div><div class="contact-text"><div class="contact-label">البريد الإلكتروني</div><div class="contact-value">' + c.email + '</div></div></div>';
+  }
+
+  var wa = document.getElementById('wa-btn');
+  var tel = document.getElementById('tel-btn');
+  var mail = document.getElementById('mail-btn');
+  if (wa) wa.href = 'https://wa.me/' + c.whatsapp;
+  if (tel) tel.href = 'tel:' + c.phone.replace(/\s/g,'');
+  if (mail) mail.href = 'mailto:' + c.email;
+
+  try {
+    var products = JSON.parse(localStorage.getItem('chizen_fb_products') || '[]');
+    var users = JSON.parse(localStorage.getItem('chizen_users') || '[]');
+    var cats = JSON.parse(localStorage.getItem('chizen_categories') || '[]');
+
+    var pEl = document.getElementById('stat-products');
+    var uEl = document.getElementById('stat-users');
+    var cEl = document.getElementById('stat-cats');
+    if (pEl) pEl.textContent = products.length > 0 ? products.length : 16;
+    if (uEl) uEl.textContent = users.length > 0 ? users.length : 1;
+    if (cEl) cEl.textContent = cats.length > 0 ? cats.length : 8;
+  } catch(e) {}
+
+  try {
+    var st = localStorage.getItem('chizen_state');
+    if (st) {
+      var p = JSON.parse(st);
+      if (p.theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.lang = p.lang || 'ar';
+      document.documentElement.dir = (p.lang === 'ar' ? 'rtl' : 'ltr');
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

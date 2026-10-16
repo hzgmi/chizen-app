@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#1A0B2E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231A0B2E'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='900' fill='%23EC4899' text-anchor='middle'>C</text></svg>">
+<title>CHIZEN — تسجيل الدخول</title>
+<script>
+/* إصلاح ارتفاع الشاشة + منع العودة لصفحة الدخول */
+(function(){
+  function setAppHeight(){
+    document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+  }
+  setAppHeight();
+  window.addEventListener('resize', setAppHeight);
+  window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
+
+  /* امنع الرجوع لصفحة الدخول — استبدل التاريخ عند كل زيارة */
+  try { history.replaceState(null, '', location.pathname + '?login'); } catch(e) {}
+  window.addEventListener('popstate', function(e) {
+    /* إذا حاول المستخدم الرجوع، استبدل الحالة مباشرة */
+    try { history.pushState(null, '', location.pathname); } catch(err) {}
+  });
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg-deep:#1A0B2E;--bg-card:#372254;--bg-elev:#422663;--pink-hot:#EC4899;--pink-light:#F472B6;--orange-sunset:#FB923C;--purple-vibrant:#A855F7;--blue-sky:#38BDF8;--mint:#5EEAD4;--cream:#FEF3E2;--muted:#B8A5D4;--muted-2:#6E5A8A;--error:#EF4444;--success:#10B981;--nav-border:#3A2560;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{height:100%;}
+  body{height:100%;overflow:hidden;font-family:'Cairo',sans-serif;background:var(--bg-deep);color:var(--cream);overscroll-behavior:none;}
+  #app{width:100%;height:var(--app-height,100vh);max-width:600px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg-deep);overflow:hidden;position:relative;}
+  #screens{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;}
+  .screen{position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;}
+  .screen::-webkit-scrollbar{display:none;}
+  .screen.active{display:block;}
+  .safe-top{height:20px;}
+  .login-wrap{padding:40px 28px;display:flex;flex-direction:column;gap:14px;min-height:100%;justify-content:center;position:relative;}
+  .logo-big{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset) 0%,var(--pink-hot) 30%,var(--purple-vibrant) 60%,var(--blue-sky) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;letter-spacing:4px;margin-bottom:6px;}
+  .logo-sm{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot),var(--purple-vibrant));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;letter-spacing:3px;margin-bottom:20px;}
+  .gold-divider{width:90px;height:3px;background:linear-gradient(90deg,transparent,var(--orange-sunset),var(--pink-hot),transparent);margin:0 auto 26px;border-radius:2px;}
+  .welcome{font-size:24px;font-weight:900;text-align:center;}
+  .sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:14px;}
+  .input-group{position:relative;width:100%;}
+  .input-icon{position:absolute;top:50%;transform:translateY(-50%);right:16px;width:18px;height:18px;stroke:var(--muted);stroke-width:2;fill:none;pointer-events:none;}
+  .input{width:100%;padding:16px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:14px;color:var(--cream);font-family:'Cairo',sans-serif;font-size:14px;outline:none;}
+  .input.with-icon{padding-right:46px;}
+  .input:focus{border-color:var(--pink-hot);}
+  .input::placeholder{color:var(--muted-2);}
+  .input-eye{position:absolute;top:50%;transform:translateY(-50%);left:8px;width:36px;height:36px;background:transparent;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px;}
+  .input-eye svg{width:18px;height:18px;stroke:var(--muted);stroke-width:2;fill:none;}
+  .input-eye.active svg{stroke:var(--pink-light);}
+  .forgot-row{display:flex;justify-content:space-between;align-items:center;margin-top:-4px;gap:12px;}
+  .forgot-row a{color:var(--pink-light);font-size:13px;font-weight:700;cursor:pointer;}
+  .btn-primary{padding:16px;background:linear-gradient(135deg,var(--orange-sunset) 0%,var(--pink-hot) 50%,var(--purple-vibrant) 100%);color:white;border:none;border-radius:14px;font-family:'Cairo',sans-serif;font-weight:900;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-primary:disabled{opacity:.6;cursor:not-allowed;}
+  .divider{text-align:center;color:var(--muted);font-size:12px;position:relative;margin:4px 0;}
+  .divider span{background:var(--bg-deep);padding:0 14px;position:relative;z-index:1;}
+  .divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--nav-border);}
+  .btn-google{padding:14px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:14px;color:var(--cream);font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;}
+  .btn-google:disabled{opacity:.6;cursor:not-allowed;}
+  .bottom-text{text-align:center;font-size:13px;color:var(--muted);margin-top:10px;}
+  .bottom-text a{color:var(--pink-light);text-decoration:none;font-weight:900;cursor:pointer;}
+  .back-btn-top{position:absolute;top:16px;right:16px;width:40px;height:40px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .back-btn-top svg{width:20px;height:20px;stroke:var(--pink-light);stroke-width:2.5;fill:none;}
+  .err-msg{margin-top:10px;padding:12px 16px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;color:var(--error);font-size:12px;font-weight:700;text-align:center;display:none;line-height:1.5;}
+  .err-msg.show{display:block;}
+  .spinner-sm{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-elev);border:1px solid var(--nav-border);color:var(--cream);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:700;z-index:2000;opacity:0;transition:all .3s;max-width:90%;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast.error{background:linear-gradient(135deg,#EF4444,#DC2626);color:white;}
+  .toast.success{background:linear-gradient(135deg,#10B981,#5EEAD4);color:#0A0515;}
+  .offline-banner{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#EF4444,#DC2626);color:white;padding:10px 16px;font-size:12px;font-weight:700;text-align:center;z-index:1500;transform:translateY(-100%);transition:transform .3s;}
+  .offline-banner.show{transform:translateY(0);}
+  .pw-strength{display:none;margin-top:-6px;padding:0 4px;}
+  .pw-strength.show{display:block;}
+  .pw-bars{display:flex;gap:5px;height:4px;margin-bottom:6px;}
+  .pw-bar{flex:1;background:var(--nav-border);border-radius:2px;transition:background .3s;}
+  .pw-bar.s1{background:#EF4444;}
+  .pw-bar.s2{background:#F59E0B;}
+  .pw-bar.s3{background:#10B981;}
+  .pw-bar.s4{background:var(--mint);}
+  .pw-label{font-size:11px;color:var(--muted);text-align:right;font-weight:700;}
+  .pw-label.good{color:var(--success);}
+  .pw-label.bad{color:var(--error);}
+  .checkbox-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);cursor:pointer;user-select:none;line-height:1.5;}
+  .checkbox-row input{display:none;}
+  .checkbox-box{width:18px;height:18px;border:2px solid var(--nav-border);border-radius:5px;flex-shrink:0;position:relative;background:var(--bg-card);}
+  .checkbox-row input:checked + .checkbox-box{background:linear-gradient(135deg,var(--pink-hot),var(--purple-vibrant));border-color:transparent;}
+  .checkbox-row input:checked + .checkbox-box::after{content:'';position:absolute;top:2px;left:5px;width:4px;height:8px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg);}
+  .checkbox-row a{color:var(--pink-light);font-weight:700;}
+  .load-overlay{position:fixed;inset:0;background:rgba(26,11,46,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:3000;}
+  .load-overlay.show{display:flex;}
+  .load-box{background:var(--bg-elev);border:1px solid var(--nav-border);border-radius:20px;padding:30px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;}
+  .spinner-lg{width:44px;height:44px;border:3px solid rgba(236,72,153,.2);border-top-color:var(--pink-hot);border-radius:50%;animation:spin .9s linear infinite;}
+  .load-text{color:var(--muted);font-size:13px;font-weight:700;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="offline-banner" id="offline-banner">لا يوجد اتصال بالإنترنت</div>
+
+<div id="app">
+  <div id="screens">
+
+    <div class="screen active" id="screen-login">
+      <div class="safe-top"></div>
+      <div class="login-wrap">
+        <div class="logo-big">CHIZEN</div>
+        <div class="gold-divider"></div>
+        <div class="welcome">مرحباً بك</div>
+        <div class="sub">سجّل دخولك للمتابعة</div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="login-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+        </div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="login-password" class="input with-icon" placeholder="كلمة المرور" autocomplete="current-password">
+          <button type="button" class="input-eye" onclick="togglePassword('login-password', this)">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <div class="forgot-row">
+          <label class="checkbox-row">
+            <input type="checkbox" id="login-remember">
+            <span class="checkbox-box"></span>
+            <span>تذكرني</span>
+          </label>
+          <a onclick="AUTH.showScreen('forgot')">نسيت كلمة المرور؟</a>
+        </div>
+
+        <button class="btn-primary" id="btn-login" onclick="AUTH.login()">تسجيل الدخول</button>
+
+        <div class="divider"><span>أو</span></div>
+
+        <button class="btn-google" id="btn-google" onclick="AUTH.googleLogin()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          <span>الدخول بحساب Google</span>
+        </button>
+
+        <div class="err-msg" id="login-err"></div>
+
+        <div class="bottom-text">
+          <span>ليس لديك حساب؟</span>
+          <a onclick="AUTH.showScreen('signup')">أنشئ حساب</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-signup">
+      <div class="safe-top"></div>
+      <div class="login-wrap">
+        <button class="back-btn-top" onclick="AUTH.showScreen('login')">
+          <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="logo-sm">CHIZEN</div>
+        <div class="welcome">أنشئ حساب</div>
+        <div class="sub">انضم إلينا واستمتع بأفضل العروض</div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="signup-name" class="input with-icon" placeholder="الاسم الكامل" autocomplete="name">
+        </div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="signup-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+        </div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <input type="tel" id="signup-phone" class="input with-icon" placeholder="رقم الجوال" autocomplete="tel" inputmode="tel">
+        </div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="signup-password" class="input with-icon" placeholder="كلمة المرور" autocomplete="new-password">
+          <button type="button" class="input-eye" onclick="togglePassword('signup-password', this)">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <div class="pw-strength" id="signup-strength">
+          <div class="pw-bars"><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div></div>
+          <div class="pw-label" id="signup-strength-label">قوة كلمة المرور</div>
+        </div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="signup-confirm" class="input with-icon" placeholder="تأكيد كلمة المرور" autocomplete="new-password">
+          <button type="button" class="input-eye" onclick="togglePassword('signup-confirm', this)">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <label class="checkbox-row" style="margin-top:6px;">
+          <input type="checkbox" id="signup-terms">
+          <span class="checkbox-box"></span>
+          <span>أوافق على <a href="terms.html" target="_blank">الشروط والأحكام</a></span>
+        </label>
+
+        <button class="btn-primary" id="btn-signup" onclick="AUTH.signup()">إنشاء الحساب</button>
+
+        <div class="err-msg" id="signup-err"></div>
+
+        <div class="bottom-text">
+          <span>لديك حساب؟</span>
+          <a onclick="AUTH.showScreen('login')">تسجيل الدخول</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-forgot">
+      <div class="safe-top"></div>
+      <div class="login-wrap">
+        <button class="back-btn-top" onclick="AUTH.showScreen('login')">
+          <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="logo-sm">CHIZEN</div>
+        <div class="welcome">استعادة كلمة المرور</div>
+        <div class="sub">أدخل بريدك الإلكتروني وسنرسل لك رابط الاستعادة</div>
+
+        <div class="input-group">
+          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="forgot-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+        </div>
+
+        <button class="btn-primary" id="btn-forgot" onclick="AUTH.sendReset()">إرسال رابط الاستعادة</button>
+
+        <div class="err-msg" id="forgot-err"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="load-overlay" id="load-overlay">
+  <div class="load-box">
+    <div class="spinner-lg"></div>
+    <div class="load-text" id="load-text">جاري المعالجة...</div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="firebase-service.js"></script>
+
+<script>
+var AUTH = {
+  _busy: false,
+  _fbReady: false,
+
+  init: async function() {
+    var self = this;
+
+    window.addEventListener('offline', function(){ document.getElementById('offline-banner').classList.add('show'); });
+    window.addEventListener('online',  function(){ document.getElementById('offline-banner').classList.remove('show'); });
+    if (!navigator.onLine) document.getElementById('offline-banner').classList.add('show');
+
+    try {
+      var rem = localStorage.getItem('chizen_remember_email');
+      if (rem) {
+        document.getElementById('login-email').value = rem;
+        document.getElementById('login-remember').checked = true;
+      }
+    } catch(e) {}
+
+    this.bindPwStrength('signup-password', 'signup-strength', 'signup-strength-label');
+    this.bindErrorClear();
+
+    this._fbReady = await this.waitForFB(5000);
+
+    if (this._fbReady) {
+      try {
+        var redirectUser = await FB.handleGoogleRedirect();
+        if (redirectUser) {
+          var existing = await FB.getUserProfile();
+          if (!existing) {
+            await FB.saveUserProfile({
+              name: redirectUser.displayName || 'مستخدم',
+              email: redirectUser.email,
+              phone: '',
+              loyaltyPoints: 240,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          }
+          window.location.replace('chizen.html');
+          return;
+        }
+      } catch(e) {
+        console.error('Redirect error:', e);
+      }
+
+      FB.onAuthChange(function(user) {
+        if (user) window.location.replace('chizen.html');
+      });
+    } else {
+      try {
+        var s = localStorage.getItem('chizen_state');
+        if (s) {
+          var p = JSON.parse(s);
+          if (p.user) { window.location.replace('chizen.html'); return; }
+        }
+      } catch(e) {}
+    }
+
+    this.showScreen('login');
+  },
+
+  waitForFB: function(timeout) {
+    return new Promise(function(resolve) {
+      var start = Date.now();
+      (function check() {
+        if (window.FB && window.FB.ready) return resolve(true);
+        if (Date.now() - start > timeout) return resolve(false);
+        setTimeout(check, 100);
+      })();
+    });
+  },
+
+  showScreen: function(id) {
+    var s = document.querySelectorAll('.screen');
+    for (var i = 0; i < s.length; i++) s[i].classList.remove('active');
+    var t = document.getElementById('screen-' + id);
+    if (t) { t.classList.add('active'); t.scrollTop = 0; }
+    ['login-err','signup-err','forgot-err'].forEach(function(x){
+      var el = document.getElementById(x);
+      if (el) el.classList.remove('show');
+    });
+  },
+
+  isEmail: function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); },
+  isPhone: function(v) {
+    var digits = (v || '').replace(/\D/g, '');
+    return digits.length >= 8 && digits.length <= 15;
+  },
+  pwStrength: function(p) {
+    if (!p) return 0;
+    var s = 0;
+    if (p.length >= 6) s++;
+    if (p.length >= 10) s++;
+    if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
+    if (/\d/.test(p)) s++;
+    if (/[^A-Za-z0-9]/.test(p)) s++;
+    return Math.min(s, 4);
+  },
+
+  setLoading: function(btnId, loading) {
+    var btn = document.getElementById(btnId);
+    if (!btn) return;
+    if (loading) {
+      btn.disabled = true;
+      if (!btn.dataset.original) btn.dataset.original = btn.innerHTML;
+      btn.innerHTML = '<div class="spinner-sm"></div><span>جاري...</span>';
+    } else {
+      btn.disabled = false;
+      if (btn.dataset.original) btn.innerHTML = btn.dataset.original;
+    }
+  },
+
+  showOverlay: function(text) {
+    document.getElementById('load-text').textContent = text || 'جاري المعالجة...';
+    document.getElementById('load-overlay').classList.add('show');
+  },
+  hideOverlay: function() { document.getElementById('load-overlay').classList.remove('show'); },
+
+  showErr: function(id, msg) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(el._timer);
+    el._timer = setTimeout(function() { el.classList.remove('show'); }, 6000);
+  },
+  clearErr: function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  },
+
+  bindPwStrength: function(inputId, wrapId, labelId) {
+    var inp = document.getElementById(inputId);
+    var wrap = document.getElementById(wrapId);
+    var label = document.getElementById(labelId);
+    if (!inp || !wrap || !label) return;
+    var bars = wrap.querySelectorAll('.pw-bar');
+    var texts = ['', 'ضعيفة', 'متوسطة', 'قوية', 'قوية جداً'];
+    inp.addEventListener('input', function() {
+      var v = inp.value;
+      if (!v) { wrap.classList.remove('show'); return; }
+      wrap.classList.add('show');
+      var score = AUTH.pwStrength(v);
+      bars.forEach(function(b, i) { b.className = 'pw-bar' + (i < score ? ' s' + score : ''); });
+      label.textContent = texts[score] || 'ضعيفة';
+      label.className = 'pw-label ' + (score >= 3 ? 'good' : score <= 1 ? 'bad' : '');
+    });
+  },
+
+  bindErrorClear: function() {
+    var pairs = [
+      ['login-email','login-err'], ['login-password','login-err'],
+      ['signup-name','signup-err'], ['signup-email','signup-err'],
+      ['signup-phone','signup-err'], ['signup-password','signup-err'],
+      ['signup-confirm','signup-err'], ['forgot-email','forgot-err']
+    ];
+    pairs.forEach(function(p) {
+      var inp = document.getElementById(p[0]);
+      if (inp) inp.addEventListener('input', function(){ AUTH.clearErr(p[1]); });
+    });
+  },
+
+  login: async function() {
+    if (this._busy) return;
+    var email = (document.getElementById('login-email').value || '').trim().toLowerCase();
+    var pass  = document.getElementById('login-password').value || '';
+    var remember = document.getElementById('login-remember').checked;
+
+    if (!this.isEmail(email)) { this.showErr('login-err', 'أدخل بريداً صحيحاً'); return; }
+    if (pass.length < 6)      { this.showErr('login-err', 'كلمة المرور 6 أحرف على الأقل'); return; }
+    if (!this._fbReady)       { this.showErr('login-err', 'لا يوجد اتصال'); return; }
+
+    this._busy = true;
+    this.setLoading('btn-login', true);
+
+    try {
+      await FB.loginEmail(email, pass);
+      try {
+        if (remember) localStorage.setItem('chizen_remember_email', email);
+        else localStorage.removeItem('chizen_remember_email');
+      } catch(e) {}
+      window.location.replace('chizen.html');
+    } catch (e) {
+      this.setLoading('btn-login', false);
+      this._busy = false;
+      var msg = 'حدث خطأ';
+      var code = e.code || '';
+      if (code === 'auth/invalid-email') msg = 'البريد غير صحيح';
+      else if (code === 'auth/user-not-found') msg = 'لا يوجد حساب بهذا البريد';
+      else if (code === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
+      else if (code === 'auth/invalid-credential') msg = 'البريد أو كلمة المرور غير صحيحة';
+      else if (code === 'auth/too-many-requests') msg = 'محاولات كثيرة — حاول لاحقاً';
+      else if (code === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      this.showErr('login-err', msg);
+    }
+  },
+
+  signup: async function() {
+    if (this._busy) return;
+    var name    = (document.getElementById('signup-name').value || '').trim();
+    var email   = (document.getElementById('signup-email').value || '').trim().toLowerCase();
+    var phone   = (document.getElementById('signup-phone').value || '').trim();
+    var pass    = document.getElementById('signup-password').value || '';
+    var confirm = document.getElementById('signup-confirm').value || '';
+    var terms   = document.getElementById('signup-terms').checked;
+
+    if (name.length < 2)         { this.showErr('signup-err', 'أدخل اسمك الكامل'); return; }
+    if (!this.isEmail(email))    { this.showErr('signup-err', 'أدخل بريداً صحيحاً'); return; }
+    if (!this.isPhone(phone))    { this.showErr('signup-err', 'أدخل رقم جوال صحيح (8-15 رقم)'); return; }
+    if (pass.length < 6)         { this.showErr('signup-err', 'كلمة المرور 6 أحرف على الأقل'); return; }
+    if (pass !== confirm)        { this.showErr('signup-err', 'كلمتا المرور غير متطابقتين'); return; }
+    if (!terms)                  { this.showErr('signup-err', 'يجب الموافقة على الشروط والأحكام'); return; }
+    if (!this._fbReady)          { this.showErr('signup-err', 'لا يوجد اتصال'); return; }
+
+    this._busy = true;
+    this.setLoading('btn-signup', true);
+
+    try {
+      await FB.signupEmail(email, pass);
+      await FB.saveUserProfile({
+        name: name, email: email, phone: phone,
+        loyaltyPoints: 240,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      await FB.updateDisplayName(name);
+      window.location.replace('chizen.html');
+    } catch (e) {
+      this.setLoading('btn-signup', false);
+      this._busy = false;
+      var msg = 'حدث خطأ';
+      var code = e.code || '';
+      if (code === 'auth/email-already-in-use') msg = 'البريد مسجل بالفعل';
+      else if (code === 'auth/weak-password') msg = 'كلمة المرور ضعيفة';
+      else if (code === 'auth/invalid-email') msg = 'البريد غير صحيح';
+      else if (code === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      this.showErr('signup-err', msg);
+    }
+  },
+
+  googleLogin: async function() {
+    if (this._busy) return;
+    if (!this._fbReady) { this.showErr('login-err', 'لا يوجد اتصال'); return; }
+
+    this._busy = true;
+    this.setLoading('btn-google', true);
+
+    try {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        this.showOverlay('جاري التحويل إلى Google...');
+        await FB.auth.signInWithRedirect(provider);
+        return;
+      }
+
+      var result = await FB.auth.signInWithPopup(provider);
+
+      if (result && result.user) {
+        var existing = await FB.getUserProfile();
+        if (!existing) {
+          await FB.saveUserProfile({
+            name: result.user.displayName || 'مستخدم',
+            email: result.user.email,
+            phone: '',
+            loyaltyPoints: 240,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+        window.location.replace('chizen.html');
+      } else {
+        this.setLoading('btn-google', false);
+        this._busy = false;
+      }
+    } catch (e) {
+      this.setLoading('btn-google', false);
+      this._busy = false;
+      this.hideOverlay();
+      var code = e.code || '';
+      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+      var msg = 'فشل الدخول بـ Google';
+      if (code === 'auth/unauthorized-domain') msg = 'النطاق غير مصرح';
+      else if (code === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      this.showErr('login-err', msg);
+    }
+  },
+
+  sendReset: async function() {
+    if (this._busy) return;
+    var email = (document.getElementById('forgot-email').value || '').trim().toLowerCase();
+    if (!this.isEmail(email)) { this.showErr('forgot-err', 'أدخل بريداً صحيحاً'); return; }
+    if (!this._fbReady)       { this.showErr('forgot-err', 'لا يوجد اتصال'); return; }
+
+    this._busy = true;
+    this.setLoading('btn-forgot', true);
+
+    try {
+      await FB.sendPasswordReset(email);
+      this.setLoading('btn-forgot', false);
+      this._busy = false;
+      this.toast('تم إرسال الرابط ✓', 'success');
+      var self = this;
+      setTimeout(function() { self.showScreen('login'); }, 1500);
+    } catch (e) {
+      this.setLoading('btn-forgot', false);
+      this._busy = false;
+      var msg = 'حدث خطأ';
+      if (e.code === 'auth/user-not-found') msg = 'لا يوجد حساب بهذا البريد';
+      if (e.code === 'auth/invalid-email') msg = 'البريد غير صحيح';
+      this.showErr('forgot-err', msg);
+    }
+  },
+
+  toast: function(msg, type) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + (type || '');
+    t.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2800);
+  }
+};
+
+function togglePassword(id, btn) {
+  var inp = document.getElementById(id);
+  if (!inp) return;
+  if (inp.type === 'password') { inp.type = 'text'; btn.classList.add('active'); }
+  else { inp.type = 'password'; btn.classList.remove('active'); }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() { AUTH.init(); });
+} else {
+  AUTH.init();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter') return;
+  if (AUTH._busy) return;
+  var active = document.querySelector('.screen.active');
+  if (!active) return;
+  if (active.id === 'screen-login')  { e.preventDefault(); AUTH.login(); }
+  if (active.id === 'screen-signup') { e.preventDefault(); AUTH.signup(); }
+  if (active.id === 'screen-forgot') { e.preventDefault(); AUTH.sendReset(); }
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
