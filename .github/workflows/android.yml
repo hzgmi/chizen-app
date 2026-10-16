@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '21'
 
       - name: Install dependencies
         run: npm install
@@ -28,7 +28,6 @@ jobs:
         run: |
           mkdir -p www
           cp -r client/* www/
-          # ⚠️ الأدمن غير مضمّن — للأمان
 
       - name: Add Android platform
         run: npx cap add android
