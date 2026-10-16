@@ -10,34 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Debug info
-        run: |
-          echo "Node: $(node -v)"
-          echo "Java: $(java -version 2>&1 | head -1)"
-          echo "Root files:"
-          ls -la
-          echo "Client files:"
-          ls -la client | head -5
-
       - name: Install dependencies
-        run: |
-          npm install
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npm install @capacitor/push-notifications @capacitor/splash-screen @capacitor/status-bar @capacitor/app
+        run: npm install
 
       - name: Prepare www
         run: |
@@ -45,10 +30,10 @@ jobs:
           cp -r client/* www/
           cp -r admin www/admin
 
-      - name: Add Android
+      - name: Add Android platform
         run: npx cap add android
 
-      - name: Sync
+      - name: Sync Capacitor
         run: npx cap sync android
 
       - name: Build APK
