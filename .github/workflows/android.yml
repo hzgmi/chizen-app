@@ -24,11 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Prepare www
+      - name: Prepare www (client only)
         run: |
           mkdir -p www
           cp -r client/* www/
-          cp -r admin www/admin
+          # ⚠️ الأدمن غير مضمّن — للأمان
 
       - name: Add Android platform
         run: npx cap add android
