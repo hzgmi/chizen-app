@@ -1,0 +1,33 @@
+{
+  "appId": "com.chizen.app",
+  "appName": "CHIZEN",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": [
+      "cheezan-app.firebaseapp.com",
+      "cheezan-app.web.app",
+      "*.googleapis.com",
+      "*.gstatic.com",
+      "accounts.google.com"
+    ]
+  },
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#1A0B2E",
+      "showSpinner": false,
+      "androidScaleType": "CENTER_CROP",
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#1A0B2E"
+    }
+  }
+}
