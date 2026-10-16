@@ -1,36 +1,62 @@
 name: Build Android APK
+
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'
-      - uses: actions/setup-java@v5
+          node-version: '20'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
+
+      - name: Debug info
+        run: |
+          echo "Node: $(node -v)"
+          echo "Java: $(java -version 2>&1 | head -1)"
+          echo "Root files:"
+          ls -la
+          echo "Client files:"
+          ls -la client | head -5
+
       - name: Install dependencies
         run: |
           npm install
           npm install @capacitor/core @capacitor/cli @capacitor/android
           npm install @capacitor/push-notifications @capacitor/splash-screen @capacitor/status-bar @capacitor/app
+
       - name: Prepare www
         run: |
           mkdir -p www
           cp -r client/* www/
           cp -r admin www/admin
+
       - name: Add Android
-        run: npx cap add android || true
+        run: npx cap add android
+
       - name: Sync
         run: npx cap sync android
+
       - name: Build APK
-        run: cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
