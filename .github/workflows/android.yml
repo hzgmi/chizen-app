@@ -29,17 +29,21 @@ jobs:
           npx cap add android
           npx cap sync android
           
-      - name: Inject Configs
+      - name: Inject Configs Safely
         run: |
+          # نسخ ملف جوجل
           cp google-services.json android/app/google-services.json || true
+          # إضافة صلاحيات الإنترنت
           sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />' android/app/src/main/AndroidManifest.xml
-          echo "ext { rgcfaIncludeGoogle = true }" >> android/variables.gradle
+          
+          # الحل الجذري: إزالة أي أسطر سابقة ثم إضافة المتغير داخل بلوك ext الموجود
+          sed -i '/rgcfaIncludeGoogle/d' android/variables.gradle
+          sed -i 's/ext {/ext {\n    rgcfaIncludeGoogle = true/' android/variables.gradle
           
       - name: Force Java 21 for Gradle
         run: |
           export JAVA_HOME=$JAVA_HOME_21_X64
           echo "org.gradle.java.home=$JAVA_HOME" >> android/gradle.properties
-          java -version
           
       - name: Build APK
         run: |
