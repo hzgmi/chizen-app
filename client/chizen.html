@@ -337,8 +337,7 @@
     100% { left: 100%; width: 40%; }
   }
 </style>
-<div id="session-loader" style="position:fixed;inset:0;background:#1A0B2E;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-family:Cairo,sans-serif;">
-  <div style="width:50px;height:50px;border:4px solid rgba(236,72,153,.2);border-top-color:#EC4899;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px;"></div>
+
   <div style="font-weight:900;font-size:16px;">جاري التحقق من الحساب...</div>
 </div>
 
@@ -761,6 +760,11 @@ var APP = {
 
   init: async function() {
     var self = this;
+    
+    // إخفاء شاشة الأندرويد فوراً
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
+      window.Capacitor.Plugins.SplashScreen.hide();
+    }
 
     /* ─── Google Redirect ─── */
     if (window.FB) {
