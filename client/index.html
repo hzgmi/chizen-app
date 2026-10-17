@@ -527,7 +527,7 @@ var AUTH = {
     } catch (e) {
       this.setLoading('btn-google', false);
       this._busy = false;
-      this.showErr('login-err', 'خطأ جوجل: ' + (e.code || e.message || 'تأكد من إضافة SHA-1'));
+      this.showErr('login-err', 'خطأ جوجل: ' + (e.code || e.message));
     }
   },
 

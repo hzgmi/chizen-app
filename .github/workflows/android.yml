@@ -25,6 +25,13 @@ jobs:
       - name: Add Android
         run: npx cap add android
         
+      - name: FORCE Internet Permissions
+        run: |
+          # حقن صلاحية الإنترنت في نظام أندرويد
+          sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />' android/app/src/main/AndroidManifest.xml
+          # التأكد من عدم حظر الاتصالات
+          sed -i 's/android:usesCleartextTraffic="false"/android:usesCleartextTraffic="true"/' android/app/src/main/AndroidManifest.xml
+          
       - name: Apply Plugins & Assets
         run: |
           npx cap sync android
@@ -32,11 +39,8 @@ jobs:
           
       - name: Inject Google Auth & Firebase
         run: |
-          # إزالة أي إضافات سابقة لتفادي التكرار
           sed -i '/rgcfaIncludeGoogle/d' android/variables.gradle
-          # إضافة المتغير داخل بلوك ext الموجود
           sed -i 's/ext {/ext {\n    rgcfaIncludeGoogle = true/' android/variables.gradle
-          # نسخ ملف الإعدادات
           cp google-services.json android/app/google-services.json || true
           
       - name: Build APK

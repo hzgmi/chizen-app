@@ -1,4 +1,4 @@
-var CACHE_NAME = 'chizen-v6';
+var CACHE_NAME = 'chizen-v7';
 var urlsToCache = [
   './', './index.html', './chizen.html', './settings.html',
   './firebase-config.js', './firebase-service.js', './bridge.js',
