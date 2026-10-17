@@ -1608,9 +1608,10 @@ var APP = {
     });
   },
 
+  
   renderOrders: function() {
     var c = document.getElementById('orders-list');
-    if (!this.orders.length) {
+    if (!this.orders || !this.orders.length) {
       c.innerHTML = '<div class="cart-empty"><p>لا توجد طلبات</p></div>';
       return;
     }
@@ -1621,10 +1622,33 @@ var APP = {
       var sc = o.status || 'pending';
       var ic = 0;
       if (o.items) for (var j = 0; j < o.items.length; j++) ic += o.items[j].qty;
-      html += '<div class="order-card"><div class="order-head"><div class="order-id">#' + esc(o.id) + '</div><div class="order-status ' + esc(sc) + '">' + sl + '</div></div><div class="order-body">' + ic + ' منتج</div><div class="order-total"><span>الإجمالي</span><span>' + esc(o.total) + ' ر.س</span></div></div>';
+      
+      // حساب فارق الأيام منذ إنشاء الطلب
+      var orderDate = o.createdAt ? o.createdAt.seconds * 1000 : Date.now();
+      var daysDiff = (Date.now() - orderDate) / (1000 * 60 * 60 * 24);
+      
+      // هل الطلب متأخر (أكثر من 5 أيام ولم يكتمل/يلغى)؟
+      var isDelayed = daysDiff >= 5 && (o.status === 'pending' || o.status === 'shipped');
+      
+      var delayWarning = isDelayed ? 
+        '<div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:10px; border-radius:8px; margin-top:10px; font-size:11px; color:#EF4444; text-align:center; line-height:1.5;">⚠️ تأخر طلبك لأكثر من 5 أيام.<br>يرجى نسخ رقم الطلب والتواصل مع الدعم لمعرفة السبب.</div>' : '';
+
+      var actionButtons = 
+        '<div style="display:flex; gap:8px; margin-top:12px;">' +
+          '<button onclick="event.stopPropagation(); navigator.clipboard.writeText(\'' + esc(o.id) + '\'); APP.toast(\'تم نسخ رقم الطلب\');" style="flex:1; padding:10px; background:var(--bg-elev); border:1px solid var(--nav-border); border-radius:10px; color:var(--cream); font-family:Cairo,sans-serif; font-size:11px; font-weight:700; cursor:pointer;">📋 نسخ رقم الطلب</button>' +
+          '<button onclick="event.stopPropagation(); APP.openSupport()" style="flex:1; padding:10px; background:rgba(37,211,102,0.15); border:1px solid rgba(37,211,102,0.3); border-radius:10px; color:#25D366; font-family:Cairo,sans-serif; font-size:11px; font-weight:700; cursor:pointer;">💬 تواصل مع الدعم</button>' +
+        '</div>';
+
+      html += '<div class="order-card" style="' + (isDelayed ? 'border-color:#EF4444;' : '') + '">' + 
+              '<div class="order-head"><div class="order-id">#' + esc(o.id) + '</div><div class="order-status ' + esc(sc) + '">' + sl + '</div></div>' + 
+              '<div class="order-body">' + ic + ' منتج</div>' + 
+              '<div class="order-total" style="margin-bottom:0;"><span>الإجمالي</span><span>' + esc(o.total) + ' ر.س</span></div>' + 
+              delayWarning + actionButtons + 
+              '</div>';
     }
     c.innerHTML = html;
   },
+
 
   renderFavorites: function() {
     var c = document.getElementById('favorites-container');
