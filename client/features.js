@@ -8,7 +8,7 @@
     APP.shipping = {fee:0, freeAbove:0};
     APP.appliedCoupon = null;
 
-    // جلب بيانات الكوبونات والشحن
+    // جلب بيانات الكوبونات والشحن من Firebase
     if(window.FB && FB.ready) {
       FB.getConfig('coupons').then(function(c){ if(c && c.list) APP.coupons = c.list; });
       FB.getConfig('shipping').then(function(s){ if(s) APP.shipping = s; });
