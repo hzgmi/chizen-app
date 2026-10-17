@@ -30,9 +30,13 @@ jobs:
           npx cap sync android
           npx capacitor-assets generate --android
           
-      - name: Inject Google Auth
+      - name: Inject Google Auth & Firebase
         run: |
-          echo "ext { rgcfaIncludeGoogle = true }" >> android/variables.gradle
+          # إزالة أي إضافات سابقة لتفادي التكرار
+          sed -i '/rgcfaIncludeGoogle/d' android/variables.gradle
+          # إضافة المتغير داخل بلوك ext الموجود
+          sed -i 's/ext {/ext {\n    rgcfaIncludeGoogle = true/' android/variables.gradle
+          # نسخ ملف الإعدادات
           cp google-services.json android/app/google-services.json || true
           
       - name: Build APK
