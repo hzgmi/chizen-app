@@ -24,7 +24,7 @@
   });
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&family=Tajawal:wght@400;500;700;800;900&family=Bodoni+Moda:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{--bg-deep:#1A0B2E;--bg-card:#372254;--bg-elev:#422663;--pink-hot:#EC4899;--pink-light:#F472B6;--orange-sunset:#FB923C;--purple-vibrant:#A855F7;--blue-sky:#38BDF8;--mint:#5EEAD4;--cream:#FEF3E2;--muted:#B8A5D4;--muted-2:#6E5A8A;--error:#EF4444;--success:#10B981;--nav-border:#3A2560;}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -96,9 +96,88 @@
   .load-box{background:var(--bg-elev);border:1px solid var(--nav-border);border-radius:20px;padding:30px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;}
   .spinner-lg{width:44px;height:44px;border:3px solid rgba(236,72,153,.2);border-top-color:var(--pink-hot);border-radius:50%;animation:spin .9s linear infinite;}
   .load-text{color:var(--muted);font-size:13px;font-weight:700;text-align:center;}
+
+/* Custom Splash Screen CSS from User */
+:root { --bg: #02051b; --navy: #030b35; --pink: #ff27c9; --purple: #8d24ff; --blue: #075cff; --cyan: #00dfff; --orange: #ff8b45; --white: #f8f9ff; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+.splash-screen { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; padding: 20px; background: #02051b; transition: opacity .65s ease, visibility .65s ease; font-family: "Tajawal", sans-serif; }
+.splash-screen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.ambient { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 8% 30%, rgba(168, 20, 255, .15), transparent 38%), radial-gradient(ellipse at 95% 48%, rgba(0, 80, 255, .2), transparent 40%), radial-gradient(ellipse at 50% 100%, rgba(12, 35, 150, .15), transparent 45%); }
+.splash { position: relative; width: min(92vw, 570px, 88dvh); aspect-ratio: 1 / 1; isolation: isolate; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 23%; background: radial-gradient(ellipse at 22% 15%, rgba(62, 90, 200, .26), transparent 35%), radial-gradient(ellipse at 85% 80%, rgba(0, 60, 180, .12), transparent 40%), linear-gradient(145deg, #071747 0%, #02092c 48%, #030b31 100%); box-shadow: 0 0 24px rgba(0, 83, 255, .25), 0 0 65px rgba(23, 33, 255, .2), 0 0 115px rgba(174, 0, 255, .13), inset 0 0 30px rgba(0, 0, 0, .5), inset 0 0 80px rgba(8, 34, 100, .22); animation: cardReveal 1s ease-out both; }
+.splash::before { content: ""; position: absolute; inset: -3px; z-index: -1; border-radius: inherit; padding: 3px; background: linear-gradient(145deg, #ff37cf 0%, #ff8b80 10%, #ff31b8 23%, #592cff 43%, #0089ff 65%, #00eaff 79%, #1958ff 90%, #ff2cde 100%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; filter: drop-shadow(0 0 5px #214dff); }
+.neon-glow { position: absolute; inset: -4px; border-radius: inherit; z-index: -2; box-shadow: 0 0 10px rgba(0, 225, 255, .65), 0 0 24px rgba(0, 92, 255, .55), 0 0 35px rgba(239, 35, 255, .4); pointer-events: none; }
+.reflection { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.reflection::before { content: ""; position: absolute; width: 40%; height: 34%; left: 4%; top: 4%; background: linear-gradient(135deg, rgba(255,255,255,.15), rgba(255,255,255,.025) 35%, transparent 70%); transform: rotate(-8deg); filter: blur(2px); }
+.logo-wrap { width: 65%; max-height: 49%; aspect-ratio: 1.15 / 1; flex: 0 1 auto; display: grid; place-items: center; margin-top: -1%; margin-bottom: 1%; filter: drop-shadow(0 9px 7px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(94, 25, 255, .15)); }
+.logo-svg { width: 100%; height: 100%; overflow: visible; }
+.brand { direction: ltr; font-family: "Bodoni Moda", Georgia, serif; font-weight: 900; font-size: clamp(38px, 10.7vw, 82px); font-size: clamp(38px, 10.7cqw, 82px); letter-spacing: .015em; line-height: 1.12; white-space: nowrap; background: linear-gradient(95deg, #ff9a4e 0%, #ff356f 18%, #ff20c6 39%, #a72bff 59%, #4269ff 78%, #00cfff 100%); background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 0 #25074c) drop-shadow(0 4px 1px rgba(0,0,0,.85)) drop-shadow(0 0 7px rgba(255, 28, 205, .17)); }
+.tagline { display: flex; flex-direction: row; direction: rtl; align-items: center; justify-content: center; gap: clamp(7px, 1.8vw, 14px); width: 83%; margin-top: 3%; white-space: nowrap; color: #f7f8ff; font-size: clamp(12px, 3.25vw, 23px); font-size: clamp(12px, 3.25cqw, 23px); font-weight: 800; text-shadow: 0 2px 4px #000; }
+.tagline-line { flex: 1; min-width: 12px; max-width: 65px; height: 3px; border-radius: 20px; }
+.tagline-line:first-child { background: linear-gradient(90deg, #00dfff, #633cff); box-shadow: 0 0 7px rgba(0, 170, 255, .35); }
+.tagline-line:last-child { background: linear-gradient(90deg, #ff9b49, #ff28c6, #8c2bff); box-shadow: 0 0 7px rgba(255, 35, 199, .3); }
+.loading { position: absolute; bottom: 5.1%; width: 43%; display: flex; flex-direction: column; align-items: center; gap: 7px; opacity: .95; }
+.progress-track { width: 100%; height: 3px; border-radius: 99px; overflow: hidden; background: rgba(255,255,255,.12); box-shadow: inset 0 0 4px #000; }
+.progress-fill { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ff9b49, #ff22c7, #8e2bff, #00e2ff); box-shadow: 0 0 8px #a52cff; transition: width .12s linear; }
+.loading-label { font-size: clamp(9px, 2.1vw, 12px); color: #b8c5ee; font-weight: 500; letter-spacing: .03em; }
+@keyframes cardReveal { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
+
 </style>
 </head>
 <body>
+
+<div class="splash-screen" id="splash-screen">
+  <div class="ambient"></div>
+  <main class="splash" id="splash">
+    <div class="neon-glow"></div>
+    <div class="reflection"></div>
+    <div class="logo-wrap">
+      <svg class="logo-svg" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffb45e"/><stop offset="19%" stop-color="#ff5b91"/><stop offset="42%" stop-color="#ff20c7"/><stop offset="64%" stop-color="#a22bff"/><stop offset="83%" stop-color="#394cff"/><stop offset="100%" stop-color="#00cfff"/></linearGradient>
+          <linearGradient id="cartGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ff37d4"/><stop offset="43%" stop-color="#a62bff"/><stop offset="74%" stop-color="#4558ff"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient>
+          <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#a11cff" stop-opacity="0"/><stop offset="35%" stop-color="#ff21c6"/><stop offset="100%" stop-color="#ff39c8"/></linearGradient>
+          <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".8"/><stop offset="40%" stop-color="#ffffff" stop-opacity=".08"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+          <filter id="neon" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="deepShadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/><feOffset dy="5" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".7"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <path d="M 293 34 C 281 55 267 61 247 52 C 221 40 196 35 168 37 C 89 39 35 91 35 157 C 35 224 91 269 168 269 C 216 269 257 255 285 232 L 270 218 C 243 237 208 246 171 245 C 112 244 65 211 65 157 C 65 103 108 66 169 65 C 207 64 238 78 257 98 L 281 98 L 281 34 Z" fill="url(#cGradient)" stroke="#ff78e5" stroke-width="1.5" stroke-linejoin="round" filter="url(#deepShadow)"/>
+        <path d="M 293 34 C 281 55 267 61 247 52 C 221 40 196 35 168 37 C 89 39 35 91 35 157" fill="none" stroke="url(#shine)" stroke-width="4" stroke-linecap="round"/>
+        <g filter="url(#neon)" stroke-linecap="round"><path d="M 77 150 H 172" stroke="url(#speedGradient)" stroke-width="8"/><path d="M 77 169 H 190" stroke="url(#speedGradient)" stroke-width="8"/><path d="M 95 188 H 199" stroke="url(#speedGradient)" stroke-width="7"/></g>
+        <path d="M 157 111 H 174 C 184 111 190 116 194 126 L 222 185" fill="none" stroke="#ff8bea" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon)"/>
+        <path d="M 202 130 H 321 Q 331 130 326 141 L 307 178 Q 303 186 291 186 H 224 Q 215 186 211 176 L 194 136" fill="none" stroke="url(#cartGradient)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon)"/>
+        <path d="M 216 149 H 312" stroke="url(#cartGradient)" stroke-width="10" stroke-linecap="round"/><path d="M 223 169 H 302" stroke="url(#cartGradient)" stroke-width="9" stroke-linecap="round"/>
+        <g filter="url(#neon)"><circle cx="225" cy="211" r="11" fill="url(#cartGradient)" stroke="#e5a4ff" stroke-width="1.5"/><circle cx="291" cy="211" r="11" fill="url(#cartGradient)" stroke="#63dfff" stroke-width="1.5"/></g>
+        <path d="M 208 134 H 315" stroke="#ffffff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 170 269 C 216 269 257 255 285 232" fill="none" stroke="url(#cGradient)" stroke-width="5" stroke-linecap="round" filter="url(#neon)"/>
+      </svg>
+    </div>
+    <div class="brand">CHIZEN</div>
+    <div class="tagline"><span class="tagline-line"></span><span>كل ما تحتاجه في مكان واحد</span><span class="tagline-line"></span></div>
+    <div class="loading"><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div><div class="loading-label" id="loading-label">جاري تجهيز شيزن... 0%</div></div>
+  </main>
+</div>
+<script>
+(() => {
+  const screen = document.getElementById("splash-screen");
+  const bar = document.getElementById("progress-fill");
+  const label = document.getElementById("loading-label");
+  if(!screen) return;
+  const duration = 2000;
+  const start = performance.now();
+  function finishSplash() {
+    bar.style.width = "100%"; label.textContent = "أهلاً بك في شيزن";
+    setTimeout(() => { screen.classList.add("hide"); setTimeout(() => screen.remove(), 700); }, 200);
+  }
+  function animate(now) {
+    const progress = Math.min(100, ((now - start) / duration) * 100);
+    bar.style.width = Math.floor(progress) + "%";
+    label.textContent = progress >= 100 ? "أهلاً بك في شيزن" : `جاري تجهيز شيزن... ${Math.floor(progress)}%`;
+    if (progress < 100) requestAnimationFrame(animate); else finishSplash();
+  }
+  requestAnimationFrame(animate);
+})();
+</script>
+
 
 
 <div class="offline-banner" id="offline-banner">لا يوجد اتصال بالإنترنت</div>
