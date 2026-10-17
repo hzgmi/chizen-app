@@ -578,7 +578,25 @@ var AUTH = {
     }
   },
 
-    googleLogin: async function() {
+    facebookLogin: async function() {
+    if (this._busy) return;
+    this._busy = true;
+    this.setLoading('btn-facebook', true);
+    try {
+      var provider = new firebase.auth.FacebookAuthProvider();
+      provider.setCustomParameters({ display: 'popup' });
+      var result = await FB.auth.signInWithPopup(provider);
+      if (result && result.user) {
+        window.location.replace('chizen.html');
+      }
+    } catch (e) {
+      this.setLoading('btn-facebook', false);
+      this._busy = false;
+      this.showErr('login-err', 'خطأ فيسبوك: ' + (e.code || e.message));
+    }
+  },
+
+  googleLogin: async function() {
     if (this._busy) return;
     this._busy = true;
     this.setLoading('btn-google', true);
