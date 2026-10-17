@@ -3,400 +3,831 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#1A0B2E">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231A0B2E'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='900' fill='%23EC4899' text-anchor='middle'>C</text></svg>">
+<meta name="theme-color" content="#02051b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2302051b'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='900' fill='%23ff27c9' text-anchor='middle'>C</text></svg>">
 <title>CHIZEN — تسجيل الدخول</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://firestore.googleapis.com">
 <script>
-/* إصلاح ارتفاع الشاشة + منع العودة لصفحة الدخول */
 (function(){
-  function setAppHeight(){
-    document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
-  }
+  function setAppHeight(){ document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px'); }
   setAppHeight();
   window.addEventListener('resize', setAppHeight);
   window.addEventListener('orientationchange', function(){ setTimeout(setAppHeight, 100); });
-
-  /* امنع الرجوع لصفحة الدخول — استبدل التاريخ عند كل زيارة */
   try { history.replaceState(null, '', location.pathname + '?login'); } catch(e) {}
-  window.addEventListener('popstate', function(e) {
-    /* إذا حاول المستخدم الرجوع، استبدل الحالة مباشرة */
+  window.addEventListener('popstate', function() {
     try { history.pushState(null, '', location.pathname); } catch(err) {}
   });
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&family=Tajawal:wght@400;500;700;800;900&family=Bodoni+Moda:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root{--bg-deep:#1A0B2E;--bg-card:#372254;--bg-elev:#422663;--pink-hot:#EC4899;--pink-light:#F472B6;--orange-sunset:#FB923C;--purple-vibrant:#A855F7;--blue-sky:#38BDF8;--mint:#5EEAD4;--cream:#FEF3E2;--muted:#B8A5D4;--muted-2:#6E5A8A;--error:#EF4444;--success:#10B981;--nav-border:#3A2560;}
+  :root{
+    --bg:#02051b; --bg-mid:#040b31; --bg-deep:#00010a;
+    --pink:#ff27c9; --purple:#8d24ff; --blue:#075cff; --cyan:#00dfff;
+    --orange:#ff8b45; --white:#f8f9ff;
+    --muted:#b8c5ee; --muted-2:#6b7ba8;
+    --error:#ff4d6d; --success:#00d4a0; --whatsapp:#25D366;
+    --border:rgba(120,150,255,0.16);
+    --card-bg:rgba(7,23,71,0.55);
+    --glass:rgba(7,23,71,0.45);
+    --shadow-lg:0 24px 60px -12px rgba(0,0,0,0.75);
+  }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html{height:100%;}
-  body{height:100%;overflow:hidden;font-family:'Cairo',sans-serif;background:var(--bg-deep);color:var(--cream);overscroll-behavior:none;}
-  #app{width:100%;height:var(--app-height,100vh);max-width:600px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg-deep);overflow:hidden;position:relative;}
-  #screens{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;}
-  .screen{position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;}
+  body{
+    height:100%;overflow:hidden;
+    font-family:'Tajawal',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(ellipse at 50% 45%, #07195b 0%, #040b31 38%, #02051b 72%, #00010a 100%);
+    color:var(--white);
+    overscroll-behavior:none;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  #app{
+    width:100%;height:var(--app-height,100vh);
+    max-width:600px;margin:0 auto;
+    display:flex;flex-direction:column;
+    background:transparent;
+    overflow:hidden;position:relative;
+    isolation:isolate;
+    contain:layout style paint;
+  }
+  .ambient{
+    position:absolute;inset:0;z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(ellipse at 8% 30%, rgba(168,20,255,.14), transparent 40%),
+      radial-gradient(ellipse at 95% 48%, rgba(0,80,255,.18), transparent 42%),
+      radial-gradient(ellipse at 50% 100%, rgba(12,35,150,.14), transparent 45%);
+  }
+  .bg-orbs{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;}
+  .orb{
+    position:absolute;border-radius:50%;
+    filter:blur(55px);
+    opacity:0.26;
+    animation:float 24s ease-in-out infinite;
+    will-change:transform;
+    transform:translateZ(0);
+    backface-visibility:hidden;
+  }
+  .orb-1{width:280px;height:280px;background:var(--pink);top:-100px;right:-100px;}
+  .orb-2{width:240px;height:240px;background:var(--purple);bottom:-70px;left:-90px;animation-delay:-8s;}
+  .orb-3{width:190px;height:190px;background:var(--cyan);top:45%;left:55%;opacity:0.14;animation-delay:-15s;}
+  @keyframes float{
+    0%,100%{transform:translate3d(0,0,0) scale(1);}
+    50%{transform:translate3d(30px,-25px,0) scale(1.06);}
+  }
+  #screens{flex:1 1 0%;min-height:0;position:relative;overflow:hidden;z-index:1;}
+  .screen{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    overflow-y:auto;display:none;
+    -webkit-overflow-scrolling:touch;
+    contain:layout style paint;
+  }
   .screen::-webkit-scrollbar{display:none;}
   .screen.active{display:block;}
-  .safe-top{height:20px;}
-  .login-wrap{padding:40px 28px;display:flex;flex-direction:column;gap:14px;min-height:100%;justify-content:center;position:relative;}
-  .logo-big{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset) 0%,var(--pink-hot) 30%,var(--purple-vibrant) 60%,var(--blue-sky) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;letter-spacing:4px;margin-bottom:6px;}
-  .logo-sm{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot),var(--purple-vibrant));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;letter-spacing:3px;margin-bottom:20px;}
-  .gold-divider{width:90px;height:3px;background:linear-gradient(90deg,transparent,var(--orange-sunset),var(--pink-hot),transparent);margin:0 auto 26px;border-radius:2px;}
-  .welcome{font-size:24px;font-weight:900;text-align:center;}
-  .sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:14px;}
+  .safe-top{height:24px;}
+  .login-wrap{
+    padding:20px 16px 32px;
+    display:flex;flex-direction:column;
+    gap:16px;min-height:100%;
+    justify-content:center;position:relative;
+  }
+  .brand-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;}
+  .logo-mark{
+    width:110px;height:92px;
+    filter:drop-shadow(0 6px 12px rgba(0,0,0,.5));
+    margin-bottom:-6px;
+  }
+  .logo-mark.small{width:74px;height:62px;margin-bottom:-2px;}
+  .brand-name{
+    direction:ltr;
+    font-family:'Bodoni Moda',Georgia,serif;
+    font-weight:900;font-size:clamp(34px,10vw,48px);
+    letter-spacing:.015em;line-height:1.1;
+    background:linear-gradient(95deg,#ff9a4e 0%,#ff356f 18%,#ff20c6 39%,#a72bff 59%,#4269ff 78%,#00cfff 100%);
+    background-clip:text;-webkit-background-clip:text;
+    color:transparent;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 2px 0 #25074c) drop-shadow(0 4px 1px rgba(0,0,0,.85));
+  }
+  .brand-name.small{font-size:26px;}
+  .auth-panel{
+    position:relative;
+    background:var(--glass);
+    backdrop-filter:blur(20px) saturate(1.25);
+    -webkit-backdrop-filter:blur(20px) saturate(1.25);
+    border-radius:24px;
+    padding:26px 20px;
+    display:flex;flex-direction:column;gap:13px;
+    box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .auth-panel::before{
+    content:'';position:absolute;inset:0;
+    border-radius:inherit;padding:1.5px;
+    background:linear-gradient(145deg,#ff37cf 0%,#ff8b80 10%,#ff31b8 23%,#592cff 43%,#0089ff 65%,#00eaff 79%,#1958ff 90%,#ff2cde 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:.55;pointer-events:none;
+  }
+  .welcome{font-size:22px;font-weight:900;text-align:center;color:var(--white);margin-top:2px;text-shadow:0 2px 4px rgba(0,0,0,.4);}
+  .sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:4px;line-height:1.6;font-weight:500;}
   .input-group{position:relative;width:100%;}
-  .input-icon{position:absolute;top:50%;transform:translateY(-50%);right:16px;width:18px;height:18px;stroke:var(--muted);stroke-width:2;fill:none;pointer-events:none;}
-  .input{width:100%;padding:16px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:14px;color:var(--cream);font-family:'Cairo',sans-serif;font-size:14px;outline:none;}
+  .input-icon{
+    position:absolute;top:50%;transform:translateY(-50%);
+    right:16px;width:18px;height:18px;
+    stroke:var(--muted-2);stroke-width:2;fill:none;
+    pointer-events:none;transition:stroke .25s;z-index:2;
+  }
+  .input{
+    width:100%;padding:15px 16px;
+    background:rgba(2,8,35,0.65);
+    border:1.5px solid var(--border);
+    border-radius:14px;color:var(--white);
+    font-family:'Tajawal',sans-serif;font-size:14px;font-weight:500;
+    outline:none;transition:border-color .25s,box-shadow .25s,background .25s;
+  }
   .input.with-icon{padding-right:46px;}
-  .input:focus{border-color:var(--pink-hot);}
-  .input::placeholder{color:var(--muted-2);}
-  .input-eye{position:absolute;top:50%;transform:translateY(-50%);left:8px;width:36px;height:36px;background:transparent;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px;}
-  .input-eye svg{width:18px;height:18px;stroke:var(--muted);stroke-width:2;fill:none;}
-  .input-eye.active svg{stroke:var(--pink-light);}
-  .forgot-row{display:flex;justify-content:space-between;align-items:center;margin-top:-4px;gap:12px;}
-  .forgot-row a{color:var(--pink-light);font-size:13px;font-weight:700;cursor:pointer;}
-  .btn-primary{padding:16px;background:linear-gradient(135deg,var(--orange-sunset) 0%,var(--pink-hot) 50%,var(--purple-vibrant) 100%);color:white;border:none;border-radius:14px;font-family:'Cairo',sans-serif;font-weight:900;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
-  .btn-primary:disabled{opacity:.6;cursor:not-allowed;}
-  .divider{text-align:center;color:var(--muted);font-size:12px;position:relative;margin:4px 0;}
-  .divider span{background:var(--bg-deep);padding:0 14px;position:relative;z-index:1;}
-  .divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--nav-border);}
-  .btn-google{padding:14px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:14px;color:var(--cream);font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;}
-  .btn-google:disabled{opacity:.6;cursor:not-allowed;}
-  .bottom-text{text-align:center;font-size:13px;color:var(--muted);margin-top:10px;}
-  .bottom-text a{color:var(--pink-light);text-decoration:none;font-weight:900;cursor:pointer;}
-  .back-btn-top{position:absolute;top:16px;right:16px;width:40px;height:40px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-  .back-btn-top svg{width:20px;height:20px;stroke:var(--pink-light);stroke-width:2.5;fill:none;}
-  .err-msg{margin-top:10px;padding:12px 16px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;color:var(--error);font-size:12px;font-weight:700;text-align:center;display:none;line-height:1.5;}
+  .input::placeholder{color:var(--muted-2);font-weight:500;}
+  .input:hover{border-color:rgba(120,150,255,.28);}
+  .input:focus{
+    border-color:var(--pink);
+    background:rgba(7,23,71,0.85);
+    box-shadow:0 0 0 4px rgba(255,39,201,0.13);
+  }
+  .input:focus ~ .input-icon{stroke:var(--pink);}
+  .input-eye{
+    position:absolute;top:50%;transform:translateY(-50%);
+    left:8px;width:38px;height:38px;
+    background:transparent;border:none;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;border-radius:10px;transition:background .2s;z-index:2;
+  }
+  .input-eye:active{background:rgba(255,39,201,.12);}
+  .input-eye svg{width:18px;height:18px;stroke:var(--muted-2);stroke-width:2;fill:none;transition:stroke .25s;}
+  .input-eye.active svg{stroke:var(--pink);}
+  .forgot-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:-3px;}
+  .forgot-row a{color:var(--pink);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+  .forgot-row a:hover{opacity:.8;}
+  .btn-primary{
+    position:relative;padding:15px;
+    background:linear-gradient(95deg,#ff9a4e 0%,#ff356f 18%,#ff20c6 39%,#a72bff 59%,#4269ff 78%,#00cfff 100%);
+    background-size:200% 200%;
+    color:#fff;border:none;border-radius:14px;
+    font-family:'Tajawal',sans-serif;font-weight:900;font-size:15px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(255,39,201,.35),0 10px 30px -8px rgba(141,36,255,.6),inset 0 1px 0 rgba(255,255,255,.2);
+    transition:transform .2s,box-shadow .25s,background-position .4s;
+    touch-action:manipulation;letter-spacing:.3px;
+    text-shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+  .btn-primary:hover:not(:disabled){transform:translateY(-2px);background-position:100% 50%;}
+  .btn-primary:active:not(:disabled){transform:translateY(0);}
+  .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+  .btn-social{
+    padding:13px 10px;
+    background:rgba(2,8,35,0.6);
+    border:1.5px solid var(--border);
+    border-radius:14px;color:var(--white);
+    font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:background .25s,border-color .25s,transform .2s;
+    touch-action:manipulation;
+  }
+  .btn-social:hover:not(:disabled){background:rgba(7,23,71,.85);border-color:rgba(120,150,255,.4);transform:translateY(-1px);}
+  .btn-social:active:not(:disabled){transform:translateY(0);}
+  .btn-social:disabled{opacity:.55;cursor:not-allowed;}
+  .btn-social svg{flex-shrink:0;}
+  .btn-social.google:hover:not(:disabled){border-color:rgba(234,67,53,.5);}
+  .btn-social.facebook:hover:not(:disabled){border-color:rgba(24,119,242,.5);}
+  .social-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .divider{text-align:center;color:var(--muted-2);font-size:12px;position:relative;margin:4px 0;font-weight:600;}
+  .divider span{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:0 14px;position:relative;z-index:1;}
+  .divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);}
+  .btn-phone{
+    padding:15px;background:transparent;
+    border:1.5px solid var(--border);border-radius:14px;
+    color:var(--white);font-family:'Tajawal',sans-serif;
+    font-size:14px;font-weight:800;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    transition:all .25s;position:relative;overflow:hidden;
+  }
+  .btn-phone::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(255,39,201,.08),rgba(0,223,255,.08));
+    opacity:0;transition:opacity .3s;
+  }
+  .btn-phone:hover{border-color:rgba(255,39,201,.4);}
+  .btn-phone:hover::before{opacity:1;}
+  .btn-phone svg{stroke:var(--pink);stroke-width:2;fill:none;}
+  .bottom-text{text-align:center;font-size:13px;color:var(--muted);font-weight:500;margin-top:4px;}
+  .bottom-text a{color:var(--pink);text-decoration:none;font-weight:900;cursor:pointer;transition:opacity .2s;}
+  .bottom-text a:hover{opacity:.8;}
+  .back-btn-top{
+    position:absolute;top:16px;right:16px;
+    width:42px;height:42px;
+    background:rgba(7,23,71,0.7);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid var(--border);border-radius:13px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;z-index:5;transition:all .2s;
+  }
+  .back-btn-top:hover{background:rgba(7,23,71,.9);transform:scale(1.05);border-color:rgba(255,39,201,.3);}
+  .back-btn-top:active{transform:scale(.95);}
+  .back-btn-top svg{width:20px;height:20px;stroke:var(--pink);stroke-width:2.5;fill:none;}
+  .err-msg{
+    padding:12px 16px;
+    background:rgba(255,77,109,.1);
+    border:1px solid rgba(255,77,109,.32);
+    border-radius:12px;color:var(--error);
+    font-size:12px;font-weight:700;text-align:center;
+    display:none;line-height:1.5;
+    animation:shake .4s ease-out;
+  }
   .err-msg.show{display:block;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
   .spinner-sm{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-elev);border:1px solid var(--nav-border);color:var(--cream);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:700;z-index:2000;opacity:0;transition:all .3s;max-width:90%;text-align:center;}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  .toast.error{background:linear-gradient(135deg,#EF4444,#DC2626);color:white;}
-  .toast.success{background:linear-gradient(135deg,#10B981,#5EEAD4);color:#0A0515;}
-  .offline-banner{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#EF4444,#DC2626);color:white;padding:10px 16px;font-size:12px;font-weight:700;text-align:center;z-index:1500;transform:translateY(-100%);transition:transform .3s;}
-  .offline-banner.show{transform:translateY(0);}
+  .phone-group{display:flex;gap:8px;width:100%;}
+  .country-select{position:relative;flex:0 0 auto;min-width:110px;}
+  .country-btn{
+    width:100%;padding:15px 12px;
+    background:rgba(2,8,35,0.65);
+    border:1.5px solid var(--border);border-radius:14px;
+    color:var(--white);font-family:'Tajawal',sans-serif;
+    font-size:14px;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    transition:all .2s;
+  }
+  .country-btn:hover{border-color:rgba(120,150,255,.3);}
+  .country-btn .flag{font-size:16px;}
+  .country-btn .code{direction:ltr;font-family:'Bodoni Moda',serif;font-weight:700;}
+  .country-btn .chev{width:14px;height:14px;stroke:var(--muted-2);stroke-width:2.5;fill:none;}
+  .country-dropdown{
+    position:absolute;top:calc(100% + 6px);right:0;
+    width:240px;max-height:280px;overflow-y:auto;
+    background:rgba(4,11,49,0.98);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--border);border-radius:14px;padding:6px;
+    box-shadow:0 20px 40px -10px rgba(0,0,0,.8);
+    z-index:100;opacity:0;visibility:hidden;transform:translateY(-6px);
+    transition:opacity .2s,visibility .2s,transform .2s;
+  }
+  .country-dropdown.show{opacity:1;visibility:visible;transform:translateY(0);}
+  .country-dropdown::-webkit-scrollbar{width:4px;}
+  .country-dropdown::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+  .country-option{
+    padding:10px 12px;
+    display:flex;align-items:center;gap:10px;
+    cursor:pointer;border-radius:10px;
+    font-size:13px;font-weight:600;
+    transition:background .15s;
+  }
+  .country-option:hover{background:rgba(255,39,201,.1);}
+  .country-option .flag{font-size:16px;}
+  .country-option .name{flex:1;text-align:right;}
+  .country-option .code{direction:ltr;font-family:'Bodoni Moda',serif;color:var(--muted);font-size:12px;}
+  .phone-input-wrap{flex:1;position:relative;}
+  .phone-input-wrap .input{direction:ltr;text-align:right;padding-left:16px;}
+  .method-label{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:-4px;}
+  .method-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .method-btn{
+    padding:14px 10px;
+    background:rgba(2,8,35,0.65);
+    border:1.5px solid var(--border);border-radius:14px;
+    color:var(--white);font-family:'Tajawal',sans-serif;
+    font-size:13px;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:all .2s;position:relative;overflow:hidden;
+  }
+  .method-btn svg{flex-shrink:0;}
+  .method-btn .icon-wa{fill:var(--muted-2);transition:fill .2s;}
+  .method-btn .icon-sms{stroke:var(--muted-2);fill:none;stroke-width:2;transition:stroke .2s;}
+  .method-btn:hover{border-color:rgba(120,150,255,.3);}
+  .method-btn.active{
+    border-color:var(--pink);
+    background:rgba(255,39,201,.08);
+    box-shadow:0 0 0 3px rgba(255,39,201,.1),0 0 16px rgba(255,39,201,.2);
+  }
+  .method-btn.active .icon-wa{fill:var(--whatsapp);}
+  .method-btn.active .icon-sms{stroke:var(--cyan);}
+  .method-btn.active::after{content:'✓';position:absolute;top:4px;left:6px;font-size:10px;color:var(--pink);font-weight:900;}
+  .otp-container{display:flex;gap:8px;direction:ltr;justify-content:center;margin:10px 0 6px;}
+  .otp-input{
+    width:46px;height:56px;text-align:center;
+    font-size:22px;font-weight:800;
+    background:rgba(2,8,35,0.7);
+    border:1.5px solid var(--border);border-radius:12px;
+    color:var(--white);font-family:'Bodoni Moda',serif;
+    transition:border-color .2s,box-shadow .2s,background .2s,transform .2s;
+    outline:none;caret-color:var(--pink);
+  }
+  .otp-input:focus{
+    border-color:var(--pink);
+    box-shadow:0 0 0 4px rgba(255,39,201,.15),0 0 20px rgba(255,39,201,.25);
+    background:rgba(7,23,71,0.95);
+    transform:scale(1.04);
+  }
+  .otp-input.filled{border-color:var(--purple);background:rgba(141,36,255,.08);}
+  .otp-input.error{border-color:var(--error);box-shadow:0 0 0 4px rgba(255,77,109,.15);animation:shake .4s;}
+  .otp-mask{font-size:14px;color:var(--muted);text-align:center;direction:ltr;font-weight:700;margin-bottom:6px;}
+  .otp-mask .num{font-family:'Bodoni Moda',serif;color:var(--cyan);font-weight:800;letter-spacing:.5px;}
+  .resend-row{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--muted);margin-top:4px;flex-wrap:wrap;}
+  .resend-row #resend-timer{font-weight:700;color:var(--muted-2);display:none;}
+  .resend-row #resend-timer.show{display:inline;}
+  .resend-btn{background:none;border:none;color:var(--pink);font-family:'Tajawal',sans-serif;font-size:12px;font-weight:900;cursor:pointer;padding:4px 8px;border-radius:8px;transition:background .2s;}
+  .resend-btn:hover:not(:disabled){background:rgba(255,39,201,.1);}
+  .resend-btn:disabled{color:var(--muted-2);cursor:not-allowed;}
+  .change-method{text-align:center;margin-top:6px;font-size:12px;}
+  .change-method a{color:var(--cyan);font-weight:700;cursor:pointer;text-decoration:none;}
   .pw-strength{display:none;margin-top:-6px;padding:0 4px;}
-  .pw-strength.show{display:block;}
+  .pw-strength.show{display:block;animation:fadeIn .3s ease-out;}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
   .pw-bars{display:flex;gap:5px;height:4px;margin-bottom:6px;}
-  .pw-bar{flex:1;background:var(--nav-border);border-radius:2px;transition:background .3s;}
-  .pw-bar.s1{background:#EF4444;}
-  .pw-bar.s2{background:#F59E0B;}
-  .pw-bar.s3{background:#10B981;}
-  .pw-bar.s4{background:var(--mint);}
+  .pw-bar{flex:1;background:rgba(120,150,255,0.15);border-radius:2px;transition:background .35s;}
+  .pw-bar.s1{background:#ff4d6d;}
+  .pw-bar.s2{background:#ff8b45;}
+  .pw-bar.s3{background:#00d4a0;}
+  .pw-bar.s4{background:var(--cyan);}
   .pw-label{font-size:11px;color:var(--muted);text-align:right;font-weight:700;}
   .pw-label.good{color:var(--success);}
   .pw-label.bad{color:var(--error);}
-  .checkbox-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);cursor:pointer;user-select:none;line-height:1.5;}
+  .checkbox-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);cursor:pointer;user-select:none;line-height:1.5;font-weight:600;}
   .checkbox-row input{display:none;}
-  .checkbox-box{width:18px;height:18px;border:2px solid var(--nav-border);border-radius:5px;flex-shrink:0;position:relative;background:var(--bg-card);}
-  .checkbox-row input:checked + .checkbox-box{background:linear-gradient(135deg,var(--pink-hot),var(--purple-vibrant));border-color:transparent;}
+  .checkbox-box{width:18px;height:18px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;position:relative;background:rgba(2,8,35,0.6);transition:all .2s;}
+  .checkbox-row input:checked + .checkbox-box{background:linear-gradient(135deg,var(--pink),var(--purple));border-color:transparent;}
   .checkbox-row input:checked + .checkbox-box::after{content:'';position:absolute;top:2px;left:5px;width:4px;height:8px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg);}
-  .checkbox-row a{color:var(--pink-light);font-weight:700;}
-  .load-overlay{position:fixed;inset:0;background:rgba(26,11,46,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:3000;}
-  .load-overlay.show{display:flex;}
-  .load-box{background:var(--bg-elev);border:1px solid var(--nav-border);border-radius:20px;padding:30px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;}
-  .spinner-lg{width:44px;height:44px;border:3px solid rgba(236,72,153,.2);border-top-color:var(--pink-hot);border-radius:50%;animation:spin .9s linear infinite;}
+  .checkbox-row a{color:var(--pink);font-weight:700;}
+  .toast{
+    position:fixed;bottom:100px;left:50%;
+    transform:translateX(-50%) translateY(100px);
+    background:rgba(7,23,71,0.95);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--border);color:var(--white);
+    padding:13px 22px;border-radius:14px;
+    font-size:13px;font-weight:700;
+    z-index:2000;opacity:0;
+    transition:opacity .35s,transform .35s;
+    max-width:90%;text-align:center;
+    box-shadow:0 20px 40px -10px rgba(0,0,0,.7);
+    pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast.error{background:linear-gradient(135deg,#ff4d6d,#dc2626);color:white;border-color:transparent;}
+  .toast.success{background:linear-gradient(135deg,#00d4a0,#00dfff);color:#00060f;border-color:transparent;}
+  .offline-banner{
+    position:fixed;top:0;left:0;right:0;
+    background:linear-gradient(90deg,#ff4d6d,#dc2626);
+    color:white;padding:10px 16px;
+    font-size:12px;font-weight:700;text-align:center;z-index:1500;
+    transform:translateY(-100%);transition:transform .35s;
+  }
+  .offline-banner.show{transform:translateY(0);}
+  .load-overlay{
+    position:fixed;inset:0;
+    background:rgba(2,5,27,.94);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    display:none;align-items:center;justify-content:center;z-index:3000;
+  }
+  .load-overlay.show{display:flex;animation:fadeIn .25s;}
+  .load-box{
+    background:rgba(7,23,71,0.8);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--border);border-radius:22px;
+    padding:30px 40px;display:flex;flex-direction:column;
+    align-items:center;gap:16px;
+    box-shadow:0 24px 60px -12px rgba(0,0,0,.6);
+  }
+  .spinner-lg{width:46px;height:46px;border:3px solid rgba(255,39,201,.2);border-top-color:var(--pink);border-radius:50%;animation:spin .9s linear infinite;}
   .load-text{color:var(--muted);font-size:13px;font-weight:700;text-align:center;}
-
-/* Custom Splash Screen CSS from User */
-:root { --bg: #02051b; --navy: #030b35; --pink: #ff27c9; --purple: #8d24ff; --blue: #075cff; --cyan: #00dfff; --orange: #ff8b45; --white: #f8f9ff; }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-.splash-screen { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; padding: 20px; background: #02051b; transition: opacity .65s ease, visibility .65s ease; font-family: "Tajawal", sans-serif; }
-.splash-screen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-.ambient { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 8% 30%, rgba(168, 20, 255, .15), transparent 38%), radial-gradient(ellipse at 95% 48%, rgba(0, 80, 255, .2), transparent 40%), radial-gradient(ellipse at 50% 100%, rgba(12, 35, 150, .15), transparent 45%); }
-.splash { position: relative; width: min(92vw, 570px, 88dvh); aspect-ratio: 1 / 1; isolation: isolate; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 23%; background: radial-gradient(ellipse at 22% 15%, rgba(62, 90, 200, .26), transparent 35%), radial-gradient(ellipse at 85% 80%, rgba(0, 60, 180, .12), transparent 40%), linear-gradient(145deg, #071747 0%, #02092c 48%, #030b31 100%); box-shadow: 0 0 24px rgba(0, 83, 255, .25), 0 0 65px rgba(23, 33, 255, .2), 0 0 115px rgba(174, 0, 255, .13), inset 0 0 30px rgba(0, 0, 0, .5), inset 0 0 80px rgba(8, 34, 100, .22); animation: cardReveal 1s ease-out both; }
-.splash::before { content: ""; position: absolute; inset: -3px; z-index: -1; border-radius: inherit; padding: 3px; background: linear-gradient(145deg, #ff37cf 0%, #ff8b80 10%, #ff31b8 23%, #592cff 43%, #0089ff 65%, #00eaff 79%, #1958ff 90%, #ff2cde 100%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; filter: drop-shadow(0 0 5px #214dff); }
-.neon-glow { position: absolute; inset: -4px; border-radius: inherit; z-index: -2; box-shadow: 0 0 10px rgba(0, 225, 255, .65), 0 0 24px rgba(0, 92, 255, .55), 0 0 35px rgba(239, 35, 255, .4); pointer-events: none; }
-.reflection { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
-.reflection::before { content: ""; position: absolute; width: 40%; height: 34%; left: 4%; top: 4%; background: linear-gradient(135deg, rgba(255,255,255,.15), rgba(255,255,255,.025) 35%, transparent 70%); transform: rotate(-8deg); filter: blur(2px); }
-.logo-wrap { width: 65%; max-height: 49%; aspect-ratio: 1.15 / 1; flex: 0 1 auto; display: grid; place-items: center; margin-top: -1%; margin-bottom: 1%; filter: drop-shadow(0 9px 7px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(94, 25, 255, .15)); }
-.logo-svg { width: 100%; height: 100%; overflow: visible; }
-.brand { direction: ltr; font-family: "Bodoni Moda", Georgia, serif; font-weight: 900; font-size: clamp(38px, 10.7vw, 82px); font-size: clamp(38px, 10.7cqw, 82px); letter-spacing: .015em; line-height: 1.12; white-space: nowrap; background: linear-gradient(95deg, #ff9a4e 0%, #ff356f 18%, #ff20c6 39%, #a72bff 59%, #4269ff 78%, #00cfff 100%); background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 0 #25074c) drop-shadow(0 4px 1px rgba(0,0,0,.85)) drop-shadow(0 0 7px rgba(255, 28, 205, .17)); }
-.tagline { display: flex; flex-direction: row; direction: rtl; align-items: center; justify-content: center; gap: clamp(7px, 1.8vw, 14px); width: 83%; margin-top: 3%; white-space: nowrap; color: #f7f8ff; font-size: clamp(12px, 3.25vw, 23px); font-size: clamp(12px, 3.25cqw, 23px); font-weight: 800; text-shadow: 0 2px 4px #000; }
-.tagline-line { flex: 1; min-width: 12px; max-width: 65px; height: 3px; border-radius: 20px; }
-.tagline-line:first-child { background: linear-gradient(90deg, #00dfff, #633cff); box-shadow: 0 0 7px rgba(0, 170, 255, .35); }
-.tagline-line:last-child { background: linear-gradient(90deg, #ff9b49, #ff28c6, #8c2bff); box-shadow: 0 0 7px rgba(255, 35, 199, .3); }
-.loading { position: absolute; bottom: 5.1%; width: 43%; display: flex; flex-direction: column; align-items: center; gap: 7px; opacity: .95; }
-.progress-track { width: 100%; height: 3px; border-radius: 99px; overflow: hidden; background: rgba(255,255,255,.12); box-shadow: inset 0 0 4px #000; }
-.progress-fill { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ff9b49, #ff22c7, #8e2bff, #00e2ff); box-shadow: 0 0 8px #a52cff; transition: width .12s linear; }
-.loading-label { font-size: clamp(9px, 2.1vw, 12px); color: #b8c5ee; font-weight: 500; letter-spacing: .03em; }
-@keyframes cardReveal { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
-
+  #recaptcha-container{
+    position:fixed;bottom:0;left:0;
+    width:1px;height:1px;overflow:visible;
+    z-index:-1;opacity:.01;pointer-events:auto;
+  }
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes panelIn{from{opacity:0;transform:translateY(16px) scale(.99);}to{opacity:1;transform:translateY(0) scale(1);}}
+  .screen.active .brand-wrap{animation:fadeInUp .45s cubic-bezier(.22,1,.36,1) backwards;}
+  .screen.active .auth-panel{animation:panelIn .55s cubic-bezier(.22,1,.36,1) .06s backwards;}
+  @media (max-height:700px){
+    .login-wrap{padding:14px 14px 24px;gap:12px;}
+    .auth-panel{padding:20px 18px;gap:11px;}
+    .brand-name{font-size:clamp(30px,9vw,40px);}
+    .logo-mark{width:92px;height:76px;}
+    .welcome{font-size:19px;}
+    .otp-input{width:42px;height:52px;font-size:20px;}
+  }
+  @media (max-width:360px){
+    .social-row{grid-template-columns:1fr;}
+    .otp-input{width:40px;height:50px;font-size:18px;}
+    .method-row{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}
+    .bg-orbs{display:none;}
+  }
 </style>
 </head>
 <body>
-
-<div class="splash-screen" id="splash-screen">
-  <div class="ambient"></div>
-  <main class="splash" id="splash">
-    <div class="neon-glow"></div>
-    <div class="reflection"></div>
-    <div class="logo-wrap">
-      <svg class="logo-svg" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="cGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffb45e"/><stop offset="19%" stop-color="#ff5b91"/><stop offset="42%" stop-color="#ff20c7"/><stop offset="64%" stop-color="#a22bff"/><stop offset="83%" stop-color="#394cff"/><stop offset="100%" stop-color="#00cfff"/></linearGradient>
-          <linearGradient id="cartGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ff37d4"/><stop offset="43%" stop-color="#a62bff"/><stop offset="74%" stop-color="#4558ff"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient>
-          <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#a11cff" stop-opacity="0"/><stop offset="35%" stop-color="#ff21c6"/><stop offset="100%" stop-color="#ff39c8"/></linearGradient>
-          <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".8"/><stop offset="40%" stop-color="#ffffff" stop-opacity=".08"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
-          <filter id="neon" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <filter id="deepShadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/><feOffset dy="5" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".7"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <path d="M 293 34 C 281 55 267 61 247 52 C 221 40 196 35 168 37 C 89 39 35 91 35 157 C 35 224 91 269 168 269 C 216 269 257 255 285 232 L 270 218 C 243 237 208 246 171 245 C 112 244 65 211 65 157 C 65 103 108 66 169 65 C 207 64 238 78 257 98 L 281 98 L 281 34 Z" fill="url(#cGradient)" stroke="#ff78e5" stroke-width="1.5" stroke-linejoin="round" filter="url(#deepShadow)"/>
-        <path d="M 293 34 C 281 55 267 61 247 52 C 221 40 196 35 168 37 C 89 39 35 91 35 157" fill="none" stroke="url(#shine)" stroke-width="4" stroke-linecap="round"/>
-        <g filter="url(#neon)" stroke-linecap="round"><path d="M 77 150 H 172" stroke="url(#speedGradient)" stroke-width="8"/><path d="M 77 169 H 190" stroke="url(#speedGradient)" stroke-width="8"/><path d="M 95 188 H 199" stroke="url(#speedGradient)" stroke-width="7"/></g>
-        <path d="M 157 111 H 174 C 184 111 190 116 194 126 L 222 185" fill="none" stroke="#ff8bea" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon)"/>
-        <path d="M 202 130 H 321 Q 331 130 326 141 L 307 178 Q 303 186 291 186 H 224 Q 215 186 211 176 L 194 136" fill="none" stroke="url(#cartGradient)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon)"/>
-        <path d="M 216 149 H 312" stroke="url(#cartGradient)" stroke-width="10" stroke-linecap="round"/><path d="M 223 169 H 302" stroke="url(#cartGradient)" stroke-width="9" stroke-linecap="round"/>
-        <g filter="url(#neon)"><circle cx="225" cy="211" r="11" fill="url(#cartGradient)" stroke="#e5a4ff" stroke-width="1.5"/><circle cx="291" cy="211" r="11" fill="url(#cartGradient)" stroke="#63dfff" stroke-width="1.5"/></g>
-        <path d="M 208 134 H 315" stroke="#ffffff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>
-        <path d="M 170 269 C 216 269 257 255 285 232" fill="none" stroke="url(#cGradient)" stroke-width="5" stroke-linecap="round" filter="url(#neon)"/>
-      </svg>
-    </div>
-    <div class="brand">CHIZEN</div>
-    <div class="tagline"><span class="tagline-line"></span><span>كل ما تحتاجه في مكان واحد</span><span class="tagline-line"></span></div>
-    <div class="loading"><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div><div class="loading-label" id="loading-label">جاري تجهيز شيزن... 0%</div></div>
-  </main>
-</div>
-<script>
-(() => {
-  const screen = document.getElementById("splash-screen");
-  const bar = document.getElementById("progress-fill");
-  const label = document.getElementById("loading-label");
-  if(!screen) return;
-  const duration = 5000;
-  const start = performance.now();
-  function finishSplash() {
-    bar.style.width = "100%"; label.textContent = "أهلاً بك في شيزن";
-    setTimeout(() => { screen.classList.add("hide"); setTimeout(() => screen.remove(), 700); }, 200);
-  }
-  function animate(now) {
-    const progress = Math.min(100, ((now - start) / duration) * 100);
-    bar.style.width = Math.floor(progress) + "%";
-    label.textContent = progress >= 100 ? "أهلاً بك في شيزن" : `جاري تجهيز شيزن... ${Math.floor(progress)}%`;
-    if (progress < 100) requestAnimationFrame(animate); else finishSplash();
-  }
-  requestAnimationFrame(animate);
-})();
-</script>
-
-
-
-
-
+<div class="offline-banner" id="offline-banner">لا يوجد اتصال بالإنترنت</div>
+<div id="recaptcha-container"></div>
 <div id="app">
+  <div class="ambient"></div>
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
   <div id="screens">
-
     <div class="screen active" id="screen-login">
       <div class="safe-top"></div>
       <div class="login-wrap">
-        <div class="logo-big">CHIZEN</div>
-        <div class="gold-divider"></div>
-        <div class="welcome">مرحباً بك</div>
-        <div class="sub">سجّل دخولك للمتابعة</div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <input type="email" id="login-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+        <div class="brand-wrap">
+          <svg class="logo-mark" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" aria-label="CHIZEN logo">
+            <defs>
+              <linearGradient id="cGradL" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffb45e"/><stop offset="19%" stop-color="#ff5b91"/>
+                <stop offset="42%" stop-color="#ff20c7"/><stop offset="64%" stop-color="#a22bff"/>
+                <stop offset="83%" stop-color="#394cff"/><stop offset="100%" stop-color="#00cfff"/>
+              </linearGradient>
+              <linearGradient id="cartGradL" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ff37d4"/><stop offset="43%" stop-color="#a62bff"/>
+                <stop offset="74%" stop-color="#4558ff"/><stop offset="100%" stop-color="#00e5ff"/>
+              </linearGradient>
+              <linearGradient id="speedGradL" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#a11cff" stop-opacity="0"/>
+                <stop offset="35%" stop-color="#ff21c6"/><stop offset="100%" stop-color="#ff39c8"/>
+              </linearGradient>
+              <linearGradient id="shineL" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity=".8"/>
+                <stop offset="40%" stop-color="#ffffff" stop-opacity=".08"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+              </linearGradient>
+              <filter id="neonL" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="3" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path d="M 293 34 C 281 55 267 61 247 52 C 221 40 196 35 168 37 C 89 39 35 91 35 157 C 35 224 91 269 168 269 C 216 269 257 255 285 232 L 270 218 C 243 237 208 246 171 245 C 112 244 65 211 65 157 C 65 103 108 66 169 65 C 207 64 238 78 257 98 L 281 98 L 281 34 Z" fill="url(#cGradL)" stroke="#ff78e5" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M 293 34 C 281 55 267 61 247 52 C 221 40 196 35 168 37 C 89 39 35 91 35 157" fill="none" stroke="url(#shineL)" stroke-width="4" stroke-linecap="round"/>
+            <g filter="url(#neonL)" stroke-linecap="round">
+              <path d="M 77 150 H 172" stroke="url(#speedGradL)" stroke-width="8"/>
+              <path d="M 77 169 H 190" stroke="url(#speedGradL)" stroke-width="8"/>
+              <path d="M 95 188 H 199" stroke="url(#speedGradL)" stroke-width="7"/>
+            </g>
+            <path d="M 157 111 H 174 C 184 111 190 116 194 126 L 222 185" fill="none" stroke="#ff8bea" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#neonL)"/>
+            <path d="M 202 130 H 321 Q 331 130 326 141 L 307 178 Q 303 186 291 186 H 224 Q 215 186 211 176 L 194 136" fill="none" stroke="url(#cartGradL)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#neonL)"/>
+            <path d="M 216 149 H 312" stroke="url(#cartGradL)" stroke-width="10" stroke-linecap="round"/>
+            <path d="M 223 169 H 302" stroke="url(#cartGradL)" stroke-width="9" stroke-linecap="round"/>
+            <g filter="url(#neonL)">
+              <circle cx="225" cy="211" r="11" fill="url(#cartGradL)" stroke="#e5a4ff" stroke-width="1.5"/>
+              <circle cx="291" cy="211" r="11" fill="url(#cartGradL)" stroke="#63dfff" stroke-width="1.5"/>
+            </g>
+            <path d="M 208 134 H 315" stroke="#ffffff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>
+            <path d="M 170 269 C 216 269 257 255 285 232" fill="none" stroke="url(#cGradL)" stroke-width="5" stroke-linecap="round" filter="url(#neonL)"/>
+          </svg>
+          <div class="brand-name">CHIZEN</div>
         </div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" id="login-password" class="input with-icon" placeholder="كلمة المرور" autocomplete="current-password">
-          <button type="button" class="input-eye" onclick="togglePassword('login-password', this)">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <div class="auth-panel">
+          <div class="welcome">مرحباً بك</div>
+          <div class="sub">سجّل دخولك للمتابعة</div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="login-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+          </div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="login-password" class="input with-icon" placeholder="كلمة المرور" autocomplete="current-password">
+            <button type="button" class="input-eye" onclick="togglePassword('login-password', this)">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="forgot-row">
+            <label class="checkbox-row">
+              <input type="checkbox" id="login-remember">
+              <span class="checkbox-box"></span>
+              <span>تذكرني</span>
+            </label>
+            <a onclick="AUTH.showScreen('forgot')">نسيت كلمة المرور؟</a>
+          </div>
+          <button class="btn-primary" id="btn-login" onclick="AUTH.login()">تسجيل الدخول</button>
+          <div class="err-msg" id="login-err"></div>
+          <div class="divider"><span>أو تابع باستخدام</span></div>
+          <button class="btn-phone" onclick="AUTH.showScreen('phone')">
+            <svg width="20" height="20" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>الدخول برقم الجوال</span>
           </button>
-        </div>
-
-        <div class="forgot-row">
-          <label class="checkbox-row">
-            <input type="checkbox" id="login-remember">
-            <span class="checkbox-box"></span>
-            <span>تذكرني</span>
-          </label>
-          <a onclick="AUTH.showScreen('forgot')">نسيت كلمة المرور؟</a>
-        </div>
-
-        <button class="btn-primary" id="btn-login" onclick="AUTH.login()">تسجيل الدخول</button>
-
-        <div class="divider"><span>أو</span></div>
-
-        <button class="btn-google" id="btn-google" onclick="AUTH.googleLogin()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-          <span>الدخول بحساب Google</span>
-        </button>
-
-        <div class="err-msg" id="login-err"></div>
-
-        <div class="bottom-text">
-          <span>ليس لديك حساب؟</span>
-          <a onclick="AUTH.showScreen('signup')">أنشئ حساب</a>
+          <div class="social-row">
+            <button class="btn-social google" id="btn-google" onclick="AUTH.googleLogin()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              <span>Google</span>
+            </button>
+            <button class="btn-social facebook" id="btn-facebook" onclick="AUTH.facebookLogin()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              <span>Facebook</span>
+            </button>
+          </div>
+          <div class="bottom-text">
+            <span>ليس لديك حساب؟</span>
+            <a onclick="AUTH.showScreen('signup')">أنشئ حساب</a>
+          </div>
         </div>
       </div>
     </div>
-
+    <div class="screen" id="screen-phone">
+      <div class="safe-top"></div>
+      <div class="login-wrap">
+        <button class="back-btn-top" onclick="AUTH.showScreen('login')" aria-label="رجوع">
+          <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="brand-wrap">
+          <div class="brand-name small">CHIZEN</div>
+        </div>
+        <div class="auth-panel">
+          <div class="welcome">تسجيل الدخول برقم الجوال</div>
+          <div class="sub">سنرسل لك رمز تحقق لتأكيد رقمك</div>
+          <div class="phone-group">
+            <div class="country-select">
+              <button type="button" class="country-btn" onclick="AUTH.toggleCountryDropdown(event)">
+                <span class="flag" id="country-flag">🇾🇪</span>
+                <span class="code" id="country-code">+967</span>
+                <svg class="chev" viewBox="0 0 24 24" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="country-dropdown" id="country-dropdown"></div>
+            </div>
+            <div class="phone-input-wrap">
+              <input type="tel" id="phone-number" class="input" placeholder="7XX XXX XXX" inputmode="tel" autocomplete="tel-national" maxlength="15">
+            </div>
+          </div>
+          <div class="method-label">اختر طريقة وصول الرمز</div>
+          <div class="method-row">
+            <button type="button" class="method-btn active" data-method="sms" onclick="AUTH.setMethod('sms', this)">
+              <svg class="icon-sms" width="18" height="18" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>رسالة نصية</span>
+            </button>
+            <button type="button" class="method-btn" data-method="whatsapp" onclick="AUTH.setMethod('whatsapp', this)">
+              <svg class="icon-wa" width="18" height="18" viewBox="0 0 24 24"><path d="M17.6 6.3C15.9 4.6 13.7 3.7 11.3 3.7c-4.8 0-8.7 3.9-8.7 8.7 0 1.5.4 3 1.2 4.3L2.5 21.5l4.9-1.3c1.2.7 2.6 1 4 1 4.8 0 8.7-3.9 8.7-8.7 0-2.3-.9-4.5-2.5-6.2zm-6.3 13.4c-1.3 0-2.6-.3-3.7-1l-.3-.2-2.9.8.8-2.8-.2-.3c-.8-1.2-1.2-2.6-1.2-4 0-4 3.3-7.3 7.3-7.3 2 0 3.8.8 5.2 2.1 1.4 1.4 2.1 3.2 2.1 5.2 0 4.1-3.4 7.5-7.1 7.5z"/></svg>
+              <span>واتساب</span>
+            </button>
+          </div>
+          <button class="btn-primary" id="btn-send-otp" onclick="AUTH.sendPhoneOTP()">إرسال الرمز</button>
+          <div class="err-msg" id="phone-err"></div>
+          <div class="bottom-text" style="margin-top:2px;">
+            <span>لديك حساب؟</span>
+            <a onclick="AUTH.showScreen('login')">تسجيل الدخول</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="screen" id="screen-otp">
+      <div class="safe-top"></div>
+      <div class="login-wrap">
+        <button class="back-btn-top" onclick="AUTH.showScreen('phone')" aria-label="رجوع">
+          <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="brand-wrap"><div class="brand-name small">CHIZEN</div></div>
+        <div class="auth-panel">
+          <div class="welcome">أدخل رمز التحقق</div>
+          <div class="sub">تم إرسال رمز مكوّن من 6 أرقام إلى</div>
+          <div class="otp-mask"><span class="num" id="otp-phone-display">+967 7XX XXX XXX</span></div>
+          <div class="otp-container" id="otp-container">
+            <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-index="0">
+            <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" autocomplete="off" data-index="1">
+            <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" autocomplete="off" data-index="2">
+            <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" autocomplete="off" data-index="3">
+            <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" autocomplete="off" data-index="4">
+            <input class="otp-input" type="tel" inputmode="numeric" maxlength="1" autocomplete="off" data-index="5">
+          </div>
+          <div class="resend-row">
+            <span>لم تستلم الرمز؟</span>
+            <button type="button" class="resend-btn" id="btn-resend" onclick="AUTH.resendOTP()">إعادة الإرسال</button>
+            <span id="resend-timer">(60s)</span>
+          </div>
+          <button class="btn-primary" id="btn-verify-otp" onclick="AUTH.verifyOTP()">تأكيد الرمز</button>
+          <div class="err-msg" id="otp-err"></div>
+          <div class="change-method"><a onclick="AUTH.showScreen('phone')">تغيير الرقم أو الطريقة</a></div>
+        </div>
+      </div>
+    </div>
     <div class="screen" id="screen-signup">
       <div class="safe-top"></div>
       <div class="login-wrap">
-        <button class="back-btn-top" onclick="AUTH.showScreen('login')">
+        <button class="back-btn-top" onclick="AUTH.showScreen('login')" aria-label="رجوع">
           <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
-        <div class="logo-sm">CHIZEN</div>
-        <div class="welcome">أنشئ حساب</div>
-        <div class="sub">انضم إلينا واستمتع بأفضل العروض</div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <input type="text" id="signup-name" class="input with-icon" placeholder="الاسم الكامل" autocomplete="name">
-        </div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <input type="email" id="signup-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
-        </div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <input type="tel" id="signup-phone" class="input with-icon" placeholder="رقم الجوال" autocomplete="tel" inputmode="tel">
-        </div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" id="signup-password" class="input with-icon" placeholder="كلمة المرور" autocomplete="new-password">
-          <button type="button" class="input-eye" onclick="togglePassword('signup-password', this)">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-        </div>
-
-        <div class="pw-strength" id="signup-strength">
-          <div class="pw-bars"><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div></div>
-          <div class="pw-label" id="signup-strength-label">قوة كلمة المرور</div>
-        </div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" id="signup-confirm" class="input with-icon" placeholder="تأكيد كلمة المرور" autocomplete="new-password">
-          <button type="button" class="input-eye" onclick="togglePassword('signup-confirm', this)">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-        </div>
-
-        <label class="checkbox-row" style="margin-top:6px;">
-          <input type="checkbox" id="signup-terms">
-          <span class="checkbox-box"></span>
-          <span>أوافق على <a href="terms.html" target="_blank">الشروط والأحكام</a></span>
-        </label>
-
-        <button class="btn-primary" id="btn-signup" onclick="AUTH.signup()">إنشاء الحساب</button>
-
-        <div class="err-msg" id="signup-err"></div>
-
-        <div class="bottom-text">
-          <span>لديك حساب؟</span>
-          <a onclick="AUTH.showScreen('login')">تسجيل الدخول</a>
+        <div class="brand-wrap"><div class="brand-name small">CHIZEN</div></div>
+        <div class="auth-panel">
+          <div class="welcome">أنشئ حساب</div>
+          <div class="sub">انضم إلينا واستمتع بأفضل العروض</div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="signup-name" class="input with-icon" placeholder="الاسم الكامل" autocomplete="name">
+          </div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="signup-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+          </div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <input type="tel" id="signup-phone" class="input with-icon" placeholder="رقم الجوال" autocomplete="tel" inputmode="tel">
+          </div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="signup-password" class="input with-icon" placeholder="كلمة المرور" autocomplete="new-password">
+            <button type="button" class="input-eye" onclick="togglePassword('signup-password', this)">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="pw-strength" id="signup-strength">
+            <div class="pw-bars"><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div></div>
+            <div class="pw-label" id="signup-strength-label">قوة كلمة المرور</div>
+          </div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="signup-confirm" class="input with-icon" placeholder="تأكيد كلمة المرور" autocomplete="new-password">
+            <button type="button" class="input-eye" onclick="togglePassword('signup-confirm', this)">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <label class="checkbox-row" style="margin-top:4px;">
+            <input type="checkbox" id="signup-terms">
+            <span class="checkbox-box"></span>
+            <span>أوافق على <a href="terms.html" target="_blank">الشروط والأحكام</a></span>
+          </label>
+          <button class="btn-primary" id="btn-signup" onclick="AUTH.signup()">إنشاء الحساب</button>
+          <div class="err-msg" id="signup-err"></div>
+          <div class="bottom-text" style="margin-top:2px;">
+            <span>لديك حساب؟</span>
+            <a onclick="AUTH.showScreen('login')">تسجيل الدخول</a>
+          </div>
         </div>
       </div>
     </div>
-
     <div class="screen" id="screen-forgot">
       <div class="safe-top"></div>
       <div class="login-wrap">
-        <button class="back-btn-top" onclick="AUTH.showScreen('login')">
+        <button class="back-btn-top" onclick="AUTH.showScreen('login')" aria-label="رجوع">
           <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
-        <div class="logo-sm">CHIZEN</div>
-        <div class="welcome">استعادة كلمة المرور</div>
-        <div class="sub">أدخل بريدك الإلكتروني وسنرسل لك رابط الاستعادة</div>
-
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <input type="email" id="forgot-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+        <div class="brand-wrap"><div class="brand-name small">CHIZEN</div></div>
+        <div class="auth-panel">
+          <div class="welcome">استعادة كلمة المرور</div>
+          <div class="sub">أدخل بريدك الإلكتروني وسنرسل لك رابط الاستعادة</div>
+          <div class="input-group">
+            <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="forgot-email" class="input with-icon" placeholder="البريد الإلكتروني" autocomplete="email" inputmode="email">
+          </div>
+          <button class="btn-primary" id="btn-forgot" onclick="AUTH.sendReset()">إرسال رابط الاستعادة</button>
+          <div class="err-msg" id="forgot-err"></div>
         </div>
-
-        <button class="btn-primary" id="btn-forgot" onclick="AUTH.sendReset()">إرسال رابط الاستعادة</button>
-
-        <div class="err-msg" id="forgot-err"></div>
       </div>
     </div>
-
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <div class="load-overlay" id="load-overlay">
   <div class="load-box">
     <div class="spinner-lg"></div>
     <div class="load-text" id="load-text">جاري المعالجة...</div>
   </div>
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="firebase-service.js"></script>
-
-
 <script>
+var COUNTRIES = [
+  { code:'+967', flag:'🇾🇪', name:'اليمن', len:9 },
+  { code:'+966', flag:'🇸🇦', name:'السعودية', len:9 },
+  { code:'+971', flag:'🇦🇪', name:'الإمارات', len:9 },
+  { code:'+965', flag:'🇰🇼', name:'الكويت', len:8 },
+  { code:'+974', flag:'🇶🇦', name:'قطر', len:8 },
+  { code:'+973', flag:'🇧🇭', name:'البحرين', len:8 },
+  { code:'+968', flag:'🇴🇲', name:'عُمان', len:8 },
+  { code:'+962', flag:'🇯🇴', name:'الأردن', len:9 },
+  { code:'+20',  flag:'🇪🇬', name:'مصر', len:10 },
+  { code:'+964', flag:'🇮🇶', name:'العراق', len:10 },
+  { code:'+963', flag:'🇸🇾', name:'سوريا', len:9 },
+  { code:'+961', flag:'🇱🇧', name:'لبنان', len:8 },
+  { code:'+970', flag:'🇵🇸', name:'فلسطين', len:9 },
+  { code:'+212', flag:'🇲🇦', name:'المغرب', len:9 },
+  { code:'+213', flag:'🇩🇿', name:'الجزائر', len:9 },
+  { code:'+216', flag:'🇹🇳', name:'تونس', len:8 }
+];
+function withTimeout(promise, ms, fallback) {
+  return Promise.race([
+    promise,
+    new Promise(function(resolve){
+      setTimeout(function(){ resolve(fallback !== undefined ? fallback : null); }, ms);
+    })
+  ]);
+}
 var AUTH = {
   _busy: false,
+  _busySince: 0,
   _fbReady: false,
-
-  init: async function() {
+  _redirecting: false,
+  _selectedCountry: COUNTRIES[0],
+  _phoneMethod: 'sms',
+  _confirmationResult: null,
+  _recaptchaVerifier: null,
+  _phoneNumber: null,
+  _otpTimer: null,
+  _resendCooldown: 0,
+  _setBusy: function(v) {
+    this._busy = v;
+    this._busySince = v ? Date.now() : 0;
+  },
+  redirect: function(url) {
+    if (this._redirecting) return;
+    this._redirecting = true;
+    window.location.replace(url || 'chizen.html');
+  },
+  init: function() {
     var self = this;
-
-    
-    
-    /* Removed false positive */
-
+    this.showScreen('login');
     try {
       var rem = localStorage.getItem('chizen_remember_email');
       if (rem) {
         document.getElementById('login-email').value = rem;
         document.getElementById('login-remember').checked = true;
       }
+      var savedCountry = localStorage.getItem('chizen_country');
+      if (savedCountry) {
+        var found = COUNTRIES.find(function(c){ return c.code === savedCountry; });
+        if (found) { this._selectedCountry = found; this.updateCountryUI(); }
+      }
     } catch(e) {}
-
     this.bindPwStrength('signup-password', 'signup-strength', 'signup-strength-label');
     this.bindErrorClear();
-
-    this._fbReady = await this.waitForFB(5000);
-
-    if (this._fbReady) {
-      try {
-        var redirectUser = await FB.handleGoogleRedirect();
-        if (redirectUser) {
-          var existing = await FB.getUserProfile();
-          if (!existing) {
-            await FB.saveUserProfile({
-              name: redirectUser.displayName || 'مستخدم',
-              email: redirectUser.email,
-              phone: '',
-              loyaltyPoints: 240,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-          }
-          window.location.replace('chizen.html');
-          return;
-        }
-      } catch(e) {
-        console.error('Redirect error:', e);
+    this.renderCountries();
+    this.initOTPInputs();
+    window.addEventListener('offline', function(){ document.getElementById('offline-banner').classList.add('show'); });
+    window.addEventListener('online',  function(){ document.getElementById('offline-banner').classList.remove('show'); });
+    if (!navigator.onLine) document.getElementById('offline-banner').classList.add('show');
+    setInterval(function() {
+      if (self._busy && self._busySince > 0 && (Date.now() - self._busySince) > 30000) {
+        self._setBusy(false);
+        ['btn-login','btn-signup','btn-forgot','btn-google','btn-facebook','btn-send-otp','btn-verify-otp','btn-resend'].forEach(function(id){
+          self.setLoading(id, false);
+        });
+        self.hideOverlay();
+        self.showErr('login-err', 'انتهت المهلة — حاول مرة أخرى');
       }
-
-      FB.onAuthChange(function(user) {
-        if (user) window.location.replace('chizen.html');
+    }, 5000);
+    this._fbReady = !!(window.FB && window.FB.ready);
+    if (!this._fbReady) {
+      this.waitForFB(2500).then(function(ready){
+        self._fbReady = ready;
+        if (ready) self.afterFBReady();
       });
-    }
-
-    this.showScreen('login');
-    
-    // إخفاء شاشة التحميل بنعومة
-    var splash = document.getElementById('splash-screen');
-    if (splash) {
-      splash.style.opacity = '0'; splash.style.pointerEvents = 'none';
-      setTimeout(function(){ splash.style.display = 'none'; }, 500);
+    } else {
+      this.afterFBReady();
     }
   },
-
+  afterFBReady: function() {
+    var self = this;
+    withTimeout(
+      (async function(){
+        try {
+          var redirectUser = await FB.handleGoogleRedirect();
+          if (redirectUser) {
+            var existing = await FB.getUserProfile();
+            if (!existing) {
+              await FB.saveUserProfile({
+                name: redirectUser.displayName || 'مستخدم',
+                email: redirectUser.email || '',
+                phone: '',
+                loyaltyPoints: 240,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+            }
+            self.redirect();
+            return true;
+          }
+        } catch(e) {
+          console.warn('Redirect check failed:', e);
+        }
+        return false;
+      })(),
+      4000, false
+    ).then(function(redirected){
+      if (redirected) return;
+      try {
+        FB.onAuthChange(function(user) {
+          if (user && !self._redirecting) {
+            self.redirect();
+          }
+        });
+      } catch(e) { console.warn('onAuthChange failed:', e); }
+    });
+  },
   waitForFB: function(timeout) {
     return new Promise(function(resolve) {
       var start = Date.now();
@@ -407,27 +838,20 @@ var AUTH = {
       })();
     });
   },
-
   showScreen: function(id) {
-    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.SplashScreen) {
-      window.Capacitor.Plugins.SplashScreen.hide();
-    }
     var s = document.querySelectorAll('.screen');
     for (var i = 0; i < s.length; i++) s[i].classList.remove('active');
     var t = document.getElementById('screen-' + id);
     if (t) { t.classList.add('active'); t.scrollTop = 0; }
-    ['login-err','signup-err','forgot-err'].forEach(function(x){
+    ['login-err','signup-err','forgot-err','phone-err','otp-err'].forEach(function(x){
       var el = document.getElementById(x);
       if (el) el.classList.remove('show');
     });
+    if (id !== 'otp') clearInterval(this._otpTimer);
   },
-
-  isEmail: function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); },
-  isPhone: function(v) {
-    var digits = (v || '').replace(/\D/g, '');
-    return digits.length >= 8 && digits.length <= 15;
-  },
-  pwStrength: function(p) {
+  isEmail: function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); },
+  isPhone: function(v){ var d = (v||'').replace(/\D/g,''); return d.length >= 7 && d.length <= 15; },
+  pwStrength: function(p){
     if (!p) return 0;
     var s = 0;
     if (p.length >= 6) s++;
@@ -437,7 +861,6 @@ var AUTH = {
     if (/[^A-Za-z0-9]/.test(p)) s++;
     return Math.min(s, 4);
   },
-
   setLoading: function(btnId, loading) {
     var btn = document.getElementById(btnId);
     if (!btn) return;
@@ -450,26 +873,23 @@ var AUTH = {
       if (btn.dataset.original) btn.innerHTML = btn.dataset.original;
     }
   },
-
   showOverlay: function(text) {
     document.getElementById('load-text').textContent = text || 'جاري المعالجة...';
     document.getElementById('load-overlay').classList.add('show');
   },
   hideOverlay: function() { document.getElementById('load-overlay').classList.remove('show'); },
-
   showErr: function(id, msg) {
     var el = document.getElementById(id);
     if (!el) return;
     el.textContent = msg;
     el.classList.add('show');
     clearTimeout(el._timer);
-    el._timer = setTimeout(function() { el.classList.remove('show'); }, 6000);
+    el._timer = setTimeout(function(){ el.classList.remove('show'); }, 6000);
   },
   clearErr: function(id) {
     var el = document.getElementById(id);
     if (el) el.classList.remove('show');
   },
-
   bindPwStrength: function(inputId, wrapId, labelId) {
     var inp = document.getElementById(inputId);
     var wrap = document.getElementById(wrapId);
@@ -482,60 +902,305 @@ var AUTH = {
       if (!v) { wrap.classList.remove('show'); return; }
       wrap.classList.add('show');
       var score = AUTH.pwStrength(v);
-      bars.forEach(function(b, i) { b.className = 'pw-bar' + (i < score ? ' s' + score : ''); });
+      bars.forEach(function(b, i){ b.className = 'pw-bar' + (i < score ? ' s' + score : ''); });
       label.textContent = texts[score] || 'ضعيفة';
       label.className = 'pw-label ' + (score >= 3 ? 'good' : score <= 1 ? 'bad' : '');
     });
   },
-
   bindErrorClear: function() {
     var pairs = [
-      ['login-email','login-err'], ['login-password','login-err'],
-      ['signup-name','signup-err'], ['signup-email','signup-err'],
-      ['signup-phone','signup-err'], ['signup-password','signup-err'],
-      ['signup-confirm','signup-err'], ['forgot-email','forgot-err']
+      ['login-email','login-err'],['login-password','login-err'],
+      ['signup-name','signup-err'],['signup-email','signup-err'],
+      ['signup-phone','signup-err'],['signup-password','signup-err'],
+      ['signup-confirm','signup-err'],['forgot-email','forgot-err'],
+      ['phone-number','phone-err']
     ];
-    pairs.forEach(function(p) {
+    pairs.forEach(function(p){
       var inp = document.getElementById(p[0]);
       if (inp) inp.addEventListener('input', function(){ AUTH.clearErr(p[1]); });
     });
   },
-
+  renderCountries: function() {
+    var dd = document.getElementById('country-dropdown');
+    if (!dd) return;
+    dd.innerHTML = COUNTRIES.map(function(c) {
+      return '<div class="country-option" data-code="'+c.code+'" onclick="AUTH.selectCountry(\''+c.code+'\')">'+
+        '<span class="flag">'+c.flag+'</span>'+
+        '<span class="name">'+c.name+'</span>'+
+        '<span class="code">'+c.code+'</span>'+
+      '</div>';
+    }).join('');
+  },
+  toggleCountryDropdown: function(e) {
+    e.stopPropagation();
+    var dd = document.getElementById('country-dropdown');
+    if (dd) dd.classList.toggle('show');
+  },
+  selectCountry: function(code) {
+    var c = COUNTRIES.find(function(x){ return x.code === code; });
+    if (!c) return;
+    this._selectedCountry = c;
+    this.updateCountryUI();
+    var dd = document.getElementById('country-dropdown');
+    if (dd) dd.classList.remove('show');
+    try { localStorage.setItem('chizen_country', code); } catch(e) {}
+    var input = document.getElementById('phone-number');
+    if (input) { input.maxLength = c.len; input.focus(); }
+  },
+  updateCountryUI: function() {
+    var f = document.getElementById('country-flag');
+    var c = document.getElementById('country-code');
+    if (f) f.textContent = this._selectedCountry.flag;
+    if (c) c.textContent = this._selectedCountry.code;
+    var input = document.getElementById('phone-number');
+    if (input) input.maxLength = this._selectedCountry.len || 15;
+  },
+  setMethod: function(method, btn) {
+    this._phoneMethod = method;
+    document.querySelectorAll('.method-btn').forEach(function(b){ b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+  },
+  initOTPInputs: function() {
+    var inputs = document.querySelectorAll('.otp-input');
+    var self = this;
+    inputs.forEach(function(input, i) {
+      input.addEventListener('input', function(e) {
+        var val = e.target.value.replace(/\D/g, '');
+        e.target.value = val.slice(0, 1);
+        if (val) {
+          e.target.classList.add('filled');
+          if (i < inputs.length - 1) inputs[i + 1].focus();
+        } else {
+          e.target.classList.remove('filled');
+        }
+        self.clearOTPError();
+      });
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !e.target.value && i > 0) {
+          inputs[i-1].focus(); inputs[i-1].value = ''; inputs[i-1].classList.remove('filled');
+        }
+        if (e.key === 'ArrowLeft' && i < inputs.length - 1) { e.preventDefault(); inputs[i+1].focus(); }
+        if (e.key === 'ArrowRight' && i > 0) { e.preventDefault(); inputs[i-1].focus(); }
+        if (e.key === 'Enter') { e.preventDefault(); AUTH.verifyOTP(); }
+      });
+      input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+        for (var j = 0; j < 6; j++) {
+          inputs[j].value = paste[j] || '';
+          if (paste[j]) inputs[j].classList.add('filled');
+          else inputs[j].classList.remove('filled');
+        }
+        var next = Math.min(paste.length, 5);
+        inputs[next].focus();
+      });
+      input.addEventListener('focus', function(){ this.select(); });
+    });
+  },
+  getOTPValue: function() {
+    var code = '';
+    document.querySelectorAll('.otp-input').forEach(function(inp){ code += inp.value; });
+    return code;
+  },
+  clearOTP: function() {
+    document.querySelectorAll('.otp-input').forEach(function(inp){
+      inp.value = ''; inp.classList.remove('filled','error');
+    });
+  },
+  clearOTPError: function() {
+    document.querySelectorAll('.otp-input').forEach(function(inp){ inp.classList.remove('error'); });
+    this.clearErr('otp-err');
+  },
+  sendPhoneOTP: async function() {
+    if (this._busy) return;
+    var raw = (document.getElementById('phone-number').value || '').replace(/\D/g, '');
+    var errId = 'phone-err';
+    if (!raw || raw.length < 7) { this.showErr(errId, 'أدخل رقم جوال صحيح'); return; }
+    if (raw.length < (this._selectedCountry.len - 2)) { this.showErr(errId, 'الرقم قصير جداً'); return; }
+    if (!this._fbReady) { this.showErr(errId, 'جاري التحميل — حاول بعد لحظات'); return; }
+    var clean = raw.replace(/^0+/, '');
+    var fullPhone = this._selectedCountry.code + clean;
+    this._setBusy(true);
+    this.setLoading('btn-send-otp', true);
+    try {
+      if (this._recaptchaVerifier) {
+        try { this._recaptchaVerifier.clear(); } catch(e) {}
+        this._recaptchaVerifier = null;
+      }
+      this._recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        size: 'invisible',
+        callback: function(){}
+      });
+      var result = await withTimeout(
+        FB.auth.signInWithPhoneNumber(fullPhone, this._recaptchaVerifier),
+        20000, null
+      );
+      if (!result) throw new Error('timeout');
+      this._confirmationResult = result;
+      this._phoneNumber = fullPhone;
+      document.getElementById('otp-phone-display').textContent = this.formatPhoneDisplay(fullPhone);
+      this.setLoading('btn-send-otp', false);
+      this._setBusy(false);
+      this.clearOTP();
+      this.showScreen('otp');
+      this.startResendTimer();
+      var msg = this._phoneMethod === 'whatsapp' ? 'تم إرسال الرمز عبر واتساب ✓' : 'تم إرسال الرمز عبر رسالة نصية ✓';
+      this.toast(msg, 'success');
+      setTimeout(function(){
+        var first = document.querySelector('.otp-input');
+        if (first) first.focus();
+      }, 350);
+    } catch(e) {
+      this.setLoading('btn-send-otp', false);
+      this._setBusy(false);
+      var msg = 'فشل الإرسال';
+      var c = e.code || '';
+      if (e.message === 'timeout') msg = 'انتهت المهلة — حاول مجدداً';
+      else if (c === 'auth/invalid-phone-number') msg = 'رقم الجوال غير صحيح';
+      else if (c === 'auth/too-many-requests') msg = 'محاولات كثيرة — حاول لاحقاً';
+      else if (c === 'auth/quota-exceeded') msg = 'تم تجاوز الحد اليومي';
+      else if (c === 'auth/captcha-check-failed') msg = 'فشل التحقق — أعد المحاولة';
+      else if (c === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      this.showErr(errId, msg);
+    }
+  },
+  formatPhoneDisplay: function(phone) {
+    if (!phone) return '';
+    var cc = this._selectedCountry.code;
+    var rest = phone.slice(cc.length);
+    var masked = rest.length > 4 ? rest.slice(0, 3) + ' XXX ' + rest.slice(-2) : rest;
+    return cc + ' ' + masked;
+  },
+  startResendTimer: function() {
+    var self = this;
+    clearInterval(this._otpTimer);
+    this._resendCooldown = 60;
+    var btn = document.getElementById('btn-resend');
+    var timer = document.getElementById('resend-timer');
+    if (!btn || !timer) return;
+    btn.disabled = true;
+    timer.classList.add('show');
+    timer.textContent = '(' + this._resendCooldown + 's)';
+    this._otpTimer = setInterval(function(){
+      self._resendCooldown--;
+      if (self._resendCooldown <= 0) {
+        clearInterval(self._otpTimer);
+        btn.disabled = false;
+        timer.classList.remove('show');
+      } else {
+        timer.textContent = '(' + self._resendCooldown + 's)';
+      }
+    }, 1000);
+  },
+  resendOTP: async function() {
+    if (this._resendCooldown > 0) return;
+    if (this._busy) return;
+    if (!this._phoneNumber) { this.showErr('otp-err', 'أعد إدخال الرقم أولاً'); return; }
+    this._setBusy(true);
+    var btn = document.getElementById('btn-resend');
+    var orig = btn.textContent;
+    btn.textContent = 'جاري...';
+    btn.disabled = true;
+    try {
+      if (this._recaptchaVerifier) {
+        try { this._recaptchaVerifier.clear(); } catch(e) {}
+        this._recaptchaVerifier = null;
+      }
+      this._recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        size: 'invisible', callback: function(){}
+      });
+      var result = await withTimeout(
+        FB.auth.signInWithPhoneNumber(this._phoneNumber, this._recaptchaVerifier),
+        20000, null
+      );
+      if (!result) throw new Error('timeout');
+      this._confirmationResult = result;
+      btn.textContent = orig;
+      this._setBusy(false);
+      this.toast('تم إعادة إرسال الرمز ✓', 'success');
+      this.startResendTimer();
+    } catch(e) {
+      btn.textContent = orig;
+      btn.disabled = false;
+      this._setBusy(false);
+      var msg = 'فشل الإرسال';
+      if (e.code === 'auth/too-many-requests') msg = 'انتظر قليلاً قبل إعادة المحاولة';
+      this.showErr('otp-err', msg);
+    }
+  },
+  verifyOTP: async function() {
+    if (this._busy) return;
+    var code = this.getOTPValue();
+    if (code.length !== 6) { this.showErr('otp-err', 'أدخل الرمز المكوّن من 6 أرقام'); return; }
+    if (!this._confirmationResult) { this.showErr('otp-err', 'أعد إرسال الرمز أولاً'); return; }
+    this._setBusy(true);
+    this.setLoading('btn-verify-otp', true);
+    this.clearOTPError();
+    try {
+      var result = await withTimeout(this._confirmationResult.confirm(code), 15000, null);
+      if (!result) throw new Error('timeout');
+      var user = result.user;
+      var existing = null;
+      try { existing = await withTimeout(FB.getUserProfile(), 5000, null); } catch(e) {}
+      if (!existing) {
+        await withTimeout(FB.saveUserProfile({
+          name: user.displayName || 'مستخدم',
+          email: user.email || '',
+          phone: user.phoneNumber || this._phoneNumber,
+          phoneVerified: true,
+          loyaltyPoints: 240,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }), 8000, null);
+      }
+      this.redirect();
+    } catch(e) {
+      this.setLoading('btn-verify-otp', false);
+      this._setBusy(false);
+      var msg = 'الرمز غير صحيح';
+      var c = e.code || '';
+      if (e.message === 'timeout') msg = 'انتهت المهلة — حاول مجدداً';
+      else if (c === 'auth/invalid-verification-code') msg = 'الرمز غير صحيح — حاول مجدداً';
+      else if (c === 'auth/code-expired') msg = 'انتهت صلاحية الرمز — اطلب رمزاً جديداً';
+      else if (c === 'auth/too-many-requests') msg = 'محاولات كثيرة — حاول لاحقاً';
+      this.showErr('otp-err', msg);
+      document.querySelectorAll('.otp-input').forEach(function(inp){ inp.classList.add('error'); });
+      setTimeout(function(){
+        document.querySelectorAll('.otp-input').forEach(function(inp){ inp.classList.remove('error'); });
+      }, 1500);
+    }
+  },
   login: async function() {
     if (this._busy) return;
     var email = (document.getElementById('login-email').value || '').trim().toLowerCase();
     var pass  = document.getElementById('login-password').value || '';
     var remember = document.getElementById('login-remember').checked;
-
     if (!this.isEmail(email)) { this.showErr('login-err', 'أدخل بريداً صحيحاً'); return; }
     if (pass.length < 6)      { this.showErr('login-err', 'كلمة المرور 6 أحرف على الأقل'); return; }
-    if (!this._fbReady)       { this.showErr('login-err', 'لا يوجد اتصال'); return; }
-
-    this._busy = true;
+    if (!this._fbReady)       { this.showErr('login-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    this._setBusy(true);
     this.setLoading('btn-login', true);
-
     try {
-      await FB.loginEmail(email, pass);
+      await withTimeout(FB.loginEmail(email, pass), 20000, null);
       try {
         if (remember) localStorage.setItem('chizen_remember_email', email);
         else localStorage.removeItem('chizen_remember_email');
       } catch(e) {}
-      window.location.replace('chizen.html');
+      this.redirect();
     } catch (e) {
       this.setLoading('btn-login', false);
-      this._busy = false;
+      this._setBusy(false);
       var msg = 'حدث خطأ';
-      var code = e.code || '';
-      if (code === 'auth/invalid-email') msg = 'البريد غير صحيح';
-      else if (code === 'auth/user-not-found') msg = 'لا يوجد حساب بهذا البريد';
-      else if (code === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
-      else if (code === 'auth/invalid-credential') msg = 'البريد أو كلمة المرور غير صحيحة';
-      else if (code === 'auth/too-many-requests') msg = 'محاولات كثيرة — حاول لاحقاً';
-      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال، تأكد من الإنترنت وحاول مرة أخرى';
+      var c = e.code || '';
+      if (e.message === 'timeout') msg = 'انتهت المهلة — حاول مجدداً';
+      else if (c === 'auth/invalid-email') msg = 'البريد غير صحيح';
+      else if (c === 'auth/user-not-found') msg = 'لا يوجد حساب بهذا البريد';
+      else if (c === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
+      else if (c === 'auth/invalid-credential') msg = 'البريد أو كلمة المرور غير صحيحة';
+      else if (c === 'auth/too-many-requests') msg = 'محاولات كثيرة — حاول لاحقاً';
+      else if (c === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
       this.showErr('login-err', msg);
     }
   },
-
   signup: async function() {
     if (this._busy) return;
     var name    = (document.getElementById('signup-name').value || '').trim();
@@ -544,131 +1209,176 @@ var AUTH = {
     var pass    = document.getElementById('signup-password').value || '';
     var confirm = document.getElementById('signup-confirm').value || '';
     var terms   = document.getElementById('signup-terms').checked;
-
     if (name.length < 2)         { this.showErr('signup-err', 'أدخل اسمك الكامل'); return; }
     if (!this.isEmail(email))    { this.showErr('signup-err', 'أدخل بريداً صحيحاً'); return; }
-    if (!this.isPhone(phone))    { this.showErr('signup-err', 'أدخل رقم جوال صحيح (8-15 رقم)'); return; }
+    if (!this.isPhone(phone))    { this.showErr('signup-err', 'أدخل رقم جوال صحيح'); return; }
     if (pass.length < 6)         { this.showErr('signup-err', 'كلمة المرور 6 أحرف على الأقل'); return; }
     if (pass !== confirm)        { this.showErr('signup-err', 'كلمتا المرور غير متطابقتين'); return; }
     if (!terms)                  { this.showErr('signup-err', 'يجب الموافقة على الشروط والأحكام'); return; }
-    if (!this._fbReady)          { this.showErr('signup-err', 'لا يوجد اتصال'); return; }
-
-    this._busy = true;
+    if (!this._fbReady)          { this.showErr('signup-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    this._setBusy(true);
     this.setLoading('btn-signup', true);
-
     try {
-      await FB.signupEmail(email, pass);
-      await FB.saveUserProfile({
+      await withTimeout(FB.signupEmail(email, pass), 20000, null);
+      await withTimeout(FB.saveUserProfile({
         name: name, email: email, phone: phone,
         loyaltyPoints: 240,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      await FB.updateDisplayName(name);
-      window.location.replace('chizen.html');
+      }), 10000, null);
+      try { await withTimeout(FB.updateDisplayName(name), 5000, null); } catch(e) {}
+      this.redirect();
     } catch (e) {
       this.setLoading('btn-signup', false);
-      this._busy = false;
+      this._setBusy(false);
       var msg = 'حدث خطأ';
-      var code = e.code || '';
-      if (code === 'auth/email-already-in-use') msg = 'البريد مسجل بالفعل';
-      else if (code === 'auth/weak-password') msg = 'كلمة المرور ضعيفة';
-      else if (code === 'auth/invalid-email') msg = 'البريد غير صحيح';
-      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال، تأكد من الإنترنت وحاول مرة أخرى';
+      var c = e.code || '';
+      if (e.message === 'timeout') msg = 'انتهت المهلة — حاول مجدداً';
+      else if (c === 'auth/email-already-in-use') msg = 'البريد مسجل بالفعل';
+      else if (c === 'auth/weak-password') msg = 'كلمة المرور ضعيفة';
+      else if (c === 'auth/invalid-email') msg = 'البريد غير صحيح';
+      else if (c === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
       this.showErr('signup-err', msg);
     }
   },
-
-    facebookLogin: async function() {
+  googleLogin: async function() {
     if (this._busy) return;
-    this._busy = true;
+    if (!this._fbReady) { this.showErr('login-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    this._setBusy(true);
+    this.setLoading('btn-google', true);
+    try {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+      if (isMobile) {
+        this.showOverlay('جاري التحويل إلى Google...');
+        await FB.auth.signInWithRedirect(provider);
+        return;
+      }
+      var result = await withTimeout(FB.auth.signInWithPopup(provider), 60000, null);
+      if (!result) throw new Error('timeout');
+      if (result.user) {
+        var existing = await withTimeout(FB.getUserProfile(), 5000, null);
+        if (!existing) {
+          await withTimeout(FB.saveUserProfile({
+            name: result.user.displayName || 'مستخدم',
+            email: result.user.email,
+            phone: '',
+            loyaltyPoints: 240,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }), 8000, null);
+        }
+        this.redirect();
+      } else {
+        this.setLoading('btn-google', false);
+        this._setBusy(false);
+      }
+    } catch (e) {
+      this.setLoading('btn-google', false);
+      this._setBusy(false);
+      this.hideOverlay();
+      var c = e.code || '';
+      if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
+      if (e.message === 'timeout') { this.showErr('login-err', 'انتهت المهلة'); return; }
+      var msg = 'فشل الدخول بـ Google';
+      if (c === 'auth/unauthorized-domain') msg = 'النطاق غير مصرح';
+      else if (c === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      this.showErr('login-err', msg);
+    }
+  },
+  facebookLogin: async function() {
+    if (this._busy) return;
+    if (!this._fbReady) { this.showErr('login-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    this._setBusy(true);
     this.setLoading('btn-facebook', true);
     try {
       var provider = new firebase.auth.FacebookAuthProvider();
       provider.setCustomParameters({ display: 'popup' });
-      var result = await FB.auth.signInWithPopup(provider);
-      if (result && result.user) {
-        window.location.replace('chizen.html');
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+      if (isMobile) {
+        this.showOverlay('جاري التحويل إلى Facebook...');
+        await FB.auth.signInWithRedirect(provider);
+        return;
+      }
+      var result = await withTimeout(FB.auth.signInWithPopup(provider), 60000, null);
+      if (!result) throw new Error('timeout');
+      if (result.user) {
+        var existing = await withTimeout(FB.getUserProfile(), 5000, null);
+        if (!existing) {
+          await withTimeout(FB.saveUserProfile({
+            name: result.user.displayName || 'مستخدم',
+            email: result.user.email || '',
+            phone: '',
+            loyaltyPoints: 240,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }), 8000, null);
+        }
+        this.redirect();
+      } else {
+        this.setLoading('btn-facebook', false);
+        this._setBusy(false);
       }
     } catch (e) {
       this.setLoading('btn-facebook', false);
-      this._busy = false;
-      this.showErr('login-err', 'خطأ فيسبوك: ' + (e.code || e.message));
+      this._setBusy(false);
+      this.hideOverlay();
+      var c = e.code || '';
+      if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return;
+      if (e.message === 'timeout') { this.showErr('login-err', 'انتهت المهلة'); return; }
+      var msg = 'فشل الدخول بـ Facebook';
+      if (c === 'auth/unauthorized-domain') msg = 'النطاق غير مصرح';
+      else if (c === 'auth/account-exists-with-different-credential') msg = 'هذا البريد مسجل بطريقة أخرى';
+      else if (c === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      this.showErr('login-err', msg);
     }
   },
-
-  googleLogin: async function() {
-    if (this._busy) return;
-    this._busy = true;
-    this.setLoading('btn-google', true);
-    try {
-      if (window.Capacitor && window.Capacitor.isNativePlatform()) {
-        const { FirebaseAuthentication } = window.Capacitor.Plugins;
-        await FirebaseAuthentication.signInWithGoogle();
-        window.location.replace('chizen.html');
-        return;
-      }
-      var provider = new firebase.auth.GoogleAuthProvider();
-      provider.setCustomParameters({ prompt: 'select_account' });
-      var result = await FB.auth.signInWithPopup(provider);
-      if (result && result.user) {
-        window.location.replace('chizen.html');
-      }
-    } catch (e) {
-      this.setLoading('btn-google', false);
-      this._busy = false;
-      this.showErr('login-err', 'خطأ جوجل: ' + (e.code || e.message));
-    }
-  },
-
   sendReset: async function() {
     if (this._busy) return;
     var email = (document.getElementById('forgot-email').value || '').trim().toLowerCase();
     if (!this.isEmail(email)) { this.showErr('forgot-err', 'أدخل بريداً صحيحاً'); return; }
-    if (!this._fbReady)       { this.showErr('forgot-err', 'لا يوجد اتصال'); return; }
-
-    this._busy = true;
+    if (!this._fbReady)       { this.showErr('forgot-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    this._setBusy(true);
     this.setLoading('btn-forgot', true);
-
     try {
-      await FB.sendPasswordReset(email);
+      await withTimeout(FB.sendPasswordReset(email), 15000, null);
       this.setLoading('btn-forgot', false);
-      this._busy = false;
+      this._setBusy(false);
       this.toast('تم إرسال الرابط ✓', 'success');
       var self = this;
-      setTimeout(function() { self.showScreen('login'); }, 1500);
+      setTimeout(function(){ self.showScreen('login'); }, 1500);
     } catch (e) {
       this.setLoading('btn-forgot', false);
-      this._busy = false;
+      this._setBusy(false);
       var msg = 'حدث خطأ';
-      if (e.code === 'auth/user-not-found') msg = 'لا يوجد حساب بهذا البريد';
-      if (e.code === 'auth/invalid-email') msg = 'البريد غير صحيح';
+      if (e.message === 'timeout') msg = 'انتهت المهلة';
+      else if (e.code === 'auth/user-not-found') msg = 'لا يوجد حساب بهذا البريد';
+      else if (e.code === 'auth/invalid-email') msg = 'البريد غير صحيح';
       this.showErr('forgot-err', msg);
     }
   },
-
   toast: function(msg, type) {
     var t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'toast ' + (type || '');
     t.classList.add('show');
     clearTimeout(window._toastTimer);
-    window._toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2800);
+    window._toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2800);
   }
 };
-
 function togglePassword(id, btn) {
   var inp = document.getElementById(id);
   if (!inp) return;
   if (inp.type === 'password') { inp.type = 'text'; btn.classList.add('active'); }
   else { inp.type = 'password'; btn.classList.remove('active'); }
 }
-
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('country-dropdown');
+  if (dd && !e.target.closest('.country-select')) dd.classList.remove('show');
+});
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function() { AUTH.init(); });
+  document.addEventListener('DOMContentLoaded', function(){ AUTH.init(); });
 } else {
   AUTH.init();
 }
-
 document.addEventListener('keydown', function(e) {
   if (e.key !== 'Enter') return;
   if (AUTH._busy) return;
@@ -677,8 +1387,8 @@ document.addEventListener('keydown', function(e) {
   if (active.id === 'screen-login')  { e.preventDefault(); AUTH.login(); }
   if (active.id === 'screen-signup') { e.preventDefault(); AUTH.signup(); }
   if (active.id === 'screen-forgot') { e.preventDefault(); AUTH.sendReset(); }
+  if (active.id === 'screen-phone')  { e.preventDefault(); AUTH.sendPhoneOTP(); }
 });
-
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js').catch(function(){});
