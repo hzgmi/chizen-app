@@ -1,4 +1,4 @@
-/* CHIZEN Session Fix v3 — Safe Mode */
+/* CHIZEN Session Fix v4 — Secure Mode */
 (function(){
   function patch(){
     try {
@@ -19,21 +19,6 @@
             return;
           }
 
-          // استرجاع احتياطي من الذاكرة المحلية
-          try {
-            var s = localStorage.getItem('chizen_state');
-            if (s) {
-              var p = JSON.parse(s);
-              if (p.user && p.user.uid) {
-                self.state.user = p.user;
-                if (typeof p.loyaltyPoints === 'number') self.loyaltyPoints = p.loyaltyPoints;
-                self.updateUserName();
-                self.updateLoyalty();
-              }
-            }
-          } catch(e) {}
-
-          // الاستماع للتغييرات
           FB.auth.onAuthStateChanged(function(user){
             if (user) self.onUserReady(user);
           });
