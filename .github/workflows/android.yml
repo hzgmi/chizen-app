@@ -25,18 +25,17 @@ jobs:
       - name: Add Android
         run: npx cap add android
         
-      - name: Force Android Config (No Image, Just Color)
+      - name: Setup Firebase & Permissions
         run: |
-          # إزالة صلاحيات الصورة وإجبار الخلفية فقط
+          cp google-services.json android/app/google-services.json || true
+          # إضافة صلاحيات الإنترنت بشكل آمن
           sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />' android/app/src/main/AndroidManifest.xml
-          # تغيير لون شاشة البداية الأصلية إلى البنفسجي الداكن وإخفاء الصورة
-          echo "<?xml version=\"1.0\" encoding=\"utf-8\"?><resources><color name=\"splash_background\">#1A0B2E</color><style name=\"AppTheme.NoActionBarLaunch\" parent=\"Theme.SplashScreen\"><item name=\"windowBackground\">#1A0B2E</item><item name=\"postSplashScreenTheme\">@style/AppTheme.NoActionBar</item></style></resources>" > android/app/src/main/res/values/styles.xml
           
-      - name: Inject Google Auth & Firebase
+      - name: Inject Google Auth & Assets
         run: |
           sed -i '/rgcfaIncludeGoogle/d' android/variables.gradle
           sed -i 's/ext {/ext {\n    rgcfaIncludeGoogle = true/' android/variables.gradle
-          cp google-services.json android/app/google-services.json || true
+          npx cap sync android
           
       - name: Build APK
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
