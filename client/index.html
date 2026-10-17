@@ -387,12 +387,6 @@ var AUTH = {
       });
     } else {
       try {
-        var s = localStorage.getItem('chizen_state');
-        if (s) {
-          var p = JSON.parse(s);
-          if (p.user) { window.location.replace('chizen.html'); return; }
-        }
-      } catch(e) {}
     }
 
     this.showScreen('login');

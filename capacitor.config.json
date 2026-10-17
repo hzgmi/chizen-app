@@ -1,7 +1,7 @@
 {
   "appId": "com.cheezan.app",
   "appName": "CHIZEN",
-  "webDir": "www",
+  "webDir": "client",
   "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https",
