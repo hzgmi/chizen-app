@@ -1,10 +1,6 @@
-/* ═══════════════════════════════════════════
-   CHIZEN — Firebase Service Layer v2
-   ═══════════════════════════════════════════ */
-
-/* Helper: تهريب HTML لمنع XSS */
+/* CHIZEN — Firebase Service v3 (Fixed Session) */
 window.esc = function esc(s) {
-  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
     return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
   });
 };
@@ -13,18 +9,20 @@ window.FB = {
   app: null, auth: null, db: null,
   ready: false, currentUser: null, currentProfile: null,
 
-  init: function() {
-    if (!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) {
-      console.log('[FB] No config — localStorage mode');
-      return false;
-    }
+  init: async function() {
+    if (!window.FIREBASE_CONFIG || !window.FIREBASE_CONFIG.apiKey) return false;
     try {
       this.app = (!firebase.apps.length)
         ? firebase.initializeApp(window.FIREBASE_CONFIG)
         : firebase.app();
       this.auth = firebase.auth();
-      try { this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e){ console.warn('[FB] setPersistence:', e); }); } catch(e) {}
       this.db = firebase.firestore();
+
+      /* ═══ الأهم: انتظر setPersistence قبل ready ═══ */
+      try {
+        await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        console.log('[FB] setPersistence LOCAL ✓');
+      } catch(e) { console.warn('[FB] setPersistence:', e); }
 
       this.db.enablePersistence().catch(function(err){
         if (err.code !== 'failed-precondition' && err.code !== 'unimplemented') {
@@ -32,16 +30,28 @@ window.FB = {
         }
       });
 
+      /* ═══ انتظر أول onAuthStateChanged ═══ */
+      await new Promise(function(resolve) {
+        var done = false;
+        FB.auth.onAuthStateChanged(function(user) {
+          if (done) return;
+          done = true;
+          FB.currentUser = user;
+          resolve();
+        });
+        setTimeout(function(){ if (!done) { done = true; resolve(); } }, 3000);
+      });
+
       this.ready = true;
-      console.log('[FB] Initialized ✓');
+      console.log('[FB] Initialized ✓ currentUser:', this.currentUser ? this.currentUser.uid : 'null');
       return true;
     } catch (e) {
       console.error('[FB] Init failed:', e);
+      this.ready = true;
       return false;
     }
   },
 
-  /* ═══ AUTH ═══ */
   onAuthChange: function(cb) {
     if (!this.ready) { cb(null); return; }
     this.auth.onAuthStateChanged(function(user){
@@ -54,68 +64,46 @@ window.FB = {
     if (!this.ready) throw new Error('Firebase not ready');
     return await this.auth.signInWithEmailAndPassword(email, password);
   },
-
   signupEmail: async function(email, password) {
     if (!this.ready) throw new Error('Firebase not ready');
     return await this.auth.createUserWithEmailAndPassword(email, password);
   },
-
   loginGoogle: async function() {
     if (!this.ready) throw new Error('Firebase not ready');
     var provider = new firebase.auth.GoogleAuthProvider();
     return await this.auth.signInWithPopup(provider);
   },
-
-  /* كان ناقصاً — يصلح مشكلة تسجيل الدخول بالجوال */
   handleGoogleRedirect: async function() {
     if (!this.ready) return null;
     try {
-      var result = await this.auth.getRedirectResult();
-      return (result && result.user) ? result.user : null;
-    } catch (e) {
-      if (e.code === 'auth/no-auth-event' || e.code === 'auth/argument-error') return null;
-      throw e;
-    }
+      var r = await this.auth.getRedirectResult();
+      return (r && r.user) ? r.user : null;
+    } catch(e) { return null; }
   },
-
   logout: async function() {
     if (!this.ready) return;
     await this.auth.signOut();
   },
-
   updateDisplayName: async function(name) {
     if (!this.ready || !this.currentUser) return;
     await this.currentUser.updateProfile({ displayName: name });
     this.currentUser = this.auth.currentUser;
   },
-
   sendPasswordReset: async function(email) {
     if (!this.ready) throw new Error('Firebase not ready');
     return await this.auth.sendPasswordResetEmail(email);
   },
-
   getUserId: function() { return this.currentUser ? this.currentUser.uid : null; },
   getUserEmail: function() { return this.currentUser ? this.currentUser.email : null; },
   getUserName: function() { return this.currentUser ? (this.currentUser.displayName || '') : ''; },
 
-  isAdmin: async function() {
-    if (!this.ready || !this.currentUser) return false;
-    try {
-      var doc = await this.db.collection('admins').doc(this.currentUser.uid).get();
-      return doc.exists;
-    } catch(e) { return false; }
-  },
-
-  /* ═══ USER PROFILE ═══ */
   saveUserProfile: async function(data) {
     if (!this.ready || !this.currentUser) return;
     data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
     data.email = this.currentUser.email;
     data.uid = this.currentUser.uid;
     await this.db.collection('users').doc(this.currentUser.uid).set(data, { merge: true });
-    this.currentProfile = data;
   },
-
   getUserProfile: async function() {
     if (!this.ready || !this.currentUser) return null;
     try {
@@ -124,88 +112,47 @@ window.FB = {
       return this.currentProfile;
     } catch(e) { return null; }
   },
-
   getAllUsers: async function() {
     if (!this.ready) return [];
     try {
-      var snap = await this.db.collection('users').orderBy('createdAt','desc').limit(500).get();
+      var snap = await this.db.collection('users').limit(500).get();
       var arr = [];
       snap.forEach(function(doc){ var d = doc.data(); d.uid = doc.id; arr.push(d); });
       return arr;
-    } catch(e) {
-      try {
-        var snap2 = await this.db.collection('users').limit(500).get();
-        var arr2 = [];
-        snap2.forEach(function(doc){ var d = doc.data(); d.uid = doc.id; arr2.push(d); });
-        return arr2;
-      } catch(e2) { return []; }
-    }
+    } catch(e) { return []; }
   },
-
   deleteUser: async function(uid) {
     if (!this.ready) throw new Error('Firebase not ready');
     await this.db.collection('users').doc(uid).delete();
   },
-
-  /* ═══ PRODUCTS ═══ */
   getProducts: async function() {
     if (!this.ready) return [];
     try {
       var snap = await this.db.collection('products').limit(500).get();
       var arr = [];
-      snap.forEach(function(doc){
-        var d = doc.data();
-        d.id = doc.id;
-        arr.push(d);
-      });
-      arr.sort(function(a,b){
-        var ta = a.createdAt ? a.createdAt.seconds : 0;
-        var tb = b.createdAt ? b.createdAt.seconds : 0;
-        return tb - ta;
-      });
+      snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
+      arr.sort(function(a,b){ return ((b.createdAt&&b.createdAt.seconds)||0) - ((a.createdAt&&a.createdAt.seconds)||0); });
       return arr;
-    } catch(e) { console.error('[FB] getProducts:', e); return []; }
+    } catch(e) { return []; }
   },
-
-  addProduct: async function(product) {
+  addProduct: async function(p) {
     if (!this.ready) throw new Error('Firebase not ready');
-    var payload = Object.assign({}, product);
-    delete payload.id;
-    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    payload.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-    var ref = await this.db.collection('products').add(payload);
+    var pl = Object.assign({}, p); delete pl.id;
+    pl.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    pl.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+    var ref = await this.db.collection('products').add(pl);
     return ref.id;
   },
-
-  updateProduct: async function(id, product) {
+  updateProduct: async function(id, p) {
     if (!this.ready) throw new Error('Firebase not ready');
-    var payload = Object.assign({}, product);
-    delete payload.id;
-    payload.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-    await this.db.collection('products').doc(id).update(payload);
+    var pl = Object.assign({}, p); delete pl.id;
+    pl.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+    await this.db.collection('products').doc(id).update(pl);
   },
-
   deleteProduct: async function(id) {
     if (!this.ready) throw new Error('Firebase not ready');
     await this.db.collection('products').doc(id).delete();
   },
-
-  seedProducts: async function(products) {
-    if (!this.ready) throw new Error('Firebase not ready');
-    var batch = this.db.batch();
-    for (var i = 0; i < products.length; i++) {
-      var p = Object.assign({}, products[i]);
-      delete p.id;
-      p.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      p.seedId = i + 1;
-      var ref = this.db.collection('products').doc('seed_' + (i + 1));
-      batch.set(ref, p);
-    }
-    await batch.commit();
-    return products.length;
-  },
-
-  /* ═══ BANNERS — موحّد على config/banners ═══ */
   getBanners: async function() {
     if (!this.ready) return null;
     try {
@@ -215,7 +162,6 @@ window.FB = {
       return (data && data.list && data.list.length) ? data.list : null;
     } catch(e) { return null; }
   },
-
   setBanners: async function(list) {
     if (!this.ready) throw new Error('Firebase not ready');
     await this.db.collection('config').doc('banners').set({
@@ -223,8 +169,6 @@ window.FB = {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true });
   },
-
-  /* ═══ CONFIG ═══ */
   getConfig: async function(key) {
     if (!this.ready) return null;
     try {
@@ -232,15 +176,12 @@ window.FB = {
       return doc.exists ? doc.data() : null;
     } catch(e) { return null; }
   },
-
   setConfig: async function(key, data) {
     if (!this.ready) throw new Error('Firebase not ready');
-    var payload = Object.assign({}, data);
-    payload.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-    await this.db.collection('config').doc(key).set(payload, { merge: true });
+    var pl = Object.assign({}, data);
+    pl.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+    await this.db.collection('config').doc(key).set(pl, { merge: true });
   },
-
-  /* ═══ DEALS ═══ */
   getDeal: async function() {
     if (!this.ready) return null;
     try {
@@ -248,51 +189,36 @@ window.FB = {
       return doc.exists ? doc.data() : null;
     } catch(e) { return null; }
   },
-
   setDeal: async function(deal) {
     if (!this.ready) throw new Error('Firebase not ready');
-    var payload = Object.assign({}, deal);
-    payload.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-    await this.db.collection('config').doc('deal').set(payload, { merge: true });
+    var pl = Object.assign({}, deal);
+    pl.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+    await this.db.collection('config').doc('deal').set(pl, { merge: true });
   },
-
   deleteDeal: async function() {
     if (!this.ready) throw new Error('Firebase not ready');
     await this.db.collection('config').doc('deal').delete();
   },
-
-  /* ═══ ORDERS ═══ */
   getUserOrders: async function() {
     if (!this.ready || !this.currentUser) return [];
     try {
-      var snap = await this.db.collection('orders')
-        .where('userId','==', this.currentUser.uid).limit(200).get();
+      var snap = await this.db.collection('orders').where('userId','==',this.currentUser.uid).limit(200).get();
       var arr = [];
       snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
-      arr.sort(function(a,b){
-        var ta = a.createdAt ? a.createdAt.seconds : 0;
-        var tb = b.createdAt ? b.createdAt.seconds : 0;
-        return tb - ta;
-      });
+      arr.sort(function(a,b){ return ((b.createdAt&&b.createdAt.seconds)||0) - ((a.createdAt&&a.createdAt.seconds)||0); });
       return arr;
-    } catch(e) { console.error('[FB] getUserOrders:', e); return []; }
+    } catch(e) { return []; }
   },
-
   getAllOrders: async function() {
     if (!this.ready) return [];
     try {
       var snap = await this.db.collection('orders').limit(300).get();
       var arr = [];
       snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
-      arr.sort(function(a,b){
-        var ta = a.createdAt ? a.createdAt.seconds : 0;
-        var tb = b.createdAt ? b.createdAt.seconds : 0;
-        return tb - ta;
-      });
+      arr.sort(function(a,b){ return ((b.createdAt&&b.createdAt.seconds)||0) - ((a.createdAt&&a.createdAt.seconds)||0); });
       return arr;
     } catch(e) { return []; }
   },
-
   addOrder: async function(order) {
     if (!this.ready) throw new Error('Firebase not ready');
     order.userId = this.getUserId();
@@ -301,7 +227,6 @@ window.FB = {
     var ref = await this.db.collection('orders').add(order);
     return ref.id;
   },
-
   updateOrderStatus: async function(id, status) {
     if (!this.ready) throw new Error('Firebase not ready');
     await this.db.collection('orders').doc(id).update({
@@ -309,59 +234,35 @@ window.FB = {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
   },
-
   deleteOrder: async function(id) {
     if (!this.ready) throw new Error('Firebase not ready');
     await this.db.collection('orders').doc(id).delete();
   },
-
-  /* ═══ NOTIFICATIONS ═══ */
   getNotifications: async function() {
     if (!this.ready || !this.currentUser) return [];
     try {
       var uid = this.currentUser.uid;
-      var snap1 = await this.db.collection('notifications')
-        .where('userId','==', uid).limit(50).get();
-      var snap2 = await this.db.collection('notifications')
-        .where('userId','==', 'ALL').limit(50).get();
-
+      var a1 = await this.db.collection('notifications').where('userId','==',uid).limit(50).get();
+      var a2 = await this.db.collection('notifications').where('userId','==','ALL').limit(50).get();
       var arr = [];
-      snap1.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
-      snap2.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
-
-      arr.sort(function(a,b){
-        var ta = a.createdAt ? a.createdAt.seconds : 0;
-        var tb = b.createdAt ? b.createdAt.seconds : 0;
-        return tb - ta;
-      });
+      a1.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
+      a2.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
+      arr.sort(function(a,b){ return ((b.createdAt&&b.createdAt.seconds)||0) - ((a.createdAt&&a.createdAt.seconds)||0); });
       return arr.slice(0, 60);
-    } catch(e) {
-      try {
-        var snap = await this.db.collection('notifications').limit(50).get();
-        var arr2 = [];
-        snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr2.push(d); });
-        return arr2;
-      } catch(e2) { return []; }
-    }
+    } catch(e) { return []; }
   },
-
-  /* إشعار عام (لكل المستخدمين) */
   addNotification: async function(notif) {
     if (!this.ready) throw new Error('Firebase not ready');
-    var payload = Object.assign({ userId: 'ALL' }, notif);
-    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    await this.db.collection('notifications').add(payload);
+    var pl = Object.assign({ userId: 'ALL' }, notif);
+    pl.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    await this.db.collection('notifications').add(pl);
   },
-
-  /* إشعار موجّه لمستخدم واحد */
   addUserNotification: async function(uid, notif) {
     if (!this.ready) throw new Error('Firebase not ready');
-    var payload = Object.assign({ userId: uid }, notif);
-    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    await this.db.collection('notifications').add(payload);
+    var pl = Object.assign({ userId: uid }, notif);
+    pl.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    await this.db.collection('notifications').add(pl);
   },
-
-  /* ═══ POINTS ═══ */
   updateUserPoints: async function(points) {
     if (!this.ready || !this.currentUser) return;
     await this.db.collection('users').doc(this.currentUser.uid).set({
@@ -369,34 +270,24 @@ window.FB = {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true });
   },
-
-  addPointsTransaction: async function(transaction) {
+  addPointsTransaction: async function(t) {
     if (!this.ready || !this.currentUser) return;
-    transaction.userId = this.currentUser.uid;
-    transaction.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    await this.db.collection('users').doc(this.currentUser.uid)
-      .collection('points_tx').add(transaction);
+    t.userId = this.currentUser.uid;
+    t.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    await this.db.collection('users').doc(this.currentUser.uid).collection('points_tx').add(t);
   },
-
   getPointsTransactions: async function() {
     if (!this.ready || !this.currentUser) return [];
     try {
-      var snap = await this.db.collection('users').doc(this.currentUser.uid)
-        .collection('points_tx').limit(100).get();
+      var snap = await this.db.collection('users').doc(this.currentUser.uid).collection('points_tx').limit(100).get();
       var arr = [];
       snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); });
-      arr.sort(function(a,b){
-        var ta = a.createdAt ? a.createdAt.seconds : 0;
-        var tb = b.createdAt ? b.createdAt.seconds : 0;
-        return tb - ta;
-      });
       return arr;
     } catch(e) { return []; }
   }
 };
 
-if (document.readyState === 'loading') {
+if (document.readyState === 'loading')
   document.addEventListener('DOMContentLoaded', function(){ FB.init(); });
-} else {
+else
   FB.init();
-}

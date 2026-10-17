@@ -1,4 +1,4 @@
-/* CHIZEN Session Fix v1 */
+/* CHIZEN Session Fix v2 — يعتمد على FB.ready بعد استرجاع الجلسة */
 (function(){
   function patch(){
     if (!window.APP) { setTimeout(patch, 50); return; }
@@ -8,31 +8,49 @@
     window.APP.syncBackground = function() {
       var self = this;
       if (!window.FB || !FB.ready) {
-        setTimeout(function(){ self.syncBackground(); }, 500);
+        setTimeout(function(){ self.syncBackground(); }, 300);
         return;
       }
+
+      /* FB.ready=true يعني الجلسة استُرجعَت بالفعل */
       if (FB.currentUser) {
         self.onUserReady(FB.currentUser);
         return;
       }
-      var handled = false;
-      function handleUser(user){
-        if (handled) return;
-        if (!user) return;
-        handled = true;
-        self.onUserReady(user);
-      }
+
+      /* تحقق من localStorage كاحتياط أخير */
       try {
-        FB.auth.onAuthStateChanged(function(user){ if (user) handleUser(user); });
-      } catch(e) {}
-      setTimeout(function(){
-        if (handled) return;
-        if (FB.currentUser) { handleUser(FB.currentUser); return; }
-        var c = document.getElementById('screens');
-        if (c) {
-          c.innerHTML = '<div style="padding:80px 20px;text-align:center;color:#B8A5D4;font-size:14px;line-height:2;"><div style="font-size:48px;margin-bottom:20px;">🔐</div>انتهت الجلسة<br><button onclick="window.location.replace(\'index.html\')" style="margin-top:20px;padding:12px 30px;border:none;border-radius:12px;background:linear-gradient(135deg,#FB923C,#EC4899);color:white;font-family:Cairo,sans-serif;font-weight:900;cursor:pointer;">العودة لتسجيل الدخول</button></div>';
+        var s = localStorage.getItem('chizen_state');
+        if (s) {
+          var p = JSON.parse(s);
+          if (p.user && p.user.uid) {
+            self.state.user = p.user;
+            if (typeof p.loyaltyPoints === 'number') self.loyaltyPoints = p.loyaltyPoints;
+            self.updateUserName();
+            self.updateLoyalty();
+          }
         }
-      }, 8000);
+      } catch(e) {}
+
+      /* استمع لأي تغيير مستقبلي */
+      FB.auth.onAuthStateChanged(function(user){
+        if (user) {
+          self.onUserReady(user);
+        }
+      });
+
+      /* لا تطرد — فقط أظهر زر "تسجيل الدخول" بعد وقت طويل */
+      setTimeout(function(){
+        if (FB.currentUser) return;
+        if (self.state.user && self.state.user.uid) return;
+        var c = document.getElementById('screens');
+        if (c && !document.getElementById('session-expired-msg')) {
+          c.innerHTML = '<div id="session-expired-msg" style="padding:80px 20px;text-align:center;color:#B8A5D4;font-size:14px;line-height:2;">' +
+            '<div style="font-size:48px;margin-bottom:20px;">🔐</div>' +
+            'انتهت الجلسة<br>' +
+            '<button onclick="window.location.replace(\'index.html\')" style="margin-top:20px;padding:12px 30px;border:none;border-radius:12px;background:linear-gradient(135deg,#FB923C,#EC4899);color:white;font-family:Cairo,sans-serif;font-weight:900;cursor:pointer;">العودة لتسجيل الدخول</button></div>';
+        }
+      }, 10000);
     };
 
     var patchFB = function(){
@@ -51,7 +69,7 @@
     };
     patchFB();
 
-    console.log('[SessionFix] Applied');
+    console.log('[SessionFix v2] Applied');
   }
   patch();
 })();
