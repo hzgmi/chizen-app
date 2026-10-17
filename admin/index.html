@@ -158,6 +158,7 @@
       <button class="tab" onclick="ADMIN.tab('banners',this)">البنرات</button>
       <button class="tab" onclick="ADMIN.tab('notifications',this)">الإشعارات</button>
       <button class="tab" onclick="ADMIN.tab('users',this)">المستخدمين</button>
+      <button class="tab" onclick="ADMIN.tab('points',this)">النقاط</button>
       <button class="tab" onclick="ADMIN.tab('settings',this)">الإعدادات</button>
     </div>
 
@@ -256,6 +257,18 @@
 
       <div class="section" id="sec-users">
         <div id="users-list"></div>
+      </div>
+
+      <div class="section" id="sec-points">
+        <div class="info-bar"><div>تحكم كامل بنظام نقاط الولاء للعملاء</div></div>
+        <div class="acard">
+          <div class="acard-title"><div class="acard-title-l">⚙️ إعدادات النقاط</div></div>
+          <div class="field"><label class="field-label">نقاط لكل 10 ر.س (نسبة الاستبدال)</label><input type="number" class="field-input" id="pts-persar" placeholder="10"></div>
+          <div class="field"><label class="field-label">مكافأة التسجيل اليومي</label><input type="number" class="field-input" id="pts-daily" placeholder="10"></div>
+          <div class="field"><label class="field-label">مكافأة التقييم</label><input type="number" class="field-input" id="pts-review" placeholder="50"></div>
+          <div class="field"><label class="field-label">مكافأة المشاركة</label><input type="number" class="field-input" id="pts-share" placeholder="25"></div>
+          <button class="btn btn-primary btn-block" onclick="ADMIN.savePoints()">حفظ إعدادات النقاط</button>
+        </div>
       </div>
 
       <div class="section" id="sec-settings">
@@ -507,6 +520,7 @@ var ADMIN = {
   },
 
   renderSection: function(name) {
+    if (name === 'points') this.renderPoints();
     if (name === 'dashboard') this.renderDashboard();
     if (name === 'products') this.renderProducts();
     if (name === 'categories') this.renderCategories();
@@ -1074,6 +1088,33 @@ var ADMIN = {
     t.classList.add('show');
     clearTimeout(window._tt);
     window._tt = setTimeout(function() { t.classList.remove('show'); }, 2500);
+  }
+};
+
+ADMIN.renderPoints = async function() {
+  try {
+    var pts = await FB.getConfig('points');
+    if (pts) {
+      document.getElementById('pts-persar').value = pts.perSAR || 10;
+      document.getElementById('pts-daily').value = pts.daily || 10;
+      document.getElementById('pts-review').value = pts.review || 50;
+      document.getElementById('pts-share').value = pts.share || 25;
+    }
+  } catch(e) {}
+};
+
+ADMIN.savePoints = async function() {
+  var data = {
+    perSAR: parseFloat(document.getElementById('pts-persar').value) || 10,
+    daily: parseFloat(document.getElementById('pts-daily').value) || 10,
+    review: parseFloat(document.getElementById('pts-review').value) || 50,
+    share: parseFloat(document.getElementById('pts-share').value) || 25
+  };
+  try {
+    await FB.setConfig('points', data);
+    this.toast('تم حفظ إعدادات النقاط بنجاح', 'success');
+  } catch(e) {
+    this.toast('فشل الحفظ', 'error');
   }
 };
 

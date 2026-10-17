@@ -317,6 +317,10 @@
   .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-elev);border:1px solid var(--nav-border);color:var(--cream);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:700;z-index:2000;opacity:0;transition:all .3s;max-width:90%;text-align:center;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   .btn-primary{padding:16px;background:linear-gradient(135deg,var(--orange-sunset) 0%,var(--pink-hot) 50%,var(--purple-vibrant) 100%);color:white;border:none;border-radius:14px;font-family:'Cairo',sans-serif;font-weight:900;font-size:15px;cursor:pointer;width:100%;}
+
+  * { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  button:active, .btn:active, .product:active { transform: scale(0.96); }
+
 </style>
 </head>
 <body>
@@ -716,7 +720,7 @@ var APP = {
   currentProduct:null,currentQty:1,selectedBank:null,
   carouselIndex:0,carouselTimer:null,countdownTimer:null,flashTimer:null,sortBy:'popular',
   previousScreen:'home',dealEndTime:null,activeBrand:'all',loyaltyPoints:0,
-  productsData:[],banners:[],categories:[],banks:[],
+  productsData:[],banners:[],categories:[],banks:[],pointsConfig:{perSAR:10, daily:10, review:50, share:25},
   currentScreenId:'home',
   /* ═══ خريطة الشاشات: ابن ← أب (لمعرفة إلى أين نرجع) ═══ */
   screenParent:{
@@ -1563,6 +1567,13 @@ var APP = {
     if (!isCash && !tn) { this.toast('أدخل رقم الحوالة'); return; }
     if (!isCash && !ru) { this.toast('ارفع صورة السند'); return; }
 
+    if (this._isSubmitting) return;
+    this._isSubmitting = true;
+    
+    var btn = document.querySelector('button[onclick="APP.confirmOrder()"]');
+    var oldTxt = btn ? btn.innerHTML : '';
+    if (btn) { btn.innerHTML = 'جاري المعالجة...'; btn.disabled = true; }
+
     var oid = 'CH-' + Date.now().toString().slice(-8);
     var order = {id:oid, items:JSON.parse(JSON.stringify(this.cart)), total:this.cartTotal(), pickup:pickup, name:name, phone:phone, bank:this.selectedBank, transferNum:tn, status:'pending'};
 
@@ -1575,7 +1586,8 @@ var APP = {
 
     saveToFB().then(function() {
       self.orders.push(order);
-      var points = Math.floor(order.total / 10);
+      var ptsConfig = APP.pointsConfig || {perSAR: 10, daily: 10, review: 50};
+      var points = Math.floor(order.total / ptsConfig.perSAR);
       self.loyaltyPoints += points;
       self.addPointsTx('طلب #' + oid, points);
       if (window.FB && FB.ready && FB.updateUserPoints) {
@@ -1727,9 +1739,11 @@ var APP = {
     var today = new Date().toDateString();
     if (last === today) { this.toast('سجلت اليوم بالفعل'); return; }
     localStorage.setItem('chizen_last_checkin', today);
-    this.loyaltyPoints += 10;
+    var pts = (this.pointsConfig && this.pointsConfig.daily) || 10;
+    this.loyaltyPoints += pts;
     this.updateLoyalty();
-    this.addPointsTx('تسجيل يومي', 10);
+    this.addPointsTx('تسجيل يومي', pts);
+    if(window.ChizenNotif) ChizenNotif.pointsEarned(pts);
     if (window.FB && FB.ready && FB.updateUserPoints) FB.updateUserPoints(this.loyaltyPoints).catch(function(){});
     if (window.ChizenSound) ChizenSound.playPoints();
     this.toast('+10 نقطة');
@@ -1746,9 +1760,11 @@ var APP = {
       if (!r) return;
       var rating = parseInt(r);
       if (rating < 1 || rating > 5) { APP.toast('اختر من 1 إلى 5'); return; }
-      APP.loyaltyPoints += 50;
+      var pts = (APP.pointsConfig && APP.pointsConfig.review) || 50;
+      APP.loyaltyPoints += pts;
       APP.updateLoyalty();
-      APP.addPointsTx('تقييم التطبيق', 50);
+      APP.addPointsTx('تقييم التطبيق', pts);
+      if(window.ChizenNotif) ChizenNotif.pointsEarned(pts);
       if (window.FB && FB.ready && FB.updateUserPoints) FB.updateUserPoints(APP.loyaltyPoints).catch(function(){});
       if (window.ChizenSound) ChizenSound.playPoints();
       APP.toast('+50 نقطة');
