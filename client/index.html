@@ -265,8 +265,8 @@ var AUTH = {
   init: async function() {
     var self = this;
 
-    window.addEventListener('offline', function(){ document.getElementById('offline-banner').classList.add('show'); });
-    window.addEventListener('online',  function(){ document.getElementById('offline-banner').classList.remove('show'); });
+    
+    
     /* Removed false positive */
 
     try {
@@ -321,7 +321,7 @@ var AUTH = {
     // إخفاء شاشة التحميل بنعومة
     var splash = document.getElementById('splash-screen');
     if (splash) {
-      splash.style.opacity = '0';
+      splash.style.opacity = '0'; splash.style.pointerEvents = 'none';
       setTimeout(function(){ splash.style.display = 'none'; }, 500);
     }
   },
@@ -460,7 +460,7 @@ var AUTH = {
       else if (code === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
       else if (code === 'auth/invalid-credential') msg = 'البريد أو كلمة المرور غير صحيحة';
       else if (code === 'auth/too-many-requests') msg = 'محاولات كثيرة — حاول لاحقاً';
-      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال بـ Firebase (تأكد من الإنترنت أو إعدادات جوجل)';
+      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال، تأكد من الإنترنت وحاول مرة أخرى';
       this.showErr('login-err', msg);
     }
   },
@@ -502,7 +502,7 @@ var AUTH = {
       if (code === 'auth/email-already-in-use') msg = 'البريد مسجل بالفعل';
       else if (code === 'auth/weak-password') msg = 'كلمة المرور ضعيفة';
       else if (code === 'auth/invalid-email') msg = 'البريد غير صحيح';
-      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال بـ Firebase (تأكد من الإنترنت أو إعدادات جوجل)';
+      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال، تأكد من الإنترنت وحاول مرة أخرى';
       this.showErr('signup-err', msg);
     }
   },
