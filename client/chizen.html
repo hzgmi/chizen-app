@@ -435,7 +435,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
         <div class="checkout-step"><div class="step-title"><div class="step-num">2</div> معلومات الاتصال</div><div class="field"><label class="field-label">الاسم الكامل</label><input type="text" class="field-input" id="checkout-name" placeholder="الاسم"></div><div class="field"><label class="field-label">رقم الهاتف</label><input type="tel" class="field-input" id="checkout-phone" placeholder="+967 7XX XXX XXX"></div></div>
         <div class="checkout-step"><div class="step-title"><div class="step-num">3</div> طريقة الدفع</div><div class="bank-list" id="bank-list"></div></div>
         <div class="checkout-step" id="receipt-step"><div class="step-title"><div class="step-num">4</div> سند الحوالة</div><div class="field"><label class="field-label">رقم عملية الحوالة</label><input type="text" class="field-input" id="transfer-number" placeholder="1234567890"></div><label class="field-label">صورة سند الحوالة</label><div class="upload-area" id="upload-area" onclick="document.getElementById('receipt-file').click()"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p class="upload-hint">اضغط لرفع صورة السند</p><img class="upload-preview" id="upload-preview"></div><input type="file" id="receipt-file" accept="image/*" style="display:none" onchange="APP.handleReceipt(this)"></div>
-        <div class="total-box"><div class="total-row"><span>المجموع الفرعي</span><span id="checkout-subtotal">0 ر.س</span></div><div class="total-row"><span>الشحن</span><span>مجاني</span></div><div class="total-final"><span>الإجمالي</span><span id="checkout-total">0 ر.س</span></div></div>
+        <div class="total-box"><div class="total-row"><span>المجموع الفرعي</span><span id="checkout-subtotal">0 ر.س</span></div><div class="total-row"><span>الخصم</span><span id="checkout-discount" style="color:var(--success);">0 ر.س</span></div><div class="total-row"><span>الشحن</span><span id="checkout-shipping">مجاني</span></div><div class="total-final"><span>الإجمالي</span><span id="checkout-total">0 ر.س</span></div></div>
         <button class="btn-primary" style="margin-top:16px;" onclick="APP.confirmOrder()">تأكيد الطلب</button>
       </div>
     </div>
@@ -551,7 +551,7 @@ var APP = {
     if (this._initialized) return; this._initialized = true; var self = this;
     function safe(fn) { try { fn.call(self); } catch(e) { console.warn('CHIZEN init:', e); } }
     try { var s = localStorage.getItem('chizen_state'); if (s) { var p = JSON.parse(s); for (var k in p) if (p[k] !== undefined && p[k] !== null) self.state[k] = p[k]; if (p.user) self.state.user = p.user; if (typeof p.loyaltyPoints === 'number') self.loyaltyPoints = p.loyaltyPoints; } } catch(e) {}
-    self.productsData = self.safeBridge('getProducts', window.DEFAULT_PRODUCTS);
+    self.productsData = self.safeBridge('getProducts', window.DEFAULT_PRODUCTS).filter(function(p){ return p.active !== false && (typeof p.stock !== 'number' || p.stock > 0); });
     self.banners = self.safeBridge('getBanners', window.DEFAULT_BANNERS);
     self.categories = self.safeBridge('getCategories', window.DEFAULT_CATEGORIES);
     self.banks = self.safeBridge('getPayments', window.DEFAULT_PAYMENTS);
@@ -581,7 +581,7 @@ var APP = {
       if (FB.getUserOrders) { FB.getUserOrders().then(function(orders) { if (orders && orders.length) { self.orders = orders; self.renderTracking(); } }).catch(function(){}); }
       if (FB.getNotifications) { FB.getNotifications().then(function(ns) { if (ns && ns.length) { self.notifications = ns.map(function(n) { return { title: n.title, body: n.body, date: n.createdAt ? new Date(n.createdAt.seconds * 1000).toISOString() : new Date().toISOString() }; }); self.updateNotifBadge(); } }).catch(function(){}); }
     }
-    if (window.Bridge && Bridge.syncFromFirebase) { Bridge.syncFromFirebase().then(function() { self.productsData = self.safeBridge('getProducts', self.productsData); self.banners = self.safeBridge('getBanners', self.banners); self.categories = self.safeBridge('getCategories', self.categories); self.banks = self.safeBridge('getPayments', self.banks); self.renderCategories(); self.renderBanners(); self.renderProducts(self.getSortedProducts()); }).catch(function(){}); }
+    if (window.Bridge && Bridge.syncFromFirebase) { Bridge.syncFromFirebase().then(function() { self.productsData = self.safeBridge('getProducts', self.productsData).filter(function(p){ return p.active !== false && (typeof p.stock !== 'number' || p.stock > 0); }); self.banners = self.safeBridge('getBanners', self.banners); self.categories = self.safeBridge('getCategories', self.categories); self.banks = self.safeBridge('getPayments', self.banks); self.renderCategories(); self.renderBanners(); self.renderProducts(self.getSortedProducts()); }).catch(function(){}); }
   },
   saveState: function() { try { localStorage.setItem('chizen_state', JSON.stringify(this.state)); } catch(e) {} },
   setupHistory: function() {
@@ -650,6 +650,7 @@ var APP = {
   filterByCategory: function(key) { if (key === 'all') { this.renderProducts(this.getSortedProducts()); return; } var cats = this.safeBridge('getCategories', window.DEFAULT_CATEGORIES); var catName = ''; for (var i = 0; i < cats.length; i++) { if (cats[i].key === key) catName = cats[i].name; } var ct = document.getElementById('category-title'); if (ct) ct.textContent = catName || 'المنتجات'; var f = this.productsData.filter(function(p) { return p.category === key; }); var c = document.getElementById('category-products'); if (!c) return; if (!f.length) c.innerHTML = '<div class="category-empty" style="grid-column:1/-1;">لا توجد منتجات</div>'; else this.renderProductsTo(f, c); this.navigateToScreen('category', true); },
   renderProducts: function(list) { var c = document.getElementById('products-container'); if (!c) return; if (!list.length) { c.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">لا توجد منتجات</div>'; return; } this.renderProductsTo(list, c); },
   renderProductsTo: function(list, c) {
+    list = list.filter(function(p){ return p.active !== false && (typeof p.stock !== 'number' || p.stock > 0); });
     var html = '';
     for (var i = 0; i < list.length; i++) {
       var p = list[i]; var isFav = this.favorites.indexOf(p.id) > -1; var isFavCls = isFav ? ' active' : ''; var badgeHtml = p.badge ? '<div class="product-badge">' + esc(p.badge) + '</div>' : ''; var oldHtml = p.old ? '<span class="price-old">' + esc(p.old) + '</span>' : '';
@@ -662,7 +663,7 @@ var APP = {
   renderSortBar: function() { var c = document.getElementById('sort-bar'); if (!c) return; var sorts = [{k:'popular', l:'الأكثر رواجاً'}, {k:'price_asc', l:'السعر ↑'}, {k:'price_desc', l:'السعر ↓'}]; var html = ''; for (var i = 0; i < sorts.length; i++) { var s = sorts[i]; html += '<div class="sort-chip' + (s.k === this.sortBy ? ' active' : '') + '" onclick="APP.setSort(\'' + s.k + '\')">' + s.l + '</div>'; } c.innerHTML = html; },
   setSort: function(k) { this.sortBy = k; this.renderSortBar(); this.renderProducts(this.getSortedProducts()); },
   openSortModal: function() { var self = this; this.openModal('ترتيب', [{v:'popular', l:'الأكثر رواجاً'}, {v:'price_asc', l:'السعر ↑'}, {v:'price_desc', l:'السعر ↓'}], this.sortBy, function(v) { self.setSort(v); }); },
-  getSortedProducts: function() { var list = this.productsData.slice(); switch (this.sortBy) { case 'price_asc': list.sort(function(a, b) { return a.price - b.price; }); break; case 'price_desc': list.sort(function(a, b) { return b.price - a.price; }); break; default: list.sort(function(a, b) { return (b.sold || 0) - (a.sold || 0); }); } return list; },
+  getSortedProducts: function() { var list = this.productsData.filter(function(p){ return p.active !== false && (typeof p.stock !== 'number' || p.stock > 0); }); switch (this.sortBy) { case 'price_asc': list.sort(function(a, b) { return a.price - b.price; }); break; case 'price_desc': list.sort(function(a, b) { return b.price - a.price; }); break; default: list.sort(function(a, b) { return (b.sold || 0) - (a.sold || 0); }); } return list; },
   search: function(q) { q = q.trim().toLowerCase(); if (!q) { this.renderProducts(this.getSortedProducts()); return; } var f = this.productsData.filter(function(p) { return (p.name || '').toLowerCase().indexOf(q) > -1 || (p.brand || '').toLowerCase().indexOf(q) > -1; }); this.renderProducts(f); },
   getProduct: function(id) { for (var i = 0; i < this.productsData.length; i++) { if (String(this.productsData[i].id) === String(id)) return this.productsData[i]; } return null; },
   openDetails: function(id) {
@@ -690,10 +691,45 @@ var APP = {
     var html = '';
     for (var i = 0; i < this.cart.length; i++) { var it = this.cart[i]; var p = this.getProduct(it.id); if (!p) continue; html += '<div class="cart-item"><div class="cart-img"><img src="' + esc(p.img || '') + '"><div class="cart-remove" onclick="APP.removeFromCart(\'' + esc(p.id) + '\')"><svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="cart-info"><div class="cart-name">' + esc(p.name) + '</div><div class="cart-price">' + esc(p.price) + ' ر.س</div><div class="qty"><button class="qty-btn-small" onclick="APP.changeQty(\'' + esc(p.id) + '\',-1)">−</button><span class="qty-num-small">' + esc(it.qty) + '</span><button class="qty-btn-small" onclick="APP.changeQty(\'' + esc(p.id) + '\',1)">+</button></div></div></div>'; }
     var sub = this.cartTotal();
-    html += '<div class="total-box"><div class="total-row"><span>المجموع</span><span>' + esc(sub) + ' ر.س</span></div><div class="total-row"><span>الشحن</span><span style="color:var(--success);">مجاني</span></div><div class="total-final"><span>الإجمالي</span><span>' + esc(sub) + ' ر.س</span></div></div><button class="btn-primary" style="margin-top:16px;" onclick="APP.goCheckout()">إتمام الشراء</button>';
+    var disc = 0;
+    if (this.appliedCoupon) {
+      if (this.appliedCoupon.type === 'percent') disc = Math.floor(sub * (this.appliedCoupon.value / 100));
+      else disc = this.appliedCoupon.value;
+    }
+    var shipFee = 0;
+    var freeAbove = this.shipping.freeAbove || 0;
+    var baseShipFee = this.shipping.fee || 0;
+    if (sub > 0 && (!freeAbove || sub < freeAbove)) shipFee = baseShipFee;
+    var total = Math.max(0, sub - disc + shipFee);
+    
+    var cp = '';
+    if (this.appliedCoupon) {
+      cp = '<div class="total-row" style="color:var(--success);"><span>خصم (' + esc(this.appliedCoupon.code) + ')</span><span>-' + disc + ' ر.س <span style="cursor:pointer;color:var(--red);" onclick="APP.removeCoupon()">✕</span></span></div>';
+    } else {
+      cp = '<div class="field" style="margin-top:10px;margin-bottom:10px;display:flex;gap:8px;"><input type="text" id="coupon-input" class="field-input" placeholder="كود الخصم..." style="flex:1;"><button class="btn btn-primary" onclick="APP.applyCoupon()">تطبيق</button></div>';
+    }
+
+    html += '<div class="total-box">' + cp + '<div class="total-row"><span>المجموع</span><span>' + esc(sub) + ' ر.س</span></div><div class="total-row"><span>الشحن</span><span style="color:' + (shipFee === 0 ? 'var(--success)' : 'var(--muted)') + ';">' + (shipFee === 0 ? 'مجاني' : shipFee + ' ر.س') + '</span></div><div class="total-final"><span>الإجمالي</span><span>' + esc(total) + ' ر.س</span></div></div><button class="btn-primary" style="margin-top:16px;" onclick="APP.goCheckout()">إتمام الشراء</button>';<button class="btn-primary" style="margin-top:16px;" onclick="APP.goCheckout()">إتمام الشراء</button>';
     c.innerHTML = html;
   },
   goCheckout: function() { if (!this.cart.length) { this.toast('السلة فارغة'); return; } var total = this.cartTotal(); var ss = document.getElementById('checkout-subtotal'); if (ss) ss.textContent = total + ' ر.س'; var st = document.getElementById('checkout-total'); if (st) st.textContent = total + ' ر.س'; if (this.state.user) { var cn = document.getElementById('checkout-name'); if (cn) cn.value = this.state.user.name || ''; var cp = document.getElementById('checkout-phone'); if (cp) cp.value = this.state.user.phone || ''; } this.navigateToScreen('checkout', true); },
+  applyCoupon: function() {
+    var code = (document.getElementById('coupon-input').value || '').trim().toUpperCase();
+    if (!code) return;
+    var cp = null;
+    this.coupons.forEach(function(c){ if (c.code === code && c.active) cp = c; });
+    if (!cp) { this.toast('كود الخصم غير صالح أو منتهي'); return; }
+    if (cp.usageLimit && cp.usedCount >= cp.usageLimit) { this.toast('انتهت صلاحية الكود'); return; }
+    var sub = this.cartTotal();
+    if (cp.minOrder && sub < cp.minOrder) { this.toast('الحد الأدنى للطلب ' + cp.minOrder + ' ر.س'); return; }
+    this.appliedCoupon = cp;
+    this.toast('تم تطبيق الخصم ✓');
+    this.renderCart();
+  },
+  removeCoupon: function() {
+    this.appliedCoupon = null;
+    this.renderCart();
+  },
   renderBanks: function() {
     var c = document.getElementById('bank-list'); if (!c) return; this.banks = this.safeBridge('getPayments', window.DEFAULT_PAYMENTS);
     var html = '';
@@ -724,7 +760,19 @@ var APP = {
     if (!isCash && !tn) { this.toast('أدخل رقم الحوالة'); return; }
     if (!isCash && !ru) { this.toast('ارفع صورة السند'); return; }
     var oid = 'CH-' + Date.now().toString().slice(-8);
-    var order = {id:oid, items:JSON.parse(JSON.stringify(this.cart)), total:this.cartTotal(), pickup:pickup, name:name, phone:phone, bank:this.selectedBank, transferNum:tn, status:'pending'};
+    var sub = this.cartTotal();
+    var disc = 0;
+    if (this.appliedCoupon) {
+      if (this.appliedCoupon.type === 'percent') disc = Math.floor(sub * (this.appliedCoupon.value / 100));
+      else disc = this.appliedCoupon.value;
+    }
+    var shipFee = 0;
+    var freeAbove = this.shipping.freeAbove || 0;
+    var baseShipFee = this.shipping.fee || 0;
+    if (sub > 0 && (!freeAbove || sub < freeAbove)) shipFee = baseShipFee;
+    var finalTotal = Math.max(0, sub - disc + shipFee);
+    
+    var order = {id:oid, items:JSON.parse(JSON.stringify(this.cart)), subtotal: sub, discount: disc, shipping: shipFee, total:finalTotal, couponCode: this.appliedCoupon ? this.appliedCoupon.code : null, pickup:pickup, name:name, phone:phone, bank:this.selectedBank, transferNum:tn, status:'pending'};
     var saveToFB = function() { if (window.FB && FB.ready && FB.addOrder) return FB.addOrder(order).catch(function(e) {}); return Promise.resolve(); };
     saveToFB().then(function() {
       self.orders.push(order);
@@ -736,6 +784,19 @@ var APP = {
       var so = document.getElementById('success-order-id'); if (so) so.textContent = '#' + oid;
       if (window.ChizenNotif) ChizenNotif.orderPlaced(oid, order.total);
       self.navigateToScreen('success', true);
+      
+      order.items.forEach(function(it){
+        var p = self.getProduct(it.id);
+        if (p && typeof p.stock === 'number') {
+          var newStock = Math.max(0, p.stock - it.qty);
+          if (window.FB && FB.ready) FB.updateProduct(p.id, {stock: newStock}).catch(function(){});
+        }
+      });
+      if (self.appliedCoupon && window.FB && FB.ready) {
+        self.appliedCoupon.usedCount = (self.appliedCoupon.usedCount || 0) + 1;
+        FB.setConfig('coupons', {list: self.coupons}).catch(function(){});
+      }
+      self.appliedCoupon = null;
     });
   },
   renderOrders: function() {
