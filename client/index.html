@@ -266,7 +266,7 @@ var AUTH = {
 
     window.addEventListener('offline', function(){ document.getElementById('offline-banner').classList.add('show'); });
     window.addEventListener('online',  function(){ document.getElementById('offline-banner').classList.remove('show'); });
-    if (!navigator.onLine) document.getElementById('offline-banner').classList.add('show');
+    /* Removed false positive */
 
     try {
       var rem = localStorage.getItem('chizen_remember_email');
@@ -449,7 +449,7 @@ var AUTH = {
       else if (code === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
       else if (code === 'auth/invalid-credential') msg = 'البريد أو كلمة المرور غير صحيحة';
       else if (code === 'auth/too-many-requests') msg = 'محاولات كثيرة — حاول لاحقاً';
-      else if (code === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال بـ Firebase (تأكد من الإنترنت أو إعدادات جوجل)';
       this.showErr('login-err', msg);
     }
   },
@@ -491,7 +491,7 @@ var AUTH = {
       if (code === 'auth/email-already-in-use') msg = 'البريد مسجل بالفعل';
       else if (code === 'auth/weak-password') msg = 'كلمة المرور ضعيفة';
       else if (code === 'auth/invalid-email') msg = 'البريد غير صحيح';
-      else if (code === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
+      else if (code === 'auth/network-request-failed') msg = 'فشل الاتصال بـ Firebase (تأكد من الإنترنت أو إعدادات جوجل)';
       this.showErr('signup-err', msg);
     }
   },
@@ -516,7 +516,7 @@ var AUTH = {
     } catch (e) {
       this.setLoading('btn-google', false);
       this._busy = false;
-      this.showErr('login-err', 'فشل الدخول: ' + (e.message || 'خطأ غير معروف'));
+      this.showErr('login-err', 'خطأ جوجل: ' + (e.code || e.message || 'تأكد من إضافة SHA-1'));
     }
   },
 

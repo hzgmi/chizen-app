@@ -442,7 +442,10 @@ var ADMIN = {
     document.getElementById('session-email').textContent = user.email || '-';
     document.getElementById('session-uid').textContent = user.uid || '-';
     var self = this;
-    this.loadData().then(function(){ self.renderAll(); });
+    this.loadData().then(function(){ 
+      self.renderAll(); 
+      self.startRealtime(); 
+    });
     this.toast('مرحباً ' + (user.displayName || ''), 'success');
   },
 
@@ -1071,6 +1074,47 @@ var ADMIN = {
     if (!confirm('تسجيل الخروج؟')) return;
     try { if (FB.ready) await FB.logout(); } catch(e) {}
     window.location.reload();
+  },
+
+  startRealtime: function() {
+    var self = this;
+    FB.db.collection('orders').onSnapshot(function(snapshot) {
+      var hasNew = false;
+      var arr = [];
+      
+      snapshot.forEach(function(doc) {
+        var d = doc.data(); d.id = doc.id; arr.push(d);
+      });
+      
+      arr.sort(function(a, b) {
+        var ta = a.createdAt ? a.createdAt.seconds : 0;
+        var tb = b.createdAt ? b.createdAt.seconds : 0;
+        return tb - ta;
+      });
+
+      // التحقق مما إذا كان هناك طلب جديد
+      if (self.orders && self.orders.length > 0 && arr.length > self.orders.length) {
+        hasNew = true;
+      }
+
+      self.orders = arr;
+      
+      // تشغيل الصوت وإظهار التنبيه
+      if (hasNew) {
+        try {
+          var audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+          audio.play().catch(function(e){});
+        } catch(e) {}
+        self.toast('🔔 وصل طلب جديد!', 'success');
+      }
+
+      // تحديث الجدول إذا كانت الشاشة مفتوحة
+      var ordersSec = document.getElementById('sec-orders');
+      if (ordersSec && ordersSec.classList.contains('active')) {
+        self.renderOrders();
+      }
+      self.renderDashboard();
+    });
   },
 
   openModal: function(title, body, actions) {
