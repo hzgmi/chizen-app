@@ -406,12 +406,7 @@ var ADMIN = {
     var cacheKey = 'chizen_admin_verified_' + user.uid;
     
     // 1. التحقق من الذاكرة المحلية أولاً (سرعة فورية)
-    try {
-      if (localStorage.getItem(cacheKey) === 'true') {
-        this.grantAccess(user);
-        return;
-      }
-    } catch(e) {}
+    
 
     // 2. إذا لم يكن محفوظاً، نتحقق من Firebase لأول مرة
     box.innerHTML =
@@ -437,7 +432,7 @@ var ADMIN = {
         return;
       }
       // 3. حفظ النتيجة في الذاكرة المحلية (لن يُسأل مرة أخرى على هذا الجهاز)
-      try { localStorage.setItem(cacheKey, 'true'); } catch(e) {}
+      
       
       this.grantAccess(user);
     } catch(e) {

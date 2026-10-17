@@ -779,16 +779,7 @@ var APP = {
     }
 
     /* ─── استرجاع الحالة ─── */
-    try {
-      var s = localStorage.getItem('chizen_state');
-      if (s) {
-        var p = JSON.parse(s);
-        if (p.user) self.state.user = p.user;
-        if (typeof p.loyaltyPoints === 'number') self.loyaltyPoints = p.loyaltyPoints;
-        if (p.lang) self.state.lang = p.lang;
-        if (p.theme) self.state.theme = p.theme;
-      }
-    } catch(e) {}
+    /* removed insecure session restore */
 
     self.productsData = self.safeBridge('getProducts', window.DEFAULT_PRODUCTS);
     self.banners = self.safeBridge('getBanners', window.DEFAULT_BANNERS);
@@ -945,78 +936,7 @@ var APP = {
     });
     setTimeout(function() {
       if (FB.currentUser) return;
-      try {
-        var s = localStorage.getItem('chizen_state');
-        if (s && JSON.parse(s).user) {
-           self.state.user = JSON.parse(s).user;
-           self.updateUserName();
-        } else {
-           window.location.replace('index.html');
-        }
-      } catch(e) { window.location.replace('index.html'); }
-    }, 5000);
-  },
-
-  onUserReady: function(user) {
-    var self = this;
-    self.state.user = {
-      name: user.displayName || (user.email || '').split('@')[0] || 'User',
-      email: user.email || '',
-      phone: '',
-      uid: user.uid
-    };
-    self.updateUserName();
-
-    FB.getUserProfile().then(function(profile) {
-      if (profile) {
-        if (profile.name) self.state.user.name = profile.name;
-        if (profile.phone) self.state.user.phone = profile.phone;
-        if (typeof profile.loyaltyPoints === 'number') self.loyaltyPoints = profile.loyaltyPoints;
-        self.updateUserName();
-        self.updateLoyalty();
-      }
-      self.saveState();
-    }).catch(function(){});
-
-    if (Bridge && Bridge.syncFromFirebase) {
-      Bridge.syncFromFirebase().then(function() {
-        self.productsData = self.safeBridge('getProducts', self.productsData);
-        self.banners = self.safeBridge('getBanners', self.banners);
-        self.categories = self.safeBridge('getCategories', self.categories);
-        self.banks = self.safeBridge('getPayments', self.banks);
-        self.renderCategories();
-        self.renderBanners();
-        self.renderProducts(self.getSortedProducts());
-      }).catch(function(){});
-    }
-
-    if (FB.getUserOrders) {
-      FB.getUserOrders().then(function(orders) {
-        if (orders && orders.length) {
-          self.orders = orders;
-          self.renderTracking();
-        }
-      }).catch(function(){});
-    }
-
-    if (FB.getNotifications) {
-      FB.getNotifications().then(function(ns) {
-        if (ns && ns.length) {
-          self.notifications = ns.map(function(n) {
-            return {
-              title: n.title,
-              body: n.body,
-              date: n.createdAt ? new Date(n.createdAt.seconds * 1000).toISOString() : new Date().toISOString()
-            };
-          });
-          self.updateNotifBadge();
-        }
-      }).catch(function(){});
-    }
-  },
-
-  saveState: function() {
-    try { localStorage.setItem('chizen_state', JSON.stringify(this.state)); } catch(e) {}
+      /* removed insecure session restore */
   },
 
   checkNotifPrompt: function() {
