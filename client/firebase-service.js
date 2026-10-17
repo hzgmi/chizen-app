@@ -23,9 +23,10 @@ window.FB = {
         ? firebase.initializeApp(window.FIREBASE_CONFIG)
         : firebase.app();
       this.auth = firebase.auth();
+      try { this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e){ console.warn('[FB] setPersistence:', e); }); } catch(e) {}
       this.db = firebase.firestore();
 
-      this.db.enablePersistence({ synchronizeTabs: true }).catch(function(err){
+      this.db.enablePersistence().catch(function(err){
         if (err.code !== 'failed-precondition' && err.code !== 'unimplemented') {
           console.log('[FB] Persistence:', err.code);
         }
