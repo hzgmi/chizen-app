@@ -20,7 +20,7 @@ window.FB = {
 
       /* ═══ الأهم: انتظر setPersistence قبل ready ═══ */
       try {
-        await this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(){});
         console.log('[FB] setPersistence LOCAL ✓');
       } catch(e) { console.warn('[FB] setPersistence:', e); }
 
