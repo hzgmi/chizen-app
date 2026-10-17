@@ -843,7 +843,17 @@ var ADMIN = {
       var o = list[i];
       var ic = 0;
       if (o.items) for (var k = 0; k < o.items.length; k++) ic += o.items[k].qty;
-      html += '<div class="acard"><div class="acard-title"><div class="acard-title-l">#' + esc((o.id || '').substring(0, 14)) + '</div>'
+      
+      // حساب تأخير الطلب (5 أيام)
+      var orderDate = o.createdAt ? o.createdAt.seconds * 1000 : Date.now();
+      var daysDiff = (Date.now() - orderDate) / (1000 * 60 * 60 * 24);
+      var isDelayed = daysDiff >= 5 && (o.status === 'pending' || o.status === 'shipped');
+      var delayBadge = isDelayed ? '<span style="background:#EF4444;color:white;font-size:9px;padding:2px 6px;border-radius:6px;margin-right:5px;font-weight:bold;">⚠️ متأخر</span>' : '';
+      
+      // زر نسخ رقم الطلب
+      var copyBtn = '<button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(\'' + esc(o.id) + '\'); ADMIN.toast(\'تم نسخ رقم الطلب\', \'success\');" title="نسخ رقم الطلب">📋</button>';
+
+      html += '<div class="acard" style="' + (isDelayed ? 'border-color:#EF4444;' : '') + '"><div class="acard-title"><div class="acard-title-l">' + delayBadge + '#' + esc((o.id || '').substring(0, 14)) + ' ' + copyBtn + '</div>'
            +  '<span class="badge-status badge-' + esc(o.status || 'pending') + '">' + this.statusLabel(o.status) + '</span></div>'
            +  '<div style="font-size:11px;color:var(--muted);line-height:1.8;">'
            +  '<div>👤 ' + esc(o.name || '') + '</div>'
