@@ -31,18 +31,13 @@ window.FB = {
       });
 
       /* ═══ انتظر أول onAuthStateChanged ═══ */
-      await new Promise(function(resolve) {
-        var done = false;
-        FB.auth.onAuthStateChanged(function(user) {
-          if (done) return;
-          done = true;
-          FB.currentUser = user;
-          resolve();
-        });
-        setTimeout(function(){ if (!done) { done = true; resolve(); } }, 3000);
-      });
-
+      // إعلان الجاهزية فوراً لتجنب رسالة "جاري التحميل"
       this.ready = true;
+      
+      // الاستماع لحالة الدخول في الخلفية
+      this.auth.onAuthStateChanged(function(user) {
+        FB.currentUser = user;
+      });
       console.log('[FB] Initialized ✓ currentUser:', this.currentUser ? this.currentUser.uid : 'null');
       return true;
     } catch (e) {

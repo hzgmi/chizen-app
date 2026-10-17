@@ -337,7 +337,7 @@ var AUTH = {
       }
     }, 5000);
     this._fbReady = !!(window.FB && window.FB.ready);
-    if (!this._fbReady) { this.waitForFB(2500).then(function(ready){ self._fbReady = ready; if (ready) self.afterFBReady(); }); }
+    if (!this._fbReady) { this.waitForFB(10000).then(function(ready){ self._fbReady = ready; if (ready) self.afterFBReady(); }); }
     else { this.afterFBReady(); }
   },
   afterFBReady: function() {
