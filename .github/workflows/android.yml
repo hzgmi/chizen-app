@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npm install @capacitor-firebase/authentication firebase @capacitor/app @capacitor/assets
+          npm install @capacitor-firebase/authentication firebase @capacitor/app
           
       - name: Prepare www
         run: |
@@ -25,17 +25,12 @@ jobs:
       - name: Add Android
         run: npx cap add android
         
-      - name: FORCE Internet Permissions
+      - name: Force Android Config (No Image, Just Color)
         run: |
-          # حقن صلاحية الإنترنت في نظام أندرويد
+          # إزالة صلاحيات الصورة وإجبار الخلفية فقط
           sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />' android/app/src/main/AndroidManifest.xml
-          # التأكد من عدم حظر الاتصالات
-          sed -i 's/android:usesCleartextTraffic="false"/android:usesCleartextTraffic="true"/' android/app/src/main/AndroidManifest.xml
-          
-      - name: Apply Plugins & Assets
-        run: |
-          npx cap sync android
-          npx capacitor-assets generate --android
+          # تغيير لون شاشة البداية الأصلية إلى البنفسجي الداكن وإخفاء الصورة
+          echo "<?xml version=\"1.0\" encoding=\"utf-8\"?><resources><color name=\"splash_background\">#1A0B2E</color><style name=\"AppTheme.NoActionBarLaunch\" parent=\"Theme.SplashScreen\"><item name=\"windowBackground\">#1A0B2E</item><item name=\"postSplashScreenTheme\">@style/AppTheme.NoActionBar</item></style></resources>" > android/app/src/main/res/values/styles.xml
           
       - name: Inject Google Auth & Firebase
         run: |
