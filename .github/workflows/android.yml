@@ -13,11 +13,10 @@ jobs:
         with: { distribution: 'zulu', java-version: '21' }
       
       - name: Install dependencies
-        run: npm install
-        
-      - name: Install Capacitor Assets
-        run: npm install @capacitor/assets
-        
+        run: |
+          npm install
+          npm install @capacitor-firebase/authentication firebase @capacitor/app @capacitor/assets
+          
       - name: Prepare www
         run: |
           mkdir -p www
@@ -26,21 +25,20 @@ jobs:
       - name: Add Android
         run: npx cap add android
         
-      - name: Fix AndroidManifest (Permissions)
+      - name: Apply Plugins & Assets
         run: |
-          sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />' android/app/src/main/AndroidManifest.xml
-          
-      - name: Generate App Icons
-        run: |
+          npx cap sync android
           npx capacitor-assets generate --android
           
-      - name: Sync Capacitor
-        run: npx cap sync android
-        
+      - name: Inject Google Auth
+        run: |
+          echo "ext { rgcfaIncludeGoogle = true }" >> android/variables.gradle
+          cp google-services.json android/app/google-services.json || true
+          
       - name: Build APK
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
         
       - uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
+          name: chizen-apk
           path: android/app/build/outputs/apk/debug/*.apk

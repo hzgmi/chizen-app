@@ -905,40 +905,30 @@ var APP = {
 
   /* ═══════════════════════════════════════ */
 
-  syncBackground: function() {
+    syncBackground: function() {
     var self = this;
-
     if (!window.FB || !FB.ready) {
-      if (!self.state.user) {
-        setTimeout(function() {
-          if (!self.state.user) window.location.replace('index.html');
-        }, 3000);
-      }
+      setTimeout(function(){ self.syncBackground(); }, 500);
       return;
     }
-
     if (FB.currentUser) {
       self.onUserReady(FB.currentUser);
       return;
     }
-
-    var handled = false;
-    function handleUser(user) {
-      if (handled) return;
-      if (!user) return;
-      handled = true;
-      self.onUserReady(user);
-    }
-
-    try {
-      FB.auth.onAuthStateChanged(function(user) { handleUser(user); });
-    } catch(e) {}
-
+    FB.auth.onAuthStateChanged(function(user) {
+      if (user) self.onUserReady(user);
+    });
     setTimeout(function() {
-      if (handled) return;
-      if (FB.currentUser) { handleUser(FB.currentUser); return; }
-      if (self.state.user) { self.updateUserName(); return; }
-      window.location.replace('index.html');
+      if (FB.currentUser) return;
+      try {
+        var s = localStorage.getItem('chizen_state');
+        if (s && JSON.parse(s).user) {
+           self.state.user = JSON.parse(s).user;
+           self.updateUserName();
+        } else {
+           window.location.replace('index.html');
+        }
+      } catch(e) { window.location.replace('index.html'); }
     }, 5000);
   },
 

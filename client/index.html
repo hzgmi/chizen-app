@@ -254,7 +254,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="firebase-service.js"></script>
-<script src="hide-google-apk.js"></script>
+
 
 <script>
 var AUTH = {
@@ -496,52 +496,27 @@ var AUTH = {
     }
   },
 
-  googleLogin: async function() {
+    googleLogin: async function() {
     if (this._busy) return;
-    if (!this._fbReady) { this.showErr('login-err', 'لا يوجد اتصال'); return; }
-
     this._busy = true;
     this.setLoading('btn-google', true);
-
     try {
-      var provider = new firebase.auth.GoogleAuthProvider();
-      provider.setCustomParameters({ prompt: 'select_account' });
-      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        this.showOverlay('جاري التحويل إلى Google...');
-        await FB.auth.signInWithRedirect(provider);
+      if (window.Capacitor && window.Capacitor.isNativePlatform()) {
+        const { FirebaseAuthentication } = window.Capacitor.Plugins;
+        await FirebaseAuthentication.signInWithGoogle();
+        window.location.replace('chizen.html');
         return;
       }
-
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
       var result = await FB.auth.signInWithPopup(provider);
-
       if (result && result.user) {
-        var existing = await FB.getUserProfile();
-        if (!existing) {
-          await FB.saveUserProfile({
-            name: result.user.displayName || 'مستخدم',
-            email: result.user.email,
-            phone: '',
-            loyaltyPoints: 240,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        }
         window.location.replace('chizen.html');
-      } else {
-        this.setLoading('btn-google', false);
-        this._busy = false;
       }
     } catch (e) {
       this.setLoading('btn-google', false);
       this._busy = false;
-      this.hideOverlay();
-      var code = e.code || '';
-      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
-      var msg = 'فشل الدخول بـ Google';
-      if (code === 'auth/unauthorized-domain') msg = 'النطاق غير مصرح';
-      else if (code === 'auth/network-request-failed') msg = 'تحقق من الإنترنت';
-      this.showErr('login-err', msg);
+      this.showErr('login-err', 'فشل الدخول: ' + (e.message || 'خطأ غير معروف'));
     }
   },
 
