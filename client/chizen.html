@@ -626,6 +626,59 @@
       </div>
     </div>
 
+    <!-- الإعدادات -->
+    <div class="screen" id="screen-settings">
+      <div class="safe-top"></div>
+      <div class="screen-header">
+        <button class="back-btn" onclick="APP.goBack()"><svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button>
+        <div class="screen-title">الإعدادات</div>
+        <div class="header-version">v1.0.0</div>
+      </div>
+      <div class="settings-hero">
+        <div class="settings-hero-avatar" id="settings-avatar">U</div>
+        <div class="settings-hero-info">
+          <div class="settings-hero-name" id="settings-name">مستخدم</div>
+          <div class="settings-hero-email" id="settings-email">user@chizen.app</div>
+          <div class="settings-hero-badges">
+            <span class="premium-badge">⭐ Premium</span>
+            <span class="member-badge">عضو نشط</span>
+          </div>
+        </div>
+      </div>
+      <div class="settings-stats">
+        <div class="stat-card" onclick="APP.goTab('orders')"><div class="stat-icon">📦</div><div class="stat-num" id="stat-orders">0</div><div class="stat-label">طلبات</div></div>
+        <div class="stat-card" onclick="APP.goTab('points')"><div class="stat-icon">💎</div><div class="stat-num" id="stat-points">0</div><div class="stat-label">نقاط</div></div>
+        <div class="stat-card" onclick="APP.goTab('favorites')"><div class="stat-icon">❤️</div><div class="stat-num" id="stat-favs">0</div><div class="stat-label">مفضلة</div></div>
+      </div>
+      <div class="elite-banner" onclick="APP.showElite()">
+        <div class="elite-icon">👑</div>
+        <div class="elite-info"><div class="elite-title">CHIZEN Elite</div><div class="elite-desc">عضوية مميزة · عروض حصرية · دعم أولوية</div></div>
+        <div class="elite-arrow">›</div>
+      </div>
+      <div class="settings-group">
+        <div class="settings-group-title">المظهر والمحتوى</div>
+        <div class="settings-item" onclick="APP.openLanguage()"><div class="settings-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div><div class="settings-text"><div class="settings-title">اللغة</div></div><div class="mi-value" id="v-lang">العربية</div><div class="mi-arrow">›</div></div>
+        <div class="settings-item" onclick="APP.openTheme()"><div class="settings-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg></div><div class="settings-text"><div class="settings-title">الوضع</div></div><div class="mi-value" id="v-theme">داكن</div><div class="mi-arrow">›</div></div>
+        <div class="settings-item" onclick="APP.openFont()"><div class="settings-icon">Aa</div><div class="settings-text"><div class="settings-title">حجم الخط</div></div><div class="mi-value" id="v-font">متوسط</div><div class="mi-arrow">›</div></div>
+      </div>
+      <div class="settings-group">
+        <div class="settings-group-title">الأمان والإشعارات</div>
+        <div class="settings-item"><div class="settings-icon">🔒</div><div class="settings-text"><div class="settings-title">فتح بالبصمة</div><div class="settings-desc" id="bio-desc">قفل التطبيق ببصمة الإصبع</div></div><div class="toggle" id="t-bio" onclick="event.stopPropagation();APP.toggleBiometric()"></div></div>
+        <div class="settings-item"><div class="settings-icon">🔔</div><div class="settings-text"><div class="settings-title">إشعارات التطبيق</div></div><div class="toggle on" id="t-notif" onclick="APP.toggleT('notifications', this)"></div></div>
+      </div>
+      <div class="settings-group">
+        <div class="settings-group-title">البيانات والخصوصية</div>
+        <div class="settings-item" onclick="APP.showPrivacy()"><div class="settings-icon">🛡️</div><div class="settings-text"><div class="settings-title">سياسة الخصوصية</div></div><div class="mi-arrow">›</div></div>
+        <div class="settings-item" onclick="APP.clearCache()"><div class="settings-icon">🗑️</div><div class="settings-text"><div class="settings-title">مسح ذاكرة التخزين المؤقت</div><div class="settings-desc" id="cache-size">— KB</div></div><div class="mi-arrow">›</div></div>
+      </div>
+      <div class="settings-group">
+        <div class="settings-group-title">الحساب</div>
+        <div class="settings-item" onclick="APP.editProfile()"><div class="settings-icon">👤</div><div class="settings-text"><div class="settings-title">تعديل الملف الشخصي</div></div><div class="mi-arrow">›</div></div>
+        <div class="settings-item" onclick="APP.deleteAccount()"><div class="settings-icon" style="background:rgba(255,77,109,.15);">⚠️</div><div class="settings-text"><div class="settings-title" style="color:var(--error);">حذف الحساب</div></div><div class="mi-arrow">›</div></div>
+      </div>
+      <div style="padding:0 20px 30px;"><button class="danger-btn" onclick="APP.logout()">تسجيل الخروج</button></div>
+    </div>
+
   </div>
 
   <div class="fab" id="fab" onclick="APP.openSupport()">
@@ -1761,6 +1814,65 @@ var APP = {
 
   closeModal: function() { document.getElementById('modal-overlay').classList.remove('active'); },
 
+
+  renderSettings: function() {
+    var s = this.state;
+    if(document.getElementById('v-lang')) document.getElementById('v-lang').textContent = s.lang === 'ar' ? 'العربية' : 'English';
+    if(document.getElementById('v-theme')) document.getElementById('v-theme').textContent = s.theme === 'dark' ? 'داكن' : 'فاتح';
+    if(document.getElementById('v-font')) document.getElementById('v-font').textContent = s.fontSize === 'small' ? 'صغير' : s.fontSize === 'large' ? 'كبير' : 'متوسط';
+    if(document.getElementById('t-notif')) { if (s.notifications) document.getElementById('t-notif').classList.add('on'); else document.getElementById('t-notif').classList.remove('on'); }
+    if(document.getElementById('t-bio')) { if (s.biometric) document.getElementById('t-bio').classList.add('on'); else document.getElementById('t-bio').classList.remove('on'); }
+    if(document.getElementById('stat-orders')) document.getElementById('stat-orders').textContent = this.orders.length || 0;
+    if(document.getElementById('stat-points')) document.getElementById('stat-points').textContent = this.loyaltyPoints || 0;
+    if(document.getElementById('stat-favs')) document.getElementById('stat-favs').textContent = this.favorites.length || 0;
+    this.updateUserName();
+  },
+  openLanguage: function() {
+    var self = this;
+    this.openModal('اختر اللغة', [{v:'ar', l:'العربية'}, {v:'en', l:'English'}], this.state.lang, function(v) {
+      self.state.lang = v; self.applyState(); self.saveState(); self.toast('تم تطبيق اللغة ✓');
+    });
+  },
+  openTheme: function() {
+    var self = this;
+    this.openModal('اختر الوضع', [{v:'dark', l:'داكن'}, {v:'light', l:'فاتح'}], this.state.theme, function(v) {
+      self.state.theme = v; self.applyState(); self.saveState(); self.toast('تم تطبيق الوضع ✓');
+    });
+  },
+  openFont: function() {
+    var self = this;
+    this.openModal('حجم الخط', [{v:'small', l:'صغير'}, {v:'medium', l:'متوسط'}, {v:'large', l:'كبير'}], this.state.fontSize, function(v) {
+      self.state.fontSize = v; self.applyState(); self.saveState(); self.toast('تم التطبيق ✓');
+    });
+  },
+  toggleT: function(k, el) {
+    if (el) { if (this.state[k]) el.classList.add('on'); else el.classList.remove('on'); }
+    this.saveState(); this.toast('تم الحفظ ✓');
+  },
+  toggleBiometric: function() {
+    this.saveState();
+    var el = document.getElementById('t-bio');
+    if (el) { if (this.state.biometric) el.classList.add('on'); else el.classList.remove('on'); }
+    this.toast('تم التغيير');
+  },
+  clearCache: function() {
+    try { if ('caches' in window) { caches.keys().then(function(names){ for(var i=0;i<names.length;i++) caches.delete(names[i]); }); } } catch(e){}
+    this.toast('تم مسح الملفات المؤقتة ✓');
+  },
+  editProfile: function() {
+    var self = this;
+    this.showPrompt('الاسم', this.state.user ? this.state.user.name : '', function(name) {
+      if (name) { self.state.user.name = name; self.saveState(); self.updateUserName(); self.toast('تم ✓'); }
+    });
+  },
+  deleteAccount: function() {
+    var self = this;
+    this.showConfirm('حذف الحساب', 'هل أنت متأكد؟', function(ok) {
+      if (ok) { localStorage.clear(); window.location.href = 'index.html'; }
+    });
+  },
+  showPrivacy: function() { window.location.href = 'privacy.html'; },
+  showElite: function() { this.showConfirm('CHIZEN Elite 👑', 'قريباً جداً!', function(){}); },
   logout: function() {
     showConfirm('تسجيل الخروج', 'هل أنت متأكد؟', function(ok) {
       if (!ok) return;
