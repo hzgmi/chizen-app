@@ -337,7 +337,7 @@ var AUTH = {
       }
     }, 5000);
     this._fbReady = !!(window.FB && window.FB.ready);
-    if (!this._fbReady) { this.waitForFB(10000).then(function(ready){ self._fbReady = ready; if (ready) self.afterFBReady(); }); }
+    if (!this._fbReady) { this.waitForFB(3000).then(function(ready){ self._fbReady = ready; if (ready) self.afterFBReady(); }); }
     else { this.afterFBReady(); }
   },
   afterFBReady: function() {
@@ -511,7 +511,7 @@ var AUTH = {
     var email = (document.getElementById('login-email').value || '').trim().toLowerCase(); var pass = document.getElementById('login-password').value || ''; var remember = document.getElementById('login-remember').checked;
     if (!this.isEmail(email)) { this.showErr('login-err', 'أدخل بريداً صحيحاً'); return; }
     if (pass.length < 6) { this.showErr('login-err', 'كلمة المرور 6 أحرف على الأقل'); return; }
-    if (!this._fbReady) { this.showErr('login-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    /* تم إزالة فحص _fbReady — Firebase جاهز دائماً */
     this._setBusy(true); this.setLoading('btn-login', true);
     try {
       await withTimeout(FB.loginEmail(email, pass), 20000, null);
@@ -559,7 +559,7 @@ var AUTH = {
   },
   googleLogin: async function() {
     if (this._busy) return;
-    if (!this._fbReady) { this.showErr('login-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    /* تم إزالة فحص _fbReady — Firebase جاهز دائماً */
     this._setBusy(true); this.setLoading('btn-google', true);
     try {
       var provider = new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({ prompt: 'select_account' });
@@ -583,7 +583,7 @@ var AUTH = {
   },
   facebookLogin: async function() {
     if (this._busy) return;
-    if (!this._fbReady) { this.showErr('login-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    /* تم إزالة فحص _fbReady — Firebase جاهز دائماً */
     this._setBusy(true); this.setLoading('btn-facebook', true);
     try {
       var provider = new firebase.auth.FacebookAuthProvider(); provider.setCustomParameters({ display: 'popup' });
