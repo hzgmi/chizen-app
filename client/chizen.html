@@ -387,6 +387,32 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .bio-btn{padding:14px 30px;background:var(--grad-chizen-soft);color:white;border:none;border-radius:14px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 4px 16px rgba(255,39,201,.35);}
 @media (max-width:360px){.cats{grid-template-columns:repeat(3,1fr);}.trust-row{grid-template-columns:repeat(2,1fr);}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}}
+
+  /* ═══ اختيار نقطة التسليم ═══ */
+  .pickup-modal-overlay { position: fixed; inset: 0; background: rgba(10,5,21,0.85); backdrop-filter: blur(8px); z-index: 10000; display: none; align-items: flex-end; justify-content: center; }
+  .pickup-modal-overlay.active { display: flex; }
+  .pickup-modal-sheet { width: 100%; max-width: 600px; background: var(--bg-card); border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 20px; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); border: 1.5px solid var(--nav-border); border-bottom: none; }
+  .pickup-modal-overlay.active .pickup-modal-sheet { transform: translateY(0); }
+  .pickup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .pickup-close { width: 36px; height: 36px; background: var(--bg-elev); border: 1.5px solid var(--nav-border); border-radius: 50%; color: var(--cream); font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+  .pickup-close:active { transform: scale(0.9); }
+  .pickup-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .pickup-tab { flex: 1; padding: 12px; background: rgba(2,8,35,0.5); border: 1.5px solid var(--nav-border); border-radius: 12px; color: var(--muted); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; min-height: 44px; }
+  .pickup-tab.active { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(255,39,201,0.3); }
+  .pickup-content { overflow-y: auto; flex: 1; padding-bottom: 20px; }
+  .pickup-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .pickup-district-card { background: rgba(31,13,53,0.55); border: 1.5px solid var(--nav-border); border-radius: 14px; padding: 16px 10px; text-align: center; cursor: pointer; transition: all 0.2s; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+  .pickup-district-card:active { transform: scale(0.96); border-color: var(--pink); }
+  .pickup-district-card .icon { font-size: 24px; }
+  .pickup-district-card .name { font-size: 13px; font-weight: 900; color: var(--cream); }
+  .pickup-area-item, .pickup-station-item { background: rgba(31,13,53,0.55); border: 1.5px solid var(--nav-border); border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; justify-content: space-between; }
+  .pickup-area-item:active, .pickup-station-item:active { transform: scale(0.98); border-color: var(--pink); }
+  .pickup-station-item .gov { font-size: 14px; font-weight: 900; color: var(--cream); }
+  .pickup-station-item .station { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .pickup-back { background: none; border: none; color: var(--pink); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; padding: 8px 0; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .pickup-loading { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; font-weight: 700; }
+  .pickup-empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
+
 </style>
 </head>
 <body>
@@ -431,7 +457,14 @@ input,textarea{-webkit-user-select:text;user-select:text;}
       <div class="safe-top"></div>
       <div class="screen-header"><button class="back-btn" onclick="APP.goBack()"><svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button><div class="screen-title">إتمام الشراء</div></div>
       <div style="padding:0 20px 20px;">
-        <div class="checkout-step"><div class="step-title"><div class="step-num">1</div> نقطة التسليم</div><div class="field"><label class="field-label">اختر نقطة التسليم</label><select class="field-input" id="pickup-point"><option value="">-- اختر --</option><option value="sanaa">صنعاء - شارع تعز</option><option value="aden">عدن - المنصورة</option><option value="taiz">تعز - الحوبان</option><option value="hodeidah">الحديدة - شارع صنعاء</option><option value="ibb">إب - شارع تعز</option></select></div></div>
+        <div class="checkout-step"><div class="step-title"><div class="step-num">1</div> نقطة التسليم</div><div class="field">
+            <label class="field-label">نقطة التسليم</label>
+            <button id="pickup-btn" onclick="APP.openPickupModal()" style="width:100%; padding:14px; background:rgba(2,8,35,.55); border:1.5px solid var(--nav-border); border-radius:12px; color:var(--muted); font-family:'Tajawal',sans-serif; font-size:14px; text-align:right; display:flex; justify-content:space-between; align-items:center; cursor:pointer; transition:all 0.2s;">
+              <span id="pickup-btn-text">📍 اختر نقطة التسليم</span>
+              <span style="color:var(--muted-2); font-size:18px;">›</span>
+            </button>
+            <input type="hidden" id="pickup-point" value="">
+          </div></div>
         <div class="checkout-step"><div class="step-title"><div class="step-num">2</div> معلومات الاتصال</div><div class="field"><label class="field-label">الاسم الكامل</label><input type="text" class="field-input" id="checkout-name" placeholder="الاسم"></div><div class="field"><label class="field-label">رقم الهاتف</label><input type="tel" class="field-input" id="checkout-phone" placeholder="+967 7XX XXX XXX"></div></div>
         <div class="checkout-step"><div class="step-title"><div class="step-num">3</div> طريقة الدفع</div><div class="bank-list" id="bank-list"></div></div>
         <div class="checkout-step" id="receipt-step"><div class="step-title"><div class="step-num">4</div> سند الحوالة</div><div class="field"><label class="field-label">رقم عملية الحوالة</label><input type="text" class="field-input" id="transfer-number" placeholder="1234567890"></div><label class="field-label">صورة سند الحوالة</label><div class="upload-area" id="upload-area" onclick="document.getElementById('receipt-file').click()"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p class="upload-hint">اضغط لرفع صورة السند</p><img class="upload-preview" id="upload-preview"></div><input type="file" id="receipt-file" accept="image/*" style="display:none" onchange="APP.handleReceipt(this)"></div>
@@ -530,6 +563,24 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this) APP.closeModal()"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title" id="modal-title"></div><div id="modal-content"></div></div></div>
 <div class="dialog-overlay" id="dialog-overlay" onclick="if(event.target===this) APP.closeDialog()"><div class="dialog-box" id="dialog-box"></div></div>
 <div class="biometric-overlay" id="biometric-overlay"><div class="bio-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11c0 3.5-1 5-1 7s1.5 2 1.5 2"/><path d="M9 4.5C10 3.5 11 3 12 3s2 .5 3 1.5"/><path d="M15 9c0 1.5-.5 3-.5 3.5"/><path d="M6.5 11c0 3-.5 4-1 5"/><path d="M5 8.5C4.5 7 4.5 5.5 5 4.5"/><path d="M19 8.5c.5-1.5.5-3 0-4"/></svg></div><div class="bio-text">فتح بالبصمة</div><div class="bio-sub">ضع إصبعك على مستشعر البصمة</div><button class="bio-btn" onclick="APP.doBiometric()">تحقق</button></div>
+
+<!-- نافذة اختيار نقطة التسليم -->
+<div class="pickup-modal-overlay" id="pickup-modal">
+  <div class="pickup-modal-sheet">
+    <div class="pickup-header">
+      <h3 style="font-size:16px; font-weight:900;">📍 أين تريد استلام طلبك؟</h3>
+      <button class="pickup-close" onclick="APP.closePickupModal()">×</button>
+    </div>
+    <div class="pickup-tabs">
+      <button class="pickup-tab active" id="tab-aden" onclick="APP.switchPickupTab('aden', this)">🏙️ داخل عدن</button>
+      <button class="pickup-tab" id="tab-yemen" onclick="APP.switchPickupTab('yemen', this)">🚌 خارج عدن</button>
+    </div>
+    <div class="pickup-content" id="pickup-content">
+      <!-- سيتم ملؤها ديناميكياً -->
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -711,12 +762,16 @@ var APP = {
   handleReceipt: function(input) { if (!input.files || !input.files[0]) return; var r = new FileReader(); r.onload = function(e) { var a = document.getElementById('upload-area'); var p = document.getElementById('upload-preview'); if (p) p.src = e.target.result; if (a) a.classList.add('has-file'); }; r.readAsDataURL(input.files[0]); },
   confirmOrder: function() {
     var self = this;
-    var pickup = document.getElementById('pickup-point').value;
+    var pickup = this.selectedPickup || document.getElementById('pickup-point').value;
     var name = document.getElementById('checkout-name').value.trim();
     var phone = document.getElementById('checkout-phone').value.trim();
     var tn = document.getElementById('transfer-number').value.trim();
     var ua = document.getElementById('upload-area'); var ru = ua && ua.classList.contains('has-file');
-    if (!pickup) { this.toast('اختر نقطة التسليم'); return; }
+    if (!pickup) { 
+      this.toast('الرجاء اختيار نقطة التسليم أولاً');
+      this.openPickupModal(); // فتح النافذة مباشرة لاختيارها
+      return; 
+    }
     if (name.length < 2) { this.toast('أدخل اسمك'); return; }
     if (phone.length < 8) { this.toast('أدخل رقم هاتف صحيح'); return; }
     if (!this.selectedBank) { this.toast('اختر طريقة الدفع'); return; }
@@ -781,6 +836,126 @@ var APP = {
   },
   submitConfirm: function() { this.closeDialog(); if (window._confirmCb) window._confirmCb(true); },
   closeDialog: function() { var do_ = document.getElementById('dialog-overlay'); if (do_) do_.classList.remove('active'); },
+
+  /* ═══ اختيار نقطة التسليم ═══ */
+  pickupLocations: null,
+  selectedPickup: null,
+  currentPickupTab: 'aden',
+  currentDistrict: null,
+
+  openPickupModal: function() {
+    document.getElementById('pickup-modal').classList.add('active');
+    if (this.pickupLocations) {
+      this.renderPickupContent();
+      return;
+    }
+    document.getElementById('pickup-content').innerHTML = '<div class="pickup-loading"><div class="spinner-sm" style="margin:0 auto 10px; border-top-color:var(--pink);"></div>جاري تحميل المناطق...</div>';
+    
+    var self = this;
+    var fetchPromise = FB.getConfig('delivery_locations');
+    var timeout = new Promise(function(_, reject) { setTimeout(function() { reject(new Error('timeout')); }, 3000); });
+
+    Promise.race([fetchPromise, timeout]).then(function(data) {
+      if (data) {
+        self.pickupLocations = data;
+      } else {
+        self.pickupLocations = self.getDefaultPickupLocations(); // احتياطي
+      }
+      self.renderPickupContent();
+    }).catch(function(err) {
+      console.warn('Pickup fetch failed, using fallback:', err);
+      self.pickupLocations = self.getDefaultPickupLocations();
+      self.renderPickupContent();
+    });
+  },
+
+  getDefaultPickupLocations: function() {
+    return {
+      aden: [
+        { district: "المعلا", areas: ["الشارع الرئيسي", "سوق المعلا", "شارع جمال"] },
+        { district: "كريتر", areas: ["شارع الملكة أروى", "سوق الطويل"] },
+        { district: "المنصورة", areas: ["شارع الميناء", "حي الزهراء"] },
+        { district: "الشيخ عثمان", areas: ["شارع الستين", "المنطقة الصناعية"] }
+      ],
+      yemen: [
+        { gov: "تعز", station: "مكتب باصات الحوبان" },
+        { gov: "صنعاء", station: "مكتب باصات الشام" },
+        { gov: "الحديدة", station: "مكتب باصات شارع صنعاء" },
+        { gov: "إب", station: "مكتب باصات شارع تعز" }
+      ]
+    };
+  },
+
+  switchPickupTab: function(tab, el) {
+    this.currentPickupTab = tab;
+    this.currentDistrict = null;
+    document.querySelectorAll('.pickup-tab').forEach(function(b) { b.classList.remove('active'); });
+    el.classList.add('active');
+    this.renderPickupContent();
+  },
+
+  renderPickupContent: function() {
+    var c = document.getElementById('pickup-content');
+    var data = this.pickupLocations;
+
+    if (!data || !data[this.currentPickupTab] || data[this.currentPickupTab].length === 0) {
+      c.innerHTML = '<div class="pickup-empty">لا توجد مناطق متاحة حالياً</div>';
+      return;
+    }
+
+    if (this.currentPickupTab === 'aden') {
+      if (this.currentDistrict) {
+        // عرض المناطق داخل المديرية
+        var district = data.aden.find(function(d) { return d.district === ADMIN.currentDistrict || d.district === APP.currentDistrict; });
+        if (!district) return;
+        var h = '<button class="pickup-back" onclick="APP.currentDistrict=null; APP.renderPickupContent()">← رجوع للمديريات</button>';
+        district.areas.forEach(function(area) {
+          h += '<div class="pickup-area-item" onclick="APP.selectPickup('' + esc(district.district) + ' - ' + esc(area) + '')"><span style="font-size:14px; font-weight:700; color:var(--cream);">' + esc(area) + '</span><span style="color:var(--pink);">اختيار ›</span></div>';
+        });
+        c.innerHTML = h;
+      } else {
+        // عرض المديريات
+        var h = '<div class="pickup-grid">';
+        data.aden.forEach(function(dist) {
+          h += '<div class="pickup-district-card" onclick="APP.currentDistrict='' + esc(dist.district) + ''; APP.renderPickupContent()"><div class="icon">🏘️</div><div class="name">' + esc(dist.district) + '</div></div>';
+        });
+        h += '</div>';
+        c.innerHTML = h;
+      }
+    } else {
+      // عرض مكاتب الباصات (خارج عدن)
+      var h = '';
+      data.yemen.forEach(function(station) {
+        h += '<div class="pickup-station-item" onclick="APP.selectPickup('' + esc(station.gov) + ' - ' + esc(station.station) + '')"><div><div class="gov">' + esc(station.gov) + '</div><div class="station">' + esc(station.station) + '</div></div><span style="color:var(--pink); font-weight:900;">اختيار ›</span></div>';
+      });
+      c.innerHTML = h;
+    }
+  },
+
+  selectPickup: function(value) {
+    this.selectedPickup = value;
+    document.getElementById('pickup-point').value = value;
+    
+    // تحديث شكل الزر
+    var btn = document.getElementById('pickup-btn');
+    var txt = document.getElementById('pickup-btn-text');
+    if (btn && txt) {
+      txt.innerHTML = '📍 ' + esc(value);
+      btn.style.borderColor = 'var(--success)';
+      txt.style.color = 'var(--mint)';
+    }
+    
+    // حفظ في الذاكرة المحلية
+    try { localStorage.setItem('chizen_last_pickup', value); } catch(e) {}
+    
+    this.closePickupModal();
+    this.toast('تم اختيار: ' + value);
+  },
+
+  closePickupModal: function() {
+    document.getElementById('pickup-modal').classList.remove('active');
+  },
+
   toast: function(msg) { var t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('show'); clearTimeout(window._toastTimer); window._toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2500); },
   renderSettings: function() {
     var s = this.state; var vLang = document.getElementById('v-lang'); if (vLang) vLang.textContent = s.lang === 'ar' ? 'العربية' : 'English'; var vTheme = document.getElementById('v-theme'); if (vTheme) vTheme.textContent = s.theme === 'dark' ? 'داكن' : 'فاتح'; var vFont = document.getElementById('v-font'); if (vFont) vFont.textContent = s.fontSize === 'small' ? 'صغير' : s.fontSize === 'large' ? 'كبير' : 'متوسط';
