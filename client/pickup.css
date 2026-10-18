@@ -1,0 +1,23 @@
+.pickup-modal-overlay { position: fixed; inset: 0; background: rgba(10,5,21,0.85); backdrop-filter: blur(8px); z-index: 10000; display: none; align-items: flex-end; justify-content: center; }
+.pickup-modal-overlay.active { display: flex; }
+.pickup-modal-sheet { width: 100%; max-width: 600px; background: var(--bg-card); border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 20px; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); border: 1.5px solid var(--nav-border); border-bottom: none; }
+.pickup-modal-overlay.active .pickup-modal-sheet { transform: translateY(0); }
+.pickup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.pickup-close { width: 36px; height: 36px; background: var(--bg-elev); border: 1.5px solid var(--nav-border); border-radius: 50%; color: var(--cream); font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.pickup-close:active { transform: scale(0.9); }
+.pickup-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.pickup-tab { flex: 1; padding: 12px; background: rgba(2,8,35,0.5); border: 1.5px solid var(--nav-border); border-radius: 12px; color: var(--muted); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; min-height: 44px; }
+.pickup-tab.active { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(255,39,201,0.3); }
+.pickup-content { overflow-y: auto; flex: 1; padding-bottom: 20px; }
+.pickup-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.pickup-district-card { background: rgba(31,13,53,0.55); border: 1.5px solid var(--nav-border); border-radius: 14px; padding: 16px 10px; text-align: center; cursor: pointer; transition: all 0.2s; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.pickup-district-card:active { transform: scale(0.96); border-color: var(--pink); }
+.pickup-district-card .icon { font-size: 24px; }
+.pickup-district-card .name { font-size: 13px; font-weight: 900; color: var(--cream); }
+.pickup-area-item, .pickup-station-item { background: rgba(31,13,53,0.55); border: 1.5px solid var(--nav-border); border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; justify-content: space-between; }
+.pickup-area-item:active, .pickup-station-item:active { transform: scale(0.98); border-color: var(--pink); }
+.pickup-station-item .gov { font-size: 14px; font-weight: 900; color: var(--cream); }
+.pickup-station-item .station { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.pickup-back { background: none; border: none; color: var(--pink); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; padding: 8px 0; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.pickup-loading { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; font-weight: 700; }
+.pickup-empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
