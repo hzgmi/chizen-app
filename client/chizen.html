@@ -173,6 +173,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .pickup-loading{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;font-weight:700;}
 .pickup-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;}
 </style>
+<link rel="stylesheet" href="chat-widget.css">
 </head>
 <body>
 <div id="app">
@@ -494,5 +495,7 @@ var APP = {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ APP.init(); });
 else APP.init();
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-functions-compat.js"></script>
+<script src="chat-widget.js"></script>
 </body>
 </html>
