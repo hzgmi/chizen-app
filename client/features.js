@@ -33,15 +33,18 @@
 
       var cp = '';
       if(this.appliedCoupon) {
-        cp = '<div class="total-row" style="color:var(--success);"><span>خصم ('+esc(this.appliedCoupon.code)+')</span><span>-' + disc + ' ر.س <span style="cursor:pointer;color:var(--red);" onclick="APP.removeCoupon()">✕</span></span></div>';
+        cp = '<div class="total-row" style="color:var(--success); margin-top:10px;"><span>خصم ('+esc(this.appliedCoupon.code)+')</span><span>-' + disc + ' ر.س <span style="cursor:pointer;color:var(--red); font-size:16px; margin-right:5px;" onclick="APP.removeCoupon()">✕</span></span></div>';
       } else {
-        cp = '<div class="field" style="margin-top:10px;margin-bottom:10px;display:flex;gap:8px;"><input type="text" id="coupon-input" class="field-input" placeholder="كود الخصم..." style="flex:1;"><button class="btn btn-primary" onclick="APP.applyCoupon()">تطبيق</button></div>';
+        cp = '<div style="margin-top:15px; margin-bottom:15px; display:flex; gap:8px;">' +
+               '<input type="text" id="coupon-input" placeholder="أدخل كود الخصم هنا..." style="flex:1; padding:12px; background:rgba(2,8,35,0.65); border:1.5px solid rgba(120,150,255,0.16); border-radius:12px; color:#FEF3E2; font-family:Cairo,sans-serif; font-size:13px; outline:none; text-align:right;">' +
+               '<button onclick="APP.applyCoupon()" style="padding:0 20px; background:linear-gradient(135deg,#ff356f,#a72bff); border:none; border-radius:12px; color:white; font-family:Cairo,sans-serif; font-weight:900; font-size:13px; cursor:pointer; white-space:nowrap; box-shadow:0 4px 12px rgba(255,53,111,0.3);">تطبيق</button>' +
+             '</div>';
       }
 
       var oldBox = c.querySelector('.total-box');
       if(oldBox) {
         oldBox.innerHTML = cp +
-          '<div class="total-row"><span>المجموع</span><span>' + esc(sub) + ' ر.س</span></div>' +
+          '<div class="total-row" style="border-top:1px dashed rgba(58,31,90,0.4); padding-top:10px;"><span>المجموع</span><span>' + esc(sub) + ' ر.س</span></div>' +
           '<div class="total-row"><span>الشحن</span><span style="color:' + (shipFee === 0 ? 'var(--success)' : 'var(--muted)') + ';">' + (shipFee === 0 ? 'مجاني' : shipFee + ' ر.س') + '</span></div>' +
           '<div class="total-final"><span>الإجمالي</span><span>' + esc(total) + ' ر.س</span></div>';
       }
@@ -49,7 +52,7 @@
 
     APP.applyCoupon = function() {
       var code = (document.getElementById('coupon-input').value || '').trim().toUpperCase();
-      if (!code) return;
+      if (!code) { this.toast('أدخل كود الخصم أولاً'); return; }
       var cp = null;
       this.coupons.forEach(function(c){ if (c.code === code && c.active) cp = c; });
       if (!cp) { this.toast('كود الخصم غير صالح أو منتهي'); return; }
@@ -57,12 +60,13 @@
       var sub = this.cartTotal();
       if (cp.minOrder && sub < cp.minOrder) { this.toast('الحد الأدنى للطلب ' + cp.minOrder + ' ر.س'); return; }
       this.appliedCoupon = cp;
-      this.toast('تم تطبيق الخصم ✓');
+      this.toast('تم تطبيق الخصم بنجاح ✓');
       this.renderCart();
     };
 
     APP.removeCoupon = function() {
       this.appliedCoupon = null;
+      this.toast('تم إزالة الخصم');
       this.renderCart();
     };
 
