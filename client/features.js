@@ -8,13 +8,11 @@
     APP.shipping = {fee:0, freeAbove:0};
     APP.appliedCoupon = null;
 
-    // جلب بيانات الكوبونات والشحن من Firebase
     if(window.FB && FB.ready) {
       FB.getConfig('coupons').then(function(c){ if(c && c.list) APP.coupons = c.list; });
       FB.getConfig('shipping').then(function(s){ if(s) APP.shipping = s; });
     }
 
-    // اعتراض دالة عرض السلة لإضافة الكوبون
     var origRenderCart = APP.renderCart;
     APP.renderCart = function() {
       origRenderCart.apply(this, arguments);
@@ -68,7 +66,6 @@
       this.renderCart();
     };
 
-    // اعتراض صفحة الدفع لتحديث الإجمالي
     var origGoCheckout = APP.goCheckout;
     APP.goCheckout = function() {
       origGoCheckout.apply(this, arguments);
