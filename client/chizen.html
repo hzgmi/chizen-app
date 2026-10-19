@@ -9,6 +9,85 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <script>
+// --- المفضلة ---
+APP.getFavorites = function() {
+    return JSON.parse(localStorage.getItem('chizen_favorites') || '[]');
+};
+APP.toggleFavorite = function(id, event) {
+    if(event) event.stopPropagation(); // عشان ميفتحش المنتج
+    let favs = this.getFavorites();
+    let index = favs.indexOf(id);
+    if (index > -1) {
+        favs.splice(index, 1);
+    } else {
+        favs.push(id);
+    }
+    localStorage.setItem('chizen_favorites', JSON.stringify(favs));
+    this.renderFavorites(); 
+    
+    // تحديث شكل القلوب في الشاشة
+    document.querySelectorAll('.fav-btn[data-id="'+id+'"]').forEach(btn => {
+        btn.style.color = favs.includes(id) ? '#ff27c9' : '#888';
+        btn.style.fill = favs.includes(id) ? '#ff27c9' : 'none';
+    });
+};
+APP.renderFavorites = function() {
+    const grid = document.getElementById('wishlist-grid');
+    if(!grid) return;
+    const favs = this.getFavorites();
+    const prods = window.APP.products || [];
+    const favProds = prods.filter(p => favs.includes(p.id));
+    
+    if(favProds.length === 0) {
+        grid.innerHTML = '<div style="text-align:center;color:#888;grid-column:1/-1;padding:50px;">لا توجد منتجات في المفضلة</div>';
+        return;
+    }
+    grid.innerHTML = favProds.map(p => `
+        <div class="p-card" onclick="APP.openProduct('${p.id}')">
+            <svg class="fav-btn" data-id="${p.id}" onclick="APP.toggleFavorite('${p.id}', event)" viewBox="0 0 24 24" style="position:absolute;top:10px;left:10px;width:24px;height:24px;stroke:#ff27c9;stroke-width:2;fill:#ff27c9;z-index:10;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <img src="${p.img||p.image||''}" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="p-name">${p.name}</div>
+            <div class="p-price">${p.price} ر.س</div>
+        </div>
+    `).join('');
+};
+
+// --- المنتجات المشابهة (هتتنادى جوه صفحة المنتج) ---
+APP.renderRelatedProducts = function(currentProduct) {
+    const relatedContainer = document.getElementById('related-products');
+    if(!relatedContainer || !window.APP.products) return;
+    
+    // فلترة المنتجات اللي من نفس القسم ومش نفس المنتج الحالي
+    let related = window.APP.products.filter(p => p.category === currentProduct.category && p.id !== currentProduct.id);
+    
+    // لو مفيش في نفس القسم، هات أي منتجات تانية
+    if(related.length === 0) {
+        related = window.APP.products.filter(p => p.id !== currentProduct.id).slice(0, 4);
+    } else {
+        related = related.slice(0, 4); // هنعرض 4 بس
+    }
+
+    if(related.length === 0) {
+        relatedContainer.innerHTML = '';
+        return;
+    }
+
+    relatedContainer.innerHTML = `
+        <div style="margin-top: 30px; padding: 0 15px 30px;">
+            <h3 style="color:#fff; font-size:16px; margin-bottom:15px; font-weight:bold;">منتجات مشابهة</h3>
+            <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                ${related.map(p => `
+                    <div onclick="APP.openProduct('${p.id}')" style="min-width: 120px; width: 120px; background: #1F0D35; border-radius: 10px; overflow: hidden; padding-bottom: 8px;">
+                        <img src="${p.img||p.image||''}" style="width: 100%; height: 100px; object-fit: cover;">
+                        <div style="color: #fff; font-size: 11px; padding: 5px 8px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
+                        <div style="color: #ff27c9; font-size: 12px; font-weight: bold; padding: 2px 8px;">${p.price} ر.س</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+};
+
 APP.getTimelineHtml = function(status) {
     const steps = [
         { key: 'pending', label: 'قيد المراجعة' },
@@ -270,7 +349,9 @@ input,textarea{-webkit-user-select:text;user-select:text;}
       <div class="hd">
         <div><div class="brand-m">CHIZEN</div><div class="hello">أهلاً بك</div><div class="name" id="home-user">User</div></div>
         <div class="ha">
-          <div class="ib" onclick="APP.goTab('notifications')"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="bg" id="notif-b">0</div></div>
+          <div class="ib" onclick="APP.goTab('notifications')"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="bg" id="notif-b">0</div>
+    <div class="ib" onclick="APP.goTab('wishlist')" style="margin-left: 10px;"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+    </div>
           <div class="ib" onclick="APP.goTab('cart')"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><div class="bg" id="cart-b">0</div></div>
         </div>
       </div>
@@ -282,7 +363,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
     </div>
 
     <!-- DETAILS -->
-    <div class="screen" id="sc-details">
+    <div class="screen" id="sc-details"><div id="related-products"></div>
       <div class="st"></div>
       <div class="det-i" id="det-img"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
       <div class="det-b">
@@ -387,6 +468,15 @@ input,textarea{-webkit-user-select:text;user-select:text;}
         </div>
         <div id="addresses-list"></div>
     </div>
+</div>
+
+<div class="screen" id="sc-wishlist">
+    <div class="st"></div>
+    <div class="sh2">
+        <button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+        <div class="st2">المفضلة ❤️</div>
+    </div>
+    <div id="wishlist-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px;"></div>
 </div>
 <div class="screen" id="sc-settings">
       <div class="st"></div>
@@ -1223,6 +1313,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // عرض العناوين عند فتح الشاشة
     if (window.APP && window.APP.renderAddresses) {
         APP.renderAddresses();
+    }
+});
+</script><script>
+document.addEventListener('DOMContentLoaded', function() {
+    // دالة بتضيف القلوب للمنتجات
+    const injectHearts = () => {
+        const favs = APP.getFavorites ? APP.getFavorites() : [];
+        document.querySelectorAll('.p-card').forEach(card => {
+            if (card.querySelector('.fav-btn')) return; // لو موجود متضيفهوش تاني
+            
+            // استخراج ID المنتج من الـ onclick
+            const onclickStr = card.getAttribute('onclick') || '';
+            const match = onclickStr.match(/openProduct\('([^']+)'\)/);
+            if (!match) return;
+            const id = match[1];
+            
+            const isFav = favs.includes(id);
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'fav-btn');
+            svg.setAttribute('data-id', id);
+            svg.setAttribute('viewBox', '0 0 24 24');
+            svg.style.cssText = `position:absolute;top:10px;left:10px;width:22px;height:22px;stroke:#ff27c9;stroke-width:2;z-index:10;${isFav ? 'fill:#ff27c9;' : 'fill:rgba(0,0,0,0.5);'}`;
+            svg.innerHTML = '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>';
+            svg.onclick = (e) => APP.toggleFavorite(id, e);
+            
+            if (getComputedStyle(card).position === 'static') {
+                card.style.position = 'relative';
+            }
+            card.appendChild(svg);
+        });
+    };
+
+    // بنشغلها أول ما الصفحة تحمل
+    setTimeout(injectHearts, 1000);
+    // وبنشغلها كل ما نغير تاب
+    if(window.APP && window.APP.goTab) {
+        const originalGoTab = window.APP.goTab;
+        window.APP.goTab = function(tab) {
+            originalGoTab.apply(this, arguments);
+            if(tab === 'home' || tab === 'wishlist') setTimeout(injectHearts, 500);
+        };
     }
 });
 </script></body>
