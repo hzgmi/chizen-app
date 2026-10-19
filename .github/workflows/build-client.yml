@@ -14,8 +14,10 @@ jobs:
         node-version: 18
     - name: Install dependencies
       run: npm install
+    - name: Force Clean Android Folder
+      run: rm -rf android
     - name: Add Android platform
-      run: npx cap add android || true
+      run: npx cap add android
     - name: Sync Capacitor
       run: npx cap sync
     - name: Build APK
