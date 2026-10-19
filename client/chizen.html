@@ -873,12 +873,97 @@ else APP.init();
 #ptr-refresh.active { top: 0; }
 </style>
 <div id="ptr-refresh">🔄 جاري التحديث...</div>
+
+
 <script>
-let touchStart = 0;
-let pulling = false;
-document.addEventListener('touchstart', function(e) { if (window.scrollY === 0) { touchStart = e.touches[0].pageY; pulling = true; } }, { passive: true });
-document.addEventListener('touchmove', function(e) { if (!pulling) return; let currentY = e.touches[0].pageY; if (currentY - touchStart > 100 && window.scrollY === 0) { document.getElementById('ptr-refresh').classList.add('active'); } }, { passive: true });
-document.addEventListener('touchend', function(e) { if (!pulling) return; pulling = false; let ptr = document.getElementById('ptr-refresh'); if (ptr.classList.contains('active')) { setTimeout(function() { location.reload(); ptr.classList.remove('active'); }, 1000); } });
+let touchStartY = 0;
+let isPulling = false;
+document.addEventListener('touchstart', function(e) {
+    if (window.scrollY <= 0) {
+        touchStartY = e.touches[0].pageY;
+        isPulling = true;
+    }
+}, { passive: true });
+document.addEventListener('touchmove', function(e) {
+    if (!isPulling) return;
+    let currentY = e.touches[0].pageY;
+    if (currentY - touchStartY > 100 && window.scrollY <= 0) {
+        document.getElementById('ptr-refresh').classList.add('active');
+    }
+}, { passive: true });
+document.addEventListener('touchend', function(e) {
+    if (!isPulling) return;
+    isPulling = false;
+    let ptr = document.getElementById('ptr-refresh');
+    if (ptr && ptr.classList.contains('active')) {
+        setTimeout(function() {
+            location.reload();
+            ptr.classList.remove('active');
+        }, 1000);
+    }
+});
+</script>
+
+<script>
+window.renderCategoryProducts = function(catKey, catName) {
+    // إخفاء كل الأقسام وإظهار قسم المنتجات
+    var sec = document.getElementById('tab-home');
+    if(!sec) return;
+    var grid = document.getElementById('products-grid') || document.querySelector('.products-grid');
+    if(!grid) return;
+
+    // إظهار لودر
+    grid.innerHTML = '<div style="text-align:center;padding:50px;color:#fff;">جاري تحميل المنتجات...</div>';
+
+    // سحب المنتجات من Firebase
+    if(window.FB && FB.getProducts) {
+        FB.getProducts().then(function(prods) {
+            var filtered = prods.filter(function(p) { return p.category === catKey; });
+            if(filtered.length === 0) {
+                grid.innerHTML = '<div style="text-align:center;padding:50px;color:#fff;">لا توجد منتجات في هذا القسم حالياً</div>';
+            } else {
+                grid.innerHTML = filtered.map(function(p) {
+                    return '<div class="p-card" onclick="App.openProduct(\''+p.id+'\')">' +
+                           '<img src="'+(p.image||'')+'" onerror="this.src=\'https://via.placeholder.com/150\'">' +
+                           '<div class="p-name">'+p.name+'</div>' +
+                           '<div class="p-price">'+p.price+' ر.س</div></div>';
+                }).join('');
+            }
+            // تحديث عنوان الصفحة
+            var h = document.querySelector('.page-title');
+            if(h) h.innerText = catName;
+        });
+    }
+};
+</script>
+
+<script>
+let touchStartY = 0;
+let isPulling = false;
+document.addEventListener('touchstart', function(e) {
+    if (window.scrollY <= 0) {
+        touchStartY = e.touches[0].pageY;
+        isPulling = true;
+    }
+}, { passive: true });
+document.addEventListener('touchmove', function(e) {
+    if (!isPulling) return;
+    let currentY = e.touches[0].pageY;
+    if (currentY - touchStartY > 100 && window.scrollY <= 0) {
+        document.getElementById('ptr-refresh').classList.add('active');
+    }
+}, { passive: true });
+document.addEventListener('touchend', function(e) {
+    if (!isPulling) return;
+    isPulling = false;
+    let ptr = document.getElementById('ptr-refresh');
+    if (ptr && ptr.classList.contains('active')) {
+        setTimeout(function() {
+            location.reload();
+            ptr.classList.remove('active');
+        }, 1000);
+    }
+});
 </script>
 </body>
 </html>
