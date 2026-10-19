@@ -4,18 +4,16 @@
   "webDir": "client",
   "bundledWebRuntime": false,
   "server": {
-    "androidScheme": "https",
-    "allowNavigation": [
-      "cheezan-app.firebaseapp.com",
-      "cheezan-app.web.app",
-      "*.googleapis.com",
-      "*.gstatic.com",
-      "accounts.google.com"
-    ]
+    "url": "https://jolly-parfait-819acf.netlify.app",
+    "cleartext": true
   },
   "plugins": {
     "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
     },
     "SplashScreen": {
       "launchShowDuration": 2000,

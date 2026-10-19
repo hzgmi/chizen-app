@@ -77,3 +77,14 @@
 .chat-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media (max-width:480px){.chat-fab{width:56px;height:56px;font-size:24px}.chat-sheet{height:90vh;max-height:90vh}.chat-msg{font-size:13px;max-width:85%}}
 @media (prefers-reduced-motion:reduce){.chat-fab::after,.chat-typing span,.chat-status-dot{animation:none}.chat-msg{animation:none}.chat-sheet{transition:none}}
+
+/* WhatsApp Style Overrides */
+.chat-sheet { background: #efeae2 !important; } /* لون خلفية واتساب */
+.chat-header { background: #008069 !important; color: white !important; }
+.chat-header-name, .chat-header-sub { color: white !important; }
+.chat-messages { background: #efeae2 url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png') repeat !important; }
+.chat-msg.bot { background: #ffffff !important; color: #000 !important; border-radius: 8px 8px 8px 0 !important; align-self: flex-start; }
+.chat-msg.user { background: #d9fdd3 !important; color: #000 !important; border-radius: 8px 8px 0 8px !important; align-self: flex-end; }
+.chat-input-area { background: #f0f2f5 !important; padding: 5px !important; }
+.chat-input { background: #fff !important; border-radius: 20px !important; border: none !important; padding: 10px 15px !important; }
+.chat-send { background: #00a884 !important; color: white !important; border-radius: 50% !important; width: 45px !important; height: 45px !important; }
