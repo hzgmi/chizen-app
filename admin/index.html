@@ -273,7 +273,7 @@ var A={
     try{
       var p=new firebase.auth.GoogleAuthProvider();
       p.setCustomParameters({prompt:'select_account'});
-      if(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)){await FB.auth.signInWithRedirect(p);return;}
+      // تم تعديلها للعمل على الـ APK بدون الخروج من التطبيق
       await FB.auth.signInWithPopup(p);
     }catch(e){
       if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request')return;
