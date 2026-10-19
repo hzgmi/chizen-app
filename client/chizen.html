@@ -868,41 +868,11 @@ else APP.init();
 <script src="chat-widget.js"></script>
 <script src="chizen-extra.js"></script>
 
-<style>
-#ptr-refresh { position: fixed; top: -60px; left: 0; right: 0; height: 60px; display: flex; justify-content: center; align-items: center; background: #1F0D35; color: #ff27c9; font-family: Tajawal, sans-serif; font-weight: bold; z-index: 100000; transition: top 0.3s ease; }
-#ptr-refresh.active { top: 0; }
-</style>
-<div id="ptr-refresh">🔄 جاري التحديث...</div>
 
 
-<script>
-let touchStartY = 0;
-let isPulling = false;
-document.addEventListener('touchstart', function(e) {
-    if (window.scrollY <= 0) {
-        touchStartY = e.touches[0].pageY;
-        isPulling = true;
-    }
-}, { passive: true });
-document.addEventListener('touchmove', function(e) {
-    if (!isPulling) return;
-    let currentY = e.touches[0].pageY;
-    if (currentY - touchStartY > 100 && window.scrollY <= 0) {
-        document.getElementById('ptr-refresh').classList.add('active');
-    }
-}, { passive: true });
-document.addEventListener('touchend', function(e) {
-    if (!isPulling) return;
-    isPulling = false;
-    let ptr = document.getElementById('ptr-refresh');
-    if (ptr && ptr.classList.contains('active')) {
-        setTimeout(function() {
-            location.reload();
-            ptr.classList.remove('active');
-        }, 1000);
-    }
-});
-</script>
+
+
+
 
 <script>
 window.renderCategoryProducts = function(catKey, catName) {
@@ -937,25 +907,50 @@ window.renderCategoryProducts = function(catKey, catName) {
 };
 </script>
 
+
+
+
+
+
+<div class="screen" id="sc-category" style="display:none; z-index: 9999; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0A0515; overflow-y: auto;">
+    <div class="st" style="height: 40px;"></div>
+    <div class="sh2" style="display: flex; align-items: center; padding: 10px 20px; border-bottom: 1px solid #1F0D35;">
+        <button class="back" onclick="APP.closeCategory()" style="background: none; border: none; color: #fff; margin-right: 10px;"><svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;"><path d="m9 18 6-6-6-6"/></svg></button>
+        <div class="st2" id="cat-page-title" style="color: #fff; font-size: 18px; font-weight: bold;">القسم</div>
+    </div>
+    <div id="cat-products-grid"></div>
+</div>
+
 <script>
-let touchStartY = 0;
-let isPulling = false;
+// ═══ نظام السحب (من فوق بس) ═══
+let ptrStartY = 0;
+let ptrIsPulling = false;
 document.addEventListener('touchstart', function(e) {
-    if (window.scrollY <= 0) {
-        touchStartY = e.touches[0].pageY;
-        isPulling = true;
+    const screen = document.querySelector('.screen.active') || document.documentElement;
+    const scrollTop = screen.scrollTop || window.scrollY;
+    if (scrollTop <= 0) {
+        ptrStartY = e.touches[0].pageY;
+        ptrIsPulling = true;
+    } else {
+        ptrIsPulling = false;
     }
 }, { passive: true });
+
 document.addEventListener('touchmove', function(e) {
-    if (!isPulling) return;
+    if (!ptrIsPulling) return;
     let currentY = e.touches[0].pageY;
-    if (currentY - touchStartY > 100 && window.scrollY <= 0) {
-        document.getElementById('ptr-refresh').classList.add('active');
+    if (currentY - ptrStartY > 100) {
+        const screen = document.querySelector('.screen.active') || document.documentElement;
+        const scrollTop = screen.scrollTop || window.scrollY;
+        if (scrollTop <= 0) {
+            document.getElementById('ptr-refresh').classList.add('active');
+        }
     }
 }, { passive: true });
+
 document.addEventListener('touchend', function(e) {
-    if (!isPulling) return;
-    isPulling = false;
+    if (!ptrIsPulling) return;
+    ptrIsPulling = false;
     let ptr = document.getElementById('ptr-refresh');
     if (ptr && ptr.classList.contains('active')) {
         setTimeout(function() {
@@ -963,6 +958,176 @@ document.addEventListener('touchend', function(e) {
             ptr.classList.remove('active');
         }, 1000);
     }
+});
+
+// ═══ نظام عرض الأقسام ═══
+APP.openCategoryPage = function(catKey, catName) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const catScreen = document.getElementById('sc-category');
+    catScreen.style.display = 'block';
+    
+    document.getElementById('cat-page-title').innerText = catName;
+    const grid = document.getElementById('cat-products-grid');
+    grid.innerHTML = '<div style="text-align:center;padding:50px;color:#fff;grid-column:1/-1;">جاري تحميل المنتجات...</div>';
+
+    if(window.FB && window.FB.getProducts) {
+        window.FB.getProducts().then(function(prods) {
+            var filtered = prods.filter(function(p) { return (p.category === catKey || p.cat === catKey); });
+            if(filtered.length === 0) {
+                grid.innerHTML = '<div style="text-align:center;padding:50px;color:#fff;grid-column:1/-1;">لا توجد منتجات في هذا القسم حالياً</div>';
+            } else {
+                grid.innerHTML = filtered.map(function(p) {
+                    return '<div class="cat-prod-card" onclick="APP.openProduct(\''+p.id+'\')">'+
+                           '<img src="'+(p.img||p.image||'')+'" onerror="this.src=\'https://via.placeholder.com/150\'">'+
+                           '<div class="name">'+p.name+'</div>'+
+                           '<div class="price">'+p.price+' ر.س</div></div>';
+                }).join('');
+            }
+        });
+    }
+};
+
+APP.closeCategory = function() {
+    document.getElementById('sc-category').style.display = 'none';
+    APP.goTab('home');
+};
+
+// ═══ اعتراض النقر على أي قسم في الصفحة الرئيسية ═══
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function(e) {
+        const el = e.target.closest('div, button, a');
+        if (!el) return;
+        
+        // البحث عن الأقسام بالكلاسات الشائعة
+        const isCat = el.classList.contains('cat-card') || el.classList.contains('c-item') || el.classList.contains('category-item');
+        
+        if (isCat) {
+            let key = el.getAttribute('data-cat') || el.getAttribute('data-key');
+            let name = el.querySelector('.name, .title') ? el.querySelector('.name, .title').innerText : el.innerText.trim();
+            
+            if (key) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                APP.openCategoryPage(key, name);
+            }
+        }
+    }, true);
+});
+</script>
+
+<style>
+#ptr-refresh { position: fixed; top: -60px; left: 0; right: 0; height: 60px; display: flex; justify-content: center; align-items: center; background: #1F0D35; color: #ff27c9; font-family: Tajawal, sans-serif; font-weight: bold; z-index: 100000; transition: top 0.3s ease; }
+#ptr-refresh.active { top: 0; }
+/* تصميم صفحة القسم */
+#sc-category { background: var(--bg, #0A0515); min-height: 100vh; }
+#cat-products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.cat-prod-card { background: var(--card, #1F0D35); border-radius: 12px; overflow: hidden; padding-bottom: 10px; text-align: center; }
+.cat-prod-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px 12px 0 0; }
+.cat-prod-card .name { color: #fff; font-size: 13px; font-weight: bold; padding: 8px 10px 0; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.cat-prod-card .price { color: #ff27c9; font-size: 14px; font-weight: bold; padding: 5px 10px; }
+</style>
+<div id="ptr-refresh">🔄 جاري التحديث...</div>
+
+<div class="screen" id="sc-category" style="display:none; z-index: 9999; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0A0515; overflow-y: auto;">
+    <div class="st" style="height: 40px;"></div>
+    <div class="sh2" style="display: flex; align-items: center; padding: 10px 20px; border-bottom: 1px solid #1F0D35;">
+        <button class="back" onclick="APP.closeCategory()" style="background: none; border: none; color: #fff; margin-right: 10px;"><svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;"><path d="m9 18 6-6-6-6"/></svg></button>
+        <div class="st2" id="cat-page-title" style="color: #fff; font-size: 18px; font-weight: bold;">القسم</div>
+    </div>
+    <div id="cat-products-grid"></div>
+</div>
+
+<script>
+// ═══ نظام السحب (من فوق بس) ═══
+let ptrStartY = 0;
+let ptrIsPulling = false;
+document.addEventListener('touchstart', function(e) {
+    const screen = document.querySelector('.screen.active') || document.documentElement;
+    const scrollTop = screen.scrollTop || window.scrollY;
+    if (scrollTop <= 0) {
+        ptrStartY = e.touches[0].pageY;
+        ptrIsPulling = true;
+    } else {
+        ptrIsPulling = false;
+    }
+}, { passive: true });
+
+document.addEventListener('touchmove', function(e) {
+    if (!ptrIsPulling) return;
+    let currentY = e.touches[0].pageY;
+    if (currentY - ptrStartY > 100) {
+        const screen = document.querySelector('.screen.active') || document.documentElement;
+        const scrollTop = screen.scrollTop || window.scrollY;
+        if (scrollTop <= 0) {
+            document.getElementById('ptr-refresh').classList.add('active');
+        }
+    }
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+    if (!ptrIsPulling) return;
+    ptrIsPulling = false;
+    let ptr = document.getElementById('ptr-refresh');
+    if (ptr && ptr.classList.contains('active')) {
+        setTimeout(function() {
+            location.reload();
+            ptr.classList.remove('active');
+        }, 1000);
+    }
+});
+
+// ═══ نظام عرض الأقسام ═══
+APP.openCategoryPage = function(catKey, catName) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const catScreen = document.getElementById('sc-category');
+    catScreen.style.display = 'block';
+    
+    document.getElementById('cat-page-title').innerText = catName;
+    const grid = document.getElementById('cat-products-grid');
+    grid.innerHTML = '<div style="text-align:center;padding:50px;color:#fff;grid-column:1/-1;">جاري تحميل المنتجات...</div>';
+
+    if(window.FB && window.FB.getProducts) {
+        window.FB.getProducts().then(function(prods) {
+            var filtered = prods.filter(function(p) { return (p.category === catKey || p.cat === catKey); });
+            if(filtered.length === 0) {
+                grid.innerHTML = '<div style="text-align:center;padding:50px;color:#fff;grid-column:1/-1;">لا توجد منتجات في هذا القسم حالياً</div>';
+            } else {
+                grid.innerHTML = filtered.map(function(p) {
+                    return '<div class="cat-prod-card" onclick="APP.openProduct(\''+p.id+'\')">'+
+                           '<img src="'+(p.img||p.image||'')+'" onerror="this.src=\'https://via.placeholder.com/150\'">'+
+                           '<div class="name">'+p.name+'</div>'+
+                           '<div class="price">'+p.price+' ر.س</div></div>';
+                }).join('');
+            }
+        });
+    }
+};
+
+APP.closeCategory = function() {
+    document.getElementById('sc-category').style.display = 'none';
+    APP.goTab('home');
+};
+
+// ═══ اعتراض النقر على أي قسم في الصفحة الرئيسية ═══
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function(e) {
+        const el = e.target.closest('div, button, a');
+        if (!el) return;
+        
+        // البحث عن الأقسام بالكلاسات الشائعة
+        const isCat = el.classList.contains('cat-card') || el.classList.contains('c-item') || el.classList.contains('category-item');
+        
+        if (isCat) {
+            let key = el.getAttribute('data-cat') || el.getAttribute('data-key');
+            let name = el.querySelector('.name, .title') ? el.querySelector('.name, .title').innerText : el.innerText.trim();
+            
+            if (key) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                APP.openCategoryPage(key, name);
+            }
+        }
+    }, true);
 });
 </script>
 </body>
