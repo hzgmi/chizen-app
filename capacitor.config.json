@@ -2,30 +2,8 @@
   "appId": "com.cheezan.app",
   "appName": "CHIZEN",
   "webDir": "client",
-  "bundledWebRuntime": false,
   "server": {
     "url": "https://jolly-parfait-819acf.netlify.app",
     "cleartext": true
-  },
-  "plugins": {
-    "PushNotifications": {
-      "presentationOptions": [
-        "badge",
-        "sound",
-        "alert"
-      ]
-    },
-    "SplashScreen": {
-      "launchShowDuration": 2000,
-      "backgroundColor": "#1A0B2E",
-      "showSpinner": false,
-      "androidScaleType": "CENTER_CROP",
-      "splashFullScreen": true,
-      "splashImmersive": true
-    },
-    "StatusBar": {
-      "style": "DARK",
-      "backgroundColor": "#1A0B2E"
-    }
   }
 }
