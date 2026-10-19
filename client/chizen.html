@@ -9,6 +9,31 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <script>
+APP.getTimelineHtml = function(status) {
+    const steps = [
+        { key: 'pending', label: 'قيد المراجعة' },
+        { key: 'shipped', label: 'تم الشحن' },
+        { key: 'delivered', label: 'تم التوصيل' }
+    ];
+    
+    let currentIndex = steps.findIndex(s => s.key === status);
+    if (currentIndex === -1) currentIndex = 0; // افتراضي: قيد المراجعة
+    if (status === 'cancelled') return '<div style="color:#ff4444;text-align:center;font-size:12px;margin-top:10px;">تم إلغاء الطلب</div>';
+
+    let htmlStr = '<div class="order-timeline">';
+    steps.forEach((step, idx) => {
+        let activeClass = idx <= currentIndex ? 'active' : '';
+        htmlStr += `
+            <div class="order-timeline-step ${activeClass}">
+                <div class="order-timeline-dot"></div>
+                <div class="order-timeline-label">${step.label}</div>
+            </div>
+        `;
+    });
+    htmlStr += '</div>';
+    return htmlStr;
+};
+
 (function(){function s(){document.documentElement.style.setProperty('--app-height',window.innerHeight+'px');}s();window.addEventListener('resize',s);window.addEventListener('orientationchange',function(){setTimeout(s,100);});document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(s,100);});})();
 </script>
 <link rel="stylesheet" href="chat-widget.css">
@@ -220,6 +245,16 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .dlb2.danger{background:linear-gradient(135deg,#ff4d6d,#dc2626);color:#fff;}
 @media(max-width:360px){.cats{grid-template-columns:repeat(3,1fr);}}
 </style>
+
+<style>
+.order-timeline { display: flex; justify-content: space-between; margin-top: 15px; position: relative; padding-top: 10px; }
+.order-timeline::before { content: ''; position: absolute; top: 20px; left: 10%; right: 10%; height: 2px; background: #333; z-index: 1; }
+.order-timeline-step { position: relative; z-index: 2; text-align: center; width: 30%; }
+.order-timeline-dot { width: 20px; height: 20px; border-radius: 50%; background: #333; margin: 0 auto 5px; border: 2px solid #1F0D35; }
+.order-timeline-step.active .order-timeline-dot { background: #ff27c9; box-shadow: 0 0 10px #ff27c9; }
+.order-timeline-step.active .order-timeline-label { color: #ff27c9; font-weight: bold; }
+.order-timeline-label { font-size: 10px; color: #888; }
+</style>
 </head>
 <body>
 <div id="app">
@@ -262,7 +297,15 @@ input,textarea{-webkit-user-select:text;user-select:text;}
     </div>
 
     <!-- CART -->
-    <div class="screen" id="sc-cart"><div class="st"></div><div class="sh2"><div class="st2">سلة التسوق</div></div><div class="ch" id="cart-items"></div></div>
+    <div class="screen" id="sc-cart"><div class="st"></div>
+<div id="search-container" style="padding: 10px 15px; margin-top: 10px; position: relative; z-index: 100;">
+    <div style="position: relative;">
+        <input type="text" id="global-search" placeholder="ابحث عن منتج أو ماركة..." 
+               style="width: 100%; padding: 12px 15px 12px 40px; border-radius: 25px; border: 1px solid #333; background: #1F0D35; color: #fff; font-family: inherit; font-size: 14px; box-sizing: border-box;">
+        <svg viewBox="0 0 24 24" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; stroke: #888; fill: none; stroke-width: 2;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </div>
+</div>
+<div class="sh2"><div class="st2">سلة التسوق</div></div><div class="ch" id="cart-items"></div></div>
 
     <!-- CHECKOUT -->
     <div class="screen" id="sc-checkout">
@@ -329,7 +372,23 @@ input,textarea{-webkit-user-select:text;user-select:text;}
     </div>
 
     <!-- SETTINGS -->
-    <div class="screen" id="sc-settings">
+    
+<div class="screen" id="sc-addresses">
+    <div class="st"></div>
+    <div class="sh2">
+        <button class="back" onclick="APP.goTab('settings')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+        <div class="st2">عناويني</div>
+    </div>
+    <div style="padding: 20px;">
+        <div style="background: #1F0D35; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+            <input type="text" id="addr-title" placeholder="اسم العنوان (مثلاً: البيت، العمل)" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: none; background: #0A0515; color: #fff;">
+            <textarea id="addr-details" placeholder="تفاصيل العنوان بالكامل..." style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: none; background: #0A0515; color: #fff; resize: none; height: 60px;"></textarea>
+            <button onclick="APP.saveNewAddress()" style="width: 100%; background: #ff27c9; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold;">حفظ العنوان</button>
+        </div>
+        <div id="addresses-list"></div>
+    </div>
+</div>
+<div class="screen" id="sc-settings">
       <div class="st"></div>
       <div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">الإعدادات</div></div>
       <div class="sg">
@@ -345,7 +404,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
       </div>
       <div class="sg">
         <div class="sgt">الإشعارات</div>
-        <div class="sit"><div class="sii"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><div class="sit-t"><div class="sit-ti">إشعارات التطبيق</div></div><div class="tog on" id="t-notif" onclick="APP.togT('notifications',this)"></div></div>
+        <div class="sit"><div class="sii"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><div class="sit-t"><div class="sit-ti">إشعارات التطبيق</div></div><div class="tog on" id="t-notif" onclick="APP.togT('notifications',this)"></div></div><div class="sit" onclick="APP.goTab('addresses')"><div class="sii">📍</div><div class="sit-t"><div class="sit-ti">دفتر العناوين</div></div></div>
         <div class="sit"><div class="sii">🏷️</div><div class="sit-t"><div class="sit-ti">إشعارات العروض</div></div><div class="tog on" id="t-offers" onclick="APP.togT('offers',this)"></div></div>
         <div class="sit"><div class="sii">📦</div><div class="sit-t"><div class="sit-ti">إشعارات الطلبات</div></div><div class="tog on" id="t-orders" onclick="APP.togT('orderNotifs',this)"></div></div>
       </div>
@@ -655,6 +714,7 @@ var APP={
     if(!this.orders.length){c.innerHTML='<div class="cempty"><p>لا توجد طلبات</p></div>';return;}
     var list=this.orders.slice().reverse();
     c.innerHTML=list.map(function(o){
+var timelineHtml = APP.getTimelineHtml(o.status);
       var ic=0;if(o.items)o.items.forEach(function(i){ic+=i.qty;});
       return '<div class="oc"><div class="oh"><div class="oi">#'+esc((o.id||'').substring(0,14))+'</div><div class="os '+(o.status||'pending')+'">'+(o.status==='pending'?'قيد المعالجة':o.status==='shipped'?'في الطريق':o.status==='completed'?'مكتمل':'ملغي')+'</div></div><div class="ob">'+ic+' منتج • 📍 '+esc(o.pickup||'')+'</div><div class="ot"><span>الإجمالي</span><span>'+esc(o.total)+' ر.س</span></div></div>';
     }).join('');
@@ -1130,5 +1190,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }, true);
 });
 </script>
-</body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // البحث
+    const searchInput = document.getElementById('global-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            const grid = document.getElementById('products-grid') || document.querySelector('.products-grid') || document.querySelector('.grid');
+            if (!grid || !window.APP || !window.APP.products) return;
+
+            if (query === '') {
+                if (window.APP.renderProducts) window.APP.renderProducts();
+                return;
+            }
+            const filtered = window.APP.products.filter(p => 
+                (p.name||'').toLowerCase().includes(query) || (p.brand||'').toLowerCase().includes(query)
+            );
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="text-align:center;padding:50px;color:#fff;grid-column:1/-1;">لا توجد نتائج مطابقة</div>';
+            } else {
+                grid.innerHTML = filtered.map(p => 
+                    '<div class="p-card" onclick="APP.openProduct(\''+p.id+'\')">' +
+                    '<img src="'+(p.img||p.image)+'" onerror="this.src=\'https://via.placeholder.com/150\'">' +
+                    '<div class="p-name">'+p.name+'</div>' +
+                    '<div class="p-price">'+p.price+' ر.س</div></div>'
+                ).join('');
+            }
+        });
+    }
+
+    // عرض العناوين عند فتح الشاشة
+    if (window.APP && window.APP.renderAddresses) {
+        APP.renderAddresses();
+    }
+});
+</script></body>
 </html>
