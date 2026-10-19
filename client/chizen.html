@@ -635,7 +635,15 @@ var APP={
     var total=Math.max(0,sub-disc+shipF);
     var order={id:oid,items:JSON.parse(JSON.stringify(this.cart)),subtotal:sub,discount:disc,shipping:shipF,total:total,pickup:pickup,name:name,phone:phone,bank:this.selectedBank,status:'pending'};
     var self=this;
-    if(window.FB&&FB.ready&&FB.addOrder)try{await FB.addOrder(order);}catch(e){}
+    if(window.FB&&FB.ready&&FB.addOrder){
+      try{
+        await FB.addOrder(order);
+        if(FB.sendWhatsAppMessage){
+          var waMsg = "أهلاً " + name + "، تم استلام طلبك رقم " + oid + " بنجاح.\nالإجمالي: " + total + " ريال.\nسنقوم بالتواصل معك قريباً لتأكيد التوصيل. شكراً لثقتك بـ CHIZEN!";
+          FB.sendWhatsAppMessage(phone, waMsg);
+        }
+      }catch(e){}
+    }
     this.orders.push(order);
     this.cart=[];this.appliedCoupon=null;this.saveCart();this.updateCartB();
     this.toast('✓ تم استلام طلبك');
