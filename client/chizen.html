@@ -867,5 +867,18 @@ else APP.init();
 </script>
 <script src="chat-widget.js"></script>
 <script src="chizen-extra.js"></script>
+
+<style>
+#ptr-refresh { position: fixed; top: -60px; left: 0; right: 0; height: 60px; display: flex; justify-content: center; align-items: center; background: #1F0D35; color: #ff27c9; font-family: Tajawal, sans-serif; font-weight: bold; z-index: 100000; transition: top 0.3s ease; }
+#ptr-refresh.active { top: 0; }
+</style>
+<div id="ptr-refresh">🔄 جاري التحديث...</div>
+<script>
+let touchStart = 0;
+let pulling = false;
+document.addEventListener('touchstart', function(e) { if (window.scrollY === 0) { touchStart = e.touches[0].pageY; pulling = true; } }, { passive: true });
+document.addEventListener('touchmove', function(e) { if (!pulling) return; let currentY = e.touches[0].pageY; if (currentY - touchStart > 100 && window.scrollY === 0) { document.getElementById('ptr-refresh').classList.add('active'); } }, { passive: true });
+document.addEventListener('touchend', function(e) { if (!pulling) return; pulling = false; let ptr = document.getElementById('ptr-refresh'); if (ptr.classList.contains('active')) { setTimeout(function() { location.reload(); ptr.classList.remove('active'); }, 1000); } });
+</script>
 </body>
 </html>

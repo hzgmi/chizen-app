@@ -88,3 +88,16 @@
 .chat-input-area { background: #f0f2f5 !important; padding: 5px !important; }
 .chat-input { background: #fff !important; border-radius: 20px !important; border: none !important; padding: 10px 15px !important; }
 .chat-send { background: #00a884 !important; color: white !important; border-radius: 50% !important; width: 45px !important; height: 45px !important; }
+
+/* WhatsApp Full Screen Override */
+.chat-overlay { background: #efeae2 !important; z-index: 999999 !important; }
+.chat-sheet { width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important; border-radius: 0 !important; margin: 0 !important; background: #efeae2 url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png') repeat !important; display: flex; flex-direction: column; }
+.chat-header { background-color: #008069 !important; color: white !important; border-radius: 0 !important; padding: 10px 15px !important; display: flex; align-items: center; }
+.chat-messages { flex: 1 !important; overflow-y: auto !important; padding: 10px !important; display: flex; flex-direction: column; }
+.chat-msg.bot { background: #ffffff !important; color: #000 !important; border-radius: 8px 8px 8px 0 !important; align-self: flex-start; padding: 8px 12px !important; margin-bottom: 10px; max-width: 85%; box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative; }
+.chat-msg.user { background: #d9fdd3 !important; color: #000 !important; border-radius: 8px 8px 0 8px !important; align-self: flex-end; padding: 8px 12px !important; margin-bottom: 10px; max-width: 85%; box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative; }
+.chat-input-area { background: #f0f2f5 !important; padding: 5px 10px !important; display: flex; align-items: center; }
+.chat-input { background: #fff !important; border-radius: 20px !important; border: none !important; padding: 10px 15px !important; flex: 1 !important; font-family: inherit; resize: none; }
+.chat-send { background: #00a884 !important; color: white !important; border-radius: 50% !important; width: 45px !important; height: 45px !important; display: flex; justify-content: center; align-items: center; margin-right: 5px; border: none !important; }
+.chat-close { color: white !important; font-size: 24px !important; margin-left: 10px; cursor: pointer; }
+.chat-avatar { background: #fff; color: #000; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin-left: 10px; }
