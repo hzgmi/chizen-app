@@ -1,6 +1,6 @@
 {
   "appId": "com.cheezan.app",
-  "appName": "CHIZEN",
+  "appName": "CHIZEN Store",
   "webDir": "client",
   "server": {
     "url": "https://jolly-parfait-819acf.netlify.app",
