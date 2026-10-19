@@ -9,6 +9,48 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <script>
+APP.renderColorSwatches = function(p) {
+    const container = document.getElementById('color-swatches-container');
+    if (!container) return;
+
+    // بندور على الصورة الرئيسية في الشاشة
+    const mainImg = document.querySelector('#sc-details img'); 
+    
+    if (!p.colors || p.colors.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'flex';
+    
+    // إضافة الصورة الأساسية كأول لون (لو مش موجودة في المصفوفة)
+    let allColors = [...p.colors];
+    if (p.img || p.image) {
+        if (!allColors.includes(p.img || p.image)) {
+            allColors.unshift(p.img || p.image);
+        }
+    }
+
+    container.innerHTML = allColors.map((imgUrl, index) => {
+        return `<img src="${imgUrl}" class="color-swatch ${index === 0 ? 'active' : ''}" 
+                onclick="APP.changeColor(this, '${imgUrl}')" 
+                onerror="this.src='https://via.placeholder.com/60'">`;
+    }).join('');
+};
+
+APP.changeColor = function(el, imgUrl) {
+    // إزالة التحديد من كل الألوان
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    // تحديد اللون اللي تم النقر عليه
+    el.classList.add('active');
+    
+    // تغيير الصورة الرئيسية
+    const mainImg = document.querySelector('#sc-details img');
+    if (mainImg) {
+        mainImg.src = imgUrl;
+    }
+};
+
 // --- المفضلة ---
 APP.getFavorites = function() {
     return JSON.parse(localStorage.getItem('chizen_favorites') || '[]');
@@ -334,6 +376,12 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .order-timeline-step.active .order-timeline-label { color: #ff27c9; font-weight: bold; }
 .order-timeline-label { font-size: 10px; color: #888; }
 </style>
+
+<style>
+.color-swatches { display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto; background: transparent; }
+.color-swatch { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid transparent; cursor: pointer; transition: border 0.2s; }
+.color-swatch.active { border-color: #ff27c9; box-shadow: 0 0 8px rgba(255,39,201,0.5); }
+</style>
 </head>
 <body>
 <div id="app">
@@ -647,7 +695,7 @@ var APP={
     if(!list.length){c.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mt);">لا توجد منتجات</div>';return;}
     c.innerHTML=list.map(function(p){
       var fav=APP.favorites.indexOf(p.id)>-1;
-      return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-b">'+esc(p.badge||'')+'</div><div class="prod-f'+(fav?' active':'')+'" onclick="event.stopPropagation();APP.togFav(\''+esc(p.id)+'\',this)"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><div class="prod-i"><img src="'+esc(p.img||'')+'" loading="lazy"></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-c">ر.س</span>'+(p.old?'<span class="price-o">'+esc(p.old)+'</span>':'')+'</div></div></div>';
+      return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-b">'+esc(p.badge||'')+'</div><div class="prod-f'+(fav?' active':'')+'" onclick="event.stopPropagation();APP.togFav(\''+esc(p.id)+'\',this)"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><div class="prod-i"><img src="'+esc(p.img||'')+'" loading="lazy"><div class="color-swatches" id="color-swatches-container" style="display:none;"></div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-c">ر.س</span>'+(p.old?'<span class="price-o">'+esc(p.old)+'</span>':'')+'</div></div></div>';
     }).join('');
   },
   
