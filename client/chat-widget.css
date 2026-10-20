@@ -101,3 +101,9 @@
 .chat-send { background: #00a884 !important; color: white !important; border-radius: 50% !important; width: 45px !important; height: 45px !important; display: flex; justify-content: center; align-items: center; margin-right: 5px; border: none !important; }
 .chat-close { color: white !important; font-size: 24px !important; margin-left: 10px; cursor: pointer; }
 .chat-avatar { background: #fff; color: #000; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin-left: 10px; }
+
+/* Keyboard Fix & Layout Overhaul */
+.chat-overlay.active { display: flex !important; flex-direction: column; height: 100vh; height: 100dvh; }
+.chat-sheet { display: flex !important; flex-direction: column; height: 100% !important; max-height: 100% !important; width: 100% !important; border-radius: 0 !important; background: #efeae2 url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png') repeat !important; }
+.chat-messages { flex: 1 1 auto !important; overflow-y: auto !important; padding: 15px !important; }
+.chat-input-area { flex: 0 0 auto !important; padding-bottom: env(safe-area-inset-bottom, 10px) !important; background: #f0f2f5 !important; }
