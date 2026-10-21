@@ -720,6 +720,100 @@ body, #app, .screen { background: var(--bg) !important; color: var(--cr) !import
 .premium-booking-btn { background: var(--grad) !important; color: #FFF !important; border: none !important; border-radius: 12px !important; padding: 10px 16px !important; font-weight: 800 !important; font-size: 13px !important; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2) !important; }
 .premium-booking-btn svg { stroke: #FFF !important; width: 16px; height: 16px; }
 
+
+/* ═══ CHIZEN GLOBAL REDESIGN (CLEAN & LUXURY) ═══ */
+:root {
+  --bg-main: #FAFAFC !important;
+  --bg-card: #FFFFFF !important;
+  --text-main: #0B1B3F !important;
+  --btn-primary: #2563EB !important;
+  --accent-purple: #8A55F7 !important;
+  --accent-pink: #E83EAD !important;
+  --border-light: #E5EAF4 !important;
+  --text-sec: #718096 !important;
+  --bg-sec: #F1F5FF !important;
+  --gradient-main: linear-gradient(135deg, #2563EB, #8A55F7, #E83EAD) !important;
+}
+
+body, #app, .screen { background: var(--bg-main) !important; color: var(--text-main) !important; font-family: 'Tajawal', sans-serif !important; }
+
+/* Header */
+.hd { background: var(--bg-card) !important; border-bottom: 1px solid var(--border-light) !important; padding: 16px 20px !important; }
+.brand-m { background: var(--gradient-main) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; font-family: 'Bodoni Moda', serif !important; letter-spacing: 1.5px !important; }
+.name { color: var(--text-main) !important; font-weight: 900 !important; }
+.ib { background: var(--bg-sec) !important; border: none !important; border-radius: 50% !important; width: 42px !important; height: 42px !important; color: var(--text-main) !important; }
+.ib svg { stroke: var(--text-main) !important; }
+.ib .bg { background: var(--accent-pink) !important; color: #FFF !important; border: 2px solid var(--bg-card) !important; }
+
+/* Search */
+.sw { padding: 10px 20px !important; margin: 0 !important; }
+.sb { background: var(--bg-sec) !important; border: 1px solid var(--border-light) !important; border-radius: 14px !important; padding: 12px 16px !important; }
+.search { color: var(--text-main) !important; font-size: 14px !important; }
+.search::placeholder { color: var(--text-sec) !important; }
+.si { stroke: var(--text-sec) !important; }
+
+/* Loyalty */
+.loy { background: var(--bg-card) !important; border: 1px solid var(--border-light) !important; border-radius: 14px !important; padding: 14px 18px !important; margin: 0 20px 15px !important; box-shadow: 0 4px 12px rgba(11, 27, 63, 0.03) !important; }
+.loy-t { color: var(--text-main) !important; font-weight: 700 !important; }
+.loy-p { color: var(--accent-purple) !important; font-weight: 900 !important; }
+
+/* Categories */
+.sec { padding: 15px 20px !important; margin: 0 !important; }
+.stl { color: var(--text-main) !important; font-weight: 900 !important; font-size: 17px !important; }
+.sl2 { color: var(--btn-primary) !important; font-weight: 700 !important; }
+.cats { display: flex !important; gap: 16px !important; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.cats::-webkit-scrollbar { display: none; }
+.cat { background: transparent !important; border: none !important; box-shadow: none !important; display: flex; flex-direction: column; align-items: center; min-width: 65px; }
+.cat-i { width: 64px !important; height: 64px !important; background: var(--bg-sec) !important; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; font-size: 26px !important; margin-bottom: 8px !important; border: 1px solid var(--border-light) !important; }
+.cat-n { color: var(--text-main) !important; font-weight: 700 !important; font-size: 12px !important; }
+
+/* Quick Booking Bar (مضغوط وأنيق) */
+.quick-booking-wrap { padding: 0 20px !important; margin: 10px 0 15px !important; }
+.quick-booking-bar { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card) !important; border: 1px solid var(--border-light) !important; border-radius: 16px !important; padding: 12px 10px !important; box-shadow: 0 4px 15px rgba(11, 27, 63, 0.04) !important; }
+.qb-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: transform 0.2s; color: var(--btn-primary) !important; }
+.qb-item:active { transform: scale(0.92); }
+.qb-item svg { width: 22px; height: 22px; stroke: var(--btn-primary) !important; }
+.qb-item:nth-child(2) svg { stroke: var(--accent-purple) !important; }
+.qb-item:nth-child(3) svg { stroke: var(--accent-pink) !important; }
+.qb-item:nth-child(4) svg { stroke: #F59E0B !important; }
+.qb-item span { font-size: 11px; font-weight: 800; color: var(--text-main) !important; }
+
+/* Banner */
+.cw { padding: 0 20px !important; margin-bottom: 15px !important; }
+.car { border-radius: 18px !important; overflow: hidden; box-shadow: 0 6px 20px rgba(11, 27, 63, 0.06) !important; }
+.dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px !important; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-light); }
+.dot.active { background: var(--btn-primary); width: 18px; border-radius: 4px; }
+
+/* Products */
+.prods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px !important; }
+.prod { background: var(--bg-card) !important; border: 1px solid var(--border-light) !important; border-radius: 16px !important; overflow: hidden; box-shadow: 0 4px 15px rgba(11, 27, 63, 0.03) !important; display: flex; flex-direction: column; }
+.prod-i { height: 160px !important; background: var(--bg-sec) !important; display: flex; align-items: center; justify-content: center; padding: 15px; }
+.prod-i img { width: 100%; height: 100%; object-fit: contain !important; mix-blend-mode: multiply; }
+.prod-inf { padding: 12px !important; background: var(--bg-card) !important; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.prod-n { color: var(--text-main) !important; font-weight: 700 !important; font-size: 13px !important; line-height: 1.4 !important; margin-bottom: 8px !important; }
+.price { color: var(--btn-primary) !important; font-weight: 900 !important; font-size: 16px !important; }
+.price-c { color: var(--text-sec) !important; font-size: 11px !important; }
+.price-o { color: var(--text-sec) !important; text-decoration: line-through; font-size: 11px !important; }
+.prod-b { background: var(--gradient-main) !important; color: #FFF !important; border-radius: 6px !important; font-weight: 800 !important; padding: 4px 8px !important; top: 10px !important; right: 10px !important; font-size: 10px !important; }
+.prod-f { top: 10px !important; left: 10px !important; background: var(--bg-card) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important; border-radius: 50% !important; }
+.prod-f svg { stroke: var(--text-main) !important; }
+
+/* Bottom Nav */
+.nav-bar { background: var(--bg-card) !important; border-top: 1px solid var(--border-light) !important; box-shadow: 0 -4px 20px rgba(11, 27, 63, 0.04) !important; padding: 10px 0 !important; }
+.nav-item { color: var(--text-sec) !important; }
+.nav-item svg { stroke: var(--text-sec) !important; width: 22px; height: 22px; }
+.nav-item .lbl { font-size: 10px !important; margin-top: 4px; }
+.nav-item.active { color: var(--btn-primary) !important; }
+.nav-item.active svg { stroke: var(--btn-primary) !important; }
+.nav-item.active .lbl { font-weight: 900 !important; }
+
+/* AI Widget */
+.chat-fab { background: var(--gradient-main) !important; box-shadow: 0 8px 25px rgba(138, 85, 247, 0.3) !important; }
+.chat-header { background: var(--gradient-main) !important; }
+.chat-send { background: var(--btn-primary) !important; }
+.chat-msg.user { background: var(--btn-primary) !important; }
+
 </style>
 
 <style>
@@ -882,15 +976,15 @@ body, #app, .screen { background: var(--bg) !important; color: var(--cr) !import
     <span>حجز</span>
 </div>
 </div>
-      <div class="cw"><div class="car"><div class="slides" id="slides"></div></div><div class="dots" id="dots"></div></div>
-      <div class="sec"><div class="sh"><div class="stl">الأقسام</div><div class="sl2" onclick="APP.filterCat('all')">الكل</div></div><div class="cats" id="cats"></div></div>
+      
+      
       
       <div class="sec" id="brands-sec" style="display:none;">
         <div class="sh"><div class="stl">العلامات التجارية</div></div>
         <div class="brands" id="brands-list" style="display:flex; gap:10px; overflow-x:auto; padding:10px 15px;"></div>
       </div>
 
-      <div class="sec"><div class="sh"><div class="stl">🔥 المنتجات</div></div><div class="prods" id="prods"></div></div>
+      
     </div>
 
     
