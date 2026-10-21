@@ -501,6 +501,51 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .success-card p { color: #aaa; font-family: 'Tajawal', sans-serif; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
 .success-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); border: none; border-radius: 12px; color: #fff; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 16px; cursor: pointer; }
 
+
+.booking-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
+.booking-tabs::-webkit-scrollbar { display: none; }
+.booking-tab { flex-shrink: 0; padding: 12px 20px; border-radius: 14px; background: rgba(255,255,255,0.05); color: #aaa; font-weight: 900; font-family: 'Tajawal', sans-serif; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.3s; }
+.booking-tab.active { background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; border: none; box-shadow: 0 4px 15px rgba(255,39,201,0.3); }
+.booking-form { background: linear-gradient(135deg, #1F0D35, #00010a); border-radius: 20px; padding: 20px; border: 1px solid #3A1F5A; display: none; }
+.booking-form.active { display: block; animation: fadeIn 0.3s; }
+.booking-form label { display: block; font-size: 12px; color: #ff27c9; font-weight: 900; margin-bottom: 5px; font-family: 'Tajawal', sans-serif; }
+.booking-form input, .booking-form select { width: 100%; box-sizing: border-box; padding: 14px; border-radius: 12px; border: 1px solid #3A1F5A; background: #00010a; color: #fff; font-family: 'Tajawal', sans-serif; outline: none; margin-bottom: 15px; font-size: 14px; }
+.booking-form input:focus, .booking-form select:focus { border-color: #ff27c9; }
+.booking-form button { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; font-weight: 900; font-size: 16px; border: none; font-family: 'Tajawal', sans-serif; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 20px rgba(255,39,201,0.4); transition: transform 0.2s; }
+.booking-form button:active { transform: scale(0.98); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.success-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+.success-modal.active { display: flex; opacity: 1; }
+.success-card { background: linear-gradient(135deg, #1F0D35, #00010a); border: 2px solid #ff27c9; border-radius: 24px; padding: 30px; text-align: center; width: 85%; max-width: 320px; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.success-modal.active .success-card { transform: scale(1); }
+.success-icon { width: 80px; height: 80px; background: rgba(0, 212, 160, 0.15); border: 2px solid #00d4a0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #00d4a0; margin: 0 auto 20px; }
+.success-card h2 { color: #fff; font-family: 'Tajawal', sans-serif; margin-bottom: 10px; font-size: 22px; font-weight: 900; }
+.success-card p { color: #aaa; font-family: 'Tajawal', sans-serif; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+.success-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); border: none; border-radius: 12px; color: #fff; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 16px; cursor: pointer; }
+
+
+.booking-tabs{display:flex;gap:10px;overflow-x:auto;padding:15px;scrollbar-width:none}
+.booking-tabs::-webkit-scrollbar{display:none}
+.booking-tab{flex-shrink:0;padding:12px 20px;border-radius:14px;background:rgba(255,255,255,.05);color:#aaa;font-weight:900;font-family:'Tajawal',sans-serif;border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s}
+.booking-tab.active{background:linear-gradient(135deg,#ff27c9,#8d24ff);color:#fff;border:none;box-shadow:0 4px 15px rgba(255,39,201,.3)}
+.booking-form{background:linear-gradient(135deg,#1F0D35,#00010a);border-radius:20px;padding:20px;border:1px solid #3A1F5A;display:none}
+.booking-form.active{display:block;animation:fadeIn .3s}
+.booking-form label{display:block;font-size:12px;color:#ff27c9;font-weight:900;margin-bottom:5px;font-family:'Tajawal',sans-serif}
+.booking-form input,.booking-form select{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:1px solid #3A1F5A;background:#00010a;color:#fff;font-family:'Tajawal',sans-serif;outline:none;margin-bottom:15px;font-size:14px}
+.booking-form input:focus,.booking-form select:focus{border-color:#ff27c9}
+.booking-form button{width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,#ff27c9,#8d24ff);color:#fff;font-weight:900;font-size:16px;border:none;font-family:'Tajawal',sans-serif;cursor:pointer;margin-top:10px;box-shadow:0 5px 20px rgba(255,39,201,.4);transition:transform .2s}
+.booking-form button:active{transform:scale(.98)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.success-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:9999999;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.success-modal.active{display:flex;opacity:1}
+.success-card{background:linear-gradient(135deg,#1F0D35,#00010a);border:2px solid #ff27c9;border-radius:24px;padding:30px;text-align:center;width:85%;max-width:320px;transform:scale(.9);transition:transform .3s cubic-bezier(.175,.885,.32,1.275)}
+.success-modal.active .success-card{transform:scale(1)}
+.success-icon{width:80px;height:80px;background:rgba(0,212,160,.15);border:2px solid #00d4a0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;color:#00d4a0;margin:0 auto 20px}
+.success-card h2{color:#fff;font-family:'Tajawal',sans-serif;margin-bottom:10px;font-size:22px;font-weight:900}
+.success-card p{color:#aaa;font-family:'Tajawal',sans-serif;font-size:14px;line-height:1.6;margin-bottom:20px}
+.success-card button{width:100%;padding:14px;background:linear-gradient(135deg,#ff27c9,#8d24ff);border:none;border-radius:12px;color:#fff;font-family:'Tajawal',sans-serif;font-weight:900;font-size:16px;cursor:pointer}
+
 </style>
 
 <style>
@@ -1144,7 +1189,7 @@ var APP={
 
 
 
-    checkServices: function() {
+      checkServices: function() {
     firebase.firestore().collection('config').doc('services').get().then(function(doc) {
        if(doc.exists) {
            var d = doc.data();
@@ -1160,6 +1205,75 @@ var APP={
     });
   },
 
+
+  switchBookingTab: function(tab) {
+    document.querySelectorAll('.booking-form').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.booking-tab').forEach(function(el){ el.classList.remove('active'); });
+    var form = document.getElementById('form-' + tab);
+    var btn = document.getElementById('tab-' + tab);
+    if(form) form.classList.add('active');
+    if(btn) btn.classList.add('active');
+  },
+  closeSuccessModal: function() {
+    document.getElementById('booking-success-modal').classList.remove('active');
+    APP.goTab('home');
+  },
+  submitBus: function() {
+    var to = document.getElementById('bus-to').value;
+    var date = document.getElementById('bus-date').value;
+    var time = document.getElementById('bus-time').value;
+    var pax = document.getElementById('bus-pax').value;
+    var name = document.getElementById('bus-name').value.trim();
+    var phone = document.getElementById('bus-phone').value.trim();
+    if(!to || !date || !name || !phone) { this.toast('يرجى تعبئة الحقول', 'err'); return; }
+    var btn = event.target; btn.innerText = 'جاري الإرسال...'; btn.disabled = true;
+    firebase.firestore().collection('orders').add({
+      type: 'bus_booking', details: { from: 'عدن', to: to, date: date, time: time, pax: pax },
+      customer: { name: name, phone: phone }, total: 0, status: 'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp(), userId: this.user ? this.user.uid : 'guest'
+    }).then(function() {
+       document.getElementById('booking-success-modal').classList.add('active');
+       ['bus-date','bus-name','bus-phone'].forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
+       btn.innerText = 'تأكيد حجز الباص'; btn.disabled = false;
+    }).catch(function(e) { APP.toast('حدث خطأ', 'err'); btn.innerText = 'تأكيد حجز الباص'; btn.disabled = false; });
+  },
+  submitHajj: function() {
+    var type = document.getElementById('hajj-type').value;
+    var date = document.getElementById('hajj-date').value;
+    var pax = document.getElementById('hajj-pax').value;
+    var name = document.getElementById('hajj-name').value.trim();
+    var passport = document.getElementById('hajj-passport').value.trim();
+    var phone = document.getElementById('hajj-phone').value.trim();
+    if(!date || !name || !phone || !passport) { this.toast('يرجى تعبئة الحقول', 'err'); return; }
+    var btn = event.target; btn.innerText = 'جاري الإرسال...'; btn.disabled = true;
+    firebase.firestore().collection('orders').add({
+      type: 'hajj_booking', details: { hajjType: type, date: date, pax: pax, passport: passport },
+      customer: { name: name, phone: phone }, total: 0, status: 'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp(), userId: this.user ? this.user.uid : 'guest'
+    }).then(function() {
+       document.getElementById('booking-success-modal').classList.add('active');
+       ['hajj-date','hajj-name','hajj-passport','hajj-phone'].forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
+       btn.innerText = 'تأكيد الحجز'; btn.disabled = false;
+    }).catch(function(e) { APP.toast('حدث خطأ', 'err'); btn.innerText = 'تأكيد الحجز'; btn.disabled = false; });
+  },
+  submitHotel: function() {
+    var city = document.getElementById('hotel-city').value.trim();
+    var hname = document.getElementById('hotel-name').value.trim();
+    var checkin = document.getElementById('hotel-in').value;
+    var checkout = document.getElementById('hotel-out').value;
+    var rooms = document.getElementById('hotel-rooms').value;
+    var guests = document.getElementById('hotel-guests').value;
+    var name = document.getElementById('hotel-client-name').value.trim();
+    var phone = document.getElementById('hotel-phone').value.trim();
+    if(!city || !checkin || !checkout || !name || !phone) { this.toast('يرجى تعبئة الحقول', 'err'); return; }
+    var btn = event.target; btn.innerText = 'جاري الإرسال...'; btn.disabled = true;
+    firebase.firestore().collection('orders').add({
+      type: 'hotel_booking', details: { city: city, hotelName: hname, checkin: checkin, checkout: checkout, rooms: rooms, guests: guests },
+      customer: { name: name, phone: phone }, total: 0, status: 'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp(), userId: this.user ? this.user.uid : 'guest'
+    }).then(function() {
+       document.getElementById('booking-success-modal').classList.add('active');
+       ['hotel-city','hotel-name','hotel-in','hotel-out','hotel-client-name','hotel-phone'].forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
+       btn.innerText = 'تأكيد حجز الفندق'; btn.disabled = false;
+    }).catch(function(e) { APP.toast('حدث خطأ', 'err'); btn.innerText = 'تأكيد حجز الفندق'; btn.disabled = false; });
+  },
   submitFlight: function() {
     var from = document.getElementById('fly-from').value.trim();
     var to = document.getElementById('fly-to').value.trim();
