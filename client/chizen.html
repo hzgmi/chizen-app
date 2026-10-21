@@ -635,7 +635,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
       </div>
       <div class="loy" onclick="APP.goTab('points')"><div class="loy-t"><span>💎</span> نقاط الولاء</div><div class="loy-p" id="loyalty">0 نقطة</div></div>
       <div style="display:flex; align-items:center; gap:10px; padding:0 15px;"><div style="flex:1;"><div class="sw"><div class="sb"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" class="search" id="search-in" placeholder="ابحث عن منتج..." oninput="APP.search(this.value)"></div></div></div>
-      <div class="ib" onclick="APP.goTab('more')" style="margin-right: 10px;">
+      <div class="ib" onclick="APP.goTab('booking')" style="margin-right: 10px;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="5" r="3"/><circle cx="12" cy="19" r="3"/></svg>
       </div>
 </div>
@@ -667,30 +667,55 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 
     
     <!-- MORE / FLIGHT BOOKING FULL SCREEN -->
-    <div class="screen" id="sc-more">
+    
+
+    
+    <!-- BOOKINGS FULL SCREEN -->
+    <div class="screen" id="sc-booking">
       <div class="hd" style="display:flex; align-items:center; gap:15px; padding:15px; position:sticky; top:0; background:rgba(2,5,27,0.95); backdrop-filter:blur(10px); z-index:100;">
         <div onclick="APP.goTab('home')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </div>
-        <div style="font-weight:900; font-size:20px; color:#fff; font-family:'Tajawal',sans-serif;">المزيد والخدمات</div>
+        <div style="font-weight:900; font-size:20px; color:#fff; font-family:'Tajawal',sans-serif;">مركز الحجوزات</div>
       </div>
+      
+      <div style="padding:0 15px; margin-top:15px; display:flex; gap:10px;" id="service-tabs">
+         <button id="tab-flight" onclick="APP.switchBookingTab('flight')" style="flex:1; padding:12px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; border:none; font-family:'Tajawal';">✈️ طيران</button>
+         <button id="tab-hotel" onclick="APP.switchBookingTab('hotel')" style="flex:1; padding:12px; border-radius:12px; background:rgba(255,255,255,0.05); color:#aaa; font-weight:900; border:1px solid rgba(255,255,255,0.1); font-family:'Tajawal';">🏨 فنادق</button>
+      </div>
+
       <div style="padding:15px 15px 100px 15px;">
-         <div style="background:linear-gradient(135deg, #1F0D35, #00010a); border-radius:20px; padding:20px; border:1px solid #3A1F5A; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
-            <div style="font-size:22px; font-weight:900; color:#ff27c9; margin-bottom:5px;">✈️ حجز تذاكر طيران</div>
-            <div style="font-size:12px; color:#888; margin-bottom:15px;">سافر لأي مكان في العالم بأفضل الأسعار</div>
-            
+         <div id="form-flight" style="display:block; background:linear-gradient(135deg, #1F0D35, #00010a); border-radius:20px; padding:20px; border:1px solid #3A1F5A;">
+            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">✈️ تفاصيل الرحلة</div>
             <div style="display:flex; gap:10px; margin-bottom:15px;">
                 <input id="fly-from" type="text" placeholder="من (مثال: صنعاء)" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
                 <input id="fly-to" type="text" placeholder="إلى (مثال: القاهرة)" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
             </div>
             <div style="display:flex; gap:10px; margin-bottom:15px;">
                 <input id="fly-date" type="date" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
-                <input id="fly-pax" type="number" min="1" value="1" placeholder="عدد المسافرين" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+                <input id="fly-pax" type="number" min="1" value="1" placeholder="المسافرين" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
             </div>
-            <input id="fly-name" type="text" placeholder="الاسم الكامل" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
+            <input id="fly-name" type="text" placeholder="الاسم الكامل (باللغة الإنجليزية)" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
+            <input id="fly-passport" type="text" placeholder="رقم الجواز" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
             <input id="fly-phone" type="tel" placeholder="رقم الجوال" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:20px;">
-            
-            <button onclick="APP.submitFlight()" style="width:100%; padding:15px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; font-size:16px; border:none; font-family:'Tajawal'; cursor:pointer; box-shadow:0 5px 15px rgba(255,39,201,0.3);">تأكيد الحجز وإرسال للطلب</button>
+            <button onclick="APP.submitFlight()" style="width:100%; padding:15px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; font-size:16px; border:none; font-family:'Tajawal';">إرسال طلب الحجز</button>
+         </div>
+
+         <div id="form-hotel" style="display:none; background:linear-gradient(135deg, #1F0D35, #00010a); border-radius:20px; padding:20px; border:1px solid #3A1F5A;">
+            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🏨 تفاصيل الفندق</div>
+            <input id="hotel-city" type="text" placeholder="المدينة (مثال: القاهرة)" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
+            <input id="hotel-name" type="text" placeholder="اسم الفندق (إن وجد)" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input id="hotel-in" type="date" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+                <input id="hotel-out" type="date" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input id="hotel-rooms" type="number" min="1" value="1" placeholder="الغرف" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+                <input id="hotel-guests" type="number" min="1" value="1" placeholder="الضيوف" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+            </div>
+            <input id="hotel-client-name" type="text" placeholder="الاسم الكامل" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
+            <input id="hotel-phone" type="tel" placeholder="رقم الجوال" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:20px;">
+            <button onclick="APP.submitHotel()" style="width:100%; padding:15px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; font-size:16px; border:none; font-family:'Tajawal';">إرسال طلب الحجز</button>
          </div>
       </div>
     </div>
