@@ -1685,6 +1685,26 @@ var timelineHtml = APP.getTimelineHtml(o.status);
     }).join('');
   },
   
+
+  clearAllNotifs: async function() {
+    if (!this.user || !this.notifications.length) return;
+    var self = this;
+    try {
+        var batch = firebase.firestore().batch();
+        // نحذف الإشعارات الخاصة بهذا المستخدم فقط
+        var snap = await firebase.firestore().collection('notifications').where('userId', '==', this.user.uid).get();
+        snap.forEach(function(doc) { batch.delete(doc.ref); });
+        await batch.commit();
+        
+        this.notifications = [];
+        this.renderNotifs();
+        this.toast('تم مسح الإشعارات', 'suc');
+    } catch(e) {
+        console.error('Clear error:', e);
+        this.toast('فشل المسح', 'err');
+    }
+  },
+
   renderNotifs:function(){
     var c=document.getElementById('notif-list');if(!c)return;
     if(!this.notifications.length){c.innerHTML='<div class="cempty"><p>لا توجد إشعارات</p></div>';return;}
@@ -2131,12 +2151,24 @@ document.addEventListener('DOMContentLoaded', function() {
             if (result.receive === 'granted') { PushNotifications.register(); }
         });
         PushNotifications.addListener('registration', (token) => {
-            if (window.APP && window.APP.user && firebase) {
-                firebase.firestore().collection('users').doc(window.APP.user.uid).set({
-                    fcmToken: token.value, lastTokenUpdate: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-            }
+            window.FCM_TOKEN = token.value;
+            localStorage.setItem('chizen_fcm', token.value);
+            saveFcmToken();
         });
+
+        function saveFcmToken() {
+            var t = window.FCM_TOKEN || localStorage.getItem('chizen_fcm');
+            if (window.APP && window.APP.user && t && firebase) {
+                firebase.firestore().collection('users').doc(window.APP.user.uid).set({
+                    fcmToken: t, lastTokenUpdate: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true }).then(function(){
+                    console.log('✅ FCM Token saved for user');
+                }).catch(function(e){ console.log('FCM save err', e); });
+            } else {
+                setTimeout(saveFcmToken, 3000); // إعادة المحاولة كل 3 ثوانٍ حتى يسجل الدخول
+            }
+        }
+        saveFcmToken();
         PushNotifications.addListener('pushNotificationActionPerformed', () => {
             if (window.APP) window.APP.goTab('orders');
         });
