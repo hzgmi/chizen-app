@@ -5,44 +5,13 @@
   'use strict';
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 
-  var DEFAULT_PRODUCTS = [
-    {id:1,category:'electronics',brand:'Sony',name:'سماعات Sony WH-1000XM5',price:1299,old:1899,badge:'-32%',rating:4.9,reviews:1240,sold:5420,img:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80',desc:'سماعات لاسلكية احترافية',features:['إلغاء ضوضاء','30 ساعة','شحن سريع']},
-    {id:2,category:'electronics',brand:'Apple',name:'ساعة Apple Watch S9',price:1599,old:1999,badge:'-20%',rating:4.8,reviews:856,sold:3200,img:'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80',desc:'ساعة ذكية',features:['Retina','S9','ECG']},
-    {id:3,category:'clothes',brand:'Nike',name:'حذاء Nike Air Max',price:599,old:849,badge:'-29%',rating:4.7,reviews:2103,sold:8900,img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',desc:'حذاء رياضي',features:['Air Max','جلد','خفيف']},
-    {id:4,category:'beauty',brand:'Dior',name:'عطر Dior Sauvage',price:450,old:null,badge:'جديد',rating:4.9,reviews:3421,sold:12000,img:'https://images.unsplash.com/photo-1541643600914-78b084683601?w=600&q=80',desc:'عطر رجالي شرقي',features:['شرقي','100ml','أصلي']},
-    {id:5,category:'home',brand:'Philips',name:'آلة قهوة Philips',price:2899,old:3499,badge:'-17%',rating:4.8,reviews:678,sold:1200,img:'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80',desc:'آلة قهوة',features:['LatteGo','12 نوع','1.8 لتر']},
-    {id:6,category:'school',brand:'Moleskine',name:'دفتر Moleskine',price:89,old:120,badge:'-26%',rating:4.6,reviews:1890,sold:6700,img:'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=600&q=80',desc:'دفتر فاخر',features:['جلد','A5','مطاطي']},
-    {id:7,category:'electronics',brand:'Apple',name:'iPhone 15 Pro Max',price:5499,old:5999,badge:'-8%',rating:4.9,reviews:5621,sold:9800,img:'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&q=80',desc:'أقوى iPhone',features:['تيتانيوم','A17','48MP']},
-    {id:8,category:'beauty',brand:'Chanel',name:'عطر Chanel No.5',price:680,old:850,badge:'-20%',rating:4.9,reviews:4210,sold:15000,img:'https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600&q=80',desc:'عطر نسائي',features:['زهري','100ml','أصلي']},
-    {id:9,category:'clothes',brand:'Adidas',name:'جاكيت Adidas',price:399,old:550,badge:'-27%',rating:4.5,reviews:1023,sold:3400,img:'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80',desc:'جاكيت رياضي',features:['قطنية','سحاب','أحجام']},
-    {id:10,category:'home',brand:'IKEA',name:'كرسي IKEA POÄNG',price:899,old:1200,badge:'-25%',rating:4.7,reviews:2340,sold:4100,img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80',desc:'كرسي هزاز',features:['خشب','وسائد','إسكندنافي']},
-    {id:11,category:'school',brand:'Faber-Castell',name:'طقم Faber-Castell',price:159,old:220,badge:'-28%',rating:4.8,reviews:1567,sold:5600,img:'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=600&q=80',desc:'طقم أقلام',features:['رصاص','ألوان','ألماني']},
-    {id:12,category:'electronics',brand:'JBL',name:'مكبر JBL Charge 5',price:549,old:749,badge:'-27%',rating:4.7,reviews:3456,sold:7200,img:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=80',desc:'مكبر صوت',features:['JBL','IP67','20 ساعة']},
-    {id:13,category:'beauty',brand:'Maybelline',name:'أحمر شفاه Maybelline',price:79,old:120,badge:'-34%',rating:4.6,reviews:2890,sold:11000,img:'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=600&q=80',desc:'أحمر شفاه',features:['12 ساعة','مات','مرطب']},
-    {id:14,category:'food',brand:'Nescafé',name:'قهوة Nescafé Gold',price:65,old:85,badge:'-24%',rating:4.5,reviews:1890,sold:8400,img:'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80',desc:'قهوة فورية',features:['حبوب','200g','سريعة']},
-    {id:15,category:'games',brand:'Sony',name:'PlayStation 5 DualSense',price:299,old:399,badge:'-25%',rating:4.9,reviews:4521,sold:6800,img:'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&q=80',desc:'ذراع تحكم PS5',features:['لمسية','USB-C','بطارية']},
-    {id:16,category:'home',brand:'Dyson',name:'مكنسة Dyson V15',price:3499,old:4299,badge:'-18%',rating:4.8,reviews:1230,sold:980,img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',desc:'مكنسة لاسلكية',features:['شفط','ليزر','Hepa']}
-  ];
+  var DEFAULT_PRODUCTS = [];
 
-  var DEFAULT_CATEGORIES = [
-    {key:'home',name:'منزلية',icon:'🏠'},{key:'beauty',name:'تجميل',icon:'💄'},
-    {key:'school',name:'مدرسية',icon:'📚'},{key:'clothes',name:'ملابس',icon:'👕'},
-    {key:'electronics',name:'إلكترونيات',icon:'📱'},{key:'food',name:'طعام',icon:'🍔'},
-    {key:'games',name:'ألعاب',icon:'🎮'},{key:'booking',name:'حجز',icon:'✈️'}
-  ];
+  var DEFAULT_CATEGORIES = [];
 
-  var DEFAULT_BANNERS = [
-    {bg:'linear-gradient(135deg,#EC4899 0%,#A855F7 60%,#38BDF8 100%)',tag:'عرض محدود',title:'عروض الجمعة',sub:'خصم حتى 50%',btn:'تسوق الآن',img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&q=60'},
-    {bg:'linear-gradient(135deg,#FB923C 0%,#EC4899 100%)',tag:'جديد',title:'إلكترونيات 2025',sub:'أحدث الأجهزة',btn:'اكتشف',img:'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=60'},
-    {bg:'linear-gradient(135deg,#8B5CF6 0%,#EC4899 100%)',tag:'حصري',title:'عالم الجمال',sub:'ماركات عالمية',btn:'تسوقي',img:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=60'}
-  ];
+  var DEFAULT_BANNERS = [];
 
-  var DEFAULT_PAYMENTS = [
-    {id:'kuraimi',name:'بنك الكريمي',account:'1234-567-890',color:'#0d47a1',icon:'🏦',type:'bank'},
-    {id:'tadhamon',name:'بنك التضامن',account:'9876-543-210',color:'#1b5e20',icon:'🏦',type:'bank'},
-    {id:'yemen',name:'البنك اليمني',account:'5555-444-333',color:'#b71c1c',icon:'🏦',type:'bank'},
-    {id:'cash',name:'دفع نقدي',account:'',color:'#EF6C00',icon:'💵',type:'cash'}
-  ];
+  var DEFAULT_PAYMENTS = [];
 
   function patch() {
     if (!window.APP) { setTimeout(patch, 150); return; }
