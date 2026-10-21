@@ -2144,36 +2144,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+setTimeout(function() {
     if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications) {
         const PushNotifications = window.Capacitor.Plugins.PushNotifications;
+        
         PushNotifications.requestPermissions().then(result => {
-            if (result.receive === 'granted') { PushNotifications.register(); }
-        });
+            if (result.receive === 'granted') { 
+                PushNotifications.register(); 
+            } else {
+                alert('❌ أنت لم تسمح بالإشعارات من إعدادات الهاتف!');
+            }
+        }).catch(e => alert('❌ فشل طلب الإذن: ' + e.message));
+        
         PushNotifications.addListener('registration', (token) => {
+            alert('✅ تم استلام التوكن من جوجل: ' + token.value.substring(0, 15) + '...');
             window.FCM_TOKEN = token.value;
             localStorage.setItem('chizen_fcm', token.value);
             saveFcmToken();
         });
+        
+        PushNotifications.addListener('registrationError', (err) => {
+            alert('❌ خطأ في تسجيل الإشعارات: ' + JSON.stringify(err));
+        });
 
         function saveFcmToken() {
             var t = window.FCM_TOKEN || localStorage.getItem('chizen_fcm');
-            if (window.APP && window.APP.user && t && firebase) {
-                firebase.firestore().collection('users').doc(window.APP.user.uid).set({
-                    fcmToken: t, lastTokenUpdate: firebase.firestore.FieldValue.serverTimestamp()
+            if (window.APP && window.APP.user && t && window.firebase) {
+                window.firebase.firestore().collection('users').doc(window.APP.user.uid).set({
+                    fcmToken: t, lastTokenUpdate: window.firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true }).then(function(){
-                    console.log('✅ FCM Token saved for user');
-                }).catch(function(e){ console.log('FCM save err', e); });
+                    alert('✅ تم حفظ التوكن في قاعدة البيانات بنجاح!');
+                }).catch(function(e){ alert('❌ فشل حفظ التوكن في الفايربيس: ' + e.message); });
             } else {
-                setTimeout(saveFcmToken, 3000); // إعادة المحاولة كل 3 ثوانٍ حتى يسجل الدخول
+                setTimeout(saveFcmToken, 3000);
             }
         }
         saveFcmToken();
-        PushNotifications.addListener('pushNotificationActionPerformed', () => {
-            if (window.APP) window.APP.goTab('orders');
-        });
+    } else {
+        alert('❌ إضافة الإشعارات (PushNotifications) غير مثبتة في التطبيق!');
     }
-});
+}, 3000);
 </script>
 </body>
 </html>
