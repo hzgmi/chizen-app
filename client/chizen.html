@@ -478,6 +478,29 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .dlb2.primary{background:var(--grad2);color:#fff;}
 .dlb2.danger{background:linear-gradient(135deg,#ff4d6d,#dc2626);color:#fff;}
 @media(max-width:360px){.cats{grid-template-columns:repeat(3,1fr);}}
+
+.booking-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
+.booking-tabs::-webkit-scrollbar { display: none; }
+.booking-tab { flex-shrink: 0; padding: 12px 20px; border-radius: 14px; background: rgba(255,255,255,0.05); color: #aaa; font-weight: 900; font-family: 'Tajawal', sans-serif; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.3s; }
+.booking-tab.active { background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; border: none; box-shadow: 0 4px 15px rgba(255,39,201,0.3); }
+.booking-form { background: linear-gradient(135deg, #1F0D35, #00010a); border-radius: 20px; padding: 20px; border: 1px solid #3A1F5A; display: none; }
+.booking-form.active { display: block; animation: fadeIn 0.3s; }
+.booking-form label { display: block; font-size: 12px; color: #ff27c9; font-weight: 900; margin-bottom: 5px; font-family: 'Tajawal', sans-serif; }
+.booking-form input, .booking-form select { width: 100%; box-sizing: border-box; padding: 14px; border-radius: 12px; border: 1px solid #3A1F5A; background: #00010a; color: #fff; font-family: 'Tajawal', sans-serif; outline: none; margin-bottom: 15px; font-size: 14px; }
+.booking-form input:focus, .booking-form select:focus { border-color: #ff27c9; }
+.booking-form button { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; font-weight: 900; font-size: 16px; border: none; font-family: 'Tajawal', sans-serif; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 20px rgba(255,39,201,0.4); transition: transform 0.2s; }
+.booking-form button:active { transform: scale(0.98); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.success-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+.success-modal.active { display: flex; opacity: 1; }
+.success-card { background: linear-gradient(135deg, #1F0D35, #00010a); border: 2px solid #ff27c9; border-radius: 24px; padding: 30px; text-align: center; width: 85%; max-width: 320px; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.success-modal.active .success-card { transform: scale(1); }
+.success-icon { width: 80px; height: 80px; background: rgba(0, 212, 160, 0.15); border: 2px solid #00d4a0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #00d4a0; margin: 0 auto 20px; }
+.success-card h2 { color: #fff; font-family: 'Tajawal', sans-serif; margin-bottom: 10px; font-size: 22px; font-weight: 900; }
+.success-card p { color: #aaa; font-family: 'Tajawal', sans-serif; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+.success-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); border: none; border-radius: 12px; color: #fff; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 16px; cursor: pointer; }
+
 </style>
 
 <style>
@@ -670,7 +693,8 @@ input,textarea{-webkit-user-select:text;user-select:text;}
     
 
     
-    <!-- BOOKINGS FULL SCREEN -->
+    
+    <!-- BOOKINGS FULL SCREEN V3 -->
     <div class="screen" id="sc-booking">
       <div class="hd" style="display:flex; align-items:center; gap:15px; padding:15px; position:sticky; top:0; background:rgba(2,5,27,0.95); backdrop-filter:blur(10px); z-index:100;">
         <div onclick="APP.goTab('home')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%;">
@@ -679,44 +703,106 @@ input,textarea{-webkit-user-select:text;user-select:text;}
         <div style="font-weight:900; font-size:20px; color:#fff; font-family:'Tajawal',sans-serif;">مركز الحجوزات</div>
       </div>
       
-      <div style="padding:0 15px; margin-top:15px; display:flex; gap:10px;" id="service-tabs">
-         <button id="tab-flight" onclick="APP.switchBookingTab('flight')" style="flex:1; padding:12px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; border:none; font-family:'Tajawal';">✈️ طيران</button>
-         <button id="tab-hotel" onclick="APP.switchBookingTab('hotel')" style="flex:1; padding:12px; border-radius:12px; background:rgba(255,255,255,0.05); color:#aaa; font-weight:900; border:1px solid rgba(255,255,255,0.1); font-family:'Tajawal';">🏨 فنادق</button>
+      <div class="booking-tabs" id="service-tabs">
+         <button id="tab-flight" class="booking-tab active" onclick="APP.switchBookingTab('flight')">✈️ طيران</button>
+         <button id="tab-bus" class="booking-tab" onclick="APP.switchBookingTab('bus')">🚌 باصات</button>
+         <button id="tab-hajj" class="booking-tab" onclick="APP.switchBookingTab('hajj')">🕋 حج وعمرة</button>
+         <button id="tab-hotel" class="booking-tab" onclick="APP.switchBookingTab('hotel')">🏨 فنادق</button>
       </div>
 
-      <div style="padding:15px 15px 100px 15px;">
-         <div id="form-flight" style="display:block; background:linear-gradient(135deg, #1F0D35, #00010a); border-radius:20px; padding:20px; border:1px solid #3A1F5A;">
+      <div style="padding:0 15px 100px 15px;">
+         <div id="form-flight" class="booking-form active">
             <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">✈️ تفاصيل الرحلة</div>
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <input id="fly-from" type="text" placeholder="من (مثال: صنعاء)" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
-                <input id="fly-to" type="text" placeholder="إلى (مثال: القاهرة)" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+            <label>شركة الطيران</label>
+            <select id="fly-airline">
+               <option value="yemenia">الخطوط الجوية اليمنية</option>
+               <option value="qutaibi">طيران عدن (القطيبي)</option>
+               <option value="other">أخرى</option>
+            </select>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;"><label>من</label><input id="fly-from" type="text" value="عدن" placeholder="من"></div>
+                <div style="flex:1;"><label>إلى</label><input id="fly-to" type="text" placeholder="إلى"></div>
             </div>
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <input id="fly-date" type="date" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
-                <input id="fly-pax" type="number" min="1" value="1" placeholder="المسافرين" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;"><label>التاريخ</label><input id="fly-date" type="date"></div>
+                <div style="flex:1;"><label>المسافرين</label><input id="fly-pax" type="number" min="1" value="1"></div>
             </div>
-            <input id="fly-name" type="text" placeholder="الاسم الكامل (باللغة الإنجليزية)" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
-            <input id="fly-passport" type="text" placeholder="رقم الجواز" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
-            <input id="fly-phone" type="tel" placeholder="رقم الجوال" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:20px;">
-            <button onclick="APP.submitFlight()" style="width:100%; padding:15px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; font-size:16px; border:none; font-family:'Tajawal';">إرسال طلب الحجز</button>
+            <label>الدرجة</label>
+            <select id="fly-class">
+               <option value="economy">اقتصادية</option>
+               <option value="business">رجال الأعمال (VIP)</option>
+            </select>
+            <label>الاسم الكامل</label><input id="fly-name" type="text" placeholder="الاسم كما في الجواز">
+            <label>رقم الجواز</label><input id="fly-passport" type="text" placeholder="رقم الجواز">
+            <label>رقم الجوال</label><input id="fly-phone" type="tel" placeholder="رقم الجوال">
+            <button onclick="APP.submitFlight()">تأكيد حجز الطيران</button>
          </div>
 
-         <div id="form-hotel" style="display:none; background:linear-gradient(135deg, #1F0D35, #00010a); border-radius:20px; padding:20px; border:1px solid #3A1F5A;">
-            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🏨 تفاصيل الفندق</div>
-            <input id="hotel-city" type="text" placeholder="المدينة (مثال: القاهرة)" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
-            <input id="hotel-name" type="text" placeholder="اسم الفندق (إن وجد)" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <input id="hotel-in" type="date" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
-                <input id="hotel-out" type="date" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+         <div id="form-bus" class="booking-form">
+            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🚌 تفاصيل رحلة الباص</div>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;"><label>من</label><input type="text" value="عدن" disabled style="opacity:0.7;"></div>
+                <div style="flex:1;"><label>إلى</label>
+                    <select id="bus-to">
+                        <option value="صنعاء">صنعاء</option>
+                        <option value="تعز">تعز</option>
+                        <option value="إب">إب</option>
+                        <option value="المكلا">المكلا</option>
+                        <option value="سيئون">سيئون</option>
+                    </select>
+                </div>
             </div>
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <input id="hotel-rooms" type="number" min="1" value="1" placeholder="الغرف" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
-                <input id="hotel-guests" type="number" min="1" value="1" placeholder="الضيوف" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;"><label>التاريخ</label><input id="bus-date" type="date"></div>
+                <div style="flex:1;"><label>الوقت</label><input id="bus-time" type="time"></div>
             </div>
-            <input id="hotel-client-name" type="text" placeholder="الاسم الكامل" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
-            <input id="hotel-phone" type="tel" placeholder="رقم الجوال" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:20px;">
-            <button onclick="APP.submitHotel()" style="width:100%; padding:15px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; font-size:16px; border:none; font-family:'Tajawal';">إرسال طلب الحجز</button>
+            <label>عدد المقاعد</label><input id="bus-pax" type="number" min="1" value="1">
+            <label>الاسم الكامل</label><input id="bus-name" type="text" placeholder="الاسم">
+            <label>رقم الجوال</label><input id="bus-phone" type="tel" placeholder="رقم الجوال">
+            <button onclick="APP.submitBus()">تأكيد حجز الباص</button>
          </div>
+
+         <div id="form-hajj" class="booking-form">
+            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🕋 رحلات الحج والعمرة</div>
+            <label>نوع الرحلة</label>
+            <select id="hajj-type">
+                <option value="umrah">عمرة</option>
+                <option value="hajj">حج</option>
+            </select>
+            <label>تاريخ السفر التقريبي</label><input id="hajj-date" type="date">
+            <label>عدد الأشخاص</label><input id="hajj-pax" type="number" min="1" value="1">
+            <label>الاسم الكامل</label><input id="hajj-name" type="text" placeholder="الاسم كما في الجواز">
+            <label>رقم الجواز</label><input id="hajj-passport" type="text" placeholder="رقم الجواز">
+            <label>رقم الجوال</label><input id="hajj-phone" type="tel" placeholder="رقم الجوال">
+            <button onclick="APP.submitHajj()">تأكيد الحجز</button>
+         </div>
+
+         <div id="form-hotel" class="booking-form">
+            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🏨 تفاصيل الفندق</div>
+            <label>المدينة</label><input id="hotel-city" type="text" placeholder="مثال: القاهرة">
+            <label>اسم الفندق (إن وجد)</label><input id="hotel-name" type="text" placeholder="اسم الفندق">
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;"><label>تاريخ الدخول</label><input id="hotel-in" type="date"></div>
+                <div style="flex:1;"><label>تاريخ الخروج</label><input id="hotel-out" type="date"></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;"><label>الغرف</label><input id="hotel-rooms" type="number" min="1" value="1"></div>
+                <div style="flex:1;"><label>الضيوف</label><input id="hotel-guests" type="number" min="1" value="1"></div>
+            </div>
+            <label>الاسم الكامل</label><input id="hotel-client-name" type="text" placeholder="الاسم">
+            <label>رقم الجوال</label><input id="hotel-phone" type="tel" placeholder="رقم الجوال">
+            <button onclick="APP.submitHotel()">تأكيد حجز الفندق</button>
+         </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div id="booking-success-modal" class="success-modal">
+      <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h2>تم حجزك بنجاح!</h2>
+        <p>لقد استلمنا طلبك، وسيقوم فريقنا بالتواصل معك قريباً لتأكيد التفاصيل وإتمام الدفع.</p>
+        <button onclick="APP.closeSuccessModal()">العودة للرئيسية</button>
       </div>
     </div>
 
@@ -1058,15 +1144,18 @@ var APP={
 
 
 
-  checkServices: function() {
+    checkServices: function() {
     firebase.firestore().collection('config').doc('services').get().then(function(doc) {
        if(doc.exists) {
            var d = doc.data();
-           var fBtn = document.getElementById('tab-flight');
-           var hBtn = document.getElementById('tab-hotel');
-           // إذا كان الأدمن قد أوقف الخدمة، نخفي الزر
-           if(fBtn) fBtn.style.display = d.flights === false ? 'none' : 'block';
-           if(hBtn) hBtn.style.display = d.hotels === false ? 'none' : 'block';
+           var tabs = { flight: 'flights', hotel: 'hotels', bus: 'buses', hajj: 'hajj' };
+           for(var key in tabs) {
+               var btn = document.getElementById('tab-' + key);
+               if(btn) {
+                   var isAvailable = d[tabs[key]] !== false;
+                   btn.style.display = isAvailable ? 'block' : 'none';
+               }
+           }
        }
     });
   },
