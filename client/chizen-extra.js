@@ -28,7 +28,7 @@
     {key:'home',name:'منزلية',icon:'🏠'},{key:'beauty',name:'تجميل',icon:'💄'},
     {key:'school',name:'مدرسية',icon:'📚'},{key:'clothes',name:'ملابس',icon:'👕'},
     {key:'electronics',name:'إلكترونيات',icon:'📱'},{key:'food',name:'طعام',icon:'🍔'},
-    {key:'games',name:'ألعاب',icon:'🎮'},{key:'more',name:'المزيد',icon:'➕'}
+    {key:'games',name:'ألعاب',icon:'🎮'},{key:'booking',name:'حجز',icon:'✈️'}
   ];
 
   var DEFAULT_BANNERS = [
@@ -403,7 +403,18 @@
       }
     };
 
-    console.log('✅ CHIZEN Extra Applied (16 fixes)');
+    
+    /* ═══ 22. اعتراض فتح القسم للحجز ═══ */
+    var origOpenCatPage = A.openCatPage;
+    A.openCatPage = function(key, name, icon) {
+      if (key === 'booking') {
+        this.goTab('booking');
+        return;
+      }
+      origOpenCatPage.call(this, key, name, icon);
+    };
+
+    console.log('✅ CHIZEN Extra Applied (17 fixes)');
   }
 
   if (document.readyState === 'loading') {

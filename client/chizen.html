@@ -976,7 +976,7 @@ var APP={
     this.currentSc=id;
     document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
     var t=document.getElementById('sc-'+id);if(t){t.classList.add('active');t.scrollTop=0;}
-    var hide=['details','checkout','success','settings','points','notifications','favorites','help'];
+    var hide=['details','checkout','success','settings','points','notifications','favorites','help','cat','booking'];
     var nav=document.getElementById('bnav');
     if(nav)nav.style.display=hide.indexOf(id)>-1?'none':'flex';
     var map={home:0,cart:1,orders:2,profile:3};
@@ -1038,6 +1038,7 @@ var APP={
     if(!catScreen) return;
     catScreen.classList.add('active');
     catScreen.scrollTop = 0;
+    this.currentSc = 'cat';
 
     document.getElementById('cat-title').innerHTML = icon + ' ' + name;
 
@@ -1049,7 +1050,7 @@ var APP={
            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#888;">لا توجد منتجات في هذا القسم حالياً</div>';
        } else {
            grid.innerHTML = prods.map(p => {
-              return '<div class="prod" onclick="APP.openProduct(\''+p.id+'\')"><img src="'+(p.img||'')+'"><div style="padding:10px;"><div style="font-weight:bold;color:#fff;font-size:14px;margin-bottom:5px;">'+esc(p.name)+'</div><div style="color:#ff27c9;font-weight:900;">'+(p.price||0)+' ر.س</div></div></div>';
+              return '<div class="prod" onclick="APP.openProduct(\''+p.id+'\')"><div class="prod-i"><img src="'+(p.img||'')+'"></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+(p.price||0)+'</span><span class="price-c">ر.س</span></div></div></div>';
            }).join('');
        }
     }
