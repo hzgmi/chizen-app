@@ -1449,12 +1449,24 @@ var APP={
     var order={id:oid,items:JSON.parse(JSON.stringify(this.cart)),subtotal:sub,discount:disc,shipping:shipF,total:total,pickup:pickup,name:name,phone:phone,bank:this.selectedBank,status:'pending'};
     var self=this;
     var receiptFile = document.getElementById('co-receipt') ? document.getElementById('co-receipt').files[0] : null;
-    if (receiptFile && firebase.storage) {
+    if (receiptFile) {
         try {
-            var storageRef = firebase.storage().ref('receipts/' + oid + '_' + Date.now() + '.jpg');
-            await storageRef.put(receiptFile);
-            order.receiptUrl = await storageRef.getDownloadURL();
-        } catch(upErr) { console.log('Receipt upload failed:', upErr); }
+            var formData = new FormData();
+            formData.append('image', receiptFile);
+            var res = await fetch('https://api.imgbb.com/1/upload?key=0207a2f59e64d6e294ab7974e44d23aa', {
+                method: 'POST',
+                body: formData
+            });
+            var data = await res.json();
+            if (data.success && data.data && data.data.url) {
+                order.receiptUrl = data.data.url;
+                console.log('✅ Receipt uploaded to ImgBB:', data.data.url);
+            } else {
+                console.log('ImgBB upload failed:', data);
+            }
+        } catch(upErr) { 
+            console.log('Receipt upload error:', upErr); 
+        }
     }
     if(window.FB&&FB.ready&&FB.addOrder){
       try{
