@@ -931,7 +931,7 @@ var APP={
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
       FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();}});
       FB.getConfig('banners').then(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
-      FB.getConfig('categories').then(function(c){if(c&&c.list){self.cats=c.list;self.renderCats(); if(self.renderBrands) self.renderBrands();}});
+      FB.getConfig('categories').then(function(c){if(c&&c.list){self.cats=c.list;self.renderCats(); if(self.checkServices) self.checkServices(); if(self.renderBrands) self.renderBrands();}});
       FB.getConfig('payments').then(function(p){if(p&&p.list){self.banks=p.list;self.renderBanks();}});
       FB.getConfig('coupons').then(function(c){if(c&&c.list)self.coupons=c.list;});
       FB.getConfig('shipping').then(function(s){if(s)self.shipping=s;});
@@ -1055,6 +1055,20 @@ var APP={
     }
   },
 
+
+
+  checkServices: function() {
+    firebase.firestore().collection('config').doc('services').get().then(function(doc) {
+       if(doc.exists) {
+           var d = doc.data();
+           var fBtn = document.getElementById('tab-flight');
+           var hBtn = document.getElementById('tab-hotel');
+           // إذا كان الأدمن قد أوقف الخدمة، نخفي الزر
+           if(fBtn) fBtn.style.display = d.flights === false ? 'none' : 'block';
+           if(hBtn) hBtn.style.display = d.hotels === false ? 'none' : 'block';
+       }
+    });
+  },
 
   submitFlight: function() {
     var from = document.getElementById('fly-from').value.trim();
