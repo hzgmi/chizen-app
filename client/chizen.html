@@ -634,9 +634,19 @@ input,textarea{-webkit-user-select:text;user-select:text;}
         </div>
       </div>
       <div class="loy" onclick="APP.goTab('points')"><div class="loy-t"><span>💎</span> نقاط الولاء</div><div class="loy-p" id="loyalty">0 نقطة</div></div>
-      <div class="sw"><div class="sb"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" class="search" id="search-in" placeholder="ابحث عن منتج..." oninput="APP.search(this.value)"></div></div>
+      <div style="display:flex; align-items:center; gap:10px; padding:0 15px;"><div style="flex:1;"><div class="sw"><div class="sb"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" class="search" id="search-in" placeholder="ابحث عن منتج..." oninput="APP.search(this.value)"></div></div></div>
+      <div class="ib" onclick="APP.goTab('more')" style="margin-right: 10px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="5" r="3"/><circle cx="12" cy="19" r="3"/></svg>
+      </div>
+</div>
       <div class="cw"><div class="car"><div class="slides" id="slides"></div></div><div class="dots" id="dots"></div></div>
       <div class="sec"><div class="sh"><div class="stl">الأقسام</div><div class="sl2" onclick="APP.filterCat('all')">الكل</div></div><div class="cats" id="cats"></div></div>
+      
+      <div class="sec" id="brands-sec" style="display:none;">
+        <div class="sh"><div class="stl">العلامات التجارية</div></div>
+        <div class="brands" id="brands-list" style="display:flex; gap:10px; overflow-x:auto; padding:10px 15px;"></div>
+      </div>
+
       <div class="sec"><div class="sh"><div class="stl">🔥 المنتجات</div></div><div class="prods" id="prods"></div></div>
     </div>
 
@@ -644,7 +654,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
     <!-- CATEGORY FULL SCREEN -->
     <div class="screen" id="sc-cat">
       <div class="hd" style="display:flex; align-items:center; gap:15px; padding:15px; position:sticky; top:0; background:rgba(2,5,27,0.95); backdrop-filter:blur(10px); z-index:100;">
-        <div onclick="APP.goTab('sc-home')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%;">
+        <div onclick="APP.goTab('home')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </div>
         <div id="cat-title" style="font-weight:900; font-size:20px; color:#fff; font-family:'Tajawal',sans-serif; flex:1;">اسم القسم</div>
@@ -652,6 +662,36 @@ input,textarea{-webkit-user-select:text;user-select:text;}
       <div style="padding:15px 15px 100px 15px;">
          <div id="cat-offers" style="margin-bottom:20px;"></div>
          <div class="prods" id="cat-prods" style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px;"></div>
+      </div>
+    </div>
+
+    
+    <!-- MORE / FLIGHT BOOKING FULL SCREEN -->
+    <div class="screen" id="sc-more">
+      <div class="hd" style="display:flex; align-items:center; gap:15px; padding:15px; position:sticky; top:0; background:rgba(2,5,27,0.95); backdrop-filter:blur(10px); z-index:100;">
+        <div onclick="APP.goTab('home')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </div>
+        <div style="font-weight:900; font-size:20px; color:#fff; font-family:'Tajawal',sans-serif;">المزيد والخدمات</div>
+      </div>
+      <div style="padding:15px 15px 100px 15px;">
+         <div style="background:linear-gradient(135deg, #1F0D35, #00010a); border-radius:20px; padding:20px; border:1px solid #3A1F5A; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+            <div style="font-size:22px; font-weight:900; color:#ff27c9; margin-bottom:5px;">✈️ حجز تذاكر طيران</div>
+            <div style="font-size:12px; color:#888; margin-bottom:15px;">سافر لأي مكان في العالم بأفضل الأسعار</div>
+            
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input id="fly-from" type="text" placeholder="من (مثال: صنعاء)" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+                <input id="fly-to" type="text" placeholder="إلى (مثال: القاهرة)" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input id="fly-date" type="date" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+                <input id="fly-pax" type="number" min="1" value="1" placeholder="عدد المسافرين" style="flex:1; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none;">
+            </div>
+            <input id="fly-name" type="text" placeholder="الاسم الكامل" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:15px;">
+            <input id="fly-phone" type="tel" placeholder="رقم الجوال" style="width:100%; box-sizing:border-box; padding:12px; border-radius:10px; border:1px solid #3A1F5A; background:#00010a; color:#fff; font-family:'Tajawal'; outline:none; margin-bottom:20px;">
+            
+            <button onclick="APP.submitFlight()" style="width:100%; padding:15px; border-radius:12px; background:linear-gradient(135deg, #ff27c9, #8d24ff); color:#fff; font-weight:900; font-size:16px; border:none; font-family:'Tajawal'; cursor:pointer; box-shadow:0 5px 15px rgba(255,39,201,0.3);">تأكيد الحجز وإرسال للطلب</button>
+         </div>
       </div>
     </div>
 
@@ -866,7 +906,7 @@ var APP={
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
       FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();}});
       FB.getConfig('banners').then(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
-      FB.getConfig('categories').then(function(c){if(c&&c.list){self.cats=c.list;self.renderCats();}});
+      FB.getConfig('categories').then(function(c){if(c&&c.list){self.cats=c.list;self.renderCats(); if(self.renderBrands) self.renderBrands();}});
       FB.getConfig('payments').then(function(p){if(p&&p.list){self.banks=p.list;self.renderBanks();}});
       FB.getConfig('coupons').then(function(c){if(c&&c.list)self.coupons=c.list;});
       FB.getConfig('shipping').then(function(s){if(s)self.shipping=s;});
@@ -988,6 +1028,64 @@ var APP={
            }).join('');
        }
     }
+  },
+
+
+  submitFlight: function() {
+    var from = document.getElementById('fly-from').value.trim();
+    var to = document.getElementById('fly-to').value.trim();
+    var date = document.getElementById('fly-date').value;
+    var pax = document.getElementById('fly-pax').value;
+    var name = document.getElementById('fly-name').value.trim();
+    var phone = document.getElementById('fly-phone').value.trim();
+
+    if(!from || !to || !date || !name || !phone) {
+       this.toast('يرجى تعبئة جميع الحقول المطلوبة', 'err');
+       return;
+    }
+
+    var btn = event.target;
+    btn.innerText = 'جاري الإرسال...';
+    btn.disabled = true;
+
+    var orderData = {
+      type: 'flight_booking',
+      details: { from: from, to: to, date: date, pax: pax },
+      customer: { name: name, phone: phone },
+      total: 0,
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      userId: this.user ? this.user.uid : 'guest'
+    };
+
+    firebase.firestore().collection('orders').add(orderData).then(function() {
+       APP.toast('تم استلام طلب الحجز بنجاح! سنتواصل معك قريباً', 'suc');
+       document.getElementById('fly-from').value = '';
+       document.getElementById('fly-to').value = '';
+       document.getElementById('fly-date').value = '';
+       document.getElementById('fly-name').value = '';
+       document.getElementById('fly-phone').value = '';
+       btn.innerText = 'تأكيد الحجز وإرسال للطلب';
+       btn.disabled = false;
+       APP.goTab('home');
+    }).catch(function(e) {
+       APP.toast('حدث خطأ، يرجى المحاولة لاحقاً', 'err');
+       btn.innerText = 'تأكيد الحجز وإرسال للطلب';
+       btn.disabled = false;
+    });
+  },
+
+  renderBrands: function() {
+    var self = this;
+    firebase.firestore().collection('config').doc('brands').get().then(function(doc) {
+       if(doc.exists && doc.data().list && doc.data().list.length > 0) {
+           var brands = doc.data().list;
+           document.getElementById('brands-sec').style.display = 'block';
+           document.getElementById('brands-list').innerHTML = brands.map(function(b) {
+               return '<div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:10px 20px; border-radius:20px; white-space:nowrap; font-weight:bold; color:#fff; font-size:14px; cursor:pointer;" onclick="APP.search(\''+b.name+'\')">'+b.name+'</div>';
+           }).join('');
+       }
+    });
   },
 
   filterCat:function(k){
