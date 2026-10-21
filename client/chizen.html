@@ -623,6 +623,102 @@ input,textarea{-webkit-user-select:text;user-select:text;}
     stroke-linejoin: round;
 }
 
+
+/* ═══ CHIZEN ULTIMATE UI (AMAZON/NOON STYLE) ═══ */
+:root {
+  --bg: #F5F6F8 !important; /* رمادي فاتح جداً للخلفية العامة */
+  --nav: #FFFFFF !important; /* أبيض نقي للبطاقات */
+  --cr: #1C1C1E !important; /* أسود للنصوص */
+  --mt: #8E8E93 !important; /* رمادي للنصوص الفرعية */
+  --bd: #EAEAEA !important; /* حدود ناعمة */
+  --grad: linear-gradient(135deg, #7C3AED, #EC4899) !important; /* بنفسجي ووردي */
+  --pl: #7C3AED !important;
+  --pk: #EC4899 !important;
+}
+
+body, #app, .screen { background: var(--bg) !important; color: var(--cr) !important; }
+
+/* ── الشريط العلوي (Header) ── */
+.hd { background: transparent !important; padding: 15px 20px 10px !important; display: flex; justify-content: space-between; align-items: center; }
+.hd .brand-m { font-family: 'Bodoni Moda', serif !important; font-size: 22px !important; color: #1C1C1E !important; letter-spacing: 2px !important; }
+.hd .hello { display: none !important; } /* إخفاء "أهلاً بك" لجعل الشريط أنظف */
+.hd .name { font-size: 14px !important; color: var(--pl) !important; font-weight: 800 !important; margin-top: 2px; }
+.ha { display: flex; gap: 12px; align-items: center; }
+.ib { background: #FFFFFF !important; border: 1px solid var(--bd) !important; border-radius: 50% !important; width: 42px !important; height: 42px !important; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important; color: #1C1C1E !important; }
+.ib svg { stroke: #1C1C1E !important; width: 20px; height: 20px; }
+
+/* ── شريط البحث ── */
+.sw { padding: 0 20px 15px !important; margin: 0 !important; }
+.sb { background: #FFFFFF !important; border: 1px solid var(--bd) !important; border-radius: 12px !important; padding: 12px 15px !important; box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important; display: flex; align-items: center; gap: 10px; }
+.search { background: transparent !important; color: #1C1C1E !important; font-size: 14px !important; }
+.search::placeholder { color: var(--mt) !important; }
+.si { stroke: var(--mt) !important; width: 18px; height: 18px; }
+
+/* ── نقاط الولاء ── */
+.loy { background: #FFFFFF !important; border: 1px solid var(--bd) !important; border-radius: 14px !important; padding: 12px 15px !important; margin: 0 20px 15px !important; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important; }
+.loy-t { color: #1C1C1E !important; font-weight: 700 !important; font-size: 13px !important; }
+.loy-p { color: var(--pl) !important; font-weight: 900 !important; font-size: 14px !important; }
+
+/* ── البنر (Banner) ── */
+.cw { padding: 0 20px !important; margin-bottom: 0 !important; }
+.car { border-radius: 16px !important; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.06) !important; }
+.slides { border-radius: 16px !important; }
+.dots { margin-top: 10px !important; }
+
+/* ── شريط الحجز السريع (Quick Booking) ── */
+.quick-booking-wrap { padding: 15px 20px 5px !important; margin: 0 !important; }
+.quick-booking-bar { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
+.quick-booking-bar::-webkit-scrollbar { display: none; }
+.qb-card { position: relative; flex-shrink: 0; width: 75px; height: 75px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; border: 2px solid #FFF; }
+.qb-card img { width: 100%; height: 100%; object-fit: cover; }
+.qb-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); }
+.qb-text { position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; color: #FFF; font-size: 10px; font-weight: 900; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
+/* ── الأقسام (الفئات) ── */
+.sec { padding: 15px 20px !important; margin: 0 !important; }
+.sh { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px !important; }
+.stl { font-size: 16px !important; font-weight: 900 !important; color: #1C1C1E !important; }
+.sl2 { color: var(--pl) !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer; }
+.cats { display: flex !important; gap: 15px !important; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.cats::-webkit-scrollbar { display: none; }
+.cat { background: transparent !important; border: none !important; padding: 0 !important; display: flex; flex-direction: column; align-items: center; min-width: 65px; box-shadow: none !important; }
+.cat-i { width: 65px !important; height: 65px !important; border-radius: 50% !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 28px !important; background: #F2F2F7 !important; margin-bottom: 8px !important; }
+/* ألوان دائرية للأقسام */
+.cat:nth-child(1) .cat-i { background: #E0E7FF !important; }
+.cat:nth-child(2) .cat-i { background: #FCE7F3 !important; }
+.cat:nth-child(3) .cat-i { background: #FEF3C7 !important; }
+.cat:nth-child(4) .cat-i { background: #DCFCE7 !important; }
+.cat:nth-child(5) .cat-i { background: #F3E8FF !important; }
+.cat-n { font-size: 12px !important; font-weight: 700 !important; color: #1C1C1E !important; }
+
+/* ── المنتجات (Products) ── */
+.prods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px !important; padding: 0 20px 20px !important; }
+.prod { background: #FFFFFF !important; border: none !important; border-radius: 16px !important; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04) !important; display: flex; flex-direction: column; }
+.prod-i { height: 150px !important; background: #F9F9F9 !important; display: flex; align-items: center; justify-content: center; padding: 10px; }
+.prod-i img { width: 100%; height: 100%; object-fit: contain !important; mix-blend-mode: multiply; }
+.prod-inf { padding: 12px !important; background: #FFF !important; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.prod-n { font-size: 13px !important; font-weight: 700 !important; color: #1C1C1E !important; line-height: 1.4 !important; margin-bottom: 8px !important; min-height: 36px; }
+.pr { display: flex; align-items: baseline; gap: 6px; }
+.price { font-size: 15px !important; font-weight: 900 !important; color: var(--pl) !important; }
+.price-c { font-size: 10px !important; color: var(--mt) !important; }
+.price-o { font-size: 10px !important; color: var(--mt) !important; text-decoration: line-through; }
+.prod-b { background: var(--grad) !important; color: #FFF !important; font-weight: 800 !important; border-radius: 6px !important; padding: 3px 8px !important; top: 10px !important; right: 10px !important; font-size: 9px !important; }
+.prod-f { top: 10px !important; left: 10px !important; background: #FFF !important; box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; border-radius: 50% !important; }
+.prod-f svg { stroke: #1C1C1E !important; }
+
+/* ── الشريط السفلي (Bottom Nav) ── */
+.nav-bar { background: #FFFFFF !important; border-top: 1px solid var(--bd) !important; box-shadow: 0 -2px 15px rgba(0,0,0,0.03) !important; padding: 10px 0 !important; }
+.nav-item { color: var(--mt) !important; }
+.nav-item svg { stroke: var(--mt) !important; width: 22px; height: 22px; }
+.nav-item .lbl { font-size: 10px !important; margin-top: 4px; }
+.nav-item.active { color: var(--pl) !important; }
+.nav-item.active svg { stroke: var(--pl) !important; }
+.nav-item.active .lbl { font-weight: 900 !important; }
+
+/* زر الحجز الفاخر */
+.premium-booking-btn { background: var(--grad) !important; color: #FFF !important; border: none !important; border-radius: 12px !important; padding: 10px 16px !important; font-weight: 800 !important; font-size: 13px !important; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2) !important; }
+.premium-booking-btn svg { stroke: #FFF !important; width: 16px; height: 16px; }
+
 </style>
 
 <style>
@@ -1299,6 +1395,12 @@ var APP={
     });
   },
 
+
+
+  openBookingTab: function(tab) {
+    this.goTab('booking');
+    this.switchBookingTab(tab);
+  },
 
   switchBookingTab: function(tab) {
     document.querySelectorAll('.booking-form').forEach(function(el){ el.classList.remove('active'); });
