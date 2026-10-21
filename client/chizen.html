@@ -896,7 +896,12 @@ input,textarea{-webkit-user-select:text;user-select:text;}
         </div>
         <div class="cs"><div class="cst"><div class="cn">3</div>طريقة الدفع</div><div class="bank-l" id="bank-list"></div></div>
         <div class="tb"><div class="tr"><span>المجموع</span><span id="co-sub">0 ر.س</span></div><div class="tr"><span>الشحن</span><span id="co-ship">مجاني</span></div><div class="tf"><span>الإجمالي</span><span id="co-total">0 ر.س</span></div></div>
-        <button class="btn-p" style="margin-top:16px;" onclick="APP.confirmOrder()">تأكيد الطلب</button>
+        
+      <div style="margin:15px 0;padding:15px;background:rgba(255,255,255,.05);border:1px dashed #ff27c9;border-radius:12px;text-align:center">
+        <div style="color:#fff;font-weight:bold;margin-bottom:10px;font-family:'Tajawal'">📎 ارفق صورة إيصال التحويل (اختياري)</div>
+        <input type="file" id="co-receipt" accept="image/*" style="color:#aaa;font-family:'Tajawal';width:100%">
+      </div>
+<button class="btn-p" style="margin-top:16px;" onclick="APP.confirmOrder()">تأكيد الطلب</button>
       </div>
     </div>
 
@@ -1020,6 +1025,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 <div class="dlg" id="dlg" onclick="if(event.target===this)APP.closeDlg()"><div class="dlb" id="dlb"></div></div>
 <div class="toast" id="toast"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
@@ -1442,6 +1448,14 @@ var APP={
     var total=Math.max(0,sub-disc+shipF);
     var order={id:oid,items:JSON.parse(JSON.stringify(this.cart)),subtotal:sub,discount:disc,shipping:shipF,total:total,pickup:pickup,name:name,phone:phone,bank:this.selectedBank,status:'pending'};
     var self=this;
+    var receiptFile = document.getElementById('co-receipt') ? document.getElementById('co-receipt').files[0] : null;
+    if (receiptFile && firebase.storage) {
+        try {
+            var storageRef = firebase.storage().ref('receipts/' + oid + '_' + Date.now() + '.jpg');
+            await storageRef.put(receiptFile);
+            order.receiptUrl = await storageRef.getDownloadURL();
+        } catch(upErr) { console.log('Receipt upload failed:', upErr); }
+    }
     if(window.FB&&FB.ready&&FB.addOrder){
       try{
         await FB.addOrder(order);
@@ -1905,5 +1919,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications) {
+        const PushNotifications = window.Capacitor.Plugins.PushNotifications;
+        PushNotifications.requestPermissions().then(result => {
+            if (result.receive === 'granted') { PushNotifications.register(); }
+        });
+        PushNotifications.addListener('registration', (token) => {
+            if (window.APP && window.APP.user && firebase) {
+                firebase.firestore().collection('users').doc(window.APP.user.uid).set({
+                    fcmToken: token.value, lastTokenUpdate: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            }
+        });
+        PushNotifications.addListener('pushNotificationActionPerformed', () => {
+            if (window.APP) window.APP.goTab('orders');
+        });
+    }
+});
+</script>
 </body>
 </html>
