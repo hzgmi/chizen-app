@@ -229,7 +229,7 @@
           "X-Title": "CHIZEN Store"
         },
         body: JSON.stringify({
-          model: "openrouter/free",
+          model: "google/gemini-2.0-flash-lite-preview-02-05:free",
           messages: [
             { role: "system", content: "أنت مساعد ذكي لمتجر CHIZEN اليمني. مهمتك فقط الإجابة على أسئلة العملاء المتعلقة بالمتجر (منتجات، أقسام، أسعار، دفع، توصيل، تتبع طلبات). إذا سألك المستخدم أي سؤال خارجي، اعتذر بلطف وقل: 'أنا مساعد شيزن، وأقدر أساعدك فقط في كل ما يتعلق بتسوقك من تطبيقنا الحبيب.' ولا تجب على أي سؤال خارجي مهما حدث. تحدث بلهجة ودودة." },
             { role: "user", content: userMessage }
