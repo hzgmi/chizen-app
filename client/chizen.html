@@ -1254,6 +1254,34 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   #bottom-nav .bn-it span { font-size: 11px !important; font-weight: bold !important; }
 </style>
 
+
+<style id="final-top-layout">
+  /* تصفير الهوامش المتضاربة */
+  .sw { margin: 0 !important; padding: 0 !important; }
+  .search-wrapper { margin: 0 15px 15px 15px !important; padding: 0 !important; }
+  
+  /* ضبط الشريط الماشي */
+  .top-marquee { margin: 0 !important; padding: 8px 0 !important; width: 100% !important; display: flex !important; }
+  
+  /* ضبط النقاط */
+  .loy { margin: 0 15px 15px 15px !important; padding: 15px !important; }
+  
+  /* ضبط الهيدر */
+  .app-header { margin: 0 !important; padding: 15px !important; height: auto !important; min-height: 70px !important; }
+  
+  /* إصلاح زر الذكاء الاصطناعي (تصغيره ورفعه) */
+  .ai-fab, #ai-btn, .chat-fab, [class*="ai-button"] {
+    width: 50px !important; height: 50px !important;
+    bottom: 80px !important; left: 15px !important;
+    position: fixed !important; z-index: 999 !important;
+    box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3) !important;
+  }
+  .ai-fab svg, [class*="ai-button"] svg { width: 24px !important; height: 24px !important; }
+  
+  /* ضبط البنر ليكون متناسقاً */
+  #slides { min-height: 160px !important; max-height: 180px !important; }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -1262,10 +1290,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <!-- HOME -->
     <div class="screen active" id="sc-home">
       <div class="st"></div>
-      <div class="ship"><div class="ship-t">
-        <span>🚚 شحن مجاني للطلبات فوق 200 ر.س</span><span>⚡ خصم 20% بكود CHIZEN20</span><span>🎁 هدية مع كل طلب فوق 500 ر.س</span>
-        <span>🚚 شحن مجاني للطلبات فوق 200 ر.س</span><span>⚡ خصم 20% بكود CHIZEN20</span><span>🎁 هدية مع كل طلب فوق 500 ر.س</span>
-      </div></div>
+      
       
 <!-- شريط الخصم الماشي -->
 <div class="top-marquee">
@@ -1311,10 +1336,8 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   </div>
 </div>
 
-</div>
-
       <div class="loy" onclick="APP.goTab('points')"><div class="loy-t"><span>💎</span> نقاط الولاء</div><div class="loy-p" id="loyalty">0 نقطة</div></div>
-      <div style="display:flex; align-items:center; gap:10px; padding:0 15px;"><div style="flex:1;"><div class="sw"><div class="sb"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" class="search" id="search-in" placeholder="ابحث عن منتج..." oninput="APP.search(this.value)"></div></div></div>
+      <div class="search-wrapper"><div class="sw"><div class="sb"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" class="search" id="search-in" placeholder="ابحث عن منتج..." oninput="APP.search(this.value)"></div></div>
       
 
 
