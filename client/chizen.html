@@ -1099,6 +1099,161 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="chizen-master-theme">
+  /* ═══════ أساسيات ═══════ */
+  html, body {
+    margin: 0; padding: 0;
+    background: linear-gradient(180deg, #F5EFFF 0%, #FCEBF3 50%, #F8F9FA 100%) !important;
+    background-attachment: fixed !important;
+    overflow-x: hidden !important;
+  }
+  #sc-home { padding-top: 0 !important; }
+  
+  /* ═══════ شريط الخصم الماشي ═══════ */
+  .top-marquee {
+    background: linear-gradient(90deg, #8d24ff, #ff27c9) !important;
+    color: #fff !important;
+    padding: 8px 0 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 32px !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+  .marquee-content {
+    display: inline-block !important;
+    animation: marquee 18s linear infinite !important;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* ═══════ الهيدر ═══════ */
+  .app-header {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 15px !important;
+    background: transparent !important;
+    width: 100% !important;
+    height: 70px !important;
+    box-sizing: border-box !important;
+  }
+  .header-left, .header-right {
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .header-left { justify-content: flex-start !important; }
+  .header-right { justify-content: flex-end !important; }
+  .header-center {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin: 0 10px !important;
+  }
+  .brand-logo {
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    line-height: 1 !important;
+  }
+  .brand-sub { font-size: 10px !important; color: #6B7280 !important; font-weight: 700 !important; }
+  
+  .icon-btn {
+    width: 36px !important; height: 36px !important;
+    background: #fff !important;
+    border-radius: 50% !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    box-shadow: 0 3px 8px rgba(106, 27, 154, 0.1) !important;
+    position: relative !important;
+  }
+  .icon-btn svg { width: 20px !important; height: 20px !important; stroke: #6A1B9A !important; }
+  .icon-btn .badge {
+    position: absolute !important; top: -2px !important; right: -2px !important;
+    background: #D81B60 !important; color: #fff !important;
+    font-size: 9px !important; font-weight: bold !important;
+    border-radius: 50% !important; min-width: 16px !important; height: 16px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    border: 2px solid #fff !important;
+  }
+  .user-info { display: flex !important; flex-direction: column !important; align-items: flex-end !important; }
+  .user-info .username { font-size: 14px !important; font-weight: 900 !important; color: #1f2937 !important; white-space: nowrap !important; }
+  .user-info .welcome { font-size: 10px !important; color: #6B7280 !important; }
+  .user-avatar {
+    width: 38px !important; height: 38px !important;
+    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
+    border-radius: 50% !important; display: flex !important;
+    align-items: center !important; justify-content: center !important;
+  }
+
+  /* ═══════ شريط النقاط والبحث ═══════ */
+  .loy {
+    margin: 15px !important;
+    padding: 15px !important;
+    background: #fff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02) !important;
+    display: flex !important; justify-content: space-between !important; align-items: center !important;
+    border: 1px solid #eee !important;
+  }
+  .loy-t { font-size: 14px !important; color: #4b5563 !important; }
+  .loy-p { font-size: 18px !important; color: #D81B60 !important; font-weight: 900 !important; }
+
+  .sw { margin: 0 15px 15px 15px !important; }
+  .sb {
+    background: #fff !important;
+    border-radius: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 12px 15px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02) !important;
+    border: 1px solid #eee !important;
+  }
+  .search { border: none !important; background: transparent !important; outline: none !important; font-size: 14px !important; flex: 1 !important; }
+
+  /* ═══════ الأقسام والحجوزات ═══════ */
+  #cats { display: flex !important; overflow-x: auto !important; padding: 15px !important; gap: 15px !important; scrollbar-width: none; }
+  #cats::-webkit-scrollbar { display: none; }
+  .cat { display: flex !important; flex-direction: column !important; align-items: center !important; min-width: 60px !important; }
+  .cat-i { width: 60px !important; height: 60px !important; font-size: 30px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 20px !important; }
+  
+  .booking-row-container { display: flex !important; align-items: center !important; margin: 15px !important; padding: 15px 0 !important; background: #fff !important; border-radius: 16px !important; border: 1px solid #eee !important; }
+  .booking-item { flex: 1 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 5px !important; }
+  .booking-label { font-size: 12px !important; font-weight: 700 !important; }
+  .booking-divider { width: 1px !important; height: 40px !important; background: #eee !important; }
+
+  /* ═══════ البنر والمنتجات ═══════ */
+  #slides { margin: 15px !important; border-radius: 16px !important; overflow: hidden !important; height: 180px !important; }
+  #prods { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; padding: 15px !important; }
+
+  /* ═══════ الشريط السفلي ═══════ */
+  #bottom-nav {
+    background: #fff !important;
+    height: 70px !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    box-shadow: 0 -2px 15px rgba(0,0,0,0.05) !important;
+    border-top: 1px solid #eee !important;
+  }
+  #bottom-nav .bn-it { flex: 1 !important; display: flex !important; flex-direction: column !important; align-items: center !important; color: #9ca3af !important; }
+  #bottom-nav .bn-it.active { color: #D81B60 !important; }
+  #bottom-nav .bn-it svg { width: 24px !important; height: 24px !important; margin-bottom: 4px; }
+  #bottom-nav .bn-it span { font-size: 11px !important; font-weight: bold !important; }
+</style>
+
 </head>
 <body>
 <div id="app">
