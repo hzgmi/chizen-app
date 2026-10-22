@@ -1453,6 +1453,166 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   [class*="chat-input"] input { background: #f4f6fa !important; color: #1f2937 !important; }
 </style>
 
+
+<style id="premium-header-final">
+  /* ═════════ الشريط الماشي (مُحسّن) ═════════ */
+  .top-marquee {
+    margin: 0 !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+    background: linear-gradient(90deg, #6A1B9A, #D81B60, #6A1B9A) !important;
+    background-size: 200% 100% !important;
+    animation: shimmer 4s linear infinite !important;
+    box-shadow: 0 2px 8px rgba(106,27,154,0.15) !important;
+    position: relative !important;
+    z-index: 50 !important;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  .marquee-content span {
+    padding: 0 30px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+    display: inline-block !important;
+  }
+
+  /* ═════════ الهيدر الرئيسي ═════════ */
+  .app-header {
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    padding: 8px 15px 12px !important;
+    background: transparent !important;
+    gap: 8px !important;
+    min-height: 64px !important;
+  }
+
+  /* الأيقونات - على اليمين الآن */
+  .header-left {
+    justify-content: flex-end !important;
+    gap: 7px !important;
+    flex: 0 0 auto !important;
+  }
+
+  /* المستخدم - على اليسار الآن */
+  .header-right {
+    justify-content: flex-start !important;
+    flex-direction: row-reverse !important;
+    gap: 8px !important;
+    flex: 0 0 auto !important;
+  }
+  .user-info {
+    align-items: flex-end !important;
+    text-align: right !important;
+  }
+  .user-info .username {
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: #1f2937 !important;
+    line-height: 1.2 !important;
+    display: block !important;
+  }
+  .user-info .welcome {
+    font-size: 9px !important;
+    color: #9ca3af !important;
+    font-weight: 600 !important;
+    display: block !important;
+  }
+
+  /* الشعار - الوسط مرفوع ومتوسط بدقة */
+  .header-center {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: -4px 0 0 0 !important;
+    padding: 0 !important;
+  }
+  .brand-logo {
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    letter-spacing: 1.5px !important;
+    line-height: 1 !important;
+    display: block !important;
+    text-align: center !important;
+    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin: 0 !important;
+  }
+  .brand-sub {
+    font-size: 10px !important;
+    color: #6b7280 !important;
+    font-weight: 600 !important;
+    margin-top: 4px !important;
+    letter-spacing: 0.2px !important;
+    display: block !important;
+    text-align: center !important;
+    line-height: 1 !important;
+  }
+
+  /* الأيقونات الفردية (تحسين بصري) */
+  .icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+    background: #ffffff !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 6px rgba(106,27,154,0.08) !important;
+    border: 1px solid #f0eaf5 !important;
+    position: relative !important;
+  }
+  .icon-btn svg {
+    width: 17px !important;
+    height: 17px !important;
+    stroke: #6A1B9A !important;
+  }
+  .icon-btn .badge {
+    position: absolute !important;
+    top: -3px !important;
+    right: -3px !important;
+    background: #D81B60 !important;
+    color: #fff !important;
+    font-size: 9px !important;
+    font-weight: 900 !important;
+    min-width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid #fff !important;
+    padding: 0 3px !important;
+  }
+  .user-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(106,27,154,0.2) !important;
+  }
+  .user-avatar svg { width: 18px !important; height: 18px !important; }
+
+  /* الشاشات الصغيرة */
+  @media (max-width: 380px) {
+    .brand-logo { font-size: 24px !important; }
+    .brand-sub { font-size: 9px !important; }
+    .user-info .username { font-size: 11px !important; max-width: 70px !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+    .icon-btn { width: 28px !important; height: 28px !important; }
+    .icon-btn svg { width: 15px !important; height: 15px !important; }
+    .user-avatar { width: 30px !important; height: 30px !important; }
+  }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -1460,15 +1620,18 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
     <!-- HOME -->
     <div class="screen active" id="sc-home">
-      <div class="st"></div>
-      
-      
-<!-- شريط الخصم الماشي -->
-<div class="top-marquee">
+
+    <div class="top-marquee">
   <div class="marquee-content">
     <span>عروض خاصة على الإلكترونيات والواف | خصم كتي 0% لغاية محدودة | شحن مجاني للطلبات فوق 100 ر.س</span>
   </div>
 </div>
+
+      <div class="st"></div>
+      
+      
+<!-- شريط الخصم الماشي -->
+
 
 <!-- الهيدر الرئيسي -->
 
