@@ -1056,6 +1056,30 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="cats-design-fix">
+  #cats { 
+    display: flex !important; gap: 15px !important; overflow-x: auto !important; padding: 15px !important; 
+    scrollbar-width: none;
+  }
+  #cats::-webkit-scrollbar { display: none; }
+  .cat { 
+    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 8px !important; 
+    cursor: pointer !important; min-width: 68px !important; 
+  }
+  .cat-i { 
+    width: 64px !important; height: 64px !important; border-radius: 20px !important; 
+    display: flex !important; align-items: center !important; justify-content: center !important; 
+    font-size: 32px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
+    transition: transform 0.2s;
+  }
+  .cat:active .cat-i { transform: scale(0.9); }
+  .cat-n { 
+    font-size: 13px !important; font-weight: 700 !important; color: #374151 !important; text-align: center !important; 
+    white-space: nowrap;
+  }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -1457,6 +1481,20 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 <script src="firebase-config.js"></script>
 <script src="firebase-service.js"></script>
 <script>
+
+// ================= الأقسام الأساسية المثبتة =================
+window.FIXED_CATS = [
+  { key: 'electronics', name: 'الإلكترونيات', icon: '🎧', bg: '#e0e7ff' },
+  { key: 'fashion', name: 'الأزياء', icon: '👜', bg: '#f3e8ff' },
+  { key: 'home', name: 'المنزل', icon: '🛋️', bg: '#dcfce7' },
+  { key: 'beauty', name: 'الجمال', icon: '💄', bg: '#fce7f3' },
+  { key: 'kids', name: 'الأطفال', icon: '🧸', bg: '#fef9c3' },
+  { key: 'sports', name: 'الرياضة', icon: '👟', bg: '#e0f2fe' },
+  { key: 'tools', name: 'الأدوات المنزلية', icon: '🎒', bg: '#e0e7ff' }
+];
+// ============================================================
+
+
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 var APP={
   state:{lang:'ar',theme:'dark',notifications:true,offers:true,orderNotifs:true,biometric:false,fontSize:'medium',user:null},
@@ -1494,7 +1532,21 @@ var APP={
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
       FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();}});
       FB.getConfig('banners').then(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
-      FB.getConfig('categories').then(function(c){if(c&&c.list){self.cats=c.list;self.renderCats(); if(self.checkServices) self.checkServices(); if(self.renderBrands) self.renderBrands();}});
+      FB.getConfig('categories').then(function(c){
+  var dbCats = (c && c.list) ? c.list : [];
+  // إزالة أي قسم مكرر من الداتابيس يطابق الأقسام الثابتة
+  var fixedKeys = window.FIXED_CATS.map(function(x){ return x.key; });
+  var fixedNames = window.FIXED_CATS.map(function(x){ return x.name; });
+  var extraCats = dbCats.filter(function(x){
+    return fixedKeys.indexOf(x.key) === -1 && fixedNames.indexOf(x.name) === -1;
+  });
+  
+  // دمج الأقسام الثابتة (أولاً) + الجديدة
+  self.cats = window.FIXED_CATS.concat(extraCats);
+  self.renderCats();
+  if(self.checkServices) self.checkServices();
+  if(self.renderBrands) self.renderBrands();
+});
       FB.getConfig('payments').then(function(p){if(p&&p.list){self.banks=p.list;self.renderBanks();}});
       FB.getConfig('coupons').then(function(c){if(c&&c.list)self.coupons=c.list;});
       FB.getConfig('shipping').then(function(s){if(s)self.shipping=s;});
@@ -1558,7 +1610,13 @@ var APP={
   
   renderCats:function(){
     var c=document.getElementById('cats');if(!c)return;
-    c.innerHTML=this.cats.map(function(cat){return '<div class="cat" onclick="APP.openCatPage(\''+esc(cat.key)+'\',\''+esc(cat.name)+'\',\''+esc(cat.icon||'📦')+'\')"><div class="cat-i">'+esc(cat.icon||'📦')+'</div><div class="cat-n">'+esc(cat.name)+'</div></div>';}).join('');
+    c.innerHTML=this.cats.map(function(cat){
+      var bgColor = cat.bg || 'rgba(0,0,0,0.05)';
+      return '<div class="cat" onclick="APP.openCatPage(\''+esc(cat.key)+'\',\''+esc(cat.name)+'\',\''+esc(cat.icon||'📦')+'\')">' +
+             '<div class="cat-i" style="background:'+bgColor+'">'+esc(cat.icon||'📦')+'</div>' +
+             '<div class="cat-n">'+esc(cat.name)+'</div>' +
+             '</div>';
+    }).join('');
   },
   
   renderProducts:function(list){
