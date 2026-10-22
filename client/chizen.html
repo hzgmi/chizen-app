@@ -950,457 +950,152 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 }
 </style>
 
-<style id="ui-light-fix">
-  body { background: var(--bg) !important; color: var(--cr) !important; }
-  .bn-it { transition: color 0.2s; }
-  .bn-it.active { color: #D81B60 !important; }
-  .bn-it.active svg { stroke: #D81B60 !important; }
-  .hd { background: rgba(255,255,255,0.95) !important; border-bottom: 1px solid #e5e7eb; }
-  .hd svg { stroke: #1f2937 !important; }
-  .hd div[style*="rgba(255,255,255,0.1)"] { background: rgba(0,0,0,0.05) !important; }
-</style>
 
 
 
 
 
-<style id="nav-width-fix">
-  #bottom-nav { display: flex !important; justify-content: space-around !important; align-items: stretch !important; padding: 0 !important; height: 65px; }
-  #bottom-nav .bn-it { flex: 1 !important; padding: 8px 0 !important; margin: 0 !important; border-radius: 0; height: 100%; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; }
-  #bottom-nav .bn-it:active { background: rgba(255,39,201,0.05); }
-</style>
 
 
-<style id="booking-row-css">
-  .booking-row-container { display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; margin: 15px 15px 20px 15px; padding: 12px 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-  .booking-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: transform 0.2s; }
-  .booking-item:active { transform: scale(0.95); }
-  .booking-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; }
-  .booking-icon svg { width: 32px; height: 32px; }
-  .booking-label { font-size: 13px; font-weight: 700; color: #374151; }
-  .booking-divider { width: 1px; height: 45px; background: #f3f4f6; }
-  .premium-booking-btn { display: none !important; }
-</style>
 
 
-<style id="top-header-css">
-  /* شريط الخصم الماشي */
-  .top-marquee {
-    background: linear-gradient(90deg, #6A1B9A, #D81B60);
-    color: #fff;
-    padding: 8px 0;
-    font-size: 13px;
-    font-weight: 600;
-    overflow: hidden;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-  }
-  .marquee-content {
-    display: inline-block;
-    animation: marquee 18s linear infinite;
-  }
-  @keyframes marquee {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="chizen-master-theme">
+  /* =========================================
+     CHIZEN ROYAL THEME (MASTER CSS)
+     ========================================= */
+  :root {
+    --primary: #6A1B9A;
+    --secondary: #D81B60;
+    --grad: linear-gradient(135deg, #6A1B9A, #D81B60);
+    --text: #1f2937;
   }
 
-  /* الهيدر الجديد */
-  .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background: #ffffff;
-  }
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .user-avatar {
-    width: 42px; height: 42px;
-    background: linear-gradient(135deg, #6A1B9A, #9C27B0);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .user-info { display: flex; flex-direction: column; align-items: flex-start; }
-  .user-info .welcome { font-size: 13px; color: #6b7280; font-weight: 600; }
-  .user-info .username { font-size: 15px; font-weight: 900; color: #1f2937; }
-  
-  .header-center { display: flex; flex-direction: column; align-items: center; margin-left: auto; margin-right: auto; }
-  .brand-logo {
-    font-size: 28px; font-weight: 900; font-family: 'Tajawal', sans-serif;
-    background: linear-gradient(135deg, #6A1B9A, #D81B60);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 1px;
-  }
-  .brand-sub { font-size: 11px; color: #1f2937; font-weight: 600; margin-top: -2px; }
-
-  .header-left { display: flex; gap: 15px; align-items: center; }
-  .icon-btn {
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px;
-    cursor: pointer;
-  }
-  .icon-btn svg { width: 26px; height: 26px; stroke: #1f2937; fill: none; stroke-width: 2; }
-  .icon-btn .badge {
-    position: absolute; top: -3px; right: -6px;
-    background: #D81B60;
-    color: #fff; font-size: 11px; font-weight: bold;
-    border-radius: 50%; min-width: 18px; height: 18px;
-    display: flex; align-items: center; justify-content: center;
-    border: 2px solid #fff;
-  }
-</style>
-
-
-<style id="cats-design-fix">
-  #cats { 
-    display: flex !important; gap: 15px !important; overflow-x: auto !important; padding: 15px !important; 
-    scrollbar-width: none;
-  }
-  #cats::-webkit-scrollbar { display: none; }
-  .cat { 
-    display: flex !important; flex-direction: column !important; align-items: center !important; gap: 8px !important; 
-    cursor: pointer !important; min-width: 68px !important; 
-  }
-  .cat-i { 
-    width: 64px !important; height: 64px !important; border-radius: 20px !important; 
-    display: flex !important; align-items: center !important; justify-content: center !important; 
-    font-size: 32px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
-    transition: transform 0.2s;
-  }
-  .cat:active .cat-i { transform: scale(0.9); }
-  .cat-n { 
-    font-size: 13px !important; font-weight: 700 !important; color: #374151 !important; text-align: center !important; 
-    white-space: nowrap;
-  }
-</style>
-
-
-
-
-
-<style id="ui-true-responsive">
-  /* إعدادات عامة لمنع التمرير الأفقي */
-  html, body { width: 100% !important; max-width: 100vw !important; overflow-x: hidden !important; margin: 0; padding: 0; }
-  * { box-sizing: border-box; }
-
-  /* 1. شريط الخصم (ارتفاع ثابت ومنع التداخل) */
-  .top-marquee {
-    height: 32px !important; padding: 0 !important; display: flex !important; align-items: center !important;
-    font-size: clamp(10px, 3vw, 13px) !important; overflow: hidden !important;
-  }
-
-  /* 2. الهيدر (مرن بالكامل) */
-  .app-header {
-    display: flex !important; justify-content: space-between !important; align-items: center !important;
-    padding: clamp(8px, 2vw, 15px) !important; width: 100% !important;
-  }
-  .header-right { flex: 0 0 auto; display: flex; align-items: center; gap: clamp(5px, 2vw, 10px); }
-  .user-avatar { width: clamp(30px, 8vw, 42px) !important; height: clamp(30px, 8vw, 42px) !important; }
-  .user-info .welcome { font-size: clamp(8px, 2.5vw, 11px) !important; }
-  .user-info .username { font-size: clamp(11px, 3.5vw, 15px) !important; white-space: nowrap; }
-
-  .header-center { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; margin: 0; }
-  .brand-logo { font-size: clamp(18px, 5.5vw, 26px) !important; }
-  .brand-sub { font-size: clamp(8px, 2.2vw, 10px) !important; }
-
-  .header-left { flex: 0 0 auto; display: flex; gap: clamp(5px, 2vw, 12px); }
-  .icon-btn { width: clamp(24px, 7vw, 34px) !important; height: clamp(24px, 7vw, 34px) !important; }
-  .icon-btn svg { width: clamp(18px, 5.5vw, 26px) !important; height: clamp(18px, 5.5vw, 26px) !important; }
-  .icon-btn .badge { 
-    width: clamp(14px, 3.5vw, 18px) !important; height: clamp(14px, 3.5vw, 18px) !important; 
-    font-size: clamp(8px, 2vw, 11px) !important; top: -2px !important; right: -4px !important; 
-  }
-
-  /* 3. شريط النقاط والبحث */
-  .loy { padding: clamp(10px, 2.5vw, 15px) !important; margin: clamp(8px, 2vw, 15px) !important; border-radius: clamp(10px, 2vw, 16px) !important; }
-  .loy-t { font-size: clamp(10px, 3vw, 13px) !important; }
-  .loy-p { font-size: clamp(14px, 4vw, 18px) !important; }
-  
-  .sw { margin: 0 clamp(8px, 2vw, 15px) !important; }
-  .search { font-size: clamp(11px, 3.2vw, 14px) !important; padding: clamp(8px, 2vw, 12px) !important; }
-
-  /* 4. الأقسام (مرنة ولا تقص الحواف) */
-  #cats {
-    display: flex !important; overflow-x: auto !important; width: 100% !important;
-    gap: clamp(8px, 3vw, 15px) !important; padding: clamp(10px, 3vw, 15px) !important;
-  }
-  #cats::-webkit-scrollbar { display: none; }
-  .cat { min-width: clamp(55px, 16vw, 75px) !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
-  .cat-i {
-    width: clamp(45px, 13vw, 64px) !important; height: clamp(45px, 13vw, 64px) !important;
-    font-size: clamp(22px, 7vw, 32px) !important; border-radius: clamp(12px, 3.5vw, 20px) !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-  }
-  .cat-n { font-size: clamp(9px, 2.8vw, 13px) !important; }
-
-  /* 5. شريط الحجوزات (منع النصوص من الالتفاف) */
-  .booking-row-container {
-    display: flex !important; flex-wrap: nowrap !important; align-items: center !important; justify-content: space-between !important;
-    margin: 10px clamp(8px, 2vw, 15px) !important; padding: clamp(8px, 2vw, 12px) 0 !important;
-  }
-  .booking-item { flex: 1 !important; min-width: 0 !important; }
-  .booking-label { font-size: clamp(9px, 2.8vw, 12px) !important; white-space: nowrap !important; }
-  .booking-icon svg { width: clamp(22px, 6.5vw, 32px) !important; height: clamp(22px, 6.5vw, 32px) !important; }
-  .booking-divider { height: clamp(30px, 8vw, 45px) !important; }
-
-  /* 6. الشريط السفلي */
-  #bottom-nav { height: clamp(55px, 15vw, 70px) !important; }
-  #bottom-nav .bn-it span { font-size: clamp(10px, 2.8vw, 12px) !important; }
-  #bottom-nav .bn-it svg { width: clamp(20px, 5.5vw, 24px) !important; height: clamp(20px, 5.5vw, 24px) !important; }
-
-  /* 7. زر الذكاء الاصطناعي (رفعه للأعلى قليلاً) */
-  .ai-fab, #ai-btn, .chat-fab, [class*="ai-button"] { bottom: 80px !important; left: 15px !important; }
-</style>
-
-
-<style id="header-force-fix">
-  /* منع التفاف الهيدر نهائياً */
-  .app-header {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    justify-content: space-between !important;
-    align-items: center !important;
+  /* الخلفية الملكية */
+  html, body, #sc-home, .screen {
+    background: linear-gradient(180deg, #F5EFFF 0%, #FCEBF3 50%, #F8F9FA 100%) !important;
+    background-attachment: fixed !important;
+    color: var(--text) !important;
+    overflow-x: hidden !important;
     width: 100% !important;
     max-width: 100vw !important;
-    overflow: hidden !important;
-    gap: 6px !important;
   }
-  
-  .app-header .header-right,
-  .app-header .header-left {
-    flex-shrink: 0 !important;
-    flex-wrap: nowrap !important;
-    display: flex !important;
-    align-items: center !important;
-  }
-  
-  .app-header .header-center {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-    text-align: center !important;
-  }
-  
-  /* الشعار مرن دقيق لكل الشاشات */
-  .brand-logo {
-    font-size: clamp(18px, 4.5vw, 26px) !important;
-    line-height: 1.1 !important;
-    white-space: nowrap !important;
-    letter-spacing: 0.5px !important;
-  }
-  
-  .brand-sub {
-    font-size: clamp(8px, 2vw, 10px) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  
-  /* اسم المستخدم مقصوص إن طال */
-  .user-info .username {
-    font-size: clamp(11px, 3vw, 14px) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 90px !important;
-  }
-  
-  .user-info .welcome {
-    font-size: clamp(9px, 2.3vw, 11px) !important;
-    white-space: nowrap !important;
-  }
-  
-  /* إزالة أي مسافة فارغة من هيدرات قديمة */
-  .hd { display: none !important; }
-  
-  /* منع التداخل على الشاشات الصغيرة جداً */
-  @media (max-width: 360px) {
-    .brand-logo { font-size: 18px !important; }
-    .brand-sub { display: none !important; }
-    .user-info .welcome { display: none !important; }
-    .user-info .username { font-size: 11px !important; }
-  }
-</style>
+  *, *::before, *::after { box-sizing: border-box; }
 
-
-<style id="royal-background">
-  /* 1. الخلفية العامة للتطبيق بالكامل (تدرج ناعم جداً) */
-  html, body {
-    background: linear-gradient(180deg, #F5EFFF 0%, #FCEBF3 50%, #F8F9FA 100%) !important;
-    background-attachment: fixed !important;
-  }
-  
-  /* 2. شاشة الرئيسية (نفس التدرج) */
-  #sc-home, .screen {
-    background: linear-gradient(180deg, #F5EFFF 0%, #FCEBF3 50%, #F8F9FA 100%) !important;
-    background-attachment: fixed !important;
-  }
-  
-  /* 3. البطاقات والأقسام تبقى بيضاء لتبرز */
-  .loy, 
-  .sw, 
-  .sw .sb,
-  .booking-row-container,
-  .cat-i,
-  .prod-card, 
-  .p-card, 
-  .pc,
-  .card {
-    background: #ffffff !important;
-  }
-  
-  /* 4. إضافة ظل ناعم للبطاقات لتعطي عمقاً فخماً */
-  .loy, .sw, .booking-row-container {
-    box-shadow: 0 4px 20px rgba(106, 27, 154, 0.06) !important;
-    border: 1px solid rgba(106, 27, 154, 0.08) !important;
-  }
-  
-  /* 5. تحسين مظهر أيقونات الأقسام (خلفية ملونة فاتحة + ظل) */
-  .cat-i {
-    box-shadow: 0 4px 12px rgba(106, 27, 154, 0.08) !important;
-  }
-  
-  /* 6. شريط البحث بلون أبيض مع حدود ناعمة */
-  .sw .sb {
-    box-shadow: 0 2px 10px rgba(106, 27, 154, 0.05) !important;
-  }
-  
-  /* 7. البنر (الخلفية الوردية عند عدم وجود صورة) */
-  #slides {
-    box-shadow: 0 8px 24px rgba(106, 27, 154, 0.15) !important;
-  }
-  
-  /* 8. جعل الشريط السفلي بخلفية بيضاء نقية مع ظل علوي */
-  #bottom-nav {
-    background: #ffffff !important;
-    box-shadow: 0 -4px 20px rgba(106, 27, 154, 0.06) !important;
-  }
-</style>
-
-
-<style id="header-premium-css">
-  /* الهيدر الأساسي */
+  /* 1. الهيدر الفخم */
   .app-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 12px 15px !important;
-    background: transparent !important; /* ليأخذ لون الخلفية الملكية */
-    width: 100% !important;
-    flex-wrap: nowrap !important;
-    gap: 5px !important;
+    display: flex !important; flex-wrap: nowrap !important; justify-content: space-between !important;
+    align-items: center !important; padding: clamp(10px, 2vw, 15px) !important;
+    background: transparent !important; width: 100% !important; gap: 5px !important;
   }
-
-  /* 1. قسم أيقونات اليسار */
-  .header-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    flex: 1 !important;
-    justify-content: flex-start !important;
+  .header-left, .header-right {
+    flex: 1 !important; display: flex !important; align-items: center !important; gap: clamp(5px, 2vw, 10px) !important;
   }
-  .icon-btn {
-    position: relative !important;
-    width: 34px !important;
-    height: 34px !important;
-    background: #ffffff !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 3px 10px rgba(106, 27, 154, 0.08) !important;
-    border: 1px solid rgba(106, 27, 154, 0.05) !important;
-  }
-  .icon-btn svg { width: 18px !important; height: 18px !important; stroke: #6A1B9A !important; stroke-width: 2.2 !important; }
-  .icon-btn .badge {
-    position: absolute !important;
-    top: -2px !important; right: -2px !important;
-    background: #D81B60 !important;
-    color: #fff !important;
-    font-size: 9px !important;
-    font-weight: 900 !important;
-    border-radius: 50% !important;
-    min-width: 15px !important; height: 15px !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    border: 1.5px solid #fff !important;
-  }
-
-  /* 2. قسم الشعار (الوسط) */
+  .header-left { justify-content: flex-start !important; }
+  .header-right { justify-content: flex-end !important; }
   .header-center {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    flex: 0 0 auto !important;
-    text-align: center !important;
-    margin: 0 5px !important;
+    flex: 0 0 auto !important; display: flex !important; flex-direction: column !important;
+    align-items: center !important; text-align: center !important; margin: 0 5px !important;
   }
   .brand-logo {
-    font-size: 24px !important;
-    font-weight: 900 !important;
-    font-family: 'Tajawal', sans-serif !important;
-    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.5px !important;
+    font-size: clamp(20px, 5vw, 26px) !important; font-weight: 900 !important;
+    background: var(--grad) !important; -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important; line-height: 1.1 !important;
   }
-  .brand-sub {
-    font-size: 9px !important;
-    color: #4B5563 !important;
-    font-weight: 700 !important;
-    white-space: nowrap !important;
-    margin-top: 2px !important;
+  .brand-sub { font-size: clamp(9px, 2.5vw, 11px) !important; color: #4B5563 !important; font-weight: 700 !important; white-space: nowrap !important; }
+  
+  .icon-btn {
+    width: clamp(30px, 8vw, 36px) !important; height: clamp(30px, 8vw, 36px) !important;
+    background: #ffffff !important; border-radius: 50% !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    box-shadow: 0 3px 10px rgba(106, 27, 154, 0.08) !important; position: relative !important;
   }
-
-  /* 3. قسم المستخدم (اليمين) */
-  .header-right {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 8px !important;
-    flex: 1 !important;
+  .icon-btn svg { width: clamp(16px, 4.5vw, 20px) !important; height: clamp(16px, 4.5vw, 20px) !important; stroke: var(--primary) !important; stroke-width: 2.2 !important; }
+  .icon-btn .badge {
+    position: absolute !important; top: -2px !important; right: -2px !important;
+    background: var(--secondary) !important; color: #fff !important;
+    font-size: clamp(8px, 2.5vw, 10px) !important; font-weight: 900 !important;
+    border-radius: 50% !important; min-width: 16px !important; height: 16px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    border: 2px solid #fff !important;
   }
-  .user-info {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important; /* الاسم على اليمين */
-    text-align: right !important;
-  }
-  .user-info .welcome { font-size: 9px !important; color: #6B7280 !important; font-weight: 600 !important; }
-  .user-info .username {
-    font-size: 13px !important;
-    font-weight: 900 !important;
-    color: #1F2937 !important;
-    white-space: nowrap !important;
-    max-width: 80px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
+  .user-info { display: flex !important; flex-direction: column !important; align-items: flex-end !important; }
+  .user-info .username { font-size: clamp(12px, 3.5vw, 14px) !important; font-weight: 900 !important; color: var(--text) !important; white-space: nowrap !important; max-width: 80px !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+  .user-info .welcome { font-size: clamp(9px, 2.5vw, 10px) !important; color: #6B7280 !important; font-weight: 600 !important; }
   .user-avatar {
-    width: 38px !important;
-    height: 38px !important;
-    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    width: clamp(34px, 9vw, 40px) !important; height: clamp(34px, 9vw, 40px) !important;
+    background: var(--grad) !important; border-radius: 50% !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
     box-shadow: 0 3px 10px rgba(106, 27, 154, 0.2) !important;
-    flex-shrink: 0 !important;
   }
   .user-avatar svg { width: 20px !important; height: 20px !important; stroke: #fff !important; }
 
-  /* منع التداخل في الشاشات الصغيرة جداً */
-  @media (max-width: 360px) {
-    .brand-logo { font-size: 20px !important; }
-    .brand-sub { display: none !important; } /* إخفاء العبارة في الشاشات الصغيرة جداً */
-    .user-info .username { font-size: 11px !important; max-width: 60px !important; }
-    .icon-btn { width: 30px !important; height: 30px !important; }
+  /* 2. الشريط السفلي */
+  #bottom-nav {
+    height: clamp(55px, 15vw, 70px) !important; background: #ffffff !important;
+    box-shadow: 0 -4px 20px rgba(106, 27, 154, 0.06) !important; border-top: 1px solid #e5e7eb !important;
+    display: flex !important; justify-content: space-around !important; align-items: stretch !important; padding: 0 !important;
+  }
+  #bottom-nav .bn-it {
+    flex: 1 !important; padding: 8px 0 !important; margin: 0 !important; border-radius: 0;
+    height: 100%; display: flex !important; flex-direction: column !important;
+    align-items: center !important; justify-content: center !important; color: #9E9E9E !important;
+  }
+  #bottom-nav .bn-it.active { color: var(--secondary) !important; }
+  #bottom-nav .bn-it.active svg { stroke: var(--secondary) !important; }
+  #bottom-nav .bn-it span { font-size: clamp(10px, 2.8vw, 12px) !important; }
+  #bottom-nav .bn-it svg { width: clamp(20px, 5.5vw, 24px) !important; height: clamp(20px, 5.5vw, 24px) !important; }
+
+  /* 3. النقاط والبحث */
+  .loy, .sw, .booking-row-container, .cat-i { background: #ffffff !important; }
+  .loy, .sw, .booking-row-container {
+    box-shadow: 0 4px 20px rgba(106, 27, 154, 0.06) !important;
+    border: 1px solid rgba(106, 27, 154, 0.08) !important;
+    border-radius: clamp(10px, 2vw, 16px) !important;
+  }
+  .loy { padding: clamp(10px, 2.5vw, 15px) !important; margin: clamp(8px, 2vw, 15px) !important; }
+  .loy-p { color: var(--secondary) !important; }
+  .sw { margin: 0 clamp(8px, 2vw, 15px) !important; }
+  
+  /* 4. الأقسام والحجوزات */
+  #cats { display: flex !important; overflow-x: auto !important; width: 100% !important; gap: clamp(8px, 3vw, 15px) !important; padding: clamp(10px, 3vw, 15px) !important; scrollbar-width: none; }
+  #cats::-webkit-scrollbar { display: none; }
+  .cat { min-width: clamp(55px, 16vw, 75px) !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
+  .cat-i { width: clamp(45px, 13vw, 64px) !important; height: clamp(45px, 13vw, 64px) !important; font-size: clamp(22px, 7vw, 32px) !important; border-radius: clamp(12px, 3.5vw, 20px) !important; display: flex !important; align-items: center !important; justify-content: center !important; box-shadow: 0 4px 12px rgba(106, 27, 154, 0.08) !important; }
+  
+  .booking-row-container { display: flex !important; flex-wrap: nowrap !important; align-items: center !important; justify-content: space-between !important; margin: 10px clamp(8px, 2vw, 15px) !important; padding: clamp(8px, 2vw, 12px) 0 !important; }
+  .booking-item { flex: 1 !important; min-width: 0 !important; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+  .booking-label { font-size: clamp(9px, 2.8vw, 12px) !important; white-space: nowrap !important; color: #374151; font-weight: 700; }
+  .booking-icon svg { width: clamp(22px, 6.5vw, 32px) !important; height: clamp(22px, 6.5vw, 32px) !important; }
+  .booking-divider { height: clamp(30px, 8vw, 45px) !important; width: 1px; background: #f3f4f6; }
+
+  /* 5. زر AI */
+  .ai-fab, #ai-btn, .chat-fab, [class*="ai-button"] {
+    bottom: 80px !important; left: 15px !important; background: var(--grad) !important;
+    color: #fff !important; box-shadow: 0 8px 20px rgba(106, 27, 154, 0.3) !important; border: none !important;
   }
 </style>
 
