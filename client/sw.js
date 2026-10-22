@@ -26,3 +26,37 @@ self.addEventListener('fetch', function(event) {
     })
   );
 });
+
+
+// ═══ Web Push handlers (Plan B) ═══
+self.addEventListener('push', function(event) {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; }
+  catch(e) { data = { title: 'CHIZEN', body: event.data ? event.data.text() : 'لديك إشعار جديد' }; }
+  const title = data.title || 'CHIZEN';
+  const options = {
+    body: data.body || '',
+    icon: data.icon || 'icon-192.png',
+    badge: data.badge || 'icon-192.png',
+    data: data.data || { url: data.url || 'chizen.html' },
+    vibrate: [200, 100, 200],
+    tag: 'chizen-notif',
+    renotify: true
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  const d = event.notification.data || {};
+  const url = d.url || 'chizen.html';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list) {
+      for (let i = 0; i < list.length; i++) {
+        const c = list[i];
+        if (c.url.indexOf('chizen') !== -1 && 'focus' in c) return c.focus();
+      }
+      if (clients.openWindow) return clients.openWindow(url);
+    })
+  );
+});

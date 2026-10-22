@@ -2086,14 +2086,7 @@ window.renderCategoryProducts = function(catKey, catName) {
 </style>
 
 
-<div class="screen" id="sc-category" style="display:none; z-index: 9999; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0A0515; overflow-y: auto;">
-    <div class="st" style="height: 40px;"></div>
-    <div class="sh2" style="display: flex; align-items: center; padding: 10px 20px; border-bottom: 1px solid #1F0D35;">
-        <button class="back" onclick="APP.closeCategory()" style="background: none; border: none; color: #fff; margin-right: 10px;"><svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;"><path d="m9 18 6-6-6-6"/></svg></button>
-        <div class="st2" id="cat-page-title" style="color: #fff; font-size: 18px; font-weight: bold;">القسم</div>
-    </div>
-    <div id="cat-products-grid"></div>
-</div>
+
 
 <script>
 // ═══ نظام السحب (من فوق بس) ═══
@@ -2253,7 +2246,7 @@ setTimeout(function() {
         PushNotifications.addListener('registration', (token) => {
             alert('✅ تم استلام التوكن من جوجل: ' + token.value.substring(0, 15) + '...');
             window.FCM_TOKEN = token.value;
-            localStorage.setItem('chizen_fcm', token.value);
+            localStorage.setItem('chizen_fcm_token', token.value);
             saveFcmToken();
         });
         
@@ -2262,12 +2255,12 @@ setTimeout(function() {
         });
 
         function saveFcmToken() {
-            var t = window.FCM_TOKEN || localStorage.getItem('chizen_fcm');
+            var t = window.FCM_TOKEN || localStorage.getItem('chizen_fcm_token');
             if (window.APP && window.APP.user && t && window.firebase) {
                 window.firebase.firestore().collection('users').doc(window.APP.user.uid).set({
                     fcmToken: t, lastTokenUpdate: window.firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true }).then(function(){
-                    alert('✅ تم حفظ التوكن في قاعدة البيانات بنجاح!');
+                    console.log('FCM token saved to Firestore');
                 }).catch(function(e){ alert('❌ فشل حفظ التوكن في الفايربيس: ' + e.message); });
             } else {
                 setTimeout(saveFcmToken, 3000);
@@ -2278,6 +2271,25 @@ setTimeout(function() {
         alert('❌ إضافة الإشعارات (PushNotifications) غير مثبتة في التطبيق!');
     }
 }, 3000);
+</script>
+<script src="web-push-client.js"></script>
+<button id="wp-enable-btn" onclick="chizenEnablePush(this)" style="position:fixed;bottom:80px;left:16px;z-index:9998;padding:10px 16px;background:linear-gradient(135deg,#7B61FF,#FF61D2);color:#fff;border:none;border-radius:24px;font-family:inherit;font-size:13px;font-weight:bold;box-shadow:0 4px 16px rgba(123,97,255,.4);cursor:pointer;display:none;">🔔 فعّل الإشعارات</button>
+<script>
+window.chizenEnablePush = function(btn){
+  if(!window.WebPush){ if(window.toast)toast("الميزة غير متوفرة","err"); return; }
+  btn.disabled = true; btn.textContent = "⏳ جاري التفعيل...";
+  WebPush.register().then(function(ok){
+    if(ok){ btn.style.display = "none"; if(window.toast)toast("✅ الإشعارات مفعلة","suc"); }
+    else { btn.disabled = false; btn.textContent = "🔔 فعّل الإشعارات"; if(window.toast)toast("تم رفض الإذن","err"); }
+  }).catch(function(e){ console.error(e); btn.disabled = false; btn.textContent = "🔔 فعّل الإشعارات"; });
+};
+(function(){
+  if (typeof Notification === "undefined") return;
+  if (Notification.permission === "granted") return;
+  var b = document.getElementById("wp-enable-btn");
+  if (!b) return;
+  setTimeout(function(){ if(Notification.permission !== "granted") b.style.display = "block"; }, 2500);
+})();
 </script>
 </body>
 </html>
