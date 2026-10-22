@@ -1283,6 +1283,127 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="header-premium-css">
+  /* الهيدر الأساسي */
+  .app-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 15px !important;
+    background: transparent !important; /* ليأخذ لون الخلفية الملكية */
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+    gap: 5px !important;
+  }
+
+  /* 1. قسم أيقونات اليسار */
+  .header-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex: 1 !important;
+    justify-content: flex-start !important;
+  }
+  .icon-btn {
+    position: relative !important;
+    width: 34px !important;
+    height: 34px !important;
+    background: #ffffff !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 3px 10px rgba(106, 27, 154, 0.08) !important;
+    border: 1px solid rgba(106, 27, 154, 0.05) !important;
+  }
+  .icon-btn svg { width: 18px !important; height: 18px !important; stroke: #6A1B9A !important; stroke-width: 2.2 !important; }
+  .icon-btn .badge {
+    position: absolute !important;
+    top: -2px !important; right: -2px !important;
+    background: #D81B60 !important;
+    color: #fff !important;
+    font-size: 9px !important;
+    font-weight: 900 !important;
+    border-radius: 50% !important;
+    min-width: 15px !important; height: 15px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    border: 1.5px solid #fff !important;
+  }
+
+  /* 2. قسم الشعار (الوسط) */
+  .header-center {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    flex: 0 0 auto !important;
+    text-align: center !important;
+    margin: 0 5px !important;
+  }
+  .brand-logo {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    font-family: 'Tajawal', sans-serif !important;
+    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0.5px !important;
+  }
+  .brand-sub {
+    font-size: 9px !important;
+    color: #4B5563 !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    margin-top: 2px !important;
+  }
+
+  /* 3. قسم المستخدم (اليمين) */
+  .header-right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    flex: 1 !important;
+  }
+  .user-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important; /* الاسم على اليمين */
+    text-align: right !important;
+  }
+  .user-info .welcome { font-size: 9px !important; color: #6B7280 !important; font-weight: 600 !important; }
+  .user-info .username {
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: #1F2937 !important;
+    white-space: nowrap !important;
+    max-width: 80px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .user-avatar {
+    width: 38px !important;
+    height: 38px !important;
+    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 3px 10px rgba(106, 27, 154, 0.2) !important;
+    flex-shrink: 0 !important;
+  }
+  .user-avatar svg { width: 20px !important; height: 20px !important; stroke: #fff !important; }
+
+  /* منع التداخل في الشاشات الصغيرة جداً */
+  @media (max-width: 360px) {
+    .brand-logo { font-size: 20px !important; }
+    .brand-sub { display: none !important; } /* إخفاء العبارة في الشاشات الصغيرة جداً */
+    .user-info .username { font-size: 11px !important; max-width: 60px !important; }
+    .icon-btn { width: 30px !important; height: 30px !important; }
+  }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -1304,20 +1425,9 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 </div>
 
 <!-- الهيدر الرئيسي -->
+
 <div class="app-header">
-  <div class="header-right">
-    <div class="user-avatar">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </div>
-    <div class="user-info">
-      <span class="welcome">أهلاً بك</span>
-      <span class="username" id="home-user">هزيم بن فريش</span>
-    </div>
-  </div>
-  <div class="header-center">
-    <div class="brand-logo">CHIZEN</div>
-    <div class="brand-sub">تسوق ذكي .. لحياة أجمل</div>
-  </div>
+  <!-- اليسار: أيقونات دائرية -->
   <div class="header-left">
     <div class="icon-btn" onclick="APP.goTab('notifications')">
       <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -1332,6 +1442,25 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
       <div class="badge" id="cart-b">2</div>
     </div>
   </div>
+
+  <!-- الوسط: الشعار والعبارة -->
+  <div class="header-center">
+    <div class="brand-logo">CHIZEN</div>
+    <div class="brand-sub">تسوق ذكي .. لحياة أجمل</div>
+  </div>
+
+  <!-- اليمين: معلومات المستخدم -->
+  <div class="header-right">
+    <div class="user-info">
+      <span class="username" id="home-user">هزيم بن فريش</span>
+      <span class="welcome">أهلاً بك</span>
+    </div>
+    <div class="user-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </div>
+</div>
+
 </div>
 
       <div class="loy" onclick="APP.goTab('points')"><div class="loy-t"><span>💎</span> نقاط الولاء</div><div class="loy-p" id="loyalty">0 نقطة</div></div>
