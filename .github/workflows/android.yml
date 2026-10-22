@@ -7,8 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v5
-        with: { node-version: '22' }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          check-latest: true
       
       - name: Setup Java 21
         uses: actions/setup-java@v4
@@ -23,6 +25,12 @@ jobs:
         run: |
           mkdir -p www
           cp -r client/* www/
+      - name: Verify Node.js version
+        run: |
+          node -v
+          npm -v
+          npm install -g @capacitor/cli@latest
+
           
       - name: Add Android & Sync
         run: |
