@@ -69,8 +69,8 @@ APP.toggleFavorite = function(id, event) {
     
     // تحديث شكل القلوب في الشاشة
     document.querySelectorAll('.fav-btn[data-id="'+id+'"]').forEach(btn => {
-        btn.style.color = favs.includes(id) ? '#ff27c9' : '#888';
-        btn.style.fill = favs.includes(id) ? '#ff27c9' : 'none';
+        btn.style.color = favs.includes(id) ? '#D81B60' : '#888';
+        btn.style.fill = favs.includes(id) ? '#D81B60' : 'none';
     });
 };
 APP.renderFavorites = function() {
@@ -86,7 +86,7 @@ APP.renderFavorites = function() {
     }
     grid.innerHTML = favProds.map(p => `
         <div class="p-card" onclick="APP.openProduct('${p.id}')">
-            <svg class="fav-btn" data-id="${p.id}" onclick="APP.toggleFavorite('${p.id}', event)" viewBox="0 0 24 24" style="position:absolute;top:10px;left:10px;width:24px;height:24px;stroke:#ff27c9;stroke-width:2;fill:#ff27c9;z-index:10;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <svg class="fav-btn" data-id="${p.id}" onclick="APP.toggleFavorite('${p.id}', event)" viewBox="0 0 24 24" style="position:absolute;top:10px;left:10px;width:24px;height:24px;stroke:#D81B60;stroke-width:2;fill:#D81B60;z-index:10;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <img src="${p.img||p.image||''}" onerror="this.src='https://via.placeholder.com/150'">
             <div class="p-name">${p.name}</div>
             <div class="p-price">${p.price} ر.س</div>
@@ -122,7 +122,7 @@ APP.renderRelatedProducts = function(currentProduct) {
                     <div onclick="APP.openProduct('${p.id}')" style="min-width: 120px; width: 120px; background: #1F0D35; border-radius: 10px; overflow: hidden; padding-bottom: 8px;">
                         <img src="${p.img||p.image||''}" style="width: 100%; height: 100px; object-fit: cover;">
                         <div style="color: #fff; font-size: 11px; padding: 5px 8px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
-                        <div style="color: #ff27c9; font-size: 12px; font-weight: bold; padding: 2px 8px;">${p.price} ر.س</div>
+                        <div style="color: #D81B60; font-size: 12px; font-weight: bold; padding: 2px 8px;">${p.price} ر.س</div>
                     </div>
                 `).join('')}
             </div>
@@ -279,10 +279,10 @@ APP.closeCategory = function() {
   --bd: #e5e7eb; /* حدود ذهبية خفيفة */
   --cr: #1f2937; /* أبيض كريمي */
   --mt: #6b7280; /* رمادي للنصوص الثانوية */
-  --grad: linear-gradient(135deg, #ff27c9, #8d24ff); /* تدرج ذهبي */
+  --grad: linear-gradient(135deg, #D81B60, #6A1B9A); /* تدرج ذهبي */
   --grad2: linear-gradient(135deg, #ff8bc2, #d986ff);
-  --pk: #ff27c9; /* الذهبي بدل الوردي */
-  --pl: #8d24ff;
+  --pk: #D81B60; /* الذهبي بدل الوردي */
+  --pl: #6A1B9A;
 }
 
 html[data-theme="light"]{--bg: #f4f6fa;--bg2:#fff;--cd:#fff;--ce:#f0f2ff;--cr: #1f2937;--mt: #6b7280;--mt2:#8a98c0;--nav-bg:rgba(255,255,255,.95);--bd: #e5e7eb;--nav: #ffffff;}
@@ -304,7 +304,7 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .hd{padding:10px 20px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .brand-m{direction:ltr;font-family:'Bodoni Moda',Georgia,serif;font-weight:900;font-size:20px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px;}
 .hello{font-size:11px;color:var(--mt);font-weight:600;}
-.name{font-size:22px;font-weight:900;background:linear-gradient(135deg,#ffb9ef,var(--pk),var(--pp));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:2px;}
+.name{font-size:22px;font-weight:900;background:linear-gradient(135deg,#F48FB1,var(--pk),var(--pp));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:2px;}
 .ha{display:flex;gap:10px;}
 .ib{width:44px;height:44px;background:var(--nav);border:1.5px solid var(--bd);border-radius:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
 .ib svg{width:20px;height:20px;stroke:var(--pl);stroke-width:2;fill:none;}
@@ -494,69 +494,69 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .booking-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
 .booking-tabs::-webkit-scrollbar { display: none; }
 .booking-tab { flex-shrink: 0; padding: 12px 20px; border-radius: 14px; background: rgba(255,255,255,0.05); color: #aaa; font-weight: 900; font-family: 'Tajawal', sans-serif; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.3s; }
-.booking-tab.active { background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; border: none; box-shadow: 0 4px 15px rgba(255,39,201,0.3); }
+.booking-tab.active { background: linear-gradient(135deg, #D81B60, #6A1B9A); color: #fff; border: none; box-shadow: 0 4px 15px rgba(255,39,201,0.3); }
 .booking-form { background: linear-gradient(135deg, #1F0D35, #00010a); border-radius: 20px; padding: 20px; border: 1px solid #3A1F5A; display: none; }
 .booking-form.active { display: block; animation: fadeIn 0.3s; }
-.booking-form label { display: block; font-size: 12px; color: #ff27c9; font-weight: 900; margin-bottom: 5px; font-family: 'Tajawal', sans-serif; }
+.booking-form label { display: block; font-size: 12px; color: #D81B60; font-weight: 900; margin-bottom: 5px; font-family: 'Tajawal', sans-serif; }
 .booking-form input, .booking-form select { width: 100%; box-sizing: border-box; padding: 14px; border-radius: 12px; border: 1px solid #3A1F5A; background: #00010a; color: #fff; font-family: 'Tajawal', sans-serif; outline: none; margin-bottom: 15px; font-size: 14px; }
-.booking-form input:focus, .booking-form select:focus { border-color: #ff27c9; }
-.booking-form button { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; font-weight: 900; font-size: 16px; border: none; font-family: 'Tajawal', sans-serif; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 20px rgba(255,39,201,0.4); transition: transform 0.2s; }
+.booking-form input:focus, .booking-form select:focus { border-color: #D81B60; }
+.booking-form button { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #D81B60, #6A1B9A); color: #fff; font-weight: 900; font-size: 16px; border: none; font-family: 'Tajawal', sans-serif; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 20px rgba(255,39,201,0.4); transition: transform 0.2s; }
 .booking-form button:active { transform: scale(0.98); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 .success-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
 .success-modal.active { display: flex; opacity: 1; }
-.success-card { background: linear-gradient(135deg, #1F0D35, #00010a); border: 2px solid #ff27c9; border-radius: 24px; padding: 30px; text-align: center; width: 85%; max-width: 320px; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.success-card { background: linear-gradient(135deg, #1F0D35, #00010a); border: 2px solid #D81B60; border-radius: 24px; padding: 30px; text-align: center; width: 85%; max-width: 320px; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .success-modal.active .success-card { transform: scale(1); }
 .success-icon { width: 80px; height: 80px; background: rgba(0, 212, 160, 0.15); border: 2px solid #00d4a0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #00d4a0; margin: 0 auto 20px; }
 .success-card h2 { color: #fff; font-family: 'Tajawal', sans-serif; margin-bottom: 10px; font-size: 22px; font-weight: 900; }
 .success-card p { color: #aaa; font-family: 'Tajawal', sans-serif; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-.success-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); border: none; border-radius: 12px; color: #fff; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 16px; cursor: pointer; }
+.success-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #D81B60, #6A1B9A); border: none; border-radius: 12px; color: #fff; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 16px; cursor: pointer; }
 
 
 .booking-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
 .booking-tabs::-webkit-scrollbar { display: none; }
 .booking-tab { flex-shrink: 0; padding: 12px 20px; border-radius: 14px; background: rgba(255,255,255,0.05); color: #aaa; font-weight: 900; font-family: 'Tajawal', sans-serif; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.3s; }
-.booking-tab.active { background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; border: none; box-shadow: 0 4px 15px rgba(255,39,201,0.3); }
+.booking-tab.active { background: linear-gradient(135deg, #D81B60, #6A1B9A); color: #fff; border: none; box-shadow: 0 4px 15px rgba(255,39,201,0.3); }
 .booking-form { background: linear-gradient(135deg, #1F0D35, #00010a); border-radius: 20px; padding: 20px; border: 1px solid #3A1F5A; display: none; }
 .booking-form.active { display: block; animation: fadeIn 0.3s; }
-.booking-form label { display: block; font-size: 12px; color: #ff27c9; font-weight: 900; margin-bottom: 5px; font-family: 'Tajawal', sans-serif; }
+.booking-form label { display: block; font-size: 12px; color: #D81B60; font-weight: 900; margin-bottom: 5px; font-family: 'Tajawal', sans-serif; }
 .booking-form input, .booking-form select { width: 100%; box-sizing: border-box; padding: 14px; border-radius: 12px; border: 1px solid #3A1F5A; background: #00010a; color: #fff; font-family: 'Tajawal', sans-serif; outline: none; margin-bottom: 15px; font-size: 14px; }
-.booking-form input:focus, .booking-form select:focus { border-color: #ff27c9; }
-.booking-form button { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); color: #fff; font-weight: 900; font-size: 16px; border: none; font-family: 'Tajawal', sans-serif; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 20px rgba(255,39,201,0.4); transition: transform 0.2s; }
+.booking-form input:focus, .booking-form select:focus { border-color: #D81B60; }
+.booking-form button { width: 100%; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #D81B60, #6A1B9A); color: #fff; font-weight: 900; font-size: 16px; border: none; font-family: 'Tajawal', sans-serif; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 20px rgba(255,39,201,0.4); transition: transform 0.2s; }
 .booking-form button:active { transform: scale(0.98); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 .success-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
 .success-modal.active { display: flex; opacity: 1; }
-.success-card { background: linear-gradient(135deg, #1F0D35, #00010a); border: 2px solid #ff27c9; border-radius: 24px; padding: 30px; text-align: center; width: 85%; max-width: 320px; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.success-card { background: linear-gradient(135deg, #1F0D35, #00010a); border: 2px solid #D81B60; border-radius: 24px; padding: 30px; text-align: center; width: 85%; max-width: 320px; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .success-modal.active .success-card { transform: scale(1); }
 .success-icon { width: 80px; height: 80px; background: rgba(0, 212, 160, 0.15); border: 2px solid #00d4a0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #00d4a0; margin: 0 auto 20px; }
 .success-card h2 { color: #fff; font-family: 'Tajawal', sans-serif; margin-bottom: 10px; font-size: 22px; font-weight: 900; }
 .success-card p { color: #aaa; font-family: 'Tajawal', sans-serif; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-.success-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #ff27c9, #8d24ff); border: none; border-radius: 12px; color: #fff; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 16px; cursor: pointer; }
+.success-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #D81B60, #6A1B9A); border: none; border-radius: 12px; color: #fff; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 16px; cursor: pointer; }
 
 
 .booking-tabs{display:flex;gap:10px;overflow-x:auto;padding:15px;scrollbar-width:none}
 .booking-tabs::-webkit-scrollbar{display:none}
 .booking-tab{flex-shrink:0;padding:12px 20px;border-radius:14px;background:rgba(255,255,255,.05);color:#aaa;font-weight:900;font-family:'Tajawal',sans-serif;border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s}
-.booking-tab.active{background:linear-gradient(135deg,#ff27c9,#8d24ff);color:#fff;border:none;box-shadow:0 4px 15px rgba(255,39,201,.3)}
+.booking-tab.active{background:linear-gradient(135deg,#D81B60,#6A1B9A);color:#fff;border:none;box-shadow:0 4px 15px rgba(255,39,201,.3)}
 .booking-form{background:linear-gradient(135deg,#1F0D35,#00010a);border-radius:20px;padding:20px;border:1px solid #3A1F5A;display:none}
 .booking-form.active{display:block;animation:fadeIn .3s}
-.booking-form label{display:block;font-size:12px;color:#ff27c9;font-weight:900;margin-bottom:5px;font-family:'Tajawal',sans-serif}
+.booking-form label{display:block;font-size:12px;color:#D81B60;font-weight:900;margin-bottom:5px;font-family:'Tajawal',sans-serif}
 .booking-form input,.booking-form select{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:1px solid #3A1F5A;background:#00010a;color:#fff;font-family:'Tajawal',sans-serif;outline:none;margin-bottom:15px;font-size:14px}
-.booking-form input:focus,.booking-form select:focus{border-color:#ff27c9}
-.booking-form button{width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,#ff27c9,#8d24ff);color:#fff;font-weight:900;font-size:16px;border:none;font-family:'Tajawal',sans-serif;cursor:pointer;margin-top:10px;box-shadow:0 5px 20px rgba(255,39,201,.4);transition:transform .2s}
+.booking-form input:focus,.booking-form select:focus{border-color:#D81B60}
+.booking-form button{width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,#D81B60,#6A1B9A);color:#fff;font-weight:900;font-size:16px;border:none;font-family:'Tajawal',sans-serif;cursor:pointer;margin-top:10px;box-shadow:0 5px 20px rgba(255,39,201,.4);transition:transform .2s}
 .booking-form button:active{transform:scale(.98)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .success-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:9999999;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
 .success-modal.active{display:flex;opacity:1}
-.success-card{background:linear-gradient(135deg,#1F0D35,#00010a);border:2px solid #ff27c9;border-radius:24px;padding:30px;text-align:center;width:85%;max-width:320px;transform:scale(.9);transition:transform .3s cubic-bezier(.175,.885,.32,1.275)}
+.success-card{background:linear-gradient(135deg,#1F0D35,#00010a);border:2px solid #D81B60;border-radius:24px;padding:30px;text-align:center;width:85%;max-width:320px;transform:scale(.9);transition:transform .3s cubic-bezier(.175,.885,.32,1.275)}
 .success-modal.active .success-card{transform:scale(1)}
 .success-icon{width:80px;height:80px;background:rgba(0,212,160,.15);border:2px solid #00d4a0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;color:#00d4a0;margin:0 auto 20px}
 .success-card h2{color:#fff;font-family:'Tajawal',sans-serif;margin-bottom:10px;font-size:22px;font-weight:900}
 .success-card p{color:#aaa;font-family:'Tajawal',sans-serif;font-size:14px;line-height:1.6;margin-bottom:20px}
-.success-card button{width:100%;padding:14px;background:linear-gradient(135deg,#ff27c9,#8d24ff);border:none;border-radius:12px;color:#fff;font-family:'Tajawal',sans-serif;font-weight:900;font-size:16px;cursor:pointer}
+.success-card button{width:100%;padding:14px;background:linear-gradient(135deg,#D81B60,#6A1B9A);border:none;border-radius:12px;color:#fff;font-family:'Tajawal',sans-serif;font-weight:900;font-size:16px;cursor:pointer}
 
 
 .skeleton-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 12px; animation: pulse 1.5s infinite; }
@@ -633,10 +633,10 @@ input,textarea{-webkit-user-select:text;user-select:text;}
   --mt: #6b7280; /* رمادي متوسط للنصوص الثانوية */
   --mt2: #A0AEC0 !important;
   --bd: #e5e7eb; /* حدود ناعمة جداً */
-  --grad: linear-gradient(135deg, #ff27c9, #8d24ff); /* بنفسجي ووردي هادئ */
+  --grad: linear-gradient(135deg, #D81B60, #6A1B9A); /* بنفسجي ووردي هادئ */
   --grad2: linear-gradient(135deg, #ff8bc2, #d986ff);
-  --pl: #8d24ff; /* بنفسجي هادئ */
-  --pk: #ff27c9; /* وردي هادئ */
+  --pl: #6A1B9A; /* بنفسجي هادئ */
+  --pk: #D81B60; /* وردي هادئ */
 }
 
 body, #app, .screen { background: var(--bg) !important; color: var(--cr) !important; }
@@ -821,15 +821,15 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 .order-timeline::before { content: ''; position: absolute; top: 20px; left: 10%; right: 10%; height: 2px; background: #333; z-index: 1; }
 .order-timeline-step { position: relative; z-index: 2; text-align: center; width: 30%; }
 .order-timeline-dot { width: 20px; height: 20px; border-radius: 50%; background: #333; margin: 0 auto 5px; border: 2px solid #1F0D35; }
-.order-timeline-step.active .order-timeline-dot { background: #ff27c9; box-shadow: 0 0 10px #ff27c9; }
-.order-timeline-step.active .order-timeline-label { color: #ff27c9; font-weight: bold; }
+.order-timeline-step.active .order-timeline-dot { background: #D81B60; box-shadow: 0 0 10px #D81B60; }
+.order-timeline-step.active .order-timeline-label { color: #D81B60; font-weight: bold; }
 .order-timeline-label { font-size: 10px; color: #888; }
 </style>
 
 <style>
 .color-swatches { display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto; background: transparent; }
 .color-swatch { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid transparent; cursor: pointer; transition: border 0.2s; }
-.color-swatch.active { border-color: #ff27c9; box-shadow: 0 0 8px rgba(255,39,201,0.5); }
+.color-swatch.active { border-color: #D81B60; box-shadow: 0 0 8px rgba(255,39,201,0.5); }
 </style>
 
 <style id="category-fullscreen-styles">
@@ -935,7 +935,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     min-height: 36px;
 }
 .cat-prod-card .price {
-    color: #ff27c9 !important;
+    color: #D81B60 !important;
     font-size: 15px !important;
     font-weight: 900 !important;
     padding: 4px 10px 8px !important;
@@ -953,8 +953,8 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 <style id="ui-light-fix">
   body { background: var(--bg) !important; color: var(--cr) !important; }
   .bn-it { transition: color 0.2s; }
-  .bn-it.active { color: #ff27c9 !important; }
-  .bn-it.active svg { stroke: #ff27c9 !important; }
+  .bn-it.active { color: #D81B60 !important; }
+  .bn-it.active svg { stroke: #D81B60 !important; }
   .hd { background: rgba(255,255,255,0.95) !important; border-bottom: 1px solid #e5e7eb; }
   .hd svg { stroke: #1f2937 !important; }
   .hd div[style*="rgba(255,255,255,0.1)"] { background: rgba(0,0,0,0.05) !important; }
@@ -986,7 +986,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 <style id="top-header-css">
   /* شريط الخصم الماشي */
   .top-marquee {
-    background: linear-gradient(90deg, #8d24ff, #ff27c9);
+    background: linear-gradient(90deg, #6A1B9A, #D81B60);
     color: #fff;
     padding: 8px 0;
     font-size: 13px;
@@ -1020,7 +1020,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
   .user-avatar {
     width: 42px; height: 42px;
-    background: linear-gradient(135deg, #8d24ff, #b19cd9);
+    background: linear-gradient(135deg, #6A1B9A, #9C27B0);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
   }
@@ -1031,7 +1031,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   .header-center { display: flex; flex-direction: column; align-items: center; margin-left: auto; margin-right: auto; }
   .brand-logo {
     font-size: 28px; font-weight: 900; font-family: 'Tajawal', sans-serif;
-    background: linear-gradient(135deg, #8d24ff, #ff27c9);
+    background: linear-gradient(135deg, #6A1B9A, #D81B60);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: 1px;
@@ -1048,7 +1048,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   .icon-btn svg { width: 26px; height: 26px; stroke: #1f2937; fill: none; stroke-width: 2; }
   .icon-btn .badge {
     position: absolute; top: -3px; right: -6px;
-    background: #ff27c9;
+    background: #D81B60;
     color: #fff; font-size: 11px; font-weight: bold;
     border-radius: 50%; min-width: 18px; height: 18px;
     display: flex; align-items: center; justify-content: center;
@@ -1158,6 +1158,76 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   .ai-fab, #ai-btn, .chat-fab, [class*="ai-button"] { bottom: 80px !important; left: 15px !important; }
 </style>
 
+
+<style id="header-force-fix">
+  /* منع التفاف الهيدر نهائياً */
+  .app-header {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow: hidden !important;
+    gap: 6px !important;
+  }
+  
+  .app-header .header-right,
+  .app-header .header-left {
+    flex-shrink: 0 !important;
+    flex-wrap: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .app-header .header-center {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-align: center !important;
+  }
+  
+  /* الشعار مرن دقيق لكل الشاشات */
+  .brand-logo {
+    font-size: clamp(18px, 4.5vw, 26px) !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.5px !important;
+  }
+  
+  .brand-sub {
+    font-size: clamp(8px, 2vw, 10px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  /* اسم المستخدم مقصوص إن طال */
+  .user-info .username {
+    font-size: clamp(11px, 3vw, 14px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 90px !important;
+  }
+  
+  .user-info .welcome {
+    font-size: clamp(9px, 2.3vw, 11px) !important;
+    white-space: nowrap !important;
+  }
+  
+  /* إزالة أي مسافة فارغة من هيدرات قديمة */
+  .hd { display: none !important; }
+  
+  /* منع التداخل على الشاشات الصغيرة جداً */
+  @media (max-width: 360px) {
+    .brand-logo { font-size: 18px !important; }
+    .brand-sub { display: none !important; }
+    .user-info .welcome { display: none !important; }
+    .user-info .username { font-size: 11px !important; }
+  }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -1200,7 +1270,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     </div>
     <div class="icon-btn" onclick="APP.goTab('wishlist')">
       <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      <div class="badge" id="wishlist-b" style="background: linear-gradient(135deg, #ffb9ef, #ff27c9);">3</div>
+      <div class="badge" id="wishlist-b" style="background: linear-gradient(135deg, #F48FB1, #D81B60);">3</div>
     </div>
     <div class="icon-btn" onclick="APP.goTab('cart')">
       <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -1222,7 +1292,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 <!-- الأقسام -->
 <div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
 
-<div class="booking-row-container"><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hotel', null);"><div class="booking-icon" style="color: #8d24ff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg></div><span class="booking-label">فنادق</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('bus', null);"><div class="booking-icon" style="color: #f97316;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></div><span class="booking-label">حافلات</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hajj', null);"><div class="booking-icon" style="color: #ff27c9;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="3"/></svg></div><span class="booking-label">حج وعمرة</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('flight', null);"><div class="booking-icon" style="color: #3b82f6;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div><span class="booking-label">رحلات طيران</span></div></div>
+<div class="booking-row-container"><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hotel', null);"><div class="booking-icon" style="color: #6A1B9A;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg></div><span class="booking-label">فنادق</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('bus', null);"><div class="booking-icon" style="color: #f97316;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></div><span class="booking-label">حافلات</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hajj', null);"><div class="booking-icon" style="color: #D81B60;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="3"/></svg></div><span class="booking-label">حج وعمرة</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('flight', null);"><div class="booking-icon" style="color: #3b82f6;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div><span class="booking-label">رحلات طيران</span></div></div>
 
 
 
@@ -1230,7 +1300,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 <!-- البنر -->
 <div style="margin:15px; position:relative;">
-  <div id="slides" style="position:relative; border-radius:16px; overflow:hidden; min-height:180px; background:linear-gradient(135deg,#ff27c9,#8d24ff);"></div>
+  <div id="slides" style="position:relative; border-radius:16px; overflow:hidden; min-height:180px; background:linear-gradient(135deg,#D81B60,#6A1B9A);"></div>
   <div id="dots" style="display:flex; justify-content:center; gap:6px; margin-top:10px;"></div>
 </div>
 
@@ -1238,7 +1308,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 <div class="sec">
   <div class="sh" style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px;">
     <div class="stl" style="font-weight:900; font-size:20px; color:#1f2937;">🔥 الأكثر مبيعاً</div>
-    <a onclick="APP.filterCat('all')" style="color:#ff27c9; font-size:13px; font-weight:bold; cursor:pointer;">عرض الكل</a>
+    <a onclick="APP.filterCat('all')" style="color:#D81B60; font-size:13px; font-weight:bold; cursor:pointer;">عرض الكل</a>
   </div>
   <div id="prods" class="prods" style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; padding:0 15px;"></div>
 </div>
@@ -1290,7 +1360,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
       <div style="padding:0 15px 100px 15px;">
          <div id="form-flight" class="booking-form active">
-            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">✈️ تفاصيل الرحلة</div>
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">✈️ تفاصيل الرحلة</div>
             <label>شركة الطيران</label>
             <select id="fly-airline">
                <option value="yemenia">الخطوط الجوية اليمنية</option>
@@ -1317,7 +1387,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
          </div>
 
          <div id="form-bus" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🚌 تفاصيل رحلة الباص</div>
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">🚌 تفاصيل رحلة الباص</div>
             <div style="display:flex; gap:10px;">
                 <div style="flex:1;"><label>من</label><input type="text" value="عدن" disabled style="opacity:0.7;"></div>
                 <div style="flex:1;"><label>إلى</label>
@@ -1341,7 +1411,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
          </div>
 
          <div id="form-hajj" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🕋 رحلات الحج والعمرة</div>
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">🕋 رحلات الحج والعمرة</div>
             <label>نوع الرحلة</label>
             <select id="hajj-type">
                 <option value="umrah">عمرة</option>
@@ -1356,7 +1426,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
          </div>
 
          <div id="form-hotel" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#ff27c9; margin-bottom:15px;">🏨 تفاصيل الفندق</div>
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">🏨 تفاصيل الفندق</div>
             <label>المدينة</label><input id="hotel-city" type="text" placeholder="مثال: القاهرة">
             <label>اسم الفندق (إن وجد)</label><input id="hotel-name" type="text" placeholder="اسم الفندق">
             <div style="display:flex; gap:10px;">
@@ -1430,7 +1500,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
         <div class="cs"><div class="cst"><div class="cn">3</div>طريقة الدفع</div><div class="bank-l" id="bank-list"></div></div>
         <div class="tb"><div class="tr"><span>المجموع</span><span id="co-sub">0 ر.س</span></div><div class="tr"><span>الشحن</span><span id="co-ship">مجاني</span></div><div class="tf"><span>الإجمالي</span><span id="co-total">0 ر.س</span></div></div>
         
-      <div style="margin:15px 0;padding:15px;background:rgba(255,255,255,.05);border:1px dashed #ff27c9;border-radius:12px;text-align:center">
+      <div style="margin:15px 0;padding:15px;background:rgba(255,255,255,.05);border:1px dashed #D81B60;border-radius:12px;text-align:center">
         <div style="color:#fff;font-weight:bold;margin-bottom:10px;font-family:'Tajawal'">📎 ارفق صورة إيصال التحويل (اختياري)</div>
         <input type="file" id="co-receipt" accept="image/*" style="color:#aaa;font-family:'Tajawal';width:100%">
       </div>
@@ -1442,7 +1512,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div class="screen" id="sc-orders"><div class="st"></div><div class="sh2"><div class="st2">طلباتي</div></div><div style="padding:4px 20px 20px;" id="orders-list"></div></div>
 
     <!-- NOTIFICATIONS -->
-    <div class="screen" id="sc-notifications"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">الإشعارات</div><button style="margin-right:auto;background:none;border:none;color:#ff27c9;font-family:inherit;font-size:12px;font-weight:bold;" onclick="APP.clearAllNotifs()">مسح الكل 🗑️</button></div><div style="padding:4px 20px 20px;" id="notif-list"></div></div>
+    <div class="screen" id="sc-notifications"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">الإشعارات</div><button style="margin-right:auto;background:none;border:none;color:#D81B60;font-family:inherit;font-size:12px;font-weight:bold;" onclick="APP.clearAllNotifs()">مسح الكل 🗑️</button></div><div style="padding:4px 20px 20px;" id="notif-list"></div></div>
 
     <!-- FAVORITES -->
     <div class="screen" id="sc-favorites"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">المفضلة</div></div><div class="sec" style="padding-top:8px;"><div class="prods" id="fav-list"></div></div></div>
@@ -1491,7 +1561,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
         <div style="background: #1F0D35; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
             <input type="text" id="addr-title" placeholder="اسم العنوان (مثلاً: البيت، العمل)" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: none; background: #f4f6fa; color: #fff;">
             <textarea id="addr-details" placeholder="تفاصيل العنوان بالكامل..." style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: none; background: #f4f6fa; color: #fff; resize: none; height: 60px;"></textarea>
-            <button onclick="APP.saveNewAddress()" style="width: 100%; background: #ff27c9; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold;">حفظ العنوان</button>
+            <button onclick="APP.saveNewAddress()" style="width: 100%; background: #D81B60; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold;">حفظ العنوان</button>
         </div>
         <div id="addresses-list"></div>
     </div>
@@ -1682,7 +1752,7 @@ var APP={
     if(id==='settings')this.renderSettings();
   },
   
-  goTab:function(id,el){  this.navigate(id,true);  try{    var btns=document.querySelectorAll('.bn-it');    btns.forEach(function(b){b.classList.remove('active');b.style.color='#8e8e93';});    if(el){el.classList.add('active');el.style.color='#ff27c9';}    else{btns.forEach(function(b){var oc=b.getAttribute('onclick')||'';if(oc.indexOf("'"+id+"'")>-1){b.classList.add('active');b.style.color='#ff27c9';}});}  }catch(e){}},
+  goTab:function(id,el){  this.navigate(id,true);  try{    var btns=document.querySelectorAll('.bn-it');    btns.forEach(function(b){b.classList.remove('active');b.style.color='#8e8e93';});    if(el){el.classList.add('active');el.style.color='#D81B60';}    else{btns.forEach(function(b){var oc=b.getAttribute('onclick')||'';if(oc.indexOf("'"+id+"'")>-1){b.classList.add('active');b.style.color='#D81B60';}});}  }catch(e){}},
   closeModal:function(){document.getElementById('modal').classList.remove('active');},
   closeDlg:function(){document.getElementById('dlg').classList.remove('active');},
   
@@ -2374,7 +2444,7 @@ window.renderCategoryProducts = function(catKey, catName) {
 .cat-prod-card { background: var(--card, #1F0D35); border-radius: 12px; overflow: hidden; padding-bottom: 10px; text-align: center; }
 .cat-prod-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px 12px 0 0; }
 .cat-prod-card .name { color: #fff; font-size: 13px; font-weight: bold; padding: 8px 10px 0; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-.cat-prod-card .price { color: #ff27c9; font-size: 14px; font-weight: bold; padding: 5px 10px; }
+.cat-prod-card .price { color: #D81B60; font-size: 14px; font-weight: bold; padding: 5px 10px; }
 </style>
 
 
@@ -2446,7 +2516,7 @@ document.addEventListener('DOMContentLoaded', function() {
             svg.setAttribute('class', 'fav-btn');
             svg.setAttribute('data-id', id);
             svg.setAttribute('viewBox', '0 0 24 24');
-            svg.style.cssText = `position:absolute;top:10px;left:10px;width:22px;height:22px;stroke:#ff27c9;stroke-width:2;z-index:10;${isFav ? 'fill:#ff27c9;' : 'fill:rgba(0,0,0,0.5);'}`;
+            svg.style.cssText = `position:absolute;top:10px;left:10px;width:22px;height:22px;stroke:#D81B60;stroke-width:2;z-index:10;${isFav ? 'fill:#D81B60;' : 'fill:rgba(0,0,0,0.5);'}`;
             svg.innerHTML = '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>';
             svg.onclick = (e) => APP.toggleFavorite(id, e);
             
@@ -2471,7 +2541,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <!-- NEW PTR -->
 <div id="custom-ptr" style="position:fixed; top:-80px; left:0; right:0; height:80px; display:flex; justify-content:center; align-items:center; z-index:9999999; transition:top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events:none;">
-  <div style="width:45px; height:45px; border:4px solid rgba(255,39,201,0.15); border-top:4px solid #ff27c9; border-radius:50%; box-shadow: 0 4px 15px rgba(255,39,201,0.5); animation: ptr-spin 0.8s linear infinite;"></div>
+  <div style="width:45px; height:45px; border:4px solid rgba(255,39,201,0.15); border-top:4px solid #D81B60; border-radius:50%; box-shadow: 0 4px 15px rgba(255,39,201,0.5); animation: ptr-spin 0.8s linear infinite;"></div>
 </div>
 <style>
   @keyframes ptr-spin {
@@ -2586,7 +2656,7 @@ window.chizenEnablePush = function(btn){
 
   <!-- BOTTOM NAV (Light) -->
   <div id="bottom-nav" style="display:flex; justify-content:space-around; align-items:center; background:#ffffff; border-top:1px solid #e5e7eb; padding:8px 0 12px; position:fixed; bottom:0; left:0; right:0; z-index:9999; box-shadow:0 -2px 10px rgba(0,0,0,0.03);">
-    <button class="bn-it active" onclick="APP.goTab('home', this)" style="background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px; color:#ff27c9; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer;">
+    <button class="bn-it active" onclick="APP.goTab('home', this)" style="background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px; color:#D81B60; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>الرئيسية</span>
     </button>
@@ -2597,7 +2667,7 @@ window.chizenEnablePush = function(btn){
     <button class="bn-it" onclick="APP.goTab('cart', this)" style="background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px; color:#8e8e93; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; position:relative;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       <span>السلة</span>
-      <div id="cart-b" style="position:absolute; top:-5px; right:5px; background:#ff27c9; color:#fff; font-size:10px; font-weight:bold; border-radius:50%; width:16px; height:16px; display:none; align-items:center; justify-content:center;">0</div>
+      <div id="cart-b" style="position:absolute; top:-5px; right:5px; background:#D81B60; color:#fff; font-size:10px; font-weight:bold; border-radius:50%; width:16px; height:16px; display:none; align-items:center; justify-content:center;">0</div>
     </button>
     <button class="bn-it" onclick="APP.goTab('profile', this)" style="background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px; color:#8e8e93; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
