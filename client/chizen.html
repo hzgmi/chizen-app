@@ -1080,6 +1080,72 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="ui-responsive-polish">
+  /* منع التمرير الأفقي وجعل الخطوط متناسقة */
+  html, body { max-width: 100vw !important; overflow-x: hidden !important; }
+  * { box-sizing: border-box; }
+
+  /* شريط الخصم الماشي */
+  .top-marquee { font-size: 11px !important; padding: 6px 0 !important; }
+
+  /* الهيدر */
+  .app-header { 
+    padding: 10px 12px !important; 
+    gap: 8px !important; 
+    display: flex !important; 
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+  .header-right { gap: 8px !important; flex-shrink: 0 !important; }
+  .user-avatar { width: 34px !important; height: 34px !important; }
+  .user-info .welcome { font-size: 10px !important; }
+  .user-info .username { font-size: 12px !important; font-weight: 800 !important; white-space: nowrap !important; }
+  
+  .header-center { margin: 0 !important; flex: 1; text-align: center; }
+  .brand-logo { font-size: 22px !important; letter-spacing: 0 !important; }
+  .brand-sub { font-size: 9px !important; margin-top: 0 !important; }
+  
+  .header-left { gap: 8px !important; flex-shrink: 0 !important; }
+  .icon-btn { width: 28px !important; height: 28px !important; }
+  .icon-btn svg { width: 22px !important; height: 22px !important; }
+  .icon-btn .badge { min-width: 14px !important; height: 14px !important; font-size: 9px !important; top: -2px !important; right: -4px !important; border-width: 1.5px !important; }
+
+  /* شريط النقاط */
+  .loy { padding: 10px 12px !important; margin: 10px 12px !important; border-radius: 12px !important; }
+  .loy-t { font-size: 12px !important; }
+  .loy-p { font-size: 16px !important; }
+
+  /* البحث */
+  .sw { margin: 0 12px !important; padding: 2px !important; }
+  .search { font-size: 13px !important; padding: 8px 12px !important; }
+
+  /* الأقسام */
+  #cats { padding: 10px 12px !important; gap: 10px !important; }
+  .cat { min-width: 60px !important; }
+  .cat-i { width: 50px !important; height: 50px !important; font-size: 24px !important; border-radius: 14px !important; }
+  .cat-n { font-size: 11px !important; font-weight: 700 !important; }
+
+  /* شريط الحجوزات */
+  .booking-row-container { padding: 10px 4px !important; margin: 10px 12px !important; }
+  .booking-icon svg { width: 26px !important; height: 26px !important; }
+  .booking-label { font-size: 11px !important; white-space: nowrap !important; }
+  .booking-divider { height: 35px !important; }
+
+  /* زر الذكاء الاصطناعي (رفعه عن شريط الحجوزات) */
+  .ai-fab, #ai-btn, .chat-fab, [class*="ai-button"] { 
+    bottom: 80px !important; 
+    left: 15px !important; 
+    width: 50px !important; 
+    height: 50px !important;
+  }
+
+  /* الشريط السفلي */
+  #bottom-nav .bn-it span { font-size: 11px !important; }
+  #bottom-nav .bn-it svg { width: 22px !important; height: 22px !important; }
+</style>
+
 </head>
 <body>
 <div id="app">
