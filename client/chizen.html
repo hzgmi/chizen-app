@@ -2435,7 +2435,53 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 
   <!-- سجل الحركات -->
-  <div class="pt-h">
+  
+<!-- ═══ قسم شحن النقاط ═══ -->
+<div class="pts-shop-section" style="padding: 0 15px 20px;">
+  <div style="background: linear-gradient(135deg, #FF3D9A, #7C3AED); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(216,27,96,0.25);">
+    
+    <div style="text-align: center; margin-bottom: 15px;">
+      <div style="font-size: 40px;">💎</div>
+      <div style="font-size: 18px; font-weight: 900; color: #fff;">شحن رصيد النقاط</div>
+      <div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 5px;">اشترِ نقاطاً واستخدمها في أي وقت</div>
+    </div>
+
+    <!-- الباقات -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+      
+      <div class="pts-package" onclick="selectPointsPackage(100, 10)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
+        <div style="font-size: 22px;">🥉</div>
+        <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">100</div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
+        <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">10 ر.س</div>
+      </div>
+
+      <div class="pts-package" onclick="selectPointsPackage(300, 25)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
+        <div style="font-size: 22px;">🥈</div>
+        <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">300</div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
+        <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">25 ر.س</div>
+      </div>
+
+      <div class="pts-package" onclick="selectPointsPackage(600, 50)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
+        <div style="font-size: 22px;">🥇</div>
+        <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">600</div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
+        <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">50 ر.س</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 12px; font-size: 11px; color: #fff; text-align: center; line-height: 1.6;">
+      📌 بعد اختيار الباقة، قم بتحويل المبلغ إلى حسابنا البنكي، ثم ارفع صورة الإيصال لتفعيل النقاط.
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ نهاية قسم شحن النقاط ═══ -->
+
+<div class="pt-h">
     <div class="pt-ht">سجل الحركات</div>
     <div id="pt-list"></div>
   </div>
