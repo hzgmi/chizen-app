@@ -1952,6 +1952,9 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 
 
+
+
+
 <style id="luxury-cats-css">
   #cats {
     display: flex !important;
@@ -1963,71 +1966,58 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
   #cats::-webkit-scrollbar { display: none; }
 
-  /* البطاقة الأساسية */
-  .up-cat-card {
+  /* البطاقة */
+  .photo-cat-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     min-width: 75px;
     cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.2s ease;
   }
-  .up-cat-card:active {
-    transform: scale(0.9) translateY(5px);
+  .photo-cat-card:active {
+    transform: scale(0.92);
   }
 
-  /* حاوية الأيقونة (تصميم Squircle مسطح) */
-  .up-cat-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 24px;
+  /* الإطار الدائري */
+  .photo-cat-circle {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    padding: 3px; /* سمك الإطار الأبيض */
+    background: linear-gradient(135deg, #FF3D9A, #7C3AED, #2E5AFF); /* تدرج ملكي */
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 25px -5px rgba(106, 27, 154, 0.15), inset 0 2px 5px rgba(255,255,255,0.9);
-    border: 1.5px solid rgba(255,255,255,0.8);
-    position: relative;
-    overflow: hidden;
   }
   
-  /* أيقونة داخل الحاوية */
-  .up-cat-icon img {
-    width: 45px;
-    height: 45px;
-    object-fit: contain;
+  /* الصورة الداخلية */
+  .photo-cat-circle img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover; /* ملء الدائرة دون تشويه */
+    border: 3px solid #ffffff; /* إطار أبيض داخلي */
+    background: #fff;
     transition: transform 0.3s ease;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
   }
 
-  /* تأثير التكبير عند التمرير */
-  .up-cat-card:hover .up-cat-icon img {
-    transform: scale(1.15) rotate(3deg);
+  /* تكبير الصورة قليلاً عند التمرير */
+  .photo-cat-card:hover .photo-cat-circle img {
+    transform: scale(1.08);
   }
 
   /* اسم القسم */
-  .up-cat-name {
+  .photo-cat-name {
     font-size: 13px;
     font-weight: 800;
-    color: #374151;
+    color: #1f2937;
     text-align: center;
     white-space: nowrap;
     font-family: 'Tajawal', sans-serif;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
-  }
-
-  /* تأثير اللمعان (Shimmer) عند التمرير */
-  .up-cat-icon::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 50%; height: 100%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-20deg);
-    transition: 0.6s;
-  }
-  .up-cat-card:hover .up-cat-icon::before {
-    left: 120%;
   }
 </style>
 
@@ -2497,13 +2487,13 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 // ================= الأقسام الأساسية المثبتة =================
 window.FIXED_CATS = [
-  { key: 'electronics', name: 'الإلكترونيات', img: 'https://cdn-icons-png.flaticon.com/512/3659/3659899.png', grad: 'linear-gradient(135deg, #E0E7FF, #C7D2FE)' },
-  { key: 'fashion', name: 'الأزياء', img: 'https://cdn-icons-png.flaticon.com/512/3534/3534033.png', grad: 'linear-gradient(135deg, #FCE7F3, #FBCFE8)' },
-  { key: 'home', name: 'المنزل', img: 'https://cdn-icons-png.flaticon.com/512/1670/1670694.png', grad: 'linear-gradient(135deg, #DCFCE7, #BBF7D0)' },
-  { key: 'beauty', name: 'الجمال', img: 'https://cdn-icons-png.flaticon.com/512/3163/3163479.png', grad: 'linear-gradient(135deg, #FEF3C7, #FDE68A)' },
-  { key: 'kids', name: 'الأطفال', img: 'https://cdn-icons-png.flaticon.com/512/3082/3082011.png', grad: 'linear-gradient(135deg, #FEF9C3, #FEF08A)' },
-  { key: 'sports', name: 'الرياضة', img: 'https://cdn-icons-png.flaticon.com/512/2749/2749963.png', grad: 'linear-gradient(135deg, #DBEAFE, #BFDBFE)' },
-  { key: 'tools', name: 'الأدوات', img: 'https://cdn-icons-png.flaticon.com/512/3063/3063230.png', grad: 'linear-gradient(135deg, #F3E8FF, #E9D5FF)' }
+  { key: 'electronics', name: 'الإلكترونيات', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop' }, 
+  { key: 'fashion', name: 'الأزياء', img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=300&auto=format&fit=crop' }, 
+  { key: 'home', name: 'المنزل', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=300&auto=format&fit=crop' }, 
+  { key: 'beauty', name: 'الجمال', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=300&auto=format&fit=crop' }, 
+  { key: 'kids', name: 'الأطفال', img: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=300&auto=format&fit=crop' }, 
+  { key: 'sports', name: 'الرياضة', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop' }, 
+  { key: 'tools', name: 'الأدوات', img: 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?q=80&w=300&auto=format&fit=crop' } 
 ];
 // ============================================================
 
@@ -2626,12 +2616,11 @@ var APP={
     if(!c) return;
     
     c.innerHTML = this.cats.map(function(cat) {
-      var bgStyle = cat.grad ? 'background:' + cat.grad + ';' : 'background:#f4f6fa;';
-      return '<div class="up-cat-card" onclick="APP.openCatPage(\'' + esc(cat.key) + '\',\'' + esc(cat.name) + '\',\'\')">' +
-             '  <div class="up-cat-icon" style="' + bgStyle + '">' +
-             '    <img src="' + cat.img + '" alt="' + cat.name + '">' +
+      return '<div class="photo-cat-card" onclick="APP.openCatPage(\'' + esc(cat.key) + '\',\'' + esc(cat.name) + '\',\'\')">' +
+             '  <div class="photo-cat-circle">' +
+             '    <img src="' + cat.img + '" alt="' + cat.name + '" loading="lazy">' +
              '  </div>' +
-             '  <div class="up-cat-name">' + esc(cat.name) + '</div>' +
+             '  <div class="photo-cat-name">' + esc(cat.name) + '</div>' +
              '</div>';
     }).join('');
   },
