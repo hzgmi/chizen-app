@@ -79,3 +79,29 @@
     }
   });
 })();
+
+
+// ═══ تشغيل نغمة مخصصة عند استقبال إشعار (في المتصفح) ═══
+var CHIZEN_SOUND_URL = 'https://actions.google.com/sounds/v1/alarms/beep_short.ogg'; // نغمة مفتوحة المصدر
+var chizenAudio = null;
+
+try {
+  chizenAudio = new Audio(CHIZEN_SOUND_URL);
+  chizenAudio.volume = 0.6;
+} catch(e) {}
+
+window.playChizenSound = function() {
+  if (chizenAudio) {
+    chizenAudio.currentTime = 0;
+    chizenAudio.play().catch(function(e) { console.log('Audio play failed:', e); });
+  }
+};
+
+// الاستماع للرسائل القادمة من Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'PUSH_RECEIVED') {
+      window.playChizenSound();
+    }
+  });
+}

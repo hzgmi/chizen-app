@@ -54,6 +54,16 @@ self.addEventListener('push', function(event) {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
+// إرسال رسالة للـ Client لتشغيل الصوت
+event.waitUntil(
+  clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+    clientList.forEach(function(client) {
+      if ('postMessage' in client) client.postMessage({ type: 'PUSH_RECEIVED' });
+    });
+  })
+);
+
+
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   const d = event.notification.data || {};
