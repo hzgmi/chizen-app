@@ -2380,7 +2380,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
     <div class="st2">نقاطي</div>
   </div>
-  
+
   <!-- بطاقة الرصيد -->
   <div class="pt-hero">
     <div class="pt-hi">💎</div>
@@ -2389,127 +2389,85 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div class="pt-hv" id="pt-val">= 0 ر.س خصم</div>
   </div>
 
-  <!-- أزرار المهام السريعة -->
-  
-<div class="pt-act" style="display: flex; gap: 10px; padding: 15px; justify-content: space-between;">
-  
-  <!-- زر تسجيل يومي -->
-  <div class="pt-btn-card" onclick="dailyCheckinSafe()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-    <div style="font-size: 24px;">🎁</div>
-    <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">تسجيل يومي</div>
-    <div style="font-size: 11px; font-weight: 900; color: #D81B60;">+1 نقطة</div>
-  </div>
-
-  <!-- زر كودي -->
-  <div class="pt-btn-card" onclick="showMyReferralCode()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-    <div style="font-size: 24px;">🎟️</div>
-    <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">كودي</div>
-    <div style="font-size: 11px; font-weight: 900; color: #D81B60;">شارك</div>
-  </div>
-
-  <!-- زر شحن النقاط (ينزل للقسم) -->
-  <div class="pt-btn-card" onclick="document.querySelector('.pts-shop-section').scrollIntoView({behavior:'smooth'})" style="flex: 1; background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(216,27,96,0.1);">
-    <div style="font-size: 24px;">💎</div>
-    <div style="font-size: 12px; font-weight: 800; color: #6A1B9A; margin-top: 4px;">شحن رصيد</div>
-    <div style="font-size: 11px; font-weight: 900; color: #D81B60;">اشتري</div>
-  </div>
-
-</div>
-
-    
-    <!-- كودي -->
-    <div class="pt-a" onclick="showMyReferralCode()" style="flex: 1 1 45%;">
-      <div class="pt-ai">🎟️</div>
-      <div class="pt-at">كودي</div>
-      <div class="pt-ap">شارك</div>
+  <!-- الأزرار الثلاثة -->
+  <div style="display: flex; gap: 10px; padding: 15px;">
+    <div onclick="dailyCheckinSafe()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+      <div style="font-size: 24px;">🎁</div>
+      <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">تسجيل يومي</div>
+      <div style="font-size: 11px; font-weight: 900; color: #D81B60;">+1 نقطة</div>
     </div>
-
+    <div onclick="showMyReferralCode()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+      <div style="font-size: 24px;">🎟️</div>
+      <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">كودي</div>
+      <div style="font-size: 11px; font-weight: 900; color: #D81B60;">شارك</div>
+    </div>
+    <div onclick="document.querySelector('.pts-shop-section').scrollIntoView({behavior:'smooth'})" style="flex: 1; background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(216,27,96,0.1);">
+      <div style="font-size: 24px;">💎</div>
+      <div style="font-size: 12px; font-weight: 800; color: #6A1B9A; margin-top: 4px;">شحن رصيد</div>
+      <div style="font-size: 11px; font-weight: 900; color: #D81B60;">اشتري</div>
+    </div>
   </div>
 
   <!-- قسم دعوة صديق -->
   <div style="padding: 0 15px 20px;">
-    
-<div style="padding: 0 15px 20px;">
-  <div style="background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 20px;">
-    
-    <div style="text-align: center; margin-bottom: 15px;">
-      <div style="font-size: 40px;">🤝</div>
-      <div style="font-size: 16px; font-weight: 900; color: #6A1B9A; margin-top: 5px;">ادعُ صديقاً واكسبوا معاً!</div>
-      <div style="font-size: 12px; color: #6b7280; margin-top: 5px;">أدخل كود صديقك لتحصل أنت وهو على 10 نقاط لكل منكما</div>
+    <div style="background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 20px;">
+      <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 40px;">🤝</div>
+        <div style="font-size: 16px; font-weight: 900; color: #6A1B9A; margin-top: 5px;">ادعُ صديقاً واكسبوا معاً!</div>
+        <div style="font-size: 12px; color: #6b7280; margin-top: 5px;">أدخل كود صديقك لتحصل أنت وهو على 10 نقاط لكل منكما</div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="ref-input" placeholder="أدخل الكود (CHZ...)" style="flex: 1; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; text-align: center; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; font-size: 14px;">
+        <button onclick="applyReferralCode()" style="background: linear-gradient(135deg, #6A1B9A, #D81B60); color: #fff; border: none; border-radius: 12px; padding: 12px 20px; font-weight: bold; cursor: pointer; font-size: 14px;">تطبيق</button>
+      </div>
+      <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center;">
+        <button onclick="showMyReferralCode()" style="background: #fff; color: #6A1B9A; border: 2px solid #6A1B9A; border-radius: 12px; padding: 10px 20px; font-weight: bold; cursor: pointer; font-size: 13px;">🎟️ عرض كودي</button>
+      </div>
     </div>
-    
-    <div style="display: flex; gap: 8px;">
-      <input type="text" id="ref-input" placeholder="أدخل الكود هنا (CHZ...)" style="flex: 1; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; text-align: center; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; font-size: 14px;">
-      <button onclick="applyReferralCode()" style="background: linear-gradient(135deg, #6A1B9A, #D81B60); color: #fff; border: none; border-radius: 12px; padding: 12px 20px; font-weight: bold; cursor: pointer; font-size: 14px;">تطبيق</button>
-    </div>
-    
-    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center;">
-      <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px;">ليس لديك كود؟ شارك كودك الخاص مع أصدقائك</div>
-      <button onclick="showMyReferralCode()" style="background: #fff; color: #6A1B9A; border: 2px solid #6A1B9A; border-radius: 12px; padding: 10px 20px; font-weight: bold; cursor: pointer; font-size: 13px;">🎟️ عرض كودي</button>
-    </div>
-    
   </div>
-</div>
 
+  <!-- قسم شحن النقاط -->
+  <div class="pts-shop-section" style="padding: 0 15px 20px;">
+    <div style="background: linear-gradient(135deg, #FF3D9A, #7C3AED); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(216,27,96,0.25);">
+      <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 40px;">💎</div>
+        <div style="font-size: 18px; font-weight: 900; color: #fff;">شحن رصيد النقاط</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 5px;">اشترِ نقاطاً واستخدمها في أي وقت</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <div class="pts-package" onclick="selectPointsPackage(100, 10)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
+          <div style="font-size: 22px;">🥉</div>
+          <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">100</div>
+          <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
+          <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">10 ر.س</div>
+        </div>
+        <div class="pts-package" onclick="selectPointsPackage(300, 25)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
+          <div style="font-size: 22px;">🥈</div>
+          <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">300</div>
+          <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
+          <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">25 ر.س</div>
+        </div>
+        <div class="pts-package" onclick="selectPointsPackage(600, 50)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
+          <div style="font-size: 22px;">🥇</div>
+          <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">600</div>
+          <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
+          <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">50 ر.س</div>
+        </div>
+      </div>
+      <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 12px; font-size: 11px; color: #fff; text-align: center; line-height: 1.6;">
+        📌 بعد اختيار الباقة، قم بتحويل المبلغ إلى حسابنا البنكي، ثم ارفع صورة الإيصال لتفعيل النقاط.
+      </div>
+    </div>
+  </div>
 
   <!-- سجل الحركات -->
-  
-<!-- ═══ قسم شحن النقاط ═══ -->
-<div class="pts-shop-section" style="padding: 0 15px 20px;">
-  <div style="background: linear-gradient(135deg, #FF3D9A, #7C3AED); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(216,27,96,0.25);">
-    
-    <div style="text-align: center; margin-bottom: 15px;">
-      <div style="font-size: 40px;">💎</div>
-      <div style="font-size: 18px; font-weight: 900; color: #fff;">شحن رصيد النقاط</div>
-      <div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 5px;">اشترِ نقاطاً واستخدمها في أي وقت</div>
-    </div>
-
-    <!-- الباقات -->
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-      
-      <div class="pts-package" onclick="selectPointsPackage(100, 10)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
-        <div style="font-size: 22px;">🥉</div>
-        <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">100</div>
-        <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
-        <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">10 ر.س</div>
-      </div>
-
-      <div class="pts-package" onclick="selectPointsPackage(300, 25)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
-        <div style="font-size: 22px;">🥈</div>
-        <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">300</div>
-        <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
-        <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">25 ر.س</div>
-      </div>
-
-      <div class="pts-package" onclick="selectPointsPackage(600, 50)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
-        <div style="font-size: 22px;">🥇</div>
-        <div style="font-size: 16px; font-weight: 900; color: #fff; margin: 5px 0;">600</div>
-        <div style="font-size: 10px; color: rgba(255,255,255,0.9);">نقطة</div>
-        <div style="font-size: 13px; font-weight: bold; color: #FFD700; margin-top: 5px;">50 ر.س</div>
-      </div>
-
-    </div>
-
-    <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 12px; font-size: 11px; color: #fff; text-align: center; line-height: 1.6;">
-      📌 بعد اختيار الباقة، قم بتحويل المبلغ إلى حسابنا البنكي، ثم ارفع صورة الإيصال لتفعيل النقاط.
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══ نهاية قسم شحن النقاط ═══ -->
-
-<div class="pt-h">
+  <div class="pt-h">
     <div class="pt-ht">سجل الحركات</div>
     <div id="pt-list"></div>
   </div>
 </div>
 
-      <div class="pt-h"><div class="pt-ht">سجل الحركات</div><div id="pt-list"></div></div>
-    </div>
-
-    <!-- HELP -->
-    <div class="screen" id="sc-help"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">المساعدة</div></div><div style="padding:8px 20px 20px;" id="help-c"></div></div>
+<div class="screen" id="sc-help"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">المساعدة</div></div><div style="padding:8px 20px 20px;" id="help-c"></div></div>
 
     <!-- PROFILE -->
     <div class="screen" id="sc-profile">
