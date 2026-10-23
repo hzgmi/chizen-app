@@ -3576,15 +3576,49 @@ var APP={
     this.goTab('orders');
   },
   
-  renderOrders:function(){
-    var c=document.getElementById('orders-list');if(!c)return;
-    if(!this.orders.length){c.innerHTML='<div class="cempty"><p>لا توجد طلبات</p></div>';return;}
-    var list=this.orders.slice().reverse();
-    c.innerHTML=list.map(function(o){
-var timelineHtml = APP.getTimelineHtml(o.status);
-      var ic=0;if(o.items)o.items.forEach(function(i){ic+=i.qty;});
-      return '<div class="oc"><div class="oh"><div class="oi">#'+esc((o.id||'').substring(0,14))+'</div><div class="os '+(o.status||'pending')+'">'+(o.status==='pending'?'قيد المعالجة':o.status==='shipped'?'في الطريق':o.status==='completed'?'مكتمل':'ملغي')+'</div></div><div class="ob">'+ic+' منتج • 📍 '+esc(o.pickup||'')+'</div><div class="ot"><span>الإجمالي</span><span>'+esc(o.total)+' ر.س</span></div></div>';
-    }).join('');
+  renderOrders: async function() {
+    var c = document.getElementById('orders-list');
+    if (!c) return;
+    
+    c.innerHTML = '<div class="cempty"><p>⏳ جاري التحميل...</p></div>';
+    
+    try {
+      if (!window.FB || !FB.currentUser || !FB.getUserOrders) {
+        c.innerHTML = '<div class="cempty"><p>سجل دخول لعرض طلباتك</p></div>';
+        return;
+      }
+      
+      var orders = await FB.getUserOrders();
+      this.orders = orders || [];
+      
+      if (!this.orders.length) {
+        c.innerHTML = '<div class="cempty"><p>لا توجد طلبات</p></div>';
+        return;
+      }
+      
+      var list = this.orders.slice().reverse();
+      c.innerHTML = list.map(function(o) {
+        var timelineHtml = APP.getTimelineHtml(o.status);
+        var ic = 0;
+        if (o.items) o.items.forEach(function(i) { ic += i.qty; });
+        return '<div class="oc">' +
+          '<div class="oh">' +
+            '<div class="oi">#' + esc((o.id || '').substring(0, 14)) + '</div>' +
+            '<div class="os ' + (o.status || 'pending') + '">' +
+              (o.status === 'pending' ? 'قيد المعالجة' : 
+               o.status === 'shipped' ? 'في الطريق' : 
+               o.status === 'completed' ? 'تم التسليم' : 
+               o.status === 'cancelled' ? 'ملغي' : o.status) +
+            '</div>' +
+          '</div>' +
+          timelineHtml +
+          '<div class="ob">' + (o.total || 0) + ' ر.س · ' + ic + ' منتج</div>' +
+          '</div>';
+      }).join('');
+    } catch(e) {
+      console.error('Orders error:', e);
+      c.innerHTML = '<div class="cempty"><p>حدث خطأ في التحميل</p></div>';
+    }
   },
   
 
@@ -3607,12 +3641,56 @@ var timelineHtml = APP.getTimelineHtml(o.status);
     }
   },
 
-  renderNotifs:function(){
-    var c=document.getElementById('notif-list');if(!c)return;
-    if(!this.notifications.length){c.innerHTML='<div class="cempty"><p>لا توجد إشعارات</p></div>';return;}
-    c.innerHTML=this.notifications.slice().reverse().map(function(n){
-      return '<div class="oc"><div class="ob" style="color:var(--cr);font-weight:700;font-size:14px;">'+esc(n.title)+'</div><div class="ob" style="margin-top:6px;">'+esc(n.body)+'</div></div>';
-    }).join('');
+  renderNotifs: async function() {
+    var c = document.getElementById('notif-list');
+    if (!c) return;
+    
+    c.innerHTML = '<div class="cempty"><p>⏳ جاري التحميل...</p></div>';
+    
+    try {
+      if (!window.FB || !FB.db) {
+        c.innerHTML = '<div class="cempty"><p>غير متصل</p></div>';
+        return;
+      }
+      
+      var snap = await FB.db.collection('notifications').orderBy('createdAt', 'desc').limit(50).get();
+      var list = [];
+      snap.forEach(function(doc) {
+        var d = doc.data();
+        d.id = doc.id;
+        list.push(d);
+      });
+      
+      this.notifications = list;
+      
+      if (!list.length) {
+        c.innerHTML = '<div class="cempty"><p>لا توجد إشعارات</p></div>';
+        return;
+      }
+      
+      c.innerHTML = list.map(function(n) {
+        var timeStr = '';
+        if (n.createdAt && n.createdAt.toDate) {
+          var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
+          if (diff < 1) timeStr = 'الآن';
+          else if (diff < 60) timeStr = 'قبل ' + diff + ' دقيقة';
+          else if (diff < 1440) timeStr = 'قبل ' + Math.floor(diff / 60) + ' ساعة';
+          else timeStr = 'قبل ' + Math.floor(diff / 1440) + ' يوم';
+        }
+        return '<div class="oc" style="padding:15px;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:start;gap:10px;">' +
+            '<div style="flex:1;">' +
+              '<div style="color:#1f2937;font-weight:900;font-size:14px;">' + esc(n.title || '') + '</div>' +
+              '<div style="color:#6b7280;font-size:13px;margin-top:6px;line-height:1.6;">' + esc(n.body || '') + '</div>' +
+              (timeStr ? '<div style="color:#9ca3af;font-size:11px;margin-top:6px;">' + timeStr + '</div>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    } catch(e) {
+      console.error('Notifs error:', e);
+      c.innerHTML = '<div class="cempty"><p>حدث خطأ في التحميل</p></div>';
+    }
   },
   
   renderFav:function(){
