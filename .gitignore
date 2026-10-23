@@ -1,0 +1,4 @@
+client/*.bak_*
+*.bak_*
+_archive_backups/
+*.log
