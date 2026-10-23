@@ -1852,6 +1852,99 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="smart-search-css">
+  .smart-search-container {
+    padding: 0 15px;
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 900; /* لضمان ظهور القائمة المنسدلة فوق العناصر */
+  }
+  .ss-wrapper {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 15px rgba(106, 27, 154, 0.05);
+    border: 1px solid rgba(106, 27, 154, 0.1);
+    gap: 10px;
+  }
+  .ss-icon { width: 20px; height: 20px; flex-shrink: 0; }
+  .ss-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    color: #1f2937;
+  }
+  .ss-input::placeholder { color: #9ca3af; }
+  .ss-clear {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ss-clear svg { width: 18px; height: 18px; }
+
+  /* القائمة المنسدلة */
+  .ss-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 15px;
+    right: 15px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(106, 27, 154, 0.15);
+    border: 1px solid #f0eaf5;
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 999;
+    padding: 8px 0;
+    animation: slideDown 0.2s ease-out;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ss-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f8f9fa;
+  }
+  .ss-item:last-child { border-bottom: none; }
+  .ss-item:hover { background: #fdf2f8; }
+  .ss-item-img {
+    width: 45px; height: 45px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #f4f6fa;
+    border: 1px solid #e5e7eb;
+    flex-shrink: 0;
+  }
+  .ss-item-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .ss-item-name { font-size: 13px; font-weight: 700; color: #1f2937; }
+  .ss-item-cat { font-size: 10px; color: #6b7280; }
+  .ss-item-price { font-size: 14px; font-weight: 900; color: #D81B60; white-space: nowrap; }
+  
+  .ss-empty {
+    padding: 20px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+    font-family: 'Tajawal', sans-serif;
+  }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -1954,7 +2047,19 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
   
   <div class="loy" onclick="APP.goTab('points')"><div class="loy-t"><span>💎</span> نقاط الولاء</div><div class="loy-p" id="loyalty">0 نقطة</div></div>
-      <div class="search-wrapper"><div class="sw"><div class="sb"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" class="search" id="search-in" placeholder="ابحث عن منتج..." oninput="APP.search(this.value)"></div></div>
+      <div class="search-wrapper">
+<div class="smart-search-container">
+  <div class="ss-wrapper">
+    <svg class="ss-icon" viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" class="ss-input" id="search-in" placeholder="ابحث عن منتج، علامة تجارية..." autocomplete="off">
+    <button class="ss-clear" id="ss-clear-btn" onclick="APP.clearSearch()" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <!-- القائمة المنسدلة للاقتراحات -->
+  <div id="search-dropdown" class="ss-dropdown" style="display:none;"></div>
+</div>
+
       
 
 
@@ -3368,6 +3473,109 @@ window.chizenEnablePush = function(btn){
       };
     }
   })();
+
+
+// ═══ SMART SEARCH ENGINE ═══
+APP.smartSearchTimer = null;
+
+APP.search = function(q) {
+  var self = this;
+  var dropdown = document.getElementById('search-dropdown');
+  var clearBtn = document.getElementById('ss-clear-btn');
+  
+  if (!dropdown) return;
+  
+  if (q && q.trim().length > 0) {
+    if (clearBtn) clearBtn.style.display = 'flex';
+  } else {
+    if (clearBtn) clearBtn.style.display = 'none';
+    dropdown.style.display = 'none';
+    return;
+  }
+
+  // Debounce: تأخير البحث 300ms بعد توقف الكتابة
+  clearTimeout(this.smartSearchTimer);
+  this.smartSearchTimer = setTimeout(function() {
+    self.performSmartSearch(q.trim());
+  }, 300);
+};
+
+APP.clearSearch = function() {
+  var input = document.getElementById('search-in');
+  var dropdown = document.getElementById('search-dropdown');
+  var clearBtn = document.getElementById('ss-clear-btn');
+  if (input) input.value = '';
+  if (dropdown) dropdown.style.display = 'none';
+  if (clearBtn) clearBtn.style.display = 'none';
+  // العودة للرئيسية لعرض كل المنتجات
+  if (this.renderProducts) this.renderProducts(this.products);
+};
+
+APP.performSmartSearch = function(query) {
+  var dropdown = document.getElementById('search-dropdown');
+  if (!dropdown) return;
+  
+  var q = query.toLowerCase();
+  
+  // البحث في المصفوفة المحلية (products) والتي تم تحميلها من Firebase
+  var results = (this.products || []).filter(function(p) {
+    return (p.name || '').toLowerCase().indexOf(q) > -1 
+        || (p.brand || '').toLowerCase().indexOf(q) > -1
+        || (p.category || '').toLowerCase().indexOf(q) > -1;
+  });
+
+  if (results.length === 0) {
+    dropdown.innerHTML = '<div class="ss-empty">لا توجد نتائج مطابقة لـ "' + esc(query) + '"</div>';
+    dropdown.style.display = 'block';
+    return;
+  }
+
+  // عرض أول 6 نتائج
+  var html = '';
+  results.slice(0, 6).forEach(function(p) {
+    var img = p.img || p.image || 'https://via.placeholder.com/50?text=?';
+    html += '<div class="ss-item" onclick="APP.openProduct(\'' + p.id + '\')">' +
+              '<img src="' + img + '" class="ss-item-img" onerror="this.src=\'https://via.placeholder.com/50?text=?\'">' +
+              '<div class="ss-item-info">' +
+                '<div class="ss-item-name">' + esc(p.name || '') + '</div>' +
+                '<div class="ss-item-cat">' + esc(p.category || p.brand || '') + '</div>' +
+              '</div>' +
+              '<div class="ss-item-price">' + (p.price || 0) + ' ر.س</div>' +
+            '</div>';
+  });
+
+  // إذا كان هناك أكثر من 6 نتائج، نضيف زر "عرض الكل"
+  if (results.length > 6) {
+    html += '<div class="ss-item" style="justify-content:center; color:#D81B60; font-weight:900; background:#fdf2f8;" onclick="APP.showAllSearchResults(\'' + esc(query) + '\')">عرض كل النتائج (' + results.length + ')</div>';
+  }
+
+  dropdown.innerHTML = html;
+  dropdown.style.display = 'block';
+};
+
+APP.showAllSearchResults = function(query) {
+  var dropdown = document.getElementById('search-dropdown');
+  if (dropdown) dropdown.style.display = 'none';
+  
+  var q = query.toLowerCase();
+  var results = (this.products || []).filter(function(p) {
+    return (p.name || '').toLowerCase().indexOf(q) > -1 
+        || (p.brand || '').toLowerCase().indexOf(q) > -1;
+  });
+  
+  // عرض النتائج في شبكة المنتجات الرئيسية
+  if (this.renderProducts) this.renderProducts(results);
+};
+
+// إغلاق القائمة عند النقر خارجها
+document.addEventListener('click', function(e) {
+  var container = document.querySelector('.smart-search-container');
+  var dropdown = document.getElementById('search-dropdown');
+  if (container && dropdown && !container.contains(e.target)) {
+    dropdown.style.display = 'none';
+  }
+});
+
 </script>
 </body>
 </html>
