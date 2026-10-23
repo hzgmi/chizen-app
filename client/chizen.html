@@ -3265,6 +3265,18 @@ var APP={
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
       await FB.db.collection('bookings').add(booking);
+      
+      // إشعار تلقائي للحجز
+      var bookingTitle = type === 'flight' ? '✈️ حجز طيران' : type === 'bus' ? '🚌 حجز باص' : type === 'hotel' ? '🏨 حجز فندق' : '🕋 حجز حج وعمرة';
+      if (window.pushUserNotification) {
+        await window.pushUserNotification(
+          bookingTitle + ' - قيد المراجعة',
+          'تم استلام حجزك بنجاح، سنتواصل معك قريباً للتأكيد.',
+          'booking',
+          { bookingId: 'pending', type: type }
+        );
+      }
+      
       return true;
     } catch(e) {
       console.error('Booking save error:', e);
@@ -3839,22 +3851,58 @@ var APP={
         return;
       }
       
-      var snap = await FB.db.collection('notifications').orderBy('createdAt', 'desc').limit(50).get();
-      var list = [];
-      snap.forEach(function(doc) {
-        var d = doc.data();
-        d.id = doc.id;
-        list.push(d);
+      var uid = FB.currentUser ? FB.currentUser.uid : null;
+      var all = [];
+      
+      // 1) الإشعارات العامة (بدون userId أو isGlobal)
+      try {
+        var globalSnap = await FB.db.collection('notifications').orderBy('createdAt', 'desc').limit(50).get();
+        globalSnap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          if (!d.userId || d.userId === uid || d.isGlobal) {
+            all.push(d);
+          }
+        });
+      } catch(e) {
+        console.warn('Global notifs error:', e);
+      }
+      
+      // ترتيب حسب التاريخ
+      all.sort(function(a, b) {
+        var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+        var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+        return tb - ta;
       });
       
-      this.notifications = list;
+      this.notifications = all;
       
-      if (!list.length) {
+      if (!all.length) {
         c.innerHTML = '<div class="cempty"><p>لا توجد إشعارات</p></div>';
         return;
       }
       
-      c.innerHTML = list.map(function(n) {
+      var typeIcons = {
+        'booking': '✈️',
+        'order': '🛒',
+        'points': '💎',
+        'referral': '🎟️',
+        'promo': '🎁',
+        'system': '🔔',
+        'general': '📢'
+      };
+      
+      var typeColors = {
+        'booking': '#3b82f6',
+        'order': '#10b981',
+        'points': '#8b5cf6',
+        'referral': '#f59e0b',
+        'promo': '#ec4899',
+        'system': '#6b7280',
+        'general': '#6A1B9A'
+      };
+      
+      c.innerHTML = all.map(function(n) {
         var timeStr = '';
         if (n.createdAt && n.createdAt.toDate) {
           var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
@@ -3863,12 +3911,25 @@ var APP={
           else if (diff < 1440) timeStr = 'قبل ' + Math.floor(diff / 60) + ' ساعة';
           else timeStr = 'قبل ' + Math.floor(diff / 1440) + ' يوم';
         }
-        return '<div class="oc" style="padding:15px;">' +
-          '<div style="display:flex;justify-content:space-between;align-items:start;gap:10px;">' +
+        
+        var type = n.type || 'general';
+        var icon = typeIcons[type] || '🔔';
+        var color = typeColors[type] || '#6A1B9A';
+        var isSelected = window._selectedNotifs && window._selectedNotifs.indexOf(n.id) !== -1;
+        var isUnread = n.read === false;
+        
+        return '<div class="notif-card' + (isSelected ? ' selected' : '') + (isUnread ? ' unread' : '') + '" data-id="' + n.id + '"' +
+          ' ontouchstart="notifTouchStart(event, \'' + n.id + '\')"' +
+          ' ontouchend="notifTouchEnd(event)"' +
+          ' ontouchmove="notifTouchEnd(event)"' +
+          ' onclick="notifClick(event, \'' + n.id + '\')">' +
+          '<div class="notif-checkbox"></div>' +
+          '<div class="notif-content" style="display:flex; gap:12px; align-items:flex-start;">' +
+            '<div style="width:38px; height:38px; border-radius:50%; background:' + color + '15; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;">' + icon + '</div>' +
             '<div style="flex:1;">' +
-              '<div style="color:#1f2937;font-weight:900;font-size:14px;">' + esc(n.title || '') + '</div>' +
-              '<div style="color:#6b7280;font-size:13px;margin-top:6px;line-height:1.6;">' + esc(n.body || '') + '</div>' +
-              (timeStr ? '<div style="color:#9ca3af;font-size:11px;margin-top:6px;">' + timeStr + '</div>' : '') +
+              '<div style="color:#1f2937; font-weight:900; font-size:14px;">' + esc(n.title || '') + '</div>' +
+              '<div style="color:#6b7280; font-size:13px; margin-top:4px; line-height:1.6;">' + esc(n.body || '') + '</div>' +
+              (timeStr ? '<div style="color:#9ca3af; font-size:11px; margin-top:6px;">' + timeStr + '</div>' : '') +
             '</div>' +
           '</div>' +
         '</div>';
@@ -3878,6 +3939,7 @@ var APP={
       c.innerHTML = '<div class="cempty"><p>حدث خطأ في التحميل</p></div>';
     }
   },
+
   
   renderFav:function(){
     var c=document.getElementById('fav-list');if(!c)return;
@@ -4462,7 +4524,10 @@ window.addEventListener('load', function() {
         APP.addPointsTx('استخدام كود إحالة', 10);
         APP.renderPoints();
       }
-      input.value = '';
+      if (window.pushUserNotification) {
+      await window.pushUserNotification('🎟️ مبروك! +10 نقاط', 'تم استخدام كود الإحالة بنجاح.', 'referral', { points: 10 });
+    }
+    input.value = '';
       showRefSuccess('حصلت على 10 نقاط فوراً!');
     } catch(e) {
       console.error(e);
@@ -5050,6 +5115,29 @@ window.addEventListener('load', function() {
   }, 100);
 
 })();
+</script>
+
+
+<script>
+// ═══ إرسال إشعار داخلي إلى Firebase ═══
+window.pushUserNotification = async function(title, body, type, data) {
+  try {
+    if (!window.FB || !FB.db || !FB.currentUser) return;
+    await FB.db.collection('notifications').add({
+      userId: FB.currentUser.uid,
+      title: title,
+      body: body,
+      type: type || 'general',
+      data: data || {},
+      read: false,
+      isGlobal: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    if (window.updateBadges) updateBadges();
+  } catch(e) {
+    console.log('Push notif error:', e);
+  }
+};
 </script>
 
 </body>
