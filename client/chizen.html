@@ -2390,14 +2390,32 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   </div>
 
   <!-- أزرار المهام السريعة -->
-  <div class="pt-act" style="flex-wrap: wrap; gap: 10px; padding: 15px;">
-    
-    <!-- تسجيل يومي -->
-    <div class="pt-a" onclick="dailyCheckinSafe()" style="flex: 1 1 45%;">
-      <div class="pt-ai">🎁</div>
-      <div class="pt-at">تسجيل يومي</div>
-      <div class="pt-ap">+1</div>
-    </div>
+  
+<div class="pt-act" style="display: flex; gap: 10px; padding: 15px; justify-content: space-between;">
+  
+  <!-- زر تسجيل يومي -->
+  <div class="pt-btn-card" onclick="dailyCheckinSafe()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="font-size: 24px;">🎁</div>
+    <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">تسجيل يومي</div>
+    <div style="font-size: 11px; font-weight: 900; color: #D81B60;">+1 نقطة</div>
+  </div>
+
+  <!-- زر كودي -->
+  <div class="pt-btn-card" onclick="showMyReferralCode()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div style="font-size: 24px;">🎟️</div>
+    <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">كودي</div>
+    <div style="font-size: 11px; font-weight: 900; color: #D81B60;">شارك</div>
+  </div>
+
+  <!-- زر شحن النقاط (ينزل للقسم) -->
+  <div class="pt-btn-card" onclick="document.querySelector('.pts-shop-section').scrollIntoView({behavior:'smooth'})" style="flex: 1; background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(216,27,96,0.1);">
+    <div style="font-size: 24px;">💎</div>
+    <div style="font-size: 12px; font-weight: 800; color: #6A1B9A; margin-top: 4px;">شحن رصيد</div>
+    <div style="font-size: 11px; font-weight: 900; color: #D81B60;">اشتري</div>
+  </div>
+
+</div>
+
     
     <!-- كودي -->
     <div class="pt-a" onclick="showMyReferralCode()" style="flex: 1 1 45%;">
