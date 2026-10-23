@@ -1619,7 +1619,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 
   /* الوسط: الشعار والاسم */
-  .chz-brand-group { display: flex; align-items: center; gap: 8px; direction: rtl; }
+  .chz-brand-group { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0; margin: 0; }
   .chz-logo {
     width: 42px; height: 42px; border-radius: 12px;
     background: #0A1028; border: 1px solid rgba(255,255,255,0.2);
@@ -1627,9 +1627,9 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
   .chz-logo img { width: 100%; height: 100%; object-fit: cover; }
   .chz-text-group { display: flex; flex-direction: column; justify-content: center; }
-  .chz-en { font-size: 20px; font-weight: 900; color: #FFD700; line-height: 1; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-  .chz-ar { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2; }
-  .chz-tag { font-size: 9px; color: rgba(255,255,255,0.85); white-space: nowrap; }
+  .chz-en { font-size: 20px; font-weight: 900; color: #FFD700; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.3); margin: 0; }
+  .chz-ar { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.1; margin: -2px 0 0 0; text-align: center; }
+  .chz-tag { font-size: 9px; color: rgba(255,255,255,0.9); white-space: nowrap; line-height: 1; margin-top: 1px; text-align: center; }
 
   /* اليسار: المستخدم */
   .chz-profile-group { display: flex; align-items: center; gap: 8px; direction: rtl; cursor: pointer; }
