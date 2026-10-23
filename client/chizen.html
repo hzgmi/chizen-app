@@ -5908,14 +5908,34 @@ var APP={
     c.innerHTML=items.map(function(p){return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-i"><img src="'+esc(p.img||'')+'"><div class="prod-b">⚡ '+esc(p.badge)+'</div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-o">'+esc(p.old)+'</span></div></div></div>';}).join('');
   },
   
-  renderBanners:function(){
-    var s=document.getElementById('slides');var d=document.getElementById('dots');
-    if(!s)return;
-    s.innerHTML=this.banners.map(function(b){
-      var img=b.img?'<img class="sl-img" src="'+esc(b.img)+'">':'';
-      return '<div class="slide" style="background:'+esc(b.bg)+'">'+img+'<div class="sl-c"><div class="sl-tag">'+esc(b.tag||'')+'</div><div class="sl-title">'+esc(b.title||'')+'</div><div class="sl-sub">'+esc(b.sub||'')+'</div><button class="sl-btn">'+esc(b.btn||'تسوق')+'</button></div></div>';
+  renderBanners: function() {
+    var s = document.getElementById('slides');
+    var d = document.getElementById('dots');
+    if (!s) return;
+    if (!this.banners || !this.banners.length) { s.innerHTML = ''; if (d) d.innerHTML = ''; return; }
+    s.innerHTML = this.banners.map(function(b) {
+      var fit = b.fit || 'cover';
+      var position = b.position || 'center';
+      var height = parseInt(b.height) || 200;
+      var align = b.align || 'right';
+      var overlay = (b.overlay !== undefined && b.overlay !== null) ? parseInt(b.overlay) : 50;
+      var ta = align === 'center' ? 'center' : (align === 'left' ? 'left' : 'right');
+      var ai = align === 'center' ? 'center' : (align === 'left' ? 'flex-start' : 'flex-end');
+      var dir = align === 'left' ? '270deg' : (align === 'center' ? '180deg' : '90deg');
+      var img = b.img ? '<img class="sl-img" src="' + esc(b.img) + '" style="width:100%;height:100%;object-fit:' + fit + ';object-position:' + position + ';display:block;">' : '';
+      var content = '<div class="sl-c" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 25px;text-align:' + ta + ';align-items:' + ai + ';background:linear-gradient(' + dir + ', rgba(0,0,0,' + (overlay/100) + ') 0%, transparent 80%);">' +
+        (b.tag ? '<div class="sl-tag" style="color:#ff27c9;font-weight:900;font-size:11px;text-shadow:0 2px 4px rgba(0,0,0,0.5);">' + esc(b.tag) + '</div>' : '') +
+        '<div class="sl-title" style="color:#fff;font-weight:900;font-size:22px;margin:6px 0;text-shadow:0 2px 8px rgba(0,0,0,0.6);">' + esc(b.title || '') + '</div>' +
+        (b.sub ? '<div class="sl-sub" style="color:#f8f9ff;font-size:13px;margin-bottom:12px;text-shadow:0 2px 6px rgba(0,0,0,0.6);">' + esc(b.sub) + '</div>' : '') +
+        (b.btn ? '<button class="sl-btn" style="background:linear-gradient(135deg,#ff27c9,#8d24ff);color:#fff;border:none;border-radius:10px;padding:10px 22px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 4px 15px rgba(255,39,201,0.4);">' + esc(b.btn) + '</button>' : '') +
+        '</div>';
+      var bg = b.img ? '' : 'background:' + (b.bg || 'linear-gradient(135deg,#6A1B9A,#D81B60)');
+      return '<div class="slide" style="' + bg + ';position:relative;height:' + height + 'px;">' + img + content + '</div>';
     }).join('');
-    d.innerHTML=this.banners.map(function(_,i){return '<div class="dot'+(i===0?' active':'')+'" onclick="APP.goSlide('+i+')"></div>';}).join('');
+    if (d) d.innerHTML = this.banners.map(function(_, i) {
+      return '<div class="dot' + (i === 0 ? ' active' : '') + '" onclick="APP.goSlide(' + i + ')"></div>';
+    }).join('');
+    if (this.startSlideAutoplay) this.startSlideAutoplay();
   },
   
   goSlide:function(i){
