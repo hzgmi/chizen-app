@@ -5121,14 +5121,22 @@ var APP={
   setTog:function(id,v){var el=document.getElementById(id);if(!el)return;if(v)el.classList.add('on');else el.classList.remove('on');},
   togT:function(k,el){this.state[k]=!this.state[k];if(this.state[k])el.classList.add('on');else el.classList.remove('on');this.saveState();this.toast('تم الحفظ ✓');},
   
-  openLang:function(){var self=this;this.openModal('اللغة',[{v:'ar',l:'العربية'},{v:'en',l:'English'}],this.state.lang,function(v){self.state.lang=v;self.applyState();self.saveState();self.renderSettings();self.toast('✓');});},
-  openTheme:function(){var self=this;this.openModal('الوضع',[{v:'dark',l:'داكن'},{v:'light',l:'فاتح'}],this.state.theme,function(v){self.state.theme=v;self.applyState();self.saveState();self.renderSettings();self.toast('✓');});},
-  openFont:function(){var self=this;this.openModal('حجم الخط',[{v:'small',l:'صغير'},{v:'medium',l:'متوسط'},{v:'large',l:'كبير'}],this.state.fontSize,function(v){self.state.fontSize=v;self.saveState();self.renderSettings();self.toast('✓');});},
-  openModal:function(title,opts,cur,cb){
-    document.getElementById('modal-t').textContent=title;
-    document.getElementById('modal-c').innerHTML=opts.map(function(o){return '<div class="mo'+(o.v===cur?' selected':'')+'" onclick="APP.selectModal(\''+o.v+'\')">'+o.l+'</div>';}).join('');
-    window._modalCb=cb;
-    document.getElementById('modal').classList.add('active');
+  openLang: function() {
+    var self = this;
+    var current = localStorage.getItem('chizen_lang') || 'ar';
+    var langs = [
+      { v: 'ar', l: '🇾🇪 العربية' },
+      { v: 'en', l: '🇬🇧 English' }
+    ];
+    this.openModal('اختر اللغة', langs, current, function(v) {
+      if (v === current) return;
+      localStorage.setItem('chizen_lang', v);
+      self.state.lang = v;
+      self.saveState();
+      self.toast(v === 'ar' ? '🇾🇪 تم تفعيل العربية' : '🇬🇧 English activated', 'suc');
+      // إعادة تحميل لتفعيل الترجمة (إذا وجدت)
+      setTimeout(function() { location.reload(); }, 800);
+    });
   },
   selectModal:function(v){if(window._modalCb)window._modalCb(v);this.closeModal();},
   
@@ -6300,6 +6308,43 @@ window.addEventListener('load', function() {
       value.textContent = '☀️ فاتح';
       value.style.background = 'linear-gradient(135deg,#FFD700,#FF8B45)';
     }
+  }
+});
+</script>
+
+
+<script>
+// ═══ notifClick (معالجة النقر على الإشعارات) ═══
+window.notifClick = function(event, id) {
+  if (window._longPressTriggered) {
+    window._longPressTriggered = false;
+    return;
+  }
+  if (window._selectMode) {
+    window.toggleNotifSelection(id);
+    return;
+  }
+  // النقر العادي: عرض تفاصيل الإشعار
+  if (window.APP && APP.notifications) {
+    var notif = APP.notifications.find(function(n) { return n.id === id; });
+    if (notif && window.showSuccess) {
+      showSuccess({
+        title: notif.title || 'إشعار',
+        message: notif.body || '',
+        btn: 'حسناً'
+      });
+    }
+  }
+};
+</script>
+
+
+<script>
+// تطبيق الإعدادات المحفوظة عند التحميل
+window.addEventListener('load', function() {
+  var fontSize = localStorage.getItem('chizen_fontsize');
+  if (fontSize) {
+    document.body.style.fontSize = fontSize === 'small' ? '14px' : fontSize === 'large' ? '18px' : '16px';
   }
 });
 </script>
