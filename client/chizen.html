@@ -2373,15 +2373,62 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div class="screen" id="sc-favorites"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">المفضلة</div></div><div class="sec" style="padding-top:8px;"><div class="prods" id="fav-list"></div></div></div>
 
     <!-- POINTS -->
-    <div class="screen" id="sc-points">
-      <div class="st"></div>
-      <div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">نقاطي</div></div>
-      <div class="pt-hero"><div class="pt-hi">💎</div><div class="pt-hn" id="pt-num">0</div><div class="pt-hl">نقطة ولاء</div><div class="pt-hv" id="pt-val">= 0 ر.س خصم</div></div>
-      <div class="pt-act">
-        <div class="pt-a" onclick="APP.dailyCheckin()"><div class="pt-ai">🎁</div><div class="pt-at">تسجيل يومي</div><div class="pt-ap">+10</div></div>
-        <div class="pt-a" onclick="APP.sharePoints()"><div class="pt-ai">📤</div><div class="pt-at">شارك</div><div class="pt-ap">+25</div></div>
-        <div class="pt-a" onclick="APP.reviewPoints()"><div class="pt-ai">⭐</div><div class="pt-at">قيّم</div><div class="pt-ap">+50</div></div>
+    
+<div class="screen" id="sc-points">
+  <div class="st"></div>
+  <div class="sh2">
+    <button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+    <div class="st2">نقاطي</div>
+  </div>
+  
+  <!-- بطاقة الرصيد -->
+  <div class="pt-hero">
+    <div class="pt-hi">💎</div>
+    <div class="pt-hn" id="pt-num">0</div>
+    <div class="pt-hl">نقطة ولاء</div>
+    <div class="pt-hv" id="pt-val">= 0 ر.س خصم</div>
+  </div>
+
+  <!-- أزرار المهام السريعة -->
+  <div class="pt-act" style="flex-wrap: wrap; gap: 10px; padding: 15px;">
+    
+    <!-- تسجيل يومي -->
+    <div class="pt-a" onclick="dailyCheckinSafe()" style="flex: 1 1 45%;">
+      <div class="pt-ai">🎁</div>
+      <div class="pt-at">تسجيل يومي</div>
+      <div class="pt-ap">+10</div>
+    </div>
+    
+    <!-- كودي -->
+    <div class="pt-a" onclick="showMyReferralCode()" style="flex: 1 1 45%;">
+      <div class="pt-ai">🎟️</div>
+      <div class="pt-at">كودي</div>
+      <div class="pt-ap">شارك</div>
+    </div>
+
+  </div>
+
+  <!-- قسم دعوة صديق -->
+  <div style="padding: 0 15px 20px;">
+    <div style="background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 20px;">
+      <div style="font-size: 16px; font-weight: 900; color: #6A1B9A; margin-bottom: 5px;">🎁 ادعُ صديقاً</div>
+      <div style="font-size: 12px; color: #6b7280; margin-bottom: 15px;">أدخل كود صديقك لتحصل على 50 نقطة فوراً!</div>
+      
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="ref-input" placeholder="CHZ123ABC" style="flex: 1; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; text-align: center; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">
+        <button onclick="applyReferralCode()" style="background: linear-gradient(135deg, #6A1B9A, #D81B60); color: #fff; border: none; border-radius: 12px; padding: 12px 20px; font-weight: bold; cursor: pointer;">تطبيق</button>
       </div>
+      <div id="ref-message" style="font-size: 11px; color: #D81B60; margin-top: 8px; text-align: center; display: none;"></div>
+    </div>
+  </div>
+
+  <!-- سجل الحركات -->
+  <div class="pt-h">
+    <div class="pt-ht">سجل الحركات</div>
+    <div id="pt-list"></div>
+  </div>
+</div>
+
       <div class="pt-h"><div class="pt-ht">سجل الحركات</div><div id="pt-list"></div></div>
     </div>
 
