@@ -1628,57 +1628,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 </style>
 
 
-<style id="layout-swap-fix">
-  /* ═════════ رفع الهيدر للأعلى ═════════ */
-  .app-header {
-    margin: 4px 16px 12px !important; /* تقليل الهامش العلوي */
-    padding: 8px 16px 12px !important;
-  }
 
-  /* ═════════ تبديل الأماكن (Grid) ═════════ */
-  /* الأيقونات (اليسار الآن) */
-  .header-left {
-    grid-column: 3 !important;
-    justify-self: end !important; /* محاذاة لليسار في RTL */
-    flex-direction: row !important;
-  }
-
-  /* الاسم والصورة (اليمين الآن) */
-  .header-right {
-    grid-column: 1 !important;
-    justify-self: start !important; /* محاذاة لليمين في RTL */
-    flex-direction: row-reverse !important; /* الصورة في أقصى اليمين، والاسم بجانبها */
-    gap: 8px !important;
-  }
-  
-  .user-info {
-    align-items: flex-start !important;
-    text-align: right !important;
-  }
-
-  /* ═════════ رفع شعار CHIZEN ═════════ */
-  .header-center {
-    grid-column: 2 !important;
-    justify-self: center !important;
-    align-self: start !important; /* رفع الشعار لأعلى الخلية */
-    transform: translateY(-4px) !important; /* رفعه أكثر قليلاً */
-  }
-  
-  .brand-logo {
-    font-size: 30px !important; /* تكبير طفيف ليتناسب مع الرفع */
-  }
-  
-  .brand-sub {
-    margin-top: 1px !important; /* تقريب الكلمتين من الشعار */
-  }
-
-  /* تحسين المسافات على الشاشات الصغيرة */
-  @media (max-width: 380px) {
-    .app-header { margin: 2px 12px 10px !important; padding: 6px 12px 10px !important; }
-    .brand-logo { font-size: 26px !important; }
-    .user-info .username { font-size: 12px !important; }
-  }
-</style>
 
 </head>
 <body>
