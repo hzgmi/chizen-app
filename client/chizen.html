@@ -3737,49 +3737,49 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
         <div onclick="APP.goTab('home')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </div>
-        <div style="font-weight:900; font-size:20px; color: #1f2937; font-family:'Tajawal',sans-serif;">مركز الحجوزات</div>
+        <div style="font-weight:900; font-size:20px; color: #1f2937; font-family:'Tajawal',sans-serif;"><span data-i18n="booking.center" data-i18n-ar="مركز الحجوزات">مركز الحجوزات</span></div>
       </div>
       
       <div class="booking-tabs" id="service-tabs">
-         <button id="tab-flight" class="booking-tab active" onclick="APP.switchBookingTab('flight')">✈️ طيران</button>
-         <button id="tab-bus" class="booking-tab" onclick="APP.switchBookingTab('bus')">🚌 باصات</button>
-         <button id="tab-hajj" class="booking-tab" onclick="APP.switchBookingTab('hajj')">🕋 حج وعمرة</button>
-         <button id="tab-hotel" class="booking-tab" onclick="APP.switchBookingTab('hotel')">🏨 فنادق</button>
+         <button id="tab-flight" class="booking-tab active" onclick="APP.switchBookingTab('flight')"><span data-i18n="booking.flight_tab" data-i18n-ar="✈️ طيران">✈️ طيران</span></button>
+         <button id="tab-bus" class="booking-tab" onclick="APP.switchBookingTab('bus')"><span data-i18n="booking.bus_tab" data-i18n-ar="🚌 باصات">🚌 باصات</span></button>
+         <button id="tab-hajj" class="booking-tab" onclick="APP.switchBookingTab('hajj')"><span data-i18n="booking.hajj_tab" data-i18n-ar="🕋 حج وعمرة">🕋 حج وعمرة</span></button>
+         <button id="tab-hotel" class="booking-tab" onclick="APP.switchBookingTab('hotel')"><span data-i18n="booking.hotel_tab" data-i18n-ar="🏨 فنادق">🏨 فنادق</span></button>
       </div>
 
       <div style="padding:0 15px 100px 15px;">
          <div id="form-flight" class="booking-form active">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">✈️ تفاصيل الرحلة</div>
-            <label>شركة الطيران</label>
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.flight_details" data-i18n-ar="✈️ تفاصيل الرحلة">✈️ تفاصيل الرحلة</span></div>
+            <label><span data-i18n="booking.airline" data-i18n-ar="شركة الطيران">شركة الطيران</span></label>
             <select id="fly-airline">
                <option value="yemenia">الخطوط الجوية اليمنية</option>
                <option value="qutaibi">طيران عدن (القطيبي)</option>
                <option value="other">أخرى</option>
             </select>
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>من</label><input id="fly-from" type="text" value="عدن" placeholder="من"></div>
-                <div style="flex:1;"><label>إلى</label><input id="fly-to" type="text" placeholder="إلى"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.from" data-i18n-ar="من">من</span></label><input id="fly-from" type="text" value="عدن" placeholder="من"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.to" data-i18n-ar="إلى">إلى</span></label><input id="fly-to" type="text" placeholder="إلى"></div>
             </div>
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>التاريخ</label><input id="fly-date" type="date"></div>
-                <div style="flex:1;"><label>المسافرين</label><input id="fly-pax" type="number" min="1" value="1"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.date" data-i18n-ar="التاريخ">التاريخ</span></label><input id="fly-date" type="date"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.passengers" data-i18n-ar="المسافرين">المسافرين</span></label><input id="fly-pax" type="number" min="1" value="1"></div>
             </div>
-            <label>الدرجة</label>
+            <label><span data-i18n="booking.class" data-i18n-ar="الدرجة">الدرجة</span></label>
             <select id="fly-class">
                <option value="economy">اقتصادية</option>
                <option value="business">رجال الأعمال (VIP)</option>
             </select>
-            <label>الاسم الكامل</label><input id="fly-name" type="text" placeholder="الاسم كما في الجواز">
-            <label>رقم الجواز</label><input id="fly-passport" type="text" placeholder="رقم الجواز">
-            <label>رقم الجوال</label><input id="fly-phone" type="tel" placeholder="رقم الجوال">
-            <button onclick="APP.submitFlight()">تأكيد حجز الطيران</button>
+            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="fly-name" type="text" placeholder="الاسم كما في الجواز" data-i18n-placeholder="ph.الاسم كما في الجواز" data-i18n-placeholder-ar="الاسم كما في الجواز">
+            <label><span data-i18n="booking.passport" data-i18n-ar="رقم الجواز">رقم الجواز</span></label><input id="fly-passport" type="text" placeholder="رقم الجواز" data-i18n-placeholder="ph.رقم الجواز" data-i18n-placeholder-ar="رقم الجواز">
+            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="fly-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            <button onclick="APP.submitFlight()"><span data-i18n="booking.confirm_flight" data-i18n-ar="تأكيد حجز الطيران">تأكيد حجز الطيران</span></button>
          </div>
 
          <div id="form-bus" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">🚌 تفاصيل رحلة الباص</div>
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.bus_details" data-i18n-ar="🚌 تفاصيل رحلة الباص">🚌 تفاصيل رحلة الباص</span></div>
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>من</label><input type="text" value="عدن" disabled style="opacity:0.7;"></div>
-                <div style="flex:1;"><label>إلى</label>
+                <div style="flex:1;"><label><span data-i18n="booking.from" data-i18n-ar="من">من</span></label><input type="text" value="عدن" disabled style="opacity:0.7;"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.to" data-i18n-ar="إلى">إلى</span></label>
                     <select id="bus-to">
                         <option value="صنعاء">صنعاء</option>
                         <option value="تعز">تعز</option>
@@ -3790,45 +3790,45 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
                 </div>
             </div>
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>التاريخ</label><input id="bus-date" type="date"></div>
-                <div style="flex:1;"><label>الوقت</label><input id="bus-time" type="time"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.date" data-i18n-ar="التاريخ">التاريخ</span></label><input id="bus-date" type="date"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.time" data-i18n-ar="الوقت">الوقت</span></label><input id="bus-time" type="time"></div>
             </div>
-            <label>عدد المقاعد</label><input id="bus-pax" type="number" min="1" value="1">
-            <label>الاسم الكامل</label><input id="bus-name" type="text" placeholder="الاسم">
-            <label>رقم الجوال</label><input id="bus-phone" type="tel" placeholder="رقم الجوال">
-            <button onclick="APP.submitBus()">تأكيد حجز الباص</button>
+            <label><span data-i18n="booking.seats" data-i18n-ar="عدد المقاعد">عدد المقاعد</span></label><input id="bus-pax" type="number" min="1" value="1">
+            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="bus-name" type="text" placeholder="الاسم" data-i18n-placeholder="ph.الاسم" data-i18n-placeholder-ar="الاسم" data-i18n-placeholder="checkout.name" data-i18n-placeholder-ar="الاسم">
+            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="bus-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            <button onclick="APP.submitBus()"><span data-i18n="booking.confirm_bus" data-i18n-ar="تأكيد حجز الباص">تأكيد حجز الباص</span></button>
          </div>
 
          <div id="form-hajj" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">🕋 رحلات الحج والعمرة</div>
-            <label>نوع الرحلة</label>
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.hajj_details" data-i18n-ar="🕋 رحلات الحج والعمرة">🕋 رحلات الحج والعمرة</span></div>
+            <label><span data-i18n="booking.trip_type" data-i18n-ar="نوع الرحلة">نوع الرحلة</span></label>
             <select id="hajj-type">
-                <option value="umrah">عمرة</option>
-                <option value="hajj">حج</option>
+                <option value="umrah"><span data-i18n="booking.umrah" data-i18n-ar="عمرة">عمرة</span></option>
+                <option value="hajj"><span data-i18n="booking.hajj" data-i18n-ar="حج">حج</span></option>
             </select>
-            <label>تاريخ السفر التقريبي</label><input id="hajj-date" type="date">
-            <label>عدد الأشخاص</label><input id="hajj-pax" type="number" min="1" value="1">
-            <label>الاسم الكامل</label><input id="hajj-name" type="text" placeholder="الاسم كما في الجواز">
-            <label>رقم الجواز</label><input id="hajj-passport" type="text" placeholder="رقم الجواز">
-            <label>رقم الجوال</label><input id="hajj-phone" type="tel" placeholder="رقم الجوال">
-            <button onclick="APP.submitHajj()">تأكيد الحجز</button>
+            <label><span data-i18n="booking.travel_date" data-i18n-ar="تاريخ السفر التقريبي">تاريخ السفر التقريبي</span></label><input id="hajj-date" type="date">
+            <label><span data-i18n="booking.people" data-i18n-ar="عدد الأشخاص">عدد الأشخاص</span></label><input id="hajj-pax" type="number" min="1" value="1">
+            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="hajj-name" type="text" placeholder="الاسم كما في الجواز" data-i18n-placeholder="ph.الاسم كما في الجواز" data-i18n-placeholder-ar="الاسم كما في الجواز">
+            <label><span data-i18n="booking.passport" data-i18n-ar="رقم الجواز">رقم الجواز</span></label><input id="hajj-passport" type="text" placeholder="رقم الجواز" data-i18n-placeholder="ph.رقم الجواز" data-i18n-placeholder-ar="رقم الجواز">
+            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="hajj-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            <button onclick="APP.submitHajj()"><span data-i18n="booking.confirm_hajj" data-i18n-ar="تأكيد الحجز">تأكيد الحجز</span></button>
          </div>
 
          <div id="form-hotel" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;">🏨 تفاصيل الفندق</div>
-            <label>المدينة</label><input id="hotel-city" type="text" placeholder="مثال: القاهرة">
-            <label>اسم الفندق (إن وجد)</label><input id="hotel-name" type="text" placeholder="اسم الفندق">
+            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.hotel_details" data-i18n-ar="🏨 تفاصيل الفندق">🏨 تفاصيل الفندق</span></div>
+            <label><span data-i18n="booking.city" data-i18n-ar="المدينة">المدينة</span></label><input id="hotel-city" type="text" placeholder="مثال: القاهرة" data-i18n-placeholder="ph.مثال: القاهرة" data-i18n-placeholder-ar="مثال: القاهرة">
+            <label><span data-i18n="booking.hotel_name" data-i18n-ar="اسم الفندق (إن وجد)">اسم الفندق (إن وجد)</span></label><input id="hotel-name" type="text" placeholder="اسم الفندق">
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>تاريخ الدخول</label><input id="hotel-in" type="date"></div>
-                <div style="flex:1;"><label>تاريخ الخروج</label><input id="hotel-out" type="date"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.checkin" data-i18n-ar="تاريخ الدخول">تاريخ الدخول</span></label><input id="hotel-in" type="date"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.checkout" data-i18n-ar="تاريخ الخروج">تاريخ الخروج</span></label><input id="hotel-out" type="date"></div>
             </div>
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label>الغرف</label><input id="hotel-rooms" type="number" min="1" value="1"></div>
-                <div style="flex:1;"><label>الضيوف</label><input id="hotel-guests" type="number" min="1" value="1"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.rooms" data-i18n-ar="الغرف">الغرف</span></label><input id="hotel-rooms" type="number" min="1" value="1"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.guests" data-i18n-ar="الضيوف">الضيوف</span></label><input id="hotel-guests" type="number" min="1" value="1"></div>
             </div>
-            <label>الاسم الكامل</label><input id="hotel-client-name" type="text" placeholder="الاسم">
-            <label>رقم الجوال</label><input id="hotel-phone" type="tel" placeholder="رقم الجوال">
-            <button onclick="APP.submitHotel()">تأكيد حجز الفندق</button>
+            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="hotel-client-name" type="text" placeholder="الاسم" data-i18n-placeholder="ph.الاسم" data-i18n-placeholder-ar="الاسم" data-i18n-placeholder="checkout.name" data-i18n-placeholder-ar="الاسم">
+            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="hotel-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            <button onclick="APP.submitHotel()"><span data-i18n="booking.confirm_hotel" data-i18n-ar="تأكيد حجز الفندق">تأكيد حجز الفندق</span></button>
          </div>
       </div>
     </div>
@@ -3853,8 +3853,8 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
         <div class="det-r" id="det-rate"></div>
         <div class="det-p" id="det-price"></div>
         <div class="det-d" id="det-desc"></div>
-        <div class="qs"><div class="qsl">الكمية</div><div class="qc"><button class="qb2" onclick="APP.chQty(-1)">−</button><span class="qn2" id="det-qty">1</span><button class="qb2" onclick="APP.chQty(1)">+</button></div></div>
-        <div class="det-a"><button class="btn-c" onclick="APP.addDetCart()">أضف للسلة</button><button class="btn-b" onclick="APP.buyNow()">اشترِ الآن</button></div>
+        <div class="qs"><div class="qsl"><span data-i18n="details.quantity" data-i18n-ar="الكمية">الكمية</span></div><div class="qc"><button class="qb2" onclick="APP.chQty(-1)">−</button><span class="qn2" id="det-qty">1</span><button class="qb2" onclick="APP.chQty(1)">+</button></div></div>
+        <div class="det-a"><button class="btn-c" onclick="APP.addDetCart()"><span data-i18n="details.add_to_cart" data-i18n-ar="أضف للسلة">أضف للسلة</span></button><button class="btn-b" onclick="APP.buyNow()"><span data-i18n="details.buy_now" data-i18n-ar="اشترِ الآن">اشترِ الآن</span></button></div>
       </div>
     </div>
 
@@ -3868,28 +3868,28 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <!-- CHECKOUT -->
     <div class="screen" id="sc-checkout">
       <div class="st"></div>
-      <div class="sh2"><button class="back" onclick="APP.goTab('cart')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2">إتمام الشراء</div></div>
+      <div class="sh2"><button class="back" onclick="APP.goTab('cart')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></div></div>
       <div style="padding:0 20px 20px;">
-        <div class="cs"><div class="cst"><div class="cn">1</div>نقطة التسليم</div>
-          <div class="f"><label class="fl">اختر نقطة التسليم</label>
+        <div class="cs"><div class="cst"><div class="cn">1</div><span data-i18n="checkout.delivery" data-i18n-ar="نقطة التسليم">نقطة التسليم</span></div>
+          <div class="f"><label class="fl"><span data-i18n="checkout.choose_delivery" data-i18n-ar="اختر نقطة التسليم">اختر نقطة التسليم</span></label>
             <button id="pickup-btn" onclick="APP.openPickup()" style="width:100%;padding:14px;background: #f4f6fa;border:1.5px solid var(--bd);border-radius:12px;color:var(--mt);font-family:'Tajawal',sans-serif;font-size:14px;text-align:right;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
               <span id="pickup-txt">📍 اختر نقطة التسليم</span><span style="color:var(--mt2);font-size:18px;">›</span>
             </button>
             <input type="hidden" id="pickup-val" value="">
           </div>
         </div>
-        <div class="cs"><div class="cst"><div class="cn">2</div>معلومات الاتصال</div>
-          <div class="f"><label class="fl">الاسم</label><input class="fi" id="co-name" placeholder="اسمك الكامل"></div>
-          <div class="f"><label class="fl">الهاتف</label><input class="fi" id="co-phone" type="tel" placeholder="+967 7XX XXX XXX"></div>
+        <div class="cs"><div class="cst"><div class="cn">2</div><span data-i18n="checkout.contact" data-i18n-ar="معلومات الاتصال">معلومات الاتصال</span></div>
+          <div class="f"><label class="fl"><span data-i18n="checkout.name" data-i18n-ar="الاسم">الاسم</span></label><input class="fi" id="co-name" placeholder="اسمك الكامل" data-i18n-placeholder="checkout.name_placeholder" data-i18n-placeholder-ar="اسمك الكامل"></div>
+          <div class="f"><label class="fl"><span data-i18n="checkout.phone" data-i18n-ar="الهاتف">الهاتف</span></label><input class="fi" id="co-phone" type="tel" placeholder="+967 7XX XXX XXX"></div>
         </div>
-        <div class="cs"><div class="cst"><div class="cn">3</div>طريقة الدفع</div><div class="bank-l" id="bank-list"></div></div>
-        <div class="tb"><div class="tr"><span>المجموع</span><span id="co-sub">0 ر.س</span></div><div class="tr"><span>الشحن</span><span id="co-ship">مجاني</span></div><div class="tf"><span>الإجمالي</span><span id="co-total">0 ر.س</span></div></div>
+        <div class="cs"><div class="cst"><div class="cn">3</div><span data-i18n="checkout.payment" data-i18n-ar="طريقة الدفع">طريقة الدفع</span></div><div class="bank-l" id="bank-list"></div></div>
+        <div class="tb"><div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span id="co-sub">0 ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span id="co-ship"><span data-i18n="cart.free" data-i18n-ar="مجاني">مجاني</span></span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span id="co-total">0 ر.س</span></div></div>
         
       <div style="margin:15px 0;padding:15px;background:rgba(255,255,255,.05);border:1px dashed #D81B60;border-radius:12px;text-align:center">
         <div style="color:#fff;font-weight:bold;margin-bottom:10px;font-family:'Tajawal'">📎 ارفق صورة إيصال التحويل (اختياري)</div>
         <input type="file" id="co-receipt" accept="image/*" style="color:#aaa;font-family:'Tajawal';width:100%">
       </div>
-<button class="btn-p" style="margin-top:16px;" onclick="APP.confirmOrder()">تأكيد الطلب</button>
+<button class="btn-p" style="margin-top:16px;" onclick="APP.confirmOrder()"><span data-i18n="checkout.confirm" data-i18n-ar="تأكيد الطلب">تأكيد الطلب</span></button>
       </div>
     </div>
 
@@ -3897,7 +3897,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div class="screen" id="sc-orders"><div class="st"></div><div class="sh2"><div class="st2" data-i18n="orders.title" data-i18n-ar="طلباتي">طلباتي</div></div><div style="padding:4px 20px 20px;" id="orders-list"></div></div>
 
     <!-- NOTIFICATIONS -->
-    <div class="screen" id="sc-notifications"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2" data-i18n="notifications.title" data-i18n-ar="الإشعارات">الإشعارات</div><button style="margin-right:auto;background:none;border:none;color:#D81B60;font-family:inherit;font-size:12px;font-weight:bold;" onclick="APP.clearAllNotifs()">مسح الكل 🗑️</button></div><div style="padding:4px 20px 20px;" id="notif-list"></div></div>
+    <div class="screen" id="sc-notifications"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2" data-i18n="notifications.title" data-i18n-ar="الإشعارات"><span data-i18n="settings.notifications" data-i18n-ar="الإشعارات">الإشعارات</span></div><button style="margin-right:auto;background:none;border:none;color:#D81B60;font-family:inherit;font-size:12px;font-weight:bold;" onclick="APP.clearAllNotifs()">مسح الكل 🗑️</button></div><div style="padding:4px 20px 20px;" id="notif-list"></div></div>
 
     <!-- FAVORITES -->
     <div class="screen" id="sc-favorites"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2" data-i18n="favorites.title" data-i18n-ar="المفضلة">المفضلة</div></div><div class="sec" style="padding-top:8px;"><div class="prods" id="fav-list"></div></div></div>
@@ -3915,7 +3915,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   <div class="pt-hero">
     <div class="pt-hi">💎</div>
     <div class="pt-hn" id="pt-num">0</div>
-    <div class="pt-hl">نقطة ولاء</div>
+    <div class="pt-hl"><span data-i18n="points.unit" data-i18n-ar="نقطة ولاء">نقطة ولاء</span></div>
     <div class="pt-hv" id="pt-val">= 0 ر.س خصم</div>
   </div>
 
@@ -3923,18 +3923,18 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   <div style="display: flex; gap: 10px; padding: 15px;">
     <div onclick="dailyCheckinSafe()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
       <div style="font-size: 24px;">🎁</div>
-      <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">تسجيل يومي</div>
+      <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;"><span data-i18n="points.checkin" data-i18n-ar="تسجيل يومي">تسجيل يومي</span></div>
       <div style="font-size: 11px; font-weight: 900; color: #D81B60;">+1 نقطة</div>
     </div>
     <div onclick="showMyReferralCode()" style="flex: 1; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
       <div style="font-size: 24px;">🎟️</div>
-      <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;">كودي</div>
-      <div style="font-size: 11px; font-weight: 900; color: #D81B60;">شارك</div>
+      <div style="font-size: 12px; font-weight: 800; color: #1f2937; margin-top: 4px;"><span data-i18n="points.mycode" data-i18n-ar="كودي">كودي</span></div>
+      <div style="font-size: 11px; font-weight: 900; color: #D81B60;"><span data-i18n="points.share" data-i18n-ar="شارك">شارك</span></div>
     </div>
     <div onclick="document.querySelector('.pts-shop-section').scrollIntoView({behavior:'smooth'})" style="flex: 1; background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 12px 5px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(216,27,96,0.1);">
       <div style="font-size: 24px;">💎</div>
-      <div style="font-size: 12px; font-weight: 800; color: #6A1B9A; margin-top: 4px;">شحن رصيد</div>
-      <div style="font-size: 11px; font-weight: 900; color: #D81B60;">اشتري</div>
+      <div style="font-size: 12px; font-weight: 800; color: #6A1B9A; margin-top: 4px;"><span data-i18n="points.buy" data-i18n-ar="شحن رصيد">شحن رصيد</span></div>
+      <div style="font-size: 11px; font-weight: 900; color: #D81B60;"><span data-i18n="points.buy_btn" data-i18n-ar="اشتري">اشتري</span></div>
     </div>
   </div>
 
@@ -3943,12 +3943,12 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div style="background: linear-gradient(135deg, #F5EFFF, #FCEBF3); border: 1px solid #f0eaf5; border-radius: 16px; padding: 20px;">
       <div style="text-align: center; margin-bottom: 15px;">
         <div style="font-size: 40px;">🤝</div>
-        <div style="font-size: 16px; font-weight: 900; color: #6A1B9A; margin-top: 5px;">ادعُ صديقاً واكسبوا معاً!</div>
-        <div style="font-size: 12px; color: #6b7280; margin-top: 5px;">أدخل كود صديقك لتحصل أنت وهو على 10 نقاط لكل منكما</div>
+        <div style="font-size: 16px; font-weight: 900; color: #6A1B9A; margin-top: 5px;"><span data-i18n="points.invite_title" data-i18n-ar="ادعُ صديقاً واكسبوا معاً!">ادعُ صديقاً واكسبوا معاً!</span></div>
+        <div style="font-size: 12px; color: #6b7280; margin-top: 5px;"><span data-i18n="points.invite_desc" data-i18n-ar="أدخل كود صديقك لتحصل أنت وهو على 10 نقاط لكل منكما">أدخل كود صديقك لتحصل أنت وهو على 10 نقاط لكل منكما</span></div>
       </div>
       <div style="display: flex; gap: 8px;">
         <input type="text" id="ref-input" placeholder="أدخل الكود (CHZ...)" style="flex: 1; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; text-align: center; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; font-size: 14px;">
-        <button onclick="applyReferralCode()" style="background: linear-gradient(135deg, #6A1B9A, #D81B60); color: #fff; border: none; border-radius: 12px; padding: 12px 20px; font-weight: bold; cursor: pointer; font-size: 14px;">تطبيق</button>
+        <button onclick="applyReferralCode()" style="background: linear-gradient(135deg, #6A1B9A, #D81B60); color: #fff; border: none; border-radius: 12px; padding: 12px 20px; font-weight: bold; cursor: pointer; font-size: 14px;"><span data-i18n="points.apply" data-i18n-ar="تطبيق">تطبيق</span></button>
       </div>
       <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center;">
         <button onclick="showMyReferralCode()" style="background: #fff; color: #6A1B9A; border: 2px solid #6A1B9A; border-radius: 12px; padding: 10px 20px; font-weight: bold; cursor: pointer; font-size: 13px;">🎟️ عرض كودي</button>
@@ -3961,8 +3961,8 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div style="background: linear-gradient(135deg, #FF3D9A, #7C3AED); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(216,27,96,0.25);">
       <div style="text-align: center; margin-bottom: 15px;">
         <div style="font-size: 40px;">💎</div>
-        <div style="font-size: 18px; font-weight: 900; color: #fff;">شحن رصيد النقاط</div>
-        <div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 5px;">اشترِ نقاطاً واستخدمها في أي وقت</div>
+        <div style="font-size: 18px; font-weight: 900; color: #fff;"><span data-i18n="points.buy_title" data-i18n-ar="شحن رصيد النقاط">شحن رصيد النقاط</span></div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 5px;"><span data-i18n="points.buy_desc" data-i18n-ar="اشترِ نقاطاً واستخدمها في أي وقت">اشترِ نقاطاً واستخدمها في أي وقت</span></div>
       </div>
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
         <div class="pts-package" onclick="selectPointsPackage(100, 10)" style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s;">
@@ -4017,17 +4017,17 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
         <div class="profile-stats">
           <div class="pstat">
             <div class="pstat-num" id="stat-orders">0</div>
-            <div class="pstat-lbl">طلبات</div>
+            <div class="pstat-lbl"><span data-i18n="profile.orders_stat" data-i18n-ar="طلبات">طلبات</span></div>
           </div>
           <div class="pstat-divider"></div>
           <div class="pstat">
             <div class="pstat-num" id="stat-favs">0</div>
-            <div class="pstat-lbl">مفضلة</div>
+            <div class="pstat-lbl"><span data-i18n="profile.favs_stat" data-i18n-ar="مفضلة">مفضلة</span></div>
           </div>
           <div class="pstat-divider"></div>
           <div class="pstat">
             <div class="pstat-num" id="prof-pts">0</div>
-            <div class="pstat-lbl">نقطة</div>
+            <div class="pstat-lbl"><span data-i18n="profile.points_stat" data-i18n-ar="نقطة">نقطة</span></div>
           </div>
         </div>
       </div>
@@ -4037,32 +4037,32 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
         <div class="sgt">📦 نشاطي</div>
         <div class="sit" onclick="APP.goTab('orders')">
           <div class="sii" style="background:rgba(59,130,246,.15);"><svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
-          <div class="sit-t"><div class="sit-ti">طلباتي</div><div class="sit-d">تتبع طلباتك</div></div>
+          <div class="sit-t"><div class="sit-ti"><span data-i18n="profile.orders" data-i18n-ar="طلباتي">طلباتي</span></div><div class="sit-d"><span data-i18n="desc.تتبع طلباتك" data-i18n-ar="تتبع طلباتك">تتبع طلباتك</span></div></div>
           <div class="mi-a">›</div>
         </div>
         <div class="sit" onclick="APP.goTab('favorites')">
           <div class="sii" style="background:rgba(255,39,201,.15);"><svg viewBox="0 0 24 24" fill="none" stroke="#ff27c9" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
-          <div class="sit-t"><div class="sit-ti">المفضلة</div><div class="sit-d">المنتجات المحفوظة</div></div>
+          <div class="sit-t"><div class="sit-ti"><span data-i18n="profile.favorites" data-i18n-ar="المفضلة">المفضلة</span></div><div class="sit-d"><span data-i18n="desc.المنتجات المحفوظة" data-i18n-ar="المنتجات المحفوظة">المنتجات المحفوظة</span></div></div>
           <div class="mi-a">›</div>
         </div>
         <div class="sit" onclick="APP.goTab('points')">
           <div class="sii" style="background:rgba(255,193,7,.15);"><svg viewBox="0 0 24 24" fill="none" stroke="#FFC107" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-          <div class="sit-t"><div class="sit-ti">نقاط الولاء</div><div class="sit-d" id="prof-pts-2">0 نقطة</div></div>
+          <div class="sit-t"><div class="sit-ti"><span data-i18n="profile.loyalty_points" data-i18n-ar="نقاط الولاء"><span data-i18n="points.loyalty" data-i18n-ar="نقاط الولاء">نقاط الولاء</span></span></div><div class="sit-d" id="prof-pts-2">0 نقطة</div></div>
           <div class="mi-a">›</div>
         </div>
       </div>
 
       <!-- قسم الإعدادات والمساعدة -->
       <div class="sg">
-        <div class="sgt">⚙️ الإعدادات</div>
+        <div class="sgt"><span data-i18n="profile.section_settings" data-i18n-ar="⚙️ الإعدادات">⚙️ الإعدادات</span></div>
         <div class="sit" onclick="APP.goTab('settings')">
           <div class="sii" style="background:rgba(141,36,255,.15);"><svg viewBox="0 0 24 24" fill="none" stroke="#8d24ff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-          <div class="sit-t"><div class="sit-ti">الإعدادات</div><div class="sit-d">المظهر، الأمان، الخصوصية</div></div>
+          <div class="sit-t"><div class="sit-ti"><span data-i18n="profile.settings" data-i18n-ar="الإعدادات">الإعدادات</span></div><div class="sit-d"><span data-i18n="desc.المظهر، الأمان، الخصوصية" data-i18n-ar="المظهر، الأمان، الخصوصية">المظهر، الأمان، الخصوصية</span></div></div>
           <div class="mi-a">›</div>
         </div>
         <div class="sit" onclick="APP.goTab('help')">
           <div class="sii" style="background:rgba(0,212,160,.15);"><svg viewBox="0 0 24 24" fill="none" stroke="#00d4a0" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-          <div class="sit-t"><div class="sit-ti">المساعدة والدعم</div><div class="sit-d">تواصل معنا</div></div>
+          <div class="sit-t"><div class="sit-ti"><span data-i18n="profile.help" data-i18n-ar="المساعدة والدعم">المساعدة والدعم</span></div><div class="sit-d"><span data-i18n="desc.تواصل معنا" data-i18n-ar="تواصل معنا">تواصل معنا</span></div></div>
           <div class="mi-a">›</div>
         </div>
         <div class="sit" onclick="APP.logout()">
@@ -4105,14 +4105,14 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
       <div class="st"></div>
       <div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2" data-i18n="settings.title" data-i18n-ar="الإعدادات">الإعدادات</div></div>
       <div class="sg">
-        <div class="sgt">المظهر</div>
-        <div class="sit" onclick="showLangModal()"><div class="sii"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="sit-t"><div class="sit-ti">اللغة</div></div><div class="mi-v" id="v-lang">العربية</div><div class="mi-a">›</div></div>
-        <div class="sit" onclick="APP.openTheme()"><div class="sii"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2"/></svg></div><div class="sit-t"><div class="sit-ti">الوضع</div></div><div class="mi-v" id="v-theme">داكن</div><div class="mi-a">›</div></div>
-        <div class="sit" onclick="showFontModal()"><div class="sii" style="font-weight:900;">Aa</div><div class="sit-t"><div class="sit-ti">حجم الخط</div></div><div class="mi-v" id="v-font">متوسط</div><div class="mi-a">›</div></div>
+        <div class="sgt"><span data-i18n="settings.appearance" data-i18n-ar="المظهر">المظهر</span></div>
+        <div class="sit" onclick="showLangModal()"><div class="sii"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.language" data-i18n-ar="اللغة">اللغة</span></div></div><div class="mi-v" id="v-lang">العربية</div><div class="mi-a">›</div></div>
+        <div class="sit" onclick="APP.openTheme()"><div class="sii"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.theme" data-i18n-ar="الوضع">الوضع</span></div></div><div class="mi-v" id="v-theme">داكن</div><div class="mi-a">›</div></div>
+        <div class="sit" onclick="showFontModal()"><div class="sii" style="font-weight:900;">Aa</div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.font" data-i18n-ar="حجم الخط">حجم الخط</span></div></div><div class="mi-v" id="v-font">متوسط</div><div class="mi-a">›</div></div>
       </div>
       <div class="sg">
         
-        <div class="sgt">المظهر</div>
+        <div class="sgt"><span data-i18n="settings.appearance" data-i18n-ar="المظهر">المظهر</span></div>
         <div class="sit" onclick="toggleThemeMode()">
           <div class="sii">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -4121,37 +4121,37 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
             </svg>
           </div>
           <div class="sit-t">
-            <div class="sit-ti">الوضع</div>
+            <div class="sit-ti"><span data-i18n="settings.theme" data-i18n-ar="الوضع">الوضع</span></div>
             <div class="sit-d" id="theme-mode-label">داكن فاخر</div>
           </div>
           <div class="mi-v" id="theme-mode-value" style="font-size:11px; padding:6px 12px; background:linear-gradient(135deg,#ff27c9,#8d24ff); color:#fff; border-radius:10px; font-weight:900;">🌙 داكن</div>
         </div>
 
-        <div class="sgt">الأمان</div>
-        <div class="sit"><div class="sii"><svg viewBox="0 0 24 24"><path d="M12 11c0 3.5-1 5-1 7s1.5 2 1.5 2"/><path d="M9 4.5C10 3.5 11 3 12 3s2 .5 3 1.5"/></svg></div><div class="sit-t"><div class="sit-ti">فتح بالبصمة</div><div class="sit-d" id="bio-d">قفل التطبيق ببصمة</div></div><div class="tog" id="t-bio" onclick="event.stopPropagation();APP.togBio()"></div></div>
-        <div class="sit" onclick="APP.changePass()"><div class="sii"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="sit-t"><div class="sit-ti">تغيير كلمة المرور</div></div><div class="mi-a">›</div></div>
+        <div class="sgt"><span data-i18n="settings.security" data-i18n-ar="الأمان">الأمان</span></div>
+        <div class="sit"><div class="sii"><svg viewBox="0 0 24 24"><path d="M12 11c0 3.5-1 5-1 7s1.5 2 1.5 2"/><path d="M9 4.5C10 3.5 11 3 12 3s2 .5 3 1.5"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.biometric" data-i18n-ar="فتح بالبصمة">فتح بالبصمة</span></div><div class="sit-d" id="bio-d"><span data-i18n="settings.biometric_desc" data-i18n-ar="قفل التطبيق ببصمة">قفل التطبيق ببصمة</span></div></div><div class="tog" id="t-bio" onclick="event.stopPropagation();APP.togBio()"></div></div>
+        <div class="sit" onclick="APP.changePass()"><div class="sii"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.password" data-i18n-ar="تغيير كلمة المرور">تغيير كلمة المرور</span></div></div><div class="mi-a">›</div></div>
       </div>
       <div class="sg">
-        <div class="sgt">الإشعارات</div>
-        <div class="sit"><div class="sii"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><div class="sit-t"><div class="sit-ti">إشعارات التطبيق</div></div><div class="tog on" id="t-notif" onclick="APP.togT('notifications',this)"></div></div><div class="sit" onclick="APP.goTab('addresses')"><div class="sii">📍</div><div class="sit-t"><div class="sit-ti">دفتر العناوين</div></div></div>
-        <div class="sit"><div class="sii">🏷️</div><div class="sit-t"><div class="sit-ti">إشعارات العروض</div></div><div class="tog on" id="t-offers" onclick="APP.togT('offers',this)"></div></div>
-        <div class="sit"><div class="sii">📦</div><div class="sit-t"><div class="sit-ti">إشعارات الطلبات</div></div><div class="tog on" id="t-orders" onclick="APP.togT('orderNotifs',this)"></div></div>
+        <div class="sgt"><span data-i18n="settings.notifications" data-i18n-ar="الإشعارات">الإشعارات</span></div>
+        <div class="sit"><div class="sii"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.app_notifs" data-i18n-ar="إشعارات التطبيق">إشعارات التطبيق</span></div></div><div class="tog on" id="t-notif" onclick="APP.togT('notifications',this)"></div></div><div class="sit" onclick="APP.goTab('addresses')"><div class="sii">📍</div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.address_book" data-i18n-ar="دفتر العناوين">دفتر العناوين</span></div></div></div>
+        <div class="sit"><div class="sii">🏷️</div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.offer_notifs" data-i18n-ar="إشعارات العروض">إشعارات العروض</span></div></div><div class="tog on" id="t-offers" onclick="APP.togT('offers',this)"></div></div>
+        <div class="sit"><div class="sii">📦</div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.order_notifs" data-i18n-ar="إشعارات الطلبات">إشعارات الطلبات</span></div></div><div class="tog on" id="t-orders" onclick="APP.togT('orderNotifs',this)"></div></div>
       </div>
       <div class="sg">
-        <div class="sgt">البيانات</div>
-        <div class="sit" onclick="APP.clearCache()"><div class="sii"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg></div><div class="sit-t"><div class="sit-ti">مسح الكاش</div><div class="sit-d" id="cache-s">— KB</div></div><div class="mi-a">›</div></div>
-        <div class="sit" onclick="APP.backup()"><div class="sii"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="sit-t"><div class="sit-ti">نسخ احتياطي</div></div><div class="mi-a">›</div></div>
+        <div class="sgt"><span data-i18n="settings.data" data-i18n-ar="البيانات">البيانات</span></div>
+        <div class="sit" onclick="APP.clearCache()"><div class="sii"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.clear_cache" data-i18n-ar="مسح الكاش">مسح الكاش</span></div><div class="sit-d" id="cache-s">— KB</div></div><div class="mi-a">›</div></div>
+        <div class="sit" onclick="APP.backup()"><div class="sii"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.backup" data-i18n-ar="نسخ احتياطي">نسخ احتياطي</span></div></div><div class="mi-a">›</div></div>
       </div>
       <div class="sg">
-        <div class="sgt">الخصوصية والقانونية</div>
-        <div class="sit" onclick="window.location.href='privacy.html'"><div class="sii"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="sit-t"><div class="sit-ti">سياسة الخصوصية</div></div><div class="mi-a">›</div></div>
-        <div class="sit" onclick="window.location.href='terms.html'"><div class="sii"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="sit-t"><div class="sit-ti">الشروط والأحكام</div></div><div class="mi-a">›</div></div>
-        <div class="sit" onclick="window.location.href='about.html'"><div class="sii"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="sit-t"><div class="sit-ti">عن التطبيق</div></div><div class="mi-a">›</div></div>
+        <div class="sgt"><span data-i18n="settings.legal" data-i18n-ar="الخصوصية والقانونية">الخصوصية والقانونية</span></div>
+        <div class="sit" onclick="window.location.href='privacy.html'"><div class="sii"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.privacy" data-i18n-ar="سياسة الخصوصية">سياسة الخصوصية</span></div></div><div class="mi-a">›</div></div>
+        <div class="sit" onclick="window.location.href='terms.html'"><div class="sii"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.terms" data-i18n-ar="الشروط والأحكام">الشروط والأحكام</span></div></div><div class="mi-a">›</div></div>
+        <div class="sit" onclick="window.location.href='about.html'"><div class="sii"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.about" data-i18n-ar="عن التطبيق">عن التطبيق</span></div></div><div class="mi-a">›</div></div>
       </div>
       <div class="sg">
-        <div class="sgt">الحساب</div>
-        <div class="sit" onclick="APP.editProfile()"><div class="sii"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="sit-t"><div class="sit-ti">تعديل الملف</div></div><div class="mi-a">›</div></div>
-        <div class="sit" onclick="APP.deleteAccount()"><div class="sii" style="background:rgba(255,77,109,.15);"><svg viewBox="0 0 24 24" stroke="#ff4d6d"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg></div><div class="sit-t"><div class="sit-ti" style="color:var(--rd);">حذف الحساب</div></div><div class="mi-a">›</div></div>
+        <div class="sgt"><span data-i18n="settings.account" data-i18n-ar="الحساب">الحساب</span></div>
+        <div class="sit" onclick="APP.editProfile()"><div class="sii"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="sit-t"><div class="sit-ti"><span data-i18n="settings.edit_profile" data-i18n-ar="تعديل الملف">تعديل الملف</span></div></div><div class="mi-a">›</div></div>
+        <div class="sit" onclick="APP.deleteAccount()"><div class="sii" style="background:rgba(255,77,109,.15);"><svg viewBox="0 0 24 24" stroke="#ff4d6d"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg></div><div class="sit-t"><div class="sit-ti" style="color:var(--rd);"><span data-i18n="settings.delete_account" data-i18n-ar="حذف الحساب">حذف الحساب</span></div></div><div class="mi-a">›</div></div>
       </div>
       <div style="padding:0 20px 30px;"><button class="danger-b" onclick="APP.logout()">تسجيل الخروج</button><div style="text-align:center;font-size:11px;color:var(--mt2);margin-top:16px;">CHIZEN v1.0.0</div></div>
     </div>
@@ -4737,18 +4737,18 @@ var APP={
   
   renderCart:function(){
     var c=document.getElementById('cart-items');if(!c)return;
-    if(!this.cart.length){c.innerHTML='<div class="cempty"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p>سلتك فارغة</p><button class="btn-p" style="margin-top:16px;max-width:200px;" onclick="APP.goTab(\'home\')">تسوق الآن</button></div>';return;}
+    if(!this.cart.length){c.innerHTML='<div class="cempty"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p><span data-i18n="cart.empty" data-i18n-ar="سلتك فارغة">سلتك فارغة</span></p><button class="btn-p" style="margin-top:16px;max-width:200px;" onclick="APP.goTab(\'home\')">تسوق الآن</button></div>';return;}
     var sub=this.cartTotal();
     var disc=0;if(this.appliedCoupon){disc=this.appliedCoupon.type==='percent'?Math.floor(sub*(this.appliedCoupon.value/100)):this.appliedCoupon.value;}
     var shipF=0;if(sub>0&&(!this.shipping.freeAbove||sub<this.shipping.freeAbove))shipF=this.shipping.fee||0;
     var total=Math.max(0,sub-disc+shipF);
     var cp='';
     if(this.appliedCoupon)cp='<div class="tr" style="color:var(--gn);"><span>خصم ('+esc(this.appliedCoupon.code)+')</span><span>-' +disc+' ر.س <span style="cursor:pointer;color:var(--rd);" onclick="APP.rmCoupon()">✕</span></span></div>';
-    else cp='<div class="f" style="display:flex;gap:8px;margin-bottom:10px;"><input type="text" id="coupon-in" class="fi" placeholder="كود الخصم..." style="flex:1;"><button class="btn-p" style="width:auto;padding:0 20px;" onclick="APP.applyCoupon()">تطبيق</button></div>';
+    else cp='<div class="f" style="display:flex;gap:8px;margin-bottom:10px;"><input type="text" id="coupon-in" class="fi" placeholder="كود الخصم..." style="flex:1;"><button class="btn-p" style="width:auto;padding:0 20px;" onclick="APP.applyCoupon()"><span data-i18n="points.apply" data-i18n-ar="تطبيق">تطبيق</span></button></div>';
     var html=this.cart.map(function(i){var p=APP.getProduct(i.id);if(!p)return'';
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCart(\''+esc(p.id)+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div><div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',-1)">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',1)">+</button></div></div></div>';
     }).join('');
-    html+='<div class="tb">'+cp+'<div class="tr"><span>المجموع</span><span>'+sub+' ر.س</span></div><div class="tr"><span>الشحن</span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span>الإجمالي</span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()">إتمام الشراء</button>';
+    html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
     c.innerHTML=html;
   },
   
@@ -6399,7 +6399,7 @@ window.showFontModal = function() {
     <div style="background:linear-gradient(135deg,#040b31,#25074c);border:1px solid rgba(255,39,201,0.3);border-radius:24px;padding:25px;max-width:340px;width:100%;box-shadow:0 25px 70px rgba(255,39,201,0.3);">
       <div style="text-align:center;margin-bottom:20px;">
         <div style="font-size:40px;">🔤</div>
-        <div style="font-size:18px;font-weight:900;color:#f8f9ff;margin-top:8px;">حجم الخط</div>
+        <div style="font-size:18px;font-weight:900;color:#f8f9ff;margin-top:8px;"><span data-i18n="settings.font" data-i18n-ar="حجم الخط">حجم الخط</span></div>
       </div>
       <div onclick="setFontSize('small')" style="display:flex;align-items:center;gap:12px;padding:15px;margin-bottom:10px;background:${current === 'small' ? 'rgba(255,39,201,0.2)' : 'rgba(7,23,71,0.6)'};border:2px solid ${current === 'small' ? '#ff27c9' : 'rgba(120,150,255,0.2)'};border-radius:14px;cursor:pointer;">
         <div style="font-size:14px;color:#f8f9ff;flex:1;font-weight:700;">صغير</div>
