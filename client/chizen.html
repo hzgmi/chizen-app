@@ -3029,26 +3029,74 @@ var APP={
     window.addEventListener('popstate',function(){if(self.currentSc!=='home'){self.navigate('home',false);}});
   },
   
-  navigate:function(id,push){
-    if(push===undefined)push=true;
-    if(this.currentSc===id)return;
-    this.currentSc=id;
-    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
-    var t=document.getElementById('sc-'+id);if(t){t.classList.add('active');t.scrollTop=0;}
-    var hide=['details','checkout','success','settings','points','notifications','favorites','help','cat','booking'];
-    var nav=document.getElementById('bottom-nav');
-    if(nav)nav.style.display=hide.indexOf(id)>-1?'none':'flex';
-    // (active state handled by goTab via .bn-it)
-    if(id==='cart')this.renderCart();
-    if(id==='orders')this.renderOrders();
-    if(id==='favorites')this.renderFav();
-    if(id==='notifications')this.renderNotifs();
-    if(id==='points')this.renderPoints();
-    if(id==='help')this.renderHelp();
-    if(id==='settings')this.renderSettings();
+  goTab: function(id, el) {
+    this.navigate(id, true);
+    try {
+      var btns = document.querySelectorAll('.bn-it');
+      btns.forEach(function(b) {
+        b.classList.remove('active');
+        b.style.color = '#9ca3af';
+      });
+      if (el) {
+        el.classList.add('active');
+        el.style.color = '#D81B60';
+      } else {
+        btns.forEach(function(b) {
+          var oc = b.getAttribute('onclick') || '';
+          if (oc.indexOf("'" + id + "'") > -1) {
+            b.classList.add('active');
+            b.style.color = '#D81B60';
+          }
+        });
+      }
+    } catch(e) {}
   },
-  
-  goTab:function(id,el){  this.navigate(id,true);  try{    var btns=document.querySelectorAll('.bn-it');    btns.forEach(function(b){b.classList.remove('active');b.style.color='#8e8e93';});    if(el){el.classList.add('active');el.style.color='#D81B60';}    else{btns.forEach(function(b){var oc=b.getAttribute('onclick')||'';if(oc.indexOf("'"+id+"'")>-1){b.classList.add('active');b.style.color='#D81B60';}});}  }catch(e){}},
+  navigate: function(id, push) {
+    if (push === undefined) push = true;
+    if (this.currentSc === id) return;
+    this.currentSc = id;
+    
+    // إخفاء كل الشاشات
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    var t = document.getElementById('sc-' + id);
+    if (t) { t.classList.add('active'); t.scrollTop = 0; }
+    
+    // ═══ الشاشات التي تظهر فيها الشريط السفلي (الرئيسية فقط) ═══
+    var mainTabs = ['home', 'orders', 'cart', 'profile'];
+    var isMainTab = mainTabs.indexOf(id) !== -1;
+    
+    var nav = document.getElementById('bottom-nav');
+    if (nav) {
+      if (isMainTab) {
+        nav.style.display = 'flex';
+      } else {
+        nav.style.display = 'none';
+      }
+    }
+    
+    // تحديث حالة الزر النشط
+    if (window.APP && window.APP.goTab) {
+      var btns = document.querySelectorAll('.bn-it');
+      btns.forEach(function(b) {
+        b.classList.remove('active');
+        b.style.color = '#9ca3af';
+        var oc = b.getAttribute('onclick') || '';
+        if (oc.indexOf("'" + id + "'") > -1) {
+          b.classList.add('active');
+          b.style.color = '#D81B60';
+        }
+      });
+    }
+    
+    // تنفيذ وظائف الشاشة
+    if (id === 'cart') this.renderCart();
+    if (id === 'orders') this.renderOrders();
+    if (id === 'favorites') this.renderFav();
+    if (id === 'notifications') this.renderNotifs();
+    if (id === 'points') this.renderPoints();
+    if (id === 'help') this.renderHelp();
+    if (id === 'settings') this.renderSettings();
+  },
   closeModal:function(){document.getElementById('modal').classList.remove('active');},
   closeDlg:function(){document.getElementById('dlg').classList.remove('active');},
   
