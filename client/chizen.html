@@ -2237,6 +2237,44 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   #ref-success-box .err-btn:active { transform: scale(0.96); }
 </style>
 
+
+<style id="pts-modal-css">
+  #pts-purchase-modal {
+    position: fixed; inset: 0; background: rgba(10, 5, 25, 0.75);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    z-index: 15000; display: none; align-items: center; justify-content: center;
+    padding: 20px; overflow-y: auto;
+  }
+  #pts-purchase-modal.open { display: flex !important; }
+  #pts-purchase-modal > div {
+    background: #ffffff; border-radius: 24px; padding: 25px;
+    width: 100%; max-width: 400px; position: relative;
+    box-shadow: 0 20px 60px rgba(106, 27, 154, 0.3);
+    animation: ptsPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: auto;
+  }
+  @keyframes ptsPop {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  #pts-modal-close-btn {
+    position: absolute; top: 12px; left: 12px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #f4f6fa; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #6b7280; font-size: 20px; font-weight: bold;
+    transition: all 0.2s;
+  }
+  #pts-modal-close-btn:hover { background: #fee2e2; color: #ef4444; }
+  .pts-info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0;
+  }
+  .pts-info-label { font-size: 14px; color: #6b7280; }
+  .pts-info-value { font-size: 16px; font-weight: 900; color: #6A1B9A; }
+  .pts-info-value.price { color: #D81B60; }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -3958,239 +3996,155 @@ window.addEventListener('load', function() {
   </div>
 </div>
 
+
+
+
+<!-- ═══ نافذة شراء النقاط ═══ -->
+<div id="pts-purchase-modal">
+  <div>
+    <button id="pts-modal-close-btn" onclick="closePointsModal()">×</button>
+    
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="font-size:48px;">💳</div>
+      <div style="font-size:18px; font-weight:900; color:#1f2937; margin-top:8px;">تأكيد شراء النقاط</div>
+    </div>
+    
+    <div style="background:#f4f6fa; border-radius:14px; padding:15px; margin-bottom:15px;">
+      <div class="pts-info-row">
+        <span class="pts-info-label">الباقة:</span>
+        <span class="pts-info-value" id="modal-package-info">100 نقطة</span>
+      </div>
+      <div class="pts-info-row">
+        <span class="pts-info-label">السعر:</span>
+        <span class="pts-info-value price" id="modal-price-info">10 ر.س</span>
+      </div>
+    </div>
+    
+    <div style="background:#FEF3C7; border-radius:12px; padding:12px; margin-bottom:15px; font-size:12px; color:#92400e; line-height:1.7;">
+      <b>📌 خطوات الدفع:</b><br>
+      1. حوّل المبلغ إلى حسابنا البنكي (الكريمي/القطيبي).<br>
+      2. ارفع صورة إيصال التحويل أدناه.<br>
+      3. اضغط "إرسال الطلب" — سيتم تفعيل النقاط بعد المراجعة.
+    </div>
+    
+    <div style="margin-bottom:15px;">
+      <label style="display:block; font-size:13px; font-weight:bold; color:#374151; margin-bottom:8px;">📎 صورة الإيصال</label>
+      <input type="file" id="pts-receipt-input" accept="image/*" style="width:100%; padding:10px; border:2px dashed #d1d5db; border-radius:12px; background:#fafbfc; font-size:12px; cursor:pointer;">
+    </div>
+    
+    <div style="margin-bottom:15px;">
+      <label style="display:block; font-size:13px; font-weight:bold; color:#374151; margin-bottom:8px;">📝 ملاحظات (اختياري)</label>
+      <textarea id="pts-notes-input" placeholder="مثال: تم التحويل من حساب باسم..." style="width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:12px; background:#f4f6fa; font-family:inherit; font-size:13px; height:60px; resize:none;"></textarea>
+    </div>
+    
+    <button onclick="submitPointsPurchase()" style="width:100%; background:linear-gradient(135deg,#6A1B9A,#D81B60); color:#fff; border:none; border-radius:14px; padding:14px; font-family:inherit; font-weight:bold; font-size:15px; cursor:pointer; box-shadow:0 6px 20px rgba(216,27,96,0.3);">📤 إرسال الطلب</button>
+  </div>
+</div>
+<!-- ═══ نهاية نافذة الشراء ═══ -->
+
+
+
 <script>
-
-// ═══ نظام شراء النقاط ═══
-window.selectedPointsPackage = { points: 0, price: 0 };
-
-window.selectPointsPackage = function(points, price) {
-  window.selectedPointsPackage = { points: points, price: price };
+// ═══ نظام شراء النقاط (نسخة نظيفة) ═══
+(function() {
+  'use strict';
   
-  // تعبئة النافذة
-  var infoPts = document.getElementById('modal-package-info');
-  var infoPrice = document.getElementById('modal-price-info');
-  if (infoPts) infoPts.textContent = points + ' نقطة';
-  if (infoPrice) infoPrice.textContent = price + ' ر.س';
+  window.selectedPointsPackage = { points: 0, price: 0 };
   
-  // تفريغ الحقول
-  var receipt = document.getElementById('pts-receipt-input');
-  var notes = document.getElementById('pts-notes-input');
-  if (receipt) receipt.value = '';
-  if (notes) notes.value = '';
+  window.selectPointsPackage = function(points, price) {
+    window.selectedPointsPackage = { points: points, price: price };
+    var pts = document.getElementById('modal-package-info');
+    var prc = document.getElementById('modal-price-info');
+    if (pts) pts.textContent = points + ' نقطة';
+    if (prc) prc.textContent = price + ' ر.س';
+    var r = document.getElementById('pts-receipt-input');
+    var n = document.getElementById('pts-notes-input');
+    if (r) r.value = '';
+    if (n) n.value = '';
+    var m = document.getElementById('pts-purchase-modal');
+    if (m) { m.classList.add('open'); m.style.display = 'flex'; }
+  };
   
-  // فتح النافذة
-  var modal = document.getElementById('pts-purchase-modal');
-  if (modal) { modal.style.display = 'flex'; }
-};
-
-window.closePointsModal = function() {
-  var modal = document.getElementById('pts-purchase-modal');
-  if (modal) modal.style.display = 'none';
-};
-
-window.submitPointsPurchase = async function() {
-  if (!window.FB || !FB.currentUser) {
-    if (window.toast) toast('سجل دخول أولاً', 'err');
-    return;
-  }
+  window.closePointsModal = function() {
+    var m = document.getElementById('pts-purchase-modal');
+    if (m) { m.classList.remove('open'); m.style.display = 'none'; }
+  };
   
-  var pkg = window.selectedPointsPackage;
-  if (!pkg.points) { if (window.toast) toast('اختر باقة أولاً', 'err'); return; }
-  
-  var receiptInput = document.getElementById('pts-receipt-input');
-  var notesInput = document.getElementById('pts-notes-input');
-  
-  if (!receiptInput || !receiptInput.files || !receiptInput.files[0]) {
-    if (window.toast) toast('ارفع صورة الإيصال أولاً', 'err');
-    return;
-  }
-  
-  var file = receiptInput.files[0];
-  
-  // التحقق من نوع الملف
-  if (!file.type.startsWith('image/')) {
-    if (window.toast) toast('الملف يجب أن يكون صورة', 'err');
-    return;
-  }
-  
-  // التحقق من الحجم (أقل من 5MB)
-  if (file.size > 5 * 1024 * 1024) {
-    if (window.toast) toast('حجم الصورة أكبر من 5MB', 'err');
-    return;
-  }
-  
-  var btn = document.querySelector('#pts-purchase-modal button:last-child');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الرفع...'; }
-  
-  try {
-    // 1) رفع الإيصال إلى ImgBB
-    var formData = new FormData();
-    formData.append('image', file);
-    
-    // المفتاح - استخدم مفتاح ImgBB الخاص بك
-    var IMGBB_KEY = 'YOUR_IMGBB_API_KEY';
-    
-    var imgRes = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, {
-      method: 'POST',
-      body: formData
-    });
-    var imgData = await imgRes.json();
-    
-    if (!imgData.success) {
-      throw new Error('فشل رفع الصورة');
+  window.submitPointsPurchase = async function() {
+    if (!window.FB || !FB.currentUser) {
+      if (window.toast) toast('سجل دخول أولاً', 'err');
+      return;
     }
     
-    var receiptUrl = imgData.data.url;
-    
-    // 2) حفظ الطلب في Firebase
-    var request = {
-      userId: FB.currentUser.uid,
-      userName: (FB.currentUser.displayName || FB.currentUser.email || 'مستخدم'),
-      userEmail: FB.currentUser.email || '',
-      points: pkg.points,
-      price: pkg.price,
-      receiptUrl: receiptUrl,
-      notes: notesInput ? notesInput.value.trim() : '',
-      status: 'pending',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    
-    await FB.db.collection('points_requests').add(request);
-    
-    // 3) نجاح
-    if (window.toast) toast('✅ تم إرسال الطلب! سيتم تفعيل النقاط بعد المراجعة', 'suc');
-    closePointsModal();
-    
-    // إعادة تعيين
-    if (receiptInput) receiptInput.value = '';
-    if (notesInput) notesInput.value = '';
-    window.selectedPointsPackage = { points: 0, price: 0 };
-    
-  } catch(e) {
-    console.error('خطأ:', e);
-    if (window.toast) toast('❌ حدث خطأ: ' + e.message, 'err');
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '📤 إرسال الطلب'; }
-  }
-};
-
-</script>
-<script>
-
-// ═══ نظام شراء النقاط ═══
-window.selectedPointsPackage = { points: 0, price: 0 };
-
-window.selectPointsPackage = function(points, price) {
-  window.selectedPointsPackage = { points: points, price: price };
-  
-  // تعبئة النافذة
-  var infoPts = document.getElementById('modal-package-info');
-  var infoPrice = document.getElementById('modal-price-info');
-  if (infoPts) infoPts.textContent = points + ' نقطة';
-  if (infoPrice) infoPrice.textContent = price + ' ر.س';
-  
-  // تفريغ الحقول
-  var receipt = document.getElementById('pts-receipt-input');
-  var notes = document.getElementById('pts-notes-input');
-  if (receipt) receipt.value = '';
-  if (notes) notes.value = '';
-  
-  // فتح النافذة
-  var modal = document.getElementById('pts-purchase-modal');
-  if (modal) { modal.style.display = 'flex'; }
-};
-
-window.closePointsModal = function() {
-  var modal = document.getElementById('pts-purchase-modal');
-  if (modal) modal.style.display = 'none';
-};
-
-window.submitPointsPurchase = async function() {
-  if (!window.FB || !FB.currentUser) {
-    if (window.toast) toast('سجل دخول أولاً', 'err');
-    return;
-  }
-  
-  var pkg = window.selectedPointsPackage;
-  if (!pkg.points) { if (window.toast) toast('اختر باقة أولاً', 'err'); return; }
-  
-  var receiptInput = document.getElementById('pts-receipt-input');
-  var notesInput = document.getElementById('pts-notes-input');
-  
-  if (!receiptInput || !receiptInput.files || !receiptInput.files[0]) {
-    if (window.toast) toast('ارفع صورة الإيصال أولاً', 'err');
-    return;
-  }
-  
-  var file = receiptInput.files[0];
-  
-  // التحقق من نوع الملف
-  if (!file.type.startsWith('image/')) {
-    if (window.toast) toast('الملف يجب أن يكون صورة', 'err');
-    return;
-  }
-  
-  // التحقق من الحجم (أقل من 5MB)
-  if (file.size > 5 * 1024 * 1024) {
-    if (window.toast) toast('حجم الصورة أكبر من 5MB', 'err');
-    return;
-  }
-  
-  var btn = document.querySelector('#pts-purchase-modal button:last-child');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الرفع...'; }
-  
-  try {
-    // 1) رفع الإيصال إلى ImgBB
-    var formData = new FormData();
-    formData.append('image', file);
-    
-    // المفتاح - استخدم مفتاح ImgBB الخاص بك
-    var IMGBB_KEY = 'YOUR_IMGBB_API_KEY';
-    
-    var imgRes = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, {
-      method: 'POST',
-      body: formData
-    });
-    var imgData = await imgRes.json();
-    
-    if (!imgData.success) {
-      throw new Error('فشل رفع الصورة');
+    var pkg = window.selectedPointsPackage;
+    if (!pkg.points) {
+      if (window.toast) toast('اختر باقة أولاً', 'err');
+      return;
     }
     
-    var receiptUrl = imgData.data.url;
+    var receiptInput = document.getElementById('pts-receipt-input');
+    var notesInput = document.getElementById('pts-notes-input');
     
-    // 2) حفظ الطلب في Firebase
-    var request = {
-      userId: FB.currentUser.uid,
-      userName: (FB.currentUser.displayName || FB.currentUser.email || 'مستخدم'),
-      userEmail: FB.currentUser.email || '',
-      points: pkg.points,
-      price: pkg.price,
-      receiptUrl: receiptUrl,
-      notes: notesInput ? notesInput.value.trim() : '',
-      status: 'pending',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    if (!receiptInput || !receiptInput.files || !receiptInput.files[0]) {
+      if (window.toast) toast('ارفع صورة الإيصال أولاً', 'err');
+      return;
+    }
     
-    await FB.db.collection('points_requests').add(request);
+    var file = receiptInput.files[0];
+    if (!file.type.startsWith('image/')) {
+      if (window.toast) toast('الملف يجب أن يكون صورة', 'err');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      if (window.toast) toast('حجم الصورة أكبر من 5MB', 'err');
+      return;
+    }
     
-    // 3) نجاح
-    if (window.toast) toast('✅ تم إرسال الطلب! سيتم تفعيل النقاط بعد المراجعة', 'suc');
-    closePointsModal();
+    var btn = document.querySelector('#pts-purchase-modal button:last-child');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الرفع...'; }
     
-    // إعادة تعيين
-    if (receiptInput) receiptInput.value = '';
-    if (notesInput) notesInput.value = '';
-    window.selectedPointsPackage = { points: 0, price: 0 };
-    
-  } catch(e) {
-    console.error('خطأ:', e);
-    if (window.toast) toast('❌ حدث خطأ: ' + e.message, 'err');
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '📤 إرسال الطلب'; }
-  }
-};
-
+    try {
+      var formData = new FormData();
+      formData.append('image', file);
+      var IMGBB_KEY = 'YOUR_IMGBB_API_KEY';
+      
+      var imgRes = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, {
+        method: 'POST',
+        body: formData
+      });
+      var imgData = await imgRes.json();
+      
+      if (!imgData.success) throw new Error('فشل رفع الصورة');
+      
+      var request = {
+        userId: FB.currentUser.uid,
+        userName: (FB.currentUser.displayName || FB.currentUser.email || 'مستخدم'),
+        userEmail: FB.currentUser.email || '',
+        points: pkg.points,
+        price: pkg.price,
+        receiptUrl: imgData.data.url,
+        notes: notesInput ? notesInput.value.trim() : '',
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      await FB.db.collection('points_requests').add(request);
+      
+      if (window.toast) toast('✅ تم إرسال الطلب! سيتم تفعيل النقاط بعد المراجعة', 'suc');
+      closePointsModal();
+      if (receiptInput) receiptInput.value = '';
+      if (notesInput) notesInput.value = '';
+      window.selectedPointsPackage = { points: 0, price: 0 };
+      
+    } catch(e) {
+      console.error(e);
+      if (window.toast) toast('❌ حدث خطأ: ' + e.message, 'err');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '📤 إرسال الطلب'; }
+    }
+  };
+})();
 </script>
+
 </body>
 </html>
