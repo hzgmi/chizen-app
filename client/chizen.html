@@ -3447,6 +3447,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+// ═══ [APK NOTIFICATIONS] ═══
+window.setupAPKNotifications = async function() {
+  if (!window.Capacitor || !window.Capacitor.isNativePlatform || !window.Capacitor.isNativePlatform()) return;
+  try {
+    var P = window.Capacitor.Plugins.PushNotifications;
+    if (!P) return;
+    var perm = await P.checkPermissions();
+    if (perm.receive !== 'granted') perm = await P.requestPermissions();
+    if (perm.receive !== 'granted') return;
+    await P.register();
+    P.addListener('registration', function(token) {
+      window.FCM_TOKEN = token.value;
+      if (window.saveFcmToken) window.saveFcmToken();
+    });
+    P.addListener('pushNotificationReceived', function(n) {
+      if (window.toast) window.toast(n.title, 'suc');
+    });
+    P.addListener('pushNotificationActionPerformed', function() {
+      if (window.APP) window.APP.goTab('notifications');
+    });
+  } catch(e) { console.log('APK Push error:', e); }
+};
+
+// ═══ [WEB NOTIFICATIONS] ═══
+window.setupWebNotifications = async function() {
+  if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) return;
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  try {
+    await navigator.serviceWorker.register('sw.js');
+    if (Notification.permission === 'granted') {
+      if (window.WebPush && window.WebPush.register) await window.WebPush.register();
+    }
+  } catch(e) { console.log('Web Push error:', e); }
+};
+
+// التشغيل التلقائي بعد التحميل
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    if (window.setupAPKNotifications) window.setupAPKNotifications();
+    if (window.setupWebNotifications) window.setupWebNotifications();
+  }, 3000);
+});
+
 </script>
 
 
