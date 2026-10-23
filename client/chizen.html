@@ -3958,5 +3958,239 @@ window.addEventListener('load', function() {
   </div>
 </div>
 
+<script>
+
+// ═══ نظام شراء النقاط ═══
+window.selectedPointsPackage = { points: 0, price: 0 };
+
+window.selectPointsPackage = function(points, price) {
+  window.selectedPointsPackage = { points: points, price: price };
+  
+  // تعبئة النافذة
+  var infoPts = document.getElementById('modal-package-info');
+  var infoPrice = document.getElementById('modal-price-info');
+  if (infoPts) infoPts.textContent = points + ' نقطة';
+  if (infoPrice) infoPrice.textContent = price + ' ر.س';
+  
+  // تفريغ الحقول
+  var receipt = document.getElementById('pts-receipt-input');
+  var notes = document.getElementById('pts-notes-input');
+  if (receipt) receipt.value = '';
+  if (notes) notes.value = '';
+  
+  // فتح النافذة
+  var modal = document.getElementById('pts-purchase-modal');
+  if (modal) { modal.style.display = 'flex'; }
+};
+
+window.closePointsModal = function() {
+  var modal = document.getElementById('pts-purchase-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.submitPointsPurchase = async function() {
+  if (!window.FB || !FB.currentUser) {
+    if (window.toast) toast('سجل دخول أولاً', 'err');
+    return;
+  }
+  
+  var pkg = window.selectedPointsPackage;
+  if (!pkg.points) { if (window.toast) toast('اختر باقة أولاً', 'err'); return; }
+  
+  var receiptInput = document.getElementById('pts-receipt-input');
+  var notesInput = document.getElementById('pts-notes-input');
+  
+  if (!receiptInput || !receiptInput.files || !receiptInput.files[0]) {
+    if (window.toast) toast('ارفع صورة الإيصال أولاً', 'err');
+    return;
+  }
+  
+  var file = receiptInput.files[0];
+  
+  // التحقق من نوع الملف
+  if (!file.type.startsWith('image/')) {
+    if (window.toast) toast('الملف يجب أن يكون صورة', 'err');
+    return;
+  }
+  
+  // التحقق من الحجم (أقل من 5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    if (window.toast) toast('حجم الصورة أكبر من 5MB', 'err');
+    return;
+  }
+  
+  var btn = document.querySelector('#pts-purchase-modal button:last-child');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الرفع...'; }
+  
+  try {
+    // 1) رفع الإيصال إلى ImgBB
+    var formData = new FormData();
+    formData.append('image', file);
+    
+    // المفتاح - استخدم مفتاح ImgBB الخاص بك
+    var IMGBB_KEY = 'YOUR_IMGBB_API_KEY';
+    
+    var imgRes = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, {
+      method: 'POST',
+      body: formData
+    });
+    var imgData = await imgRes.json();
+    
+    if (!imgData.success) {
+      throw new Error('فشل رفع الصورة');
+    }
+    
+    var receiptUrl = imgData.data.url;
+    
+    // 2) حفظ الطلب في Firebase
+    var request = {
+      userId: FB.currentUser.uid,
+      userName: (FB.currentUser.displayName || FB.currentUser.email || 'مستخدم'),
+      userEmail: FB.currentUser.email || '',
+      points: pkg.points,
+      price: pkg.price,
+      receiptUrl: receiptUrl,
+      notes: notesInput ? notesInput.value.trim() : '',
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    await FB.db.collection('points_requests').add(request);
+    
+    // 3) نجاح
+    if (window.toast) toast('✅ تم إرسال الطلب! سيتم تفعيل النقاط بعد المراجعة', 'suc');
+    closePointsModal();
+    
+    // إعادة تعيين
+    if (receiptInput) receiptInput.value = '';
+    if (notesInput) notesInput.value = '';
+    window.selectedPointsPackage = { points: 0, price: 0 };
+    
+  } catch(e) {
+    console.error('خطأ:', e);
+    if (window.toast) toast('❌ حدث خطأ: ' + e.message, 'err');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '📤 إرسال الطلب'; }
+  }
+};
+
+</script>
+<script>
+
+// ═══ نظام شراء النقاط ═══
+window.selectedPointsPackage = { points: 0, price: 0 };
+
+window.selectPointsPackage = function(points, price) {
+  window.selectedPointsPackage = { points: points, price: price };
+  
+  // تعبئة النافذة
+  var infoPts = document.getElementById('modal-package-info');
+  var infoPrice = document.getElementById('modal-price-info');
+  if (infoPts) infoPts.textContent = points + ' نقطة';
+  if (infoPrice) infoPrice.textContent = price + ' ر.س';
+  
+  // تفريغ الحقول
+  var receipt = document.getElementById('pts-receipt-input');
+  var notes = document.getElementById('pts-notes-input');
+  if (receipt) receipt.value = '';
+  if (notes) notes.value = '';
+  
+  // فتح النافذة
+  var modal = document.getElementById('pts-purchase-modal');
+  if (modal) { modal.style.display = 'flex'; }
+};
+
+window.closePointsModal = function() {
+  var modal = document.getElementById('pts-purchase-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.submitPointsPurchase = async function() {
+  if (!window.FB || !FB.currentUser) {
+    if (window.toast) toast('سجل دخول أولاً', 'err');
+    return;
+  }
+  
+  var pkg = window.selectedPointsPackage;
+  if (!pkg.points) { if (window.toast) toast('اختر باقة أولاً', 'err'); return; }
+  
+  var receiptInput = document.getElementById('pts-receipt-input');
+  var notesInput = document.getElementById('pts-notes-input');
+  
+  if (!receiptInput || !receiptInput.files || !receiptInput.files[0]) {
+    if (window.toast) toast('ارفع صورة الإيصال أولاً', 'err');
+    return;
+  }
+  
+  var file = receiptInput.files[0];
+  
+  // التحقق من نوع الملف
+  if (!file.type.startsWith('image/')) {
+    if (window.toast) toast('الملف يجب أن يكون صورة', 'err');
+    return;
+  }
+  
+  // التحقق من الحجم (أقل من 5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    if (window.toast) toast('حجم الصورة أكبر من 5MB', 'err');
+    return;
+  }
+  
+  var btn = document.querySelector('#pts-purchase-modal button:last-child');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الرفع...'; }
+  
+  try {
+    // 1) رفع الإيصال إلى ImgBB
+    var formData = new FormData();
+    formData.append('image', file);
+    
+    // المفتاح - استخدم مفتاح ImgBB الخاص بك
+    var IMGBB_KEY = 'YOUR_IMGBB_API_KEY';
+    
+    var imgRes = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, {
+      method: 'POST',
+      body: formData
+    });
+    var imgData = await imgRes.json();
+    
+    if (!imgData.success) {
+      throw new Error('فشل رفع الصورة');
+    }
+    
+    var receiptUrl = imgData.data.url;
+    
+    // 2) حفظ الطلب في Firebase
+    var request = {
+      userId: FB.currentUser.uid,
+      userName: (FB.currentUser.displayName || FB.currentUser.email || 'مستخدم'),
+      userEmail: FB.currentUser.email || '',
+      points: pkg.points,
+      price: pkg.price,
+      receiptUrl: receiptUrl,
+      notes: notesInput ? notesInput.value.trim() : '',
+      status: 'pending',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    await FB.db.collection('points_requests').add(request);
+    
+    // 3) نجاح
+    if (window.toast) toast('✅ تم إرسال الطلب! سيتم تفعيل النقاط بعد المراجعة', 'suc');
+    closePointsModal();
+    
+    // إعادة تعيين
+    if (receiptInput) receiptInput.value = '';
+    if (notesInput) notesInput.value = '';
+    window.selectedPointsPackage = { points: 0, price: 0 };
+    
+  } catch(e) {
+    console.error('خطأ:', e);
+    if (window.toast) toast('❌ حدث خطأ: ' + e.message, 'err');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '📤 إرسال الطلب'; }
+  }
+};
+
+</script>
 </body>
 </html>
