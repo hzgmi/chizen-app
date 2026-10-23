@@ -1945,6 +1945,76 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="luxury-cats-css">
+  #cats {
+    display: flex !important;
+    gap: 15px !important;
+    overflow-x: auto !important;
+    padding: 10px 15px 20px !important;
+    scrollbar-width: none;
+    background: transparent !important;
+  }
+  #cats::-webkit-scrollbar { display: none; }
+
+  .lux-cat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 75px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .lux-cat-card:active {
+    transform: scale(0.92);
+  }
+
+  /* بطاقة الصورة */
+  .lux-cat-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 22px; /* حواف دائرية ناعمة */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    box-shadow: 0 8px 20px rgba(106, 27, 154, 0.08), inset 0 2px 4px rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.9);
+    position: relative;
+    overflow: hidden;
+  }
+  /* تأثير لمعان خفيف على البطاقة */
+  .lux-cat-img::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: 0.5s;
+  }
+  .lux-cat-card:hover .lux-cat-img::after {
+    left: 100%;
+  }
+
+  .lux-cat-img img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+  }
+
+  .lux-cat-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1f2937;
+    text-align: center;
+    white-space: nowrap;
+    font-family: 'Tajawal', sans-serif;
+  }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -2411,13 +2481,13 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 // ================= الأقسام الأساسية المثبتة =================
 window.FIXED_CATS = [
-  { key: 'electronics', name: 'الإلكترونيات', icon: '🎧', bg: '#e0e7ff' },
-  { key: 'fashion', name: 'الأزياء', icon: '👜', bg: '#f3e8ff' },
-  { key: 'home', name: 'المنزل', icon: '🛋️', bg: '#dcfce7' },
-  { key: 'beauty', name: 'الجمال', icon: '💄', bg: '#fce7f3' },
-  { key: 'kids', name: 'الأطفال', icon: '🧸', bg: '#fef9c3' },
-  { key: 'sports', name: 'الرياضة', icon: '👟', bg: '#e0f2fe' },
-  { key: 'tools', name: 'الأدوات المنزلية', icon: '🎒', bg: '#e0e7ff' }
+  { key: 'electronics', name: 'الإلكترونيات', icon: '🎧', img: 'https://img.icons8.com/3d-fluency/94/macbook.png', bg: '#EEF2FF' },
+  { key: 'fashion', name: 'الأزياء', icon: '👜', img: 'https://img.icons8.com/3d-fluency/94/handbag.png', bg: '#FDF2F8' },
+  { key: 'home', name: 'المنزل', icon: '🛋️', img: 'https://img.icons8.com/3d-fluency/94/sofa.png', bg: '#F0FDF4' },
+  { key: 'beauty', name: 'الجمال', icon: '💄', img: 'https://img.icons8.com/3d-fluency/94/lipstick.png', bg: '#FFF7ED' },
+  { key: 'kids', name: 'الأطفال', icon: '🧸', img: 'https://img.icons8.com/3d-fluency/94/teddy-bear.png', bg: '#FEFCE8' },
+  { key: 'sports', name: 'الرياضة', icon: '👟', img: 'https://img.icons8.com/3d-fluency/94/sneakers.png', bg: '#EFF6FF' },
+  { key: 'tools', name: 'الأدوات المنزلية', icon: '🎒', img: 'https://img.icons8.com/3d-fluency/94/backpack.png', bg: '#F8FAFC' }
 ];
 // ============================================================
 
@@ -2536,12 +2606,20 @@ var APP={
   closeDlg:function(){document.getElementById('dlg').classList.remove('active');},
   
   renderCats:function(){
-    var c=document.getElementById('cats');if(!c)return;
-    c.innerHTML=this.cats.map(function(cat){
-      var bgColor = cat.bg || 'rgba(0,0,0,0.05)';
-      return '<div class="cat" onclick="APP.openCatPage(\''+esc(cat.key)+'\',\''+esc(cat.name)+'\',\''+esc(cat.icon||'📦')+'\')">' +
-             '<div class="cat-i" style="background:'+bgColor+'">'+esc(cat.icon||'📦')+'</div>' +
-             '<div class="cat-n">'+esc(cat.name)+'</div>' +
+    var c = document.getElementById('cats'); 
+    if(!c) return;
+    
+    c.innerHTML = this.cats.map(function(cat) {
+      // استخدام الصورة إذا وجدت، أو الإيموجي كخطة بديلة
+      var innerContent = cat.img 
+        ? '<img src="' + cat.img + '" alt="' + cat.name + '" style="width:100%; height:100%; object-fit:contain;">' 
+        : esc(cat.icon || '📦');
+      
+      var bgColor = cat.bg || '#f4f6fa';
+      
+      return '<div class="lux-cat-card" onclick="APP.openCatPage(\'' + esc(cat.key) + '\',\'' + esc(cat.name) + '\',\'' + esc(cat.icon) + '\')">' +
+             '  <div class="lux-cat-img" style="background:' + bgColor + ';">' + innerContent + '</div>' +
+             '  <div class="lux-cat-name">' + esc(cat.name) + '</div>' +
              '</div>';
     }).join('');
   },
