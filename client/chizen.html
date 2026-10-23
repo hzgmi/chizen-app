@@ -3937,5 +3937,26 @@ window.addEventListener('load', function() {
 })();
 </script>
 
+
+<!-- ═══ نافذة الخطأ ═══ -->
+<div id="ref-error-overlay">
+  <div id="ref-error-box">
+    <div class="modal-icon-big">⚠️</div>
+    <div class="modal-title-big error">عذراً!</div>
+    <div class="modal-message" id="ref-error-message">حدث خطأ</div>
+    <button class="modal-btn-close error" onclick="closeRefError()">حسناً، فهمت</button>
+  </div>
+</div>
+
+<!-- ═══ نافذة النجاح ═══ -->
+<div id="ref-success-overlay">
+  <div id="ref-success-box">
+    <div class="modal-icon-big">🎉</div>
+    <div class="modal-title-big success">مبروك!</div>
+    <div class="modal-message" id="ref-success-message">+10 نقاط!</div>
+    <button class="modal-btn-close success" onclick="closeRefSuccess()">رائع</button>
+  </div>
+</div>
+
 </body>
 </html>
