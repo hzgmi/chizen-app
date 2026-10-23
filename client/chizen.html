@@ -2396,7 +2396,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div class="pt-a" onclick="dailyCheckinSafe()" style="flex: 1 1 45%;">
       <div class="pt-ai">🎁</div>
       <div class="pt-at">تسجيل يومي</div>
-      <div class="pt-ap">+10</div>
+      <div class="pt-ap">+1</div>
     </div>
     
     <!-- كودي -->
@@ -2417,7 +2417,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div style="text-align: center; margin-bottom: 15px;">
       <div style="font-size: 40px;">🤝</div>
       <div style="font-size: 16px; font-weight: 900; color: #6A1B9A; margin-top: 5px;">ادعُ صديقاً واكسبوا معاً!</div>
-      <div style="font-size: 12px; color: #6b7280; margin-top: 5px;">أدخل كود صديقك لتحصل أنت وهو على 50 نقطة لكل منكما</div>
+      <div style="font-size: 12px; color: #6b7280; margin-top: 5px;">أدخل كود صديقك لتحصل أنت وهو على 10 نقاط لكل منكما</div>
     </div>
     
     <div style="display: flex; gap: 8px;">
@@ -3130,7 +3130,7 @@ var timelineHtml = APP.getTimelineHtml(o.status);
       self.state.loyaltyPoints=(self.state.loyaltyPoints||0)+50;
       self.updateLoyalty();self.addPointsTx('تقييم',50);self.renderPoints();
       if(window.FB&&FB.ready&&FB.updateUserPoints)FB.updateUserPoints(self.state.loyaltyPoints).catch(function(){});
-      self.toast('+50 نقطة ⭐');
+      self.toast('+10 نقاط ⭐');
     });
   },
   
@@ -3583,10 +3583,10 @@ window.addEventListener('load', function() {
       if (window.APP) {
         APP.state.loyaltyPoints = newPoints;
         APP.updateLoyalty();
-        APP.addPointsTx('تسجيل دخول يومي', 10);
+        APP.addPointsTx('تسجيل دخول يومي', 1);
         APP.renderPoints();
       }
-      if (window.toast) toast('🎉 +10 نقاط!', 'suc');
+      if (window.toast) toast('🎉 +1 نقطة!', 'suc');
     } catch(e) {
       console.error(e);
       if (window.toast) toast('حدث خطأ', 'err');
@@ -3664,7 +3664,7 @@ window.showMyReferralCode = function() {
       if (referrerFound.id === uid) { if (window.toast) toast('لا يمكنك استخدام كودك الخاص', 'err'); return; }
       
       // نقاط للمستخدم الجديد
-      var newPoints = (userData.loyaltyPoints || 0) + 50;
+      var newPoints = (userData.loyaltyPoints || 0) + 10;
       await FB.db.collection('users').doc(uid).update({
         loyaltyPoints: newPoints,
         referredBy: referrerFound.id
@@ -3673,17 +3673,17 @@ window.showMyReferralCode = function() {
       // نقاط لصاحب الكود
       var referrerData = referrerFound.data();
       await FB.db.collection('users').doc(referrerFound.id).update({
-        loyaltyPoints: (referrerData.loyaltyPoints || 0) + 50
+        loyaltyPoints: (referrerData.loyaltyPoints || 0) + 10
       });
       
       if (window.APP) {
         APP.state.loyaltyPoints = newPoints;
         APP.updateLoyalty();
-        APP.addPointsTx('استخدام كود إحالة', 50);
+        APP.addPointsTx("استخدام كود إحالة", 10);
         APP.renderPoints();
       }
       input.value = '';
-      if (window.toast) toast('🎉 +50 نقطة! تم استخدام الكود بنجاح', 'suc');
+      if (window.toast) toast('🎉 +10 نقاط! تم استخدام الكود بنجاح', 'suc');
     } catch(e) {
       console.error(e);
       if (window.toast) toast('حدث خطأ', 'err');
