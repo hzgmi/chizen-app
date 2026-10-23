@@ -1,0 +1,13 @@
+const fs = require('fs');
+const path = require('path');
+const h = fs.readFileSync('client/chizen.html', 'utf8');
+const scRe = /<script([^>]*)>([\s\S]*?)<\/script>/gi;
+let sc, i = 0;
+while ((sc = scRe.exec(h)) !== null) {
+  i++;
+  if (i !== 28) continue;
+  if (/src\s*=/.test(sc[1])) continue;
+  fs.writeFileSync('/data/data/com.termux/files/home/b28.js', sc[2]);
+  console.log('✅ حفظ b28.js (' + sc[2].length + ' حرف)');
+  break;
+}
