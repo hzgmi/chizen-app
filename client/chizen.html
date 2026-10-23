@@ -3492,6 +3492,135 @@ window.addEventListener('load', function() {
   }, 3000);
 });
 
+
+
+// ═══ نظام الإحالة v2 ═══
+(function() {
+  'use strict';
+
+  // 1) إعادة تعريف dailyCheckin (نظام آمن يعتمد على Firebase)
+  window.dailyCheckinSafe = async function() {
+    if (!window.FB || !FB.currentUser) {
+      if (window.toast) toast('سجل دخول أولاً', 'err');
+      return;
+    }
+    try {
+      var uid = FB.currentUser.uid;
+      var userDoc = await FB.db.collection('users').doc(uid).get();
+      var userData = userDoc.data() || {};
+      var today = new Date().toDateString();
+      
+      if (userData.lastCheckin === today) {
+        if (window.toast) toast('لقد سجلت دخولك اليوم بالفعل ⏳', 'err');
+        return;
+      }
+      
+      var newPoints = (userData.loyaltyPoints || 0) + 10;
+      await FB.db.collection('users').doc(uid).update({
+        loyaltyPoints: newPoints,
+        lastCheckin: today
+      });
+      
+      if (window.APP) {
+        APP.state.loyaltyPoints = newPoints;
+        APP.updateLoyalty();
+        APP.addPointsTx('تسجيل دخول يومي', 10);
+        APP.renderPoints();
+      }
+      if (window.toast) toast('🎉 +10 نقاط!', 'suc');
+    } catch(e) {
+      console.error(e);
+      if (window.toast) toast('حدث خطأ', 'err');
+    }
+  };
+
+  // 2) توليد كود الإحالة
+  window.generateMyCode = function() {
+    if (!window.FB || !FB.currentUser) return null;
+    var uid = FB.currentUser.uid;
+    return 'CHZ' + uid.substring(0, 6).toUpperCase();
+  };
+
+  // 3) عرض/نسخ كود الإحالة
+  window.showMyReferralCode = function() {
+    var code = window.generateMyCode();
+    if (!code) { if (window.toast) toast('سجل دخول أولاً', 'err'); return; }
+    var msg = 'كود الإحالة الخاص بك في CHIZEN:\n\n' + code + '\n\nشارك هذا الكود مع أصدقائك، واحصل على 50 نقطة لكل صديق يسجل به!';
+    if (navigator.share) {
+      navigator.share({ title: 'CHIZEN', text: msg }).catch(function(){});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(code);
+      if (window.toast) toast('📋 تم نسخ الكود: ' + code, 'suc');
+    }
+  };
+
+  // 4) تطبيق كود الإحالة
+  window.applyReferralCode = async function() {
+    if (!window.FB || !FB.currentUser) {
+      if (window.toast) toast('سجل دخول أولاً', 'err');
+      return;
+    }
+    var input = document.getElementById('ref-input');
+    if (!input) return;
+    var code = input.value.trim().toUpperCase();
+    if (!code || code.length < 6) {
+      if (window.toast) toast('كود غير صحيح', 'err');
+      return;
+    }
+    
+    try {
+      var uid = FB.currentUser.uid;
+      var userDoc = await FB.db.collection('users').doc(uid).get();
+      var userData = userDoc.data() || {};
+      
+      if (userData.referredBy) {
+        if (window.toast) toast('لقد استخدمت كود إحالة من قبل', 'err');
+        return;
+      }
+      
+      // البحث عن صاحب الكود
+      var allUsers = await FB.db.collection('users').get();
+      var referrerFound = null;
+      allUsers.forEach(function(doc) {
+        var id = doc.id;
+        var expectedCode = 'CHZ' + id.substring(0, 6).toUpperCase();
+        if (expectedCode === code) referrerFound = doc;
+      });
+      
+      if (!referrerFound) { if (window.toast) toast('الكود غير موجود', 'err'); return; }
+      if (referrerFound.id === uid) { if (window.toast) toast('لا يمكنك استخدام كودك الخاص', 'err'); return; }
+      
+      // نقاط للمستخدم الجديد
+      var newPoints = (userData.loyaltyPoints || 0) + 50;
+      await FB.db.collection('users').doc(uid).update({
+        loyaltyPoints: newPoints,
+        referredBy: referrerFound.id
+      });
+      
+      // نقاط لصاحب الكود
+      var referrerData = referrerFound.data();
+      await FB.db.collection('users').doc(referrerFound.id).update({
+        loyaltyPoints: (referrerData.loyaltyPoints || 0) + 50
+      });
+      
+      if (window.APP) {
+        APP.state.loyaltyPoints = newPoints;
+        APP.updateLoyalty();
+        APP.addPointsTx('استخدام كود إحالة', 50);
+        APP.renderPoints();
+      }
+      input.value = '';
+      if (window.toast) toast('🎉 +50 نقطة! تم استخدام الكود بنجاح', 'suc');
+    } catch(e) {
+      console.error(e);
+      if (window.toast) toast('حدث خطأ', 'err');
+    }
+  };
+
+  console.log('✅ تم تحميل نظام الإحالة v2');
+})();
+// ═══ نهاية نظام الإحالة v2 ═══
+
 </script>
 
 
