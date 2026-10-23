@@ -3645,22 +3645,53 @@ var APP={
   },
   
 
+  
+
+  
   clearAllNotifs: async function() {
-    if (!this.user || !this.notifications.length) return;
-    var self = this;
+    if (!window.FB || !FB.currentUser) {
+      if (window.toast) toast('سجل دخول أولاً', 'err');
+      return;
+    }
+    
+    if (!confirm('هل تريد مسح كل الإشعارات؟')) return;
+    
     try {
-        var batch = firebase.firestore().batch();
-        // نحذف الإشعارات الخاصة بهذا المستخدم فقط
-        var snap = await firebase.firestore().collection('notifications').where('userId', '==', this.user.uid).get();
-        snap.forEach(function(doc) { batch.delete(doc.ref); });
+      var c = document.getElementById('notif-list');
+      if (c) c.innerHTML = '<div class="cempty"><p>⏳ جاري المسح...</p></div>';
+      
+      var snap = await FB.db.collection('notifications')
+        .where('userId', '==', FB.currentUser.uid)
+        .get();
+      
+      if (snap.empty) {
+        // جرب بدون فلتر userId (للإشعارات العامة)
+        snap = await FB.db.collection('notifications').get();
+      }
+      
+      var batch = FB.db.batch();
+      var deleted = 0;
+      snap.forEach(function(doc) {
+        // احذف فقط إشعارات المستخدم أو العامة
+        var d = doc.data();
+        if (!d.userId || d.userId === FB.currentUser.uid || d.isGlobal) {
+          batch.delete(doc.ref);
+          deleted++;
+        }
+      });
+      
+      if (deleted > 0) {
         await batch.commit();
-        
-        this.notifications = [];
-        this.renderNotifs();
-        this.toast('تم مسح الإشعارات', 'suc');
+      }
+      
+      this.notifications = [];
+      this.renderNotifs();
+      if (window.updateBadges) updateBadges();
+      if (window.toast) toast('✅ تم مسح ' + deleted + ' إشعار', 'suc');
+      
     } catch(e) {
-        console.error('Clear error:', e);
-        this.toast('فشل المسح', 'err');
+      console.error('Clear notifs error:', e);
+      if (window.toast) toast('حدث خطأ: ' + e.message, 'err');
     }
   },
 
