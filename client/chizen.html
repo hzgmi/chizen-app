@@ -2126,6 +2126,34 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="ref-modal-clickfix">
+  /* ضمان أن النافذة والأزرار قابلة للنقر */
+  #ref-modal-overlay { pointer-events: auto !important; }
+  #ref-modal-overlay.active { display: flex !important; }
+  #ref-modal-box { pointer-events: auto !important; position: relative; z-index: 10001; }
+  
+  /* الأزرار داخل النافذة */
+  #ref-modal-box button,
+  .ref-modal-actions button,
+  .close-btn,
+  .btn-copy-code,
+  .btn-share-code {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative;
+    z-index: 10002;
+  }
+  
+  /* تحسين مظهر الأزرار عند اللمس */
+  .btn-copy-code:active,
+  .btn-share-code:active,
+  .close-btn:active {
+    transform: scale(0.95) !important;
+    opacity: 0.8;
+  }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -3770,39 +3798,11 @@ window.showMyReferralCode = function() {
   if (overlay) overlay.classList.add('active');
 };
 
-window.closeRefModal = function() {
-  var overlay = document.getElementById('ref-modal-overlay');
-  if (overlay) overlay.classList.remove('active');
-};
 
-window.copyRefCode = function() {
-  var code = document.getElementById('ref-code-value').textContent;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(code).then(function() {
-      if (window.toast) toast('📋 تم نسخ الكود: ' + code, 'suc');
-    });
-  } else {
-    var temp = document.createElement('textarea');
-    temp.value = code;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand('copy');
-    document.body.removeChild(temp);
-    if (window.toast) toast('📋 تم نسخ الكود', 'suc');
-  }
-};
 
-window.shareRefCode = function() {
-  var code = document.getElementById('ref-code-value').textContent;
-  var msg = 'اكتشف CHIZEN! تطبيق تسوق ذكي.\n\nاستخدم كود الإحالة الخاص بي: ' + code + '\n\nستحصل أنت وأنا على نقاط مجانية! 🎁';
-  
-  if (navigator.share) {
-    navigator.share({ title: 'CHIZEN - كود إحالة', text: msg }).catch(function(){});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(code);
-    if (window.toast) toast('📋 الكود جاهز للمشاركة', 'suc');
-  }
-};
+
+
+
 
 // إغلاق النافذة عند الضغط خارجها
 document.addEventListener('click', function(e) {
@@ -3877,6 +3877,74 @@ document.addEventListener('click', function(e) {
   console.log('✅ تم تحميل نظام الإحالة v2');
 })();
 // ═══ نهاية نظام الإحالة v2 ═══
+
+
+
+// ═══ دوال النافذة المُحسّنة ═══
+window.closeRefModal = function() {
+  var overlay = document.getElementById('ref-modal-overlay');
+  if (overlay) {
+    overlay.classList.remove('active');
+    overlay.style.display = 'none';
+  }
+};
+
+window.copyRefCode = function() {
+  var codeEl = document.getElementById('ref-code-value');
+  if (!codeEl) { if (window.toast) toast('خطأ: الكود غير موجود', 'err'); return; }
+  var code = codeEl.textContent.trim();
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).then(function() {
+      if (window.toast) toast('📋 تم نسخ الكود: ' + code, 'suc');
+    }).catch(function() {
+      fallbackCopy(code);
+    });
+  } else {
+    fallbackCopy(code);
+  }
+  
+  function fallbackCopy(text) {
+    var temp = document.createElement('textarea');
+    temp.value = text;
+    temp.style.position = 'fixed';
+    temp.style.left = '-9999px';
+    document.body.appendChild(temp);
+    temp.select();
+    try {
+      document.execCommand('copy');
+      if (window.toast) toast('📋 تم نسخ الكود: ' + text, 'suc');
+    } catch(e) {
+      if (window.toast) toast('⚠️ انسخ يدوياً: ' + text, 'err');
+    }
+    document.body.removeChild(temp);
+  }
+};
+
+window.shareRefCode = function() {
+  var codeEl = document.getElementById('ref-code-value');
+  if (!codeEl) { if (window.toast) toast('خطأ', 'err'); return; }
+  var code = codeEl.textContent.trim();
+  var msg = 'اكتشف CHIZEN! تطبيق تسوق ذكي.\n\nاستخدم كود الإحالة الخاص بي: ' + code + '\n\nستحصل أنت وأنا على 10 نقاط مجانية! 🎁';
+  
+  if (navigator.share) {
+    navigator.share({ 
+      title: 'CHIZEN - كود إحالة', 
+      text: msg 
+    }).catch(function(){});
+  } else {
+    // نسخ بديل
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(msg).then(function() {
+        if (window.toast) toast('📋 الكود جاهز للمشاركة', 'suc');
+      });
+    } else {
+      if (window.toast) toast('⚠️ المشاركة غير مدعومة', 'err');
+    }
+  }
+};
+
+// ═══ نهاية الدوال ═══
 
 </script>
 
