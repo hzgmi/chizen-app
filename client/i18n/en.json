@@ -1,0 +1,72 @@
+{
+  "app.name": "CHIZEN",
+  "app.slogan": "Smart Shopping.. For a Better Life",
+  
+  "nav.home": "Home",
+  "nav.orders": "My Orders",
+  "nav.cart": "Cart",
+  "nav.profile": "Account",
+  
+  "home.welcome": "Welcome",
+  "home.points": "Loyalty Points",
+  "home.search": "Search for a product, brand...",
+  "home.best_sellers": "Best Sellers",
+  "home.view_all": "View All",
+  
+  "booking.hotels": "Hotels",
+  "booking.buses": "Buses",
+  "booking.hajj": "Hajj & Umrah",
+  "booking.flights": "Flights",
+  
+  "profile.title": "My Account",
+  "profile.orders_stat": "Orders",
+  "profile.favs_stat": "Favorites",
+  "profile.points_stat": "Points",
+  "profile.section_activity": "My Activity",
+  "profile.section_settings": "Settings",
+  "profile.logout": "Logout",
+  
+  "cart.title": "Shopping Cart",
+  "cart.empty": "Your cart is empty",
+  "cart.start_shopping": "Start shopping now",
+  "cart.checkout": "Checkout",
+  
+  "checkout.title": "Checkout",
+  "checkout.delivery": "Delivery Point",
+  "checkout.contact": "Contact Info",
+  "checkout.payment": "Payment Method",
+  "checkout.receipt": "Attach Payment Receipt",
+  "checkout.confirm": "Confirm Order",
+  
+  "booking.title": "Booking Center",
+  "booking.flight_details": "Flight Details",
+  "booking.bus_details": "Bus Details",
+  "booking.hotel_details": "Hotel Details",
+  "booking.hajj_details": "Hajj & Umrah",
+  "booking.confirm": "Confirm Booking",
+  
+  "points.title": "My Points",
+  "points.checkin": "Daily Check-in",
+  "points.mycode": "My Code",
+  "points.buy": "Buy Points",
+  "points.invite": "Invite a Friend",
+  "points.apply": "Apply",
+  
+  "settings.title": "Settings",
+  "settings.appearance": "Appearance",
+  "settings.language": "Language",
+  "settings.theme": "Theme",
+  "settings.font": "Font Size",
+  "settings.security": "Security",
+  "settings.password": "Change Password",
+  "settings.notifications": "Notifications",
+  "settings.cache": "Clear Cache",
+  "settings.backup": "Backup",
+  
+  "common.save": "Save",
+  "common.cancel": "Cancel",
+  "common.confirm": "Confirm",
+  "common.delete": "Delete",
+  "common.close": "Close",
+  "common.back": "Back"
+}
