@@ -29,6 +29,12 @@ self.addEventListener('fetch', function(event) {
 
 
 // ═══ Web Push handlers (Plan B) ═══
+
+
+
+
+
+// ═══ Web Push Handler (مع أيقونة الشعار) ═══
 self.addEventListener('push', function(event) {
   let data = {};
   try { data = event.data ? event.data.json() : {}; }
@@ -36,12 +42,14 @@ self.addEventListener('push', function(event) {
   const title = data.title || 'CHIZEN';
   const options = {
     body: data.body || '',
-    icon: data.icon || 'icon-192.png',
-    badge: data.badge || 'icon-192.png',
+    icon: 'https://i.ibb.co/FkvCmDwy/logo.png', // أيقونة الشعار
+    badge: 'https://i.ibb.co/FkvCmDwy/logo.png', // شارة الإشعار
+    image: data.image || null,
     data: data.data || { url: data.url || 'chizen.html' },
     vibrate: [200, 100, 200],
     tag: 'chizen-notif',
-    renotify: true
+    renotify: true,
+    requireInteraction: false
   };
   event.waitUntil(self.registration.showNotification(title, options));
 });
