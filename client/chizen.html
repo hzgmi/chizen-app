@@ -1949,63 +1949,85 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 
 
+
+
+
 <style id="luxury-cats-css">
   #cats {
     display: flex !important;
-    gap: 12px !important;
+    gap: 16px !important;
     overflow-x: auto !important;
-    padding: 10px 15px 20px !important;
+    padding: 15px 20px 25px !important;
     scrollbar-width: none;
     background: transparent !important;
   }
   #cats::-webkit-scrollbar { display: none; }
 
-  .lux-cat-card {
+  /* البطاقة الأساسية */
+  .up-cat-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    min-width: 80px;
+    gap: 10px;
+    min-width: 75px;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  .lux-cat-card:active {
-    transform: scale(0.92);
+  .up-cat-card:active {
+    transform: scale(0.9) translateY(5px);
   }
 
-  /* بطاقة الصورة الواقعية */
-  .lux-cat-img {
-    width: 75px;
-    height: 75px;
-    border-radius: 50%; /* شكل دائري فاخر */
+  /* حاوية الأيقونة (تصميم Squircle مسطح) */
+  .up-cat-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 16px rgba(106, 27, 154, 0.15), inset 0 2px 4px rgba(255,255,255,0.8);
-    border: 2px solid #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(106, 27, 154, 0.15), inset 0 2px 5px rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(255,255,255,0.8);
     position: relative;
     overflow: hidden;
-    background: #fff;
   }
   
-  .lux-cat-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* لملء الدائرة بالكامل */
+  /* أيقونة داخل الحاوية */
+  .up-cat-icon img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
     transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
   }
 
-  .lux-cat-card:hover .lux-cat-img img {
-    transform: scale(1.1); /* تكبير الصورة عند التمرير */
+  /* تأثير التكبير عند التمرير */
+  .up-cat-card:hover .up-cat-icon img {
+    transform: scale(1.15) rotate(3deg);
   }
 
-  .lux-cat-name {
-    font-size: 12px;
+  /* اسم القسم */
+  .up-cat-name {
+    font-size: 13px;
     font-weight: 800;
-    color: #1f2937;
+    color: #374151;
     text-align: center;
     white-space: nowrap;
     font-family: 'Tajawal', sans-serif;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  }
+
+  /* تأثير اللمعان (Shimmer) عند التمرير */
+  .up-cat-icon::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-20deg);
+    transition: 0.6s;
+  }
+  .up-cat-card:hover .up-cat-icon::before {
+    left: 120%;
   }
 </style>
 
@@ -2475,13 +2497,13 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 // ================= الأقسام الأساسية المثبتة =================
 window.FIXED_CATS = [
-  { key: 'electronics', name: 'الإلكترونيات', icon: '🎧', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=200&auto=format&fit=crop', bg: '#E0E7FF' },
-  { key: 'fashion', name: 'الأزياء', icon: '👜', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=200&auto=format&fit=crop', bg: '#FCE7F3' },
-  { key: 'home', name: 'المنزل', icon: '🛋️', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=200&auto=format&fit=crop', bg: '#DCFCE7' },
-  { key: 'beauty', name: 'الجمال', icon: '💄', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200&auto=format&fit=crop', bg: '#FFF7ED' },
-  { key: 'kids', name: 'الأطفال', icon: '🧸', img: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=200&auto=format&fit=crop', bg: '#FEF9C3' },
-  { key: 'sports', name: 'الرياضة', icon: '👟', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop', bg: '#E0F2FE' },
-  { key: 'tools', name: 'الأدوات', icon: '🎒', img: 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?q=80&w=200&auto=format&fit=crop', bg: '#F8FAFC' }
+  { key: 'electronics', name: 'الإلكترونيات', img: 'https://cdn-icons-png.flaticon.com/512/3659/3659899.png', grad: 'linear-gradient(135deg, #E0E7FF, #C7D2FE)' },
+  { key: 'fashion', name: 'الأزياء', img: 'https://cdn-icons-png.flaticon.com/512/3534/3534033.png', grad: 'linear-gradient(135deg, #FCE7F3, #FBCFE8)' },
+  { key: 'home', name: 'المنزل', img: 'https://cdn-icons-png.flaticon.com/512/1670/1670694.png', grad: 'linear-gradient(135deg, #DCFCE7, #BBF7D0)' },
+  { key: 'beauty', name: 'الجمال', img: 'https://cdn-icons-png.flaticon.com/512/3163/3163479.png', grad: 'linear-gradient(135deg, #FEF3C7, #FDE68A)' },
+  { key: 'kids', name: 'الأطفال', img: 'https://cdn-icons-png.flaticon.com/512/3082/3082011.png', grad: 'linear-gradient(135deg, #FEF9C3, #FEF08A)' },
+  { key: 'sports', name: 'الرياضة', img: 'https://cdn-icons-png.flaticon.com/512/2749/2749963.png', grad: 'linear-gradient(135deg, #DBEAFE, #BFDBFE)' },
+  { key: 'tools', name: 'الأدوات', img: 'https://cdn-icons-png.flaticon.com/512/3063/3063230.png', grad: 'linear-gradient(135deg, #F3E8FF, #E9D5FF)' }
 ];
 // ============================================================
 
@@ -2604,16 +2626,12 @@ var APP={
     if(!c) return;
     
     c.innerHTML = this.cats.map(function(cat) {
-      // استخدام الصورة إذا وجدت، أو الإيموجي كخطة بديلة
-      var innerContent = cat.img 
-        ? '<img src="' + cat.img + '" alt="' + cat.name + '" style="width:100%; height:100%; object-fit:contain;">' 
-        : esc(cat.icon || '📦');
-      
-      var bgColor = cat.bg || '#f4f6fa';
-      
-      return '<div class="lux-cat-card" onclick="APP.openCatPage(\'' + esc(cat.key) + '\',\'' + esc(cat.name) + '\',\'' + esc(cat.icon) + '\')">' +
-             '  <div class="lux-cat-img" style="background:' + bgColor + ';">' + innerContent + '</div>' +
-             '  <div class="lux-cat-name">' + esc(cat.name) + '</div>' +
+      var bgStyle = cat.grad ? 'background:' + cat.grad + ';' : 'background:#f4f6fa;';
+      return '<div class="up-cat-card" onclick="APP.openCatPage(\'' + esc(cat.key) + '\',\'' + esc(cat.name) + '\',\'\')">' +
+             '  <div class="up-cat-icon" style="' + bgStyle + '">' +
+             '    <img src="' + cat.img + '" alt="' + cat.name + '">' +
+             '  </div>' +
+             '  <div class="up-cat-name">' + esc(cat.name) + '</div>' +
              '</div>';
     }).join('');
   },
