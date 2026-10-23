@@ -2154,6 +2154,89 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   }
 </style>
 
+
+<style id="ref-error-style">
+  #ref-error-overlay {
+    position: fixed; inset: 0; background: rgba(10, 5, 25, 0.75);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    z-index: 20000; display: none; align-items: center; justify-content: center;
+    padding: 25px; opacity: 0; transition: opacity 0.3s;
+  }
+  #ref-error-overlay.active { display: flex; opacity: 1; }
+  
+  #ref-error-box {
+    background: #ffffff; border-radius: 24px; padding: 30px 25px;
+    width: 100%; max-width: 340px; text-align: center;
+    box-shadow: 0 20px 60px rgba(220, 38, 38, 0.3);
+    animation: errPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+  }
+  @keyframes errPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  #ref-error-box .err-icon {
+    font-size: 60px; margin-bottom: 15px;
+    filter: drop-shadow(0 4px 10px rgba(220,38,38,0.4));
+  }
+  #ref-error-box .err-title {
+    font-size: 18px; font-weight: 900; color: #dc2626;
+    margin-bottom: 10px;
+  }
+  #ref-error-box .err-message {
+    font-size: 14px; color: #6b7280; line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  #ref-error-box .err-btn {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff; border: none; border-radius: 14px;
+    padding: 14px 30px; font-family: inherit; font-weight: bold;
+    font-size: 15px; cursor: pointer; width: 100%;
+    box-shadow: 0 6px 20px rgba(220,38,38,0.35);
+    transition: transform 0.2s;
+  }
+  #ref-error-box .err-btn:active { transform: scale(0.96); }
+  
+  /* نسخة النجاح */
+  #ref-success-overlay {
+    position: fixed; inset: 0; background: rgba(10, 5, 25, 0.75);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    z-index: 20000; display: none; align-items: center; justify-content: center;
+    padding: 25px; opacity: 0; transition: opacity 0.3s;
+  }
+  #ref-success-overlay.active { display: flex; opacity: 1; }
+  
+  #ref-success-box {
+    background: #ffffff; border-radius: 24px; padding: 30px 25px;
+    width: 100%; max-width: 340px; text-align: center;
+    box-shadow: 0 20px 60px rgba(34, 197, 94, 0.3);
+    animation: errPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+  }
+  #ref-success-box .err-icon {
+    font-size: 60px; margin-bottom: 15px;
+    filter: drop-shadow(0 4px 10px rgba(34,197,94,0.4));
+  }
+  #ref-success-box .err-title {
+    font-size: 18px; font-weight: 900; color: #16a34a;
+    margin-bottom: 10px;
+  }
+  #ref-success-box .err-message {
+    font-size: 14px; color: #6b7280; line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  #ref-success-box .err-btn {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff; border: none; border-radius: 14px;
+    padding: 14px 30px; font-family: inherit; font-weight: bold;
+    font-size: 15px; cursor: pointer; width: 100%;
+    box-shadow: 0 6px 20px rgba(34,197,94,0.35);
+    transition: transform 0.2s;
+  }
+  #ref-success-box .err-btn:active { transform: scale(0.96); }
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -3736,216 +3819,12 @@ window.addEventListener('load', function() {
 
 
 
-// ═══ نظام الإحالة v2 ═══
-(function() {
-  'use strict';
-
-  // 1) إعادة تعريف dailyCheckin (نظام آمن يعتمد على Firebase)
-  window.dailyCheckinSafe = async function() {
-    if (!window.FB || !FB.currentUser) {
-      if (window.toast) toast('سجل دخول أولاً', 'err');
-      return;
-    }
-    try {
-      var uid = FB.currentUser.uid;
-      var userDoc = await FB.db.collection('users').doc(uid).get();
-      var userData = userDoc.data() || {};
-      var today = new Date().toDateString();
-      
-      if (userData.lastCheckin === today) {
-        if (window.toast) toast('لقد سجلت دخولك اليوم بالفعل ⏳', 'err');
-        return;
-      }
-      
-      var newPoints = (userData.loyaltyPoints || 0) + 10;
-      await FB.db.collection('users').doc(uid).update({
-        loyaltyPoints: newPoints,
-        lastCheckin: today
-      });
-      
-      if (window.APP) {
-        APP.state.loyaltyPoints = newPoints;
-        APP.updateLoyalty();
-        APP.addPointsTx('تسجيل دخول يومي', 1);
-        APP.renderPoints();
-      }
-      if (window.toast) toast('🎉 +1 نقطة!', 'suc');
-    } catch(e) {
-      console.error(e);
-      if (window.toast) toast('حدث خطأ', 'err');
-    }
-  };
-
-  // 2) توليد كود الإحالة
-  window.generateMyCode = function() {
-    if (!window.FB || !FB.currentUser) return null;
-    var uid = FB.currentUser.uid;
-    return 'CHZ' + uid.substring(0, 6).toUpperCase();
-  };
-
-  // 3) عرض/نسخ كود الإحالة
-  
-window.showMyReferralCode = function() {
-  var code = window.generateMyCode();
-  if (!code) { if (window.toast) toast('سجل دخول أولاً', 'err'); return; }
-  
-  // تعيين الكود في النافذة
-  var codeEl = document.getElementById('ref-code-value');
-  if (codeEl) codeEl.textContent = code;
-  
-  // فتح النافذة
-  var overlay = document.getElementById('ref-modal-overlay');
-  if (overlay) overlay.classList.add('active');
-};
 
 
 
 
 
-
-
-// إغلاق النافذة عند الضغط خارجها
-document.addEventListener('click', function(e) {
-  var overlay = document.getElementById('ref-modal-overlay');
-  if (overlay && e.target === overlay) overlay.classList.remove('active');
-});
-
-
-  // 4) تطبيق كود الإحالة
-  window.applyReferralCode = async function() {
-    if (!window.FB || !FB.currentUser) {
-      if (window.toast) toast('سجل دخول أولاً', 'err');
-      return;
-    }
-    var input = document.getElementById('ref-input');
-    if (!input) return;
-    var code = input.value.trim().toUpperCase();
-    if (!code || code.length < 6) {
-      if (window.toast) toast('كود غير صحيح', 'err');
-      return;
-    }
-    
-    try {
-      var uid = FB.currentUser.uid;
-      var userDoc = await FB.db.collection('users').doc(uid).get();
-      var userData = userDoc.data() || {};
-      
-      if (userData.referredBy) {
-        if (window.toast) toast('لقد استخدمت كود إحالة من قبل', 'err');
-        return;
-      }
-      
-      // البحث عن صاحب الكود
-      var allUsers = await FB.db.collection('users').get();
-      var referrerFound = null;
-      allUsers.forEach(function(doc) {
-        var id = doc.id;
-        var expectedCode = 'CHZ' + id.substring(0, 6).toUpperCase();
-        if (expectedCode === code) referrerFound = doc;
-      });
-      
-      if (!referrerFound) { if (window.toast) toast('الكود غير موجود', 'err'); return; }
-      if (referrerFound.id === uid) { if (window.toast) toast('لا يمكنك استخدام كودك الخاص', 'err'); return; }
-      
-      // نقاط للمستخدم الجديد
-      var newPoints = (userData.loyaltyPoints || 0) + 10;
-      await FB.db.collection('users').doc(uid).update({
-        loyaltyPoints: newPoints,
-        referredBy: referrerFound.id
-      });
-      
-      // نقاط لصاحب الكود
-      var referrerData = referrerFound.data();
-      await FB.db.collection('users').doc(referrerFound.id).update({
-        loyaltyPoints: (referrerData.loyaltyPoints || 0) + 10
-      });
-      
-      if (window.APP) {
-        APP.state.loyaltyPoints = newPoints;
-        APP.updateLoyalty();
-        APP.addPointsTx("استخدام كود إحالة", 10);
-        APP.renderPoints();
-      }
-      input.value = '';
-      if (window.toast) toast('🎉 +10 نقاط! تم استخدام الكود بنجاح', 'suc');
-    } catch(e) {
-      console.error(e);
-      if (window.toast) toast('حدث خطأ', 'err');
-    }
-  };
-
-  console.log('✅ تم تحميل نظام الإحالة v2');
-})();
-// ═══ نهاية نظام الإحالة v2 ═══
-
-
-
-// ═══ دوال النافذة المُحسّنة ═══
-window.closeRefModal = function() {
-  var overlay = document.getElementById('ref-modal-overlay');
-  if (overlay) {
-    overlay.classList.remove('active');
-    overlay.style.display = 'none';
-  }
-};
-
-window.copyRefCode = function() {
-  var codeEl = document.getElementById('ref-code-value');
-  if (!codeEl) { if (window.toast) toast('خطأ: الكود غير موجود', 'err'); return; }
-  var code = codeEl.textContent.trim();
-  
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(code).then(function() {
-      if (window.toast) toast('📋 تم نسخ الكود: ' + code, 'suc');
-    }).catch(function() {
-      fallbackCopy(code);
-    });
-  } else {
-    fallbackCopy(code);
-  }
-  
-  function fallbackCopy(text) {
-    var temp = document.createElement('textarea');
-    temp.value = text;
-    temp.style.position = 'fixed';
-    temp.style.left = '-9999px';
-    document.body.appendChild(temp);
-    temp.select();
-    try {
-      document.execCommand('copy');
-      if (window.toast) toast('📋 تم نسخ الكود: ' + text, 'suc');
-    } catch(e) {
-      if (window.toast) toast('⚠️ انسخ يدوياً: ' + text, 'err');
-    }
-    document.body.removeChild(temp);
-  }
-};
-
-window.shareRefCode = function() {
-  var codeEl = document.getElementById('ref-code-value');
-  if (!codeEl) { if (window.toast) toast('خطأ', 'err'); return; }
-  var code = codeEl.textContent.trim();
-  var msg = 'اكتشف CHIZEN! تطبيق تسوق ذكي.\n\nاستخدم كود الإحالة الخاص بي: ' + code + '\n\nستحصل أنت وأنا على 10 نقاط مجانية! 🎁';
-  
-  if (navigator.share) {
-    navigator.share({ 
-      title: 'CHIZEN - كود إحالة', 
-      text: msg 
-    }).catch(function(){});
-  } else {
-    // نسخ بديل
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(msg).then(function() {
-        if (window.toast) toast('📋 الكود جاهز للمشاركة', 'suc');
-      });
-    } else {
-      if (window.toast) toast('⚠️ المشاركة غير مدعومة', 'err');
-    }
-  }
-};
-
-// ═══ نهاية الدوال ═══
-
+// [تم حذف الكود المعطوب]
 </script>
 
 
