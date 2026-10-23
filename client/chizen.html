@@ -1258,175 +1258,6 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 
 
-<style id="global-harmony-css">
-  /* ═══ الأساسيات ═══ */
-  :root {
-    --primary: #6A1B9A; --secondary: #D81B60;
-    --grad: linear-gradient(135deg, #6A1B9A, #D81B60);
-    --bg: #f8f9fa; --card: #ffffff; --text: #1f2937;
-    --text-sec: #6b7280; --border: #e5e7eb;
-    --radius: 16px; --shadow: 0 4px 15px rgba(106,27,154,0.05);
-  }
-  html, body, .screen, #sc-home {
-    background: linear-gradient(180deg, #F5EFFF 0%, #FCEBF3 50%, #F8F9FA 100%) !important;
-    background-attachment: fixed !important;
-    color: var(--text) !important;
-    font-family: 'Tajawal', sans-serif !important;
-    overflow-x: hidden !important;
-  }
-  .st { background: transparent !important; }
-
-  /* ═══ الحقول والنماذج ═══ */
-  input, textarea, select {
-    background: #f4f6fa !important; color: #1f2937 !important;
-    border: 1px solid #e5e7eb !important; border-radius: 12px !important;
-    padding: 12px 15px !important; font-family: 'Tajawal', sans-serif !important;
-    font-size: 14px !important; outline: none !important;
-  }
-  input:focus, textarea:focus, select:focus {
-    border-color: #D81B60 !important; box-shadow: 0 0 0 3px rgba(216,27,96,0.1) !important;
-  }
-  input::placeholder, textarea::placeholder { color: #9ca3af !important; }
-  #global-search, #addr-title, #addr-details {
-    background: #ffffff !important; color: #1f2937 !important; border: 1px solid #e5e7eb !important;
-  }
-
-  /* ═══ الهيدر الداخلي (.hd) للشاشات التفصيلية ═══ */
-  .hd {
-    background: rgba(255,255,255,0.85) !important; backdrop-filter: blur(10px) !important;
-    border-bottom: 1px solid #e5e7eb !important;
-  }
-  .hd div[style*="color:#fff"], .hd div[style*="color: #fff"] { color: #1f2937 !important; }
-  .hd svg { stroke: #1f2937 !important; }
-  .hd > div[onclick] { background: #f4f6fa !important; }
-
-  /* ═══ العناوين (.sh2) ═══ */
-  .sh2 { background: #ffffff !important; border-bottom: 1px solid #e5e7eb !important; padding: 15px !important; }
-  .st2 { color: #1f2937 !important; font-weight: 900 !important; font-size: 20px !important; }
-
-  /* ═══ السلة ═══ */
-  .ch { background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: var(--radius) !important; margin-bottom: 10px !important; }
-  .ci { background: #f4f6fa !important; border-radius: 12px !important; }
-  .ci-n { color: #1f2937 !important; font-weight: 700 !important; }
-  .ci-p { color: #D81B60 !important; font-weight: 900 !important; }
-
-  /* ═══ الدفع (Checkout) ═══ */
-  .cs { background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: var(--radius) !important; padding: 15px !important; margin-bottom: 15px !important; }
-  .cst { color: #1f2937 !important; font-weight: 900 !important; }
-  .cn { background: var(--grad) !important; color: #fff !important; }
-  .fl { color: #374151 !important; font-weight: 700 !important; }
-  .fi { background: #f4f6fa !important; color: #1f2937 !important; }
-  #pickup-btn { background: #f4f6fa !important; color: #1f2937 !important; border: 1px solid #e5e7eb !important; }
-  #co-receipt { color: #1f2937 !important; }
-  .bank { background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; padding: 15px !important; margin-bottom: 10px !important; }
-  .bank-n { color: #1f2937 !important; font-weight: 700 !important; }
-  .bank-d { color: #6b7280 !important; }
-  .tb { background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: var(--radius) !important; padding: 15px !important; margin-top: 15px !important; }
-  .tr { color: #1f2937 !important; }
-  .tf { color: #D81B60 !important; border-top: 1px solid #e5e7eb !important; padding-top: 10px !important; margin-top: 10px !important; }
-
-  /* ═══ الأزرار ═══ */
-  .btn-p, .btn-c, .btn-b {
-    background: var(--grad) !important; color: #fff !important; border: none !important;
-    border-radius: 12px !important; padding: 14px !important; font-family: 'Tajawal', sans-serif !important;
-    font-weight: 700 !important; box-shadow: 0 4px 12px rgba(216,27,96,0.2) !important;
-    width: 100% !important; display: block !important; margin-top: 10px !important;
-  }
-  .btn-c { background: #f4f6fa !important; color: #6A1B9A !important; box-shadow: none !important; border: 1px solid #e5e7eb !important; }
-  .danger-b { background: #fee2e2 !important; color: #dc2626 !important; border: none !important; border-radius: 12px !important; padding: 14px !important; width: 100% !important; font-family: 'Tajawal', sans-serif !important; font-weight: 700 !important; }
-
-  /* ═══ تفاصيل المنتج ═══ */
-  .det-i { background: #ffffff !important; }
-  .det-b { background: #ffffff !important; border-radius: 20px 20px 0 0 !important; padding: 20px !important; }
-  .det-n { color: #1f2937 !important; font-weight: 900 !important; }
-  .det-br { color: #6b7280 !important; }
-  .det-p { color: #D81B60 !important; font-weight: 900 !important; }
-  .det-d { color: #4b5563 !important; }
-  .back { background: #ffffff !important; border-radius: 50% !important; box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important; }
-  .back svg { stroke: #1f2937 !important; }
-  .qs { background: #f4f6fa !important; border-radius: 12px !important; }
-  .qsl { color: #1f2937 !important; }
-  .qb2 { background: #ffffff !important; color: #1f2937 !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important; }
-  .qn2 { color: #1f2937 !important; }
-
-  /* ═══ الحجوزات ═══ */
-  .booking-tabs { display: flex !important; gap: 8px !important; padding: 15px !important; overflow-x: auto !important; background: transparent !important; }
-  .booking-tab {
-    background: #ffffff !important; color: #6b7280 !important; border: 1px solid #e5e7eb !important;
-    border-radius: 12px !important; padding: 10px 16px !important; font-family: 'Tajawal', sans-serif !important;
-    font-weight: 700 !important; white-space: nowrap !important; cursor: pointer !important; transition: all 0.2s !important;
-  }
-  .booking-tab.active { background: var(--grad) !important; color: #fff !important; border-color: transparent !important; }
-  .booking-form { background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: var(--radius) !important; padding: 20px !important; margin: 15px !important; }
-  .booking-form label { display: block !important; color: #374151 !important; font-weight: 700 !important; font-size: 13px !important; margin: 12px 0 6px !important; }
-  .booking-form button { background: var(--grad) !important; color: #fff !important; border: none !important; border-radius: 12px !important; padding: 14px !important; width: 100% !important; font-family: 'Tajawal', sans-serif !important; font-weight: 700 !important; font-size: 15px !important; margin-top: 15px !important; box-shadow: 0 4px 12px rgba(216,27,96,0.2) !important; }
-
-  /* ═══ النقاط ═══ */
-  .pt-hero { background: var(--grad) !important; color: #fff !important; border-radius: var(--radius) !important; padding: 25px !important; text-align: center !important; }
-  .pt-hi { font-size: 40px !important; } .pt-hn { font-size: 36px !important; font-weight: 900 !important; }
-  .pt-hl { font-size: 13px !important; opacity: 0.9 !important; }
-  .pt-hv { font-size: 12px !important; background: rgba(255,255,255,0.2) !important; padding: 4px 12px !important; border-radius: 20px !important; display: inline-block !important; margin-top: 8px !important; }
-  .pt-act { display: flex !important; gap: 10px !important; padding: 15px !important; }
-  .pt-a { flex: 1 !important; background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; padding: 12px !important; text-align: center !important; }
-  .pt-ai { font-size: 24px !important; }
-  .pt-at { color: #1f2937 !important; font-weight: 700 !important; font-size: 12px !important; }
-  .pt-ap { color: #D81B60 !important; font-weight: 900 !important; font-size: 14px !important; }
-  .pt-h { padding: 0 15px !important; }
-  .pt-ht { color: #1f2937 !important; font-weight: 900 !important; margin-bottom: 10px !important; }
-  .pt-t { display: flex !important; align-items: center !important; gap: 10px !important; background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; padding: 12px !important; margin-bottom: 8px !important; }
-  .pt-tt { color: #1f2937 !important; } .pt-ta { color: #D81B60 !important; font-weight: 900 !important; margin-right: auto !important; }
-
-  /* ═══ الحساب والإعدادات ═══ */
-  .ph { text-align: center !important; padding: 30px 20px !important; background: #ffffff !important; border-bottom: 1px solid #e5e7eb !important; margin-bottom: 15px !important; }
-  .av { width: 80px !important; height: 80px !important; border-radius: 50% !important; background: var(--grad) !important; color: #fff !important; font-size: 32px !important; font-weight: 900 !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto 10px !important; }
-  .pn { color: #1f2937 !important; font-weight: 900 !important; font-size: 20px !important; }
-  .pe { color: #6b7280 !important; font-size: 13px !important; }
-  .sg { background: #ffffff !important; border: 1px solid #e5e7eb !important; border-radius: var(--radius) !important; margin: 0 15px 15px !important; overflow: hidden !important; }
-  .sgt { padding: 12px 15px !important; color: #6A1B9A !important; font-weight: 900 !important; font-size: 13px !important; background: #f4f6fa !important; border-bottom: 1px solid #e5e7eb !important; }
-  .sit { display: flex !important; align-items: center !important; gap: 12px !important; padding: 14px 15px !important; border-bottom: 1px solid #f4f6fa !important; cursor: pointer !important; }
-  .sit:last-child { border-bottom: none !important; }
-  .sii { width: 38px !important; height: 38px !important; border-radius: 10px !important; background: #f4f6fa !important; display: flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
-  .sii svg { width: 20px !important; height: 20px !important; stroke: #6A1B9A !important; }
-  .sit-t { flex: 1 !important; } .sit-ti { color: #1f2937 !important; font-weight: 700 !important; } .sit-d { color: #6b7280 !important; font-size: 11px !important; }
-  .mi-a { color: #9ca3af !important; font-size: 18px !important; } .mi-v { color: #6b7280 !important; font-size: 12px !important; }
-  .tog { width: 44px !important; height: 24px !important; border-radius: 12px !important; background: #d1d5db !important; position: relative !important; transition: background 0.2s !important; }
-  .tog::after { content: '' !important; position: absolute !important; top: 2px !important; left: 2px !important; width: 20px !important; height: 20px !important; border-radius: 50% !important; background: #fff !important; transition: transform 0.2s !important; }
-  .tog.on { background: var(--grad) !important; } .tog.on::after { transform: translateX(20px) !important; }
-
-  /* ═══ المودال (نجاح الحجز والمنبثقات) ═══ */
-  .success-card, .ms { background: #fff !important; border-radius: 20px !important; padding: 25px !important; }
-  .success-icon { background: linear-gradient(135deg, #10b981, #059669) !important; color: #fff !important; }
-  .success-card h2, .mt2 { color: #1f2937 !important; }
-  .success-card p { color: #6b7280 !important; }
-  .success-card button { background: var(--grad) !important; color: #fff !important; border: none !important; border-radius: 12px !important; padding: 12px 24px !important; font-weight: 700 !important; }
-  .mh { background: #e5e7eb !important; }
-
-  /* ═══ الإشعارات والطلبات ═══ */
-  .notif-item, [class*="notif"] { background: #fff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; padding: 12px !important; margin-bottom: 8px !important; }
-  .notif-item.unread, [class*="notif"].unread { background: #fdf2f8 !important; border-color: #f9a8d4 !important; }
-  .order-card, [class*="order-item"] { background: #fff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; padding: 15px !important; margin-bottom: 10px !important; }
-
-  /* ═══ زر الدردشة AI ═══ */
-  #ai-btn, .ai-fab, [class*="ai-button"], [class*="chat-button"] {
-    background: var(--grad) !important; color: #fff !important;
-    width: 54px !important; height: 54px !important; border-radius: 50% !important;
-    box-shadow: 0 6px 20px rgba(216,27,96,0.35) !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    border: none !important; z-index: 999 !important; bottom: 90px !important; left: 15px !important;
-  }
-  #ai-btn svg, [class*="ai-button"] svg { width: 26px !important; height: 26px !important; }
-
-  /* ═══ نافذة الدردشة AI ═══ */
-  [class*="chat-widget"], [class*="chat-container"], [class*="chat-window"], [id*="chat-widget"] {
-    background: #fff !important; border-radius: 20px !important; box-shadow: 0 10px 40px rgba(106,27,154,0.15) !important;
-  }
-  [class*="chat-header"], .chat-header { background: var(--grad) !important; color: #fff !important; }
-  [class*="chat-body"], .chat-body, [class*="messages"] { background: #f8f9fa !important; }
-  [class*="bot-message"], [class*="message-bot"] { background: #fff !important; color: #1f2937 !important; border-radius: 16px 16px 16px 4px !important; padding: 12px !important; margin-bottom: 8px !important; }
-  [class*="user-message"], [class*="message-user"] { background: var(--grad) !important; color: #fff !important; border-radius: 16px 16px 4px 16px !important; padding: 12px !important; margin-bottom: 8px !important; }
-  [class*="chat-input"] { background: #fff !important; border-top: 1px solid #e5e7eb !important; }
-  [class*="chat-input"] input { background: #f4f6fa !important; color: #1f2937 !important; }
-</style>
 
 
 
@@ -1441,215 +1272,305 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 
 
-<style id="chizen-luxury-css">
-  /* إخفاء أي بقايا للهيدرات السابقة */
-  .top-marquee, .app-header, .neon-header, .neon-marquee { display: none !important; }
 
-  /* الحاوية الرئيسية (الخلفية المتدرجة مع تأثير اللمعان) */
-  .lux-header-wrapper {
-    margin: 0 15px 20px;
+
+
+
+<style id="chizen-ultimate-css">
+  /* ═══════════════ TOP BANNER ═══════════════ */
+  .chz-banner {
+    height: 48px;
+    width: 100%;
+    background: linear-gradient(90deg, #FF8A00 0%, #FF3D9A 25%, #2E5AFF 60%, #7C3AED 85%, #9B4DFF 100%);
     border-radius: 20px;
-    background: linear-gradient(135deg, #2E5AFF, #7C3AED, #FF3D9A, #FF8A00);
-    background-size: 300% 300%;
-    animation: gradientBG 10s ease infinite;
-    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
-    position: relative;
     overflow: hidden;
-    padding: 12px 15px;
-  }
-  @keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* تأثير الجزيئات اللامعة (Glitter) */
-  .lux-header-wrapper::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
-    background-size: 20px 20px;
-    opacity: 0.6;
-    pointer-events: none;
-  }
-
-  /* الشريط العلوي */
-  .lux-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(90deg, #FF8A00, #FF3D9A, #2E5AFF, #7C3AED);
-    border-radius: 12px;
-    padding: 8px 12px;
-    margin-bottom: 15px;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
     position: relative;
-    z-index: 2;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 6px;
+    box-shadow: 0 4px 16px rgba(255,61,154,0.2);
   }
-  .lux-banner-sec {
+  .chz-marquee-track { overflow: hidden; width: 100%; height: 100%; }
+  .chz-marquee-content {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 0;
+    animation: chz-marquee 25s linear infinite;
+    width: max-content;
+    height: 100%;
+    padding-right: 16px;
   }
-  .lux-b-icon, .lux-b-icon-bolt {
-    width: 14px; height: 14px;
-    stroke: #fff;
+  .chz-marquee-content:hover { animation-play-state: paused; }
+  @keyframes chz-marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
-  .lux-b-icon-bolt { stroke: #FFD700; margin-right: -2px; }
-  .lux-b-divider {
-    width: 1px; height: 14px;
+  .chz-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    padding: 0 8px;
+  }
+  .chz-icon { width: 16px; height: 16px; flex-shrink: 0; filter: drop-shadow(0 0 4px rgba(255,61,154,0.6)); }
+  .chz-text-yellow { color: #FFEB3B; font-size: 15px; font-weight: 900; font-family: 'Tajawal', sans-serif; }
+  .chz-text-white { color: #fff; font-size: 14px; font-weight: 600; font-family: 'Tajawal', sans-serif; }
+  .chz-bolt { color: #FFEB3B; filter: drop-shadow(0 0 4px #FFEB3B); }
+  .chz-sep {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
     background: rgba(255,255,255,0.4);
+    margin: 0 24px;
+    flex-shrink: 0;
   }
-
-  /* الهيدر الرئيسي */
-  .lux-main {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* اليمين: المستخدم */
-  .lux-profile-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    direction: ltr; /* لضمان ترتيب العناصر من اليسار لليمين */
-    cursor: pointer;
-  }
-  .lux-prof-txt {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* محاذاة النص لليمين */
-    direction: rtl;
-  }
-  .lux-prof-name {
+  .chz-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
     color: #fff;
-    font-size: 13px;
-    font-weight: 900;
-    line-height: 1.2;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  .lux-prof-welcome {
-    color: rgba(255,255,255,0.85);
-    font-size: 10px;
-    font-weight: 600;
-  }
-  .lux-avatar {
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #FF3D9A, #7C3AED, #2E5AFF);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(255, 61, 154, 0.5), inset 0 0 10px rgba(255,255,255,0.3);
-    border: 2px solid rgba(255,255,255,0.8);
-  }
-  .lux-avatar svg { width: 22px; height: 22px; }
-  .lux-arrow {
-    color: #fff;
+    opacity: 0.6;
     font-size: 20px;
     font-weight: bold;
-    opacity: 0.8;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .chz-glitter {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .chz-glitter span {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 4px #fff;
+    animation: chz-twinkle 2s infinite;
+    opacity: 0.7;
+  }
+  .chz-glitter span:nth-child(2n) { background: #FF3D9A; box-shadow: 0 0 4px #FF3D9A; animation-delay: 0.5s; }
+  @keyframes chz-twinkle {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.2; transform: scale(0.5); }
   }
 
-  /* الوسط: الشعار */
-  .lux-center {
+  /* ═══════════════ MAIN HEADER ═══════════════ */
+  .chz-main {
+    height: 92px;
+    width: 100%;
+    margin-top: 6px;
+    background: linear-gradient(105deg, #2E5AFF 0%, #4A5AFF 15%, #7C3AED 35%, #9B4DFF 50%, #FF3D9A 70%, #FF8A00 100%);
+    border-radius: 18px;
+    padding: 12px 18px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    direction: ltr; /* لضمان ترتيب العناصر */
-  }
-  .lux-logo-box {
-    width: 48px; height: 48px;
-    border-radius: 14px;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: inset 0 0 15px rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(124,58,237,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    position: relative;
     overflow: hidden;
   }
-  .lux-logo-box img {
-    width: 100%; height: 100%; object-fit: contain;
+  .chz-particles { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+  .chz-particles span {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 3px #fff;
+    opacity: 0.5;
+    animation: chz-twinkle 3s infinite;
   }
-  .fallback-logo::after {
-    content: 'C';
-    color: #fff; font-size: 28px; font-weight: 900;
-    background: linear-gradient(135deg, #FF3D9A, #2E5AFF);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .lux-text-group {
-    display: flex; flex-direction: column;
-    direction: rtl; /* إرجاع النص للعربية */
-  }
-  .lux-brand-en {
-    font-size: 22px;
-    font-weight: 900;
-    background: linear-gradient(to right, #FFD700, #00BFFF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-    letter-spacing: 1.5px;
-    text-shadow: 0 2px 10px rgba(0, 191, 255, 0.2);
-  }
-  .lux-brand-ar {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 800;
-    display: flex; align-items: center; gap: 5px;
-    margin-top: 3px;
-  }
-  .lux-line {
-    width: 14px; height: 2px;
-    background: #00BFFF;
-    display: inline-block;
-    border-radius: 2px;
-    box-shadow: 0 0 5px #00BFFF;
-  }
-  .lux-tagline {
-    color: rgba(255,255,255,0.95);
-    font-size: 9px;
-    margin-top: 4px;
-    font-weight: 600;
-  }
+  .chz-particles span:nth-child(3n) { background: #FFEB3B; box-shadow: 0 0 3px #FFEB3B; }
+  .chz-particles span:nth-child(3n+2) { background: #FF3D9A; box-shadow: 0 0 3px #FF3D9A; }
 
-  /* اليسار: الأيقونات */
-  .lux-icons-left {
+  /* ═══ LEFT: 3 Glass Icons ═══ */
+  .chz-left {
     display: flex;
-    gap: 8px;
-    direction: ltr; /* لضمان ترتيب العناصر */
+    gap: 14px;
+    align-items: center;
+    direction: ltr;
+    z-index: 2;
   }
-  .lux-glass-icon {
-    width: 38px; height: 38px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.5);
-    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+  .chz-glass-icon {
+    width: 54px; height: 54px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.3);
     display: flex; align-items: center; justify-content: center;
     position: relative;
     cursor: pointer;
     transition: transform 0.2s;
   }
-  .lux-glass-icon:active { transform: scale(0.9); }
-  .lux-glass-icon svg { width: 20px; height: 20px; }
-  .lux-badge {
+  .chz-glass-icon:active { transform: scale(0.9); }
+  .chz-glass-icon svg { width: 26px; height: 26px; }
+  .chz-badge {
     position: absolute;
-    top: -6px; right: -6px;
-    min-width: 18px; height: 18px;
+    top: -8px; right: -8px;
+    width: 26px; height: 26px;
     border-radius: 50%;
+    background: linear-gradient(135deg, #FF3D9A 0%, #FF8A00 100%);
+    border: 2px solid rgba(255,255,255,0.9);
+    font-size: 12px; font-weight: 900;
+    color: #fff;
     display: flex; align-items: center; justify-content: center;
-    font-size: 9px; font-weight: 900; color: #fff;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(255,61,154,0.5);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* ═══ CENTER: Logo + Brand ═══ */
+  .chz-center {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    z-index: 2;
     direction: ltr;
   }
-  .lux-b-pink { background: linear-gradient(135deg, #FF8A00, #FF3D9A); }
-  .lux-b-orange { background: linear-gradient(135deg, #FF3D9A, #7C3AED); }
+  .chz-logo-box {
+    width: 62px; height: 62px;
+    background: linear-gradient(135deg, #0A1028 0%, #1A2340 100%);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .chz-logo-box img {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 17px;
+  }
+  .chz-logo-box.chz-fallback::before {
+    content: 'C';
+    font-size: 42px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #FF3D9A, #2E5AFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Poppins', sans-serif;
+  }
+  .chz-brand-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    direction: rtl;
+  }
+  .chz-brand-en {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(90deg, #FFD700 0%, #FF8A9B 30%, #9B4DFF 70%, #2EAAFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    line-height: 1;
+  }
+  .chz-brand-ar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #FFDDAA;
+    font-family: 'Tajawal', sans-serif;
+    line-height: 1;
+  }
+  .chz-line {
+    display: inline-block;
+    width: 28px; height: 2px;
+    background: linear-gradient(90deg, #7C3AED, #2E5AFF);
+    border-radius: 2px;
+  }
+  .chz-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 500;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  /* ═══ RIGHT: Profile ═══ */
+  .chz-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    direction: ltr;
+    z-index: 2;
+    cursor: pointer;
+  }
+  .chz-profile-txt {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    direction: rtl;
+  }
+  .chz-p-name {
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Tajawal', sans-serif;
+    white-space: nowrap;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .chz-p-welcome {
+    font-size: 13px;
+    font-weight: 500;
+    color: #FFDDAA;
+    opacity: 0.95;
+    font-family: 'Tajawal', sans-serif;
+  }
+  .chz-avatar {
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0A1028 0%, #0A1028 20%, #FF3D9A 40%, #7C3AED 70%, #2E5AFF 100%);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 4px 16px rgba(255,61,154,0.4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .chz-avatar svg { width: 28px; height: 28px; }
+  .chz-arrow-right {
+    color: #fff;
+    opacity: 0.8;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 4px;
+  }
+
+  /* ═══════════ RESPONSIVE ═══════════ */
+  @media (max-width: 380px) {
+    .chz-logo-box { width: 50px; height: 50px; }
+    .chz-brand-en { font-size: 22px; }
+    .chz-brand-ar { font-size: 16px; }
+    .chz-line { width: 18px; }
+    .chz-tagline { font-size: 11px; }
+    .chz-glass-icon { width: 46px; height: 46px; }
+    .chz-glass-icon svg { width: 22px; height: 22px; }
+    .chz-badge { width: 22px; height: 22px; font-size: 10px; top: -6px; right: -6px; }
+    .chz-avatar { width: 48px; height: 48px; }
+    .chz-avatar svg { width: 24px; height: 24px; }
+    .chz-p-name { font-size: 14px; max-width: 80px; }
+    .chz-p-welcome { font-size: 11px; }
+    .chz-main { height: 82px; padding: 10px 14px; }
+    .chz-left { gap: 10px; }
+    .chz-center { gap: 10px; }
+    .chz-text-yellow, .chz-text-white { font-size: 12px; }
+    .chz-sep { margin: 0 14px; }
+  }
+
+  /* ═══ Fonts ═══ */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Tajawal:wght@400;500;700;800;900&display=swap');
 </style>
 
 </head>
@@ -1661,129 +1582,126 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     <div class="screen active" id="sc-home">
 
 <!-- NEW NEON MARQUEE -->
-<div class="neon-marquee">
-  <div class="neon-marquee-inner">
-    <span>عروض حصرية وخصومات مميزة ⭐</span>
-    <span>توصيل سريع لجميع المناطق 🚚</span>
-    <span>خصم حتى 20% ⚡</span>
-  </div>
-</div>
+
 
 <!-- NEW NEON HEADER -->
-<div class="neon-header">
-  <div class="neon-glow-1"></div>
-  <div class="neon-glow-2"></div>
-  
-  <!-- الأيقونات (اليسار) -->
-  <div class="nh-left">
-    <div class="nh-icon-box" onclick="APP.goTab('cart')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span class="nh-badge">3</span>
-    </div>
-    <div class="nh-icon-box" onclick="APP.goTab('wishlist')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      <span class="nh-badge" style="background:#ff0066;">5</span>
-    </div>
-    <div class="nh-icon-box" onclick="APP.goTab('notifications')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span class="nh-badge" style="background:#ff6600;">1</span>
-    </div>
-  </div>
 
-  <!-- الشعار (الوسط) -->
-  
-    <div class="nh-center">
-      <img src="https://i.ibb.co/5XDwGR8S/IMG-20261017-WA3158.jpg" class="nh-logo-img" alt="CHIZEN Logo" style="width:60px; height:60px; border-radius:16px; margin-bottom:5px; box-shadow:0 4px 15px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2);">
-      <div class="nh-brand" style="font-size:28px; text-shadow:0 2px 10px rgba(255,255,255,0.4);">CHIZEN</div>
-      <div class="nh-sub" style="color:#00e5ff; font-size:16px; font-weight:bold; margin-top:-2px;">شيزن</div>
-      <div class="nh-tagline" style="font-size:10px; color:#fff; opacity:0.8; margin-top:2px;">تسوق أذكى .. لحياة أجمل</div>
-    </div>
-    
-    <!-- المستخدم (اليمين) -->
-  <div class="nh-right" onclick="APP.goTab('profile')">
-    <div class="nh-user-text">
-      <span class="nh-name" id="home-user">هزيم بن ق...</span>
-      <span class="nh-welcome">أهلاً بك</span>
-    </div>
-    <div class="nh-avatar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </div>
-    <div class="nh-arrow">›</div>
-  </div>
-</div>
 
 
 
     
 
       <div class="st"></div>
-  <!-- CHIZEN LUXURY HEADER -->
-  <div class="lux-header-wrapper">
-    <!-- Top Banner -->
-    <div class="lux-banner">
-      <div class="lux-banner-sec">
-        <svg class="lux-b-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <span>عروض حصرية وخصومات مميزة</span>
-      </div>
-      <div class="lux-b-divider"></div>
-      <div class="lux-banner-sec">
-        <svg class="lux-b-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        <span>توصيل سريع لجميع المناطق</span>
-      </div>
-      <div class="lux-b-divider"></div>
-      <div class="lux-banner-sec">
-        <svg class="lux-b-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-        <svg class="lux-b-icon-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        <span>خصم حتى 20%</span>
+
+<!-- CHIZEN ULTIMATE HEADER -->
+<div class="chizen-hdr">
+
+  <!-- ═══ 1) TOP ANIMATED BANNER ═══ -->
+  <div class="chz-banner">
+    <div class="chz-marquee-track">
+      <div class="chz-marquee-content">
+        <!-- Loop 1 -->
+        <span class="chz-item">
+          <svg class="chz-icon" viewBox="0 0 24 24" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="#FF3D9A" stroke-width="2"/><line x1="7" y1="7" x2="7.01" y2="7" stroke="#FF3D9A" stroke-width="2"/></svg>
+          <span class="chz-text-yellow">خصم حتى 20%</span>
+          <span class="chz-bolt">⚡</span>
+        </span>
+        <span class="chz-sep"></span>
+        <span class="chz-item">
+          <svg class="chz-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><line x1="5" y1="6" x2="11" y2="6"/><line x1="5" y1="9" x2="9" y2="9"/></svg>
+          <span class="chz-text-white">توصيل سريع لجميع المناطق</span>
+        </span>
+        <span class="chz-sep"></span>
+        <span class="chz-item">
+          <svg class="chz-icon" viewBox="0 0 24 24" fill="#fff"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span class="chz-text-white">عروض حصرية وخصومات مميزة</span>
+        </span>
+        <!-- Loop 2 (duplicate for seamless) -->
+        <span class="chz-item">
+          <svg class="chz-icon" viewBox="0 0 24 24" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="#FF3D9A" stroke-width="2"/><line x1="7" y1="7" x2="7.01" y2="7" stroke="#FF3D9A" stroke-width="2"/></svg>
+          <span class="chz-text-yellow">خصم حتى 20%</span>
+          <span class="chz-bolt">⚡</span>
+        </span>
+        <span class="chz-sep"></span>
+        <span class="chz-item">
+          <svg class="chz-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span class="chz-text-white">توصيل سريع لجميع المناطق</span>
+        </span>
+        <span class="chz-sep"></span>
+        <span class="chz-item">
+          <svg class="chz-icon" viewBox="0 0 24 24" fill="#fff"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span class="chz-text-white">عروض حصرية وخصومات مميزة</span>
+        </span>
       </div>
     </div>
-
-    <!-- Main Header -->
-    <div class="lux-main">
-      <!-- Left Icons (LTR forced) -->
-      <div class="lux-icons-left">
-        <div class="lux-glass-icon" onclick="APP.goTab('cart')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          <span class="lux-badge lux-b-pink">3</span>
-        </div>
-        <div class="lux-glass-icon" onclick="APP.goTab('wishlist')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span class="lux-badge lux-b-orange">5</span>
-        </div>
-        <div class="lux-glass-icon" onclick="APP.goTab('notifications')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="lux-badge lux-b-pink">1</span>
-        </div>
-      </div>
-
-      <!-- Center Logo -->
-      <div class="lux-center">
-        <div class="lux-logo-box">
-          <img src="https://i.ibb.co/FkvCmDwy/logo.png" alt="C Logo" onerror="this.style.display='none';this.parentElement.classList.add('fallback-logo');">
-        </div>
-        <div class="lux-text-group">
-          <div class="lux-brand-en">CHIZEN</div>
-          <div class="lux-brand-ar">
-            <span class="lux-line"></span> شيزن <span class="lux-line"></span>
-          </div>
-          <div class="lux-tagline">تسوق ذكي .. لحياة أجمل</div>
-        </div>
-      </div>
-
-      <!-- Right Profile (LTR forced) -->
-      <div class="lux-profile-right" onclick="APP.goTab('profile')">
-        <div class="lux-prof-txt">
-          <div class="lux-prof-name">هزيم بن ق..</div>
-          <div class="lux-prof-welcome">أهلاً بك</div>
-        </div>
-        <div class="lux-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-        <div class="lux-arrow">›</div>
-      </div>
+    <div class="chz-arrow">›</div>
+    <!-- Glitter particles -->
+    <div class="chz-glitter">
+      <span style="top:15%;left:10%"></span><span style="top:70%;left:20%"></span>
+      <span style="top:30%;left:40%"></span><span style="top:80%;left:60%"></span>
+      <span style="top:20%;left:80%"></span><span style="top:60%;left:90%"></span>
     </div>
   </div>
-  <!-- END CHIZEN LUXURY HEADER -->
+
+  <!-- ═══ 2) MAIN HEADER ═══ -->
+  <div class="chz-main">
+    <!-- Particles -->
+    <div class="chz-particles">
+      <span style="top:10%;left:5%"></span><span style="top:50%;left:15%"></span>
+      <span style="top:80%;left:25%"></span><span style="top:20%;left:45%"></span>
+      <span style="top:70%;left:55%"></span><span style="top:15%;left:75%"></span>
+      <span style="top:60%;left:85%"></span><span style="top:85%;left:95%"></span>
+    </div>
+
+    <!-- LEFT: 3 Glass Icons -->
+    <div class="chz-left">
+      <div class="chz-glass-icon" onclick="APP.goTab('cart')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="chz-badge">3</span>
+      </div>
+      <div class="chz-glass-icon" onclick="APP.goTab('wishlist')">
+        <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="chz-badge">5</span>
+      </div>
+      <div class="chz-glass-icon" onclick="APP.goTab('notifications')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="chz-badge">1</span>
+      </div>
+    </div>
+
+    <!-- CENTER: Logo + Brand -->
+    <div class="chz-center">
+      <div class="chz-logo-box">
+        <img src="https://i.ibb.co/FkvCmDwy/logo.png" alt="C" onerror="this.style.display='none';this.parentElement.classList.add('chz-fallback');">
+      </div>
+      <div class="chz-brand-col">
+        <div class="chz-brand-en">CHIZEN</div>
+        <div class="chz-brand-ar">
+          <span class="chz-line"></span>
+          <span>شيزن</span>
+          <span class="chz-line"></span>
+        </div>
+        <div class="chz-tagline">تسوق ذكي .. لحياة أجمل</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Profile -->
+    <div class="chz-right" onclick="APP.goTab('profile')">
+      <div class="chz-profile-txt">
+        <div class="chz-p-name">هزيم بن ق..</div>
+        <div class="chz-p-welcome">أهلاً بك</div>
+      </div>
+      <div class="chz-avatar">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="chz-arrow-right">›</div>
+    </div>
+  </div>
+</div>
+<!-- END CHIZEN ULTIMATE HEADER -->
+
+
+  
   <div class="loy" onclick="APP.goTab('points')"><div class="loy-t"><span>💎</span> نقاط الولاء</div><div class="loy-p" id="loyalty">0 نقطة</div></div>
       <div class="search-wrapper"><div class="sw"><div class="sb"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" class="search" id="search-in" placeholder="ابحث عن منتج..." oninput="APP.search(this.value)"></div></div>
       
