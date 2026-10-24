@@ -5661,6 +5661,126 @@ body, #app, .screen {
   .banner-slide, .banner-item, #banners > div { border-radius: 12px !important; }
 }
 </style>
+<style id="v8-booking-colors">
+/* ═══ V8: شريط الحجوزات والألوان الدقيقة ═══ */
+
+/* 1. شريط الحجوزات (شكل مطابق تماماً) */
+.booking-row-container {
+    background: linear-gradient(135deg, rgba(13, 17, 39, 0.9), rgba(30, 27, 75, 0.8)) !important;
+    border: 1px solid rgba(106, 27, 154, 0.4) !important;
+    border-radius: 20px !important;
+    padding: 16px 10px !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+.booking-row-container > div {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    flex: 1 !important;
+}
+/* الخطوط الفاصلة بين الأيقونات */
+.booking-row-container > div:not(:last-child)::after {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 1px !important;
+    height: 35px !important;
+    background: linear-gradient(to bottom, transparent, rgba(168, 85, 247, 0.4), transparent) !important;
+}
+
+/* الدوائر الملونة حول الأيقونات */
+.booking-icon {
+    width: 55px !important;
+    height: 55px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 8px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    transition: all 0.3s ease !important;
+}
+.booking-icon svg {
+    width: 26px !important;
+    height: 26px !important;
+}
+
+/* الألوان المخصصة لكل أيقونة */
+.booking-row-container > div:nth-child(1) .booking-icon {
+    border: 1.5px solid #3b82f6 !important; 
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.3) !important;
+}
+.booking-row-container > div:nth-child(1) .booking-icon svg { stroke: #3b82f6 !important; fill: rgba(59, 130, 246, 0.1) !important; }
+
+.booking-row-container > div:nth-child(2) .booking-icon {
+    border: 1.5px solid #ec4899 !important; 
+    box-shadow: 0 0 12px rgba(236, 72, 153, 0.3) !important;
+}
+.booking-row-container > div:nth-child(2) .booking-icon svg { stroke: #ec4899 !important; fill: rgba(236, 72, 153, 0.1) !important; }
+
+.booking-row-container > div:nth-child(3) .booking-icon {
+    border: 1.5px solid #f97316 !important; 
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.3) !important;
+}
+.booking-row-container > div:nth-child(3) .booking-icon svg { stroke: #f97316 !important; fill: rgba(249, 115, 22, 0.1) !important; }
+
+.booking-row-container > div:nth-child(4) .booking-icon {
+    border: 1.5px solid #a855f7 !important; 
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.3) !important;
+}
+.booking-row-container > div:nth-child(4) .booking-icon svg { stroke: #a855f7 !important; fill: rgba(168, 85, 247, 0.1) !important; }
+
+.booking-label { font-size: 11px !important; font-weight: 700 !important; color: #fff !important; margin-top: 4px !important; }
+
+/* 2. شريط الولاء (تدرج بنفسجي غامق) */
+.loy {
+    background: linear-gradient(90deg, #4c1d95 0%, #7e22ce 50%, #4c1d95 100%) !important;
+    border: 1px solid rgba(168, 85, 247, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(126, 34, 206, 0.3) !important;
+}
+.loy-p { color: #f472b6 !important; text-shadow: 0 0 8px rgba(244, 114, 182, 0.6) !important; }
+
+/* 3. شريط البحث (حدود أرق وزوايا دائرية) */
+.ss-wrapper {
+    background: rgba(15, 23, 42, 0.7) !important;
+    border: 1px solid rgba(236, 72, 153, 0.3) !important;
+    border-radius: 30px !important;
+}
+.ss-wrapper::after {
+    background: linear-gradient(135deg, #ec4899, #8b5cf6) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.4) !important;
+}
+
+/* 4. دوائر الأقسام */
+.photo-cat-circle {
+    padding: 2px !important;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6) !important;
+    box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3) !important;
+}
+
+/* 5. إصلاح زر AI لعدم تغطية شريط الحجوزات */
+#chat-widget, [class*="chat-widget"], [id*="aiWidget"], #chatBtn {
+    bottom: 90px !important;
+    left: 10px !important;
+    width: 50px !important;
+    height: 50px !important;
+    z-index: 999 !important;
+}
+
+/* 6. البانر العلوي (إظهار النص إن كان مخفياً) */
+.chz-marquee-content, .chz-marquee-content span, .chz-item {
+    opacity: 1 !important; 
+    visibility: visible !important; 
+    display: flex !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
