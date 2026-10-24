@@ -10906,6 +10906,20 @@ document.addEventListener('keydown', function(e) {
     // احذف القسم القديم إن وجد
     var old = document.getElementById('det-features-block');
     if (old) old.remove();
+    // STRIP_DUP_FEATURES: إزالة المميزات المكررة من الوصف
+    try {
+      var _raw = (descEl.textContent || '').trim();
+      if (_raw && Array.isArray(prod.features) && prod.features.length > 0) {
+        var _fset = {};
+        prod.features.forEach(function(f){ if (f) _fset[(f||'').trim().toLowerCase()] = 1; });
+        var _lines = _raw.split(/\n/);
+        var _cleaned = _lines.filter(function(l){ return !_fset[l.trim().toLowerCase()]; }).join('\n').trim();
+        if (_cleaned !== _raw) {
+          descEl.textContent = _cleaned;
+          console.log('[FEATURES] stripped duplicate from desc');
+        }
+      }
+    } catch(_e) { console.warn('strip dup features:', _e); }
     
     var features = prod.features || [];
     if (!Array.isArray(features) || features.length === 0) return;
