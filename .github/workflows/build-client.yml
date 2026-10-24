@@ -17,7 +17,7 @@ jobs:
     - name: Force Clean Android Folder
       run: rm -rf android
     - name: Add Android platform
-      run: npx cap add android
+      run: npx cap sync android
     - name: Sync Capacitor
       run: npx cap sync
     - name: Build APK

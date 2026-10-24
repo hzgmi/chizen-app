@@ -34,7 +34,7 @@ jobs:
           
       - name: Add Android & Sync
         run: |
-          npx cap add android
+          npx cap sync android
           npx cap sync android
           
       - name: Inject Configs Safely
