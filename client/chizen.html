@@ -5923,6 +5923,214 @@ body, #app, .screen {
   .booking-label { font-size: 8px !important; }
 }
 </style>
+<style id="v11-theme-fix">
+/* ═══ V11: توافق كامل مع الوضع الفاتح والداكن ═══ */
+
+/* ═══════════════════════════════════════════════════════
+   الوضع الفاتح (light) — كل النصوص تُصحَّح لتبدو جميلة
+   ═══════════════════════════════════════════════════════ */
+html[data-theme="light"] body,
+html[data-theme="light"] #app,
+html[data-theme="light"] .screen {
+  background: linear-gradient(135deg, #f8f9fc 0%, #eef2ff 100%) !important;
+  color: #1f2937 !important;
+}
+
+/* 1. الهيدر في الوضع الفاتح */
+html[data-theme="light"] .chz-hdr {
+  background: rgba(255,255,255,0.95) !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+html[data-theme="light"] .chz-en {
+  background: linear-gradient(135deg, #d4a017 0%, #d81b60 55%, #6a1b9a 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html[data-theme="light"] .chz-ar {
+  color: #1f2937 !important;
+}
+html[data-theme="light"] .chz-tag {
+  background: linear-gradient(90deg, #d81b60, #6a1b9a, #2563eb) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html[data-theme="light"] .chz-icons-group,
+html[data-theme="light"] .chz-profile-group {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+}
+html[data-theme="light"] .chz-icon-box svg {
+  stroke: #374151 !important;
+}
+html[data-theme="light"] .chz-prof-name {
+  background: linear-gradient(135deg, #d4a017 0%, #d81b60 55%, #6a1b9a 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html[data-theme="light"] .chz-prof-welcome {
+  color: #6b7280 !important;
+}
+html[data-theme="light"] .chz-prof-avatar {
+  background: linear-gradient(135deg, #f3e8ff, #fce7f3) !important;
+  border: 2px solid #d81b60 !important;
+}
+html[data-theme="light"] .chz-prof-avatar svg {
+  stroke: #d81b60 !important;
+  fill: #d81b60 !important;
+}
+
+/* 2. شريط الولاء في الوضع الفاتح */
+html[data-theme="light"] .loy {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%) !important;
+  border: 1px solid #a855f7 !important;
+}
+html[data-theme="light"] .loy-t {
+  color: #ffffff !important;
+}
+html[data-theme="light"] .loy-p {
+  color: #fef08a !important;
+  text-shadow: 0 0 8px rgba(254,240,138,0.4) !important;
+}
+
+/* 3. شريط البحث في الوضع الفاتح */
+html[data-theme="light"] .ss-wrapper {
+  background: #ffffff !important;
+  border: 1.5px solid #d81b60 !important;
+  box-shadow: 0 2px 8px rgba(216,27,96,0.12) !important;
+}
+html[data-theme="light"] .ss-input {
+  color: #1f2937 !important;
+  background: transparent !important;
+}
+html[data-theme="light"] .ss-input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* 4. الأقسام في الوضع الفاتح */
+html[data-theme="light"] .photo-cat-name {
+  color: #1f2937 !important;
+  font-weight: 800 !important;
+}
+
+/* 5. شريط الحجز في الوضع الفاتح */
+html[data-theme="light"] .booking-row-container {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06) !important;
+}
+html[data-theme="light"] .booking-label {
+  color: #1f2937 !important;
+  font-weight: 800 !important;
+}
+html[data-theme="light"] .booking-divider {
+  background: linear-gradient(to bottom, transparent, #d1d5db, transparent) !important;
+}
+html[data-theme="light"] .booking-icon {
+  background: rgba(0,0,0,0.03) !important;
+}
+
+/* 6. الشريط السفلي في الوضع الفاتح */
+html[data-theme="light"] #bottom-nav {
+  background: #ffffff !important;
+  border-top: 1px solid #e5e7eb !important;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.06) !important;
+}
+html[data-theme="light"] #bottom-nav .bn-it {
+  color: #6b7280 !important;
+}
+html[data-theme="light"] #bottom-nav .bn-it svg {
+  stroke: #6b7280 !important;
+}
+html[data-theme="light"] #bottom-nav .bn-it.active {
+  color: #d81b60 !important;
+}
+html[data-theme="light"] #bottom-nav .bn-it.active svg {
+  stroke: #d81b60 !important;
+}
+html[data-theme="light"] #bottom-nav .bn-it span {
+  color: inherit !important;
+}
+
+/* 7. بطاقات المنتجات في الوضع الفاتح */
+html[data-theme="light"] .prod {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+html[data-theme="light"] .prod-n {
+  color: #1f2937 !important;
+}
+html[data-theme="light"] .price {
+  color: #d81b60 !important;
+}
+html[data-theme="light"] .price-c {
+  color: #6b7280 !important;
+}
+
+/* 8. البانر - النصوص تبقى بيضاء (فوق صورة داكنة) */
+html[data-theme="light"] #slides .sl-title,
+html[data-theme="light"] #slides .sl-sub {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7) !important;
+}
+html[data-theme="light"] #slides .sl-tag {
+  color: #ff27c9 !important;
+}
+
+/* 9. النقاط (dots) في الوضع الفاتح */
+html[data-theme="light"] #dots .dot {
+  background: rgba(216,27,96,0.25) !important;
+}
+html[data-theme="light"] #dots .dot.active {
+  background: linear-gradient(90deg, #d81b60, #6a1b9a) !important;
+}
+
+/* 10. الشاشات الفرعية */
+html[data-theme="light"] .hd {
+  background: rgba(255,255,255,0.98) !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+html[data-theme="light"] .stl {
+  color: #1f2937 !important;
+}
+
+/* 11. النصوص العامة */
+html[data-theme="light"] .sec,
+html[data-theme="light"] .screen {
+  color: #1f2937 !important;
+}
+
+/* 12. الأزرار */
+html[data-theme="light"] .sl-btn {
+  color: #ffffff !important;
+}
+
+/* 13. الأيقونات النشطة */
+html[data-theme="light"] .chz-badge {
+  background: #d81b60 !important;
+  color: #ffffff !important;
+}
+
+/* 14. حماية: أي نص أبيض صريح في الوضع الفاتح داخل بطاقة بيضاء */
+html[data-theme="light"] .photo-cat-card,
+html[data-theme="light"] .booking-item,
+html[data-theme="light"] .prod,
+html[data-theme="light"] .bn-it {
+  color: inherit !important;
+}
+
+/* 15. تحسين الظلال في الوضع الداكن (تبقى جميلة) */
+html[data-theme="dark"] .chz-prof-name {
+  background: linear-gradient(135deg, #FFD700 0%, #ff4d94 55%, #a855f7 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
