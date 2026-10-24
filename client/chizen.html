@@ -5440,6 +5440,78 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   .photo-cat-name{font-size:8.5px!important}
 }
 </style>
+<style id="v5-exact-colors">
+/* ═══ V5: EXACT COLORS FROM REFERENCE ═══ */
+
+/* 1. الخلفية العامة: أزرق داكن جداً متدرج */
+body, #app, .screen { 
+  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important; 
+}
+
+/* 2. البانر العلوي: برتقالي -> وردي -> أزرق */
+.chz-banner { 
+  background: linear-gradient(90deg, #ff8a00 0%, #e52e71 50%, #0072ff 100%) !important; 
+}
+
+/* 3. الهيدر: أيقونات + بروفايل بخلفية بنفسجية داكنة شفافة */
+.chz-icons-group, .chz-profile-group { 
+  background: rgba(20, 15, 45, 0.85) !important; 
+  border: 1px solid rgba(168, 85, 247, 0.35) !important; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+}
+.chz-prof-avatar { 
+  border: 2px solid #a855f7 !important; 
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4) !important; 
+  background: rgba(168, 85, 247, 0.2) !important;
+}
+
+/* 4. شريط الولاء: بنفسجي غامق مع حدود وردية */
+.loy { 
+  background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%) !important; 
+  border: 1px solid rgba(255, 77, 148, 0.6) !important; 
+  box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3) !important;
+}
+.loy-p { 
+  color: #ff4d94 !important; 
+  text-shadow: 0 0 10px rgba(255, 77, 148, 0.6) !important; 
+}
+
+/* 5. البحث: خلفية داكنة جداً مع حدود وردية */
+.ss-wrapper { 
+  background: #0f0c23 !important; 
+  border: 1.5px solid rgba(255, 77, 148, 0.6) !important; 
+  box-shadow: 0 0 15px rgba(255, 77, 148, 0.15) !important;
+}
+.ss-wrapper::after { 
+  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 100%) !important; 
+  box-shadow: 0 0 10px rgba(255, 77, 148, 0.5) !important;
+}
+
+/* 6. شريط الحجوزات: خلفية داكنة وحدود بنفسجية */
+.booking-row-container { 
+  background: rgba(20, 15, 45, 0.9) !important; 
+  border: 1px solid rgba(106, 27, 154, 0.6) !important; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+.booking-divider { 
+  background: linear-gradient(to bottom, transparent, rgba(106,27,154,0.8), transparent) !important; 
+}
+
+/* 7. الشريط السفلي: خلفية داكنة مع حدود علوية بنفسجية */
+#bottom-nav { 
+  background: rgba(10, 8, 30, 0.95) !important; 
+  border-top: 1px solid rgba(168, 85, 247, 0.3) !important; 
+}
+#bottom-nav .bn-it.active { color: #ff4d94 !important; }
+#bottom-nav .bn-it.active::after { 
+  background: #ff4d94 !important; 
+  box-shadow: 0 0 10px #ff4d94 !important; 
+}
+
+/* 8. النصوص: الأبيض والأسود */
+.chz-prof-name, .chz-ar, .photo-cat-name, .booking-label { color: #ffffff !important; }
+.chz-prof-welcome { color: rgba(255,255,255,0.6) !important; }
+</style>
 </head>
 <body>
 <div id="app">
