@@ -5781,6 +5781,71 @@ body, #app, .screen {
     display: flex !important;
 }
 </style>
+<style id="v9-reorder">
+/* ═══ V9: ترتيب جديد للصفحة الرئيسية ═══ */
+
+/* 1. شبكة 4×2 للأقسام - أول 8 فقط (4 فوق + 4 تحت) */
+#cats {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px 8px !important;
+  padding: 0 clamp(12px, 3.5vw, 20px) 16px !important;
+  margin-top: 4px !important;
+}
+/* إخفاء أي قسم بعد الثامن (قادم من الأدمن) */
+#cats .photo-cat-card:nth-child(n+9) {
+  display: none !important;
+}
+#cats .photo-cat-card {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+#cats .photo-cat-circle {
+  width: 100% !important;
+  max-width: clamp(60px, 17vw, 82px) !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 0 auto !important;
+}
+#cats .photo-cat-name {
+  font-size: clamp(9px, 2.6vw, 12px) !important;
+  margin-top: clamp(4px, 1.4vw, 7px) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+}
+
+/* 2. البنر - حجم موازن ومظهر فاخر */
+#slides {
+  min-height: clamp(140px, 38vw, 220px) !important;
+  border-radius: clamp(14px, 4vw, 18px) !important;
+  box-shadow: 0 6px 20px rgba(106,27,154,0.35) !important;
+}
+#dots {
+  margin-top: 8px !important;
+}
+
+/* 3. شريط الحجز - حجم موازن */
+.booking-row-container {
+  margin: 0 clamp(12px, 3.5vw, 20px) 16px !important;
+  padding: clamp(10px, 3vw, 16px) clamp(6px, 2vw, 10px) !important;
+}
+.booking-icon {
+  width: clamp(42px, 11vw, 55px) !important;
+  height: clamp(42px, 11vw, 55px) !important;
+}
+.booking-icon svg {
+  width: clamp(20px, 5.5vw, 26px) !important;
+  height: clamp(20px, 5.5vw, 26px) !important;
+}
+.booking-label {
+  font-size: clamp(8.5px, 2.3vw, 11px) !important;
+}
+
+/* 4. مسافة موحدة بين العناصر الرئيسية */
+.ss-wrapper { margin-bottom: 12px !important; }
+</style>
 </head>
 <body>
 <div id="app">
@@ -9454,5 +9519,56 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 
+<script id="v9-reorder-js">
+/* ═══ V9: إعادة ترتيب الصفحة الرئيسية ═══
+   الترتيب المطلوب:
+   1. البحث (ss-wrapper)
+   2. البنر (slides)
+   3. شريط الحجز (booking-row-container)
+   4. الأقسام (cats)
+*/
+(function(){
+  var attempts = 0;
+  function reorderHome(){
+    var slides = document.getElementById('slides');
+    if (!slides) return false;
+    var bannersWrapper = slides.parentElement;
+    var cats = document.getElementById('cats');
+    var booking = document.querySelector('.booking-row-container');
+    if (!bannersWrapper || !cats || !booking) return false;
+    
+    try {
+      // إذا كان البنر ليس قبل cats مباشرة، أعد الترتيب
+      var already = (bannersWrapper.parentNode === cats.parentNode)
+                 && (bannersWrapper.nextElementSibling === booking)
+                 && (booking.nextElementSibling === cats);
+      if (!already) {
+        cats.parentNode.insertBefore(bannersWrapper, cats);
+        cats.parentNode.insertBefore(booking, cats);
+        console.log('[V9] Home reordered: search → banner → booking → cats');
+      }
+    } catch(e) {
+      console.log('[V9] reorder error:', e);
+    }
+    return true;
+  }
+  
+  function run(){
+    attempts = 0;
+    var iv = setInterval(function(){
+      attempts++;
+      if (reorderHome() || attempts > 25) clearInterval(iv);
+    }, 300);
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  // إعادة المحاولة بعد اكتمال التحميل (لأن الأقسام تُرسم ديناميكياً)
+  window.addEventListener('load', function(){ setTimeout(reorderHome, 1500); });
+})();
+</script>
 </body>
 </html>
