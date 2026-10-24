@@ -5806,6 +5806,17 @@ var APP={
     var self=this;
     self.state.user={name:u.displayName||'User',email:u.email||'',uid:u.uid};
     self.updateUserUI();
+    // [FCM] onUserReady hook — استعادة التوكن وحفظه بعد الدخول
+    try {
+      if (!window.FCM_TOKEN) {
+        var storedTok = localStorage.getItem('chizen_fcm_token');
+        if (storedTok) window.FCM_TOKEN = storedTok;
+      }
+      if (window.FCM_TOKEN && window.saveFcmToken) {
+        setTimeout(function(){ window.saveFcmToken(); }, 500);
+      }
+    } catch(e) {}
+
     if(window.FB){
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
       FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();}});
@@ -7105,6 +7116,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ═══ [APK NOTIFICATIONS] ═══
+// ═══ [FCM TOKEN SAVER] يحفظ التوكن في Firestore ═══
+window.saveFcmToken = function() {
+  if (!window.FCM_TOKEN) return;
+  try { localStorage.setItem('chizen_fcm_token', window.FCM_TOKEN); } catch(e) {}
+  var attempts = 0;
+  var maxAttempts = 20;
+  var iv = setInterval(async function() {
+    attempts++;
+    if (!window.FB || !FB.currentUser || !FB.currentUser.uid) {
+      if (attempts >= maxAttempts) clearInterval(iv);
+      return;
+    }
+    clearInterval(iv);
+    try {
+      await FB.db.collection('users').doc(FB.currentUser.uid).set({
+        fcmToken: window.FCM_TOKEN,
+        fcmTokenUpdatedAt: Date.now(),
+        platform: 'android'
+      }, { merge: true });
+      console.log('[FCM] token saved to Firestore');
+    } catch(e) {
+      console.log('[FCM] save error:', e);
+    }
+  }, 1500);
+};
+
 window.setupAPKNotifications = async function() {
   if (!window.Capacitor || !window.Capacitor.isNativePlatform || !window.Capacitor.isNativePlatform()) return;
   try {
