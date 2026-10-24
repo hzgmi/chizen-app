@@ -6853,6 +6853,156 @@ html[data-theme="light"] .dli::placeholder {
   color: #9ca3af !important;
 }
 </style>
+<style id="chz-theme-vars-fix">
+/* ═══════════════════════════════════════════════════════
+   الحل الجذري: تصحيح متغيرات CSS للوضعين
+   ═══════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────
+   الوضع الداكن (الافتراضي) — متغيرات صحيحة
+   ───────────────────────────────────────── */
+html[data-theme="dark"],
+html:not([data-theme="light"]) {
+  --bg: #0a0820 !important;
+  --bg2: #151030 !important;
+  --cd: #1a1535 !important;
+  --ce: #221840 !important;
+  --cr: #f5f5ff !important;
+  --mt: #a5a5c5 !important;
+  --mt2: #8888aa !important;
+  --nav-bg: rgba(10,8,30,0.95) !important;
+  --bd: rgba(168,85,247,0.25) !important;
+  --nav: rgba(15,10,35,0.98) !important;
+}
+
+/* ─────────────────────────────────────────
+   الوضع الفاتح — متغيرات صحيحة
+   ───────────────────────────────────────── */
+html[data-theme="light"] {
+  --bg: #f4f6fa !important;
+  --bg2: #ffffff !important;
+  --cd: #ffffff !important;
+  --ce: #f0f2ff !important;
+  --cr: #1f2937 !important;
+  --mt: #6b7280 !important;
+  --mt2: #8a98c0 !important;
+  --nav-bg: rgba(255,255,255,0.95) !important;
+  --bd: #e5e7eb !important;
+  --nav: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────
+   إعادة تطبيق المتغيرات على كل العناصر الأساسية
+   (بعد أن أصبحت القيم صحيحة)
+   ───────────────────────────────────────── */
+html[data-theme="dark"] body,
+html:not([data-theme="light"]) body {
+  background: radial-gradient(ellipse at 50% 45%, #07195b 0%, #040b31 38%, #02051b 72%, #00010a 100%) !important;
+  color: var(--cr) !important;
+}
+
+html[data-theme="dark"] .prod,
+html[data-theme="dark"] .sb,
+html[data-theme="dark"] .ci-inf,
+html[data-theme="dark"] .cd,
+html[data-theme="dark"] .cs,
+html:not([data-theme="light"]) .prod,
+html:not([data-theme="light"]) .sb,
+html:not([data-theme="light"]) .ci-inf,
+html:not([data-theme="light"]) .cd,
+html:not([data-theme="light"]) .cs {
+  background: var(--cd) !important;
+  color: var(--cr) !important;
+  border-color: var(--bd) !important;
+}
+
+/* النصوص العامة */
+html[data-theme="dark"] .prod-n,
+html[data-theme="dark"] .ci-n,
+html[data-theme="dark"] .stl,
+html[data-theme="dark"] .ctl,
+html[data-theme="dark"] .rti,
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html:not([data-theme="light"]) .prod-n,
+html:not([data-theme="light"]) .ci-n,
+html:not([data-theme="light"]) .stl,
+html:not([data-theme="light"]) .ctl,
+html:not([data-theme="light"]) .rti,
+html:not([data-theme="light"]) h1,
+html:not([data-theme="light"]) h2,
+html:not([data-theme="light"]) h3,
+html:not([data-theme="light"]) h4 {
+  color: var(--cr) !important;
+}
+
+/* النصوص الثانوية */
+html[data-theme="dark"] .rs,
+html[data-theme="dark"] .ci-p,
+html[data-theme="dark"] .pd,
+html[data-theme="dark"] .dd,
+html:not([data-theme="light"]) .rs,
+html:not([data-theme="light"]) .ci-p,
+html:not([data-theme="light"]) .pd,
+html:not([data-theme="light"]) .dd {
+  color: var(--mt) !important;
+}
+
+/* الحقول */
+html[data-theme="dark"] .fi,
+html[data-theme="dark"] .dli,
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html:not([data-theme="light"]) .fi,
+html:not([data-theme="light"]) .dli,
+html:not([data-theme="light"]) input,
+html:not([data-theme="light"]) textarea,
+html:not([data-theme="light"]) select {
+  background: var(--bg2) !important;
+  color: var(--cr) !important;
+  border-color: var(--bd) !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder,
+html:not([data-theme="light"]) input::placeholder,
+html:not([data-theme="light"]) textarea::placeholder {
+  color: var(--mt2) !important;
+  opacity: 0.7 !important;
+}
+
+/* البطاقات */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .item,
+html[data-theme="dark"] .rw,
+html[data-theme="dark"] .emp,
+html:not([data-theme="light"]) .card,
+html:not([data-theme="light"]) .item,
+html:not([data-theme="light"]) .rw,
+html:not([data-theme="light"]) .emp {
+  background: var(--cd) !important;
+  color: var(--cr) !important;
+  border-color: var(--bd) !important;
+}
+
+/* الشريط السفلي */
+html[data-theme="dark"] .bnav,
+html[data-theme="dark"] #bottom-nav,
+html:not([data-theme="light"]) .bnav,
+html:not([data-theme="light"]) #bottom-nav {
+  background: var(--nav) !important;
+  border-color: var(--bd) !important;
+}
+
+/* أي عنصر يستخدم color: var(--cr) بشكل مباشر */
+html[data-theme="dark"] [style*="var(--cr)"],
+html:not([data-theme="light"]) [style*="var(--cr)"] {
+  color: var(--cr) !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
