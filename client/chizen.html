@@ -6980,6 +6980,11 @@ var APP={
       }
     } catch(e) {}
 
+    // [WELCOME] ترحيب تلقائي (جديد أو عائد)
+    if (window.sendWelcomeIfNeeded) {
+      setTimeout(function(){ window.sendWelcomeIfNeeded(u); }, 2000);
+    }
+
     if(window.FB){
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
       FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();}});
@@ -8280,6 +8285,97 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ═══ [APK NOTIFICATIONS] ═══
 // ═══ [FCM TOKEN SAVER] يحفظ التوكن في Firestore ═══
+// ═══ [WELCOME] إشعارات الترحيب والعودة ═══
+window.sendWelcomeIfNeeded = async function(user) {
+  if (!window.FB || !user || !user.uid) return;
+  try {
+    var ref = FB.db.collection('users').doc(user.uid);
+    var snap = await ref.get();
+    var now = Date.now();
+    var oneDay = 24 * 60 * 60 * 1000;
+
+    // حالة 1: مستخدم جديد (لم يوجد مستند أو createdAt جديد جداً)
+    if (!snap.exists) {
+      await ref.set({
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastActiveAt: now,
+        lastActiveDate: new Date().toISOString().slice(0, 10),
+        lastWelcomeAt: now,
+        platform: 'android',
+        email: user.email || '',
+        name: user.displayName || 'صديقنا'
+      }, { merge: true });
+      await enqueueWelcome('new', user);
+      console.log('[WELCOME] new user welcomed');
+      return;
+    }
+
+    var d = snap.data() || {};
+    var createdAt = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().getTime() : 0;
+    var lastActive = d.lastActiveAt || 0;
+    var lastWelcome = d.lastWelcomeAt || 0;
+    var isFresh = (now - createdAt < oneDay) && !lastWelcome;
+
+    // حالة 2: مستخدم جديد (لم يُرحّب به خلال أول 24 ساعة)
+    if (isFresh) {
+      await ref.update({ lastWelcomeAt: now });
+      await enqueueWelcome('new', user);
+      console.log('[WELCOME] late welcome for new user');
+    }
+    // حالة 3: مستخدم عائد (غاب 6 ساعات على الأقل)
+    else if (lastActive && (now - lastActive > 6 * 60 * 60 * 1000) && (now - lastWelcome > 12 * 60 * 60 * 1000)) {
+      await ref.update({ lastWelcomeAt: now });
+      await enqueueWelcome('returning', user);
+      console.log('[WELCOME] returning user welcomed');
+    }
+
+    // تحديث النشاط
+    await ref.update({
+      lastActiveAt: now,
+      lastActiveDate: new Date().toISOString().slice(0, 10)
+    });
+  } catch(e) {
+    console.log('[WELCOME] error:', e.message);
+  }
+};
+
+async function enqueueWelcome(type, user) {
+  try {
+    var name = (user.displayName || '').split(' ')[0] || 'صديقنا';
+    var title, body;
+    if (type === 'new') {
+      title = '🎉 أهلاً بك في CHIZEN!';
+      body = 'مرحباً ' + name + ' — شكراً لانضمامك. استمتع بتجربة تسوق ذكية!';
+    } else {
+      title = '👋 اشتقنا لك يا ' + name;
+      body = 'عُدت إلينا! اكتشف ما الجديد في CHIZEN 🛍️';
+    }
+
+    // 1) إشعار داخل التطبيق (يظهر في تبويب التنبيهات)
+    await FB.db.collection('notifications').add({
+      userId: user.uid,
+      title: title,
+      body: body,
+      type: type === 'new' ? 'welcome' : 'returning',
+      read: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // 2) push (يظهر في شريط إشعارات الهاتف)
+    await FB.db.collection('push_queue').add({
+      userId: user.uid,
+      title: title,
+      body: body,
+      type: type === 'new' ? 'welcome' : 'returning',
+      status: 'pending',
+      data: { screen: 'home' },
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) {
+    console.log('[enqueueWelcome] error:', e.message);
+  }
+}
+
 window.saveFcmToken = function() {
   if (!window.FCM_TOKEN) return;
   try { localStorage.setItem('chizen_fcm_token', window.FCM_TOKEN); } catch(e) {}
