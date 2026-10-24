@@ -5330,6 +5330,116 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
   .chz-en { font-size: 17px !important; }
 }
 </style>
+<style id="v4-perfect-match">
+/* ═══ V4: PERFECT MATCH — NO COMPROMISE ═══ */
+:root{--v4-gap:clamp(12px,3.5vw,20px)}
+
+/* 1. HEADER — يوسّع المساحة ويعيد ترتيب العناصر */
+.chz-main{
+  padding:clamp(10px,3vw,16px) clamp(10px,3vw,18px)!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:clamp(6px,2vw,12px)!important;height:auto!important;min-height:clamp(70px,20vw,95px)!important;
+}
+.chz-profile-group{
+  display:flex!important;align-items:center!important;gap:clamp(6px,2vw,10px)!important;
+  flex-shrink:1!important;min-width:0!important;
+}
+.chz-prof-txt{display:flex!important;flex-direction:column!important;align-items:flex-end!important;min-width:0!important}
+.chz-prof-name{
+  display:block!important;font-size:clamp(11px,3vw,14px)!important;font-weight:900!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  color:#fff!important;line-height:1.2!important;max-width:90px!important;
+}
+.chz-prof-welcome{display:block!important;font-size:clamp(9px,2.5vw,11px)!important;color:rgba(255,255,255,.65)!important}
+.chz-brand-group{display:flex!important;flex-direction:column!important;align-items:center!important;flex-shrink:0!important;margin:0 auto!important}
+.chz-en{font-size:clamp(20px,6.5vw,28px)!important;font-weight:900!important;background:linear-gradient(135deg,#FFD700,#ff4d94,#a855f7)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;line-height:1!important}
+.chz-ar{font-size:clamp(11px,3.2vw,14px)!important;font-weight:800!important;color:#fff!important;margin-top:1px!important}
+.chz-tag{font-size:clamp(9px,2.5vw,12px)!important;background:linear-gradient(90deg,#ff4d94,#a855f7,#3b82f6)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;font-weight:700!important;margin-top:3px!important;white-space:nowrap!important;display:block!important}
+.chz-icons-group{display:flex!important;gap:clamp(4px,1.5vw,8px)!important;padding:clamp(4px,1.5vw,8px) clamp(6px,2vw,10px)!important;background:rgba(15,10,35,.6)!important;border:1px solid rgba(106,27,154,.3)!important;border-radius:clamp(16px,5vw,22px)!important;flex-shrink:0!important}
+
+/* 2. LOYALTY — يضيف مساحة أكبر وترتيب أنيق */
+.loy{
+  margin:var(--v4-gap) clamp(12px,3.5vw,20px)!important;
+  padding:clamp(12px,3.5vw,16px) clamp(14px,4vw,20px)!important;
+  border-radius:clamp(16px,4.5vw,22px)!important;
+  background:linear-gradient(135deg,rgba(106,27,154,.45),rgba(30,20,60,.8))!important;
+  border:1px solid rgba(255,77,148,.3)!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+}
+.loy-t{font-size:clamp(11px,2.8vw,13px)!important}
+.loy-p{font-size:clamp(18px,5vw,24px)!important;color:#ff4d94!important;font-weight:900!important}
+
+/* 3. SEARCH — دائرة البحث الوردية يميناً وإكس يساراً */
+.ss-wrapper{
+  margin:0 clamp(12px,3.5vw,20px) var(--v4-gap)!important;
+  padding:clamp(4px,1.2vw,6px)!important;
+  border-radius:clamp(24px,7vw,34px)!important;
+  background:linear-gradient(90deg,rgba(106,27,154,.3),rgba(30,20,60,.6))!important;
+  border:1px solid rgba(255,77,148,.4)!important;
+  display:flex!important;align-items:center!important;flex-direction:row-reverse!important;
+}
+.ss-input{font-size:clamp(11px,3vw,14px)!important;padding:clamp(8px,2vw,12px) clamp(10px,3vw,14px)!important;flex:1!important;min-width:0!important}
+.ss-wrapper::after{content:'🔍'!important;width:clamp(34px,9vw,44px)!important;height:clamp(34px,9vw,44px)!important;border-radius:50%!important;background:linear-gradient(135deg,#ff4d94,#a855f7)!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:clamp(14px,4vw,18px)!important;flex-shrink:0!important}
+.ss-wrapper .ss-clear{order:-1!important;background:transparent!important;border:none!important;color:rgba(255,255,255,.5)!important;font-size:clamp(14px,4vw,18px)!important;padding:0 8px!important}
+
+/* 4. CATEGORIES — شبكة 4 أعمدة (تظهر 8 أقسام كاملة) */
+#cats{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:clamp(10px,3vw,16px) clamp(6px,2vw,10px)!important;
+  padding:0 clamp(12px,3.5vw,20px) var(--v4-gap)!important;
+  overflow:visible!important;
+}
+.photo-cat-card{min-width:0!important;width:100%!important;display:flex!important;flex-direction:column!important;align-items:center!important}
+.photo-cat-circle{
+  width:clamp(60px,16vw,80px)!important;height:clamp(60px,16vw,80px)!important;
+  border-radius:50%!important;padding:2px!important;
+  background:linear-gradient(135deg,#ff4d94,#a855f7,#3b82f6)!important;
+  box-shadow:0 4px 14px rgba(168,85,247,.3)!important;overflow:hidden!important;
+}
+.photo-cat-circle img{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important}
+.photo-cat-name{font-size:clamp(9px,2.5vw,12px)!important;font-weight:700!important;margin-top:clamp(4px,1.5vw,8px)!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
+
+/* 5. BOOKING — مساحة مريحة */
+.booking-row-container{
+  margin:0 clamp(12px,3.5vw,20px) var(--v4-gap)!important;
+  padding:clamp(12px,3.5vw,18px) clamp(6px,2vw,10px)!important;
+  border-radius:clamp(16px,4.5vw,22px)!important;
+  background:linear-gradient(135deg,rgba(20,15,45,.9),rgba(10,8,30,.8))!important;
+  border:1px solid rgba(106,27,154,.4)!important;
+  display:flex!important;justify-content:space-around!important;align-items:center!important;
+}
+.booking-icon{width:clamp(40px,10vw,52px)!important;height:clamp(40px,10vw,52px)!important;border-radius:50%!important}
+.booking-icon svg{width:clamp(20px,5.5vw,26px)!important;height:clamp(20px,5.5vw,26px)!important}
+.booking-label{font-size:clamp(8.5px,2.3vw,11px)!important;font-weight:600!important;margin-top:clamp(4px,1.5vw,8px)!important;white-space:nowrap!important}
+
+/* 6. AI BUTTON — ثابت فوق الشريط السفلي بدون تغطية البنر */
+#chat-widget,#chatBtn,.chat-widget,[class*="chat-widget"],[class*="ai-fab"],[id*="aiWidget"]{
+  position:fixed!important;
+  bottom:calc(clamp(64px,16vw,80px) + clamp(10px,3vw,16px))!important;
+  left:clamp(10px,3vw,16px)!important;
+  right:auto!important;top:auto!important;
+  z-index:9999!important;
+  width:clamp(48px,13vw,58px)!important;height:clamp(48px,13vw,58px)!important;
+}
+
+/* 7. BOTTOM NAV */
+#bottom-nav{height:clamp(64px,16vw,80px)!important;padding:0 clamp(6px,2vw,12px)!important}
+#bottom-nav .bn-it span{font-size:clamp(9px,2.5vw,11px)!important}
+#bottom-nav .bn-it svg{width:clamp(22px,6vw,28px)!important;height:clamp(22px,6vw,28px)!important}
+
+/* 8. BANNERS — إصلاح تداخل النصوص */
+#banners,.banner-slider,.banner-container{margin:0 clamp(12px,3.5vw,20px) var(--v4-gap)!important;border-radius:clamp(16px,4.5vw,22px)!important;overflow:hidden!important}
+.banner-slide img,.banner-item img{width:100%!important;height:auto!important;object-fit:cover!important}
+
+/* 9. تحسين النصوص الصغيرة */
+@media(max-width:360px){
+  .chz-tag{font-size:8.5px!important}
+  .chz-en{font-size:18px!important}
+  .chz-ar{font-size:11px!important}
+  .photo-cat-name{font-size:8.5px!important}
+}
+</style>
 </head>
 <body>
 <div id="app">
