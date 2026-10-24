@@ -7003,6 +7003,90 @@ html:not([data-theme="light"]) [style*="var(--cr)"] {
   color: var(--cr) !important;
 }
 </style>
+<style id="chz-cat-cards-fix">
+/* ═══ إصلاح بطاقات المنتجات في صفحات الأقسام ═══ */
+
+/* 1. الوضع الداكن — خلفية داكنة + نص أبيض */
+html[data-theme="dark"] .cat-prod-card,
+html:not([data-theme="light"]) .cat-prod-card {
+  background: linear-gradient(135deg, rgba(30,25,55,0.9), rgba(20,15,40,0.95)) !important;
+  border-color: rgba(168,85,247,0.3) !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+
+html[data-theme="dark"] .cat-prod-card .name,
+html:not([data-theme="light"]) .cat-prod-card .name {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .cat-prod-card .price,
+html:not([data-theme="light"]) .cat-prod-card .price {
+  color: #ff4d94 !important;
+}
+
+/* 2. الوضع الفاتح — خلفية بيضاء + نص داكن */
+html[data-theme="light"] .cat-prod-card {
+  background: #ffffff !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+
+html[data-theme="light"] .cat-prod-card .name {
+  color: #1f2937 !important;
+}
+
+html[data-theme="light"] .cat-prod-card .price {
+  color: #d81b60 !important;
+}
+
+/* 3. حاوية القسم — خلفية ملائمة */
+html[data-theme="dark"] #sc-cat .hd,
+html:not([data-theme="light"]) #sc-cat .hd {
+  background: rgba(10,8,30,0.95) !important;
+  border-bottom: 1px solid rgba(168,85,247,0.2) !important;
+}
+
+html[data-theme="dark"] #sc-cat #cat-title,
+html:not([data-theme="light"]) #sc-cat #cat-title {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] #cat-prods,
+html:not([data-theme="light"]) #cat-prods {
+  background: transparent !important;
+}
+
+/* 4. شبكة المنتجات في صفحة القسم */
+html[data-theme="dark"] #sc-cat,
+html:not([data-theme="light"]) #sc-cat {
+  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important;
+}
+
+html[data-theme="light"] #sc-cat {
+  background: #f4f6fa !important;
+}
+
+/* 5. زر الرجوع في صفحة القسم */
+html[data-theme="dark"] #sc-cat .back,
+html:not([data-theme="light"]) #sc-cat .back {
+  background: rgba(168,85,247,0.15) !important;
+  border: 1.5px solid rgba(168,85,247,0.4) !important;
+}
+
+html[data-theme="dark"] #sc-cat .back svg,
+html:not([data-theme="light"]) #sc-cat .back svg {
+  stroke: #ffffff !important;
+}
+
+html[data-theme="light"] #sc-cat .back {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+html[data-theme="light"] #sc-cat .back svg {
+  stroke: #1f2937 !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
