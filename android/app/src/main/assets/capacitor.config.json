@@ -1,0 +1,23 @@
+{
+	"appId": "com.cheezan.app",
+	"appName": "CHIZEN Store",
+	"webDir": "client",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 2000,
+			"launchAutoHide": true,
+			"launchFadeOutDuration": 500,
+			"backgroundColor": "#0a0a15",
+			"androidSplashResourceName": "splash",
+			"androidScaleType": "CENTER_CROP",
+			"showSpinner": false,
+			"splashFullScreen": true,
+			"splashImmersive": true
+		},
+		"StatusBar": {
+			"style": "DARK",
+			"backgroundColor": "#0a0a15",
+			"overlaysWebView": false
+		}
+	}
+}

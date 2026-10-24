@@ -1,0 +1,13 @@
+{
+  "appId": "com.cheezan.app",
+  "appName": "CHIZEN",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "launchAutoHide": true,
+      "backgroundColor": "#02051b",
+      "showSpinner": false
+    }
+  }
+}
