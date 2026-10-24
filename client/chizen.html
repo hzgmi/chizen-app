@@ -11647,5 +11647,256 @@ document.addEventListener('keydown', function(e) {
   console.log('[NO CLS V2] active');
 })();
 </script>
+<style id="chz-win-all">
+/* ═══════════════════════════════════════════════════
+   FINAL WIN — يفوز على كل الأنماط السابقة
+   ═══════════════════════════════════════════════════ */
+
+/* 1. بطاقات المنتجات في صفحة القسم (كل الفئات المحتملة) */
+html[data-theme="dark"] .cat-prod-card,
+html:not([data-theme="light"]) .cat-prod-card {
+  background: linear-gradient(135deg, rgba(30,25,55,0.92), rgba(20,15,40,0.95)) !important;
+  border: 1px solid rgba(168,85,247,0.3) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  padding-bottom: 10px !important;
+}
+html[data-theme="dark"] .cat-prod-card .name,
+html[data-theme="dark"] .cat-prod-card .p-name,
+html:not([data-theme="light"]) .cat-prod-card .name,
+html:not([data-theme="light"]) .cat-prod-card .p-name {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+html[data-theme="dark"] .cat-prod-card .price,
+html[data-theme="dark"] .cat-prod-card .p-price,
+html:not([data-theme="light"]) .cat-prod-card .price,
+html:not([data-theme="light"]) .cat-prod-card .p-price {
+  color: #ff4d94 !important;
+  font-weight: 900 !important;
+}
+
+html[data-theme="light"] .cat-prod-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+html[data-theme="light"] .cat-prod-card .name,
+html[data-theme="light"] .cat-prod-card .p-name {
+  color: #1f2937 !important;
+}
+html[data-theme="light"] .cat-prod-card .price,
+html[data-theme="light"] .cat-prod-card .p-price {
+  color: #d81b60 !important;
+}
+
+/* 2. صور المنتجات في البطاقات */
+.cat-prod-card img {
+  width: 100% !important;
+  height: 160px !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* 3. صفحة القسم (كل الأسماء المحتملة) */
+html[data-theme="dark"] #sc-cat,
+html[data-theme="dark"] #sc-category,
+html:not([data-theme="light"]) #sc-cat,
+html:not([data-theme="light"]) #sc-category {
+  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important;
+}
+html[data-theme="light"] #sc-cat,
+html[data-theme="light"] #sc-category {
+  background: #f4f6fa !important;
+}
+
+/* 4. شبكة المنتجات */
+#cat-prods, #cat-products-grid, #prods, .prods {
+  min-height: 200px !important;
+}
+
+/* 5. تفاصيل المنتج — جميع المتغيرات */
+html[data-theme="dark"] .det-d,
+html[data-theme="dark"] .det-d *,
+html:not([data-theme="light"]) .det-d,
+html:not([data-theme="light"]) .det-d * {
+  color: #d5d5e8 !important;
+}
+
+html[data-theme="dark"] .det-br,
+html:not([data-theme="light"]) .det-br {
+  color: #a855f7 !important;
+}
+
+html[data-theme="dark"] .det-n,
+html:not([data-theme="light"]) .det-n {
+  color: #ffffff !important;
+}
+
+/* 6. حماية: أي نص أبيض على خلفية بيضاء في الوضع الداكن */
+html[data-theme="dark"] [style*="background: #f4f6fa"],
+html[data-theme="dark"] [style*="background:#f4f6fa"],
+html:not([data-theme="light"]) [style*="background: #f4f6fa"],
+html:not([data-theme="light"]) [style*="background:#f4f6fa"] {
+  background: linear-gradient(135deg, rgba(30,25,55,0.9), rgba(20,15,40,0.95)) !important;
+}
+
+/* 7. الإشعارات — ضمان الألوان */
+html[data-theme="dark"] #notif-list,
+html:not([data-theme="light"]) #notif-list {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] #notif-list *,
+html:not([data-theme="light"]) #notif-list * {
+  color: inherit;
+}
+
+/* 8. حقول النماذج (الحجز + الدفع) */
+html[data-theme="dark"] .booking-form input,
+html[data-theme="dark"] .booking-form select,
+html[data-theme="dark"] .fi,
+html[data-theme="dark"] .dli,
+html:not([data-theme="light"]) .booking-form input,
+html:not([data-theme="light"]) .booking-form select,
+html:not([data-theme="light"]) .fi,
+html:not([data-theme="light"]) .dli {
+  background: rgba(30,25,55,0.9) !important;
+  color: #ffffff !important;
+  border-color: rgba(168,85,247,0.4) !important;
+}
+</style>
+<script id="chz-win-all-js">
+(function(){
+  var attempts = 0;
+  var maxAttempts = 100;
+  
+  function install() {
+    attempts++;
+    if (!window.APP) {
+      if (attempts < maxAttempts) setTimeout(install, 200);
+      return;
+    }
+    
+    // تأكد أن renderNotifs هو نسختنا الجديدة
+    if (!APP.__notifsV2 || !APP.renderNotifsUI) {
+      console.log('[WIN-ALL] installing notifications UI...');
+      APP.__notifsV2 = true;
+      
+      APP.renderNotifsUI = function(list) {
+        var c = document.getElementById('notif-list');
+        if (!c) return;
+        if (!list || !list.length) {
+          c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;"><div style="font-size:52px;margin-bottom:12px;">🔔</div><div style="font-weight:700;font-size:15px;">لا توجد إشعارات</div><div style="font-size:12px;margin-top:8px;color:#666;">ستظهر هنا إشعاراتك الجديدة</div></div>';
+          return;
+        }
+        
+        var typeIcons = { booking:'✈️', order:'🛒', points:'💎', referral:'🎟️', promo:'🎁', system:'🔔', general:'📢', welcome:'🎉', returning:'👋' };
+        var typeColors = { booking:'#3b82f6', order:'#10b981', points:'#a855f7', referral:'#f59e0b', promo:'#ec4899', system:'#6b7280', general:'#a855f7', welcome:'#10b981', returning:'#f59e0b' };
+        var typeLabels = { booking:'حجز', order:'طلب', points:'نقاط', referral:'إحالة', promo:'عرض', system:'نظام', general:'عام', welcome:'ترحيب', returning:'عودة' };
+        
+        var filter = window.__notifFilter || 'all';
+        var filtered = filter === 'all' ? list : list.filter(function(n){ return (n.type||'general') === filter; });
+        
+        var tabs = [
+          { key:'all', label:'الكل', icon:'📬' },
+          { key:'order', label:'الطلبات', icon:'🛒' },
+          { key:'booking', label:'الحجوزات', icon:'✈️' },
+          { key:'promo', label:'العروض', icon:'🎁' },
+          { key:'system', label:'النظام', icon:'🔔' }
+        ];
+        
+        var tabsHtml = '<div style="display:flex;gap:6px;overflow-x:auto;padding:8px 0 12px;scrollbar-width:none;">';
+        tabs.forEach(function(t) {
+          var active = filter === t.key;
+          var count = t.key === 'all' ? list.length : list.filter(function(n){ return (n.type||'general') === t.key; }).length;
+          tabsHtml += '<button onclick="window.__setNotifFilter(\'' + t.key + '\')" style="flex-shrink:0;padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#ff4d94' : 'rgba(168,85,247,0.25)') + ';background:' + (active ? 'linear-gradient(135deg,#ff4d94,#a855f7)' : 'rgba(168,85,247,0.08)') + ';color:' + (active ? '#fff' : '#b8b8d0') + ';font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;">' + t.icon + ' ' + t.label + ' <span style="background:rgba(255,255,255,0.2);padding:1px 6px;border-radius:8px;font-size:9px;">' + count + '</span></button>';
+        });
+        tabsHtml += '</div>';
+        
+        if (!filtered.length) {
+          c.innerHTML = tabsHtml + '<div style="text-align:center;padding:50px 20px;color:#888;"><div style="font-size:44px;margin-bottom:10px;">📭</div><div style="font-size:13px;">لا توجد إشعارات في هذا التصنيف</div></div>';
+          return;
+        }
+        
+        var cards = filtered.map(function(n) {
+          var timeStr = '';
+          if (n.createdAt && n.createdAt.toDate) {
+            var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
+            if (diff < 1) timeStr = 'الآن';
+            else if (diff < 60) timeStr = 'قبل ' + diff + ' دقيقة';
+            else if (diff < 1440) timeStr = 'قبل ' + Math.floor(diff/60) + ' ساعة';
+            else if (diff < 10080) timeStr = 'قبل ' + Math.floor(diff/1440) + ' يوم';
+            else timeStr = n.createdAt.toDate().toLocaleDateString('ar');
+          }
+          
+          var type = n.type || 'general';
+          var icon = typeIcons[type] || '🔔';
+          var color = typeColors[type] || '#a855f7';
+          var label = typeLabels[type] || 'عام';
+          var isUnread = n.read === false;
+          
+          return '<div onclick="if(window.notifClick)notifClick(event,\'' + n.id + '\')" style="position:relative;display:flex;gap:12px;padding:14px;margin-bottom:10px;background:linear-gradient(135deg,rgba(168,85,247,0.06),rgba(255,77,148,0.04));border:1px solid ' + (isUnread ? 'rgba(255,77,148,0.4)' : 'rgba(168,85,247,0.15)') + ';border-radius:14px;cursor:pointer;">' +
+            (isUnread ? '<div style="position:absolute;top:12px;left:12px;width:8px;height:8px;background:#ff4d94;border-radius:50%;box-shadow:0 0 8px rgba(255,77,148,0.6);"></div>' : '') +
+            '<div style="width:42px;height:42px;border-radius:12px;background:' + color + '22;border:1px solid ' + color + '55;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + icon + '</div>' +
+            '<div style="flex:1;min-width:0;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;">' +
+                '<div style="font-weight:900;font-size:13px;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (n.title || '').replace(/[<>&]/g, function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}) + '</div>' +
+                '<span style="font-size:9px;color:' + color + ';font-weight:800;background:' + color + '18;padding:2px 7px;border-radius:8px;white-space:nowrap;flex-shrink:0;">' + label + '</span>' +
+              '</div>' +
+              '<div style="font-size:12px;color:#c5c5d8;line-height:1.6;margin-bottom:6px;">' + (n.body || '').replace(/[<>&]/g, function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}) + '</div>' +
+              (timeStr ? '<div style="font-size:10px;color:#8a8a9e;">🕐 ' + timeStr + '</div>' : '') +
+            '</div>' +
+          '</div>';
+        }).join('');
+        
+        c.innerHTML = tabsHtml + cards;
+      };
+      
+      window.__setNotifFilter = function(f) {
+        window.__notifFilter = f;
+        if (APP.renderNotifsUI) APP.renderNotifsUI(window.__notifCache || APP.notifications || []);
+      };
+      
+      APP.renderNotifs = async function() {
+        var c = document.getElementById('notif-list');
+        if (!c) return;
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">⏳ جاري التحميل...</div>';
+        if (!window.FB || !FB.db) {
+          c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">غير متصل</div>';
+          return;
+        }
+        var uid = FB.currentUser ? FB.currentUser.uid : null;
+        if (!uid) {
+          c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">سجّل دخول لعرض إشعاراتك</div>';
+          return;
+        }
+        var all = [], seen = {};
+        try {
+          var snap = await FB.db.collection('notifications').where('userId','==',uid).orderBy('createdAt','desc').limit(100).get();
+          snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; if (!seen[d.id]) { seen[d.id]=1; all.push(d); } });
+        } catch(e) {}
+        try {
+          var s2 = await FB.db.collection('notifications').where('isGlobal','==',true).orderBy('createdAt','desc').limit(30).get();
+          s2.forEach(function(doc){ var d = doc.data(); d.id = doc.id; if (!seen[d.id]) { seen[d.id]=1; all.push(d); } });
+        } catch(e) {}
+        all.sort(function(a,b){ var ta=a.createdAt&&a.createdAt.toDate?a.createdAt.toDate().getTime():0; var tb=b.createdAt&&b.createdAt.toDate?b.createdAt.toDate().getTime():0; return tb-ta; });
+        this.notifications = all;
+        window.__notifCache = all;
+        this.renderNotifsUI(all);
+      };
+      
+      console.log('[WIN-ALL] notifications installed');
+    }
+  }
+  
+  // شغّل الآن بعد APP موجود
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(install, 300); });
+  } else {
+    setTimeout(install, 300);
+  }
+})();
+</script>
 </body>
 </html>
