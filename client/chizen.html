@@ -6347,6 +6347,171 @@ html[data-theme="dark"] .chz-marquee-content {
     opacity: 1 !important;
   }
 </style>
+<style id="chz-details-colors">
+/* ═══ تحسين ألوان صفحة تفاصيل المنتج ═══ */
+
+/* 1. جميع النصوص في الصفحة */
+html[data-theme="dark"] .det-b,
+body:not([data-theme="light"]) .det-b {
+  background: linear-gradient(180deg, transparent 0%, rgba(10,8,25,0.4) 100%) !important;
+  color: #e8e8f0 !important;
+}
+
+/* 2. الماركة */
+html[data-theme="dark"] .det-br,
+body:not([data-theme="light"]) .det-br {
+  color: #a855f7 !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 0 8px rgba(168,85,247,0.4) !important;
+}
+
+/* 3. اسم المنتج */
+html[data-theme="dark"] .det-n,
+body:not([data-theme="light"]) .det-n {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5) !important;
+}
+
+/* 4. التقييم */
+html[data-theme="dark"] .det-r,
+body:not([data-theme="light"]) .det-r {
+  color: #fbbf24 !important;
+  font-weight: 700 !important;
+}
+
+/* 5. السعر */
+html[data-theme="dark"] .det-p,
+body:not([data-theme="light"]) .det-p {
+  color: #ff4d94 !important;
+  text-shadow: 0 0 10px rgba(255,77,148,0.3) !important;
+}
+
+/* 6. الوصف والمميزات */
+html[data-theme="dark"] .det-d,
+body:not([data-theme="light"]) .det-d {
+  color: #d5d5e8 !important;
+  line-height: 1.9 !important;
+  font-size: 14px !important;
+}
+
+/* 7. العناصر داخل الوصف (المميزات) */
+html[data-theme="dark"] .det-d *,
+body:not([data-theme="light"]) .det-d *,
+html[data-theme="dark"] .det-d li,
+body:not([data-theme="light"]) .det-d li {
+  color: #d5d5e8 !important;
+}
+
+/* 8. عنوان الكمية */
+html[data-theme="dark"] .qsl,
+body:not([data-theme="light"]) .qsl {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* 9. أزرار الكمية */
+html[data-theme="dark"] .qb2,
+body:not([data-theme="light"]) .qb2 {
+  background: rgba(168,85,247,0.15) !important;
+  border: 1px solid rgba(168,85,247,0.4) !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+
+html[data-theme="dark"] .qn2,
+body:not([data-theme="light"]) .qn2 {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  font-size: 18px !important;
+}
+
+/* 10. زر "أضف للسلة" */
+html[data-theme="dark"] .btn-c,
+body:not([data-theme="light"]) .btn-c {
+  background: rgba(168,85,247,0.15) !important;
+  border: 1.5px solid rgba(168,85,247,0.5) !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+
+/* 11. زر "اشترِ الآن" */
+html[data-theme="dark"] .btn-b,
+body:not([data-theme="light"]) .btn-b {
+  background: linear-gradient(135deg,#ff4d94,#a855f7) !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  box-shadow: 0 6px 20px rgba(255,77,148,0.4) !important;
+}
+
+/* 12. قائمة المميزات — تنسيق جميل */
+.det-features {
+  margin-top: 16px !important;
+  padding: 14px 16px !important;
+  background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(255,77,148,0.05)) !important;
+  border: 1px solid rgba(168,85,247,0.25) !important;
+  border-radius: 14px !important;
+}
+
+.det-features-title {
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  color: #a855f7 !important;
+  margin-bottom: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.det-features ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.det-features li {
+  padding: 6px 0 !important;
+  font-size: 13px !important;
+  color: #d5d5e8 !important;
+  position: relative !important;
+  padding-right: 22px !important;
+  border-bottom: 1px dashed rgba(168,85,247,0.15) !important;
+}
+
+.det-features li:last-child {
+  border-bottom: none !important;
+}
+
+.det-features li::before {
+  content: '✓' !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: 6px !important;
+  color: #10b981 !important;
+  font-weight: 900 !important;
+  font-size: 14px !important;
+}
+
+/* 13. الوضع الفاتح */
+html[data-theme="light"] .det-d,
+html[data-theme="light"] .det-b {
+  color: #374151 !important;
+}
+
+html[data-theme="light"] .det-features {
+  background: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+html[data-theme="light"] .det-features li {
+  color: #4b5563 !important;
+}
+
+html[data-theme="light"] .det-br {
+  color: #7c3aed !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -10237,6 +10402,52 @@ document.addEventListener('keydown', function(e) {
   } else {
     tryInstall(0);
   }
+})();
+</script>
+<script id="chz-details-features-js">
+(function(){
+  function renderFeatures() {
+    var prod = window.APP && APP.currentProd;
+    if (!prod) return;
+    var descEl = document.getElementById('det-desc');
+    if (!descEl) return;
+    
+    // احذف القسم القديم إن وجد
+    var old = document.getElementById('det-features-block');
+    if (old) old.remove();
+    
+    var features = prod.features || [];
+    if (!Array.isArray(features) || features.length === 0) return;
+    
+    var html = '<div id="det-features-block" class="det-features">' +
+      '<div class="det-features-title">✨ المميزات</div>' +
+      '<ul>';
+    features.forEach(function(f) {
+      if (f && String(f).trim()) {
+        html += '<li>' + String(f).replace(/[<>&]/g, function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}) + '</li>';
+      }
+    });
+    html += '</ul></div>';
+    
+    // أضف بعد الوصف
+    descEl.insertAdjacentHTML('afterend', html);
+  }
+  
+  // Hook into openProduct
+  function hook() {
+    if (!window.APP || !APP.openProduct) {
+      setTimeout(hook, 200);
+      return;
+    }
+    if (APP.__featuresHooked) return;
+    APP.__featuresHooked = true;
+    var orig = APP.openProduct;
+    APP.openProduct = function(id) {
+      orig.call(this, id);
+      setTimeout(renderFeatures, 50);
+    };
+  }
+  hook();
 })();
 </script>
 </body>
