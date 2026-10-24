@@ -5512,6 +5512,155 @@ body, #app, .screen {
 .chz-prof-name, .chz-ar, .photo-cat-name, .booking-label { color: #ffffff !important; }
 .chz-prof-welcome { color: rgba(255,255,255,0.6) !important; }
 </style>
+<style id="v6-layout-fixes">
+/* ═══ V6: LAYOUT FIXES (PERFECT MATCH) ═══ */
+
+/* 1. إصلاح تداخل اسم البروفايل */
+.chz-prof-txt { max-width: 75px !important; text-align: right !important; display: flex !important; flex-direction: column !important; }
+.chz-prof-name { font-size: 11px !important; font-weight: 800 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; display: block !important; }
+.chz-prof-welcome { font-size: 9px !important; opacity: 0.7 !important; display: block !important; }
+.chz-profile-group { padding: 4px 8px !important; gap: 6px !important; border-radius: 20px !important; }
+
+/* 2. إصلاح شريط البحث (إزالة التكرار) */
+.ss-wrapper::after { display: none !important; } /* إخفاء أيقونة البحث المكررة المضافة سابقاً */
+.ss-wrapper { flex-direction: row !important; padding: 4px 6px !important; gap: 8px !important; }
+.ss-input { text-align: right !important; padding-right: 10px !important; }
+/* زر البحث الوردي الأصلي (إن وجد) */
+.ss-wrapper .ss-btn, .ss-wrapper button { background: linear-gradient(135deg, #ff4d94, #a855f7) !important; border-radius: 50% !important; width: 40px !important; height: 40px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+.ss-wrapper svg { width: 20px !important; height: 20px !important; }
+
+/* 3. إصلاح شريط الولاء (توزيع العناصر) */
+.loy { display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 12px 20px !important; }
+.loy-t { font-size: 12px !important; }
+.loy-p { font-size: 22px !important; }
+
+/* 4. إصلاح زر الذكاء الاصطناعي (رفعه فوق شريط الحجوزات) */
+#chat-widget, [class*="chat-widget"], [id*="aiWidget"], #chatBtn {
+    bottom: 100px !important; /* تم رفعه ليتجنب تغطية شريط الحجوزات */
+    left: 15px !important;
+    right: auto !important;
+    width: 55px !important;
+    height: 55px !important;
+    z-index: 9999 !important;
+    box-shadow: 0 4px 15px rgba(255, 77, 148, 0.4) !important;
+}
+
+/* 5. إصلاح الأقسام (شبكة 4 أعمدة نظيفة) */
+#cats { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 15px 8px !important; padding: 0 15px 20px !important; }
+.photo-cat-circle { width: 70px !important; height: 70px !important; margin: 0 auto !important; padding: 2px !important; }
+.photo-cat-circle img { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 50% !important; }
+/* خلفية بديلة للصور المكسورة */
+.photo-cat-circle { background: linear-gradient(135deg, #6a1b9a, #a855f7) !important; }
+.photo-cat-name { font-size: 10px !important; margin-top: 6px !important; }
+
+/* 6. شريط الحجوزات (تنسيق أدق) */
+.booking-row-container { margin: 0 15px 20px !important; padding: 15px 10px !important; }
+.booking-icon { width: 45px !important; height: 45px !important; }
+.booking-label { font-size: 9px !important; }
+
+</style>
+<style id="v7-no-hide-scale">
+/* ═══ V7: تصغير متناسق — لا إخفاء لأي عنصر ═══ */
+
+/* 1. إلغاء أي display:none في الشاشات الصغيرة */
+.chz-tag, .chz-prof-name, .chz-prof-welcome, .chz-ar, .chz-en,
+.photo-cat-name, .booking-label, .loy-t, .loy-p, .photo-cat-card {
+  display: revert !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.chz-tag { display: block !important; }
+.chz-prof-txt { display: flex !important; }
+.chz-prof-name, .chz-prof-welcome { display: block !important; }
+
+/* 2. تصغير متناسق للشاشات الصغيرة جداً (≤ 380px) — كل شيء يقل معاً */
+@media (max-width: 380px) {
+  .chz-main { padding: 8px 10px !important; min-height: 62px !important; gap: 4px !important; }
+  .chz-en { font-size: 17px !important; }
+  .chz-ar { font-size: 10px !important; }
+  .chz-tag { font-size: 7.5px !important; margin-top: 1px !important; }
+  .chz-prof-avatar { width: 32px !important; height: 32px !important; }
+  .chz-prof-avatar svg { width: 16px !important; height: 16px !important; }
+  .chz-prof-name { font-size: 9px !important; }
+  .chz-prof-welcome { font-size: 7.5px !important; }
+  .chz-prof-txt { max-width: 55px !important; }
+  .chz-icons-group { padding: 3px 5px !important; gap: 3px !important; }
+  .chz-icon-box { width: 26px !important; height: 26px !important; }
+  .chz-icon-box svg { width: 18px !important; height: 18px !important; }
+
+  .loy { padding: 8px 12px !important; margin: 8px 10px !important; }
+  .loy-t { font-size: 10px !important; }
+  .loy-p { font-size: 15px !important; }
+
+  .ss-wrapper { margin: 0 10px 10px !important; padding: 3px 4px !important; }
+  .ss-input { font-size: 11px !important; }
+
+  #cats { gap: 8px 4px !important; padding: 0 10px 12px !important; }
+  .photo-cat-circle { width: 52px !important; height: 52px !important; }
+  .photo-cat-name { font-size: 8.5px !important; margin-top: 3px !important; }
+
+  .booking-row-container { margin: 0 10px 12px !important; padding: 10px 6px !important; }
+  .booking-icon { width: 34px !important; height: 34px !important; }
+  .booking-icon svg { width: 17px !important; height: 17px !important; }
+  .booking-label { font-size: 7.5px !important; margin-top: 3px !important; }
+  .booking-divider { height: 30px !important; }
+
+  #bottom-nav { height: 60px !important; }
+  #bottom-nav .bn-it span { font-size: 8px !important; }
+  #bottom-nav .bn-it svg { width: 20px !important; height: 20px !important; }
+}
+
+/* 3. تصغير أكثر حدة للشاشات الضيقة جداً (≤ 330px) */
+@media (max-width: 330px) {
+  .chz-en { font-size: 15px !important; }
+  .chz-ar { font-size: 9px !important; }
+  .chz-tag { font-size: 7px !important; }
+  .chz-prof-txt { max-width: 45px !important; }
+  .chz-prof-name { font-size: 8px !important; }
+  .chz-prof-welcome { font-size: 6.5px !important; }
+  .chz-prof-avatar { width: 28px !important; height: 28px !important; }
+  .chz-icon-box { width: 22px !important; height: 22px !important; }
+  .chz-icon-box svg { width: 15px !important; height: 15px !important; }
+  .chz-icons-group { padding: 2px 4px !important; gap: 2px !important; }
+  .photo-cat-circle { width: 46px !important; height: 46px !important; }
+  .photo-cat-name { font-size: 7.5px !important; }
+  .booking-icon { width: 30px !important; height: 30px !important; }
+  .booking-label { font-size: 6.5px !important; }
+  .loy-p { font-size: 13px !important; }
+  .loy-t { font-size: 9px !important; }
+  #bottom-nav .bn-it span { font-size: 7px !important; }
+  #bottom-nav .bn-it svg { width: 18px !important; height: 18px !important; }
+}
+
+/* 4. تحسين للشاشات الكبيرة (≥ 768px) — تكبير معقول */
+@media (min-width: 768px) {
+  .chz-main { padding: 16px 32px !important; min-height: 90px !important; }
+  .chz-en { font-size: 30px !important; }
+  .photo-cat-circle { width: 90px !important; height: 90px !important; }
+  .photo-cat-name { font-size: 13px !important; }
+  #cats { padding: 0 32px 24px !important; gap: 20px 12px !important; }
+  .booking-row-container { margin: 0 32px 24px !important; }
+  .loy { margin: 16px 32px !important; }
+  .ss-wrapper { margin: 0 32px 16px !important; }
+}
+@media (min-width: 1024px) {
+  .chz-main { padding: 18px 60px !important; }
+  #cats { padding: 0 60px 28px !important; }
+  .booking-row-container { margin: 0 60px 28px !important; }
+  .loy { margin: 18px 60px !important; }
+  .ss-wrapper { margin: 0 60px 18px !important; }
+  .photo-cat-circle { width: 110px !important; height: 110px !important; }
+}
+
+/* 5. ضمان محاذاة الاسم بجانب الصورة دائماً */
+.chz-profile-group { align-items: center !important; flex-direction: row !important; }
+.chz-prof-txt { direction: rtl !important; }
+
+/* 6. Banners — تصغير متناسق للشاشات الصغيرة */
+@media (max-width: 380px) {
+  .banner-slide, .banner-item, #banners > div { border-radius: 12px !important; }
+}
+</style>
 </head>
 <body>
 <div id="app">
