@@ -6903,7 +6903,7 @@ html[data-theme="light"] .dli::placeholder {
         <svg viewBox="0 0 24 24" fill="#fff"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
       <div class="chz-prof-txt">
-        <div class="chz-prof-name">هزيم بن ق..</div>
+        <div class="chz-prof-name" id="chz-prof-name-dynamic">مرحباً</div>
         <div class="chz-prof-welcome">أهلاً بك</div>
       </div>
     </div>
@@ -10789,6 +10789,44 @@ document.addEventListener('keydown', function(e) {
     };
   }
   hook();
+})();
+</script>
+<script id="chz-username-updater">
+(function(){
+  function getFirstName(fullName) {
+    if (!fullName) return 'مرحباً';
+    var trimmed = String(fullName).trim();
+    var parts = trimmed.split(/s+/);
+    return parts[0] || 'مرحباً';
+  }
+  
+  function updateProfileName() {
+    var el = document.getElementById('chz-prof-name-dynamic');
+    if (!el) return;
+    
+    var u = (window.FB && FB.currentUser) ? FB.currentUser : null;
+    var appUser = (window.APP && APP.state && APP.state.user) ? APP.state.user : null;
+    
+    var displayName = '';
+    if (u && u.displayName) displayName = u.displayName;
+    else if (appUser && appUser.name) displayName = appUser.name;
+    else if (u && u.email) displayName = u.email.split('@')[0];
+    
+    var firstName = getFirstName(displayName);
+    el.textContent = firstName;
+  }
+  
+  // راقب التغييرات في الاسم
+  setInterval(updateProfileName, 1000);
+  
+  // شغّل عند التحميل
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(updateProfileName, 500); });
+  } else {
+    setTimeout(updateProfileName, 500);
+  }
+  
+  console.log('[USERNAME] dynamic name updater loaded');
 })();
 </script>
 </body>
