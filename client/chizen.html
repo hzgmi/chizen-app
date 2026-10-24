@@ -7087,6 +7087,28 @@ html[data-theme="light"] #sc-cat .back svg {
   stroke: #1f2937 !important;
 }
 </style>
+<script>
+// CHZ_FORCE_RELOAD
+(function(){
+  // منع cache للصفحة الحالية
+  if (window.performance && performance.navigation && performance.navigation.type === 1) {
+    // reload تم — لا شيء
+  }
+  // إذا حملت الصفحة من cache (disk/memory) — حدثها
+  try {
+    var entries = performance.getEntriesByType('navigation');
+    if (entries.length > 0 && entries[0].transferSize === 0) {
+      console.log('[CACHE] الصفحة من cache — إعادة تحميل');
+      if (!sessionStorage.getItem('chz_cache_reloaded')) {
+        sessionStorage.setItem('chz_cache_reloaded', '1');
+        setTimeout(function(){ location.reload(true); }, 100);
+      }
+    } else {
+      sessionStorage.removeItem('chz_cache_reloaded');
+    }
+  } catch(e) {}
+})();
+</script>
 </head>
 <body>
 <div id="app">

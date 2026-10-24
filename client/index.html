@@ -180,6 +180,7 @@
   @media (max-width:360px){.social-row{grid-template-columns:1fr;}.otp-input{width:40px;height:50px;font-size:18px;}.method-row{grid-template-columns:1fr;}}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}.bg-orbs{display:none;}}
 </style>
+<!-- CHZ_CACHE_BUST -->
 </head>
 <body>
 <div class="offline-banner" id="offline-banner">لا يوجد اتصال بالإنترنت</div>
@@ -313,7 +314,7 @@ function withTimeout(promise, ms, fallback) { return Promise.race([ promise, new
 var AUTH = {
   _busy: false, _busySince: 0, _fbReady: false, _redirecting: false, _selectedCountry: COUNTRIES[0], _phoneMethod: 'sms', _confirmationResult: null, _recaptchaVerifier: null, _phoneNumber: null, _otpTimer: null, _resendCooldown: 0,
   _setBusy: function(v) { this._busy = v; this._busySince = v ? Date.now() : 0; },
-  redirect: function(url) { if (this._redirecting) return; this._redirecting = true; window.location.replace(url || 'chizen.html'); },
+  redirect: function(url) { if (this._redirecting) return; this._redirecting = true; window.location.replace(url || 'chizen.html?v=1792880141762'); },
   init: function() {
     var self = this;
     this.showScreen('login');
