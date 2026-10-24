@@ -7584,40 +7584,56 @@ var APP={
     var disc=0;if(this.appliedCoupon){disc=this.appliedCoupon.type==='percent'?Math.floor(sub*(this.appliedCoupon.value/100)):this.appliedCoupon.value;}
     var shipF=0;if(sub>0&&(!this.shipping.freeAbove||sub<this.shipping.freeAbove))shipF=this.shipping.fee||0;
     var total=Math.max(0,sub-disc+shipF);
-    var order={id:oid,items:JSON.parse(JSON.stringify(this.cart)),subtotal:sub,discount:disc,shipping:shipF,total:total,pickup:pickup,name:name,phone:phone,bank:this.selectedBank,status:'pending'};
     var self=this;
-    var receiptFile = document.getElementById('co-receipt') ? document.getElementById('co-receipt').files[0] : null;
-    if (receiptFile) {
-        try {
-            var formData = new FormData();
-            formData.append('image', receiptFile);
-            var res = await fetch('https://api.imgbb.com/1/upload?key=6d0b2b51c4b8d4f0e3c9f8a2b7d1e5f0', {
-                method: 'POST',
-                body: formData
-            });
-            var data = await res.json();
-            if (data.success && data.data && data.data.url) {
-                order.receiptUrl = data.data.url;
-                console.log('✅ Receipt uploaded to ImgBB:', data.data.url);
-            } else {
-                console.log('ImgBB upload failed:', data);
-            }
-        } catch(upErr) { 
-            console.log('Receipt upload error:', upErr); 
-        }
+    var catGroups={};
+    this.cart.forEach(function(cItem){
+      var prod=self.getProduct(cItem.id);
+      var cat=(prod && prod.category) ? prod.category : 'other';
+      if(!catGroups[cat]) catGroups[cat]={items:[],subtotal:0};
+      var price=prod ? (parseFloat(prod.price)||0) : 0;
+      catGroups[cat].items.push({id:cItem.id,name:prod ? prod.name : 'منتج',img:prod ? (prod.img||'') : '',qty:cItem.qty,price:price,subtotal:price*cItem.qty});
+      catGroups[cat].subtotal+=price*cItem.qty;
+    });
+    var order={
+      id:oid,
+      customerId:(window.FB && FB.currentUser) ? FB.currentUser.uid : '',
+      customerName:name,name:name,phone:phone,pickup:pickup,bank:this.selectedBank,
+      subtotal:sub,discount:disc,shipping:shipF,total:total,
+      items:JSON.parse(JSON.stringify(this.cart)),
+      status:'pending',workflowStatus:'awaiting_verification',
+      payment:{status:'pending',method:this.selectedBank,receiptUrl:null,verifiedBy:null,verifiedAt:null,note:''},
+      categories:{},allCategoriesConfirmed:false,sentToCustomer:false,
+      categoryStatus:{},categoryNotes:{},categoryConfirmedBy:{},categoryConfirmedAt:{}
+    };
+    for(var catKey in catGroups){
+      order.categories[catKey]={items:catGroups[catKey].items,subtotal:catGroups[catKey].subtotal,status:'pending',confirmedBy:null,confirmedAt:null,note:''};
+      order.categoryStatus[catKey]='pending';
     }
-    if(window.FB&&FB.ready&&FB.addOrder){
+    var receiptFile = document.getElementById('co-receipt') ? document.getElementById('co-receipt').files[0] : null;
+    if(receiptFile){
+      try{
+        var formData=new FormData();
+        formData.append('image',receiptFile);
+        var res=await fetch('https://api.imgbb.com/1/upload?key=6d0b2b51c4b8d4f0e3c9f8a2b7d1e5f0',{method:'POST',body:formData});
+        var data=await res.json();
+        if(data.success && data.data && data.data.url){
+          order.receiptUrl=data.data.url;
+          order.payment.receiptUrl=data.data.url;
+        }
+      }catch(upErr){console.log('Receipt upload error:',upErr);}
+    }
+    if(window.FB && FB.ready && FB.addOrder){
       try{
         await FB.addOrder(order);
         if(FB.sendWhatsAppMessage){
-          var waMsg = "أهلاً " + name + "، تم استلام طلبك رقم " + oid + " بنجاح.\nالإجمالي: " + total + " ريال.\nسنقوم بالتواصل معك قريباً لتأكيد التوصيل. شكراً لثقتك بـ CHIZEN!";
-          FB.sendWhatsAppMessage(phone, waMsg);
+          var waMsg="أهلاً "+name+"، تم استلام طلبك رقم "+oid+" بنجاح.\nالإجمالي: "+total+" ريال.\nسيتم مراجعته والتواصل معك قريباً. شكراً لثقتك بـ CHIZEN!";
+          FB.sendWhatsAppMessage(phone,waMsg);
         }
-      }catch(e){}
+      }catch(e){console.log('[Order] save error:',e);}
     }
     this.orders.push(order);
     this.cart=[];this.appliedCoupon=null;this.saveCart();this.updateCartB();
-    this.toast('✓ تم استلام طلبك');
+    this.toast('✓ تم استلام طلبك — بانتظار المراجعة');
     this.goTab('orders');
   },
   
