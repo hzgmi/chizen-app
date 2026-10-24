@@ -6306,6 +6306,47 @@ html[data-theme="dark"] .chz-marquee-content {
   color: #ffffff !important;
 }
 </style>
+<style id="chz-img-dark-fix">
+  /* ═══ إصلاح صور المنتجات في الوضع الداكن ═══ */
+  
+  /* 1. الوضع الداكن — إزالة multiply + عرض طبيعي */
+  html[data-theme="dark"] .prod-i img,
+  html[data-theme="dark"] .prod-i img {
+    mix-blend-mode: normal !important;
+    object-fit: cover !important;
+    background: #1a1a2e !important;
+    opacity: 1 !important;
+    filter: brightness(1) !important;
+  }
+  
+  /* 2. بطاقة المنتج في الوضع الداكن — خلفية محايدة */
+  html[data-theme="dark"] .prod-i {
+    background: linear-gradient(135deg, #2a1a4a 0%, #1a1a3a 100%) !important;
+    overflow: hidden !important;
+  }
+  
+  /* 3. الوضع الفاتح — يبقى multiply (لأنه يعمل) */
+  html[data-theme="light"] .prod-i img {
+    mix-blend-mode: multiply !important;
+    object-fit: contain !important;
+  }
+  
+  /* 4. في حال لم يكن data-theme محدد (default = dark) */
+  body:not([data-theme="light"]) .prod-i img,
+  html:not([data-theme="light"]) .prod-i img {
+    mix-blend-mode: normal !important;
+    object-fit: cover !important;
+    background: #1a1a2e !important;
+  }
+  
+  /* 5. صور البانرات (إن كانت تعاني نفس المشكلة) */
+  html[data-theme="dark"] #slides img,
+  html[data-theme="dark"] .slide img,
+  html[data-theme="dark"] .banner-slide img {
+    mix-blend-mode: normal !important;
+    opacity: 1 !important;
+  }
+</style>
 </head>
 <body>
 <div id="app">
