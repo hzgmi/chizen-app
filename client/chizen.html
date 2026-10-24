@@ -6732,6 +6732,127 @@ html:not([data-theme="light"]) .ci-n {
    14. الفاتح يبقى كما هو (لا تغيير)
    ───────────────────────────────────────── */
 </style>
+<style id="chz-light-audit">
+/* ═══════════════════════════════════════════════════════
+   فحص شامل للوضع الفاتح — إصلاح كل الألوان الداكنة
+   ═══════════════════════════════════════════════════════ */
+
+/* 1. نماذج الحجز (طيران/باص/فندق/حج) — من داكن إلى فاتح */
+html[data-theme="light"] .booking-form {
+  background: #ffffff !important;
+  border-color: #e5e7eb !important;
+  color: #1f2937 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+html[data-theme="light"] .booking-form h2,
+html[data-theme="light"] .booking-form h3,
+html[data-theme="light"] .booking-form h4,
+html[data-theme="light"] .booking-form label,
+html[data-theme="light"] .booking-form > div:not([class]) {
+  color: #1f2937 !important;
+}
+html[data-theme="light"] .booking-form input,
+html[data-theme="light"] .booking-form select,
+html[data-theme="light"] .booking-form textarea {
+  background: #f9fafb !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+}
+html[data-theme="light"] .booking-form input::placeholder,
+html[data-theme="light"] .booking-form textarea::placeholder {
+  color: #9ca3af !important;
+}
+html[data-theme="light"] .booking-form option {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+/* 2. بطاقة النجاح — من داكنة إلى فاتحة */
+html[data-theme="light"] .success-card {
+  background: #ffffff !important;
+  border-color: #ec4899 !important;
+  color: #1f2937 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+}
+html[data-theme="light"] .success-card h2,
+html[data-theme="light"] .success-card p {
+  color: #1f2937 !important;
+}
+html[data-theme="light"] .success-modal {
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* 3. شريط الولاء — تدرج فاتح لطيف */
+html[data-theme="light"] .loy {
+  background: linear-gradient(90deg, #f3e8ff, #fce7f3) !important;
+  border-color: #e5e7eb !important;
+}
+html[data-theme="light"] .loy-t,
+html[data-theme="light"] .loy-p {
+  color: #1f2937 !important;
+}
+
+/* 4. المنتجات المشابهة — نصوص بيضاء على خلفية فاتحة */
+html[data-theme="light"] #related-products h3 {
+  color: #1f2937 !important;
+}
+html[data-theme="light"] #related-products div[style*="color:#fff"],
+html[data-theme="light"] #related-products div[style*="color: #fff"] {
+  color: #1f2937 !important;
+}
+
+/* 5. حقل البحث */
+html[data-theme="light"] .search {
+  color: #1f2937 !important;
+}
+
+/* 6. حالات فارغة */
+html[data-theme="light"] .empty-title {
+  color: #1f2937 !important;
+}
+
+/* 7. حاويات الصور — تبقى فاتحة */
+html[data-theme="light"] .prod-i,
+html[data-theme="light"] .ci-i,
+html[data-theme="light"] .det-i,
+html[data-theme="light"] .qb-card {
+  background: #f4f6fa !important;
+}
+
+/* 8. طبقات التعتيم — أفتح */
+html[data-theme="light"] .modal {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+html[data-theme="light"] .dlg {
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+/* 9. بطاقات طرق الدفع */
+html[data-theme="light"] .bank {
+  background: #f9fafb !important;
+  color: #1f2937 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* 10. منطقة رفع الصور */
+html[data-theme="light"] .up {
+  background: #f9fafb !important;
+  border-color: #d1d5db !important;
+  color: #6b7280 !important;
+}
+
+/* 11. حقول الإدخال العامة */
+html[data-theme="light"] .fi,
+html[data-theme="light"] .dli {
+  background: #f9fafb !important;
+  color: #1f2937 !important;
+  border-color: #d1d5db !important;
+}
+html[data-theme="light"] .fi::placeholder,
+html[data-theme="light"] .dli::placeholder {
+  color: #9ca3af !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
