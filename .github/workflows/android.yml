@@ -34,6 +34,13 @@ jobs:
           
       - name: Add Android & Sync
         run: |
+      - name: Ensure Android Platform
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          else
+            echo "Android platform already exists."
+          fi
           npx cap sync android
           npx cap sync android
           
