@@ -2,3 +2,16 @@ client/*.bak_*
 *.bak_*
 _archive_backups/
 *.log
+
+# One-off scripts at repo root
+/final-ci-fix.js
+/fix-all-workflows.js
+/fix-node-version.js
+/fix-workflow.js
+/new-design.js
+/rebuild-android.js
+/responsive-new-design.js
+# Backup folders
+/resources-backup/
+# Temp/backup files
+*.bak
