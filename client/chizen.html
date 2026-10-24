@@ -6512,6 +6512,226 @@ html[data-theme="light"] .det-br {
   color: #7c3aed !important;
 }
 </style>
+<style id="chz-audit-colors">
+/* ═══════════════════════════════════════════════════════
+   فحص شامل: إصلاح كل الألوان الثابتة في الوضع الداكن
+   يغطي: خلفيات فاتحة، نصوص داكنة، حدود باهتة
+   ═══════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────
+   1. النصوص الداكنة الثابتة → أبيض في الداكن
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .btn-b,
+html[data-theme="dark"] .success-card h2,
+html[data-theme="dark"] .success-card button,
+html[data-theme="dark"] .booking-form input,
+html[data-theme="dark"] .booking-form select,
+html[data-theme="dark"] .booking-label,
+html[data-theme="dark"] .user-info .username,
+html[data-theme="dark"] .ss-item-name,
+html[data-theme="dark"] .cn,
+html:not([data-theme="light"]) .btn-b,
+html:not([data-theme="light"]) .success-card h2,
+html:not([data-theme="light"]) .success-card button,
+html:not([data-theme="light"]) .booking-form input,
+html:not([data-theme="light"]) .booking-form select,
+html:not([data-theme="light"]) .booking-label,
+html:not([data-theme="light"]) .user-info .username,
+html:not([data-theme="light"]) .ss-item-name,
+html:not([data-theme="light"]) .cn {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────
+   2. الخلفيات الفاتحة الثابتة → داكن
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .prod-i,
+html[data-theme="dark"] .ci-i,
+html[data-theme="dark"] .det-i,
+html[data-theme="dark"] .up,
+html[data-theme="dark"] .bank,
+html[data-theme="dark"] .fi,
+html[data-theme="dark"] .dli,
+html[data-theme="dark"] .tog,
+html:not([data-theme="light"]) .prod-i,
+html:not([data-theme="light"]) .ci-i,
+html:not([data-theme="light"]) .det-i,
+html:not([data-theme="light"]) .up,
+html:not([data-theme="light"]) .bank,
+html:not([data-theme="light"]) .fi,
+html:not([data-theme="light"]) .dli,
+html:not([data-theme="light"]) .tog {
+  background: rgba(30, 25, 55, 0.9) !important;
+  color: #e8e8f0 !important;
+  -webkit-text-fill-color: #e8e8f0 !important;
+}
+
+/* ─────────────────────────────────────────
+   3. الحدود الباهتة → بنفسجية واضحة
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .bank,
+html[data-theme="dark"] .up,
+html[data-theme="dark"] .fi,
+html[data-theme="dark"] .dli,
+html[data-theme="dark"] .qb-card,
+html:not([data-theme="light"]) .bank,
+html:not([data-theme="light"]) .up,
+html:not([data-theme="light"]) .fi,
+html:not([data-theme="light"]) .dli,
+html:not([data-theme="light"]) .qb-card {
+  border-color: rgba(168, 85, 247, 0.35) !important;
+}
+
+/* ─────────────────────────────────────────
+   4. الأنماط المضمنة (inline style) — خلفيات فاتحة
+   ───────────────────────────────────────── */
+html[data-theme="dark"] [style*="background: #f4f6fa"],
+html[data-theme="dark"] [style*="background:#f4f6fa"],
+html[data-theme="dark"] [style*="background: #ffffff"],
+html[data-theme="dark"] [style*="background:#ffffff"],
+html[data-theme="dark"] [style*="background: white"],
+html[data-theme="dark"] [style*="background:white"],
+html:not([data-theme="light"]) [style*="background: #f4f6fa"],
+html:not([data-theme="light"]) [style*="background:#f4f6fa"],
+html:not([data-theme="light"]) [style*="background: #ffffff"],
+html:not([data-theme="light"]) [style*="background:#ffffff"],
+html:not([data-theme="light"]) [style*="background: white"],
+html:not([data-theme="light"]) [style*="background:white"] {
+  background: rgba(30, 25, 55, 0.9) !important;
+  color: #e8e8f0 !important;
+}
+
+/* ─────────────────────────────────────────
+   5. الأنماط المضمنة — نصوص داكنة
+   ───────────────────────────────────────── */
+html[data-theme="dark"] [style*="color: #1f2937"],
+html[data-theme="dark"] [style*="color:#1f2937"],
+html[data-theme="dark"] [style*="color: #374151"],
+html[data-theme="dark"] [style*="color:#374151"],
+html:not([data-theme="light"]) [style*="color: #1f2937"],
+html:not([data-theme="light"]) [style*="color:#1f2937"],
+html:not([data-theme="light"]) [style*="color: #374151"],
+html:not([data-theme="light"]) [style*="color:#374151"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────
+   6. الأنماط المضمنة — حدود فاتحة
+   ───────────────────────────────────────── */
+html[data-theme="dark"] [style*="border: 1px solid #e5e7eb"],
+html[data-theme="dark"] [style*="border:1px solid #e5e7eb"],
+html[data-theme="dark"] [style*="border: 2px solid #FFF"],
+html[data-theme="dark"] [style*="border:2px solid #FFF"],
+html:not([data-theme="light"]) [style*="border: 1px solid #e5e7eb"],
+html:not([data-theme="light"]) [style*="border:1px solid #e5e7eb"],
+html:not([data-theme="light"]) [style*="border: 2px solid #FFF"],
+html:not([data-theme="light"]) [style*="border:2px solid #FFF"] {
+  border-color: rgba(168, 85, 247, 0.35) !important;
+}
+
+/* ─────────────────────────────────────────
+   7. حقول الإدخال في الحجز (خلفية داكنة + نص داكن = مشكلة)
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .booking-form input,
+html[data-theme="dark"] .booking-form select,
+html:not([data-theme="light"]) .booking-form input,
+html:not([data-theme="light"]) .booking-form select {
+  background: rgba(30, 25, 55, 0.9) !important;
+  color: #ffffff !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+}
+
+/* ─────────────────────────────────────────
+   8. بطاقات النجاح (success modal) — خلفية بيضاء + نص داكن
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .success-card,
+html:not([data-theme="light"]) .success-card {
+  background: rgba(30, 25, 55, 0.95) !important;
+  color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────
+   9. البطاقات البيضاء في نقاط الولاء (inline)
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .loy-box,
+html[data-theme="dark"] .pts-action-btn,
+html:not([data-theme="light"]) .loy-box,
+html:not([data-theme="light"]) .pts-action-btn {
+  background: rgba(30, 25, 55, 0.9) !important;
+  border-color: rgba(168, 85, 247, 0.35) !important;
+  color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────
+   10. مربع البحث المنسدل
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .ss-item,
+html[data-theme="dark"] .ss-dropdown,
+html:not([data-theme="light"]) .ss-item,
+html:not([data-theme="light"]) .ss-dropdown {
+  background: rgba(20, 15, 40, 0.98) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .ss-item-cat,
+html:not([data-theme="light"]) .ss-item-cat {
+  color: #a855f7 !important;
+}
+
+/* ─────────────────────────────────────────
+   11. أزرار التوجيه (tabs) — خلفيات شفافة
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .booking-tab,
+html:not([data-theme="light"]) .booking-tab {
+  background: rgba(168, 85, 247, 0.12) !important;
+  color: #e8e8f0 !important;
+  border-color: rgba(168, 85, 247, 0.35) !important;
+}
+
+html[data-theme="dark"] .booking-tab.active,
+html:not([data-theme="light"]) .booking-tab.active {
+  background: linear-gradient(135deg, #D81B60, #6A1B9A) !important;
+  color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────
+   12. قوائم المنتجات والأسعار
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .det-d,
+html:not([data-theme="light"]) .det-d {
+  color: #d5d5e8 !important;
+}
+
+html[data-theme="dark"] .prod-n,
+html:not([data-theme="light"]) .prod-n {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .prod-p,
+html:not([data-theme="light"]) .prod-p {
+  color: #ff4d94 !important;
+}
+
+/* ─────────────────────────────────────────
+   13. النصوص العامة في البطاقات
+   ───────────────────────────────────────── */
+html[data-theme="dark"] .cd,
+html[data-theme="dark"] .cs,
+html[data-theme="dark"] .ci-inf,
+html[data-theme="dark"] .ci-n,
+html:not([data-theme="light"]) .cd,
+html:not([data-theme="light"]) .cs,
+html:not([data-theme="light"]) .ci-inf,
+html:not([data-theme="light"]) .ci-n {
+  color: #e8e8f0 !important;
+}
+
+/* ─────────────────────────────────────────
+   14. الفاتح يبقى كما هو (لا تغيير)
+   ───────────────────────────────────────── */
+</style>
 </head>
 <body>
 <div id="app">
