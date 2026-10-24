@@ -5846,6 +5846,83 @@ body, #app, .screen {
 /* 4. مسافة موحدة بين العناصر الرئيسية */
 .ss-wrapper { margin-bottom: 12px !important; }
 </style>
+<style id="v10-autoplay-css">
+/* ═══ V10: تحسين البانر وشريط الحجز ═══ */
+
+/* 1. البانر - حجم موازن وشكل فاخر */
+#slides {
+  min-height: clamp(150px, 42vw, 240px) !important;
+  border-radius: clamp(14px, 4vw, 20px) !important;
+  box-shadow: 0 8px 24px rgba(106,27,154,0.35), 0 0 0 1px rgba(168,85,247,0.15) !important;
+  transition: transform 0.6s ease, opacity 0.6s ease !important;
+}
+#slides .slide {
+  transition: opacity 0.5s ease !important;
+}
+#slides .sl-title {
+  font-size: clamp(16px, 4.5vw, 22px) !important;
+  line-height: 1.3 !important;
+}
+#slides .sl-sub {
+  font-size: clamp(11px, 2.8vw, 13px) !important;
+}
+#slides .sl-btn {
+  padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 22px) !important;
+  font-size: clamp(11px, 2.8vw, 13px) !important;
+  border-radius: clamp(8px, 2vw, 10px) !important;
+}
+#slides .sl-tag {
+  font-size: clamp(9px, 2.4vw, 11px) !important;
+}
+
+/* 2. النقاط - أنيقة */
+#dots {
+  margin-top: 10px !important;
+  gap: 6px !important;
+}
+#dots .dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: rgba(168,85,247,0.35) !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+}
+#dots .dot.active {
+  width: 22px !important;
+  border-radius: 4px !important;
+  background: linear-gradient(90deg, #ff4d94, #a855f7) !important;
+  box-shadow: 0 0 8px rgba(255,77,148,0.5) !important;
+}
+
+/* 3. شريط الحجز - تحسين دقيق */
+.booking-row-container {
+  padding: clamp(12px, 3.5vw, 18px) clamp(6px, 2vw, 10px) !important;
+  border-radius: clamp(16px, 4.5vw, 22px) !important;
+}
+.booking-icon {
+  width: clamp(44px, 11.5vw, 58px) !important;
+  height: clamp(44px, 11.5vw, 58px) !important;
+  transition: transform 0.2s ease !important;
+}
+.booking-item:active .booking-icon {
+  transform: scale(0.92) !important;
+}
+.booking-label {
+  font-size: clamp(9px, 2.4vw, 11px) !important;
+  font-weight: 700 !important;
+}
+
+/* 4. صغير جداً */
+@media (max-width: 360px) {
+  #slides { min-height: 140px !important; }
+  #slides .sl-title { font-size: 15px !important; }
+  #slides .sl-sub { font-size: 10px !important; }
+  .booking-icon { width: 38px !important; height: 38px !important; }
+  .booking-icon svg { width: 18px !important; height: 18px !important; }
+  .booking-label { font-size: 8px !important; }
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -9568,6 +9645,62 @@ document.addEventListener('keydown', function(e) {
   }
   // إعادة المحاولة بعد اكتمال التحميل (لأن الأقسام تُرسم ديناميكياً)
   window.addEventListener('load', function(){ setTimeout(reorderHome, 1500); });
+})();
+</script>
+<script id="v10-autoplay">
+/* ═══ V10: بانر يدور تلقائياً + تحسين شريط الحجز ═══ */
+(function(){
+  function installAutoplay(){
+    if (!window.APP) return false;
+    if (window.APP._v10Installed) return true;
+    
+    var currentIdx = 0;
+    var timer = null;
+    
+    // تعريف الدالة المفقودة
+    window.APP.startSlideAutoplay = function(){
+      if (timer) clearInterval(timer);
+      var total = (this.banners && this.banners.length) || 0;
+      if (total <= 1) {
+        // بانر واحد: ثابت
+        currentIdx = 0;
+        return;
+      }
+      currentIdx = 0;
+      var self = this;
+      timer = setInterval(function(){
+        currentIdx = (currentIdx + 1) % total;
+        self.goSlide(currentIdx);
+      }, 4000);
+      console.log('[V10] autoplay started: ' + total + ' banners, 4s interval');
+    };
+    
+    // إعادة ضبط المؤشر عند تغيير يدوي (سحب/نقر)
+    var origGoSlide = window.APP.goSlide;
+    window.APP.goSlide = function(i){
+      currentIdx = i;
+      if (origGoSlide) origGoSlide.call(this, i);
+    };
+    
+    window.APP._v10Installed = true;
+    return true;
+  }
+  
+  // التثبيت عند الجاهزية
+  function tryInstall(n){
+    if (installAutoplay()) {
+      console.log('[V10] installed');
+      return;
+    }
+    if (n > 30) return;
+    setTimeout(function(){ tryInstall(n+1); }, 300);
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ tryInstall(0); });
+  } else {
+    tryInstall(0);
+  }
 })();
 </script>
 </body>
