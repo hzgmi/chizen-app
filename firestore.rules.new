@@ -1,0 +1,130 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── دوال مساعدة ──
+    function signedIn() {
+      return request.auth != null;
+    }
+    
+    // أدمن قديم (من collection admins)
+    function isLegacyAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // أدمن جديد (من users.role)
+    function isSuperAdmin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // أي أدمن (قديم أو جديد)
+    function isAdmin() {
+      return isLegacyAdmin() || isSuperAdmin();
+    }
+    
+    // موظف قسم
+    function isCategoryManager(cat) {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'cat_manager' &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.assignedCategory == cat;
+    }
+    
+    // مندوب طلبات
+    function isDeliveryManager() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'delivery_mgr';
+    }
+    
+    // دور المستخدم الحالي (cat_manager, driver, etc.)
+    function myRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function myCategory() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.assignedCategory;
+    }
+
+    // ── admins (القديم — يبقى كما هو) ──
+    match /admins/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // ── users ──
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create: if signedIn() && request.auth.uid == uid;
+      allow update: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow delete: if isAdmin();
+      
+      // subcollections (مثل cart, points, etc.)
+      match /{document=**} {
+        allow read, write: if signedIn() && (request.auth.uid == uid || isAdmin());
+      }
+    }
+
+    // ── products ──
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isAdmin() || (isCategoryManager(request.resource.data.category));
+      allow update, delete: if isAdmin() || (signedIn() && myRole() == 'cat_manager' && resource.data.category == myCategory());
+    }
+
+    // ── orders (المعقد) ──
+    match /orders/{orderId} {
+      allow read: if signedIn() && (
+        resource.data.customerId == request.auth.uid ||
+        isAdmin() ||
+        isDeliveryManager() ||
+        (myRole() == 'cat_manager' && resource.data.categories[myCategory()] != null)
+      );
+      
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      
+      allow update: if signedIn() && (
+        isAdmin() ||
+        isDeliveryManager() ||
+        resource.data.customerId == request.auth.uid ||
+        (myRole() == 'cat_manager' && resource.data.categories[myCategory()] != null)
+      );
+      
+      allow delete: if isAdmin();
+    }
+
+    // ── push_queue ──
+    match /push_queue/{id} {
+      allow read, write: if signedIn();
+    }
+
+    // ── notifications ──
+    match /notifications/{id} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if signedIn();
+    }
+
+    // ── config (قراءة عامة) ──
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── bookings ──
+    match /bookings/{id} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // ── chats ──
+    match /chats/{id}/{document=**} {
+      allow read, write: if signedIn();
+    }
+
+    // ── بقية المجموعات (brands, cats, pays, delivery, sups, balances, banners) ──
+    match /{collection}/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

@@ -7109,6 +7109,228 @@ html[data-theme="light"] #sc-cat .back svg {
   } catch(e) {}
 })();
 </script>
+<style id="chz-prevent-cls">
+/* ═══════════════════════════════════════════════════
+   منع Layout Shift — احتياط المساحات قبل تحميل البيانات
+   ═══════════════════════════════════════════════════ */
+
+/* 1. البانر — مساحة ثابتة قبل التحميل */
+#slides {
+  min-height: clamp(150px, 42vw, 240px) !important;
+  contain: layout size !important;
+}
+
+/* 2. شريط الحجز — مساحة ثابتة */
+.booking-row-container {
+  min-height: clamp(85px, 22vw, 110px) !important;
+  contain: layout !important;
+}
+
+/* 3. الأقسام — مساحة ثابتة (4×2 = صفين) */
+#cats {
+  min-height: clamp(220px, 60vw, 320px) !important;
+  contain: layout !important;
+}
+
+/* 4. بطاقات المنتجات — مساحة ثابتة */
+#prods, .prods {
+  min-height: 200px !important;
+}
+
+/* 5. اللويالتي (شريط النقاط) — مساحة ثابتة */
+.loy {
+  min-height: clamp(48px, 12vw, 60px) !important;
+}
+
+/* 6. البحث — مساحة ثابتة */
+.ss-wrapper {
+  min-height: clamp(44px, 11vw, 56px) !important;
+}
+
+/* 7. الماركات — تظهر بسلاسة */
+#brands-sec {
+  min-height: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+/* 8. منع قفزات من العناصر الديناميكية */
+#sc-home {
+  content-visibility: auto;
+}
+
+#sc-home > * {
+  contain-intrinsic-size: auto 100px;
+}
+</style>
+<style id="chz-tabs-flicker">
+/* ═══ منع وميض تبويبات الحجز ═══ */
+
+/* 1. احتياط مساحة التبويبات دائماً (حتى قبل التحميل) */
+.booking-tabs,
+#service-tabs {
+  min-height: 62px !important;
+  display: flex !important;
+  gap: 8px !important;
+  padding: 8px !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+}
+
+/* 2. عند الجاهزية — تظهر بسلاسة */
+.booking-tabs.chz-ready,
+#service-tabs.chz-ready {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 3. احتياط مساحة المحتوى (حتى لا يقفز) */
+#form-flight, #form-bus, #form-hajj, #form-hotel {
+  min-height: 400px !important;
+}
+
+/* 4. في الوضع الداكن */
+html[data-theme="dark"] .booking-tabs,
+html:not([data-theme="light"]) .booking-tabs,
+html[data-theme="dark"] #service-tabs,
+html:not([data-theme="light"]) #service-tabs {
+  background: transparent !important;
+}
+
+/* 5. في الوضع الفاتح */
+html[data-theme="light"] .booking-tabs,
+html[data-theme="light"] #service-tabs {
+  background: transparent !important;
+}
+</style>
+<style id="chz-tabs-no-hide">
+/* ═══ منع إخفاء تبويبات الحجز ═══ */
+
+/* التبويبات مرئية دائماً — لا يُخفيهما أي شيء */
+#service-tabs .booking-tab,
+#tab-flight,
+#tab-bus,
+#tab-hajj,
+#tab-hotel {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* الحاوية */
+#service-tabs,
+.booking-tabs {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 62px !important;
+}
+
+/* في الوضع الداكن */
+html[data-theme="dark"] .booking-tab,
+html:not([data-theme="light"]) .booking-tab {
+  background: rgba(168,85,247,0.12) !important;
+  border: 1.5px solid rgba(168,85,247,0.3) !important;
+  color: #ffffff !important;
+}
+html[data-theme="dark"] .booking-tab.active,
+html:not([data-theme="light"]) .booking-tab.active {
+  background: linear-gradient(135deg,#d81b60,#6a1b9a) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+}
+
+/* في الوضع الفاتح */
+html[data-theme="light"] .booking-tab {
+  background: #f3f4f6 !important;
+  border: 1.5px solid #e5e7eb !important;
+  color: #1f2937 !important;
+}
+html[data-theme="light"] .booking-tab.active {
+  background: linear-gradient(135deg,#d81b60,#6a1b9a) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+</style>
+<style id="chz-no-cls-v2">
+/* ═══════════════════════════════════════════════════════
+   منع كل قفزات الصفحة الرئيسية
+   الأقسام، البانر، الحجز، البحث → مساحات محفوظة دائماً
+   ═══════════════════════════════════════════════════════ */
+
+/* 1. البانر — مساحة ثابتة */
+#slides {
+  min-height: clamp(150px, 42vw, 240px) !important;
+  contain: layout size !important;
+}
+
+/* 2. شريط الحجز — مساحة ثابتة + مرئي فوراً */
+.booking-row-container {
+  min-height: clamp(90px, 23vw, 115px) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: flex !important;
+}
+
+/* 3. كل عناصر الحجز مرئية */
+.booking-item {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 4. الأقسام — مساحة ثابتة (صفّان × 4) */
+#cats {
+  min-height: clamp(200px, 55vw, 300px) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: grid !important;
+}
+
+/* 5. عناصر الأقسام مرئية دائماً */
+.photo-cat-card {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 6. شريط النقاط — مساحة ثابتة */
+.loy {
+  min-height: clamp(48px, 12vw, 60px) !important;
+  display: flex !important;
+  visibility: visible !important;
+}
+
+/* 7. البحث — مساحة ثابتة */
+.ss-wrapper {
+  min-height: clamp(44px, 11vw, 56px) !important;
+}
+
+/* 8. بطاقات المنتجات — مساحة ثابتة */
+#prods, .prods {
+  min-height: 200px !important;
+}
+
+/* 9. حاويات التحميل — لا تُدفع */
+#sc-home > * {
+  contain: layout style !important;
+}
+
+/* 10. تبويبات الحجز مرئية فوراً */
+#service-tabs,
+.booking-tabs {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 62px !important;
+}
+
+.booking-tab {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -11316,6 +11538,113 @@ document.addEventListener('keydown', function(e) {
   
   rebuildRenderNotifs();
   fixProductDup();
+})();
+</script>
+<script id="chz-tabs-flicker-js">
+(function(){
+  var attempts = 0;
+  
+  function revealTabs() {
+    attempts++;
+    
+    // أظهر التبويبات فوراً عند وجود 4 تبويبات على الأقل
+    var tabs = document.querySelectorAll('#service-tabs, .booking-tabs');
+    tabs.forEach(function(el) {
+      if (!el.classList.contains('chz-ready')) {
+        var children = el.children.length;
+        if (children >= 3 || attempts > 10) {
+          el.classList.add('chz-ready');
+        }
+      }
+    });
+    
+    if (attempts < 50) {
+      setTimeout(revealTabs, 100);
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(revealTabs, 100); });
+  } else {
+    setTimeout(revealTabs, 100);
+  }
+  
+  // مراقبة إضافة تبويبات جديدة
+  var mo = new MutationObserver(function() {
+    var tabs = document.querySelectorAll('#service-tabs:not(.chz-ready), .booking-tabs:not(.chz-ready)');
+    tabs.forEach(function(el) {
+      if (el.children.length >= 3) el.classList.add('chz-ready');
+    });
+  });
+  
+  if (document.body) {
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
+  
+  console.log('[TABS FLICKER] loaded');
+})();
+</script>
+<script id="chz-tabs-guard">
+(function(){
+  // مراقب: إذا حاول أي كود إخفاء التبويبات — نُظهرها فوراً
+  function guard() {
+    var tabs = document.querySelectorAll('#tab-flight, #tab-bus, #tab-hajj, #tab-hotel');
+    tabs.forEach(function(el) {
+      if (el.style.display === 'none' || getComputedStyle(el).display === 'none') {
+        el.style.display = 'flex';
+        console.log('[TABS] re-shown:', el.id);
+      }
+    });
+  }
+  
+  setInterval(guard, 500);
+  
+  // راقب التغييرات
+  var mo = new MutationObserver(guard);
+  if (document.body) {
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+  }
+  
+  console.log('[TABS GUARD] active');
+})();
+</script>
+<script id="chz-no-cls-js">
+(function(){
+  // ضمان: إعادة إظهار الأقسام والحجز لو حاول أي كود إخفاءها
+  function ensureVisible() {
+    var selectors = [
+      '#cats', '.booking-row-container', '.booking-item',
+      '#slides', '.loy', '.ss-wrapper', '#service-tabs',
+      '.booking-tab', '.photo-cat-card'
+    ];
+    selectors.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        if (el.style.display === 'none') {
+          // لا نُظهر ما أخفاه الأدمن من الأقسام (مثلاً قسم معطل)
+          if (sel === '.booking-tab') {
+            // التبويبات — نُظهرها دائماً
+            el.style.display = '';
+          } else if (sel === '.booking-item') {
+            el.style.display = '';
+          }
+        }
+      });
+    });
+  }
+  
+  setInterval(ensureVisible, 800);
+  
+  // عرض الأقسام فوراً من HTML
+  function revealCats() {
+    var cats = document.getElementById('cats');
+    if (cats && cats.children.length === 0 && window.APP && APP.cats) {
+      // لا حاجة — CSS يضمن المساحة
+    }
+  }
+  
+  setTimeout(revealCats, 500);
+  
+  console.log('[NO CLS V2] active');
 })();
 </script>
 </body>

@@ -1,17 +1,57 @@
-client/*.bak_*
-*.bak_*
-_archive_backups/
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+*.apk
+*.aab
+
+# Logs
 *.log
 
-# One-off scripts at repo root
-/final-ci-fix.js
-/fix-all-workflows.js
-/fix-node-version.js
-/fix-workflow.js
-/new-design.js
-/rebuild-android.js
-/responsive-new-design.js
+# Backup files
+*.bak
+*.bak_*
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# One-off scripts (temporary dev)
+/patch_*.js
+/fix_*.js
+/apply_*.js
+/check_*.js
+/audit_*.js
+/deep_*.js
+/test_*.js
+/seed_*.js
+/deploy_*.js
+/verify.js
+/vcheck.js
+/rebuild-*.js
+/restore-*.js
+/enhance-*.js
+/inject-*.js
+/find-*.js
+/extract-*.js
+/cleanup_*.js
+/add_*.js
+/final-*.js
+/quick_*.js
+
 # Backup folders
 /resources-backup/
-# Temp/backup files
-*.bak
+
+# Firebase
+/.firebase/
+firebase-debug.log
+
+# Temp
+*.tmp
