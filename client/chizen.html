@@ -6104,6 +6104,225 @@ html[data-theme="light"] .booking-tab.active {
   color: #ffffff !important;
 }
 </style>
+<style id="chz-profile-fix">
+/* ═══════════════════════════════════════════════════════════════
+   إصلاح شاشة الحساب الشخصي — الوضع الفاتح
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ══════════ 1) خلفية شاشة الحساب ══════════ */
+
+html[data-theme="light"] #sc-profile {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+}
+
+html:not([data-theme="light"]) #sc-profile {
+  background: #0a0e1a !important;
+  background-color: #0a0e1a !important;
+}
+
+/* ══════════ 2) هيدر "حسابي" (الشريط العلوي) ══════════ */
+
+html[data-theme="light"] #sc-profile .sh2,
+html[data-theme="light"] #sc-profile .hd {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+html[data-theme="light"] #sc-profile .sh2 .st2,
+html[data-theme="light"] #sc-profile .hd .st2 {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ══════════ 3) بطاقة البروفايل ══════════ */
+
+/* الوضع الفاتح — بطاقة بيضاء */
+html[data-theme="light"] .pf-card,
+html[data-theme="light"] .profile-card,
+html[data-theme="light"] .prof-card,
+html[data-theme="light"] #sc-profile .cd:first-of-type,
+html[data-theme="light"] #sc-profile .rw:first-child {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+  border-radius: 16px !important;
+}
+
+/* الوضع الداكن — الحفاظ على التدرج */
+html:not([data-theme="light"]) .pf-card,
+html:not([data-theme="light"]) .profile-card,
+html:not([data-theme="light"]) .prof-card {
+  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
+  border: 1px solid #252b42 !important;
+}
+
+/* ══════════ 4) اسم المستخدم ══════════ */
+
+html[data-theme="light"] .pf-name,
+html[data-theme="light"] .profile-name,
+html[data-theme="light"] .prof-name,
+html[data-theme="light"] #sc-profile .cd:first-of-type > div:nth-child(2) {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-weight: 900 !important;
+}
+
+html:not([data-theme="light"]) .pf-name,
+html:not([data-theme="light"]) .profile-name,
+html:not([data-theme="light"]) .prof-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ══════════ 5) البريد الإلكتروني ══════════ */
+
+html[data-theme="light"] .pf-email,
+html[data-theme="light"] .profile-email,
+html[data-theme="light"] .prof-email {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+}
+
+html:not([data-theme="light"]) .pf-email,
+html:not([data-theme="light"]) .profile-email,
+html:not([data-theme="light"]) .prof-email {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+/* ══════════ 6) الإحصائيات (0 نقطة، 0 مفضلة، 0 طلبات) ══════════ */
+
+html[data-theme="light"] .pf-stat-num,
+html[data-theme="light"] .stat-num,
+html[data-theme="light"] .prof-stat-num {
+  color: #ec4899 !important;
+  -webkit-text-fill-color: #ec4899 !important;
+}
+
+html[data-theme="light"] .pf-stat-label,
+html[data-theme="light"] .stat-label,
+html[data-theme="light"] .prof-stat-label {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+}
+
+html:not([data-theme="light"]) .pf-stat-num,
+html:not([data-theme="light"]) .stat-num {
+  color: #ec4899 !important;
+  -webkit-text-fill-color: #ec4899 !important;
+}
+
+html:not([data-theme="light"]) .pf-stat-label,
+html:not([data-theme="light"]) .stat-label {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+/* الفواصل بين الإحصائيات */
+html[data-theme="light"] #sc-profile [style*="border-right"],
+html[data-theme="light"] #sc-profile [style*="border-left"] {
+  border-color: #e5e7eb !important;
+}
+
+/* ══════════ 7) قسم "نشاطي" ══════════ */
+
+html[data-theme="light"] #sc-profile .cd {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+html[data-theme="light"] #sc-profile .ctl {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-weight: 900 !important;
+}
+
+/* ══════════ 8) عناصر القائمة (عناويني، طرق الدفع، طلباتي) ══════════ */
+
+html[data-theme="light"] #sc-profile .rw {
+  background: transparent !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+}
+
+html[data-theme="light"] #sc-profile .rw .rti {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="light"] #sc-profile .rw .rs {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+}
+
+html:not([data-theme="light"]) #sc-profile .rw {
+  background: transparent !important;
+  border-bottom: 1px solid #252b42 !important;
+}
+
+html:not([data-theme="light"]) #sc-profile .rw .rti {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html:not([data-theme="light"]) #sc-profile .rw .rs {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+/* أيقونات القائمة */
+html[data-theme="light"] #sc-profile .rw .rt {
+  background: #f5f7fb !important;
+  color: #ec4899 !important;
+}
+
+html:not([data-theme="light"]) #sc-profile .rw .rt {
+  background: #131929 !important;
+}
+
+/* السهم على اليسار */
+html[data-theme="light"] #sc-profile .rw svg {
+  stroke: #9ca3af !important;
+}
+
+html:not([data-theme="light"]) #sc-profile .rw svg {
+  stroke: #6b7591 !important;
+}
+
+/* ══════════ 9) أزرار أخرى داخل شاشة الحساب ══════════ */
+
+html[data-theme="light"] #sc-profile .btn-p {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+}
+
+html:not([data-theme="light"]) #sc-profile .btn-p {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+}
+
+/* ══════════ 10) زر تعديل الصورة (الحلقة البنفسجية) ══════════ */
+
+html[data-theme="light"] #sc-profile [style*="position: absolute"] svg,
+html:not([data-theme="light"]) #sc-profile [style*="position: absolute"] svg {
+  /* لا نغيّر */
+}
+
+/* ══════════ 11) حماية: كل النصوص في البطاقة الأولى ══════════ */
+
+html[data-theme="light"] #sc-profile .cd:first-of-type *:not(svg):not(path) {
+  /* تأكد أن النصوص داكنة */
+}
+</style>
 </head>
 <body>
 <div id="app">
