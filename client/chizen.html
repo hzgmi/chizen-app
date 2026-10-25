@@ -11412,5 +11412,156 @@ document.addEventListener('keydown', function(e) {
   install();
 })();
 </script>
+<script id="chz-checkout-colors-final">
+(function(){
+  'use strict';
+  console.log('[CO-COLORS] installing...');
+  
+  function isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+  
+  // ═══ إصلاح ألوان صفحة الدفع — بدون Observer ═══
+  function fixCheckoutColors() {
+    var checkout = document.getElementById('sc-checkout');
+    if (!checkout) return;
+    
+    var light = isLight();
+    var cardBg = light ? '#ffffff' : '#1a2035';
+    var cardBorder = light ? '#e5e7eb' : '#252b42';
+    var textColor = light ? '#1a1a2e' : '#ffffff';
+    var mutedColor = light ? '#6b7280' : '#b8c0d8';
+    var inputBg = light ? '#f9fafb' : '#131929';
+    var inputBorder = light ? '#e5e7eb' : '#252b42';
+    
+    // 1) عنوان "إتمام الشراء" (.sh2)
+    var sh2 = checkout.querySelector('.sh2');
+    if (sh2) {
+      sh2.style.setProperty('background', 'transparent', 'important');
+      sh2.style.setProperty('background-color', 'transparent', 'important');
+      sh2.style.setProperty('border', 'none', 'important');
+      sh2.style.setProperty('box-shadow', 'none', 'important');
+    }
+    
+    // 2) البطاقات (.co-card)
+    checkout.querySelectorAll('.co-card').forEach(function(card) {
+      card.style.setProperty('background', cardBg, 'important');
+      card.style.setProperty('background-color', cardBg, 'important');
+      card.style.setProperty('border-color', cardBorder, 'important');
+    });
+    
+    // 3) حاوية الخطوات (#co-progress)
+    var progress = document.getElementById('co-progress');
+    if (progress) {
+      progress.style.setProperty('background', cardBg, 'important');
+      progress.style.setProperty('background-color', cardBg, 'important');
+      progress.style.setProperty('border-color', cardBorder, 'important');
+    }
+    
+    // 4) النصوص داخل البطاقات
+    checkout.querySelectorAll('.co-card div:not([style*="background"]):not([class*="circle"]), .co-card label, .co-card span:not([class*="badge"])').forEach(function(el) {
+      var currentColor = window.getComputedStyle(el).color;
+      // إذا كان النص فاتح جداً على خلفية فاتحة
+      if (light) {
+        var rgb = currentColor.match(/d+/g);
+        if (rgb && rgb.length >= 3) {
+          var r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
+          var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          if (lum > 0.7) {
+            el.style.setProperty('color', textColor, 'important');
+            el.style.setProperty('-webkit-text-fill-color', textColor, 'important');
+          }
+        }
+      }
+    });
+    
+    // 5) الحقول
+    checkout.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"]').forEach(function(inp) {
+      inp.style.setProperty('background', inputBg, 'important');
+      inp.style.setProperty('background-color', inputBg, 'important');
+      inp.style.setProperty('color', textColor, 'important');
+      inp.style.setProperty('-webkit-text-fill-color', textColor, 'important');
+      inp.style.setProperty('border-color', inputBorder, 'important');
+    });
+    
+    // 6) زر نقطة التسليم
+    var pickupBtn = document.getElementById('pickup-btn');
+    if (pickupBtn) {
+      pickupBtn.style.setProperty('background', inputBg, 'important');
+      pickupBtn.style.setProperty('color', textColor, 'important');
+      pickupBtn.style.setProperty('border-color', inputBorder, 'important');
+    }
+    
+    // 7) عنوان "طريقة الدفع" والقسم
+    var bankList = document.getElementById('bank-list');
+    if (bankList) {
+      bankList.querySelectorAll('.bank-item').forEach(function(bank) {
+        bank.style.setProperty('background', inputBg, 'important');
+        bank.style.setProperty('border-color', inputBorder, 'important');
+      });
+    }
+    
+    // 8) بطاقة رفع الإيصال
+    var receiptLabel = document.getElementById('receipt-label');
+    if (receiptLabel) {
+      receiptLabel.style.setProperty('background', inputBg, 'important');
+    }
+    
+    // 9) قيم الخطوات (1، 2، 3)
+    checkout.querySelectorAll('.co-step-circle').forEach(function(circle) {
+      // لا نغير - لها ألوانها الديناميكية
+    });
+    
+    // 10) العناوين داخل البطاقات (h3، divs بـ font-weight)
+    checkout.querySelectorAll('.co-card div[style*="font-weight:900"], .co-card div[style*="font-weight: 900"]').forEach(function(el) {
+      el.style.setProperty('color', textColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', textColor, 'important');
+    });
+  }
+  
+  // ═══ تشغيل عند فتح الدفع — بدون Observer ═══
+  function hookGoTab() {
+    if (!window.APP || !APP.goTab) { setTimeout(hookGoTab, 200); return; }
+    if (APP.__coColorsHook) return;
+    APP.__coColorsHook = true;
+    
+    var orig = APP.goTab;
+    APP.goTab = function(tab) {
+      orig.apply(this, arguments);
+      if (tab === 'checkout') {
+        setTimeout(fixCheckoutColors, 100);
+        setTimeout(fixCheckoutColors, 500);
+        setTimeout(fixCheckoutColors, 1200);
+      }
+    };
+    
+    console.log('[CO-COLORS] goTab hooked');
+  }
+  hookGoTab();
+  
+  // ═══ مراقبة تغيير الثيم — بدون Observer على body (فقط documentElement) ═══
+  var lastTheme = isLight() ? 'light' : 'dark';
+  setInterval(function() {
+    var current = isLight() ? 'light' : 'dark';
+    if (current !== lastTheme) {
+      lastTheme = current;
+      var checkout = document.getElementById('sc-checkout');
+      if (checkout && checkout.classList.contains('active')) {
+        fixCheckoutColors();
+      }
+    }
+  }, 500); // 500ms خفيف - فقط يفحص الثيم
+  
+  // تشغيل أولي إذا كانت الصفحة مفتوحة
+  setTimeout(function() {
+    var checkout = document.getElementById('sc-checkout');
+    if (checkout && checkout.classList.contains('active')) {
+      fixCheckoutColors();
+    }
+  }, 1000);
+  
+  console.log('[CO-COLORS] ready');
+})();
+</script>
 </body>
 </html>
