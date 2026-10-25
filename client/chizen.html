@@ -5750,6 +5750,181 @@ html[data-theme="light"] #sc-checkout .sh2 .st2 {
   color: #1a1a2e !important;
 }
 </style>
+<style id="chz-pickup-fix">
+/* ═══════════════════════════════════════════════════════════════
+   إصلاح صندوق نقطة التسليم + Modal المواقع
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ────────── 1) صندوق pickup-val في صفحة الدفع ────────── */
+
+html:not([data-theme="light"]) #pickup-val,
+html:not([data-theme="light"]) #pickup-val[style] {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #pickup-val,
+html[data-theme="light"] #pickup-val[style] {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* النص الداخلي في pickup-val */
+html:not([data-theme="light"]) #pickup-val * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #pickup-val * {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* السهم في pickup-val */
+html:not([data-theme="light"]) #pickup-val svg {
+  stroke: #ffffff !important;
+}
+
+html[data-theme="light"] #pickup-val svg {
+  stroke: #6b7280 !important;
+}
+
+/* ────────── 2) Modal اختيار نقطة التسليم ────────── */
+
+/* خلفية الـ Modal */
+html:not([data-theme="light"]) [id*="pickup"][id*="modal"],
+html:not([data-theme="light"]) .pickup-modal,
+html:not([data-theme="light"]) #pickup-modal,
+html:not([data-theme="light"]) .modal-pickup {
+  background: #0a0e1a !important;
+}
+
+/* عنوان "أين تريد استلام طلبك؟" */
+html:not([data-theme="light"]) [id*="pickup"] h2,
+html:not([data-theme="light"]) [id*="pickup"] h3,
+html:not([data-theme="light"]) .pickup-modal h2,
+html:not([data-theme="light"]) .pickup-modal h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ────────── 3) بطاقات المواقع (التي تظهر بيضاء) ────────── */
+
+html:not([data-theme="light"]) [class*="area-card"],
+html:not([data-theme="light"]) [class*="district"],
+html:not([data-theme="light"]) [class*="location-card"],
+html:not([data-theme="light"]) [class*="pickup-card"],
+html:not([data-theme="light"]) [class*="pickup-area"],
+html:not([data-theme="light"]) .modal [style*="background: #fff"],
+html:not([data-theme="light"]) .modal [style*="background:#fff"],
+html:not([data-theme="light"]) .modal [style*="background: white"],
+html:not([data-theme="light"]) .modal [style*="background:white"] {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html:not([data-theme="light"]) [class*="area-card"] *,
+html:not([data-theme="light"]) [class*="district"] *,
+html:not([data-theme="light"]) [class*="location-card"] *,
+html:not([data-theme="light"]) [class*="pickup-card"] *,
+html:not([data-theme="light"]) [class*="pickup-area"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ────────── 4) في الوضع الفاتح — نفس البطاقات ────────── */
+
+html[data-theme="light"] [class*="area-card"],
+html[data-theme="light"] [class*="district"],
+html[data-theme="light"] [class*="location-card"],
+html[data-theme="light"] [class*="pickup-card"],
+html[data-theme="light"] [class*="pickup-area"] {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+html[data-theme="light"] [class*="area-card"] *,
+html[data-theme="light"] [class*="district"] *,
+html[data-theme="light"] [class*="location-card"] *,
+html[data-theme="light"] [class*="pickup-card"] *,
+html[data-theme="light"] [class*="pickup-area"] * {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ────────── 5) تبويبات "داخل عدن" / "خارج عدن" ────────── */
+
+html:not([data-theme="light"]) [id*="pickup"] button:not(.active),
+html:not([data-theme="light"]) .pickup-tab:not(.active) {
+  background: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+html:not([data-theme="light"]) [id*="pickup"] button.active,
+html:not([data-theme="light"]) .pickup-tab.active {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ────────── 6) النصوص داخل الـ Modal ────────── */
+
+html:not([data-theme="light"]) [id*="pickup"] .modal-title,
+html:not([data-theme="light"]) .modal [id*="pickup"] h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ────────── 7) خلفية الـ Modal overlay ────────── */
+html:not([data-theme="light"]) .modal {
+  background: rgba(0,0,0,0.85) !important;
+}
+
+html[data-theme="light"] .modal {
+  background: rgba(0,0,0,0.5) !important;
+}
+
+/* ────────── 8) أي عنصر بيضاء عام في الـ Modal ────────── */
+html:not([data-theme="light"]) .modal > div,
+html:not([data-theme="light"]) .modal-content,
+html:not([data-theme="light"]) .modal-inner {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+}
+
+/* ────────── 9) حماية: النصوص داخل الـ Modal ────────── */
+html:not([data-theme="light"]) .modal *:not(svg):not(path):not(circle):not(line) {
+  /* لا نغيّر كل شيء — فقط الذي لا لون له */
+}
+
+/* ────────── 10) أزرار الحفظ/الإلغاء في الـ Modal ────────── */
+html:not([data-theme="light"]) .modal button:not(.active):not(.btn-p) {
+  background: #131929 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid #252b42 !important;
+}
+
+html:not([data-theme="light"]) .modal button.btn-p {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -10180,5 +10355,100 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 
+<script id="chz-pickup-js">
+(function(){
+  // إجبار أنماط نقطة التسليم بـ inline styles (لا يُتجاوز)
+  function forcePickupStyles() {
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    
+    // 1) صندوق pickup-val
+    var pickup = document.getElementById('pickup-val');
+    if (pickup) {
+      pickup.style.setProperty('background', isLight ? '#f5f7fb' : '#131929', 'important');
+      pickup.style.setProperty('background-color', isLight ? '#f5f7fb' : '#131929', 'important');
+      pickup.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
+      pickup.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+      pickup.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+    }
+    
+    // 2) بطاقات المواقع داخل الـ Modal
+    var modal = document.querySelector('.modal:not([style*="display: none"])') || 
+                document.querySelector('.modal[style*="display: flex"]') ||
+                document.querySelector('.modal[style*="display:flex"]');
+    
+    if (modal) {
+      // كل الأبناء المباشرين
+      var allDivs = modal.querySelectorAll('div');
+      allDivs.forEach(function(div) {
+        // نتحقق: هل هذا div يحتمل أن يكون بطاقة موقع؟
+        var hasIcon = div.textContent.includes('🕌') || 
+                      div.querySelector('.icon') ||
+                      div.textContent.trim().length > 0;
+        
+        // البطاقات عادةً بين 80-150px عرض، خلفيتها بيضاء
+        var rect = div.getBoundingClientRect();
+        if (rect.width > 80 && rect.width < 400 && rect.height > 60 && rect.height < 200) {
+          var hasWhiteBg = false;
+          try {
+            var bg = window.getComputedStyle(div).backgroundColor;
+            hasWhiteBg = bg === 'rgb(255, 255, 255)' || bg === 'white';
+          } catch(e) {}
+          
+          if (hasWhiteBg) {
+            div.style.setProperty('background', isLight ? '#ffffff' : '#1a2035', 'important');
+            div.style.setProperty('background-color', isLight ? '#ffffff' : '#1a2035', 'important');
+            div.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
+            div.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+            div.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+            
+            // كل الأطفال
+            div.querySelectorAll('*').forEach(function(child) {
+              child.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+              child.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+            });
+          }
+        }
+      });
+      
+      // 3) تبويبات داخل الـ Modal
+      var buttons = modal.querySelectorAll('button');
+      buttons.forEach(function(btn) {
+        var isActive = btn.classList.contains('active') || 
+                       btn.style.background.includes('linear') ||
+                       btn.style.background.includes('gradient');
+        if (isActive) {
+          btn.style.setProperty('background', 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)', 'important');
+          btn.style.setProperty('color', '#ffffff', 'important');
+          btn.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+          btn.style.setProperty('border', 'none', 'important');
+        } else {
+          btn.style.setProperty('background', isLight ? '#f5f7fb' : '#1a2035', 'important');
+          btn.style.setProperty('color', isLight ? '#1a1a2e' : '#b8c0d8', 'important');
+          btn.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#b8c0d8', 'important');
+          btn.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
+        }
+      });
+    }
+  }
+  
+  // تشغيل عند تحميل الصفحة
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ 
+      setTimeout(forcePickupStyles, 500);
+      setInterval(forcePickupStyles, 1500);
+    });
+  } else {
+    setTimeout(forcePickupStyles, 500);
+    setInterval(forcePickupStyles, 1500);
+  }
+  
+  // مراقبة فتح الـ Modal
+  new MutationObserver(function() {
+    setTimeout(forcePickupStyles, 100);
+  }).observe(document.body, { childList: true, subtree: true });
+  
+  console.log('[PICKUP-FIX] active');
+})();
+</script>
 </body>
 </html>
