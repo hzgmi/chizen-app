@@ -11395,12 +11395,37 @@ document.addEventListener('keydown', function(e) {
   console.log('[CHECKOUT-REBUILD] active');
 })();
 </script>
-<script id="chz-banks-show">
+
+<script id="chz-banks-logos">
 (function(){
   'use strict';
-  console.log('[BANKS-SHOW] starting...');
+  console.log('[BANKS-LOGOS] starting...');
   
-  // ═══ نسخ إلى الحافظة ═══
+  // ═══ خريطة شعارات البنوك ═══
+  var BANK_LOGOS = {
+    'kuraimi': [
+      'https://logo.clearbit.com/alkuraimibank.com',
+      'https://logo.clearbit.com/kuraimibank.com',
+      'https://www.google.com/s2/favicons?domain=alkuraimibank.com&sz=128',
+      'https://www.google.com/s2/favicons?domain=kuraimibank.com&sz=128'
+    ],
+    'qutaibi': [
+      'https://logo.clearbit.com/qutaibibank.com',
+      'https://logo.clearbit.com/alqutaibibank.com',
+      'https://www.google.com/s2/favicons?domain=qutaibibank.com&sz=128',
+      'https://www.google.com/s2/favicons?domain=alqutaibibank.com&sz=128'
+    ]
+  };
+  
+  function getBankKey(bank) {
+    var name = (bank.name || '').toLowerCase();
+    var id = (bank.id || '').toLowerCase();
+    if (id.indexOf('kuraimi') > -1 || id.indexOf('kurami') > -1 || name.indexOf('كريمي') > -1) return 'kuraimi';
+    if (id.indexOf('qutaibi') > -1 || name.indexOf('قطيبي') > -1) return 'qutaibi';
+    return null;
+  }
+  
+  // ═══ نسخ للحافظة ═══
   window.copyToClipboard = function(text, btn) {
     function success() {
       if (btn) {
@@ -11420,37 +11445,25 @@ document.addEventListener('keydown', function(e) {
         window.chzAlert('✅ تم النسخ', 'رقم الحساب: ' + text + '\n\nالآن يمكنك التحويل من تطبيق بنكك.');
       }
     }
-    
     function fallback() {
       var ta = document.createElement('textarea');
       ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
+      ta.style.cssText = 'position:fixed;opacity:0;';
       document.body.appendChild(ta);
       ta.select();
-      try {
-        document.execCommand('copy');
-        success();
-      } catch(e) {
-        alert('رقم الحساب: ' + text);
-      }
+      try { document.execCommand('copy'); success(); } catch(e) { alert('رقم الحساب: ' + text); }
       document.body.removeChild(ta);
     }
-    
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(success).catch(fallback);
-    } else {
-      fallback();
-    }
+    } else { fallback(); }
   };
   
   // ═══ Modal عرض البنك ═══
-  window.showBankDetails = function(bankId, bankName, bankAccount, bankColor, bankIcon) {
-    // احذف أي modal قديم
+  window.showBankDetails = function(bankId, bankName, bankAccount, bankColor, bankIcon, logoUrls) {
     var old = document.getElementById('bank-modal');
     if (old) old.remove();
     
-    // overlay
     var overlay = document.createElement('div');
     overlay.id = 'bank-modal';
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);';
@@ -11462,6 +11475,9 @@ document.addEventListener('keydown', function(e) {
     var textColor = isLight ? '#1a1a2e' : '#ffffff';
     var mutedColor = isLight ? '#6b7280' : '#b8c0d8';
     var borderColor = isLight ? '#e5e7eb' : '#252b42';
+    
+    var hasAccount = bankAccount && bankAccount.trim().length > 0;
+    var accountDisplay = hasAccount ? bankAccount : 'لم يُضف بعد';
     
     overlay.innerHTML = 
       '<div style="background:' + bgCard + ';border:1px solid ' + borderColor + ';border-radius:24px;padding:24px;max-width:420px;width:100%;direction:rtl;font-family:Tajawal,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.4);">' +
@@ -11475,22 +11491,26 @@ document.addEventListener('keydown', function(e) {
         // Bank Card
         '<div style="background:linear-gradient(135deg,' + bankColor + 'CC,' + bankColor + '88);border-radius:20px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">' +
           '<div style="position:absolute;top:-20px;left:-20px;width:120px;height:120px;background:rgba(255,255,255,0.1);border-radius:50%;"></div>' +
-          '<div style="position:absolute;bottom:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,0.08);border-radius:50%;"></div>' +
           '<div style="position:relative;z-index:1;">' +
-            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">' +
-              '<div style="font-size:32px;">' + bankIcon + '</div>' +
-              '<div style="color:#fff;font-weight:900;font-size:16px;">' + bankName + '</div>' +
+            '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">' +
+              '<div class="bank-logo-container" data-logo-urls=\'' + (logoUrls || '[]') + '\' data-color="' + bankColor + '" data-icon="' + bankIcon + '" style="width:48px;height:48px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,0.2);">' +
+                '<span style="font-size:24px;">' + bankIcon + '</span>' +
+              '</div>' +
+              '<div style="color:#fff;font-weight:900;font-size:16px;text-shadow:0 2px 4px rgba(0,0,0,0.3);">' + bankName + '</div>' +
             '</div>' +
             '<div style="color:rgba(255,255,255,0.85);font-size:11px;font-weight:700;margin-bottom:6px;">رقم الحساب</div>' +
-            '<div style="color:#fff;font-size:22px;font-weight:900;letter-spacing:2px;direction:ltr;text-align:right;font-family:monospace;text-shadow:0 2px 8px rgba(0,0,0,0.3);">' + bankAccount + '</div>' +
+            '<div style="color:' + (hasAccount ? '#fff' : '#ffd700') + ';font-size:22px;font-weight:900;letter-spacing:2px;direction:ltr;text-align:right;font-family:monospace;text-shadow:0 2px 8px rgba(0,0,0,0.3);">' + accountDisplay + '</div>' +
           '</div>' +
         '</div>' +
         
-        // Copy Button
-        '<button id="bank-copy-btn" style="width:100%;padding:14px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-weight:900;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;box-shadow:0 6px 20px rgba(236,72,153,0.35);" onclick="window.copyToClipboard(\'' + bankAccount + '\', this)">' +
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
-          ' نسخ رقم الحساب' +
-        '</button>' +
+        // Copy Button (only if has account)
+        (hasAccount ? 
+          '<button id="bank-copy-btn" style="width:100%;padding:14px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-weight:900;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;box-shadow:0 6px 20px rgba(236,72,153,0.35);" onclick="window.copyToClipboard(\'' + bankAccount + '\', this)">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+            ' نسخ رقم الحساب' +
+          '</button>' :
+          '<div style="padding:14px;margin-bottom:16px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:14px;text-align:center;color:#f59e0b;font-size:13px;font-weight:800;">⏳ رقم الحساب قيد الإضافة</div>'
+        ) +
         
         // Instructions
         '<div style="background:' + bgInput + ';border:1px solid ' + borderColor + ';border-radius:14px;padding:14px;">' +
@@ -11499,7 +11519,7 @@ document.addEventListener('keydown', function(e) {
           '</div>' +
           '<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">' +
             '<div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>' +
-            '<div style="font-size:12px;color:' + mutedColor + ';line-height:1.5;">انسخ رقم الحساب أعلاه</div>' +
+            '<div style="font-size:12px;color:' + mutedColor + ';line-height:1.5;">' + (hasAccount ? 'انسخ رقم الحساب أعلاه' : 'انتظر إضافة رقم الحساب') + '</div>' +
           '</div>' +
           '<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">' +
             '<div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>' +
@@ -11511,21 +11531,98 @@ document.addEventListener('keydown', function(e) {
           '</div>' +
         '</div>' +
         
-        // Info note
-        '<div style="margin-top:12px;padding:10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;font-size:11px;color:#10b981;text-align:center;font-weight:700;">' +
-          '✓ سيتم مراجعة الدفع وتأكيد طلبك بأسرع وقت' +
-        '</div>' +
-        
       '</div>';
     
     document.body.appendChild(overlay);
+    
+    // تحميل الشعار داخل الـ modal
+    var logoContainer = overlay.querySelector('.bank-logo-container');
+    if (logoContainer) {
+      var urls = [];
+      try { urls = JSON.parse(logoContainer.getAttribute('data-logo-urls') || '[]'); } catch(e) {}
+      if (urls.length > 0) {
+        var img = document.createElement('img');
+        img.style.cssText = 'width:100%;height:100%;object-fit:contain;padding:6px;background:#fff;';
+        var idx = 0;
+        img.onerror = function() {
+          idx++;
+          if (idx >= urls.length) {
+            img.remove();
+            logoContainer.innerHTML = '<span style="font-size:24px;">' + bankIcon + '</span>';
+            logoContainer.style.background = bankColor;
+          } else {
+            img.src = urls[idx];
+          }
+        };
+        img.onload = function() { logoContainer.style.background = '#fff'; };
+        img.src = urls[0];
+        logoContainer.innerHTML = '';
+        logoContainer.appendChild(img);
+      }
+    }
   };
   
-  // ═══ تجاوز renderBanks — عرض الأرقام ═══
+  // ═══ بناء شعار البنك (مع fallback) ═══
+  function buildBankLogo(bank, size, color) {
+    var key = getBankKey(bank);
+    var urls = key ? (BANK_LOGOS[key] || []) : [];
+    
+    var wrapStyle = 'width:' + size + 'px;height:' + size + 'px;border-radius:14px;' +
+      'background:' + (urls.length > 0 ? '#ffffff' : color) + ';' +
+      'display:flex;align-items:center;justify-content:center;' +
+      'font-size:' + Math.floor(size * 0.5) + 'px;flex-shrink:0;' +
+      'box-shadow:0 4px 12px ' + color + '55;overflow:hidden;' +
+      (urls.length > 0 ? 'border:2px solid ' + color + ';' : '');
+    
+    var urlsJson = JSON.stringify(urls).replace(/'/g, "\\'");
+    
+    return '<div class="bank-logo-wrap" data-logo-urls=\'' + urlsJson + '\' data-color="' + color + '" data-icon="' + (bank.icon || '🏦') + '" style="' + wrapStyle + '">' +
+      '<span>' + (bank.icon || '🏦') + '</span>' +
+    '</div>';
+  }
+  
+  // ═══ تحميل الشعارات بعد الرسم ═══
+  function loadLogos() {
+    document.querySelectorAll('.bank-logo-wrap').forEach(function(wrap) {
+      if (wrap.__logoLoaded) return;
+      wrap.__logoLoaded = true;
+      
+      var urls = [];
+      try { urls = JSON.parse(wrap.getAttribute('data-logo-urls') || '[]'); } catch(e) {}
+      if (urls.length === 0) return;
+      
+      var color = wrap.getAttribute('data-color') || '#666';
+      var icon = wrap.getAttribute('data-icon') || '🏦';
+      
+      var img = document.createElement('img');
+      img.style.cssText = 'width:100%;height:100%;object-fit:contain;padding:5px;background:#fff;';
+      
+      var idx = 0;
+      img.onerror = function() {
+        idx++;
+        if (idx >= urls.length) {
+          img.remove();
+          wrap.style.background = color;
+          wrap.style.border = 'none';
+          wrap.innerHTML = '<span>' + icon + '</span>';
+        } else {
+          img.src = urls[idx];
+        }
+      };
+      img.onload = function() {
+        wrap.style.background = '#fff';
+      };
+      img.src = urls[0];
+      wrap.innerHTML = '';
+      wrap.appendChild(img);
+    });
+  }
+  
+  // ═══ تجاوز renderBanks ═══
   function install() {
     if (!window.APP) { setTimeout(install, 200); return; }
-    if (APP.__banksShow) return;
-    APP.__banksShow = true;
+    if (APP.__banksLogos) return;
+    APP.__banksLogos = true;
     
     APP.renderBanks = function() {
       var c = document.getElementById('bank-list');
@@ -11538,27 +11635,30 @@ document.addEventListener('keydown', function(e) {
         return;
       }
       
-      var colors = ['#0d47a1', '#10b981', '#a855f7', '#f59e0b', '#ec4899', '#ef4444'];
-      var icons = ['🏦', '💳', '🏛️', '💰', '💵', '🏪'];
-      
       var html = banks.map(function(b, i) {
-        var color = b.color || colors[i % colors.length];
-        var icon = b.icon || icons[i % icons.length];
+        var color = b.color || '#0d47a1';
+        var icon = b.icon || '🏦';
         var name = (b.name || 'طريقة الدفع').replace(/'/g, "\\'");
-        var account = (b.account || 'غير محدد').replace(/'/g, "\\'");
+        var account = (b.account || '').replace(/'/g, "\\'");
+        var key = getBankKey(b);
+        var urls = key ? (BANK_LOGOS[key] || []) : [];
+        var urlsJson = JSON.stringify(urls).replace(/'/g, "\\'");
+        var hasAccount = account.trim().length > 0;
+        var accountDisplay = hasAccount ? account : 'لم يُضف بعد';
+        var accountColor = hasAccount ? 'var(--mt)' : '#f59e0b';
         
-        return '<div class="bank-item" onclick="window.showBankDetails(\'' + (b.id || i) + '\',\'' + name + '\',\'' + account + '\',\'' + color + '\',\'' + icon + '\')" style="' +
+        return '<div class="bank-item" onclick="window.showBankDetails(\'' + (b.id || i) + '\',\'' + name + '\',\'' + account + '\',\'' + color + '\',\'' + icon + '\',\'' + urlsJson + '\')" style="' +
           'display:flex;align-items:center;gap:14px;padding:14px 16px;' +
           'background:var(--bg2);border:2px solid var(--bd);border-radius:14px;' +
           'cursor:pointer;transition:all 0.2s;' +
         '" onmouseover="this.style.borderColor=\'#ec4899\';this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 6px 20px rgba(236,72,153,0.2)\';" onmouseout="this.style.borderColor=\'\';this.style.transform=\'\';this.style.boxShadow=\'\';">' +
-          '<div style="width:48px;height:48px;border-radius:14px;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px ' + color + '55;">' + icon + '</div>' +
+          buildBankLogo(b, 48, color) +
           '<div style="flex:1;min-width:0;">' +
             '<div style="font-weight:900;font-size:14px;color:var(--cr);margin-bottom:3px;">' + (b.name || 'طريقة الدفع') + '</div>' +
-            '<div style="font-size:12px;color:var(--mt);direction:ltr;text-align:right;font-family:monospace;letter-spacing:0.5px;">' + (b.account || 'غير محدد') + '</div>' +
+            '<div style="font-size:12px;color:' + accountColor + ';direction:ltr;text-align:right;font-family:monospace;letter-spacing:0.5px;">' + accountDisplay + '</div>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">' +
-            '<span style="font-size:9px;background:rgba(16,185,129,0.15);color:#10b981;padding:3px 8px;border-radius:6px;font-weight:800;">متاح</span>' +
+            '<span style="font-size:9px;background:' + (hasAccount ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)') + ';color:' + (hasAccount ? '#10b981' : '#f59e0b') + ';padding:3px 8px;border-radius:6px;font-weight:800;">' + (hasAccount ? 'متاح' : 'قريباً') + '</span>' +
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--mt);"><path d="m9 18 6-6-6-6"/></svg>' +
           '</div>' +
         '</div>';
@@ -11574,13 +11674,35 @@ document.addEventListener('keydown', function(e) {
       
       c.innerHTML = html;
       
-      // ═══ ضبط selectedBank تلقائياً ═══
+      // تحميل الشعارات
+      setTimeout(loadLogos, 50);
+      
+      // ضبط selectedBank
       if (!this.selectedBank) {
         this.selectedBank = banks[0].id || 'manual';
       }
     };
     
-    console.log('[BANKS-SHOW] installed');
+    // استدعاء عند فتح الدفع
+    if (APP.goTab) {
+      var origGoTab = APP.goTab;
+      APP.goTab = function(tab) {
+        origGoTab.apply(this, arguments);
+        if (tab === 'checkout') {
+          setTimeout(function() {
+            if (APP.renderBanks) APP.renderBanks();
+          }, 200);
+        }
+      };
+    }
+    
+    // عند تغيير الثيم
+    new MutationObserver(function() {
+      var c = document.getElementById('bank-list');
+      if (c && c.querySelector('.bank-item') && APP.banks) APP.renderBanks();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    
+    console.log('[BANKS-LOGOS] installed');
   }
   
   install();
