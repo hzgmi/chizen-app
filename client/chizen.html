@@ -11115,5 +11115,246 @@ document.addEventListener('keydown', function(e) {
   console.log('[GLOBAL-LIGHT] active');
 })();
 </script>
+<script id="chz-profile-real">
+(function(){
+  var CSS = `
+    /* ═══════════════════════════════════════════════════════════════
+       PROFILE REAL FIX — يستهدف .profile-hero, .sg, .sgt, .sit
+       ═══════════════════════════════════════════════════════════════ */
+    
+    /* ────── .profile-hero (بطاقة المستخدم) ────── */
+    
+    html[data-theme="light"] .profile-hero {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    }
+    
+    html:not([data-theme="light"]) .profile-hero {
+      background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
+      background-image: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
+      border: 1px solid #252b42 !important;
+    }
+    
+    /* ────── .profile-name (الاسم) ────── */
+    html[data-theme="light"] .profile-name {
+      color: #1a1a2e !important;
+      -webkit-text-fill-color: #1a1a2e !important;
+    }
+    html:not([data-theme="light"]) .profile-name {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+    }
+    
+    /* ────── .profile-email ────── */
+    html[data-theme="light"] .profile-email {
+      color: #6b7280 !important;
+      -webkit-text-fill-color: #6b7280 !important;
+    }
+    html:not([data-theme="light"]) .profile-email {
+      color: #b8c0d8 !important;
+      -webkit-text-fill-color: #b8c0d8 !important;
+    }
+    
+    /* ────── .pstat-num, .pstat-lbl ────── */
+    html[data-theme="light"] .pstat-num {
+      color: #ec4899 !important;
+      -webkit-text-fill-color: #ec4899 !important;
+    }
+    html:not([data-theme="light"]) .pstat-num {
+      color: #ff4d94 !important;
+      -webkit-text-fill-color: #ff4d94 !important;
+    }
+    html[data-theme="light"] .pstat-lbl {
+      color: #6b7280 !important;
+      -webkit-text-fill-color: #6b7280 !important;
+    }
+    html:not([data-theme="light"]) .pstat-lbl {
+      color: #b8c0d8 !important;
+      -webkit-text-fill-color: #b8c0d8 !important;
+    }
+    
+    /* ────── .pstat-divider (الفاصل) ────── */
+    html[data-theme="light"] .pstat-divider {
+      background: #e5e7eb !important;
+    }
+    html:not([data-theme="light"]) .pstat-divider {
+      background: #252b42 !important;
+    }
+    
+    /* ────── .sg (مجموعة القسم) — المشكلة الرئيسية ────── */
+    html[data-theme="light"] .sg {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 16px !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+      margin: 12px 16px !important;
+      overflow: hidden !important;
+    }
+    
+    html:not([data-theme="light"]) .sg {
+      background: #1a2035 !important;
+      background-color: #1a2035 !important;
+      background-image: none !important;
+      border: 1px solid #252b42 !important;
+      border-radius: 16px !important;
+      margin: 12px 16px !important;
+      overflow: hidden !important;
+    }
+    
+    /* ────── .sgt (عنوان القسم - "نشاطي" / "الإعدادات") ────── */
+    html[data-theme="light"] .sgt {
+      background: transparent !important;
+      background-image: none !important;
+      color: #ec4899 !important;
+      -webkit-text-fill-color: #ec4899 !important;
+      padding: 12px 16px !important;
+      border-bottom: 1px solid #f3f4f6 !important;
+    }
+    
+    html:not([data-theme="light"]) .sgt {
+      background: transparent !important;
+      background-image: none !important;
+      color: #ff4d94 !important;
+      -webkit-text-fill-color: #ff4d94 !important;
+      padding: 12px 16px !important;
+      border-bottom: 1px solid #252b42 !important;
+    }
+    
+    /* ────── .sit (عنصر القائمة) ────── */
+    html[data-theme="light"] .sit {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      border-bottom: 1px solid #f3f4f6 !important;
+    }
+    
+    html:not([data-theme="light"]) .sit {
+      background: transparent !important;
+      background-image: none !important;
+      border-bottom: 1px solid #252b42 !important;
+    }
+    
+    /* ────── .sit-ti (نص عنصر القائمة) ────── */
+    html[data-theme="light"] .sit-ti {
+      color: #1a1a2e !important;
+      -webkit-text-fill-color: #1a1a2e !important;
+      font-weight: 700 !important;
+    }
+    
+    html:not([data-theme="light"]) .sit-ti {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      font-weight: 700 !important;
+    }
+    
+    /* ────── .sit-d (وصف صغير) ────── */
+    html[data-theme="light"] .sit-d {
+      color: #6b7280 !important;
+      -webkit-text-fill-color: #6b7280 !important;
+    }
+    
+    html:not([data-theme="light"]) .sit-d {
+      color: #b8c0d8 !important;
+      -webkit-text-fill-color: #b8c0d8 !important;
+    }
+    
+    /* ────── .mi-a (السهم) ────── */
+    html[data-theme="light"] .mi-a {
+      color: #9ca3af !important;
+    }
+    
+    html:not([data-theme="light"]) .mi-a {
+      color: #6b7591 !important;
+    }
+    
+    /* ────── .sii (أيقونة القائمة) — الإبقاء على ألوانها ────── */
+    /* لا نغيّر .sii لأن لكل أيقونة لوناً خاصاً (أزرق/وردي/أصفر/بنفسجي/أخضر/أحمر) */
+  `;
+  
+  function inject() {
+    var existing = document.getElementById('chz-profile-real-css');
+    if (existing) existing.remove();
+    var style = document.createElement('style');
+    style.id = 'chz-profile-real-css';
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+  
+  function forceInline() {
+    if (document.documentElement.getAttribute('data-theme') !== 'light') return;
+    
+    // .profile-hero
+    var hero = document.querySelector('.profile-hero');
+    if (hero) {
+      hero.style.setProperty('background', '#ffffff', 'important');
+      hero.style.setProperty('background-color', '#ffffff', 'important');
+      hero.style.setProperty('background-image', 'none', 'important');
+    }
+    
+    // .sg (كل مجموعة)
+    document.querySelectorAll('.sg').forEach(function(sg) {
+      sg.style.setProperty('background', '#ffffff', 'important');
+      sg.style.setProperty('background-color', '#ffffff', 'important');
+      sg.style.setProperty('background-image', 'none', 'important');
+      sg.style.setProperty('border', '1px solid #e5e7eb', 'important');
+    });
+    
+    // .sgt
+    document.querySelectorAll('.sgt').forEach(function(sgt) {
+      sgt.style.setProperty('background', 'transparent', 'important');
+      sgt.style.setProperty('background-image', 'none', 'important');
+    });
+    
+    // .sit
+    document.querySelectorAll('.sit').forEach(function(sit) {
+      sit.style.setProperty('background', 'transparent', 'important');
+      sit.style.setProperty('background-color', 'transparent', 'important');
+      sit.style.setProperty('background-image', 'none', 'important');
+    });
+    
+    // النصوص
+    document.querySelectorAll('.profile-name, .sit-ti').forEach(function(el) {
+      el.style.setProperty('color', '#1a1a2e', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#1a1a2e', 'important');
+    });
+    
+    document.querySelectorAll('.profile-email, .sit-d, .pstat-lbl').forEach(function(el) {
+      el.style.setProperty('color', '#6b7280', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#6b7280', 'important');
+    });
+    
+    document.querySelectorAll('.pstat-num').forEach(function(el) {
+      el.style.setProperty('color', '#ec4899', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#ec4899', 'important');
+    });
+  }
+  
+  function run() {
+    inject();
+    forceInline();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  
+  setInterval(run, 800);
+  
+  new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(forceInline, 100); }).observe(document.body, { childList: true, subtree: true });
+  }
+  
+  console.log('[PROFILE-REAL] active');
+})();
+</script>
 </body>
 </html>
