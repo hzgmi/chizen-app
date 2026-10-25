@@ -10945,17 +10945,24 @@ document.addEventListener('keydown', function(e) {
   console.log('[POINTS-NUCLEAR] active');
 })();
 </script>
-<script id="chz-fav-real">
+
+<script id="chz-fav-dual">
 (function(){
   'use strict';
-  console.log('[FAV-REAL] installing...');
+  console.log('[FAV-DUAL] installing...');
+  
+  function esc(x) {
+    return String(x == null ? '' : x).replace(/[&<>"']/g, function(c) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
   
   function install() {
-    if (!window.APP) { setTimeout(install, 200); return; }
-    if (APP.__favReal) return;
-    APP.__favReal = true;
+    if (!window.APP) { setTimeout(install, 150); return; }
+    if (APP.__favDual) return;
+    APP.__favDual = true;
     
-    // ═══ 1) togFav — يستدعي renderFav بعد الإضافة ═══
+    // ═══ togFav — يحدّث كلتا الشبكتين ═══
     APP.togFav = function(id, el) {
       var idx = this.favorites.indexOf(id);
       if (idx > -1) {
@@ -10965,56 +10972,48 @@ document.addEventListener('keydown', function(e) {
         this.favorites.push(id);
         if (el) el.classList.add('active');
       }
-      
-      try {
-        localStorage.setItem('chizen_favorites', JSON.stringify(this.favorites));
-      } catch(e) {}
-      
-      // ⭐ التحديث المفقود
-      if (this.renderFav) this.renderFav();
-      
-      // تحديث عدّاد المفضلة (إن وجد)
-      var badge = document.getElementById('fav-count');
-      if (badge) badge.textContent = this.favorites.length;
-      
-      console.log('[FAV] toggled:', id, '| total:', this.favorites.length);
+      try { localStorage.setItem('chizen_favorites', JSON.stringify(this.favorites)); } catch(e) {}
+      this.renderFav();
+      console.log('[FAV] total:', this.favorites.length);
     };
     
-    // ═══ 2) renderFav — بناء مباشر في #fav-list (بدون #prods) ═══
+    // ═══ renderFav — يكتب في #fav-list و #wishlist-grid ═══
     APP.renderFav = function() {
-      var c = document.getElementById('fav-list');
-      if (!c) return;
-      
-      var self = this;
+      var favList = document.getElementById('fav-list');
+      var wishGrid = document.getElementById('wishlist-grid');
       
       // حالة فارغة
       if (!this.favorites.length) {
-        c.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">' +
+        var emptyHtml = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">' +
           '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
           '<div style="font-weight:800;font-size:15px;color:#888;margin-bottom:8px;">لا توجد منتجات في المفضلة</div>' +
           '<div style="font-size:12px;color:#666;">اضغط ❤️ على أي منتج لإضافته</div>' +
         '</div>';
+        if (favList) favList.innerHTML = emptyHtml;
+        if (wishGrid) wishGrid.innerHTML = emptyHtml;
         return;
       }
       
       // جمع المنتجات
       var list = [];
+      var self = this;
       this.favorites.forEach(function(id) {
-        var p = APP.getProduct(id);
+        var p = self.getProduct(id);
         if (p) list.push(p);
       });
       
       if (!list.length) {
-        c.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#888;">' +
+        var noProducts = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#888;">' +
           '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
           '<div>المنتجات المحفوظة لم تعد متوفرة</div>' +
         '</div>';
+        if (favList) favList.innerHTML = noProducts;
+        if (wishGrid) wishGrid.innerHTML = noProducts;
         return;
       }
       
-      // بناء HTML مباشرة — بدون الاعتماد على #prods
-      c.innerHTML = list.map(function(p) {
-        var fav = true; // دائماً في المفضلة داخل هذا السياق
+      // بناء HTML
+      var html = list.map(function(p) {
         return '<div class="prod" onclick="APP.openProduct(\'' + esc(p.id) + '\')">' +
           '<div class="prod-f active" onclick="event.stopPropagation();APP.togFav(\'' + esc(p.id) + '\',this)">' +
             '<svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>' +
@@ -11031,21 +11030,30 @@ document.addEventListener('keydown', function(e) {
         '</div>';
       }).join('');
       
-      console.log('[FAV] rendered:', list.length, 'products');
+      // اكتب في كلتا الشبكتين
+      if (favList) {
+        favList.innerHTML = html;
+        console.log('[FAV] rendered in #fav-list:', list.length);
+      }
+      if (wishGrid) {
+        wishGrid.innerHTML = html;
+        console.log('[FAV] rendered in #wishlist-grid:', list.length);
+      }
     };
     
-    console.log('[FAV-REAL] installed');
-  }
-  
-  // دالة esc (احتياط)
-  function esc(x) {
-    return String(x == null ? '' : x).replace(/[&<>"']/g, function(c) {
-      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
-    });
-  }
-  
-  if (typeof window.esc === 'undefined') {
-    window.esc = esc;
+    // ═══ استدعاء renderFav عند فتح أي شاشة مفضلة ═══
+    var origGoTab = APP.goTab;
+    APP.goTab = function(tab) {
+      origGoTab.apply(this, arguments);
+      if (tab === 'favorites' || tab === 'wishlist') {
+        setTimeout(function() { APP.renderFav(); }, 100);
+      }
+    };
+    
+    // ═══ تحديث فوري عند التحميل ═══
+    setTimeout(function() { APP.renderFav(); }, 500);
+    
+    console.log('[FAV-DUAL] installed — renders in BOTH #fav-list and #wishlist-grid');
   }
   
   install();
