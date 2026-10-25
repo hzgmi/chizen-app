@@ -9950,6 +9950,113 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-tabs-flicker-js">
+(function(){
+  var attempts = 0;
+  
+  function revealTabs() {
+    attempts++;
+    
+    // أظهر التبويبات فوراً عند وجود 4 تبويبات على الأقل
+    var tabs = document.querySelectorAll('#service-tabs, .booking-tabs');
+    tabs.forEach(function(el) {
+      if (!el.classList.contains('chz-ready')) {
+        var children = el.children.length;
+        if (children >= 3 || attempts > 10) {
+          el.classList.add('chz-ready');
+        }
+      }
+    });
+    
+    if (attempts < 50) {
+      setTimeout(revealTabs, 100);
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(revealTabs, 100); });
+  } else {
+    setTimeout(revealTabs, 100);
+  }
+  
+  // مراقبة إضافة تبويبات جديدة
+  var mo = new MutationObserver(function() {
+    var tabs = document.querySelectorAll('#service-tabs:not(.chz-ready), .booking-tabs:not(.chz-ready)');
+    tabs.forEach(function(el) {
+      if (el.children.length >= 3) el.classList.add('chz-ready');
+    });
+  });
+  
+  if (document.body) {
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
+  
+  console.log('[TABS FLICKER] loaded');
+})();
+</script>
+<script id="chz-tabs-guard">
+(function(){
+  // مراقب: إذا حاول أي كود إخفاء التبويبات — نُظهرها فوراً
+  function guard() {
+    var tabs = document.querySelectorAll('#tab-flight, #tab-bus, #tab-hajj, #tab-hotel');
+    tabs.forEach(function(el) {
+      if (el.style.display === 'none' || getComputedStyle(el).display === 'none') {
+        el.style.display = 'flex';
+        console.log('[TABS] re-shown:', el.id);
+      }
+    });
+  }
+  
+  setInterval(guard, 500);
+  
+  // راقب التغييرات
+  var mo = new MutationObserver(guard);
+  if (document.body) {
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+  }
+  
+  console.log('[TABS GUARD] active');
+})();
+</script>
+<script id="chz-no-cls-js">
+(function(){
+  // ضمان: إعادة إظهار الأقسام والحجز لو حاول أي كود إخفاءها
+  function ensureVisible() {
+    var selectors = [
+      '#cats', '.booking-row-container', '.booking-item',
+      '#slides', '.loy', '.ss-wrapper', '#service-tabs',
+      '.booking-tab', '.photo-cat-card'
+    ];
+    selectors.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        if (el.style.display === 'none') {
+          // لا نُظهر ما أخفاه الأدمن من الأقسام (مثلاً قسم معطل)
+          if (sel === '.booking-tab') {
+            // التبويبات — نُظهرها دائماً
+            el.style.display = '';
+          } else if (sel === '.booking-item') {
+            el.style.display = '';
+          }
+        }
+      });
+    });
+  }
+  
+  setInterval(ensureVisible, 800);
+  
+  // عرض الأقسام فوراً من HTML
+  function revealCats() {
+    var cats = document.getElementById('cats');
+    if (cats && cats.children.length === 0 && window.APP && APP.cats) {
+      // لا حاجة — CSS يضمن المساحة
+    }
+  }
+  
+  setTimeout(revealCats, 500);
+  
+  console.log('[NO CLS V2] active');
+})();
+</script>
 
 
 
@@ -9957,18 +10064,336 @@ document.addEventListener('keydown', function(e) {
 
 
 
+<script id="chz-nuke-final">
+(function(){
+  function isDark(){
+    return document.documentElement.getAttribute('data-theme') !== 'light';
+  }
+  
+  function force(){
+    var d = isDark();
+    var C = d ? {
+      cardBg: 'linear-gradient(135deg, #1e1937 0%, #14102a 100%)',
+      cardBorder: '1px solid rgba(168,85,247,0.3)',
+      nameColor: '#ffffff',
+      priceColor: '#ff4d94',
+      btnBg: 'rgba(168,85,247,0.15)',
+      btnBorder: '1px solid rgba(168,85,247,0.4)',
+      btnColor: '#ffffff'
+    } : {
+      cardBg: '#ffffff',
+      cardBorder: '1px solid #e5e7eb',
+      nameColor: '#1f2937',
+      priceColor: '#d81b60',
+      btnBg: '#f3f4f6',
+      btnBorder: '1px solid #e5e7eb',
+      btnColor: '#1f2937'
+    };
+    
+    // ── كل بطاقات المنتجات (كل الأنواع) ──
+    document.querySelectorAll('.cat-prod-card, .prod, .p-card').forEach(function(el){
+      el.style.setProperty('background', C.cardBg, 'important');
+      el.style.setProperty('border', C.cardBorder, 'important');
+    });
+    
+    // ── أسماء المنتجات ──
+    document.querySelectorAll('.cat-prod-card .name, .cat-prod-card .p-name, .prod .prod-n, .prod .name, .p-card .p-name').forEach(function(el){
+      el.style.setProperty('color', C.nameColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.nameColor, 'important');
+      el.style.setProperty('visibility', 'visible', 'important');
+      el.style.setProperty('opacity', '1', 'important');
+    });
+    
+    // ── الأسعار ──
+    document.querySelectorAll('.cat-prod-card .price, .cat-prod-card .p-price, .prod .price, .p-card .p-price').forEach(function(el){
+      el.style.setProperty('color', C.priceColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.priceColor, 'important');
+    });
+    
+    // ── أزرار الكمية ──
+    document.querySelectorAll('.qb2').forEach(function(el){
+      el.style.setProperty('background', C.btnBg, 'important');
+      el.style.setProperty('border', C.btnBorder, 'important');
+      el.style.setProperty('color', C.btnColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.btnColor, 'important');
+    });
+    
+    // ── رقم الكمية ──
+    document.querySelectorAll('.qn2').forEach(function(el){
+      el.style.setProperty('color', C.btnColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.btnColor, 'important');
+    });
+    
+    // ── إخفاء الوصف إذا كان يحتوي على مميزات ──
+    if (window.APP && window.APP.currentProd) {
+      var prod = window.APP.currentProd;
+      var feats = Array.isArray(prod.features) ? prod.features.filter(function(f){ return f && String(f).trim(); }) : [];
+      var descEl = document.getElementById('det-desc');
+      if (descEl && feats.length > 0) {
+        var descText = (descEl.textContent || '').toLowerCase().replace(/\s+/g, '');
+        var hasFeature = false;
+        for (var i = 0; i < feats.length; i++) {
+          var fText = String(feats[i]).toLowerCase().replace(/\s+/g, '');
+          if (fText.length > 5 && descText.includes(fText.substring(0, 15))) {
+            hasFeature = true; break;
+          }
+        }
+        if (hasFeature) {
+          descEl.style.display = 'none';
+          descEl.setAttribute('data-hidden', '1');
+        }
+      }
+    }
+  }
+  
+  // تشغيل فوري + دوري
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){
+      force();
+      setInterval(force, 400);
+    });
+  } else {
+    force();
+    setInterval(force, 400);
+  }
+  
+  // مراقبة التغييرات
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(force, 50); })
+      .observe(document.body, { childList: true, subtree: true });
+  }
+  
+  new MutationObserver(force)
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  
+  console.log('[NUKE-FINAL] active');
+})();
+</script>
+
+
+<script id="chz-pickup-js">
+(function(){
+  // إجبار أنماط نقطة التسليم بـ inline styles (لا يُتجاوز)
+  function forcePickupStyles() {
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    
+    // 1) صندوق pickup-val
+    var pickup = document.getElementById('pickup-val');
+    if (pickup) {
+      pickup.style.setProperty('background', isLight ? '#f5f7fb' : '#131929', 'important');
+      pickup.style.setProperty('background-color', isLight ? '#f5f7fb' : '#131929', 'important');
+      pickup.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
+      pickup.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+      pickup.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+    }
+    
+    // 2) بطاقات المواقع داخل الـ Modal
+    var modal = document.querySelector('.modal:not([style*="display: none"])') || 
+                document.querySelector('.modal[style*="display: flex"]') ||
+                document.querySelector('.modal[style*="display:flex"]');
+    
+    if (modal) {
+      // كل الأبناء المباشرين
+      var allDivs = modal.querySelectorAll('div');
+      allDivs.forEach(function(div) {
+        // نتحقق: هل هذا div يحتمل أن يكون بطاقة موقع؟
+        var hasIcon = div.textContent.includes('🕌') || 
+                      div.querySelector('.icon') ||
+                      div.textContent.trim().length > 0;
+        
+        // البطاقات عادةً بين 80-150px عرض، خلفيتها بيضاء
+        var rect = div.getBoundingClientRect();
+        if (rect.width > 80 && rect.width < 400 && rect.height > 60 && rect.height < 200) {
+          var hasWhiteBg = false;
+          try {
+            var bg = window.getComputedStyle(div).backgroundColor;
+            hasWhiteBg = bg === 'rgb(255, 255, 255)' || bg === 'white';
+          } catch(e) {}
+          
+          if (hasWhiteBg) {
+            div.style.setProperty('background', isLight ? '#ffffff' : '#1a2035', 'important');
+            div.style.setProperty('background-color', isLight ? '#ffffff' : '#1a2035', 'important');
+            div.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
+            div.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+            div.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+            
+            // كل الأطفال
+            div.querySelectorAll('*').forEach(function(child) {
+              child.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+              child.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
+            });
+          }
+        }
+      });
+      
+      // 3) تبويبات داخل الـ Modal
+      var buttons = modal.querySelectorAll('button');
+      buttons.forEach(function(btn) {
+        var isActive = btn.classList.contains('active') || 
+                       btn.style.background.includes('linear') ||
+                       btn.style.background.includes('gradient');
+        if (isActive) {
+          btn.style.setProperty('background', 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)', 'important');
+          btn.style.setProperty('color', '#ffffff', 'important');
+          btn.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+          btn.style.setProperty('border', 'none', 'important');
+        } else {
+          btn.style.setProperty('background', isLight ? '#f5f7fb' : '#1a2035', 'important');
+          btn.style.setProperty('color', isLight ? '#1a1a2e' : '#b8c0d8', 'important');
+          btn.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#b8c0d8', 'important');
+          btn.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
+        }
+      });
+    }
+  }
+  
+  // تشغيل عند تحميل الصفحة
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ 
+      setTimeout(forcePickupStyles, 500);
+      setInterval(forcePickupStyles, 1500);
+    });
+  } else {
+    setTimeout(forcePickupStyles, 500);
+    setInterval(forcePickupStyles, 1500);
+  }
+  
+  // مراقبة فتح الـ Modal
+  new MutationObserver(function() {
+    setTimeout(forcePickupStyles, 100);
+  }).observe(document.body, { childList: true, subtree: true });
+  
+  console.log('[PICKUP-FIX] active');
+})();
+</script>
 
 
 
 
-
-
-
-
-
-
-
-
+<script id="chz-ultimate-fix">
+(function(){
+  var isLight = function() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  };
+  
+  function applyStyles() {
+    var light = isLight();
+    var dark = !light;
+    
+    // ═══ كل حاويات الحساب ═══
+    var sels = [
+      '.profile-hero', '.sg', '.sgt', '.sit',
+      '.sg .sit', '.sg .sgt', '.profile-stats'
+    ];
+    
+    document.querySelectorAll(sels.join(',')).forEach(function(el) {
+      if (light) {
+        // فاتح
+        if (el.matches('.profile-hero, .sg')) {
+          el.style.setProperty('background', '#ffffff', 'important');
+          el.style.setProperty('background-color', '#ffffff', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('border', '1px solid #e5e7eb', 'important');
+        } else {
+          // .sgt, .sit - شفافة داخل البطاقة
+          el.style.setProperty('background', 'transparent', 'important');
+          el.style.setProperty('background-color', 'transparent', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+        }
+      } else {
+        // داكن
+        if (el.matches('.profile-hero')) {
+          el.style.setProperty('background', 'linear-gradient(135deg, #1e1937 0%, #14102a 100%)', 'important');
+          el.style.setProperty('background-color', '#1e1937', 'important');
+          el.style.setProperty('background-image', 'linear-gradient(135deg, #1e1937 0%, #14102a 100%)', 'important');
+        } else if (el.matches('.sg')) {
+          el.style.setProperty('background', '#1a2035', 'important');
+          el.style.setProperty('background-color', '#1a2035', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('border', '1px solid #252b42', 'important');
+        } else {
+          el.style.setProperty('background', 'transparent', 'important');
+          el.style.setProperty('background-color', 'transparent', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+        }
+      }
+    });
+    
+    // ═══ النصوص ═══
+    document.querySelectorAll('.profile-name, .sit-ti').forEach(function(el) {
+      el.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#1a1a2e' : '#ffffff', 'important');
+    });
+    
+    document.querySelectorAll('.profile-email, .sit-d, .pstat-lbl').forEach(function(el) {
+      el.style.setProperty('color', light ? '#6b7280' : '#b8c0d8', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#6b7280' : '#b8c0d8', 'important');
+    });
+    
+    document.querySelectorAll('.pstat-num').forEach(function(el) {
+      el.style.setProperty('color', light ? '#ec4899' : '#ff4d94', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#ec4899' : '#ff4d94', 'important');
+    });
+    
+    // ═══ شاشة الإعدادات ═══
+    var settings = document.getElementById('sc-settings');
+    if (settings) {
+      settings.querySelectorAll('.cd, .cs, .rw').forEach(function(el) {
+        el.style.setProperty('background', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-color', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-image', 'none', 'important');
+        el.style.setProperty('border', '1px solid ' + (light ? '#e5e7eb' : '#252b42'), 'important');
+      });
+    }
+    
+    // ═══ شاشة الحساب - .cd إن وجدت ═══
+    var profile = document.getElementById('sc-profile');
+    if (profile) {
+      profile.querySelectorAll('.cd').forEach(function(el) {
+        el.style.setProperty('background', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-color', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-image', 'none', 'important');
+      });
+    }
+  }
+  
+  // CSS احتياطي للوضعين
+  function injectCSS() {
+    var existing = document.getElementById('chz-ultimate-css');
+    if (existing) existing.remove();
+    var style = document.createElement('style');
+    style.id = 'chz-ultimate-css';
+    style.textContent = `
+      html[data-theme="light"] .profile-hero { background: #ffffff !important; background-image: none !important; border: 1px solid #e5e7eb !important; }
+      html:not([data-theme="light"]) .profile-hero { background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important; background-image: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important; border: 1px solid #252b42 !important; }
+      html[data-theme="light"] .sg { background: #ffffff !important; background-image: none !important; border: 1px solid #e5e7eb !important; }
+      html:not([data-theme="light"]) .sg { background: #1a2035 !important; background-image: none !important; border: 1px solid #252b42 !important; }
+      html[data-theme="light"] .sgt, html[data-theme="light"] .sit { background: transparent !important; background-image: none !important; }
+      html:not([data-theme="light"]) .sgt, html:not([data-theme="light"]) .sit { background: transparent !important; background-image: none !important; }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  function run() {
+    injectCSS();
+    applyStyles();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  
+  setInterval(run, 400);
+  new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(applyStyles, 50); }).observe(document.body, { childList: true, subtree: true });
+  }
+  
+  console.log('[ULTIMATE] active');
+})();
+</script>
 
 
 
@@ -10362,43 +10787,620 @@ document.addEventListener('keydown', function(e) {
   console.log('[NOTIFS-HELPER] ready');
 })();
 </script>
-
-
-
-
-
-
-
-<script id="chz-banks-logos">
+<script id="chz-orders-fix">
 (function(){
   'use strict';
-  console.log('[BANKS-LOGOS] starting...');
   
-  // ═══ خريطة شعارات البنوك ═══
-  var BANK_LOGOS = {
-    'kuraimi': [
-      'https://logo.clearbit.com/alkuraimibank.com',
-      'https://logo.clearbit.com/kuraimibank.com',
-      'https://www.google.com/s2/favicons?domain=alkuraimibank.com&sz=128',
-      'https://www.google.com/s2/favicons?domain=kuraimibank.com&sz=128'
-    ],
-    'qutaibi': [
-      'https://logo.clearbit.com/qutaibibank.com',
-      'https://logo.clearbit.com/alqutaibibank.com',
-      'https://www.google.com/s2/favicons?domain=qutaibibank.com&sz=128',
-      'https://www.google.com/s2/favicons?domain=alqutaibibank.com&sz=128'
-    ]
-  };
-  
-  function getBankKey(bank) {
-    var name = (bank.name || '').toLowerCase();
-    var id = (bank.id || '').toLowerCase();
-    if (id.indexOf('kuraimi') > -1 || id.indexOf('kurami') > -1 || name.indexOf('كريمي') > -1) return 'kuraimi';
-    if (id.indexOf('qutaibi') > -1 || name.indexOf('قطيبي') > -1) return 'qutaibi';
-    return null;
+  function isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
   }
   
-  // ═══ نسخ للحافظة ═══
+  function forceOrders() {
+    var screen = document.getElementById('sc-orders');
+    if (!screen) return;
+    
+    var light = isLight();
+    
+    // 1) خلفية الشاشة
+    screen.style.setProperty('background', light ? '#f5f7fb' : '#0a0e1a', 'important');
+    screen.style.setProperty('background-color', light ? '#f5f7fb' : '#0a0e1a', 'important');
+    
+    // 2) كل الحاويات والبطاقات داخل طلباتي
+    var containers = screen.querySelectorAll('.cd, .cs, .card, .item, .oc, [class*="order-card"], [class*="order-item"]');
+    containers.forEach(function(el) {
+      el.style.setProperty('background', light ? '#ffffff' : '#1a2035', 'important');
+      el.style.setProperty('background-color', light ? '#ffffff' : '#1a2035', 'important');
+      el.style.setProperty('background-image', 'none', 'important');
+      el.style.setProperty('border', '1px solid ' + (light ? '#e5e7eb' : '#252b42'), 'important');
+      el.style.setProperty('border-radius', '14px', 'important');
+      el.style.setProperty('box-shadow', light ? '0 1px 3px rgba(0,0,0,0.05)' : 'none', 'important');
+    });
+    
+    // 3) النصوص الرئيسية (رقم الطلب)
+    screen.querySelectorAll('.ctl, .rti, .oi-id, [class*="order-id"], [class*="order-num"]').forEach(function(el) {
+      el.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#1a1a2e' : '#ffffff', 'important');
+    });
+    
+    // 4) النصوص الثانوية (السعر والمنتجات)
+    screen.querySelectorAll('.rs, .oc-d, [class*="order-total"], [class*="order-date"], [class*="order-info"]').forEach(function(el) {
+      el.style.setProperty('color', light ? '#4b5563' : '#b8c0d8', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#4b5563' : '#b8c0d8', 'important');
+    });
+    
+    // 5) أي نص داخل البطاقة
+    containers.forEach(function(container) {
+      container.querySelectorAll('div, span, p').forEach(function(el) {
+        var currentColor = window.getComputedStyle(el).color;
+        // إذا كان النص فاتح على خلفية فاتحة أو العكس
+        if (light) {
+          // في الفاتح - نجعل النصوص داكنة إذا كانت فاتحة جداً
+          var rgb = currentColor.match(/\d+/g);
+          if (rgb && rgb.length >= 3) {
+            var r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
+            var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            if (lum > 0.7) {
+              el.style.setProperty('color', '#1a1a2e', 'important');
+              el.style.setProperty('-webkit-text-fill-color', '#1a1a2e', 'important');
+            }
+          }
+        }
+      });
+    });
+    
+    // 6) شارة "قيد المعالجة" - نحافظ على لونها الأصفر
+    screen.querySelectorAll('[class*="badge"], [class*="status"]').forEach(function(el) {
+      // لا نغير الشارات - لها ألوانها الخاصة
+    });
+    
+    // 7) عناوين القوائم
+    screen.querySelectorAll('.ctl, .sh2 .st2').forEach(function(el) {
+      el.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
+    });
+    
+    // 8) نص "لا توجد طلبات"
+    screen.querySelectorAll('[style*="text-align:center"]').forEach(function(el) {
+      if (el.textContent.includes('لا') || el.textContent.includes('طلبات')) {
+        el.style.setProperty('color', light ? '#6b7280' : '#b8c0d8', 'important');
+      }
+    });
+  }
+  
+  function injectCSS() {
+    var existing = document.getElementById('chz-orders-css');
+    if (existing) existing.remove();
+    var style = document.createElement('style');
+    style.id = 'chz-orders-css';
+    style.textContent = `
+      /* طلباتي — الوضع الفاتح */
+      html[data-theme="light"] #sc-orders { background: #f5f7fb !important; }
+      html[data-theme="light"] #sc-orders .cd,
+      html[data-theme="light"] #sc-orders .cs,
+      html[data-theme="light"] #sc-orders .card,
+      html[data-theme="light"] #sc-orders .oc,
+      html[data-theme="light"] #sc-orders [class*="order"] {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        background-image: none !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        border-radius: 14px !important;
+      }
+      html[data-theme="light"] #sc-orders .ctl,
+      html[data-theme="light"] #sc-orders .rti,
+      html[data-theme="light"] #sc-orders [class*="order-id"] {
+        color: #1a1a2e !important;
+        -webkit-text-fill-color: #1a1a2e !important;
+      }
+      html[data-theme="light"] #sc-orders .rs {
+        color: #4b5563 !important;
+        -webkit-text-fill-color: #4b5563 !important;
+      }
+      
+      /* طلباتي — الوضع الداكن */
+      html:not([data-theme="light"]) #sc-orders { background: #0a0e1a !important; }
+      html:not([data-theme="light"]) #sc-orders .cd,
+      html:not([data-theme="light"]) #sc-orders .cs,
+      html:not([data-theme="light"]) #sc-orders .oc,
+      html:not([data-theme="light"]) #sc-orders [class*="order"] {
+        background: #1a2035 !important;
+        background-image: none !important;
+        border: 1px solid #252b42 !important;
+      }
+      html:not([data-theme="light"]) #sc-orders .ctl,
+      html:not([data-theme="light"]) #sc-orders .rti {
+        color: #ffffff !important;
+      }
+      html:not([data-theme="light"]) #sc-orders .rs {
+        color: #b8c0d8 !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  function run() {
+    injectCSS();
+    forceOrders();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  
+  setInterval(forceOrders, 800);
+  
+  new MutationObserver(forceOrders).observe(document.documentElement, { 
+    attributes: true, 
+    attributeFilter: ['data-theme'] 
+  });
+  
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(forceOrders, 100); }).observe(document.body, { 
+      childList: true, 
+      subtree: true 
+    });
+  }
+  
+  console.log('[ORDERS-FIX] active');
+})();
+</script>
+
+<script id="chz-points-nuclear">
+(function(){
+  'use strict';
+  
+  function isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+  
+  function force() {
+    var screen = document.getElementById('sc-points');
+    if (!screen) return;
+    
+    var light = isLight();
+    if (light) {
+      // في الفاتح: لا نعدل - يبدو جيداً
+      return;
+    }
+    
+    // ═══ الوضع الداكن فقط ═══
+    
+    // 1) خلفية الشاشة
+    screen.style.setProperty('background', '#0a0e1a', 'important');
+    screen.style.setProperty('background-color', '#0a0e1a', 'important');
+    
+    // 2) اجتياح كل العناصر داخل الصفحة
+    var all = screen.querySelectorAll('*');
+    all.forEach(function(el) {
+      var style = el.getAttribute('style') || '';
+      var computed = window.getComputedStyle(el);
+      
+      // تجاهل pt-hero (البطاقة العلوية البنفسجية)
+      if (el.classList.contains('pt-hero')) return;
+      
+      // تجاهل pts-shop-section (قسم شحن النقاط البنفسجي)
+      if (el.closest('.pts-shop-section')) return;
+      
+      // تجاهل pts-package (الباقات الثلاث داخل القسم البنفسجي)
+      if (el.classList.contains('pts-package')) return;
+      
+      // تجاهل الأزرار ذات التدرج
+      if (style.includes('linear-gradient')) {
+        // فقط استبدل التدرجات الفاتحة جداً (#F5EFFF, #FCEBF3)
+        if (style.includes('#F5EFFF') || style.includes('#FCEBF3') || style.includes('#f5efff') || style.includes('#fcebf3')) {
+          el.style.setProperty('background', '#1a2035', 'important');
+          el.style.setProperty('background-color', '#1a2035', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('border-color', '#252b42', 'important');
+        }
+        return;
+      }
+      
+      // استبدل الخلفيات البيضاء
+      var bgColor = computed.backgroundColor;
+      if (bgColor === 'rgb(255, 255, 255)' || bgColor === 'rgb(250, 250, 250)' || bgColor === 'rgb(249, 250, 251)') {
+        el.style.setProperty('background', '#1a2035', 'important');
+        el.style.setProperty('background-color', '#1a2035', 'important');
+        el.style.setProperty('border-color', '#252b42', 'important');
+      }
+      
+      // استبدل النصوص الداكنة
+      if (style.includes('color: #1f2937') || style.includes('color:#1f2937') ||
+          style.includes('color: #6b7280') || style.includes('color:#6b7280') ||
+          style.includes('color: #374151') || style.includes('color:#374151')) {
+        el.style.setProperty('color', '#ffffff', 'important');
+        el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      }
+      
+      // استبدل الحدود
+      if (style.includes('border: 1px solid #e5e7eb') || style.includes('border:1px solid #e5e7eb') ||
+          style.includes('border: 2px solid #6A1B9A') || style.includes('border:2px solid #6A1B9A')) {
+        if (style.includes('6A1B9A')) {
+          // زر "عرض كودي" - حافظ على النص البنفسجي لكن غير الخلفية
+          el.style.setProperty('background', '#1a2035', 'important');
+          el.style.setProperty('color', '#a855f7', 'important');
+        } else {
+          el.style.setProperty('border-color', '#252b42', 'important');
+        }
+      }
+    });
+    
+    // 3) معالجة خاصة: حقل الإدخال
+    var refInput = document.getElementById('ref-input');
+    if (refInput) {
+      refInput.style.setProperty('background', '#131929', 'important');
+      refInput.style.setProperty('background-color', '#131929', 'important');
+      refInput.style.setProperty('color', '#ffffff', 'important');
+      refInput.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      refInput.style.setProperty('border-color', '#252b42', 'important');
+    }
+    
+    // 4) زر "عرض كودي" - داخل قسم الدعوة
+    var myCodeBtn = screen.querySelector('button[onclick="showMyReferralCode()"]');
+    if (myCodeBtn) {
+      myCodeBtn.style.setProperty('background', '#1a2035', 'important');
+      myCodeBtn.style.setProperty('background-color', '#1a2035', 'important');
+      myCodeBtn.style.setProperty('color', '#a855f7', 'important');
+      myCodeBtn.style.setProperty('-webkit-text-fill-color', '#a855f7', 'important');
+      myCodeBtn.style.setProperty('border-color', '#a855f7', 'important');
+    }
+    
+    // 5) حماية النصوص البنفسجية والوردية (تبقى كما هي)
+    screen.querySelectorAll('[style*="color: #6A1B9A"], [style*="color:#6A1B9A"]').forEach(function(el) {
+      el.style.setProperty('color', '#c084fc', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#c084fc', 'important');
+    });
+    
+    screen.querySelectorAll('[style*="color: #D81B60"], [style*="color:#D81B60"]').forEach(function(el) {
+      el.style.setProperty('color', '#ff4d94', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#ff4d94', 'important');
+    });
+    
+    // 6) placeholder
+    if (!document.getElementById('chz-points-placeholder')) {
+      var st = document.createElement('style');
+      st.id = 'chz-points-placeholder';
+      st.textContent = 'html:not([data-theme="light"]) #ref-input::placeholder { color: #6b7591 !important; -webkit-text-fill-color: #6b7591 !important; }';
+      document.head.appendChild(st);
+    }
+  }
+  
+  function run() {
+    force();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  
+  // شغّل كل 500ms (لأن الصفحة قد تُعاد بناؤها)
+  setInterval(force, 500);
+  
+  // عند فتح الصفحة
+  var origGoTab = null;
+  function hookGoTab() {
+    if (!window.APP || !APP.goTab) { setTimeout(hookGoTab, 200); return; }
+    if (origGoTab) return;
+    origGoTab = APP.goTab;
+    APP.goTab = function(tab) {
+      origGoTab.apply(this, arguments);
+      if (tab === 'points') {
+        setTimeout(force, 100);
+        setTimeout(force, 500);
+        setTimeout(force, 1000);
+      }
+    };
+  }
+  hookGoTab();
+  
+  // عند تغيير الثيم
+  new MutationObserver(force).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+  });
+  
+  console.log('[POINTS-NUCLEAR] active');
+})();
+</script>
+
+<script id="chz-fav-dual">
+(function(){
+  'use strict';
+  console.log('[FAV-DUAL] installing...');
+  
+  function esc(x) {
+    return String(x == null ? '' : x).replace(/[&<>"']/g, function(c) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  
+  function install() {
+    if (!window.APP) { setTimeout(install, 150); return; }
+    if (APP.__favDual) return;
+    APP.__favDual = true;
+    
+    // ═══ togFav — يحدّث كلتا الشبكتين ═══
+    APP.togFav = function(id, el) {
+      var idx = this.favorites.indexOf(id);
+      if (idx > -1) {
+        this.favorites.splice(idx, 1);
+        if (el) el.classList.remove('active');
+      } else {
+        this.favorites.push(id);
+        if (el) el.classList.add('active');
+      }
+      try { localStorage.setItem('chizen_favorites', JSON.stringify(this.favorites)); } catch(e) {}
+      this.renderFav();
+      console.log('[FAV] total:', this.favorites.length);
+    };
+    
+    // ═══ renderFav — يكتب في #fav-list و #wishlist-grid ═══
+    APP.renderFav = function() {
+      var favList = document.getElementById('fav-list');
+      var wishGrid = document.getElementById('wishlist-grid');
+      
+      // حالة فارغة
+      if (!this.favorites.length) {
+        var emptyHtml = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">' +
+          '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
+          '<div style="font-weight:800;font-size:15px;color:#888;margin-bottom:8px;">لا توجد منتجات في المفضلة</div>' +
+          '<div style="font-size:12px;color:#666;">اضغط ❤️ على أي منتج لإضافته</div>' +
+        '</div>';
+        if (favList) favList.innerHTML = emptyHtml;
+        if (wishGrid) wishGrid.innerHTML = emptyHtml;
+        return;
+      }
+      
+      // جمع المنتجات
+      var list = [];
+      var self = this;
+      this.favorites.forEach(function(id) {
+        var p = self.getProduct(id);
+        if (p) list.push(p);
+      });
+      
+      if (!list.length) {
+        var noProducts = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#888;">' +
+          '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
+          '<div>المنتجات المحفوظة لم تعد متوفرة</div>' +
+        '</div>';
+        if (favList) favList.innerHTML = noProducts;
+        if (wishGrid) wishGrid.innerHTML = noProducts;
+        return;
+      }
+      
+      // بناء HTML
+      var html = list.map(function(p) {
+        return '<div class="prod" onclick="APP.openProduct(\'' + esc(p.id) + '\')">' +
+          '<div class="prod-f active" onclick="event.stopPropagation();APP.togFav(\'' + esc(p.id) + '\',this)">' +
+            '<svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>' +
+          '</div>' +
+          '<div class="prod-i"><img src="' + esc(p.img || '') + '" loading="lazy"></div>' +
+          '<div class="prod-inf">' +
+            '<div class="prod-n">' + esc(p.name) + '</div>' +
+            '<div class="pr">' +
+              '<span class="price">' + esc(p.price) + '</span>' +
+              '<span class="price-c">ر.س</span>' +
+              (p.old ? '<span class="price-o">' + esc(p.old) + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      
+      // اكتب في كلتا الشبكتين
+      if (favList) {
+        favList.innerHTML = html;
+        console.log('[FAV] rendered in #fav-list:', list.length);
+      }
+      if (wishGrid) {
+        wishGrid.innerHTML = html;
+        console.log('[FAV] rendered in #wishlist-grid:', list.length);
+      }
+    };
+    
+    // ═══ استدعاء renderFav عند فتح أي شاشة مفضلة ═══
+    var origGoTab = APP.goTab;
+    APP.goTab = function(tab) {
+      origGoTab.apply(this, arguments);
+      if (tab === 'favorites' || tab === 'wishlist') {
+        setTimeout(function() { APP.renderFav(); }, 100);
+      }
+    };
+    
+    // ═══ تحديث فوري عند التحميل ═══
+    setTimeout(function() { APP.renderFav(); }, 500);
+    
+    console.log('[FAV-DUAL] installed — renders in BOTH #fav-list and #wishlist-grid');
+  }
+  
+  install();
+})();
+</script>
+<script id="chz-checkout-rebuild">
+(function(){
+  'use strict';
+  
+  // ═══ 1) معاينة الإيصال عند الرفع ═══
+  function setupReceiptPreview() {
+    var input = document.getElementById('co-receipt');
+    var img = document.getElementById('receipt-preview-img');
+    var icon = document.getElementById('receipt-preview-icon');
+    var text = document.getElementById('receipt-preview-text');
+    var label = document.getElementById('receipt-label');
+    
+    if (!input || input.__previewSetup) return;
+    input.__previewSetup = true;
+    
+    input.addEventListener('change', function() {
+      var file = this.files && this.files[0];
+      if (!file) return;
+      
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        if (img) { img.src = e.target.result; img.style.display = 'block'; }
+        if (icon) icon.style.display = 'none';
+        if (text) {
+          text.innerHTML = '<span style="color:#10b981;font-weight:900;">✅ تم اختيار الصورة</span><br><span style="font-size:10px;opacity:0.7;">اضغط لتغييرها</span>';
+        }
+        if (label) {
+          label.style.borderColor = '#10b981';
+          label.style.background = 'rgba(16,185,129,0.1)';
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  // ═══ 2) تتبع تقدم الخطوات ═══
+  function updateProgress() {
+    var pickupVal = document.getElementById('pickup-val');
+    var name = document.getElementById('co-name');
+    var phone = document.getElementById('co-phone');
+    var bankList = document.getElementById('bank-list');
+    
+    var steps = document.querySelectorAll('.co-step');
+    if (steps.length < 3) return;
+    
+    // Step 1: pickup
+    var step1Done = pickupVal && pickupVal.value && pickupVal.value.trim().length > 0;
+    // Step 2: name + phone
+    var step2Done = name && name.value.trim().length > 0 && phone && phone.value.trim().length >= 8;
+    // Step 3: bank selected
+    var step3Done = false;
+    if (bankList) {
+      step3Done = !!bankList.querySelector('.bank[style*="ec4899"], .bank.selected, .bank[style*="D81B60"], .bank[style*="ff4d94"]');
+    }
+    
+    [step1Done, step2Done, step3Done].forEach(function(done, idx) {
+      var circle = steps[idx].querySelector('.co-step-circle');
+      var lbl = steps[idx].querySelector('.co-step-label');
+      if (!circle) return;
+      
+      if (done) {
+        circle.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+        circle.style.border = 'none';
+        circle.style.color = '#fff';
+        circle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
+        if (lbl) lbl.style.color = '#10b981';
+      } else {
+        var isCurrent = (idx === 0 && !step1Done) || (idx === 1 && step1Done && !step2Done) || (idx === 2 && step2Done && !step3Done);
+        if (isCurrent) {
+          circle.style.background = 'linear-gradient(135deg,#ec4899,#8b5cf6)';
+          circle.style.border = 'none';
+          circle.style.color = '#fff';
+          circle.innerHTML = (idx + 1).toString();
+          if (lbl) lbl.style.color = 'var(--cr)';
+        } else {
+          circle.style.background = 'rgba(168,85,247,0.15)';
+          circle.style.border = '2px solid rgba(168,85,247,0.4)';
+          circle.style.color = 'var(--cr)';
+          circle.innerHTML = (idx + 1).toString();
+          if (lbl) lbl.style.color = 'var(--mt)';
+        }
+      }
+    });
+  }
+  
+  // ═══ 3) تصميم بطاقات البنك بعد رسمها ═══
+  function styleBankCards() {
+    var bankList = document.getElementById('bank-list');
+    if (!bankList) return;
+    
+    var banks = bankList.querySelectorAll('.bank');
+    banks.forEach(function(bank) {
+      bank.style.cssText = 'display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg2);border:2px solid var(--bd);border-radius:14px;cursor:pointer;transition:all 0.2s;';
+      
+      var icon = bank.querySelector('.bank-i');
+      if (icon) {
+        icon.style.cssText = 'width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;';
+      }
+      
+      // النصوص داخل البطاقة
+      bank.querySelectorAll('div:not(.bank-i)').forEach(function(div) {
+        if (!div.getAttribute('style')) {
+          div.style.color = 'var(--cr)';
+        }
+      });
+      
+      // إذا كانت مختارة - تدرج
+      var hasGradient = (bank.getAttribute('style') || '').includes('ec4899') || 
+                        (bank.getAttribute('style') || '').includes('D81B60') ||
+                        (bank.getAttribute('style') || '').includes('ff4d94');
+      if (hasGradient || bank.classList.contains('selected')) {
+        bank.style.borderColor = '#ec4899';
+        bank.style.background = 'rgba(236,72,153,0.08)';
+        bank.style.boxShadow = '0 4px 15px rgba(236,72,153,0.2)';
+      }
+    });
+  }
+  
+  // ═══ 4) تشغيل عند فتح الصفحة ═══
+  function init() {
+    setupReceiptPreview();
+    updateProgress();
+    styleBankCards();
+  }
+  
+  // ═══ 5) مراقبة التغييرات ═══
+  function watchChanges() {
+    var checkout = document.getElementById('sc-checkout');
+    if (!checkout) return;
+    
+    // إعادة تصميم البطاقات عند إضافتها
+    new MutationObserver(function() {
+      styleBankCards();
+      updateProgress();
+    }).observe(checkout, { childList: true, subtree: true });
+    
+    // مراقبة حقول الإدخال
+    ['co-name', 'co-phone'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && !el.__stepWatch) {
+        el.__stepWatch = true;
+        el.addEventListener('input', updateProgress);
+      }
+    });
+    
+    var pickupVal = document.getElementById('pickup-val');
+    if (pickupVal && !pickupVal.__stepWatch) {
+      pickupVal.__stepWatch = true;
+      new MutationObserver(updateProgress).observe(pickupVal, { attributes: true });
+    }
+  }
+  
+  // ═══ 6) إعادة التهيئة عند الدخول للشاشة ═══
+  if (window.APP && APP.goTab) {
+    var origGoTab = APP.goTab;
+    APP.goTab = function(tab) {
+      origGoTab.apply(this, arguments);
+      if (tab === 'checkout') {
+        setTimeout(init, 100);
+        setTimeout(watchChanges, 200);
+      }
+    };
+  }
+  
+  // ═══ 7) بدء أولي ═══
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 500); setTimeout(watchChanges, 800); });
+  } else {
+    setTimeout(init, 500);
+    setTimeout(watchChanges, 800);
+  }
+  
+  console.log('[CHECKOUT-REBUILD] active');
+})();
+</script>
+<script id="chz-banks-show">
+(function(){
+  'use strict';
+  console.log('[BANKS-SHOW] starting...');
+  
+  // ═══ نسخ إلى الحافظة ═══
   window.copyToClipboard = function(text, btn) {
     function success() {
       if (btn) {
@@ -10418,25 +11420,37 @@ document.addEventListener('keydown', function(e) {
         window.chzAlert('✅ تم النسخ', 'رقم الحساب: ' + text + '\n\nالآن يمكنك التحويل من تطبيق بنكك.');
       }
     }
+    
     function fallback() {
       var ta = document.createElement('textarea');
       ta.value = text;
-      ta.style.cssText = 'position:fixed;opacity:0;';
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
-      try { document.execCommand('copy'); success(); } catch(e) { alert('رقم الحساب: ' + text); }
+      try {
+        document.execCommand('copy');
+        success();
+      } catch(e) {
+        alert('رقم الحساب: ' + text);
+      }
       document.body.removeChild(ta);
     }
+    
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(success).catch(fallback);
-    } else { fallback(); }
+    } else {
+      fallback();
+    }
   };
   
   // ═══ Modal عرض البنك ═══
-  window.showBankDetails = function(bankId, bankName, bankAccount, bankColor, bankIcon, logoUrls) {
+  window.showBankDetails = function(bankId, bankName, bankAccount, bankColor, bankIcon) {
+    // احذف أي modal قديم
     var old = document.getElementById('bank-modal');
     if (old) old.remove();
     
+    // overlay
     var overlay = document.createElement('div');
     overlay.id = 'bank-modal';
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);';
@@ -10448,9 +11462,6 @@ document.addEventListener('keydown', function(e) {
     var textColor = isLight ? '#1a1a2e' : '#ffffff';
     var mutedColor = isLight ? '#6b7280' : '#b8c0d8';
     var borderColor = isLight ? '#e5e7eb' : '#252b42';
-    
-    var hasAccount = bankAccount && bankAccount.trim().length > 0;
-    var accountDisplay = hasAccount ? bankAccount : 'لم يُضف بعد';
     
     overlay.innerHTML = 
       '<div style="background:' + bgCard + ';border:1px solid ' + borderColor + ';border-radius:24px;padding:24px;max-width:420px;width:100%;direction:rtl;font-family:Tajawal,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.4);">' +
@@ -10464,26 +11475,22 @@ document.addEventListener('keydown', function(e) {
         // Bank Card
         '<div style="background:linear-gradient(135deg,' + bankColor + 'CC,' + bankColor + '88);border-radius:20px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.3);">' +
           '<div style="position:absolute;top:-20px;left:-20px;width:120px;height:120px;background:rgba(255,255,255,0.1);border-radius:50%;"></div>' +
+          '<div style="position:absolute;bottom:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,0.08);border-radius:50%;"></div>' +
           '<div style="position:relative;z-index:1;">' +
-            '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">' +
-              '<div class="bank-logo-container" data-logo-urls=\'' + (logoUrls || '[]') + '\' data-color="' + bankColor + '" data-icon="' + bankIcon + '" style="width:48px;height:48px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,0.2);">' +
-                '<span style="font-size:24px;">' + bankIcon + '</span>' +
-              '</div>' +
-              '<div style="color:#fff;font-weight:900;font-size:16px;text-shadow:0 2px 4px rgba(0,0,0,0.3);">' + bankName + '</div>' +
+            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">' +
+              '<div style="font-size:32px;">' + bankIcon + '</div>' +
+              '<div style="color:#fff;font-weight:900;font-size:16px;">' + bankName + '</div>' +
             '</div>' +
             '<div style="color:rgba(255,255,255,0.85);font-size:11px;font-weight:700;margin-bottom:6px;">رقم الحساب</div>' +
-            '<div style="color:' + (hasAccount ? '#fff' : '#ffd700') + ';font-size:22px;font-weight:900;letter-spacing:2px;direction:ltr;text-align:right;font-family:monospace;text-shadow:0 2px 8px rgba(0,0,0,0.3);">' + accountDisplay + '</div>' +
+            '<div style="color:#fff;font-size:22px;font-weight:900;letter-spacing:2px;direction:ltr;text-align:right;font-family:monospace;text-shadow:0 2px 8px rgba(0,0,0,0.3);">' + bankAccount + '</div>' +
           '</div>' +
         '</div>' +
         
-        // Copy Button (only if has account)
-        (hasAccount ? 
-          '<button id="bank-copy-btn" style="width:100%;padding:14px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-weight:900;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;box-shadow:0 6px 20px rgba(236,72,153,0.35);" onclick="window.copyToClipboard(\'' + bankAccount + '\', this)">' +
-            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
-            ' نسخ رقم الحساب' +
-          '</button>' :
-          '<div style="padding:14px;margin-bottom:16px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:14px;text-align:center;color:#f59e0b;font-size:13px;font-weight:800;">⏳ رقم الحساب قيد الإضافة</div>'
-        ) +
+        // Copy Button
+        '<button id="bank-copy-btn" style="width:100%;padding:14px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-weight:900;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;box-shadow:0 6px 20px rgba(236,72,153,0.35);" onclick="window.copyToClipboard(\'' + bankAccount + '\', this)">' +
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+          ' نسخ رقم الحساب' +
+        '</button>' +
         
         // Instructions
         '<div style="background:' + bgInput + ';border:1px solid ' + borderColor + ';border-radius:14px;padding:14px;">' +
@@ -10492,7 +11499,7 @@ document.addEventListener('keydown', function(e) {
           '</div>' +
           '<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">' +
             '<div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>' +
-            '<div style="font-size:12px;color:' + mutedColor + ';line-height:1.5;">' + (hasAccount ? 'انسخ رقم الحساب أعلاه' : 'انتظر إضافة رقم الحساب') + '</div>' +
+            '<div style="font-size:12px;color:' + mutedColor + ';line-height:1.5;">انسخ رقم الحساب أعلاه</div>' +
           '</div>' +
           '<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">' +
             '<div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>' +
@@ -10504,98 +11511,21 @@ document.addEventListener('keydown', function(e) {
           '</div>' +
         '</div>' +
         
+        // Info note
+        '<div style="margin-top:12px;padding:10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;font-size:11px;color:#10b981;text-align:center;font-weight:700;">' +
+          '✓ سيتم مراجعة الدفع وتأكيد طلبك بأسرع وقت' +
+        '</div>' +
+        
       '</div>';
     
     document.body.appendChild(overlay);
-    
-    // تحميل الشعار داخل الـ modal
-    var logoContainer = overlay.querySelector('.bank-logo-container');
-    if (logoContainer) {
-      var urls = [];
-      try { urls = JSON.parse(logoContainer.getAttribute('data-logo-urls') || '[]'); } catch(e) {}
-      if (urls.length > 0) {
-        var img = document.createElement('img');
-        img.style.cssText = 'width:100%;height:100%;object-fit:contain;padding:6px;background:#fff;';
-        var idx = 0;
-        img.onerror = function() {
-          idx++;
-          if (idx >= urls.length) {
-            img.remove();
-            logoContainer.innerHTML = '<span style="font-size:24px;">' + bankIcon + '</span>';
-            logoContainer.style.background = bankColor;
-          } else {
-            img.src = urls[idx];
-          }
-        };
-        img.onload = function() { logoContainer.style.background = '#fff'; };
-        img.src = urls[0];
-        logoContainer.innerHTML = '';
-        logoContainer.appendChild(img);
-      }
-    }
   };
   
-  // ═══ بناء شعار البنك (مع fallback) ═══
-  function buildBankLogo(bank, size, color) {
-    var key = getBankKey(bank);
-    var urls = key ? (BANK_LOGOS[key] || []) : [];
-    
-    var wrapStyle = 'width:' + size + 'px;height:' + size + 'px;border-radius:14px;' +
-      'background:' + (urls.length > 0 ? '#ffffff' : color) + ';' +
-      'display:flex;align-items:center;justify-content:center;' +
-      'font-size:' + Math.floor(size * 0.5) + 'px;flex-shrink:0;' +
-      'box-shadow:0 4px 12px ' + color + '55;overflow:hidden;' +
-      (urls.length > 0 ? 'border:2px solid ' + color + ';' : '');
-    
-    var urlsJson = JSON.stringify(urls).replace(/'/g, "\\'");
-    
-    return '<div class="bank-logo-wrap" data-logo-urls=\'' + urlsJson + '\' data-color="' + color + '" data-icon="' + (bank.icon || '🏦') + '" style="' + wrapStyle + '">' +
-      '<span>' + (bank.icon || '🏦') + '</span>' +
-    '</div>';
-  }
-  
-  // ═══ تحميل الشعارات بعد الرسم ═══
-  function loadLogos() {
-    document.querySelectorAll('.bank-logo-wrap').forEach(function(wrap) {
-      if (wrap.__logoLoaded) return;
-      wrap.__logoLoaded = true;
-      
-      var urls = [];
-      try { urls = JSON.parse(wrap.getAttribute('data-logo-urls') || '[]'); } catch(e) {}
-      if (urls.length === 0) return;
-      
-      var color = wrap.getAttribute('data-color') || '#666';
-      var icon = wrap.getAttribute('data-icon') || '🏦';
-      
-      var img = document.createElement('img');
-      img.style.cssText = 'width:100%;height:100%;object-fit:contain;padding:5px;background:#fff;';
-      
-      var idx = 0;
-      img.onerror = function() {
-        idx++;
-        if (idx >= urls.length) {
-          img.remove();
-          wrap.style.background = color;
-          wrap.style.border = 'none';
-          wrap.innerHTML = '<span>' + icon + '</span>';
-        } else {
-          img.src = urls[idx];
-        }
-      };
-      img.onload = function() {
-        wrap.style.background = '#fff';
-      };
-      img.src = urls[0];
-      wrap.innerHTML = '';
-      wrap.appendChild(img);
-    });
-  }
-  
-  // ═══ تجاوز renderBanks ═══
+  // ═══ تجاوز renderBanks — عرض الأرقام ═══
   function install() {
     if (!window.APP) { setTimeout(install, 200); return; }
-    if (APP.__banksLogos) return;
-    APP.__banksLogos = true;
+    if (APP.__banksShow) return;
+    APP.__banksShow = true;
     
     APP.renderBanks = function() {
       var c = document.getElementById('bank-list');
@@ -10608,30 +11538,27 @@ document.addEventListener('keydown', function(e) {
         return;
       }
       
+      var colors = ['#0d47a1', '#10b981', '#a855f7', '#f59e0b', '#ec4899', '#ef4444'];
+      var icons = ['🏦', '💳', '🏛️', '💰', '💵', '🏪'];
+      
       var html = banks.map(function(b, i) {
-        var color = b.color || '#0d47a1';
-        var icon = b.icon || '🏦';
+        var color = b.color || colors[i % colors.length];
+        var icon = b.icon || icons[i % icons.length];
         var name = (b.name || 'طريقة الدفع').replace(/'/g, "\\'");
-        var account = (b.account || '').replace(/'/g, "\\'");
-        var key = getBankKey(b);
-        var urls = key ? (BANK_LOGOS[key] || []) : [];
-        var urlsJson = JSON.stringify(urls).replace(/'/g, "\\'");
-        var hasAccount = account.trim().length > 0;
-        var accountDisplay = hasAccount ? account : 'لم يُضف بعد';
-        var accountColor = hasAccount ? 'var(--mt)' : '#f59e0b';
+        var account = (b.account || 'غير محدد').replace(/'/g, "\\'");
         
-        return '<div class="bank-item" onclick="window.showBankDetails(\'' + (b.id || i) + '\',\'' + name + '\',\'' + account + '\',\'' + color + '\',\'' + icon + '\',\'' + urlsJson + '\')" style="' +
+        return '<div class="bank-item" onclick="window.showBankDetails(\'' + (b.id || i) + '\',\'' + name + '\',\'' + account + '\',\'' + color + '\',\'' + icon + '\')" style="' +
           'display:flex;align-items:center;gap:14px;padding:14px 16px;' +
           'background:var(--bg2);border:2px solid var(--bd);border-radius:14px;' +
           'cursor:pointer;transition:all 0.2s;' +
         '" onmouseover="this.style.borderColor=\'#ec4899\';this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 6px 20px rgba(236,72,153,0.2)\';" onmouseout="this.style.borderColor=\'\';this.style.transform=\'\';this.style.boxShadow=\'\';">' +
-          buildBankLogo(b, 48, color) +
+          '<div style="width:48px;height:48px;border-radius:14px;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px ' + color + '55;">' + icon + '</div>' +
           '<div style="flex:1;min-width:0;">' +
             '<div style="font-weight:900;font-size:14px;color:var(--cr);margin-bottom:3px;">' + (b.name || 'طريقة الدفع') + '</div>' +
-            '<div style="font-size:12px;color:' + accountColor + ';direction:ltr;text-align:right;font-family:monospace;letter-spacing:0.5px;">' + accountDisplay + '</div>' +
+            '<div style="font-size:12px;color:var(--mt);direction:ltr;text-align:right;font-family:monospace;letter-spacing:0.5px;">' + (b.account || 'غير محدد') + '</div>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">' +
-            '<span style="font-size:9px;background:' + (hasAccount ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)') + ';color:' + (hasAccount ? '#10b981' : '#f59e0b') + ';padding:3px 8px;border-radius:6px;font-weight:800;">' + (hasAccount ? 'متاح' : 'قريباً') + '</span>' +
+            '<span style="font-size:9px;background:rgba(16,185,129,0.15);color:#10b981;padding:3px 8px;border-radius:6px;font-weight:800;">متاح</span>' +
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--mt);"><path d="m9 18 6-6-6-6"/></svg>' +
           '</div>' +
         '</div>';
@@ -10647,183 +11574,16 @@ document.addEventListener('keydown', function(e) {
       
       c.innerHTML = html;
       
-      // تحميل الشعارات
-      setTimeout(loadLogos, 50);
-      
-      // ضبط selectedBank
+      // ═══ ضبط selectedBank تلقائياً ═══
       if (!this.selectedBank) {
         this.selectedBank = banks[0].id || 'manual';
       }
     };
     
-    // استدعاء عند فتح الدفع
-    if (APP.goTab) {
-      var origGoTab = APP.goTab;
-      APP.goTab = function(tab) {
-        origGoTab.apply(this, arguments);
-        if (tab === 'checkout') {
-          setTimeout(function() {
-            if (APP.renderBanks) APP.renderBanks();
-          }, 200);
-        }
-      };
-    }
-    
-    // عند تغيير الثيم
-    /* [SAFE] observer removed */
-    
-    console.log('[BANKS-LOGOS] installed');
+    console.log('[BANKS-SHOW] installed');
   }
   
   install();
-})();
-</script>
-<script id="chz-checkout-safe">
-(function(){
-  'use strict';
-  console.log('[CO-SAFE] installing...');
-  
-  // ═══ 1) معاينة الإيصال — عند التغيير فقط ═══
-  function setupReceipt() {
-    var input = document.getElementById('co-receipt');
-    if (!input || input.__setup) return;
-    input.__setup = true;
-    
-    input.addEventListener('change', function() {
-      var file = this.files && this.files[0];
-      if (!file) return;
-      if (file.size > 5 * 1024 * 1024) {
-        alert('الصورة كبيرة (الحد 5MB)');
-        this.value = '';
-        return;
-      }
-      
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var preview = document.getElementById('receipt-preview-img');
-        var icon = document.getElementById('receipt-preview-icon');
-        var text = document.getElementById('receipt-preview-text');
-        var label = document.getElementById('receipt-label');
-        
-        if (preview) { preview.src = e.target.result; preview.style.display = 'block'; }
-        if (icon) icon.style.display = 'none';
-        if (text) text.innerHTML = '<span style="color:#10b981;font-weight:900;">✅ تم اختيار الصورة</span>';
-        if (label) {
-          label.style.borderColor = '#10b981';
-          label.style.background = 'rgba(16,185,129,0.08)';
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-  
-  // ═══ 2) إبراز بطاقات البنك — مرة واحدة فقط ═══
-  function styleBanks() {
-    var bankList = document.getElementById('bank-list');
-    if (!bankList || bankList.__styled) return;
-    bankList.__styled = true;
-    
-    var banks = bankList.querySelectorAll('.bank-item');
-    banks.forEach(function(bank) {
-      if (bank.__styled) return;
-      bank.__styled = true;
-      
-      bank.addEventListener('mouseenter', function() {
-        bank.style.borderColor = '#ec4899';
-        bank.style.transform = 'translateY(-2px)';
-        bank.style.boxShadow = '0 6px 20px rgba(236,72,153,0.2)';
-      });
-      bank.addEventListener('mouseleave', function() {
-        bank.style.borderColor = '';
-        bank.style.transform = '';
-        bank.style.boxShadow = '';
-      });
-    });
-  }
-  
-  // ═══ 3) تحديث تقدم الخطوات — فقط عند input ═══
-  var progressTimer = null;
-  function updateProgress() {
-    if (progressTimer) return;
-    progressTimer = setTimeout(function() {
-      progressTimer = null;
-      
-      var pickupVal = document.getElementById('pickup-val');
-      var name = document.getElementById('co-name');
-      var phone = document.getElementById('co-phone');
-      var bankList = document.getElementById('bank-list');
-      
-      var steps = document.querySelectorAll('.co-step');
-      if (steps.length < 3) return;
-      
-      var step1Done = pickupVal && pickupVal.value && pickupVal.value.trim().length > 0;
-      var step2Done = name && name.value.trim().length > 0 && phone && phone.value.trim().length >= 8;
-      var step3Done = !!bankList && !!bankList.querySelector('.bank-item');
-      
-      [step1Done, step2Done, step3Done].forEach(function(done, idx) {
-        var circle = steps[idx].querySelector('.co-step-circle');
-        var lbl = steps[idx].querySelector('.co-step-label');
-        if (!circle) return;
-        
-        if (done) {
-          circle.style.background = 'linear-gradient(135deg,#10b981,#059669)';
-          circle.style.border = 'none';
-          circle.style.color = '#fff';
-          circle.innerHTML = '✓';
-          if (lbl) lbl.style.color = '#10b981';
-        } else {
-          circle.style.background = 'rgba(168,85,247,0.15)';
-          circle.style.border = '2px solid rgba(168,85,247,0.4)';
-          circle.style.color = 'var(--cr)';
-          circle.innerHTML = (idx + 1).toString();
-          if (lbl) lbl.style.color = 'var(--mt)';
-        }
-      });
-    }, 300);
-  }
-  
-  // ═══ 4) ربط أحداث — مرة واحدة فقط ═══
-  function bindOnce() {
-    ['co-name', 'co-phone'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el && !el.__bound) {
-        el.__bound = true;
-        el.addEventListener('input', updateProgress);
-        el.addEventListener('change', updateProgress);
-      }
-    });
-  }
-  
-  // ═══ 5) التنفيذ فقط عند دخول الدفع — بدون Observer ═══
-  function init() {
-    setupReceipt();
-    bindOnce();
-    styleBanks();
-    updateProgress();
-  }
-  
-  // ربط مع goTab
-  function hookGoTab() {
-    if (!window.APP || !APP.goTab) { setTimeout(hookGoTab, 200); return; }
-    if (APP.__coSafeHook) return;
-    APP.__coSafeHook = true;
-    
-    var orig = APP.goTab;
-    APP.goTab = function(tab) {
-      orig.apply(this, arguments);
-      if (tab === 'checkout') {
-        setTimeout(init, 150);
-        setTimeout(init, 500);
-      }
-    };
-    console.log('[CO-SAFE] goTab hooked');
-  }
-  hookGoTab();
-  
-  // تشغيل أولي إن كانت الصفحة مفتوحة
-  setTimeout(init, 1000);
-  
-  console.log('[CO-SAFE] active — no Observer, no loop');
 })();
 </script>
 </body>
