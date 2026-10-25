@@ -5750,181 +5750,7 @@ html[data-theme="light"] #sc-checkout .sh2 .st2 {
   color: #1a1a2e !important;
 }
 </style>
-<style id="chz-pickup-fix">
-/* ═══════════════════════════════════════════════════════════════
-   إصلاح صندوق نقطة التسليم + Modal المواقع
-   ═══════════════════════════════════════════════════════════════ */
 
-/* ────────── 1) صندوق pickup-val في صفحة الدفع ────────── */
-
-html:not([data-theme="light"]) #pickup-val,
-html:not([data-theme="light"]) #pickup-val[style] {
-  background: #131929 !important;
-  background-color: #131929 !important;
-  border: 1px solid #252b42 !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html[data-theme="light"] #pickup-val,
-html[data-theme="light"] #pickup-val[style] {
-  background: #f5f7fb !important;
-  background-color: #f5f7fb !important;
-  border: 1px solid #e5e7eb !important;
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-}
-
-/* النص الداخلي في pickup-val */
-html:not([data-theme="light"]) #pickup-val * {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html[data-theme="light"] #pickup-val * {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-}
-
-/* السهم في pickup-val */
-html:not([data-theme="light"]) #pickup-val svg {
-  stroke: #ffffff !important;
-}
-
-html[data-theme="light"] #pickup-val svg {
-  stroke: #6b7280 !important;
-}
-
-/* ────────── 2) Modal اختيار نقطة التسليم ────────── */
-
-/* خلفية الـ Modal */
-html:not([data-theme="light"]) [id*="pickup"][id*="modal"],
-html:not([data-theme="light"]) .pickup-modal,
-html:not([data-theme="light"]) #pickup-modal,
-html:not([data-theme="light"]) .modal-pickup {
-  background: #0a0e1a !important;
-}
-
-/* عنوان "أين تريد استلام طلبك؟" */
-html:not([data-theme="light"]) [id*="pickup"] h2,
-html:not([data-theme="light"]) [id*="pickup"] h3,
-html:not([data-theme="light"]) .pickup-modal h2,
-html:not([data-theme="light"]) .pickup-modal h3 {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* ────────── 3) بطاقات المواقع (التي تظهر بيضاء) ────────── */
-
-html:not([data-theme="light"]) [class*="area-card"],
-html:not([data-theme="light"]) [class*="district"],
-html:not([data-theme="light"]) [class*="location-card"],
-html:not([data-theme="light"]) [class*="pickup-card"],
-html:not([data-theme="light"]) [class*="pickup-area"],
-html:not([data-theme="light"]) .modal [style*="background: #fff"],
-html:not([data-theme="light"]) .modal [style*="background:#fff"],
-html:not([data-theme="light"]) .modal [style*="background: white"],
-html:not([data-theme="light"]) .modal [style*="background:white"] {
-  background: #1a2035 !important;
-  background-color: #1a2035 !important;
-  border: 1px solid #252b42 !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html:not([data-theme="light"]) [class*="area-card"] *,
-html:not([data-theme="light"]) [class*="district"] *,
-html:not([data-theme="light"]) [class*="location-card"] *,
-html:not([data-theme="light"]) [class*="pickup-card"] *,
-html:not([data-theme="light"]) [class*="pickup-area"] * {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* ────────── 4) في الوضع الفاتح — نفس البطاقات ────────── */
-
-html[data-theme="light"] [class*="area-card"],
-html[data-theme="light"] [class*="district"],
-html[data-theme="light"] [class*="location-card"],
-html[data-theme="light"] [class*="pickup-card"],
-html[data-theme="light"] [class*="pickup-area"] {
-  background: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-}
-
-html[data-theme="light"] [class*="area-card"] *,
-html[data-theme="light"] [class*="district"] *,
-html[data-theme="light"] [class*="location-card"] *,
-html[data-theme="light"] [class*="pickup-card"] *,
-html[data-theme="light"] [class*="pickup-area"] * {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-}
-
-/* ────────── 5) تبويبات "داخل عدن" / "خارج عدن" ────────── */
-
-html:not([data-theme="light"]) [id*="pickup"] button:not(.active),
-html:not([data-theme="light"]) .pickup-tab:not(.active) {
-  background: #1a2035 !important;
-  border: 1px solid #252b42 !important;
-  color: #b8c0d8 !important;
-  -webkit-text-fill-color: #b8c0d8 !important;
-}
-
-html:not([data-theme="light"]) [id*="pickup"] button.active,
-html:not([data-theme="light"]) .pickup-tab.active {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-  border: none !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* ────────── 6) النصوص داخل الـ Modal ────────── */
-
-html:not([data-theme="light"]) [id*="pickup"] .modal-title,
-html:not([data-theme="light"]) .modal [id*="pickup"] h3 {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* ────────── 7) خلفية الـ Modal overlay ────────── */
-html:not([data-theme="light"]) .modal {
-  background: rgba(0,0,0,0.85) !important;
-}
-
-html[data-theme="light"] .modal {
-  background: rgba(0,0,0,0.5) !important;
-}
-
-/* ────────── 8) أي عنصر بيضاء عام في الـ Modal ────────── */
-html:not([data-theme="light"]) .modal > div,
-html:not([data-theme="light"]) .modal-content,
-html:not([data-theme="light"]) .modal-inner {
-  background: #1a2035 !important;
-  background-color: #1a2035 !important;
-}
-
-/* ────────── 9) حماية: النصوص داخل الـ Modal ────────── */
-html:not([data-theme="light"]) .modal *:not(svg):not(path):not(circle):not(line) {
-  /* لا نغيّر كل شيء — فقط الذي لا لون له */
-}
-
-/* ────────── 10) أزرار الحفظ/الإلغاء في الـ Modal ────────── */
-html:not([data-theme="light"]) .modal button:not(.active):not(.btn-p) {
-  background: #131929 !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  border: 1px solid #252b42 !important;
-}
-
-html:not([data-theme="light"]) .modal button.btn-p {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-</style>
 <style id="chz-booking-form-fix">
 /* ═══════════════════════════════════════════════════════════════
    إصلاح نموذج الحجز (طيران، باصات، حج، فنادق) — الوضعين
@@ -6106,329 +5932,7 @@ html[data-theme="light"] .booking-tab.active {
 </style>
 
 
-<style id="chz-pickup-map-css">
-/* ═══════════════════════════════════════════════════════════
-   PICKUP MODAL — خريطة + مناطق
-   ═══════════════════════════════════════════════════════════ */
 
-.pickup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  z-index: 10000;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  animation: pickupFadeIn 0.2s ease;
-}
-@keyframes pickupFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.pickup-sheet {
-  background: #1a2035;
-  border-radius: 24px 24px 0 0;
-  width: 100%;
-  max-width: 500px;
-  max-height: 92vh;
-  overflow-y: auto;
-  padding: 8px 20px 24px;
-  font-family: 'Tajawal', sans-serif;
-  direction: rtl;
-  animation: pickupSlideUp 0.3s ease;
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.5);
-}
-html[data-theme="light"] .pickup-sheet {
-  background: #ffffff;
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
-}
-@keyframes pickupSlideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.pickup-handle {
-  width: 40px;
-  height: 4px;
-  background: rgba(168,85,247,0.3);
-  border-radius: 2px;
-  margin: 8px auto 16px;
-}
-
-.pickup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.pickup-title {
-  font-size: 18px;
-  font-weight: 900;
-  color: #ffffff;
-}
-html[data-theme="light"] .pickup-title { color: #1a1a2e; }
-
-.pickup-close {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(168,85,247,0.15);
-  border: 1px solid rgba(168,85,247,0.3);
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-html[data-theme="light"] .pickup-close { color: #1a1a2e; }
-
-.pickup-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-.pickup-tab {
-  flex: 1;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1.5px solid #252b42;
-  background: #131929;
-  color: #b8c0d8;
-  font-family: 'Tajawal', sans-serif;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.pickup-tab.active {
-  background: linear-gradient(135deg, #ec4899, #8b5cf6);
-  color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(236,72,153,0.3);
-}
-html[data-theme="light"] .pickup-tab {
-  background: #f9fafb;
-  border-color: #e5e7eb;
-  color: #6b7280;
-}
-html[data-theme="light"] .pickup-tab.active {
-  background: linear-gradient(135deg, #ec4899, #8b5cf6);
-  color: #ffffff;
-}
-
-.pickup-map-container {
-  height: 260px;
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 14px;
-  border: 2px solid #252b42;
-  position: relative;
-  background: #0f1420;
-}
-html[data-theme="light"] .pickup-map-container {
-  border-color: #e5e7eb;
-  background: #f0f2f5;
-}
-#pickup-map { width: 100%; height: 100%; }
-
-/* تخصيص markers */
-.pickup-marker-icon {
-  background: linear-gradient(135deg, #ec4899, #8b5cf6);
-  width: 38px;
-  height: 38px;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid #ffffff;
-  box-shadow: 0 4px 12px rgba(236,72,153,0.4);
-}
-.pickup-marker-icon span {
-  transform: rotate(45deg);
-  font-size: 18px;
-}
-.user-marker-icon {
-  background: #3b82f6;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 3px solid #ffffff;
-  box-shadow: 0 0 0 6px rgba(59,130,246,0.3);
-  animation: userPulse 2s infinite;
-}
-@keyframes userPulse {
-  0%, 100% { box-shadow: 0 0 0 6px rgba(59,130,246,0.3); }
-  50% { box-shadow: 0 0 0 12px rgba(59,130,246,0.1); }
-}
-
-.pickup-search-input {
-  width: 100%;
-  padding: 12px 16px 12px 42px;
-  border-radius: 12px;
-  border: 1.5px solid #252b42;
-  background: #131929;
-  color: #ffffff;
-  font-family: 'Tajawal', sans-serif;
-  font-size: 14px;
-  box-sizing: border-box;
-  outline: none;
-  margin-bottom: 12px;
-}
-.pickup-search-input::placeholder { color: #6b7591; }
-html[data-theme="light"] .pickup-search-input {
-  background: #f9fafb;
-  border-color: #e5e7eb;
-  color: #1a1a2e;
-}
-html[data-theme="light"] .pickup-search-input::placeholder { color: #9ca3af; }
-
-.pickup-search-wrap {
-  position: relative;
-  margin-bottom: 12px;
-}
-.pickup-search-wrap::after {
-  content: '🔍';
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 16px;
-  pointer-events: none;
-}
-
-.pickup-location-btn {
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: 2px dashed #3b82f6;
-  background: rgba(59,130,246,0.08);
-  color: #3b82f6;
-  font-family: 'Tajawal', sans-serif;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.2s;
-}
-.pickup-location-btn:hover {
-  background: rgba(59,130,246,0.15);
-}
-html[data-theme="light"] .pickup-location-btn {
-  background: rgba(59,130,246,0.1);
-}
-
-.pickup-areas-list {
-  max-height: 280px;
-  overflow-y: auto;
-  margin-bottom: 14px;
-}
-
-.pickup-area-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  margin-bottom: 8px;
-  background: #131929;
-  border: 1.5px solid #252b42;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.pickup-area-item:hover, .pickup-area-item:active {
-  border-color: #ec4899;
-  background: rgba(236,72,153,0.08);
-  transform: translateX(-2px);
-}
-html[data-theme="light"] .pickup-area-item {
-  background: #f9fafb;
-  border-color: #e5e7eb;
-}
-html[data-theme="light"] .pickup-area-item:hover {
-  background: rgba(236,72,153,0.06);
-}
-
-.pickup-area-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(139,92,246,0.15));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.pickup-area-info {
-  flex: 1;
-  min-width: 0;
-}
-.pickup-area-name {
-  font-weight: 900;
-  font-size: 14px;
-  color: #ffffff;
-  margin-bottom: 3px;
-}
-html[data-theme="light"] .pickup-area-name { color: #1a1a2e; }
-.pickup-area-city {
-  font-size: 11px;
-  color: #6b7591;
-}
-html[data-theme="light"] .pickup-area-city { color: #9ca3af; }
-
-.pickup-area-arrow {
-  color: #6b7591;
-  font-size: 20px;
-  font-weight: 900;
-}
-
-.pickup-empty {
-  text-align: center;
-  padding: 32px 20px;
-  color: #6b7591;
-  font-size: 13px;
-}
-
-.pickup-manual-btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: 2px solid rgba(168,85,247,0.4);
-  background: rgba(168,85,247,0.08);
-  color: #a855f7;
-  font-family: 'Tajawal', sans-serif;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-html[data-theme="light"] .pickup-manual-btn {
-  background: rgba(168,85,247,0.1);
-}
-
-/* Leaflet adjustments */
-.leaflet-container {
-  font-family: 'Tajawal', sans-serif;
-  direction: ltr;
-}
-.leaflet-popup-content-wrapper {
-  border-radius: 12px;
-  font-family: 'Tajawal', sans-serif;
-}
-</style>
 <!-- Leaflet Map -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -8246,35 +7750,15 @@ var APP={
   },
   
   openPickup:function(){
-    var self=this;
-    if(this.pickupLocations){this.renderPickup();return;}
-    if(window.FB&&FB.ready){FB.getConfig('delivery_locations').then(function(d){self.pickupLocations=d||self.getFallback();self.renderPickup();}).catch(function(){self.pickupLocations=self.getFallback();self.renderPickup();});}
-    else{this.pickupLocations=this.getFallback();this.renderPickup();}
+    if(typeof window.__openPickupV2 === 'function'){
+      window.__openPickupV2();
+    } else {
+      console.warn('[PICKUP] __openPickupV2 not ready');
+    }
   },
   getFallback:function(){return{aden:[{district:'المعلا',areas:['الشارع الرئيسي','سوق المعلا']},{district:'كريتر',areas:['شارع الملكة أروى']}],yemen:[{gov:'تعز',station:'مكتب الحوبان'}]};},
-  renderPickup:function(){
-    var data=this.pickupLocations;var self=this;
-    if(!data)return;
-    var tabs='<div style="display:flex;gap:8px;margin-bottom:16px;"><button onclick="APP.switchPickup(\'aden\')" style="flex:1;padding:12px;background:'+(self.currentPickupTab==='aden'?'var(--grad2)':'rgba(2,8,35,.5)')+';border:1.5px solid var(--bd);border-radius:12px;color: #1f2937; font-family:Tajawal,sans-serif;font-weight:700;cursor:pointer;">🏙️ داخل عدن</button><button onclick="APP.switchPickup(\'yemen\')" style="flex:1;padding:12px;background:'+(self.currentPickupTab==='yemen'?'var(--grad2)':'rgba(2,8,35,.5)')+';border:1.5px solid var(--bd);border-radius:12px;color: #1f2937; font-family:Tajawal,sans-serif;font-weight:700;cursor:pointer;">🚌 خارج عدن</button></div>';
-    var content='';
-    if(self.currentPickupTab==='aden'){
-      if(self.currentDistrict){
-        var dist=data.aden.find(function(d){return d.district===self.currentDistrict;});
-        content+='<button onclick="APP.currentDistrict=null;APP.renderPickup();" style="background:none;border:none;color:var(--pk);font-family:Tajawal,sans-serif;font-weight:900;font-size:13px;cursor:pointer;padding:8px 0;margin-bottom:12px;">← رجوع</button>';
-        if(dist&&dist.areas){content+=dist.areas.map(function(a){return '<div style="padding:14px;background: #f4f6fa;border:1.5px solid var(--bd);border-radius:12px;margin-bottom:8px;cursor:pointer;" onclick="APP.selectPickup(\''+esc(dist.district)+' - '+esc(a)+'\')"><div style="display:flex;justify-content:space-between;"><span style="color:var(--cr);font-weight:700;">'+esc(a)+'</span><span style="color:var(--pk);">اختيار ›</span></div></div>';}).join('');}
-      }else{
-        content+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
-        (data.aden||[]).forEach(function(d){content+='<div style="padding:16px;background: #f4f6fa;border:1.5px solid var(--bd);border-radius:12px;text-align:center;cursor:pointer;" onclick="APP.currentDistrict=\''+esc(d.district)+'\';APP.renderPickup()"><div style="font-size:22px;margin-bottom:6px;">🏘️</div><div style="color:var(--cr);font-weight:900;font-size:13px;">'+esc(d.district)+'</div></div>';});
-        content+='</div>';
-      }
-    }else{
-      content+=(data.yemen||[]).map(function(g){return '<div style="padding:14px;background: #f4f6fa;border:1.5px solid var(--bd);border-radius:12px;margin-bottom:8px;cursor:pointer;" onclick="APP.selectPickup(\''+esc(g.gov)+' - '+esc(g.station)+'\')"><div style="color:var(--cr);font-weight:900;">'+esc(g.gov)+'</div><div style="color:var(--mt);font-size:12px;margin-top:4px;">'+esc(g.station)+'</div></div>';}).join('');
-    }
-    document.getElementById('modal-t').textContent='📍 أين تريد استلام طلبك؟';
-    document.getElementById('modal-c').innerHTML=tabs+content;
-    document.getElementById('modal').classList.add('active');
-  },
-  switchPickup:function(t){this.currentPickupTab=t;this.currentDistrict=null;this.renderPickup();},
+  renderPickup:function(){/* v2 handles UI */},
+  switchPickup:function(){/* v2 handles */},
   selectPickup:function(v){
     this.selectedPickup=v;
     document.getElementById('pickup-val').value=v;
@@ -10556,101 +10040,7 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 
-<script id="chz-pickup-js">
-(function(){
-  // إجبار أنماط نقطة التسليم بـ inline styles (لا يُتجاوز)
-  function forcePickupStyles() {
-    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    
-    // 1) صندوق pickup-val
-    var pickup = document.getElementById('pickup-val');
-    if (pickup) {
-      pickup.style.setProperty('background', isLight ? '#f5f7fb' : '#131929', 'important');
-      pickup.style.setProperty('background-color', isLight ? '#f5f7fb' : '#131929', 'important');
-      pickup.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
-      pickup.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-      pickup.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-    }
-    
-    // 2) بطاقات المواقع داخل الـ Modal
-    var modal = document.querySelector('.modal:not([style*="display: none"])') || 
-                document.querySelector('.modal[style*="display: flex"]') ||
-                document.querySelector('.modal[style*="display:flex"]');
-    
-    if (modal) {
-      // كل الأبناء المباشرين
-      var allDivs = modal.querySelectorAll('div');
-      allDivs.forEach(function(div) {
-        // نتحقق: هل هذا div يحتمل أن يكون بطاقة موقع؟
-        var hasIcon = div.textContent.includes('🕌') || 
-                      div.querySelector('.icon') ||
-                      div.textContent.trim().length > 0;
-        
-        // البطاقات عادةً بين 80-150px عرض، خلفيتها بيضاء
-        var rect = div.getBoundingClientRect();
-        if (rect.width > 80 && rect.width < 400 && rect.height > 60 && rect.height < 200) {
-          var hasWhiteBg = false;
-          try {
-            var bg = window.getComputedStyle(div).backgroundColor;
-            hasWhiteBg = bg === 'rgb(255, 255, 255)' || bg === 'white';
-          } catch(e) {}
-          
-          if (hasWhiteBg) {
-            div.style.setProperty('background', isLight ? '#ffffff' : '#1a2035', 'important');
-            div.style.setProperty('background-color', isLight ? '#ffffff' : '#1a2035', 'important');
-            div.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
-            div.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-            div.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-            
-            // كل الأطفال
-            div.querySelectorAll('*').forEach(function(child) {
-              child.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-              child.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-            });
-          }
-        }
-      });
-      
-      // 3) تبويبات داخل الـ Modal
-      var buttons = modal.querySelectorAll('button');
-      buttons.forEach(function(btn) {
-        var isActive = btn.classList.contains('active') || 
-                       btn.style.background.includes('linear') ||
-                       btn.style.background.includes('gradient');
-        if (isActive) {
-          btn.style.setProperty('background', 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)', 'important');
-          btn.style.setProperty('color', '#ffffff', 'important');
-          btn.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
-          btn.style.setProperty('border', 'none', 'important');
-        } else {
-          btn.style.setProperty('background', isLight ? '#f5f7fb' : '#1a2035', 'important');
-          btn.style.setProperty('color', isLight ? '#1a1a2e' : '#b8c0d8', 'important');
-          btn.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#b8c0d8', 'important');
-          btn.style.setProperty('border', '1px solid ' + (isLight ? '#e5e7eb' : '#252b42'), 'important');
-        }
-      });
-    }
-  }
-  
-  // تشغيل عند تحميل الصفحة
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ 
-      setTimeout(forcePickupStyles, 500);
-      setInterval(forcePickupStyles, 1500);
-    });
-  } else {
-    setTimeout(forcePickupStyles, 500);
-    setInterval(forcePickupStyles, 1500);
-  }
-  
-  // مراقبة فتح الـ Modal
-  new MutationObserver(function() {
-    setTimeout(forcePickupStyles, 100);
-  }).observe(document.body, { childList: true, subtree: true });
-  
-  console.log('[PICKUP-FIX] active');
-})();
-</script>
+
 
 
 
@@ -11798,12 +11188,12 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
-<script id="chz-pickup-map">
+
+<script id="chz-pickup-v2-final">
 (function(){
   'use strict';
-  console.log('[PICKUP-MAP] installing...');
-  
-  // ═══ بيانات المناطق مع إحداثيات ═══
+  console.log('[PICKUP-V2] loading...');
+
   var ADEN_AREAS = [
     { name: 'المعلا', city: 'عدن', lat: 12.7895, lng: 45.0099, icon: '🌊' },
     { name: 'كريتر', city: 'عدن', lat: 12.7790, lng: 45.0357, icon: '🏛️' },
@@ -11816,7 +11206,7 @@ document.addEventListener('keydown', function(e) {
     { name: 'الشعب', city: 'عدن', lat: 12.7834, lng: 45.0108, icon: '🏖️' },
     { name: 'المدينة', city: 'عدن', lat: 12.7863, lng: 45.0365, icon: '🕌' }
   ];
-  
+
   var YEMEN_CITIES = [
     { name: 'صنعاء', city: 'صنعاء', lat: 15.3694, lng: 44.1910, icon: '🏛️' },
     { name: 'تعز', city: 'تعز', lat: 13.5795, lng: 44.0209, icon: '🏰' },
@@ -11834,325 +11224,160 @@ document.addEventListener('keydown', function(e) {
     { name: 'رداع', city: 'البيضاء', lat: 14.0722, lng: 44.9397, icon: '🏘️' },
     { name: 'يريم', city: 'إب', lat: 14.3017, lng: 44.3783, icon: '🌾' }
   ];
-  
+
   var currentTab = 'aden';
   var map = null;
-  var markers = {};
-  var userMarker = null;
-  
-  // ═══ حماية من التكرار ═══
-  function isOpen() {
-    return !!document.querySelector('.pickup-overlay');
+
+  function isOpen() { return !!document.querySelector('.pickup-overlay-v2'); }
+
+  function closePickup() {
+    var o = document.querySelector('.pickup-overlay-v2');
+    if (o) o.remove();
+    if (map) { try { map.remove(); } catch(e) {} map = null; }
   }
-  
-  // ═══ بناء Modal ═══
-  function buildModal() {
-    return '' +
-      '<div class="pickup-overlay" onclick="if(event.target===this)window.__closePickup()">' +
-        '<div class="pickup-sheet" onclick="event.stopPropagation()">' +
-          '<div class="pickup-handle"></div>' +
-          '<div class="pickup-header">' +
-            '<div class="pickup-title">📍 أين تريد استلام طلبك؟</div>' +
-            '<button class="pickup-close" onclick="window.__closePickup()">✕</button>' +
-          '</div>' +
-          '<div class="pickup-tabs">' +
-            '<button class="pickup-tab active" data-tab="aden" onclick="window.__switchPickupTab(&quot;aden&quot;)">🏙️ داخل عدن</button>' +
-            '<button class="pickup-tab" data-tab="yemen" onclick="window.__switchPickupTab(&quot;yemen&quot;)">🚌 خارج عدن</button>' +
-          '</div>' +
-          '<div class="pickup-map-container">' +
-            '<div id="pickup-map"></div>' +
-          '</div>' +
-          '<div class="pickup-search-wrap">' +
-            '<input type="text" class="pickup-search-input" id="pickup-search" placeholder="ابحث عن منطقتك..." oninput="window.__filterPickupAreas(this.value)">' +
-          '</div>' +
-          '<button class="pickup-location-btn" onclick="window.__useMyLocation()">' +
-            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>' +
-            'استخدم موقعي الحالي' +
-          '</button>' +
-          '<div class="pickup-areas-list" id="pickup-areas-list"></div>' +
-          '<button class="pickup-manual-btn" onclick="window.__manualPickupEntry()">' +
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
-            'إدخال عنوان يدوي' +
-          '</button>' +
+  window.__pickupClose = closePickup;
+
+  function buildHTML() {
+    return '<div class="pickup-overlay-v2" onclick="if(event.target===this)window.__pickupClose()">' +
+      '<div class="pickup-sheet-v2" onclick="event.stopPropagation()">' +
+        '<div style="width:40px;height:4px;background:rgba(168,85,247,0.3);border-radius:2px;margin:8px auto 16px;"></div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+          '<div style="font-size:18px;font-weight:900;color:#fff;">📍 أين تريد استلام طلبك؟</div>' +
+          '<button onclick="window.__pickupClose()" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:#fff;cursor:pointer;font-size:16px;">✕</button>' +
         '</div>' +
-      '</div>';
+        '<div style="display:flex;gap:8px;margin-bottom:14px;">' +
+          '<button class="pickup-tab-v2 active" data-tab="aden" onclick="window.__pickupSwitchTab(&quot;aden&quot;)">🏙️ داخل عدن</button>' +
+          '<button class="pickup-tab-v2" data-tab="yemen" onclick="window.__pickupSwitchTab(&quot;yemen&quot;)">🚌 خارج عدن</button>' +
+        '</div>' +
+        '<div id="pickup-map-v2" style="height:230px;border-radius:14px;overflow:hidden;border:2px solid #252b42;margin-bottom:14px;background:#131929;"></div>' +
+        '<div style="position:relative;margin-bottom:12px;">' +
+          '<input type="text" id="pickup-search-v2" placeholder="ابحث عن منطقتك..." style="width:100%;padding:12px 40px 12px 14px;border-radius:12px;border:1.5px solid #252b42;background:#131929;color:#fff;font-family:Tajawal,sans-serif;font-size:13px;box-sizing:border-box;outline:none;">' +
+          '<span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;">🔍</span>' +
+        '</div>' +
+        '<div id="pickup-areas-v2" style="max-height:230px;overflow-y:auto;margin-bottom:12px;"></div>' +
+        '<button onclick="window.__pickupManual()" style="width:100%;padding:12px;border-radius:12px;border:2px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.08);color:#a855f7;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;">✏️ إدخال عنوان يدوي</button>' +
+      '</div>' +
+    '</div>';
   }
-  
-  // ═══ خريطة Leaflet ═══
-  function initMap(tab) {
-    var el = document.getElementById('pickup-map');
-    if (!el || typeof L === 'undefined') {
-      console.warn('[PICKUP] Leaflet not ready');
-      return;
-    }
-    
-    if (map) {
-      try { map.remove(); } catch(e) {}
-      map = null;
-    }
-    
-    var isAden = tab === 'aden';
-    var center = isAden ? [12.7895, 45.0099] : [15.3694, 44.1910];
-    var zoom = isAden ? 12 : 6;
-    
-    map = L.map(el, {
-      center: center,
-      zoom: zoom,
-      zoomControl: true,
-      attributionControl: false
-    });
-    
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18
-    }).addTo(map);
-    
-    // إضافة العلامات
-    var areas = isAden ? ADEN_AREAS : YEMEN_CITIES;
-    markers = {};
-    
-    areas.forEach(function(area) {
-      var icon = L.divIcon({
-        className: 'pickup-marker-wrapper',
-        html: '<div class="pickup-marker-icon"><span>' + area.icon + '</span></div>',
-        iconSize: [38, 38],
-        iconAnchor: [19, 38]
-      });
-      
-      var marker = L.marker([area.lat, area.lng], { icon: icon }).addTo(map);
-      
-      marker.bindTooltip(area.name, {
-        permanent: false,
-        direction: 'top',
-        offset: [0, -38],
-        className: 'pickup-tooltip'
-      });
-      
-      marker.on('click', function() {
-        selectArea(area);
-      });
-      
-      markers[area.name] = marker;
-    });
-    
-    // محاولة الحصول على موقع المستخدم
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(pos) {
-        var lat = pos.coords.latitude;
-        var lng = pos.coords.longitude;
-        
-        var userIcon = L.divIcon({
-          className: 'user-marker-wrapper',
-          html: '<div class="user-marker-icon"></div>',
-          iconSize: [20, 20]
-        });
-        
-        userMarker = L.marker([lat, lng], { icon: userIcon })
-          .addTo(map)
-          .bindTooltip('موقعك', { permanent: false, direction: 'top' });
-        
-        // إضافة دائرة حول المستخدم
-        L.circle([lat, lng], {
-          color: '#3b82f6',
-          fillColor: '#3b82f6',
-          fillOpacity: 0.15,
-          radius: 500
-        }).addTo(map);
-        
-        window.__userLocation = { lat: lat, lng: lng };
-      }, function(err) {
-        console.log('[PICKUP] Geolocation:', err.message);
-      }, { enableHighAccuracy: false, timeout: 6000 });
-    }
-    
-    // ضبط الحجم
-    setTimeout(function() {
-      if (map) map.invalidateSize();
-    }, 200);
-  }
-  
-  // ═══ قائمة المناطق ═══
-  function renderAreasList(tab, filter) {
-    var c = document.getElementById('pickup-areas-list');
+
+  function renderAreas(filter) {
+    var c = document.getElementById('pickup-areas-v2');
     if (!c) return;
-    
-    var areas = tab === 'aden' ? ADEN_AREAS : YEMEN_CITIES;
-    
+    var areas = currentTab === 'aden' ? ADEN_AREAS : YEMEN_CITIES;
     if (filter) {
-      filter = filter.toLowerCase().trim();
+      var f = filter.toLowerCase().trim();
       areas = areas.filter(function(a) {
-        return a.name.toLowerCase().indexOf(filter) > -1 ||
-               (a.city && a.city.toLowerCase().indexOf(filter) > -1);
+        return a.name.toLowerCase().indexOf(f) > -1 || (a.city && a.city.toLowerCase().indexOf(f) > -1);
       });
     }
-    
     if (!areas.length) {
-      c.innerHTML = '<div class="pickup-empty">🔍 لا توجد مناطق مطابقة</div>';
+      c.innerHTML = '<div style="text-align:center;padding:32px;color:#6b7591;font-size:13px;">لا توجد مناطق مطابقة</div>';
       return;
     }
-    
-    c.innerHTML = areas.map(function(area) {
-      return '<div class="pickup-area-item" onclick="window.__selectPickupArea(&quot;' + area.name + '&quot;,&quot;' + (area.city || '') + '&quot;,' + area.lat + ',' + area.lng + ')">' +
-        '<div class="pickup-area-icon">' + area.icon + '</div>' +
-        '<div class="pickup-area-info">' +
-          '<div class="pickup-area-name">' + area.name + '</div>' +
-          '<div class="pickup-area-city">' + (area.city || '') + '</div>' +
-        '</div>' +
-        '<div class="pickup-area-arrow">›</div>' +
+    c.innerHTML = areas.map(function(a) {
+      return '<div onclick="window.__pickupSelect(&quot;' + a.name + '&quot;,&quot;' + (a.city || '') + '&quot;)" ' +
+        'style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:8px;background:#131929;border:1.5px solid #252b42;border-radius:12px;cursor:pointer;">' +
+        '<div style="width:40px;height:40px;border-radius:12px;background:rgba(236,72,153,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;">' + a.icon + '</div>' +
+        '<div style="flex:1;"><div style="font-weight:900;font-size:14px;color:#fff;">' + a.name + '</div><div style="font-size:11px;color:#6b7591;">' + (a.city || '') + '</div></div>' +
+        '<div style="color:#6b7591;font-size:20px;">›</div>' +
       '</div>';
     }).join('');
   }
-  
-  // ═══ اختيار منطقة ═══
-  function selectArea(area) {
-    var displayName = area.name;
-    if (area.city && area.city !== area.name) {
-      displayName = area.city + ' - ' + area.name;
-    }
-    
-    if (window.APP && APP.selectPickup) {
-      APP.selectPickup(displayName);
-    } else {
-      // احتياط
-      var val = document.getElementById('pickup-val');
-      var txt = document.getElementById('pickup-txt');
-      if (val) val.value = displayName;
-      if (txt) txt.textContent = '📍 ' + displayName;
-      try { localStorage.setItem('chizen_last_pickup', displayName); } catch(e) {}
-    }
-    
-    // إغلاق
-    window.__closePickup();
+
+  function initMap() {
+    var el = document.getElementById('pickup-map-v2');
+    if (!el) { console.warn('[PICKUP] map container missing'); return; }
+    if (typeof L === 'undefined') { console.warn('[PICKUP] Leaflet not loaded'); return; }
+    if (map) { try { map.remove(); } catch(e) {} map = null; }
+
+    var isAden = currentTab === 'aden';
+    var center = isAden ? [12.7895, 45.0099] : [15.3694, 44.1910];
+    var zoom = isAden ? 12 : 6;
+
+    map = L.map(el, { center: center, zoom: zoom, zoomControl: true, attributionControl: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+
+    var areas = isAden ? ADEN_AREAS : YEMEN_CITIES;
+    areas.forEach(function(a) {
+      var icon = L.divIcon({
+        className: '',
+        html: '<div style="background:linear-gradient(135deg,#ec4899,#8b5cf6);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.3);font-size:14px;">' + a.icon + '</div>',
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+      });
+      L.marker([a.lat, a.lng], { icon: icon })
+        .addTo(map)
+        .bindTooltip(a.name, { direction: 'top', offset: [0, -16] })
+        .on('click', function() {
+          window.__pickupSelect(a.name, a.city || '');
+        });
+    });
+
+    setTimeout(function() { if (map) map.invalidateSize(); }, 150);
   }
-  
-  // ═══ تبديل التبويبات ═══
-  window.__switchPickupTab = function(tab) {
+
+  window.__openPickupV2 = function() {
+    if (isOpen()) return;
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML = buildHTML();
+    document.body.appendChild(wrapper.firstElementChild);
+    currentTab = 'aden';
+    setTimeout(function() { initMap(); renderAreas(); }, 200);
+    setTimeout(function() {
+      var inp = document.getElementById('pickup-search-v2');
+      if (inp) inp.addEventListener('input', function() { renderAreas(this.value); });
+    }, 250);
+  };
+
+  window.__pickupSwitchTab = function(tab) {
     currentTab = tab;
-    document.querySelectorAll('.pickup-tab').forEach(function(b) {
+    document.querySelectorAll('.pickup-tab-v2').forEach(function(b) {
       b.classList.toggle('active', b.dataset.tab === tab);
     });
-    initMap(tab);
-    renderAreasList(tab);
+    initMap();
+    renderAreas();
   };
-  
-  // ═══ فلترة البحث ═══
-  window.__filterPickupAreas = function(q) {
-    renderAreasList(currentTab, q);
+
+  window.__pickupSelect = function(name, city) {
+    var display = name;
+    if (city && city !== name) display = city + ' - ' + name;
+    var valEl = document.getElementById('pickup-val');
+    var txtEl = document.getElementById('pickup-txt');
+    if (valEl) valEl.value = display;
+    if (txtEl) { txtEl.textContent = '📍 ' + display; txtEl.style.color = '#10b981'; }
+    if (window.APP) APP.selectedPickup = display;
+    try { localStorage.setItem('chizen_last_pickup', display); } catch(e) {}
+    if (window.APP && APP.toast) APP.toast('✓ تم اختيار النقطة');
+    closePickup();
   };
-  
-  // ═══ اختيار من القائمة ═══
-  window.__selectPickupArea = function(name, city, lat, lng) {
-    selectArea({ name: name, city: city, lat: lat, lng: lng });
-  };
-  
-  // ═══ الموقع الحالي ═══
-  window.__useMyLocation = function() {
-    if (!navigator.geolocation) {
-      if (APP.toast) APP.toast('الموقع غير مدعوم', 'err');
-      return;
-    }
-    
-    if (APP.toast) APP.toast('جاري تحديد موقعك...');
-    
-    navigator.geolocation.getCurrentPosition(function(pos) {
-      var lat = pos.coords.latitude;
-      var lng = pos.coords.longitude;
-      
-      // ابحث عن أقرب منطقة
-      var areas = currentTab === 'aden' ? ADEN_AREAS : YEMEN_CITIES;
-      var nearest = null;
-      var minDist = Infinity;
-      
-      areas.forEach(function(a) {
-        var d = Math.sqrt(Math.pow(a.lat - lat, 2) + Math.pow(a.lng - lng, 2));
-        if (d < minDist) { minDist = d; nearest = a; }
-      });
-      
-      if (nearest && minDist < 0.15) { // ~15 km
-        selectArea(nearest);
-      } else {
-        // عنوان تقريبي
-        var city = 'موقعي الحالي';
-        if (currentTab === 'aden') {
-          city = 'عدن (موقعك)';
-        } else {
-          city = 'موقعك (' + lat.toFixed(2) + ', ' + lng.toFixed(2) + ')';
-        }
-        
-        if (window.APP && APP.selectPickup) {
-          APP.selectPickup(city);
-        } else {
-          var val = document.getElementById('pickup-val');
-          var txt = document.getElementById('pickup-txt');
-          if (val) val.value = city;
-          if (txt) txt.textContent = '📍 ' + city;
-          try { localStorage.setItem('chizen_last_pickup', city); } catch(e) {}
-        }
-        window.__closePickup();
-      }
-    }, function(err) {
-      if (APP.toast) APP.toast('فشل تحديد الموقع: ' + err.message, 'err');
-    }, { enableHighAccuracy: true, timeout: 10000 });
-  };
-  
-  // ═══ إدخال يدوي ═══
-  window.__manualPickupEntry = function() {
-    window.__closePickup();
+
+  window.__pickupManual = function() {
+    closePickup();
     setTimeout(function() {
-      if (APP.showPrompt) {
+      if (window.APP && APP.showPrompt) {
         APP.showPrompt('أدخل عنوانك يدوياً', '', function(val) {
-          if (val && val.trim()) {
-            if (APP.selectPickup) APP.selectPickup(val.trim());
-          }
+          if (val && val.trim()) window.__pickupSelect(val.trim(), '');
         }, { placeholder: 'مثال: صنعاء - شارع حدة' });
+      } else {
+        var val = prompt('أدخل عنوانك يدوياً:');
+        if (val && val.trim()) window.__pickupSelect(val.trim(), '');
       }
     }, 300);
   };
-  
-  // ═══ إغلاق ═══
-  window.__closePickup = function() {
-    var overlay = document.querySelector('.pickup-overlay');
-    if (overlay) overlay.remove();
-    
-    if (map) {
-      try { map.remove(); } catch(e) {}
-      map = null;
-    }
-    markers = {};
-    userMarker = null;
-  };
-  
-  // ═══ استبدال openPickup ═══
-  function install() {
-    if (!window.APP) { setTimeout(install, 200); return; }
-    if (APP.__pickupMapInstalled) return;
-    APP.__pickupMapInstalled = true;
-    
-    // فتح modal
-    APP.openPickup = function() {
-      if (isOpen()) return;
-      
-      var overlay = document.createElement('div');
-      overlay.innerHTML = buildModal();
-      document.body.appendChild(overlay.firstElementChild);
-      
-      currentTab = 'aden';
-      
-      // تهيئة الخريطة
-      setTimeout(function() {
-        initMap('aden');
-        renderAreasList('aden');
-      }, 150);
-    };
-    
-    // تجاهل renderPickup القديم
-    APP.renderPickup = function() {
-      // لا شيء — نستخدم openPickup الجديد
-    };
-    
-    console.log('[PICKUP-MAP] installed');
-  }
-  
-  install();
+
+  var style = document.createElement('style');
+  style.textContent = '.pickup-overlay-v2{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);z-index:10000;display:flex;align-items:flex-end;justify-content:center;}' +
+    '.pickup-sheet-v2{background:#1a2035;border-radius:24px 24px 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:8px 20px 24px;font-family:Tajawal,sans-serif;direction:rtl;box-shadow:0 -8px 40px rgba(0,0,0,0.5);}' +
+    'html[data-theme="light"] .pickup-sheet-v2{background:#fff;}' +
+    'html[data-theme="light"] .pickup-sheet-v2>div:first-child>div:first-child{color:#1a1a2e !important;}' +
+    '.pickup-tab-v2{flex:1;padding:12px;border-radius:12px;border:1.5px solid #252b42;background:#131929;color:#b8c0d8;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;}' +
+    '.pickup-tab-v2.active{background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border-color:transparent;}' +
+    'html[data-theme="light"] .pickup-tab-v2{background:#f9fafb;border-color:#e5e7eb;color:#6b7280;}' +
+    'html[data-theme="light"] #pickup-search-v2{background:#f9fafb !important;border-color:#e5e7eb !important;color:#1a1a2e !important;}' +
+    '.leaflet-container{font-family:Tajawal,sans-serif;}';
+  document.head.appendChild(style);
+
+  console.log('[PICKUP-V2] READY');
 })();
 </script>
 </body>
