@@ -10632,711 +10632,116 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
-<script id="chz-profile-ultimate">
+
+
+
+<script id="chz-ultimate-fix">
 (function(){
-  var CSS = `
-    /* ═══ PROFILE ULTIMATE FIX ═══ */
-    
-    /* الوضع الفاتح — كل الحاويات بيضاء */
-    html[data-theme="light"] #sc-profile,
-    html[data-theme="light"] #sc-profile .sc,
-    html[data-theme="light"] #sc-profile [class*="screen"] {
-      background: #f5f7fb !important;
-      background-color: #f5f7fb !important;
-      background-image: none !important;
-    }
-    
-    html[data-theme="light"] #sc-profile .cd {
-      background: #ffffff !important;
-      background-color: #ffffff !important;
-      background-image: none !important;
-      border: 1px solid #e5e7eb !important;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-      border-radius: 16px !important;
-    }
-    
-    /* عناوين الأقسام */
-    html[data-theme="light"] #sc-profile .cd .cti,
-    html[data-theme="light"] #sc-profile .cd > div:first-child {
-      background: transparent !important;
-      background-color: transparent !important;
-      background-image: none !important;
-      border: none !important;
-    }
-    
-    /* إزالة أي gradient داخل .cd في الفاتح */
-    html[data-theme="light"] #sc-profile .cd [style*="gradient"]:not([class*="avatar"]):not([class*="btn"]) {
-      background-image: none !important;
-    }
-    
-    /* النصوص */
-    html[data-theme="light"] #sc-profile .ctl,
-    html[data-theme="light"] #sc-profile .rti {
-      color: #1a1a2e !important;
-      -webkit-text-fill-color: #1a1a2e !important;
-    }
-    
-    html[data-theme="light"] #sc-profile .rs {
-      color: #6b7280 !important;
-      -webkit-text-fill-color: #6b7280 !important;
-    }
-    
-    /* صفوف القائمة — شفافة داخل البطاقة البيضاء */
-    html[data-theme="light"] #sc-profile .rw {
-      background: transparent !important;
-      background-color: transparent !important;
-      background-image: none !important;
-      border-bottom: 1px solid #f3f4f6 !important;
-    }
-    
-    /* أيقونات القائمة */
-    html[data-theme="light"] #sc-profile .rw .rt {
-      background: #f5f7fb !important;
-      background-image: none !important;
-      color: #ec4899 !important;
-    }
-    
-    /* السهم */
-    html[data-theme="light"] #sc-profile .rw svg {
-      stroke: #9ca3af !important;
-    }
-    
-    /* الشريط العلوي "حسابي" */
-    html[data-theme="light"] #sc-profile .sh2 {
-      background: #ffffff !important;
-      background-image: none !important;
-      border: 1px solid #e5e7eb !important;
-      border-radius: 14px !important;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-    }
-    
-    html[data-theme="light"] #sc-profile .sh2 .st2 {
-      color: #1a1a2e !important;
-      -webkit-text-fill-color: #1a1a2e !important;
-    }
-    
-    /* الوضع الداكن — الحفاظ عليه */
-    html:not([data-theme="light"]) #sc-profile .cd {
-      background: #1a2035 !important;
-      background-image: none !important;
-      border: 1px solid #252b42 !important;
-    }
-    
-    html:not([data-theme="light"]) #sc-profile .rw {
-      background: transparent !important;
-      border-bottom: 1px solid #252b42 !important;
-    }
-    
-    html:not([data-theme="light"]) #sc-profile .ctl,
-    html:not([data-theme="light"]) #sc-profile .rti {
-      color: #ffffff !important;
-    }
-    
-    html:not([data-theme="light"]) #sc-profile .rs {
-      color: #b8c0d8 !important;
-    }
-    
-    html:not([data-theme="light"]) #sc-profile .rw .rt {
-      background: #131929 !important;
-    }
-    
-    html:not([data-theme="light"]) #sc-profile .sh2 {
-      background: transparent !important;
-    }
-    
-    /* إعادة الأفاتار (يجب أن يكون gradient) */
-    html[data-theme="light"] #sc-profile .chz-prof-avatar,
-    html[data-theme="light"] #sc-profile [class*="avatar"] {
-      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-      background-image: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-    }
-    
-    /* إعادة الأزرار الرئيسية */
-    html[data-theme="light"] #sc-profile .btn-p,
-    html[data-theme="light"] #sc-profile .btn-b {
-      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-      background-image: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-    }
-  `;
+  var isLight = function() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  };
   
-  // حقن CSS في نهاية <head> — أعلى أولوية
-  function inject() {
-    var existing = document.getElementById('chz-profile-ultimate-css');
-    if (existing) existing.remove();
-    var style = document.createElement('style');
-    style.id = 'chz-profile-ultimate-css';
-    style.textContent = CSS;
-    document.head.appendChild(style);
-  }
-  
-  // فرض inline styles على كل عنصر داخل profile
-  function forceInline() {
-    var p = document.getElementById('sc-profile');
-    if (!p) return;
-    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  function applyStyles() {
+    var light = isLight();
+    var dark = !light;
     
-    // كل .cd
-    p.querySelectorAll('.cd').forEach(function(cd) {
-      if (isLight) {
-        cd.style.setProperty('background', '#ffffff', 'important');
-        cd.style.setProperty('background-color', '#ffffff', 'important');
-        cd.style.setProperty('background-image', 'none', 'important');
-        cd.style.setProperty('border', '1px solid #e5e7eb', 'important');
-      } else {
-        cd.style.setProperty('background', '#1a2035', 'important');
-        cd.style.setProperty('background-color', '#1a2035', 'important');
-        cd.style.setProperty('background-image', 'none', 'important');
-        cd.style.setProperty('border', '1px solid #252b42', 'important');
-      }
-    });
+    // ═══ كل حاويات الحساب ═══
+    var sels = [
+      '.profile-hero', '.sg', '.sgt', '.sit',
+      '.sg .sit', '.sg .sgt', '.profile-stats'
+    ];
     
-    // كل .rw
-    p.querySelectorAll('.rw').forEach(function(rw) {
-      rw.style.setProperty('background', 'transparent', 'important');
-      rw.style.setProperty('background-color', 'transparent', 'important');
-      rw.style.setProperty('background-image', 'none', 'important');
-    });
-    
-    // كل .ctl, .rti
-    p.querySelectorAll('.ctl, .rti').forEach(function(el) {
-      el.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-      el.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-    });
-    
-    // كل .rs
-    p.querySelectorAll('.rs').forEach(function(el) {
-      el.style.setProperty('color', isLight ? '#6b7280' : '#b8c0d8', 'important');
-      el.style.setProperty('-webkit-text-fill-color', isLight ? '#6b7280' : '#b8c0d8', 'important');
-    });
-    
-    // اجتياح: كل عنصر داخل profile عنده gradient (استثنى الأفاتار والزر الرئيسي)
-    p.querySelectorAll('*').forEach(function(el) {
-      var tag = el.tagName;
-      if (['SVG','PATH','CIRCLE','LINE','POLYLINE','POLYGON','G','IMG'].indexOf(tag) > -1) return;
-      var cls = (el.className && typeof el.className === 'string') ? el.className : '';
-      if (cls.indexOf('avatar') > -1 || cls.indexOf('btn-p') > -1 || cls.indexOf('btn-b') > -1) return;
-      
-      var bgImg = el.style.backgroundImage || '';
-      var computedBg = window.getComputedStyle(el).backgroundImage || '';
-      
-      if (bgImg.indexOf('gradient') > -1 || (computedBg.indexOf('gradient') > -1 && computedBg !== 'none')) {
-        // تحقق: هل هو تدرج وردي-بنفسجي (علامة تجارية)؟
-        var isBrand = bgImg.indexOf('236, 72, 153') > -1 || bgImg.indexOf('236,72,153') > -1 ||
-                      computedBg.indexOf('236, 72, 153') > -1 ||
-                      bgImg.indexOf('216, 27, 96') > -1 ||
-                      bgImg.indexOf('216,27,96') > -1;
-        if (isBrand) return;
-        
-        el.style.setProperty('background-image', 'none', 'important');
-        if (isLight) {
-          el.style.setProperty('background', 'transparent', 'important');
-        }
-      }
-    });
-  }
-  
-  // تشغيل فوري بعد الجاهزية
-  function run() {
-    inject();
-    forceInline();
-  }
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-  } else {
-    run();
-  }
-  
-  // تشغيل متكرر لالتقاط أي تغيير
-  setInterval(run, 800);
-  
-  // عند تغيير الثيم
-  new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  
-  // مراقبة إضافة عناصر جديدة
-  if (document.body) {
-    new MutationObserver(function(){ setTimeout(forceInline, 100); }).observe(document.body, { childList: true, subtree: true });
-  }
-  
-  console.log('[PROFILE-ULTIMATE] active');
-})();
-</script>
-<script id="chz-global-light-fix">
-(function(){
-  var CSS = `
-    /* ═══════════════════════════════════════════════════════════════
-       GLOBAL LIGHT MODE FIX — كل الحاويات في الوضع الفاتح
-       ═══════════════════════════════════════════════════════════════ */
-    
-    /* ────── كل الحاويات الأساسية في الفاتح: بيضاء ────── */
-    html[data-theme="light"] .cd,
-    html[data-theme="light"] .cs,
-    html[data-theme="light"] .ci-inf,
-    html[data-theme="light"] .rw,
-    html[data-theme="light"] .emp,
-    html[data-theme="light"] .card,
-    html[data-theme="light"] .item,
-    html[data-theme="light"] .sw,
-    html[data-theme="light"] .cat-i,
-    html[data-theme="light"] .tb,
-    html[data-theme="light"] .profile-card,
-    html[data-theme="light"] .setting-group,
-    html[data-theme="light"] .settings-section {
-      background: #ffffff !important;
-      background-color: #ffffff !important;
-      background-image: none !important;
-      color: #1a1a2e !important;
-      border-color: #e5e7eb !important;
-    }
-    
-    /* ────── إزالة التدرج من كل الحاويات المحتملة في الفاتح ────── */
-    html[data-theme="light"] [class*="card"]:not([class*="avatar"]):not([class*="btn"]):not([class*="prod"]):not([class*="banner"]):not([class*="slide"]),
-    html[data-theme="light"] [class*="group"]:not([class*="avatar"]):not([class*="btn"]):not([class*="icon"]),
-    html[data-theme="light"] [class*="section"]:not([class*="avatar"]):not([class*="btn"]),
-    html[data-theme="light"] [class*="container"]:not([class*="avatar"]):not([class*="btn"]):not([class*="slide"]):not([class*="banner"]) {
-      background-image: none !important;
-    }
-    
-    /* ────── النصوص — داكنة في الفاتح ────── */
-    html[data-theme="light"] .ctl,
-    html[data-theme="light"] .rti,
-    html[data-theme="light"] .stl,
-    html[data-theme="light"] .ci-n,
-    html[data-theme="light"] .prod-n,
-    html[data-theme="light"] .name,
-    html[data-theme="light"] h1,
-    html[data-theme="light"] h2,
-    html[data-theme="light"] h3,
-    html[data-theme="light"] h4,
-    html[data-theme="light"] .title {
-      color: #1a1a2e !important;
-      -webkit-text-fill-color: #1a1a2e !important;
-    }
-    
-    /* ────── النصوص الثانوية ────── */
-    html[data-theme="light"] .rs,
-    html[data-theme="light"] .ci-p,
-    html[data-theme="light"] .sub,
-    html[data-theme="light"] .desc {
-      color: #6b7280 !important;
-      -webkit-text-fill-color: #6b7280 !important;
-    }
-    
-    /* ────── الشاشات — خلفية رمادية فاتحة ────── */
-    html[data-theme="light"] [id^="sc-"]:not([id*="checkout"]):not([id*="cart"]):not([id*="details"]):not([id*="cat"]):not([id*="booking"]) {
-      background: #f5f7fb !important;
-      background-color: #f5f7fb !important;
-      background-image: none !important;
-    }
-    
-    /* ────── الإعدادات — معالجة خاصة ────── */
-    html[data-theme="light"] #sc-settings .cd,
-    html[data-theme="light"] #sc-settings .cs,
-    html[data-theme="light"] #sc-settings .rw,
-    html[data-theme="light"] #sc-settings [class*="setting"] {
-      background: #ffffff !important;
-      background-image: none !important;
-      border-color: #e5e7eb !important;
-    }
-    
-    /* عناوين أقسام الإعدادات (المظهر، الأمان) */
-    html[data-theme="light"] #sc-settings .ctl {
-      color: #ec4899 !important;
-      -webkit-text-fill-color: #ec4899 !important;
-    }
-    
-    /* قيم الإعدادات (العربية، داكن، متوسط) */
-    html[data-theme="light"] .set-val,
-    html[data-theme="light"] .setting-value,
-    html[data-theme="light"] #sc-settings .rw > div:nth-child(2) {
-      background: #f5f7fb !important;
-      color: #1a1a2e !important;
-      -webkit-text-fill-color: #1a1a2e !important;
-      border-color: #e5e7eb !important;
-    }
-    
-    /* ────── مفاتيح التبديل (toggles) ────── */
-    html[data-theme="light"] .tog {
-      background: #e5e7eb !important;
-      border-color: #d1d5db !important;
-    }
-    
-    html[data-theme="light"] .tog.on {
-      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-      border-color: transparent !important;
-    }
-    
-    /* ────── عناصر القائمة في كل الشاشات ────── */
-    html[data-theme="light"] .rw .rt,
-    html[data-theme="light"] .rw .ra {
-      background: #f5f7fb !important;
-      background-image: none !important;
-    }
-    
-    /* ────── الحفاظ على الأفاتار والبنرات ────── */
-    html[data-theme="light"] [class*="avatar"],
-    html[data-theme="light"] #slides,
-    html[data-theme="light"] .slide,
-    html[data-theme="light"] .banner-slide {
-      background-image: revert !important;
-    }
-    
-    /* ────── الأزرار الرئيسية تحافظ على تدرجها ────── */
-    html[data-theme="light"] .btn-p,
-    html[data-theme="light"] .btn-b,
-    html[data-theme="light"] .btn-primary {
-      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-      background-image: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-    }
-    
-    /* ────── شريط البحث ────── */
-    html[data-theme="light"] .ss-wrapper,
-    html[data-theme="light"] .sw {
-      background: #ffffff !important;
-      background-image: none !important;
-      border-color: #e5e7eb !important;
-    }
-    
-    /* ────── الشريط السفلي ────── */
-    html[data-theme="light"] #bottom-nav,
-    html[data-theme="light"] .bnav,
-    html[data-theme="light"] .nav-bar {
-      background: #ffffff !important;
-      background-image: none !important;
-      border-color: #e5e7eb !important;
-    }
-    
-    html[data-theme="light"] #bottom-nav .bn-it {
-      color: #6b7280 !important;
-    }
-    
-    html[data-theme="light"] #bottom-nav .bn-it.active {
-      color: #ec4899 !important;
-    }
-    
-    /* ────── الحاويات الفرعية (مثل tb) ────── */
-    html[data-theme="light"] .tb,
-    html[data-theme="light"] .tr,
-    html[data-theme="light"] .tf {
-      background: transparent !important;
-      color: #1a1a2e !important;
-    }
-    
-    html[data-theme="light"] .tb {
-      background: #ffffff !important;
-      border: 1px solid #e5e7eb !important;
-    }
-  `;
-  
-  // حقن CSS في نهاية head
-  function inject() {
-    var existing = document.getElementById('chz-global-light-css');
-    if (existing) existing.remove();
-    var style = document.createElement('style');
-    style.id = 'chz-global-light-css';
-    style.textContent = CSS;
-    document.head.appendChild(style);
-  }
-  
-  // فرض inline styles على الحاويات الرئيسية في الفاتح
-  function forceInline() {
-    if (document.documentElement.getAttribute('data-theme') !== 'light') return;
-    
-    // كل .cd في الفاتح
-    document.querySelectorAll('.cd').forEach(function(el) {
-      el.style.setProperty('background', '#ffffff', 'important');
-      el.style.setProperty('background-color', '#ffffff', 'important');
-      el.style.setProperty('background-image', 'none', 'important');
-    });
-    
-    // كل .rw
-    document.querySelectorAll('.rw').forEach(function(el) {
-      el.style.setProperty('background', 'transparent', 'important');
-      el.style.setProperty('background-color', 'transparent', 'important');
-      el.style.setProperty('background-image', 'none', 'important');
-    });
-    
-    // كل .cs
-    document.querySelectorAll('.cs').forEach(function(el) {
-      el.style.setProperty('background', '#ffffff', 'important');
-      el.style.setProperty('background-color', '#ffffff', 'important');
-      el.style.setProperty('background-image', 'none', 'important');
-    });
-    
-    // النصوص
-    document.querySelectorAll('.ctl, .rti').forEach(function(el) {
-      el.style.setProperty('color', '#1a1a2e', 'important');
-      el.style.setProperty('-webkit-text-fill-color', '#1a1a2e', 'important');
-    });
-    
-    document.querySelectorAll('.rs').forEach(function(el) {
-      el.style.setProperty('color', '#6b7280', 'important');
-      el.style.setProperty('-webkit-text-fill-color', '#6b7280', 'important');
-    });
-    
-    // اجتياح: إزالة gradient من الحاويات الداخلية (مع استثناء الأفاتار والأزرار)
-    document.querySelectorAll('[class*="card"], [class*="group"], [class*="section"]').forEach(function(el) {
-      var cls = (el.className && typeof el.className === 'string') ? el.className : '';
-      if (cls.match(/avatar|btn|banner|slide|prod|icon/i)) return;
-      
-      var computed = window.getComputedStyle(el);
-      var bgImg = computed.backgroundImage || '';
-      
-      if (bgImg.includes('gradient')) {
-        // استثناء: تدرج وردي-بنفسجي (العلامة التجارية)
-        var isBrand = bgImg.includes('236, 72, 153') || bgImg.includes('216, 27, 96');
-        if (!isBrand) {
-          el.style.setProperty('background-image', 'none', 'important');
+    document.querySelectorAll(sels.join(',')).forEach(function(el) {
+      if (light) {
+        // فاتح
+        if (el.matches('.profile-hero, .sg')) {
+          el.style.setProperty('background', '#ffffff', 'important');
           el.style.setProperty('background-color', '#ffffff', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('border', '1px solid #e5e7eb', 'important');
+        } else {
+          // .sgt, .sit - شفافة داخل البطاقة
+          el.style.setProperty('background', 'transparent', 'important');
+          el.style.setProperty('background-color', 'transparent', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+        }
+      } else {
+        // داكن
+        if (el.matches('.profile-hero')) {
+          el.style.setProperty('background', 'linear-gradient(135deg, #1e1937 0%, #14102a 100%)', 'important');
+          el.style.setProperty('background-color', '#1e1937', 'important');
+          el.style.setProperty('background-image', 'linear-gradient(135deg, #1e1937 0%, #14102a 100%)', 'important');
+        } else if (el.matches('.sg')) {
+          el.style.setProperty('background', '#1a2035', 'important');
+          el.style.setProperty('background-color', '#1a2035', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('border', '1px solid #252b42', 'important');
+        } else {
+          el.style.setProperty('background', 'transparent', 'important');
+          el.style.setProperty('background-color', 'transparent', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
         }
       }
     });
-  }
-  
-  function run() {
-    inject();
-    forceInline();
-  }
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-  } else {
-    run();
-  }
-  
-  setInterval(run, 800);
-  
-  new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  
-  if (document.body) {
-    new MutationObserver(function(){ setTimeout(forceInline, 100); }).observe(document.body, { childList: true, subtree: true });
-  }
-  
-  console.log('[GLOBAL-LIGHT] active');
-})();
-</script>
-<script id="chz-profile-real">
-(function(){
-  var CSS = `
-    /* ═══════════════════════════════════════════════════════════════
-       PROFILE REAL FIX — يستهدف .profile-hero, .sg, .sgt, .sit
-       ═══════════════════════════════════════════════════════════════ */
     
-    /* ────── .profile-hero (بطاقة المستخدم) ────── */
-    
-    html[data-theme="light"] .profile-hero {
-      background: #ffffff !important;
-      background-color: #ffffff !important;
-      background-image: none !important;
-      border: 1px solid #e5e7eb !important;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-    }
-    
-    html:not([data-theme="light"]) .profile-hero {
-      background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
-      background-image: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
-      border: 1px solid #252b42 !important;
-    }
-    
-    /* ────── .profile-name (الاسم) ────── */
-    html[data-theme="light"] .profile-name {
-      color: #1a1a2e !important;
-      -webkit-text-fill-color: #1a1a2e !important;
-    }
-    html:not([data-theme="light"]) .profile-name {
-      color: #ffffff !important;
-      -webkit-text-fill-color: #ffffff !important;
-    }
-    
-    /* ────── .profile-email ────── */
-    html[data-theme="light"] .profile-email {
-      color: #6b7280 !important;
-      -webkit-text-fill-color: #6b7280 !important;
-    }
-    html:not([data-theme="light"]) .profile-email {
-      color: #b8c0d8 !important;
-      -webkit-text-fill-color: #b8c0d8 !important;
-    }
-    
-    /* ────── .pstat-num, .pstat-lbl ────── */
-    html[data-theme="light"] .pstat-num {
-      color: #ec4899 !important;
-      -webkit-text-fill-color: #ec4899 !important;
-    }
-    html:not([data-theme="light"]) .pstat-num {
-      color: #ff4d94 !important;
-      -webkit-text-fill-color: #ff4d94 !important;
-    }
-    html[data-theme="light"] .pstat-lbl {
-      color: #6b7280 !important;
-      -webkit-text-fill-color: #6b7280 !important;
-    }
-    html:not([data-theme="light"]) .pstat-lbl {
-      color: #b8c0d8 !important;
-      -webkit-text-fill-color: #b8c0d8 !important;
-    }
-    
-    /* ────── .pstat-divider (الفاصل) ────── */
-    html[data-theme="light"] .pstat-divider {
-      background: #e5e7eb !important;
-    }
-    html:not([data-theme="light"]) .pstat-divider {
-      background: #252b42 !important;
-    }
-    
-    /* ────── .sg (مجموعة القسم) — المشكلة الرئيسية ────── */
-    html[data-theme="light"] .sg {
-      background: #ffffff !important;
-      background-color: #ffffff !important;
-      background-image: none !important;
-      border: 1px solid #e5e7eb !important;
-      border-radius: 16px !important;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-      margin: 12px 16px !important;
-      overflow: hidden !important;
-    }
-    
-    html:not([data-theme="light"]) .sg {
-      background: #1a2035 !important;
-      background-color: #1a2035 !important;
-      background-image: none !important;
-      border: 1px solid #252b42 !important;
-      border-radius: 16px !important;
-      margin: 12px 16px !important;
-      overflow: hidden !important;
-    }
-    
-    /* ────── .sgt (عنوان القسم - "نشاطي" / "الإعدادات") ────── */
-    html[data-theme="light"] .sgt {
-      background: transparent !important;
-      background-image: none !important;
-      color: #ec4899 !important;
-      -webkit-text-fill-color: #ec4899 !important;
-      padding: 12px 16px !important;
-      border-bottom: 1px solid #f3f4f6 !important;
-    }
-    
-    html:not([data-theme="light"]) .sgt {
-      background: transparent !important;
-      background-image: none !important;
-      color: #ff4d94 !important;
-      -webkit-text-fill-color: #ff4d94 !important;
-      padding: 12px 16px !important;
-      border-bottom: 1px solid #252b42 !important;
-    }
-    
-    /* ────── .sit (عنصر القائمة) ────── */
-    html[data-theme="light"] .sit {
-      background: transparent !important;
-      background-color: transparent !important;
-      background-image: none !important;
-      border-bottom: 1px solid #f3f4f6 !important;
-    }
-    
-    html:not([data-theme="light"]) .sit {
-      background: transparent !important;
-      background-image: none !important;
-      border-bottom: 1px solid #252b42 !important;
-    }
-    
-    /* ────── .sit-ti (نص عنصر القائمة) ────── */
-    html[data-theme="light"] .sit-ti {
-      color: #1a1a2e !important;
-      -webkit-text-fill-color: #1a1a2e !important;
-      font-weight: 700 !important;
-    }
-    
-    html:not([data-theme="light"]) .sit-ti {
-      color: #ffffff !important;
-      -webkit-text-fill-color: #ffffff !important;
-      font-weight: 700 !important;
-    }
-    
-    /* ────── .sit-d (وصف صغير) ────── */
-    html[data-theme="light"] .sit-d {
-      color: #6b7280 !important;
-      -webkit-text-fill-color: #6b7280 !important;
-    }
-    
-    html:not([data-theme="light"]) .sit-d {
-      color: #b8c0d8 !important;
-      -webkit-text-fill-color: #b8c0d8 !important;
-    }
-    
-    /* ────── .mi-a (السهم) ────── */
-    html[data-theme="light"] .mi-a {
-      color: #9ca3af !important;
-    }
-    
-    html:not([data-theme="light"]) .mi-a {
-      color: #6b7591 !important;
-    }
-    
-    /* ────── .sii (أيقونة القائمة) — الإبقاء على ألوانها ────── */
-    /* لا نغيّر .sii لأن لكل أيقونة لوناً خاصاً (أزرق/وردي/أصفر/بنفسجي/أخضر/أحمر) */
-  `;
-  
-  function inject() {
-    var existing = document.getElementById('chz-profile-real-css');
-    if (existing) existing.remove();
-    var style = document.createElement('style');
-    style.id = 'chz-profile-real-css';
-    style.textContent = CSS;
-    document.head.appendChild(style);
-  }
-  
-  function forceInline() {
-    if (document.documentElement.getAttribute('data-theme') !== 'light') return;
-    
-    // .profile-hero
-    var hero = document.querySelector('.profile-hero');
-    if (hero) {
-      hero.style.setProperty('background', '#ffffff', 'important');
-      hero.style.setProperty('background-color', '#ffffff', 'important');
-      hero.style.setProperty('background-image', 'none', 'important');
-    }
-    
-    // .sg (كل مجموعة)
-    document.querySelectorAll('.sg').forEach(function(sg) {
-      sg.style.setProperty('background', '#ffffff', 'important');
-      sg.style.setProperty('background-color', '#ffffff', 'important');
-      sg.style.setProperty('background-image', 'none', 'important');
-      sg.style.setProperty('border', '1px solid #e5e7eb', 'important');
-    });
-    
-    // .sgt
-    document.querySelectorAll('.sgt').forEach(function(sgt) {
-      sgt.style.setProperty('background', 'transparent', 'important');
-      sgt.style.setProperty('background-image', 'none', 'important');
-    });
-    
-    // .sit
-    document.querySelectorAll('.sit').forEach(function(sit) {
-      sit.style.setProperty('background', 'transparent', 'important');
-      sit.style.setProperty('background-color', 'transparent', 'important');
-      sit.style.setProperty('background-image', 'none', 'important');
-    });
-    
-    // النصوص
+    // ═══ النصوص ═══
     document.querySelectorAll('.profile-name, .sit-ti').forEach(function(el) {
-      el.style.setProperty('color', '#1a1a2e', 'important');
-      el.style.setProperty('-webkit-text-fill-color', '#1a1a2e', 'important');
+      el.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#1a1a2e' : '#ffffff', 'important');
     });
     
     document.querySelectorAll('.profile-email, .sit-d, .pstat-lbl').forEach(function(el) {
-      el.style.setProperty('color', '#6b7280', 'important');
-      el.style.setProperty('-webkit-text-fill-color', '#6b7280', 'important');
+      el.style.setProperty('color', light ? '#6b7280' : '#b8c0d8', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#6b7280' : '#b8c0d8', 'important');
     });
     
     document.querySelectorAll('.pstat-num').forEach(function(el) {
-      el.style.setProperty('color', '#ec4899', 'important');
-      el.style.setProperty('-webkit-text-fill-color', '#ec4899', 'important');
+      el.style.setProperty('color', light ? '#ec4899' : '#ff4d94', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#ec4899' : '#ff4d94', 'important');
     });
+    
+    // ═══ شاشة الإعدادات ═══
+    var settings = document.getElementById('sc-settings');
+    if (settings) {
+      settings.querySelectorAll('.cd, .cs, .rw').forEach(function(el) {
+        el.style.setProperty('background', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-color', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-image', 'none', 'important');
+        el.style.setProperty('border', '1px solid ' + (light ? '#e5e7eb' : '#252b42'), 'important');
+      });
+    }
+    
+    // ═══ شاشة الحساب - .cd إن وجدت ═══
+    var profile = document.getElementById('sc-profile');
+    if (profile) {
+      profile.querySelectorAll('.cd').forEach(function(el) {
+        el.style.setProperty('background', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-color', light ? '#ffffff' : '#1a2035', 'important');
+        el.style.setProperty('background-image', 'none', 'important');
+      });
+    }
+  }
+  
+  // CSS احتياطي للوضعين
+  function injectCSS() {
+    var existing = document.getElementById('chz-ultimate-css');
+    if (existing) existing.remove();
+    var style = document.createElement('style');
+    style.id = 'chz-ultimate-css';
+    style.textContent = `
+      html[data-theme="light"] .profile-hero { background: #ffffff !important; background-image: none !important; border: 1px solid #e5e7eb !important; }
+      html:not([data-theme="light"]) .profile-hero { background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important; background-image: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important; border: 1px solid #252b42 !important; }
+      html[data-theme="light"] .sg { background: #ffffff !important; background-image: none !important; border: 1px solid #e5e7eb !important; }
+      html:not([data-theme="light"]) .sg { background: #1a2035 !important; background-image: none !important; border: 1px solid #252b42 !important; }
+      html[data-theme="light"] .sgt, html[data-theme="light"] .sit { background: transparent !important; background-image: none !important; }
+      html:not([data-theme="light"]) .sgt, html:not([data-theme="light"]) .sit { background: transparent !important; background-image: none !important; }
+    `;
+    document.head.appendChild(style);
   }
   
   function run() {
-    inject();
-    forceInline();
+    injectCSS();
+    applyStyles();
   }
   
   if (document.readyState === 'loading') {
@@ -11345,15 +10750,13 @@ document.addEventListener('keydown', function(e) {
     run();
   }
   
-  setInterval(run, 800);
-  
+  setInterval(run, 400);
   new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  
   if (document.body) {
-    new MutationObserver(function(){ setTimeout(forceInline, 100); }).observe(document.body, { childList: true, subtree: true });
+    new MutationObserver(function(){ setTimeout(applyStyles, 50); }).observe(document.body, { childList: true, subtree: true });
   }
   
-  console.log('[PROFILE-REAL] active');
+  console.log('[ULTIMATE] active');
 })();
 </script>
 </body>
