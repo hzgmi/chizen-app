@@ -10543,37 +10543,53 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 
-<script id="chz-notifs-deep">
+
+<script id="chz-notifs-redesign">
 (function(){
   'use strict';
-  var LOG = function(){ if (window.__notifDebug) console.log.apply(console, ['[NOTIFS-DEEP]'].concat(Array.from(arguments))); };
   
   function isLight() { return document.documentElement.getAttribute('data-theme') === 'light'; }
   
-  function getColors() {
+  function C() {
     return isLight() ? {
-      card: '#ffffff', cardBorder: '#e5e7eb', cardBorderUnread: '#ec4899',
-      title: '#1a1a2e', body: '#4b5563', time: '#9ca3af', empty: '#6b7280',
-      tabBg: '#ffffff', tabBorder: '#e5e7eb', tabActive: '#ec4899',
-      tabText: '#6b7280', tabActiveText: '#ffffff'
+      cardBg: '#ffffff', cardBorder: '#e5e7eb', cardHover: '#fafbfc',
+      textPrimary: '#1a1a2e', textSecondary: '#6b7280', textMuted: '#9ca3af',
+      divider: '#f3f4f6', inputBg: '#ffffff', inputBorder: '#e5e7eb',
+      pink: '#ec4899', purple: '#8b5cf6',
+      tabBg: '#ffffff', tabBorder: '#e5e7eb', tabText: '#6b7280',
+      tabActiveBg: 'linear-gradient(135deg, #ec4899, #8b5cf6)',
+      groupLabel: '#9ca3af',
+      unreadDot: '#ec4899',
+      emptyIcon: 'rgba(236,72,153,0.1)'
     } : {
-      card: '#1a2035', cardBorder: '#252b42', cardBorderUnread: '#ff4d94',
-      title: '#ffffff', body: '#b8c0d8', time: '#6b7591', empty: '#b8c0d8',
-      tabBg: '#1a2035', tabBorder: '#252b42', tabActive: '#ec4899',
-      tabText: '#b8c0d8', tabActiveText: '#ffffff'
+      cardBg: '#1a2035', cardBorder: '#252b42', cardHover: '#212a44',
+      textPrimary: '#ffffff', textSecondary: '#b8c0d8', textMuted: '#6b7591',
+      divider: '#252b42', inputBg: '#131929', inputBorder: '#252b42',
+      pink: '#ff4d94', purple: '#a855f7',
+      tabBg: '#1a2035', tabBorder: '#252b42', tabText: '#b8c0d8',
+      tabActiveBg: 'linear-gradient(135deg, #ec4899, #8b5cf6)',
+      groupLabel: '#6b7591',
+      unreadDot: '#ff4d94',
+      emptyIcon: 'rgba(255,77,148,0.15)'
     };
   }
   
   var TYPES = {
-    'booking': { icon: '✈️', color: '#3b82f6', label: 'حجز' },
-    'order': { icon: '🛒', color: '#10b981', label: 'طلب' },
-    'points': { icon: '💎', color: '#a855f7', label: 'نقاط' },
+    'booking':  { icon: '✈️', color: '#3b82f6', label: 'حجز' },
+    'order':    { icon: '🛒', color: '#10b981', label: 'طلب' },
+    'points':   { icon: '💎', color: '#a855f7', label: 'نقاط' },
     'referral': { icon: '🎟️', color: '#f59e0b', label: 'إحالة' },
-    'promo': { icon: '🎁', color: '#ec4899', label: 'عرض' },
-    'system': { icon: '🔔', color: '#6b7280', label: 'نظام' },
-    'general': { icon: '📢', color: '#a855f7', label: 'عام' },
-    'welcome': { icon: '🎉', color: '#10b981', label: 'ترحيب' },
-    'returning': { icon: '👋', color: '#f59e0b', label: 'عودة' }
+    'promo':    { icon: '🎁', color: '#ec4899', label: 'عرض' },
+    'system':   { icon: '🔔', color: '#64748b', label: 'نظام' },
+    'general':  { icon: '📢', color: '#a855f7', label: 'عام' },
+    'welcome':  { icon: '🎉', color: '#10b981', label: 'ترحيب' },
+    'returning':{ icon: '👋', color: '#f59e0b', label: 'عودة' }
+  };
+  
+  var state = {
+    data: [],
+    filter: 'all',
+    search: ''
   };
   
   function esc(x) {
@@ -10586,34 +10602,113 @@ document.addEventListener('keydown', function(e) {
     if (!n.createdAt || !n.createdAt.toDate) return '';
     var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
     if (diff < 1) return 'الآن';
-    if (diff < 60) return 'قبل ' + diff + ' دقيقة';
-    if (diff < 1440) return 'قبل ' + Math.floor(diff/60) + ' ساعة';
-    if (diff < 10080) return 'قبل ' + Math.floor(diff/1440) + ' يوم';
+    if (diff < 60) return 'قبل ' + diff + ' د';
+    if (diff < 1440) return 'قبل ' + Math.floor(diff/60) + ' س';
+    if (diff < 10080) return 'قبل ' + Math.floor(diff/1440) + ' ي';
     return n.createdAt.toDate().toLocaleDateString('ar');
   }
   
-  window.__notifFilter = 'all';
+  function groupByDate(list) {
+    var now = new Date();
+    var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var yesterdayStart = new Date(todayStart); yesterdayStart.setDate(todayStart.getDate() - 1);
+    var weekStart = new Date(todayStart); weekStart.setDate(todayStart.getDate() - 7);
+    
+    var groups = { today: [], yesterday: [], week: [], older: [] };
+    list.forEach(function(n) {
+      if (!n.createdAt || !n.createdAt.toDate) { groups.older.push(n); return; }
+      var d = n.createdAt.toDate();
+      if (d >= todayStart) groups.today.push(n);
+      else if (d >= yesterdayStart) groups.yesterday.push(n);
+      else if (d >= weekStart) groups.week.push(n);
+      else groups.older.push(n);
+    });
+    return groups;
+  }
   
-  // ═══ رسم الواجهة ═══
-  window.__renderNotifsUI = function(list) {
+  function buildCard(n, c) {
+    var type = n.type || 'general';
+    var t = TYPES[type] || TYPES.general;
+    var isUnread = n.read === false;
+    var time = timeAgo(n);
+    
+    return '<div class="nrf-card" data-id="' + esc(n.id) + '" data-uid="' + esc(n.userId || '') + '" onclick="if(window.notifClick)notifClick(event,&quot;' + n.id + '&quot;)" style="' +
+      'position:relative;display:flex;gap:12px;padding:14px;margin-bottom:8px;' +
+      'background:' + (isUnread ? c.cardBg : 'transparent') + ';' +
+      'border:1px solid ' + (isUnread ? c.pink + '66' : c.cardBorder) + ';' +
+      'border-radius:14px;cursor:pointer;transition:background 0.15s;' +
+    '">' +
+      (isUnread ? '<div style="position:absolute;top:14px;right:14px;width:8px;height:8px;background:' + c.pink + ';border-radius:50%;box-shadow:0 0 6px ' + c.pink + ';"></div>' : '') +
+      '<div style="width:44px;height:44px;border-radius:12px;background:' + t.color + '22;border:1px solid ' + t.color + '44;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + t.icon + '</div>' +
+      '<div style="flex:1;min-width:0;padding-right:16px;">' +
+        '<div style="font-weight:900;font-size:13px;color:' + c.textPrimary + ';margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(n.title || '') + '</div>' +
+        '<div style="font-size:12px;color:' + c.textSecondary + ';line-height:1.5;margin-bottom:6px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">' + esc(n.body || '') + '</div>' +
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+          '<span style="font-size:9px;color:' + t.color + ';font-weight:800;background:' + t.color + '18;padding:2px 7px;border-radius:8px;">' + t.label + '</span>' +
+          (time ? '<span style="font-size:10px;color:' + c.textMuted + ';">' + time + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+      '<button onclick="event.stopPropagation();window.nrfDeleteNotif(&quot;' + esc(n.id) + '&quot;)" style="position:absolute;bottom:10px;left:10px;width:26px;height:26px;border-radius:50%;background:transparent;border:none;color:' + c.textMuted + ';cursor:pointer;font-size:14px;">✕</button>' +
+    '</div>';
+  }
+  
+  function buildSkeleton(c) {
+    var skeleton = '';
+    for (var i = 0; i < 4; i++) {
+      skeleton += '<div style="display:flex;gap:12px;padding:14px;margin-bottom:8px;background:' + c.cardBg + ';border:1px solid ' + c.cardBorder + ';border-radius:14px;opacity:0.6;">' +
+        '<div style="width:44px;height:44px;border-radius:12px;background:' + c.divider + ';"></div>' +
+        '<div style="flex:1;">' +
+          '<div style="height:12px;background:' + c.divider + ';border-radius:6px;width:60%;margin-bottom:8px;"></div>' +
+          '<div style="height:10px;background:' + c.divider + ';border-radius:6px;width:90%;margin-bottom:6px;"></div>' +
+          '<div style="height:10px;background:' + c.divider + ';border-radius:6px;width:40%;"></div>' +
+        '</div>' +
+      '</div>';
+    }
+    return skeleton;
+  }
+  
+  function buildEmpty(c, filter) {
+    var msgs = {
+      all: 'ستظهر هنا إشعاراتك الجديدة',
+      order: 'لا توجد إشعارات طلبات',
+      booking: 'لا توجد إشعارات حجوزات',
+      promo: 'لا توجد عروض جديدة',
+      system: 'لا توجد إشعارات نظام'
+    };
+    return '<div style="text-align:center;padding:60px 20px;">' +
+      '<div style="width:80px;height:80px;margin:0 auto 20px;border-radius:50%;background:' + c.emptyIcon + ';display:flex;align-items:center;justify-content:center;font-size:36px;">🔔</div>' +
+      '<div style="font-size:16px;font-weight:900;color:' + c.textPrimary + ';margin-bottom:8px;">لا توجد إشعارات</div>' +
+      '<div style="font-size:12px;color:' + c.textMuted + ';max-width:240px;margin:0 auto;">' + (msgs[filter] || msgs.all) + '</div>' +
+    '</div>';
+  }
+  
+  function render() {
     var c = document.getElementById('notif-list');
-    if (!c) { LOG('notif-list missing'); return; }
+    if (!c) return;
     
+    var colors = C();
     var uid = window.FB && FB.currentUser ? FB.currentUser.uid : null;
-    LOG('rendering for user:', uid ? uid.substring(0, 8) : 'none', 'count:', list ? list.length : 0);
     
-    // فلترة إضافية دفاعية: كل إشعار يجب أن يكون للمستخدم الحالي أو عام
-    var safeList = (list || []).filter(function(n) {
-      if (!uid) return false;
+    // Filter by user (defense in depth)
+    var myNotifs = state.data.filter(function(n) {
       return n.userId === uid || n.isGlobal === true;
     });
     
-    var C = getColors();
-    var filter = window.__notifFilter || 'all';
-    var filtered = filter === 'all' ? safeList : safeList.filter(function(n) {
-      return (n.type || 'general') === filter;
+    // Filter by type
+    var byType = state.filter === 'all' ? myNotifs : myNotifs.filter(function(n) {
+      return (n.type || 'general') === state.filter;
     });
     
+    // Filter by search
+    var searched = state.search ? byType.filter(function(n) {
+      var q = state.search.toLowerCase();
+      return (n.title || '').toLowerCase().indexOf(q) > -1 ||
+             (n.body || '').toLowerCase().indexOf(q) > -1;
+    }) : byType;
+    
+    var unreadCount = myNotifs.filter(function(n) { return n.read === false; }).length;
+    
+    // ═══ التبويبات ═══
     var tabs = [
       { key: 'all', label: 'الكل', icon: '📬' },
       { key: 'order', label: 'الطلبات', icon: '🛒' },
@@ -10622,124 +10717,134 @@ document.addEventListener('keydown', function(e) {
       { key: 'system', label: 'النظام', icon: '🔔' }
     ];
     
-    var tabsHtml = '<div style="display:flex;gap:8px;overflow-x:auto;padding:8px 0 14px;margin-bottom:8px;scrollbar-width:none;">';
+    var tabsHtml = '<div style="display:flex;gap:8px;overflow-x:auto;padding:10px 0 14px;margin-bottom:8px;scrollbar-width:none;">';
     tabs.forEach(function(t) {
-      var active = filter === t.key;
-      var count = t.key === 'all' ? safeList.length : safeList.filter(function(n){ return (n.type || 'general') === t.key; }).length;
-      tabsHtml += '<button onclick="window.__setNotifFilter(&quot;' + t.key + '&quot;)" style="flex-shrink:0;padding:9px 14px;border-radius:20px;border:1.5px solid ' + (active ? C.tabActive : C.tabBorder) + ';background:' + (active ? C.tabActive : C.tabBg) + ';color:' + (active ? C.tabActiveText : C.tabText) + ';font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;">' + t.icon + ' ' + t.label + ' <span style="background:' + (active ? 'rgba(255,255,255,0.25)' : C.cardBorder) + ';padding:1px 6px;border-radius:8px;font-size:9px;">' + count + '</span></button>';
+      var active = state.filter === t.key;
+      var count = t.key === 'all' ? myNotifs.length : myNotifs.filter(function(n) { return (n.type || 'general') === t.key; }).length;
+      tabsHtml += '<button onclick="window.nrfSetFilter(&quot;' + t.key + '&quot;)" style="flex-shrink:0;padding:9px 14px;border-radius:20px;border:1.5px solid ' + (active ? 'transparent' : colors.tabBorder) + ';background:' + (active ? colors.tabActiveBg : colors.tabBg) + ';color:' + (active ? '#ffffff' : colors.tabText) + ';font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;">' + t.icon + ' ' + t.label + ' <span style="background:' + (active ? 'rgba(255,255,255,0.25)' : colors.divider) + ';padding:1px 6px;border-radius:8px;font-size:9px;">' + count + '</span></button>';
     });
     tabsHtml += '</div>';
     
-    if (!filtered.length) {
-      c.innerHTML = tabsHtml + '<div style="text-align:center;padding:60px 20px;"><div style="font-size:52px;margin-bottom:14px;">🔔</div><div style="font-weight:800;font-size:15px;color:' + C.title + ';margin-bottom:6px;">لا توجد إشعارات</div><div style="font-size:12px;color:' + C.empty + ';">' + (filter === 'all' ? 'ستظهر هنا إشعاراتك الجديدة' : 'لا توجد إشعارات في هذا التصنيف') + '</div></div>';
-      return;
-    }
+    // ═══ البحث + إجراءات ═══
+    var toolbarHtml = '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
+      '<div style="flex:1;position:relative;">' +
+        '<input type="text" id="nrf-search" placeholder="ابحث في الإشعارات..." value="' + esc(state.search) + '" oninput="window.nrfSearch(this.value)" style="width:100%;padding:11px 38px 11px 14px;border-radius:12px;border:1px solid ' + colors.inputBorder + ';background:' + colors.inputBg + ';color:' + colors.textPrimary + ';font-family:inherit;font-size:12px;box-sizing:border-box;outline:none;">' +
+        '<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:' + colors.textMuted + ';font-size:14px;pointer-events:none;">🔍</span>' +
+      '</div>' +
+      (unreadCount > 0 ? '<button onclick="window.nrfMarkAllRead()" title="تحديد الكل كمقروء" style="padding:0 14px;border-radius:12px;border:1px solid ' + colors.pink + '55;background:' + colors.pink + '15;color:' + colors.pink + ';font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;white-space:nowrap;">✓ الكل</button>' : '') +
+    '</div>';
     
-    var cardsHtml = filtered.map(function(n) {
-      var type = n.type || 'general';
-      var t = TYPES[type] || TYPES['general'];
-      var isUnread = n.read === false;
-      var time = timeAgo(n);
-      return '<div class="chz-notif-card" data-uid="' + esc(n.userId || '') + '" onclick="if(window.notifClick)notifClick(event,&quot;' + n.id + '&quot;)" style="position:relative;display:flex;gap:12px;padding:14px;margin-bottom:10px;background:' + C.card + ';border:1px solid ' + (isUnread ? C.cardBorderUnread : C.cardBorder) + ';border-radius:14px;cursor:pointer;">' +
-        (isUnread ? '<div style="position:absolute;top:12px;left:12px;width:8px;height:8px;background:#ec4899;border-radius:50%;"></div>' : '') +
-        '<div style="width:42px;height:42px;border-radius:12px;background:' + t.color + '22;border:1px solid ' + t.color + '55;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + t.icon + '</div>' +
-        '<div style="flex:1;min-width:0;">' +
-          '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;">' +
-            '<div style="font-weight:900;font-size:13px;color:' + C.title + ';flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(n.title || '') + '</div>' +
-            '<span style="font-size:9px;color:' + t.color + ';font-weight:800;background:' + t.color + '18;padding:2px 7px;border-radius:8px;white-space:nowrap;flex-shrink:0;">' + t.label + '</span>' +
-          '</div>' +
-          '<div style="font-size:12px;color:' + C.body + ';line-height:1.6;margin-bottom:6px;">' + esc(n.body || '') + '</div>' +
-          (time ? '<div style="font-size:10px;color:' + C.time + ';">🕐 ' + time + '</div>' : '') +
-        '</div>' +
-      '</div>';
-    }).join('');
+    // ═══ المحتوى ═══
+    var contentHtml = '';
     
-    c.innerHTML = tabsHtml + cardsHtml;
-    LOG('rendered', cardsHtml.length > 0 ? 'with' : 'empty', 'content');
-  };
-  
-  window.__setNotifFilter = function(f) {
-    window.__notifFilter = f;
-    if (window.APP && window.APP.notifications) {
-      window.__renderNotifsUI(window.APP.notifications);
-    }
-  };
-  
-  // ═══ Level 1: Override FB.getNotifications ═══
-  function overrideFB() {
-    if (!window.FB) { setTimeout(overrideFB, 150); return; }
-    if (FB.__notifDeepFiltered) return;
-    FB.__notifDeepFiltered = true;
-    if (FB.getNotifications) {
-      var orig = FB.getNotifications;
-      FB.getNotifications = async function() {
-        var result = await orig.call(FB);
-        var uid = FB.currentUser ? FB.currentUser.uid : null;
-        if (!uid || !Array.isArray(result)) return result;
-        var filtered = result.filter(function(n) {
-          return n.userId === uid || n.isGlobal === true;
-        });
-        LOG('FB.getNotifications filtered:', result.length, '→', filtered.length);
-        return filtered;
+    if (searched.length === 0) {
+      contentHtml = buildEmpty(colors, state.filter);
+    } else {
+      var groups = groupByDate(searched);
+      var groupLabels = {
+        today: 'اليوم',
+        yesterday: 'أمس',
+        week: 'هذا الأسبوع',
+        older: 'أقدم'
       };
-      LOG('FB.getNotifications overridden');
+      Object.keys(groupLabels).forEach(function(key) {
+        if (groups[key].length === 0) return;
+        contentHtml += '<div style="margin-bottom:14px;">';
+        contentHtml += '<div style="font-size:11px;font-weight:900;color:' + colors.groupLabel + ';margin-bottom:8px;padding:0 4px;letter-spacing:0.5px;">' + groupLabels[key] + ' · ' + groups[key].length + '</div>';
+        groups[key].forEach(function(n) {
+          contentHtml += buildCard(n, colors);
+        });
+        contentHtml += '</div>';
+      });
     }
+    
+    c.innerHTML = tabsHtml + toolbarHtml + contentHtml;
   }
-  overrideFB();
   
-  // ═══ Level 2: Override APP.renderNotifs ═══
-  function overrideAPP() {
-    if (!window.APP) { setTimeout(overrideAPP, 150); return; }
-    if (APP.__notifDeepOverride) return;
-    APP.__notifDeepOverride = true;
+  // ═══ الأحداث العامة ═══
+  window.nrfSetFilter = function(f) {
+    state.filter = f;
+    render();
+  };
+  
+  window.nrfSearch = function(q) {
+    state.search = q || '';
+    // نؤجل قليلاً لتجنب إعادة الرسم في كل حرف
+    clearTimeout(window.__nrfSearchTimer);
+    window.__nrfSearchTimer = setTimeout(render, 200);
+  };
+  
+  window.nrfMarkAllRead = async function() {
+    var uid = window.FB && FB.currentUser ? FB.currentUser.uid : null;
+    if (!uid || !window.FB || !FB.db) return;
+    var unread = state.data.filter(function(n) { return n.userId === uid && n.read === false; });
+    for (var i = 0; i < unread.length; i++) {
+      try {
+        await FB.db.collection('notifications').doc(unread[i].id).update({ read: true });
+        unread[i].read = true;
+      } catch(e) {}
+    }
+    render();
+  };
+  
+  window.nrfDeleteNotif = async function(id) {
+    if (!confirm('حذف هذا الإشعار؟')) return;
+    try {
+      if (window.FB && FB.db) {
+        await FB.db.collection('notifications').doc(id).delete();
+      }
+      state.data = state.data.filter(function(n) { return n.id !== id; });
+      if (window.APP) window.APP.notifications = state.data;
+      render();
+    } catch(e) {
+      alert('فشل الحذف');
+    }
+  };
+  
+  // ═══ تثبيت renderNotifs ═══
+  function install() {
+    if (!window.APP) { setTimeout(install, 200); return; }
+    if (APP.__notifRedesign) return;
+    APP.__notifRedesign = true;
     
     APP.renderNotifs = async function() {
       var c = document.getElementById('notif-list');
       if (!c) return;
-      var C = getColors();
-      c.innerHTML = '<div style="text-align:center;padding:40px;color:' + C.empty + ';">⏳ جاري التحميل...</div>';
+      
+      var colors = C();
+      c.innerHTML = buildSkeleton(colors);
       
       if (!window.FB || !FB.db) {
-        c.innerHTML = '<div style="text-align:center;padding:40px;color:' + C.empty + ';">غير متصل</div>';
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:' + colors.textMuted + ';">غير متصل</div>';
         return;
       }
       
       var uid = FB.currentUser ? FB.currentUser.uid : null;
       if (!uid) {
-        c.innerHTML = '<div style="text-align:center;padding:40px;color:' + C.empty + ';">سجّل دخول لعرض إشعاراتك</div>';
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:' + colors.textMuted + ';">سجّل دخول لعرض إشعاراتك</div>';
         return;
       }
-      
-      LOG('fetching notifications for uid:', uid.substring(0, 8));
       
       var all = [];
       var seen = {};
       
       try {
         var userSnap = await FB.db.collection('notifications')
-          .where('userId', '==', uid)
-          .limit(100).get();
+          .where('userId', '==', uid).limit(100).get();
         userSnap.forEach(function(doc) {
-          var d = doc.data();
-          d.id = doc.id;
-          if (d.userId === uid && !seen[d.id]) {
-            seen[d.id] = 1;
-            all.push(d);
-          }
+          var d = doc.data(); d.id = doc.id;
+          if (d.userId === uid && !seen[d.id]) { seen[d.id] = 1; all.push(d); }
         });
-        LOG('user notifs:', all.length);
-      } catch(e) { LOG('user query error:', e.message); }
+      } catch(e) {}
       
       try {
         var globalSnap = await FB.db.collection('notifications')
-          .where('isGlobal', '==', true)
-          .limit(30).get();
+          .where('isGlobal', '==', true).limit(30).get();
         globalSnap.forEach(function(doc) {
-          var d = doc.data();
-          d.id = doc.id;
+          var d = doc.data(); d.id = doc.id;
           if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
         });
-      } catch(e) { LOG('global query error:', e.message); }
+      } catch(e) {}
       
       all.sort(function(a, b) {
         var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
@@ -10747,60 +10852,20 @@ document.addEventListener('keydown', function(e) {
         return tb - ta;
       });
       
+      state.data = all;
+      state.search = '';
       this.notifications = all;
-      window.__renderNotifsUI(all);
-      LOG('final:', all.length);
+      render();
     };
-    LOG('APP.renderNotifs overridden');
     
-    // ═══ Level 3: Override updateNotifB (badge) ═══
-    var origUpdateNotifB = APP.updateNotifB;
-    APP.updateNotifB = function() {
-      var uid = FB.currentUser ? FB.currentUser.uid : null;
-      var list = this.notifications || [];
-      var filtered = uid ? list.filter(function(n) {
-        return n.userId === uid || n.isGlobal === true;
-      }) : [];
-      var b = document.getElementById('notif-b');
-      if (b) b.textContent = filtered.length;
-    };
-    LOG('APP.updateNotifB overridden');
+    console.log('[NOTIFS-REDESIGN] installed');
   }
-  overrideAPP();
+  install();
   
-  // ═══ Level 4: DOM watcher — يكتشف إشعارات مستخدم آخر ═══
-  setTimeout(function() {
-    var c = document.getElementById('notif-list');
-    if (!c) return;
-    new MutationObserver(function() {
-      setTimeout(function() {
-        var uid = window.FB && FB.currentUser ? FB.currentUser.uid : null;
-        if (!uid) return;
-        var cards = c.querySelectorAll('.chz-notif-card');
-        var wrongCount = 0;
-        cards.forEach(function(card) {
-          var cardUid = card.getAttribute('data-uid');
-          if (cardUid && cardUid !== uid && cardUid !== '') {
-            wrongCount++;
-            card.remove();
-          }
-        });
-        if (wrongCount > 0) {
-          LOG('removed', wrongCount, 'wrong-user notifications');
-        }
-      }, 200);
-    }).observe(c, { childList: true, subtree: false });
-    LOG('DOM watcher active');
-  }, 3000);
-  
-  // ═══ تحديث عند تغيير الوضع ═══
+  // إعادة الرسم عند تغيير الوضع
   new MutationObserver(function() {
-    if (window.APP && APP.notifications && APP.notifications.length >= 0) {
-      window.__renderNotifsUI(APP.notifications);
-    }
+    if (document.getElementById('notif-list')) render();
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  
-  console.log('[NOTIFS-DEEP] installed — 3-level override + DOM watcher');
 })();
 </script>
 </body>
