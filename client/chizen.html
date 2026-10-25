@@ -6104,407 +6104,8 @@ html[data-theme="light"] .booking-tab.active {
   color: #ffffff !important;
 }
 </style>
-<style id="chz-profile-fix">
-/* ═══════════════════════════════════════════════════════════════
-   إصلاح شاشة الحساب الشخصي — الوضع الفاتح
-   ═══════════════════════════════════════════════════════════════ */
 
-/* ══════════ 1) خلفية شاشة الحساب ══════════ */
 
-html[data-theme="light"] #sc-profile {
-  background: #f5f7fb !important;
-  background-color: #f5f7fb !important;
-}
-
-html:not([data-theme="light"]) #sc-profile {
-  background: #0a0e1a !important;
-  background-color: #0a0e1a !important;
-}
-
-/* ══════════ 2) هيدر "حسابي" (الشريط العلوي) ══════════ */
-
-html[data-theme="light"] #sc-profile .sh2,
-html[data-theme="light"] #sc-profile .hd {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-  border-radius: 14px !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-}
-
-html[data-theme="light"] #sc-profile .sh2 .st2,
-html[data-theme="light"] #sc-profile .hd .st2 {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-}
-
-/* ══════════ 3) بطاقة البروفايل ══════════ */
-
-/* الوضع الفاتح — بطاقة بيضاء */
-html[data-theme="light"] .pf-card,
-html[data-theme="light"] .profile-card,
-html[data-theme="light"] .prof-card,
-html[data-theme="light"] #sc-profile .cd:first-of-type,
-html[data-theme="light"] #sc-profile .rw:first-child {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  background-image: none !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-  border-radius: 16px !important;
-}
-
-/* الوضع الداكن — الحفاظ على التدرج */
-html:not([data-theme="light"]) .pf-card,
-html:not([data-theme="light"]) .profile-card,
-html:not([data-theme="light"]) .prof-card {
-  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
-  border: 1px solid #252b42 !important;
-}
-
-/* ══════════ 4) اسم المستخدم ══════════ */
-
-html[data-theme="light"] .pf-name,
-html[data-theme="light"] .profile-name,
-html[data-theme="light"] .prof-name,
-html[data-theme="light"] #sc-profile .cd:first-of-type > div:nth-child(2) {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-  font-weight: 900 !important;
-}
-
-html:not([data-theme="light"]) .pf-name,
-html:not([data-theme="light"]) .profile-name,
-html:not([data-theme="light"]) .prof-name {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* ══════════ 5) البريد الإلكتروني ══════════ */
-
-html[data-theme="light"] .pf-email,
-html[data-theme="light"] .profile-email,
-html[data-theme="light"] .prof-email {
-  color: #6b7280 !important;
-  -webkit-text-fill-color: #6b7280 !important;
-}
-
-html:not([data-theme="light"]) .pf-email,
-html:not([data-theme="light"]) .profile-email,
-html:not([data-theme="light"]) .prof-email {
-  color: #b8c0d8 !important;
-  -webkit-text-fill-color: #b8c0d8 !important;
-}
-
-/* ══════════ 6) الإحصائيات (0 نقطة، 0 مفضلة، 0 طلبات) ══════════ */
-
-html[data-theme="light"] .pf-stat-num,
-html[data-theme="light"] .stat-num,
-html[data-theme="light"] .prof-stat-num {
-  color: #ec4899 !important;
-  -webkit-text-fill-color: #ec4899 !important;
-}
-
-html[data-theme="light"] .pf-stat-label,
-html[data-theme="light"] .stat-label,
-html[data-theme="light"] .prof-stat-label {
-  color: #6b7280 !important;
-  -webkit-text-fill-color: #6b7280 !important;
-}
-
-html:not([data-theme="light"]) .pf-stat-num,
-html:not([data-theme="light"]) .stat-num {
-  color: #ec4899 !important;
-  -webkit-text-fill-color: #ec4899 !important;
-}
-
-html:not([data-theme="light"]) .pf-stat-label,
-html:not([data-theme="light"]) .stat-label {
-  color: #b8c0d8 !important;
-  -webkit-text-fill-color: #b8c0d8 !important;
-}
-
-/* الفواصل بين الإحصائيات */
-html[data-theme="light"] #sc-profile [style*="border-right"],
-html[data-theme="light"] #sc-profile [style*="border-left"] {
-  border-color: #e5e7eb !important;
-}
-
-/* ══════════ 7) قسم "نشاطي" ══════════ */
-
-html[data-theme="light"] #sc-profile .cd {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  background-image: none !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-}
-
-html[data-theme="light"] #sc-profile .ctl {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-  font-weight: 900 !important;
-}
-
-/* ══════════ 8) عناصر القائمة (عناويني، طرق الدفع، طلباتي) ══════════ */
-
-html[data-theme="light"] #sc-profile .rw {
-  background: transparent !important;
-  border-bottom: 1px solid #f3f4f6 !important;
-}
-
-html[data-theme="light"] #sc-profile .rw .rti {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-  font-weight: 700 !important;
-}
-
-html[data-theme="light"] #sc-profile .rw .rs {
-  color: #6b7280 !important;
-  -webkit-text-fill-color: #6b7280 !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw {
-  background: transparent !important;
-  border-bottom: 1px solid #252b42 !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw .rti {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw .rs {
-  color: #b8c0d8 !important;
-  -webkit-text-fill-color: #b8c0d8 !important;
-}
-
-/* أيقونات القائمة */
-html[data-theme="light"] #sc-profile .rw .rt {
-  background: #f5f7fb !important;
-  color: #ec4899 !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw .rt {
-  background: #131929 !important;
-}
-
-/* السهم على اليسار */
-html[data-theme="light"] #sc-profile .rw svg {
-  stroke: #9ca3af !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw svg {
-  stroke: #6b7591 !important;
-}
-
-/* ══════════ 9) أزرار أخرى داخل شاشة الحساب ══════════ */
-
-html[data-theme="light"] #sc-profile .btn-p {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-  color: #ffffff !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .btn-p {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
-  color: #ffffff !important;
-}
-
-/* ══════════ 10) زر تعديل الصورة (الحلقة البنفسجية) ══════════ */
-
-html[data-theme="light"] #sc-profile [style*="position: absolute"] svg,
-html:not([data-theme="light"]) #sc-profile [style*="position: absolute"] svg {
-  /* لا نغيّر */
-}
-
-/* ══════════ 11) حماية: كل النصوص في البطاقة الأولى ══════════ */
-
-html[data-theme="light"] #sc-profile .cd:first-of-type *:not(svg):not(path) {
-  /* تأكد أن النصوص داكنة */
-}
-</style>
-<style id="chz-profile-v2">
-/* ═══════════════════════════════════════════════════════════════
-   إصلاح قوي للحساب — تجاوز أي gradient
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ══════════ 1) خلفية شاشة الحساب ══════════ */
-html[data-theme="light"] #sc-profile,
-html[data-theme="light"] #sc-profile .sc,
-html[data-theme="light"] #sc-profile .screen {
-  background: #f5f7fb !important;
-  background-color: #f5f7fb !important;
-  background-image: none !important;
-}
-
-html:not([data-theme="light"]) #sc-profile,
-html:not([data-theme="light"]) #sc-profile .sc,
-html:not([data-theme="light"]) #sc-profile .screen {
-  background: #0a0e1a !important;
-  background-color: #0a0e1a !important;
-  background-image: none !important;
-}
-
-/* ══════════ 2) كل حاويات .cd داخل الحساب — إزالة أي gradient ══════════ */
-html[data-theme="light"] #sc-profile .cd,
-html[data-theme="light"] #sc-profile [class*="card"],
-html[data-theme="light"] #sc-profile [class*="section"] {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  background-image: none !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-  border-radius: 16px !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .cd,
-html:not([data-theme="light"]) #sc-profile [class*="card"] {
-  background: #1a2035 !important;
-  background-color: #1a2035 !important;
-  background-image: none !important;
-  border: 1px solid #252b42 !important;
-}
-
-/* ══════════ 3) رؤوس الأقسام (cd:has(ctl)) — تطهير كامل ══════════ */
-html[data-theme="light"] #sc-profile .cd > .cti,
-html[data-theme="light"] #sc-profile .cd > div:first-child,
-html[data-theme="light"] #sc-profile .cd .ctl {
-  background: transparent !important;
-  background-image: none !important;
-}
-
-/* ══════════ 4) عناوين الأقسام (نشاطي، الإعدادات) ══════════ */
-html[data-theme="light"] #sc-profile .ctl {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-  font-weight: 900 !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .ctl {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-/* ══════════ 5) صفوف القائمة (.rw) — شفافة داخل البطاقة البيضاء ══════════ */
-html[data-theme="light"] #sc-profile .rw {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  border-bottom: 1px solid #f3f4f6 !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw {
-  background: transparent !important;
-  border-bottom: 1px solid #252b42 !important;
-}
-
-/* ══════════ 6) نصوص القائمة ══════════ */
-html[data-theme="light"] #sc-profile .rw .rti,
-html[data-theme="light"] #sc-profile .rw .rt + div > div:first-child {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-  font-weight: 700 !important;
-}
-
-html[data-theme="light"] #sc-profile .rw .rs,
-html[data-theme="light"] #sc-profile .rw .rt + div > div:last-child {
-  color: #6b7280 !important;
-  -webkit-text-fill-color: #6b7280 !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw .rti {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw .rs {
-  color: #b8c0d8 !important;
-  -webkit-text-fill-color: #b8c0d8 !important;
-}
-
-/* ══════════ 7) أيقونات القائمة (.rt) ══════════ */
-html[data-theme="light"] #sc-profile .rw .rt {
-  background: #f5f7fb !important;
-  background-image: none !important;
-  color: #ec4899 !important;
-  border-radius: 12px !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw .rt {
-  background: #131929 !important;
-}
-
-/* ══════════ 8) السهم على يسار القائمة ══════════ */
-html[data-theme="light"] #sc-profile .rw svg,
-html[data-theme="light"] #sc-profile .rw .ra svg {
-  stroke: #9ca3af !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .rw svg {
-  stroke: #6b7591 !important;
-}
-
-/* ══════════ 9) الشريط العلوي "حسابي" ══════════ */
-html[data-theme="light"] #sc-profile .sh2 {
-  background: #ffffff !important;
-  background-image: none !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-}
-
-html[data-theme="light"] #sc-profile .sh2 .st2 {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .sh2 {
-  background: transparent !important;
-}
-
-html:not([data-theme="light"]) #sc-profile .sh2 .st2 {
-  color: #ffffff !important;
-}
-
-/* ══════════ 10) بطاقة البروفايل الأولى ══════════ */
-html[data-theme="light"] #sc-profile .cd:first-of-type {
-  background: #ffffff !important;
-  background-image: none !important;
-  border: 1px solid #e5e7eb !important;
-}
-
-/* ══════════ 11) النص في البطاقة الأولى (الاسم + البريد) ══════════ */
-html[data-theme="light"] #sc-profile .cd:first-of-type > div:not(:first-child) {
-  color: #1a1a2e !important;
-}
-
-html[data-theme="light"] #sc-profile .cd:first-of-type > div:nth-child(2) {
-  color: #1a1a2e !important;
-  -webkit-text-fill-color: #1a1a2e !important;
-  font-weight: 900 !important;
-}
-
-/* ══════════ 12) أرقام الإحصائيات ══════════ */
-html[data-theme="light"] #sc-profile .cd:first-of-type [style*="font-size"] {
-  color: #ec4899 !important;
-}
-
-/* ══════════ 13) أي عنصر بـ inline gradient في الحساب ══════════ */
-html[data-theme="light"] #sc-profile [style*="linear-gradient"] {
-  background: #ffffff !important;
-  background-image: none !important;
-}
-
-html:not([data-theme="light"]) #sc-profile [style*="linear-gradient"]:not([style*="ec4899"]):not([style*="ff27c9"]):not([style*="d81b60"]) {
-  background: #1a2035 !important;
-  background-image: none !important;
-}
-
-/* ══════════ 14) إزالة الشفافية الرمادية ══════════ */
-html[data-theme="light"] #sc-profile .cd[style*="background"] {
-  background: #ffffff !important;
-  background-image: none !important;
-}
-</style>
 </head>
 <body>
 <div id="app">
@@ -11030,16 +10631,152 @@ document.addEventListener('keydown', function(e) {
   console.log('[PICKUP-FIX] active');
 })();
 </script>
-<script id="chz-profile-v2-js">
+
+<script id="chz-profile-ultimate">
 (function(){
-  function forceProfile() {
-    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    var profile = document.getElementById('sc-profile');
-    if (!profile) return;
+  var CSS = `
+    /* ═══ PROFILE ULTIMATE FIX ═══ */
     
-    // 1) كل .cd داخل profile
-    var cds = profile.querySelectorAll('.cd');
-    cds.forEach(function(cd) {
+    /* الوضع الفاتح — كل الحاويات بيضاء */
+    html[data-theme="light"] #sc-profile,
+    html[data-theme="light"] #sc-profile .sc,
+    html[data-theme="light"] #sc-profile [class*="screen"] {
+      background: #f5f7fb !important;
+      background-color: #f5f7fb !important;
+      background-image: none !important;
+    }
+    
+    html[data-theme="light"] #sc-profile .cd {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+      border-radius: 16px !important;
+    }
+    
+    /* عناوين الأقسام */
+    html[data-theme="light"] #sc-profile .cd .cti,
+    html[data-theme="light"] #sc-profile .cd > div:first-child {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      border: none !important;
+    }
+    
+    /* إزالة أي gradient داخل .cd في الفاتح */
+    html[data-theme="light"] #sc-profile .cd [style*="gradient"]:not([class*="avatar"]):not([class*="btn"]) {
+      background-image: none !important;
+    }
+    
+    /* النصوص */
+    html[data-theme="light"] #sc-profile .ctl,
+    html[data-theme="light"] #sc-profile .rti {
+      color: #1a1a2e !important;
+      -webkit-text-fill-color: #1a1a2e !important;
+    }
+    
+    html[data-theme="light"] #sc-profile .rs {
+      color: #6b7280 !important;
+      -webkit-text-fill-color: #6b7280 !important;
+    }
+    
+    /* صفوف القائمة — شفافة داخل البطاقة البيضاء */
+    html[data-theme="light"] #sc-profile .rw {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      border-bottom: 1px solid #f3f4f6 !important;
+    }
+    
+    /* أيقونات القائمة */
+    html[data-theme="light"] #sc-profile .rw .rt {
+      background: #f5f7fb !important;
+      background-image: none !important;
+      color: #ec4899 !important;
+    }
+    
+    /* السهم */
+    html[data-theme="light"] #sc-profile .rw svg {
+      stroke: #9ca3af !important;
+    }
+    
+    /* الشريط العلوي "حسابي" */
+    html[data-theme="light"] #sc-profile .sh2 {
+      background: #ffffff !important;
+      background-image: none !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 14px !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    }
+    
+    html[data-theme="light"] #sc-profile .sh2 .st2 {
+      color: #1a1a2e !important;
+      -webkit-text-fill-color: #1a1a2e !important;
+    }
+    
+    /* الوضع الداكن — الحفاظ عليه */
+    html:not([data-theme="light"]) #sc-profile .cd {
+      background: #1a2035 !important;
+      background-image: none !important;
+      border: 1px solid #252b42 !important;
+    }
+    
+    html:not([data-theme="light"]) #sc-profile .rw {
+      background: transparent !important;
+      border-bottom: 1px solid #252b42 !important;
+    }
+    
+    html:not([data-theme="light"]) #sc-profile .ctl,
+    html:not([data-theme="light"]) #sc-profile .rti {
+      color: #ffffff !important;
+    }
+    
+    html:not([data-theme="light"]) #sc-profile .rs {
+      color: #b8c0d8 !important;
+    }
+    
+    html:not([data-theme="light"]) #sc-profile .rw .rt {
+      background: #131929 !important;
+    }
+    
+    html:not([data-theme="light"]) #sc-profile .sh2 {
+      background: transparent !important;
+    }
+    
+    /* إعادة الأفاتار (يجب أن يكون gradient) */
+    html[data-theme="light"] #sc-profile .chz-prof-avatar,
+    html[data-theme="light"] #sc-profile [class*="avatar"] {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+      background-image: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+    }
+    
+    /* إعادة الأزرار الرئيسية */
+    html[data-theme="light"] #sc-profile .btn-p,
+    html[data-theme="light"] #sc-profile .btn-b {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+      background-image: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+    }
+  `;
+  
+  // حقن CSS في نهاية <head> — أعلى أولوية
+  function inject() {
+    var existing = document.getElementById('chz-profile-ultimate-css');
+    if (existing) existing.remove();
+    var style = document.createElement('style');
+    style.id = 'chz-profile-ultimate-css';
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+  
+  // فرض inline styles على كل عنصر داخل profile
+  function forceInline() {
+    var p = document.getElementById('sc-profile');
+    if (!p) return;
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    
+    // كل .cd
+    p.querySelectorAll('.cd').forEach(function(cd) {
       if (isLight) {
         cd.style.setProperty('background', '#ffffff', 'important');
         cd.style.setProperty('background-color', '#ffffff', 'important');
@@ -11053,59 +10790,75 @@ document.addEventListener('keydown', function(e) {
       }
     });
     
-    // 2) كل .rw داخل profile
-    var rws = profile.querySelectorAll('.rw');
-    rws.forEach(function(rw) {
+    // كل .rw
+    p.querySelectorAll('.rw').forEach(function(rw) {
       rw.style.setProperty('background', 'transparent', 'important');
       rw.style.setProperty('background-color', 'transparent', 'important');
       rw.style.setProperty('background-image', 'none', 'important');
     });
     
-    // 3) النصوص (.rti, .rs)
-    profile.querySelectorAll('.rti').forEach(function(el) {
-      el.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-      el.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
-    });
-    profile.querySelectorAll('.rs').forEach(function(el) {
-      el.style.setProperty('color', isLight ? '#6b7280' : '#b8c0d8', 'important');
-      el.style.setProperty('-webkit-text-fill-color', isLight ? '#6b7280' : '#b8c0d8', 'important');
-    });
-    profile.querySelectorAll('.ctl').forEach(function(el) {
+    // كل .ctl, .rti
+    p.querySelectorAll('.ctl, .rti').forEach(function(el) {
       el.style.setProperty('color', isLight ? '#1a1a2e' : '#ffffff', 'important');
       el.style.setProperty('-webkit-text-fill-color', isLight ? '#1a1a2e' : '#ffffff', 'important');
     });
     
-    // 4) حماية: أي div داخل profile له خلفية gradient
-    profile.querySelectorAll('div').forEach(function(div) {
-      var bg = div.style.background || div.style.backgroundImage || '';
-      if (bg.includes('gradient') && !bg.includes('ec4899') && !bg.includes('ff27c9')) {
+    // كل .rs
+    p.querySelectorAll('.rs').forEach(function(el) {
+      el.style.setProperty('color', isLight ? '#6b7280' : '#b8c0d8', 'important');
+      el.style.setProperty('-webkit-text-fill-color', isLight ? '#6b7280' : '#b8c0d8', 'important');
+    });
+    
+    // اجتياح: كل عنصر داخل profile عنده gradient (استثنى الأفاتار والزر الرئيسي)
+    p.querySelectorAll('*').forEach(function(el) {
+      var tag = el.tagName;
+      if (['SVG','PATH','CIRCLE','LINE','POLYLINE','POLYGON','G','IMG'].indexOf(tag) > -1) return;
+      var cls = (el.className && typeof el.className === 'string') ? el.className : '';
+      if (cls.indexOf('avatar') > -1 || cls.indexOf('btn-p') > -1 || cls.indexOf('btn-b') > -1) return;
+      
+      var bgImg = el.style.backgroundImage || '';
+      var computedBg = window.getComputedStyle(el).backgroundImage || '';
+      
+      if (bgImg.indexOf('gradient') > -1 || (computedBg.indexOf('gradient') > -1 && computedBg !== 'none')) {
+        // تحقق: هل هو تدرج وردي-بنفسجي (علامة تجارية)؟
+        var isBrand = bgImg.indexOf('236, 72, 153') > -1 || bgImg.indexOf('236,72,153') > -1 ||
+                      computedBg.indexOf('236, 72, 153') > -1 ||
+                      bgImg.indexOf('216, 27, 96') > -1 ||
+                      bgImg.indexOf('216,27,96') > -1;
+        if (isBrand) return;
+        
+        el.style.setProperty('background-image', 'none', 'important');
         if (isLight) {
-          div.style.setProperty('background', '#ffffff', 'important');
-          div.style.setProperty('background-image', 'none', 'important');
-        } else {
-          div.style.setProperty('background', '#1a2035', 'important');
-          div.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('background', 'transparent', 'important');
         }
       }
     });
   }
   
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ 
-      setTimeout(forceProfile, 300);
-      setInterval(forceProfile, 1500);
-    });
-  } else {
-    setTimeout(forceProfile, 300);
-    setInterval(forceProfile, 1500);
+  // تشغيل فوري بعد الجاهزية
+  function run() {
+    inject();
+    forceInline();
   }
   
-  // مراقبة التغييرات
-  new MutationObserver(function(){ 
-    setTimeout(forceProfile, 100); 
-  }).observe(document.body, { childList: true, subtree: true });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
   
-  console.log('[PROFILE-V2] active');
+  // تشغيل متكرر لالتقاط أي تغيير
+  setInterval(run, 800);
+  
+  // عند تغيير الثيم
+  new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  
+  // مراقبة إضافة عناصر جديدة
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(forceInline, 100); }).observe(document.body, { childList: true, subtree: true });
+  }
+  
+  console.log('[PROFILE-ULTIMATE] active');
 })();
 </script>
 </body>
