@@ -10868,168 +10868,308 @@ document.addEventListener('keydown', function(e) {
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
 </script>
-<script id="chz-notifs-theme-v3">
+
+
+<script id="chz-notifs-realtime">
 (function(){
-  var lastTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  'use strict';
+  console.log('[NOTIFS-RT] starting...');
   
-  function triggerRerender() {
-    if (!window.APP || !APP.renderNotifs) return;
-    var screen = document.getElementById('sc-notifications');
-    if (!screen) return;
-    
-    var isActive = screen.classList.contains('active') || 
-                   (screen.offsetWidth > 0 && screen.offsetHeight > 0);
-    if (!isActive) return;
-    
-    console.log('[NOTIFS-THEME] re-rendering for', lastTheme);
-    APP.renderNotifs();
+  var CACHE_KEY = 'chizen_notifs_cache_v2';
+  var CACHE_TTL = 1000 * 60 * 60; // ساعة واحدة
+  
+  // ═══ أدوات الكاش ═══
+  function loadCache() {
+    try {
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data.timestamp || Date.now() - data.timestamp > CACHE_TTL) return null;
+      // تحويل timestamps
+      return (data.notifs || []).map(function(n) {
+        if (n.createdAt && typeof n.createdAt === 'string') {
+          n.createdAt = { toDate: function() { return new Date(n.createdAt); } };
+        }
+        return n;
+      });
+    } catch(e) { return null; }
   }
   
-  function check() {
-    var current = document.documentElement.getAttribute('data-theme') || 'dark';
-    if (current !== lastTheme) {
-      lastTheme = current;
-      setTimeout(triggerRerender, 150);
+  function saveCache(notifs) {
+    try {
+      var serializable = notifs.map(function(n) {
+        var copy = Object.assign({}, n);
+        if (copy.createdAt && copy.createdAt.toDate) {
+          copy.createdAt = copy.createdAt.toDate().toISOString();
+        }
+        return copy;
+      });
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        notifs: serializable,
+        timestamp: Date.now()
+      }));
+    } catch(e) {}
+  }
+  
+  function clearCache() {
+    try { localStorage.removeItem(CACHE_KEY); } catch(e) {}
+  }
+  
+  // ═══ الحالة ═══
+  var state = {
+    uid: null,
+    listeners: [],
+    notifications: [],
+    isListening: false
+  };
+  
+  // ═══ تنظيف listeners ═══
+  function stopListening() {
+    state.listeners.forEach(function(unsub) {
+      try { if (typeof unsub === 'function') unsub(); } catch(e) {}
+    });
+    state.listeners = [];
+    state.isListening = false;
+  }
+  
+  // ═══ دمج الإشعارات وحذف المكرر ═══
+  function mergeNotifs(a, b) {
+    var seen = {};
+    var result = [];
+    a.concat(b).forEach(function(n) {
+      if (!n.id || seen[n.id]) return;
+      seen[n.id] = 1;
+      result.push(n);
+    });
+    return result;
+  }
+  
+  // ═══ ترتيب حسب التاريخ ═══
+  function sortByDate(list) {
+    return list.slice().sort(function(a, b) {
+      var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+      var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+      return tb - ta;
+    });
+  }
+  
+  // ═══ رسم بدون skeleton (تحديث سلس) ═══
+  function renderSmooth() {
+    if (window.__renderNotifsUI) {
+      window.__renderNotifsUI(state.notifications);
+    } else if (window.APP && APP.renderNotifs) {
+      // احتياطي
+      APP.notifications = state.notifications;
     }
   }
   
-  // 1) Observer
-  try {
-    new MutationObserver(check).observe(document.documentElement, { 
-      attributes: true, 
-      attributeFilter: ['data-theme'] 
+  // ═══ بدء الاستماع الفوري ═══
+  function startListening(uid) {
+    if (state.isListening && state.uid === uid) return;
+    
+    stopListening();
+    state.uid = uid;
+    
+    if (!window.FB || !FB.db) {
+      console.log('[NOTIFS-RT] FB.db not ready');
+      return;
+    }
+    
+    console.log('[NOTIFS-RT] starting listeners for uid:', uid.substring(0, 8));
+    
+    // 1) listener: إشعارات المستخدم
+    try {
+      var userQuery = FB.db.collection('notifications')
+        .where('userId', '==', uid)
+        .limit(100);
+      
+      var unsubUser = userQuery.onSnapshot(function(snap) {
+        var userNotifs = [];
+        snap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          userNotifs.push(d);
+        });
+        
+        console.log('[NOTIFS-RT] user notifs updated:', userNotifs.length);
+        
+        // دمج مع العامة (من listener آخر)
+        var globals = state.notifications.filter(function(n) { return n.isGlobal === true; });
+        state.notifications = sortByDate(mergeNotifs(userNotifs, globals));
+        
+        if (window.APP) APP.notifications = state.notifications;
+        saveCache(state.notifications);
+        renderSmooth();
+      }, function(err) {
+        console.error('[NOTIFS-RT] user query error:', err.message);
+      });
+      state.listeners.push(unsubUser);
+    } catch(e) {
+      console.error('[NOTIFS-RT] user listener failed:', e.message);
+    }
+    
+    // 2) listener: إشعارات عامة
+    try {
+      var globalQuery = FB.db.collection('notifications')
+        .where('isGlobal', '==', true)
+        .limit(30);
+      
+      var unsubGlobal = globalQuery.onSnapshot(function(snap) {
+        var globals = [];
+        snap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          globals.push(d);
+        });
+        
+        console.log('[NOTIFS-RT] globals updated:', globals.length);
+        
+        var userNotifs = state.notifications.filter(function(n) { return n.userId === uid; });
+        state.notifications = sortByDate(mergeNotifs(userNotifs, globals));
+        
+        if (window.APP) APP.notifications = state.notifications;
+        saveCache(state.notifications);
+        renderSmooth();
+      }, function(err) {
+        console.error('[NOTIFS-RT] global query error:', err.message);
+      });
+      state.listeners.push(unsubGlobal);
+    } catch(e) {
+      console.error('[NOTIFS-RT] global listener failed:', e.message);
+    }
+    
+    state.isListening = true;
+  }
+  
+  // ═══ مراقبة تسجيل الدخول/الخروج ═══
+  function watchAuth() {
+    if (!window.FB || !FB.auth) { setTimeout(watchAuth, 300); return; }
+    
+    FB.auth.onAuthStateChanged(function(user) {
+      if (user) {
+        startListening(user.uid);
+      } else {
+        stopListening();
+        state.notifications = [];
+        clearCache();
+      }
     });
-  } catch(e) {}
+  }
   
-  // 2) Polling fallback
-  setInterval(check, 400);
+  // ═══ تجاوز APP.renderNotifs — يستخدم الكاش + onSnapshot ═══
+  function overrideRenderNotifs() {
+    if (!window.APP) { setTimeout(overrideRenderNotifs, 200); return; }
+    if (APP.__notifRealtime) return;
+    APP.__notifRealtime = true;
+    
+    APP.renderNotifs = async function() {
+      var c = document.getElementById('notif-list');
+      if (!c) return;
+      
+      var uid = FB.currentUser ? FB.currentUser.uid : null;
+      if (!uid) {
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">سجّل دخول لعرض إشعاراتك</div>';
+        return;
+      }
+      
+      // 1) عرض الكاش فوراً (بدون انتظار)
+      var cached = loadCache();
+      if (cached && cached.length > 0) {
+        state.notifications = cached;
+        this.notifications = cached;
+        if (window.__renderNotifsUI) window.__renderNotifsUI(cached);
+        console.log('[NOTIFS-RT] rendered', cached.length, 'from cache');
+      } else {
+        // لا كاش — عرض skeleton
+        if (window.__renderNotifsUI) {
+          window.__renderNotifsUI([]);
+        }
+      }
+      
+      // 2) بدء onSnapshot (سيحدّث البيانات تلقائياً)
+      startListening(uid);
+      
+      // 3) في حال لم يكن هناك كاش — نستخدم get() مرة واحدة فقط
+      if (!cached) {
+        try {
+          var all = [];
+          var seen = {};
+          
+          var userSnap = await FB.db.collection('notifications')
+            .where('userId', '==', uid).limit(100).get();
+          userSnap.forEach(function(doc) {
+            var d = doc.data(); d.id = doc.id;
+            if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
+          });
+          
+          try {
+            var globalSnap = await FB.db.collection('notifications')
+              .where('isGlobal', '==', true).limit(30).get();
+            globalSnap.forEach(function(doc) {
+              var d = doc.data(); d.id = doc.id;
+              if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
+            });
+          } catch(e) {}
+          
+          state.notifications = sortByDate(all);
+          this.notifications = state.notifications;
+          saveCache(state.notifications);
+          if (window.__renderNotifsUI) window.__renderNotifsUI(state.notifications);
+        } catch(e) {
+          console.error('[NOTIFS-RT] first fetch error:', e.message);
+        }
+      }
+    };
+    
+    console.log('[NOTIFS-RT] renderNotifs overridden');
+  }
   
-  // 3) Body class observer (احتياطي)
-  try {
-    new MutationObserver(check).observe(document.body, {
-      attributes: true,
-      attributeFilter: ['class']
+  // ═══ حذف إشعار — يُحدّث الكاش و onSnapshot يتولى الباقي ═══
+  window.nrfDeleteNotif = async function(id) {
+    if (!confirm('حذف هذا الإشعار؟')) return;
+    try {
+      if (window.FB && FB.db) {
+        await FB.db.collection('notifications').doc(id).delete();
+        // onSnapshot سيُحدّث تلقائياً
+      }
+    } catch(e) {
+      alert('فشل الحذف');
+    }
+  };
+  
+  // ═══ تحديد الكل كمقروء ═══
+  window.nrfMarkAllRead = async function() {
+    var uid = FB.currentUser ? FB.currentUser.uid : null;
+    if (!uid || !FB.db) return;
+    var unread = state.notifications.filter(function(n) {
+      return n.userId === uid && n.read === false;
     });
-  } catch(e) {}
+    for (var i = 0; i < unread.length; i++) {
+      try {
+        await FB.db.collection('notifications').doc(unread[i].id).update({ read: true });
+      } catch(e) {}
+    }
+    // onSnapshot سيُحدّث
+  };
   
-  console.log('[NOTIFS-THEME-V3] active');
-})();
-</script>
-<script id="chz-notifs-refresh">
-(function(){
-  'use strict';
+  // ═══ بدء ═══
+  watchAuth();
+  overrideRenderNotifs();
   
-  // ═══ 1) مسح كاش الإشعارات عند التحميل ═══
+  // ═══ إعادة الرسم عند تغيير الوضع ═══
+  new MutationObserver(function() {
+    if (state.notifications.length > 0 && window.__renderNotifsUI) {
+      window.__renderNotifsUI(state.notifications);
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  
+  // ═══ مسح الكاش القديم (v1) ═══
   try {
     localStorage.removeItem('chizen_notifs');
     localStorage.removeItem('chizen_notifs_cache');
-    sessionStorage.removeItem('chizen_notifs');
   } catch(e) {}
   
-  // ═══ 2) اعتراض goTab — إعادة تحميل عند فتح الإشعارات ═══
-  function hookGoTab() {
-    if (!window.APP || !APP.goTab) { setTimeout(hookGoTab, 200); return; }
-    if (APP.__notifRefreshHook) return;
-    APP.__notifRefreshHook = true;
-    
-    var origGoTab = APP.goTab;
-    APP.goTab = function(tab, skipHistory) {
-      origGoTab.call(this, tab, skipHistory);
-      
-      if (tab === 'notifications') {
-        // انتظر ظهور الشاشة ثم أعد التحميل
-        setTimeout(function() {
-          if (APP.renderNotifs) {
-            console.log('[NOTIFS-REFRESH] reloading from Firestore...');
-            // مسح البيانات القديمة أولاً
-            APP.notifications = [];
-            if (window.__nrfState) window.__nrfState.data = [];
-            APP.renderNotifs();
-          }
-        }, 250);
-      }
-    };
-    console.log('[NOTIFS-REFRESH] goTab hooked');
-  }
-  hookGoTab();
-  
-  // ═══ 3) اعتراض زر الهيدر (الجرس) أيضاً ═══
-  setTimeout(function() {
-    var bellIcon = document.querySelector('.chz-icons-group .chz-icon-box');
-    // أيقونة الجرس هي الأولى عادة - لها onclick="APP.goTab('notifications')"
-    var allIcons = document.querySelectorAll('.chz-icon-box');
-    allIcons.forEach(function(icon) {
-      var onclick = icon.getAttribute('onclick') || '';
-      if (onclick.includes('notifications')) {
-        var origClick = icon.onclick;
-        icon.onclick = function(e) {
-          if (origClick) origClick.call(this, e);
-          setTimeout(function() {
-            if (APP.renderNotifs) {
-              APP.notifications = [];
-              APP.renderNotifs();
-            }
-          }, 250);
-        };
-      }
-    });
-  }, 1500);
-  
-  // ═══ 4) اعتراض التحميل الدوري للإشعارات من مصدره ═══
-  function hookFB() {
-    if (!window.FB || !FB.getNotifications) { setTimeout(hookFB, 200); return; }
-    if (FB.__notifRefreshHook) return;
-    FB.__notifRefreshHook = true;
-    
-    var orig = FB.getNotifications;
-    FB.getNotifications = async function() {
-      var uid = FB.currentUser ? FB.currentUser.uid : null;
-      if (!uid) return [];
-      
-      var all = [];
-      var seen = {};
-      
-      // استعلام مباشر بدون كاش
-      try {
-        var userSnap = await FB.db.collection('notifications')
-          .where('userId', '==', uid).limit(100).get();
-        userSnap.forEach(function(doc) {
-          var d = doc.data(); d.id = doc.id;
-          if (d.userId === uid && !seen[d.id]) { seen[d.id] = 1; all.push(d); }
-        });
-      } catch(e) {}
-      
-      try {
-        var globalSnap = await FB.db.collection('notifications')
-          .where('isGlobal', '==', true).limit(30).get();
-        globalSnap.forEach(function(doc) {
-          var d = doc.data(); d.id = doc.id;
-          if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
-        });
-      } catch(e) {}
-      
-      return all;
-    };
-    console.log('[NOTIFS-REFRESH] FB.getNotifications wrapped');
-  }
-  hookFB();
-  
-  // ═══ 5) عند العودة إلى التطبيق (visibility) — إعادة تحميل ═══
-  document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'visible') {
-      var notifScreen = document.getElementById('sc-notifications');
-      if (notifScreen && (notifScreen.classList.contains('active') || notifScreen.style.display !== 'none')) {
-        setTimeout(function() {
-          if (APP.renderNotifs) {
-            APP.notifications = [];
-            APP.renderNotifs();
-          }
-        }, 300);
-      }
-    }
-  });
-  
-  console.log('[NOTIFS-REFRESH] active');
+  console.log('[NOTIFS-RT] active — cache + onSnapshot');
 })();
 </script>
 </body>
