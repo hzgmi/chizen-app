@@ -5509,6 +5509,247 @@ html[data-theme="light"] .tr span:last-child {
   /* لا نغيّر */
 }
 </style>
+<style id="chz-checkout-fix">
+/* ═══════════════════════════════════════════════════════════════
+   إصلاح صفحة الدفع (Checkout) — الوضعين
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ══════════ 1) خلفية صفحة الدفع ══════════ */
+
+html:not([data-theme="light"]) #sc-checkout {
+  background: #0a0e1a !important;
+  background-color: #0a0e1a !important;
+}
+
+html[data-theme="light"] #sc-checkout {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+}
+
+/* ══════════ 2) عناوين الأقسام (Checkout Step Headers) ══════════ */
+
+html:not([data-theme="light"]) .cst {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+html[data-theme="light"] .cst {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+/* الأرقام داخل العناوين (1, 2, 3) */
+html:not([data-theme="light"]) .cst .cn,
+html[data-theme="light"] .cst .cn {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ══════════ 3) البطاقات (cs) — حاويات الأقسام ══════════ */
+
+html:not([data-theme="light"]) .cs {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+html[data-theme="light"] .cs {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+}
+
+/* ══════════ 4) نص "اختر نقطة التسليم" ══════════ */
+
+html:not([data-theme="light"]) .cs .fl,
+html:not([data-theme="light"]) .cs label {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+html[data-theme="light"] .cs .fl,
+html[data-theme="light"] .cs label {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+}
+
+/* ══════════ 5) صندوق "نقطة التسليم" (pickup-val) ══════════ */
+
+html:not([data-theme="light"]) #pickup-val,
+html:not([data-theme="light"]) .pickup-selector,
+html:not([data-theme="light"]) .cs > div[id="pickup-val"] {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 14px !important;
+}
+
+html[data-theme="light"] #pickup-val,
+html[data-theme="light"] .pickup-selector,
+html[data-theme="light"] .cs > div[id="pickup-val"] {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  border-radius: 12px !important;
+  padding: 14px !important;
+}
+
+/* النص داخل صندوق النقطة */
+html:not([data-theme="light"]) #pickup-val span,
+html:not([data-theme="light"]) .pickup-selector span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #pickup-val span,
+html[data-theme="light"] .pickup-selector span {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* السهم داخل صندوق النقطة */
+html:not([data-theme="light"]) #pickup-val svg,
+html:not([data-theme="light"]) .cs #pickup-val svg {
+  stroke: #ffffff !important;
+}
+
+html[data-theme="light"] #pickup-val svg,
+html[data-theme="light"] .cs #pickup-val svg {
+  stroke: #6b7280 !important;
+}
+
+/* ══════════ 6) حقول الإدخال (الاسم، الهاتف) ══════════ */
+
+html:not([data-theme="light"]) #sc-checkout .fi {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #sc-checkout .fi {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+html:not([data-theme="light"]) #sc-checkout .fi::placeholder {
+  color: #6b7591 !important;
+  -webkit-text-fill-color: #6b7591 !important;
+}
+
+html[data-theme="light"] #sc-checkout .fi::placeholder {
+  color: #9ca3af !important;
+  -webkit-text-fill-color: #9ca3af !important;
+}
+
+/* ══════════ 7) بطاقة طريقة الدفع (bank) ══════════ */
+
+html:not([data-theme="light"]) .bank {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  border-radius: 12px !important;
+  padding: 14px !important;
+}
+
+html[data-theme="light"] .bank {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  padding: 14px !important;
+}
+
+html:not([data-theme="light"]) .bank span,
+html:not([data-theme="light"]) .bank div {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+html[data-theme="light"] .bank span,
+html[data-theme="light"] .bank div {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+}
+
+/* الأيقونة داخل بطاقة البنك (البنفسجية/الزرقاء) */
+html:not([data-theme="light"]) .bank-i {
+  background: #1f2640 !important;
+}
+
+html[data-theme="light"] .bank-i {
+  background: #1e40af !important;
+}
+
+/* ══════════ 8) زر "تأكيد الطلب" ══════════ */
+
+html:not([data-theme="light"]) #sc-checkout .btn-p,
+html[data-theme="light"] #sc-checkout .btn-p {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ══════════ 9) العنوان الرئيسي (إتمام الشراء) ══════════ */
+
+html:not([data-theme="light"]) #sc-checkout .st2 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #sc-checkout .st2 {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ══════════ 10) حقول الملف (co-name, co-phone) ══════════ */
+html:not([data-theme="light"]) #co-name,
+html:not([data-theme="light"]) #co-phone {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #co-name,
+html[data-theme="light"] #co-phone {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ══════════ 11) ملاحظة: عرض من السلة ══════════ */
+html:not([data-theme="light"]) #sc-checkout .sh2 .st2 {
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] #sc-checkout .sh2 .st2 {
+  color: #1a1a2e !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
