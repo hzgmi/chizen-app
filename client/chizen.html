@@ -10861,5 +10861,259 @@ document.addEventListener('keydown', function(e) {
   console.log('[PROFILE-ULTIMATE] active');
 })();
 </script>
+<script id="chz-global-light-fix">
+(function(){
+  var CSS = `
+    /* ═══════════════════════════════════════════════════════════════
+       GLOBAL LIGHT MODE FIX — كل الحاويات في الوضع الفاتح
+       ═══════════════════════════════════════════════════════════════ */
+    
+    /* ────── كل الحاويات الأساسية في الفاتح: بيضاء ────── */
+    html[data-theme="light"] .cd,
+    html[data-theme="light"] .cs,
+    html[data-theme="light"] .ci-inf,
+    html[data-theme="light"] .rw,
+    html[data-theme="light"] .emp,
+    html[data-theme="light"] .card,
+    html[data-theme="light"] .item,
+    html[data-theme="light"] .sw,
+    html[data-theme="light"] .cat-i,
+    html[data-theme="light"] .tb,
+    html[data-theme="light"] .profile-card,
+    html[data-theme="light"] .setting-group,
+    html[data-theme="light"] .settings-section {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      color: #1a1a2e !important;
+      border-color: #e5e7eb !important;
+    }
+    
+    /* ────── إزالة التدرج من كل الحاويات المحتملة في الفاتح ────── */
+    html[data-theme="light"] [class*="card"]:not([class*="avatar"]):not([class*="btn"]):not([class*="prod"]):not([class*="banner"]):not([class*="slide"]),
+    html[data-theme="light"] [class*="group"]:not([class*="avatar"]):not([class*="btn"]):not([class*="icon"]),
+    html[data-theme="light"] [class*="section"]:not([class*="avatar"]):not([class*="btn"]),
+    html[data-theme="light"] [class*="container"]:not([class*="avatar"]):not([class*="btn"]):not([class*="slide"]):not([class*="banner"]) {
+      background-image: none !important;
+    }
+    
+    /* ────── النصوص — داكنة في الفاتح ────── */
+    html[data-theme="light"] .ctl,
+    html[data-theme="light"] .rti,
+    html[data-theme="light"] .stl,
+    html[data-theme="light"] .ci-n,
+    html[data-theme="light"] .prod-n,
+    html[data-theme="light"] .name,
+    html[data-theme="light"] h1,
+    html[data-theme="light"] h2,
+    html[data-theme="light"] h3,
+    html[data-theme="light"] h4,
+    html[data-theme="light"] .title {
+      color: #1a1a2e !important;
+      -webkit-text-fill-color: #1a1a2e !important;
+    }
+    
+    /* ────── النصوص الثانوية ────── */
+    html[data-theme="light"] .rs,
+    html[data-theme="light"] .ci-p,
+    html[data-theme="light"] .sub,
+    html[data-theme="light"] .desc {
+      color: #6b7280 !important;
+      -webkit-text-fill-color: #6b7280 !important;
+    }
+    
+    /* ────── الشاشات — خلفية رمادية فاتحة ────── */
+    html[data-theme="light"] [id^="sc-"]:not([id*="checkout"]):not([id*="cart"]):not([id*="details"]):not([id*="cat"]):not([id*="booking"]) {
+      background: #f5f7fb !important;
+      background-color: #f5f7fb !important;
+      background-image: none !important;
+    }
+    
+    /* ────── الإعدادات — معالجة خاصة ────── */
+    html[data-theme="light"] #sc-settings .cd,
+    html[data-theme="light"] #sc-settings .cs,
+    html[data-theme="light"] #sc-settings .rw,
+    html[data-theme="light"] #sc-settings [class*="setting"] {
+      background: #ffffff !important;
+      background-image: none !important;
+      border-color: #e5e7eb !important;
+    }
+    
+    /* عناوين أقسام الإعدادات (المظهر، الأمان) */
+    html[data-theme="light"] #sc-settings .ctl {
+      color: #ec4899 !important;
+      -webkit-text-fill-color: #ec4899 !important;
+    }
+    
+    /* قيم الإعدادات (العربية، داكن، متوسط) */
+    html[data-theme="light"] .set-val,
+    html[data-theme="light"] .setting-value,
+    html[data-theme="light"] #sc-settings .rw > div:nth-child(2) {
+      background: #f5f7fb !important;
+      color: #1a1a2e !important;
+      -webkit-text-fill-color: #1a1a2e !important;
+      border-color: #e5e7eb !important;
+    }
+    
+    /* ────── مفاتيح التبديل (toggles) ────── */
+    html[data-theme="light"] .tog {
+      background: #e5e7eb !important;
+      border-color: #d1d5db !important;
+    }
+    
+    html[data-theme="light"] .tog.on {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+      border-color: transparent !important;
+    }
+    
+    /* ────── عناصر القائمة في كل الشاشات ────── */
+    html[data-theme="light"] .rw .rt,
+    html[data-theme="light"] .rw .ra {
+      background: #f5f7fb !important;
+      background-image: none !important;
+    }
+    
+    /* ────── الحفاظ على الأفاتار والبنرات ────── */
+    html[data-theme="light"] [class*="avatar"],
+    html[data-theme="light"] #slides,
+    html[data-theme="light"] .slide,
+    html[data-theme="light"] .banner-slide {
+      background-image: revert !important;
+    }
+    
+    /* ────── الأزرار الرئيسية تحافظ على تدرجها ────── */
+    html[data-theme="light"] .btn-p,
+    html[data-theme="light"] .btn-b,
+    html[data-theme="light"] .btn-primary {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+      background-image: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+    }
+    
+    /* ────── شريط البحث ────── */
+    html[data-theme="light"] .ss-wrapper,
+    html[data-theme="light"] .sw {
+      background: #ffffff !important;
+      background-image: none !important;
+      border-color: #e5e7eb !important;
+    }
+    
+    /* ────── الشريط السفلي ────── */
+    html[data-theme="light"] #bottom-nav,
+    html[data-theme="light"] .bnav,
+    html[data-theme="light"] .nav-bar {
+      background: #ffffff !important;
+      background-image: none !important;
+      border-color: #e5e7eb !important;
+    }
+    
+    html[data-theme="light"] #bottom-nav .bn-it {
+      color: #6b7280 !important;
+    }
+    
+    html[data-theme="light"] #bottom-nav .bn-it.active {
+      color: #ec4899 !important;
+    }
+    
+    /* ────── الحاويات الفرعية (مثل tb) ────── */
+    html[data-theme="light"] .tb,
+    html[data-theme="light"] .tr,
+    html[data-theme="light"] .tf {
+      background: transparent !important;
+      color: #1a1a2e !important;
+    }
+    
+    html[data-theme="light"] .tb {
+      background: #ffffff !important;
+      border: 1px solid #e5e7eb !important;
+    }
+  `;
+  
+  // حقن CSS في نهاية head
+  function inject() {
+    var existing = document.getElementById('chz-global-light-css');
+    if (existing) existing.remove();
+    var style = document.createElement('style');
+    style.id = 'chz-global-light-css';
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+  
+  // فرض inline styles على الحاويات الرئيسية في الفاتح
+  function forceInline() {
+    if (document.documentElement.getAttribute('data-theme') !== 'light') return;
+    
+    // كل .cd في الفاتح
+    document.querySelectorAll('.cd').forEach(function(el) {
+      el.style.setProperty('background', '#ffffff', 'important');
+      el.style.setProperty('background-color', '#ffffff', 'important');
+      el.style.setProperty('background-image', 'none', 'important');
+    });
+    
+    // كل .rw
+    document.querySelectorAll('.rw').forEach(function(el) {
+      el.style.setProperty('background', 'transparent', 'important');
+      el.style.setProperty('background-color', 'transparent', 'important');
+      el.style.setProperty('background-image', 'none', 'important');
+    });
+    
+    // كل .cs
+    document.querySelectorAll('.cs').forEach(function(el) {
+      el.style.setProperty('background', '#ffffff', 'important');
+      el.style.setProperty('background-color', '#ffffff', 'important');
+      el.style.setProperty('background-image', 'none', 'important');
+    });
+    
+    // النصوص
+    document.querySelectorAll('.ctl, .rti').forEach(function(el) {
+      el.style.setProperty('color', '#1a1a2e', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#1a1a2e', 'important');
+    });
+    
+    document.querySelectorAll('.rs').forEach(function(el) {
+      el.style.setProperty('color', '#6b7280', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#6b7280', 'important');
+    });
+    
+    // اجتياح: إزالة gradient من الحاويات الداخلية (مع استثناء الأفاتار والأزرار)
+    document.querySelectorAll('[class*="card"], [class*="group"], [class*="section"]').forEach(function(el) {
+      var cls = (el.className && typeof el.className === 'string') ? el.className : '';
+      if (cls.match(/avatar|btn|banner|slide|prod|icon/i)) return;
+      
+      var computed = window.getComputedStyle(el);
+      var bgImg = computed.backgroundImage || '';
+      
+      if (bgImg.includes('gradient')) {
+        // استثناء: تدرج وردي-بنفسجي (العلامة التجارية)
+        var isBrand = bgImg.includes('236, 72, 153') || bgImg.includes('216, 27, 96');
+        if (!isBrand) {
+          el.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('background-color', '#ffffff', 'important');
+        }
+      }
+    });
+  }
+  
+  function run() {
+    inject();
+    forceInline();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  
+  setInterval(run, 800);
+  
+  new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(forceInline, 100); }).observe(document.body, { childList: true, subtree: true });
+  }
+  
+  console.log('[GLOBAL-LIGHT] active');
+})();
+</script>
 </body>
 </html>
