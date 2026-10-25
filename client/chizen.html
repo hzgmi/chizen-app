@@ -10945,5 +10945,111 @@ document.addEventListener('keydown', function(e) {
   console.log('[POINTS-NUCLEAR] active');
 })();
 </script>
+<script id="chz-fav-real">
+(function(){
+  'use strict';
+  console.log('[FAV-REAL] installing...');
+  
+  function install() {
+    if (!window.APP) { setTimeout(install, 200); return; }
+    if (APP.__favReal) return;
+    APP.__favReal = true;
+    
+    // ═══ 1) togFav — يستدعي renderFav بعد الإضافة ═══
+    APP.togFav = function(id, el) {
+      var idx = this.favorites.indexOf(id);
+      if (idx > -1) {
+        this.favorites.splice(idx, 1);
+        if (el) el.classList.remove('active');
+      } else {
+        this.favorites.push(id);
+        if (el) el.classList.add('active');
+      }
+      
+      try {
+        localStorage.setItem('chizen_favorites', JSON.stringify(this.favorites));
+      } catch(e) {}
+      
+      // ⭐ التحديث المفقود
+      if (this.renderFav) this.renderFav();
+      
+      // تحديث عدّاد المفضلة (إن وجد)
+      var badge = document.getElementById('fav-count');
+      if (badge) badge.textContent = this.favorites.length;
+      
+      console.log('[FAV] toggled:', id, '| total:', this.favorites.length);
+    };
+    
+    // ═══ 2) renderFav — بناء مباشر في #fav-list (بدون #prods) ═══
+    APP.renderFav = function() {
+      var c = document.getElementById('fav-list');
+      if (!c) return;
+      
+      var self = this;
+      
+      // حالة فارغة
+      if (!this.favorites.length) {
+        c.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">' +
+          '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
+          '<div style="font-weight:800;font-size:15px;color:#888;margin-bottom:8px;">لا توجد منتجات في المفضلة</div>' +
+          '<div style="font-size:12px;color:#666;">اضغط ❤️ على أي منتج لإضافته</div>' +
+        '</div>';
+        return;
+      }
+      
+      // جمع المنتجات
+      var list = [];
+      this.favorites.forEach(function(id) {
+        var p = APP.getProduct(id);
+        if (p) list.push(p);
+      });
+      
+      if (!list.length) {
+        c.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#888;">' +
+          '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
+          '<div>المنتجات المحفوظة لم تعد متوفرة</div>' +
+        '</div>';
+        return;
+      }
+      
+      // بناء HTML مباشرة — بدون الاعتماد على #prods
+      c.innerHTML = list.map(function(p) {
+        var fav = true; // دائماً في المفضلة داخل هذا السياق
+        return '<div class="prod" onclick="APP.openProduct(\'' + esc(p.id) + '\')">' +
+          '<div class="prod-f active" onclick="event.stopPropagation();APP.togFav(\'' + esc(p.id) + '\',this)">' +
+            '<svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>' +
+          '</div>' +
+          '<div class="prod-i"><img src="' + esc(p.img || '') + '" loading="lazy"></div>' +
+          '<div class="prod-inf">' +
+            '<div class="prod-n">' + esc(p.name) + '</div>' +
+            '<div class="pr">' +
+              '<span class="price">' + esc(p.price) + '</span>' +
+              '<span class="price-c">ر.س</span>' +
+              (p.old ? '<span class="price-o">' + esc(p.old) + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      
+      console.log('[FAV] rendered:', list.length, 'products');
+    };
+    
+    console.log('[FAV-REAL] installed');
+  }
+  
+  // دالة esc (احتياط)
+  function esc(x) {
+    return String(x == null ? '' : x).replace(/[&<>"']/g, function(c) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  
+  if (typeof window.esc === 'undefined') {
+    window.esc = esc;
+  }
+  
+  install();
+})();
+</script>
 </body>
 </html>
