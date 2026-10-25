@@ -10785,7 +10785,8 @@ document.addEventListener('keydown', function(e) {
   console.log('[ORDERS-FIX] active');
 })();
 </script>
-<script id="chz-points-fix">
+
+<script id="chz-points-nuclear">
 (function(){
   'use strict';
   
@@ -10793,143 +10794,120 @@ document.addEventListener('keydown', function(e) {
     return document.documentElement.getAttribute('data-theme') === 'light';
   }
   
-  function forcePoints() {
+  function force() {
     var screen = document.getElementById('sc-points');
     if (!screen) return;
     
     var light = isLight();
+    if (light) {
+      // في الفاتح: لا نعدل - يبدو جيداً
+      return;
+    }
     
-    // ═══ 1) خلفية الشاشة ═══
-    screen.style.setProperty('background', light ? '#f5f7fb' : '#0a0e1a', 'important');
-    screen.style.setProperty('background-color', light ? '#f5f7fb' : '#0a0e1a', 'important');
+    // ═══ الوضع الداكن فقط ═══
     
-    // ═══ 2) كل البطاقات داخل النقاط ═══
-    var cards = screen.querySelectorAll('.cd, .cs, .card, [class*="pts-"], [class*="point-card"]');
-    cards.forEach(function(el) {
-      if (light) {
-        el.style.setProperty('background', '#ffffff', 'important');
-        el.style.setProperty('background-color', '#ffffff', 'important');
-      } else {
+    // 1) خلفية الشاشة
+    screen.style.setProperty('background', '#0a0e1a', 'important');
+    screen.style.setProperty('background-color', '#0a0e1a', 'important');
+    
+    // 2) اجتياح كل العناصر داخل الصفحة
+    var all = screen.querySelectorAll('*');
+    all.forEach(function(el) {
+      var style = el.getAttribute('style') || '';
+      var computed = window.getComputedStyle(el);
+      
+      // تجاهل pt-hero (البطاقة العلوية البنفسجية)
+      if (el.classList.contains('pt-hero')) return;
+      
+      // تجاهل pts-shop-section (قسم شحن النقاط البنفسجي)
+      if (el.closest('.pts-shop-section')) return;
+      
+      // تجاهل pts-package (الباقات الثلاث داخل القسم البنفسجي)
+      if (el.classList.contains('pts-package')) return;
+      
+      // تجاهل الأزرار ذات التدرج
+      if (style.includes('linear-gradient')) {
+        // فقط استبدل التدرجات الفاتحة جداً (#F5EFFF, #FCEBF3)
+        if (style.includes('#F5EFFF') || style.includes('#FCEBF3') || style.includes('#f5efff') || style.includes('#fcebf3')) {
+          el.style.setProperty('background', '#1a2035', 'important');
+          el.style.setProperty('background-color', '#1a2035', 'important');
+          el.style.setProperty('background-image', 'none', 'important');
+          el.style.setProperty('border-color', '#252b42', 'important');
+        }
+        return;
+      }
+      
+      // استبدل الخلفيات البيضاء
+      var bgColor = computed.backgroundColor;
+      if (bgColor === 'rgb(255, 255, 255)' || bgColor === 'rgb(250, 250, 250)' || bgColor === 'rgb(249, 250, 251)') {
         el.style.setProperty('background', '#1a2035', 'important');
         el.style.setProperty('background-color', '#1a2035', 'important');
-      }
-      el.style.setProperty('background-image', 'none', 'important');
-      el.style.setProperty('border', '1px solid ' + (light ? '#e5e7eb' : '#252b42'), 'important');
-      el.style.setProperty('border-radius', '14px', 'important');
-    });
-    
-    // ═══ 3) البطاقة العلوية (0 نقطة) — الإبقاء على التدرج البنفسجي ═══
-    var heroCard = screen.querySelector('[class*="pts-hero"], [class*="point-hero"]');
-    if (heroCard) {
-      heroCard.style.setProperty('background', 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)', 'important');
-      heroCard.style.setProperty('background-image', 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)', 'important');
-    }
-    
-    // ═══ 4) النصوص داخل البطاقات ═══
-    cards.forEach(function(card) {
-      // تجاهل البطاقة العلوية ذات التدرج
-      if (card.getAttribute('style') && card.getAttribute('style').indexOf('linear-gradient') > -1) return;
-      
-      card.querySelectorAll('div, span, p, label, h1, h2, h3, h4').forEach(function(el) {
-        el.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
-        el.style.setProperty('-webkit-text-fill-color', light ? '#1a1a2e' : '#ffffff', 'important');
-      });
-    });
-    
-    // ═══ 5) العناوين الملونة (الوردي/البنفسجي) — الحفاظ على لونها ═══
-    screen.querySelectorAll('[style*="color:#d81b60"], [style*="color: #d81b60"], [style*="color:#ec4899"], [style*="color: #ec4899"]').forEach(function(el) {
-      el.style.setProperty('color', light ? '#d81b60' : '#ff4d94', 'important');
-      el.style.setProperty('-webkit-text-fill-color', light ? '#d81b60' : '#ff4d94', 'important');
-    });
-    
-    // ═══ 6) حقل الإدخال (CHZ...) ═══
-    var inputs = screen.querySelectorAll('input[type="text"], input:not([type])');
-    inputs.forEach(function(inp) {
-      inp.style.setProperty('background', light ? '#ffffff' : '#131929', 'important');
-      inp.style.setProperty('background-color', light ? '#ffffff' : '#131929', 'important');
-      inp.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
-      inp.style.setProperty('-webkit-text-fill-color', light ? '#1a1a2e' : '#ffffff', 'important');
-      inp.style.setProperty('border', '1px solid ' + (light ? '#e5e7eb' : '#252b42'), 'important');
-    });
-    
-    // Placeholder
-    if (!light) {
-      var styleId = 'chz-points-placeholder-style';
-      var existing = document.getElementById(styleId);
-      if (!existing) {
-        var st = document.createElement('style');
-        st.id = styleId;
-        st.textContent = 'html:not([data-theme="light"]) #sc-points input::placeholder { color: #6b7591 !important; -webkit-text-fill-color: #6b7591 !important; }';
-        document.head.appendChild(st);
-      }
-    }
-    
-    // ═══ 7) زر "تطبيق" — تدرج وردي ═══
-    screen.querySelectorAll('button').forEach(function(btn) {
-      var text = (btn.textContent || '').trim();
-      if (text.includes('تطبيق') || text.includes('شراء') || text.includes('عرض')) {
-        btn.style.setProperty('background', 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)', 'important');
-        btn.style.setProperty('background-image', 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)', 'important');
-        btn.style.setProperty('color', '#ffffff', 'important');
-        btn.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
-      }
-    });
-  }
-  
-  function injectCSS() {
-    var existing = document.getElementById('chz-points-css');
-    if (existing) existing.remove();
-    var style = document.createElement('style');
-    style.id = 'chz-points-css';
-    style.textContent = `
-      /* النقاط — الوضع الداكن */
-      html:not([data-theme="light"]) #sc-points {
-        background: #0a0e1a !important;
-      }
-      html:not([data-theme="light"]) #sc-points .cd,
-      html:not([data-theme="light"]) #sc-points .cs,
-      html:not([data-theme="light"]) #sc-points [class*="point-card"],
-      html:not([data-theme="light"]) #sc-points [class*="pts-card"] {
-        background: #1a2035 !important;
-        background-color: #1a2035 !important;
-        background-image: none !important;
-        border: 1px solid #252b42 !important;
-      }
-      html:not([data-theme="light"]) #sc-points [class*="point-card"] div,
-      html:not([data-theme="light"]) #sc-points [class*="pts-card"] div,
-      html:not([data-theme="light"]) #sc-points [class*="point-card"] span,
-      html:not([data-theme="light"]) #sc-points [class*="pts-card"] span {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        el.style.setProperty('border-color', '#252b42', 'important');
       }
       
-      /* النقاط — الوضع الفاتح */
-      html[data-theme="light"] #sc-points {
-        background: #f5f7fb !important;
+      // استبدل النصوص الداكنة
+      if (style.includes('color: #1f2937') || style.includes('color:#1f2937') ||
+          style.includes('color: #6b7280') || style.includes('color:#6b7280') ||
+          style.includes('color: #374151') || style.includes('color:#374151')) {
+        el.style.setProperty('color', '#ffffff', 'important');
+        el.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
       }
-      html[data-theme="light"] #sc-points .cd,
-      html[data-theme="light"] #sc-points .cs,
-      html[data-theme="light"] #sc-points [class*="point-card"],
-      html[data-theme="light"] #sc-points [class*="pts-card"] {
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        background-image: none !important;
-        border: 1px solid #e5e7eb !important;
+      
+      // استبدل الحدود
+      if (style.includes('border: 1px solid #e5e7eb') || style.includes('border:1px solid #e5e7eb') ||
+          style.includes('border: 2px solid #6A1B9A') || style.includes('border:2px solid #6A1B9A')) {
+        if (style.includes('6A1B9A')) {
+          // زر "عرض كودي" - حافظ على النص البنفسجي لكن غير الخلفية
+          el.style.setProperty('background', '#1a2035', 'important');
+          el.style.setProperty('color', '#a855f7', 'important');
+        } else {
+          el.style.setProperty('border-color', '#252b42', 'important');
+        }
       }
-      html[data-theme="light"] #sc-points [class*="point-card"] div,
-      html[data-theme="light"] #sc-points [class*="pts-card"] div,
-      html[data-theme="light"] #sc-points [class*="point-card"] span,
-      html[data-theme="light"] #sc-points [class*="pts-card"] span {
-        color: #1a1a2e !important;
-        -webkit-text-fill-color: #1a1a2e !important;
-      }
-    `;
-    document.head.appendChild(style);
+    });
+    
+    // 3) معالجة خاصة: حقل الإدخال
+    var refInput = document.getElementById('ref-input');
+    if (refInput) {
+      refInput.style.setProperty('background', '#131929', 'important');
+      refInput.style.setProperty('background-color', '#131929', 'important');
+      refInput.style.setProperty('color', '#ffffff', 'important');
+      refInput.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      refInput.style.setProperty('border-color', '#252b42', 'important');
+    }
+    
+    // 4) زر "عرض كودي" - داخل قسم الدعوة
+    var myCodeBtn = screen.querySelector('button[onclick="showMyReferralCode()"]');
+    if (myCodeBtn) {
+      myCodeBtn.style.setProperty('background', '#1a2035', 'important');
+      myCodeBtn.style.setProperty('background-color', '#1a2035', 'important');
+      myCodeBtn.style.setProperty('color', '#a855f7', 'important');
+      myCodeBtn.style.setProperty('-webkit-text-fill-color', '#a855f7', 'important');
+      myCodeBtn.style.setProperty('border-color', '#a855f7', 'important');
+    }
+    
+    // 5) حماية النصوص البنفسجية والوردية (تبقى كما هي)
+    screen.querySelectorAll('[style*="color: #6A1B9A"], [style*="color:#6A1B9A"]').forEach(function(el) {
+      el.style.setProperty('color', '#c084fc', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#c084fc', 'important');
+    });
+    
+    screen.querySelectorAll('[style*="color: #D81B60"], [style*="color:#D81B60"]').forEach(function(el) {
+      el.style.setProperty('color', '#ff4d94', 'important');
+      el.style.setProperty('-webkit-text-fill-color', '#ff4d94', 'important');
+    });
+    
+    // 6) placeholder
+    if (!document.getElementById('chz-points-placeholder')) {
+      var st = document.createElement('style');
+      st.id = 'chz-points-placeholder';
+      st.textContent = 'html:not([data-theme="light"]) #ref-input::placeholder { color: #6b7591 !important; -webkit-text-fill-color: #6b7591 !important; }';
+      document.head.appendChild(st);
+    }
   }
   
   function run() {
-    injectCSS();
-    forcePoints();
+    force();
   }
   
   if (document.readyState === 'loading') {
@@ -10938,21 +10916,33 @@ document.addEventListener('keydown', function(e) {
     run();
   }
   
-  setInterval(forcePoints, 800);
+  // شغّل كل 500ms (لأن الصفحة قد تُعاد بناؤها)
+  setInterval(force, 500);
   
-  new MutationObserver(forcePoints).observe(document.documentElement, {
+  // عند فتح الصفحة
+  var origGoTab = null;
+  function hookGoTab() {
+    if (!window.APP || !APP.goTab) { setTimeout(hookGoTab, 200); return; }
+    if (origGoTab) return;
+    origGoTab = APP.goTab;
+    APP.goTab = function(tab) {
+      origGoTab.apply(this, arguments);
+      if (tab === 'points') {
+        setTimeout(force, 100);
+        setTimeout(force, 500);
+        setTimeout(force, 1000);
+      }
+    };
+  }
+  hookGoTab();
+  
+  // عند تغيير الثيم
+  new MutationObserver(force).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['data-theme']
   });
   
-  if (document.body) {
-    new MutationObserver(function(){ setTimeout(forcePoints, 100); }).observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
-  
-  console.log('[POINTS-FIX] active');
+  console.log('[POINTS-NUCLEAR] active');
 })();
 </script>
 </body>
