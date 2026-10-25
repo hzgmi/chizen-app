@@ -10174,5 +10174,110 @@ html:not([data-theme="light"]) .sw {
 #cats { min-height: clamp(200px, 55vw, 300px) !important; }
 #prods, .prods { min-height: 200px !important; }
 </style>
+<script id="chz-nuke-final">
+(function(){
+  function isDark(){
+    return document.documentElement.getAttribute('data-theme') !== 'light';
+  }
+  
+  function force(){
+    var d = isDark();
+    var C = d ? {
+      cardBg: 'linear-gradient(135deg, #1e1937 0%, #14102a 100%)',
+      cardBorder: '1px solid rgba(168,85,247,0.3)',
+      nameColor: '#ffffff',
+      priceColor: '#ff4d94',
+      btnBg: 'rgba(168,85,247,0.15)',
+      btnBorder: '1px solid rgba(168,85,247,0.4)',
+      btnColor: '#ffffff'
+    } : {
+      cardBg: '#ffffff',
+      cardBorder: '1px solid #e5e7eb',
+      nameColor: '#1f2937',
+      priceColor: '#d81b60',
+      btnBg: '#f3f4f6',
+      btnBorder: '1px solid #e5e7eb',
+      btnColor: '#1f2937'
+    };
+    
+    // ── كل بطاقات المنتجات (كل الأنواع) ──
+    document.querySelectorAll('.cat-prod-card, .prod, .p-card').forEach(function(el){
+      el.style.setProperty('background', C.cardBg, 'important');
+      el.style.setProperty('border', C.cardBorder, 'important');
+    });
+    
+    // ── أسماء المنتجات ──
+    document.querySelectorAll('.cat-prod-card .name, .cat-prod-card .p-name, .prod .prod-n, .prod .name, .p-card .p-name').forEach(function(el){
+      el.style.setProperty('color', C.nameColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.nameColor, 'important');
+      el.style.setProperty('visibility', 'visible', 'important');
+      el.style.setProperty('opacity', '1', 'important');
+    });
+    
+    // ── الأسعار ──
+    document.querySelectorAll('.cat-prod-card .price, .cat-prod-card .p-price, .prod .price, .p-card .p-price').forEach(function(el){
+      el.style.setProperty('color', C.priceColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.priceColor, 'important');
+    });
+    
+    // ── أزرار الكمية ──
+    document.querySelectorAll('.qb2').forEach(function(el){
+      el.style.setProperty('background', C.btnBg, 'important');
+      el.style.setProperty('border', C.btnBorder, 'important');
+      el.style.setProperty('color', C.btnColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.btnColor, 'important');
+    });
+    
+    // ── رقم الكمية ──
+    document.querySelectorAll('.qn2').forEach(function(el){
+      el.style.setProperty('color', C.btnColor, 'important');
+      el.style.setProperty('-webkit-text-fill-color', C.btnColor, 'important');
+    });
+    
+    // ── إخفاء الوصف إذا كان يحتوي على مميزات ──
+    if (window.APP && window.APP.currentProd) {
+      var prod = window.APP.currentProd;
+      var feats = Array.isArray(prod.features) ? prod.features.filter(function(f){ return f && String(f).trim(); }) : [];
+      var descEl = document.getElementById('det-desc');
+      if (descEl && feats.length > 0) {
+        var descText = (descEl.textContent || '').toLowerCase().replace(/\s+/g, '');
+        var hasFeature = false;
+        for (var i = 0; i < feats.length; i++) {
+          var fText = String(feats[i]).toLowerCase().replace(/\s+/g, '');
+          if (fText.length > 5 && descText.includes(fText.substring(0, 15))) {
+            hasFeature = true; break;
+          }
+        }
+        if (hasFeature) {
+          descEl.style.display = 'none';
+          descEl.setAttribute('data-hidden', '1');
+        }
+      }
+    }
+  }
+  
+  // تشغيل فوري + دوري
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){
+      force();
+      setInterval(force, 400);
+    });
+  } else {
+    force();
+    setInterval(force, 400);
+  }
+  
+  // مراقبة التغييرات
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(force, 50); })
+      .observe(document.body, { childList: true, subtree: true });
+  }
+  
+  new MutationObserver(force)
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  
+  console.log('[NUKE-FINAL] active');
+})();
+</script>
 </body>
 </html>
