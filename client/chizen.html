@@ -4590,6 +4590,154 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 
 
 
+<style id="chz-dark-bg-fix-v5">
+/* ═══════════════════════════════════════════════════════════════
+   الوضع الداكن — الخلفية الأساسية + الحاويات
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ────── 1) html, body, root containers ────── */
+html:not([data-theme="light"]),
+html:not([data-theme="light"]) body {
+  background: #07091d !important;
+  background-color: #07091d !important;
+  color: #f5f5ff !important;
+  min-height: 100vh !important;
+}
+
+html:not([data-theme="light"]) #app,
+html:not([data-theme="light"]) #screens,
+html:not([data-theme="light"]) .screen,
+html:not([data-theme="light"]) .screens {
+  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important;
+  background-color: #07091d !important;
+  color: #f5f5ff !important;
+}
+
+html:not([data-theme="light"]) #sc-home,
+html:not([data-theme="light"]) #sc-cat,
+html:not([data-theme="light"]) #sc-category,
+html:not([data-theme="light"]) #sc-cart,
+html:not([data-theme="light"]) #sc-checkout,
+html:not([data-theme="light"]) #sc-details,
+html:not([data-theme="light"]) #sc-booking,
+html:not([data-theme="light"]) #sc-profile,
+html:not([data-theme="light"]) #sc-notifications,
+html:not([data-theme="light"]) #sc-settings,
+html:not([data-theme="light"]) #sc-orders,
+html:not([data-theme="light"]) #sc-fav,
+html:not([data-theme="light"]) #sc-points {
+  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important;
+  background-color: #07091d !important;
+}
+
+/* ────── 2) جميع الـ wrappers المباشرة للعناصر ────── */
+html:not([data-theme="light"]) .st,
+html:not([data-theme="light"]) .sec,
+html:not([data-theme="light"]) .secs,
+html:not([data-theme="light"]) .section,
+html:not([data-theme="light"]) .home,
+html:not([data-theme="light"]) .home-content,
+html:not([data-theme="light"]) #home-content,
+html:not([data-theme="light"]) .main-content {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ────── 3) الهيدر — كامل داكن ────── */
+html:not([data-theme="light"]) .chz-hdr {
+  background: linear-gradient(180deg, #0a0820 0%, #07091d 100%) !important;
+  background-color: #0a0820 !important;
+  border-bottom: 1px solid rgba(168,85,247,0.15) !important;
+}
+
+html:not([data-theme="light"]) .chz-main {
+  background: transparent !important;
+}
+
+/* ────── 4) المنطقة حول البانر ────── */
+html:not([data-theme="light"]) .banner-wrapper,
+html:not([data-theme="light"]) .banner-container,
+html:not([data-theme="light"]) .slides-wrapper,
+html:not([data-theme="light"]) [class*="banner"]:not(.chz-banner) {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ────── 5) شريط الحجز — الخلفية المحيطة ────── */
+html:not([data-theme="light"]) .booking-row-container {
+  background: linear-gradient(135deg, rgba(13,17,39,0.95), rgba(30,27,75,0.85)) !important;
+  background-color: #0f0c23 !important;
+}
+
+/* ────── 6) الأقسام — الخلفية المحيطة ────── */
+html:not([data-theme="light"]) #cats {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ────── 7) شريط النقاط ────── */
+html:not([data-theme="light"]) .loy {
+  background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%) !important;
+  background-color: #6a1b9a !important;
+}
+
+/* ────── 8) شريط البحث ────── */
+html:not([data-theme="light"]) .ss-wrapper {
+  background: rgba(15,12,35,0.95) !important;
+  background-color: #0f0c23 !important;
+}
+
+/* ────── 9) إخفاء أي خلفية بيضاء من عناصر div/span ────── */
+html:not([data-theme="light"]) .screen > div:not([class]) {
+  background: transparent !important;
+}
+
+/* ────── 10) بطاقات المنتجات (تأكيد إضافي) ────── */
+html:not([data-theme="light"]) .cat-prod-card,
+html:not([data-theme="light"]) .prod,
+html:not([data-theme="light"]) .p-card {
+  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
+  background-color: #1e1937 !important;
+  border: 1px solid rgba(168,85,247,0.3) !important;
+}
+
+/* ────── 11) الحاويات (cd, cs, ci-inf) ────── */
+html:not([data-theme="light"]) .cd,
+html:not([data-theme="light"]) .cs,
+html:not([data-theme="light"]) .ci-inf,
+html:not([data-theme="light"]) .rw,
+html:not([data-theme="light"]) .emp,
+html:not([data-theme="light"]) .card,
+html:not([data-theme="light"]) .item {
+  background: #1a1535 !important;
+  background-color: #1a1535 !important;
+  color: #f5f5ff !important;
+  border-color: rgba(168,85,247,0.25) !important;
+}
+
+/* ────── 12) الصفحات الفرعية (حجز/سلة/إعدادات) ────── */
+html:not([data-theme="light"]) .hd {
+  background: rgba(10,8,30,0.98) !important;
+  border-bottom: 1px solid rgba(168,85,247,0.2) !important;
+}
+
+/* ────── 13) ضمان: أي عنصر داخل body له خلفية بيضاء يُستبدل ────── */
+html:not([data-theme="light"]) body * {
+  --tw-bg-opacity: 1;
+}
+
+/* ────── 14) الشريط السفلي (تأكيد) ────── */
+html:not([data-theme="light"]) #bottom-nav {
+  background: rgba(10,8,30,0.98) !important;
+  background-color: #0a0820 !important;
+}
+
+/* ────── 15) البانر — تأكيد الحواف ────── */
+html:not([data-theme="light"]) #slides,
+html:not([data-theme="light"]) .slide {
+  background-color: #1e1e3a !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
