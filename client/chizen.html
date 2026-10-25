@@ -5925,6 +5925,185 @@ html:not([data-theme="light"]) .modal button.btn-p {
   -webkit-text-fill-color: #ffffff !important;
 }
 </style>
+<style id="chz-booking-form-fix">
+/* ═══════════════════════════════════════════════════════════════
+   إصلاح نموذج الحجز (طيران، باصات، حج، فنادق) — الوضعين
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ══════════ 1) الصندوق الرئيسي للنموذج ══════════ */
+
+html:not([data-theme="light"]) .booking-form {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+}
+
+html[data-theme="light"] .booking-form {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+/* ══════════ 2) العناوين داخل النموذج ══════════ */
+
+/* عنوان الصفحة "تفاصيل الفندق" */
+html:not([data-theme="light"]) .booking-form h2,
+html:not([data-theme="light"]) .booking-form h3,
+html:not([data-theme="light"]) .booking-form > div:first-child {
+  color: #ec4899 !important;
+  -webkit-text-fill-color: #ec4899 !important;
+}
+
+html[data-theme="light"] .booking-form h2,
+html[data-theme="light"] .booking-form h3,
+html[data-theme="light"] .booking-form > div:first-child {
+  color: #d81b60 !important;
+  -webkit-text-fill-color: #d81b60 !important;
+}
+
+/* العناوين الفرعية (المدينة، اسم الفندق، إلخ) */
+html:not([data-theme="light"]) .booking-form label,
+html:not([data-theme="light"]) .booking-form .fll {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="light"] .booking-form label,
+html[data-theme="light"] .booking-form .fll {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-weight: 700 !important;
+}
+
+/* ══════════ 3) حقول الإدخال والقوائم ══════════ */
+
+html:not([data-theme="light"]) .booking-form input,
+html:not([data-theme="light"]) .booking-form select,
+html:not([data-theme="light"]) .booking-form textarea {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-radius: 12px !important;
+}
+
+html[data-theme="light"] .booking-form input,
+html[data-theme="light"] .booking-form select,
+html[data-theme="light"] .booking-form textarea {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  border-radius: 12px !important;
+}
+
+/* النص البديل (Placeholder) */
+html:not([data-theme="light"]) .booking-form input::placeholder,
+html:not([data-theme="light"]) .booking-form textarea::placeholder {
+  color: #6b7591 !important;
+  -webkit-text-fill-color: #6b7591 !important;
+}
+
+html[data-theme="light"] .booking-form input::placeholder,
+html[data-theme="light"]) .booking-form textarea::placeholder {
+  color: #9ca3af !important;
+  -webkit-text-fill-color: #9ca3af !important;
+}
+
+/* ══════════ 4) أزرار الاختيار (الغرف، الضيوف) ══════════ */
+
+html:not([data-theme="light"]) .booking-form .qs .qb2 {
+  background: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .booking-form .qs .qb2 {
+  background: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+}
+
+/* ══════════ 5) زر الحجز (تأكيد الحجز) ══════════ */
+
+html:not([data-theme="light"]) .booking-form button:not(.qb2) {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: none !important;
+}
+
+html[data-theme="light"] .booking-form button:not(.qb2) {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: none !important;
+}
+
+/* ══════════ 6) الشاشة الفرعية للحجز ══════════ */
+
+html:not([data-theme="light"]) #sc-booking {
+  background: #0a0e1a !important;
+}
+
+html[data-theme="light"] #sc-booking {
+  background: #f5f7fb !important;
+}
+
+/* ══════════ 7) الهيدر في صفحة الحجز ══════════ */
+
+html:not([data-theme="light"]) #sc-booking .hd {
+  background: #0a0e1a !important;
+  border-bottom: 1px solid #252b42 !important;
+}
+
+html[data-theme="light"] #sc-booking .hd {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+html:not([data-theme="light"]) #sc-booking .hd div {
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] #sc-booking .hd div {
+  color: #1a1a2e !important;
+}
+
+/* ══════════ 8) التبويبات (طيران، باصات، حج، فنادق) ══════════ */
+
+html:not([data-theme="light"]) .booking-tab {
+  background: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+}
+
+html:not([data-theme="light"]) .booking-tab.active {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] .booking-tab {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+}
+
+html[data-theme="light"] .booking-tab.active {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
