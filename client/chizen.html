@@ -4738,6 +4738,219 @@ html:not([data-theme="light"]) .slide {
   background-color: #1e1e3a !important;
 }
 </style>
+<style id="chz-color-system-v1">
+/* ═══════════════════════════════════════════════════════════════
+   CHIZEN CENTRAL COLOR SYSTEM v1
+   نظام ألوان مركزي واحد لكل وظيفة — Dark + Light
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ═══ الوضع الداكن (افتراضي) ═══ */
+:root,
+html:not([data-theme="light"]) {
+
+  /* ─── الأساسيات ─── */
+  --chz-bg-primary:       #07091d;   /* خلفية التطبيق */
+  --chz-bg-secondary:     #0a0820;   /* خلفية ثانوية (Header, Nav) */
+  --chz-bg-card:          #1a1535;   /* بطاقات */
+  --chz-bg-container:     #151030;   /* حاويات (Input, Section) */
+  --chz-bg-elevated:      #1e1937;   /* نوافذ منبثقة */
+  --chz-bg-gradient:      radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%);
+
+  /* ─── النصوص ─── */
+  --chz-text-primary:     #f5f5ff;
+  --chz-text-secondary:   #a5a5c5;
+  --chz-text-muted:       #8888aa;
+  --chz-text-inverse:     #07091d;
+  --chz-text-on-dark:     #ffffff;
+
+  /* ─── الحدود ─── */
+  --chz-border:           rgba(168,85,247,0.25);
+  --chz-border-strong:    rgba(168,85,247,0.4);
+  --chz-border-light:     rgba(255,255,255,0.1);
+
+  /* ─── الهوية (Brand) ─── */
+  --chz-brand-pink:       #ff4d94;
+  --chz-brand-pink-soft:  #ff3d9a;
+  --chz-brand-purple:     #a855f7;
+  --chz-brand-gold:       #ffd700;
+  --chz-brand-gradient:   linear-gradient(135deg, #ff4d94, #a855f7);
+  --chz-brand-gradient-gold: linear-gradient(135deg, #ffd700 0%, #ff4d94 50%, #a855f7 100%);
+
+  /* ─── الأزرار ─── */
+  --chz-btn-primary-bg:     linear-gradient(135deg, #ff4d94, #a855f7);
+  --chz-btn-primary-text:   #ffffff;
+  --chz-btn-secondary-bg:   rgba(168,85,247,0.15);
+  --chz-btn-secondary-text: #f5f5ff;
+  --chz-btn-secondary-border: rgba(168,85,247,0.4);
+  --chz-btn-danger-bg:      rgba(239,68,68,0.15);
+  --chz-btn-danger-text:    #ef4444;
+  --chz-btn-danger-border:  #ef4444;
+
+  /* ─── الحقول ─── */
+  --chz-input-bg:           #151030;
+  --chz-input-border:       rgba(168,85,247,0.4);
+  --chz-input-focus:        #a855f7;
+  --chz-input-placeholder:  #8888aa;
+
+  /* ─── حالات ─── */
+  --chz-success:            #10b981;
+  --chz-success-bg:         rgba(16,185,129,0.15);
+  --chz-warning:            #f59e0b;
+  --chz-warning-bg:         rgba(245,158,11,0.15);
+  --chz-error:              #ef4444;
+  --chz-error-bg:           rgba(239,68,68,0.15);
+  --chz-info:               #3b82f6;
+  --chz-info-bg:            rgba(59,130,246,0.15);
+
+  /* ─── الأسعار والخصومات ─── */
+  --chz-price-text:         #ff4d94;
+  --chz-price-old:          #8888aa;
+  --chz-discount-bg:        linear-gradient(135deg, #d81b60, #6a1b9a);
+  --chz-discount-text:      #ffffff;
+
+  /* ─── حالات الطلبات ─── */
+  --chz-status-pending:     #f59e0b;
+  --chz-status-confirmed:   #3b82f6;
+  --chz-status-processing:  #a855f7;
+  --chz-status-ready:       #8b5cf6;
+  --chz-status-delivered:   #10b981;
+  --chz-status-completed:   #059669;
+  --chz-status-cancelled:   #ef4444;
+
+  /* ─── الإشعارات ─── */
+  --chz-notif-bg:           #1a1535;
+  --chz-notif-unread:       rgba(255,77,148,0.4);
+  --chz-notif-badge:        #ff4d94;
+
+  /* ─── الحجز ─── */
+  --chz-booking-flight:     #3b82f6;
+  --chz-booking-bus:        #f97316;
+  --chz-booking-hajj:       #ec4899;
+  --chz-booking-hotel:      #8b5cf6;
+  --chz-booking-tab-active-bg: linear-gradient(135deg, #d81b60, #6a1b9a);
+  --chz-booking-tab-active-text: #ffffff;
+
+  /* ─── القسم السفلي ─── */
+  --chz-nav-bg:             rgba(10,8,30,0.98);
+  --chz-nav-active:         #ff4d94;
+  --chz-nav-inactive:       rgba(255,255,255,0.6);
+
+  /* ─── خاص ─── */
+  --chz-loyalty-bg:         linear-gradient(135deg, #4c1d95 0%, #7e22ce 50%, #4c1d95 100%);
+  --chz-loyalty-text:       #f472b6;
+  --chz-referral-bg:        rgba(168,85,247,0.15);
+  --chz-pin-border:         rgba(168,85,247,0.4);
+  --chz-overlay:            rgba(0,0,0,0.75);
+  --chz-shadow-sm:          0 2px 8px rgba(0,0,0,0.2);
+  --chz-shadow-md:          0 4px 15px rgba(0,0,0,0.3);
+  --chz-shadow-lg:          0 8px 24px rgba(0,0,0,0.4);
+  --chz-glass-bg:           rgba(20,15,45,0.85);
+  --chz-glass-border:       rgba(168,85,247,0.35);
+}
+
+/* ═══ الوضع الفاتح ═══ */
+html[data-theme="light"] {
+
+  /* ─── الأساسيات ─── */
+  --chz-bg-primary:       #f4f6fa;
+  --chz-bg-secondary:     #ffffff;
+  --chz-bg-card:          #ffffff;
+  --chz-bg-container:     #f9fafb;
+  --chz-bg-elevated:      #ffffff;
+  --chz-bg-gradient:      linear-gradient(135deg, #f8f9fc 0%, #eef2ff 100%);
+
+  /* ─── النصوص ─── */
+  --chz-text-primary:     #1f2937;
+  --chz-text-secondary:   #4b5563;
+  --chz-text-muted:       #6b7280;
+  --chz-text-inverse:     #ffffff;
+  --chz-text-on-dark:     #1f2937;
+
+  /* ─── الحدود ─── */
+  --chz-border:           #e5e7eb;
+  --chz-border-strong:    #d1d5db;
+  --chz-border-light:     rgba(0,0,0,0.08);
+
+  /* ─── الهوية ─── */
+  --chz-brand-pink:       #d81b60;
+  --chz-brand-pink-soft:  #ec407a;
+  --chz-brand-purple:     #7c3aed;
+  --chz-brand-gold:       #d4a017;
+  --chz-brand-gradient:   linear-gradient(135deg, #d81b60, #6a1b9a);
+  --chz-brand-gradient-gold: linear-gradient(135deg, #d4a017 0%, #d81b60 50%, #6a1b9a 100%);
+
+  /* ─── الأزرار ─── */
+  --chz-btn-primary-bg:     linear-gradient(135deg, #d81b60, #6a1b9a);
+  --chz-btn-primary-text:   #ffffff;
+  --chz-btn-secondary-bg:   #f3f4f6;
+  --chz-btn-secondary-text: #1f2937;
+  --chz-btn-secondary-border: #e5e7eb;
+  --chz-btn-danger-bg:      #fef2f2;
+  --chz-btn-danger-text:    #dc2626;
+  --chz-btn-danger-border:  #fecaca;
+
+  /* ─── الحقول ─── */
+  --chz-input-bg:           #f9fafb;
+  --chz-input-border:       #d1d5db;
+  --chz-input-focus:        #d81b60;
+  --chz-input-placeholder:  #9ca3af;
+
+  /* ─── حالات ─── */
+  --chz-success:            #10b981;
+  --chz-success-bg:         rgba(16,185,129,0.1);
+  --chz-warning:            #f59e0b;
+  --chz-warning-bg:         rgba(245,158,11,0.1);
+  --chz-error:              #dc2626;
+  --chz-error-bg:           rgba(220,38,38,0.1);
+  --chz-info:               #2563eb;
+  --chz-info-bg:            rgba(37,99,235,0.1);
+
+  /* ─── الأسعار والخصومات ─── */
+  --chz-price-text:         #d81b60;
+  --chz-price-old:          #6b7280;
+  --chz-discount-bg:        linear-gradient(135deg, #d81b60, #6a1b9a);
+  --chz-discount-text:      #ffffff;
+
+  /* ─── حالات الطلبات ─── */
+  --chz-status-pending:     #f59e0b;
+  --chz-status-confirmed:   #2563eb;
+  --chz-status-processing:  #7c3aed;
+  --chz-status-ready:       #8b5cf6;
+  --chz-status-delivered:   #10b981;
+  --chz-status-completed:   #059669;
+  --chz-status-cancelled:   #dc2626;
+
+  /* ─── الإشعارات ─── */
+  --chz-notif-bg:           #ffffff;
+  --chz-notif-unread:       rgba(216,27,96,0.3);
+  --chz-notif-badge:        #d81b60;
+
+  /* ─── الحجز ─── */
+  --chz-booking-flight:     #2563eb;
+  --chz-booking-bus:        #ea580c;
+  --chz-booking-hajj:       #db2777;
+  --chz-booking-hotel:      #7c3aed;
+  --chz-booking-tab-active-bg: linear-gradient(135deg, #d81b60, #6a1b9a);
+  --chz-booking-tab-active-text: #ffffff;
+
+  /* ─── القسم السفلي ─── */
+  --chz-nav-bg:             #ffffff;
+  --chz-nav-active:         #d81b60;
+  --chz-nav-inactive:       #6b7280;
+
+  /* ─── خاص ─── */
+  --chz-loyalty-bg:         linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  --chz-loyalty-text:       #fef08a;
+  --chz-referral-bg:        rgba(216,27,96,0.1);
+  --chz-pin-border:         #d1d5db;
+  --chz-overlay:            rgba(0,0,0,0.4);
+  --chz-shadow-sm:          0 1px 3px rgba(0,0,0,0.08);
+  --chz-shadow-md:          0 2px 8px rgba(0,0,0,0.1);
+  --chz-shadow-lg:          0 8px 24px rgba(0,0,0,0.15);
+  --chz-glass-bg:           rgba(255,255,255,0.95);
+  --chz-glass-border:       #e5e7eb;
+}
+</style>
 </head>
 <body>
 <div id="app">
