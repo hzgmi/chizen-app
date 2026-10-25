@@ -7556,105 +7556,19 @@ var APP={
     }
   },
 
-  renderNotifs: async function() {
+  renderNotifs: function() {
     var c = document.getElementById('notif-list');
     if (!c) return;
-    
-    c.innerHTML = '<div class="cempty"><p>⏳ جاري التحميل...</p></div>';
-    
-    try {
-      if (!window.FB || !FB.db) {
-        c.innerHTML = '<div class="cempty"><p>غير متصل</p></div>';
-        return;
-      }
-      
-      var uid = FB.currentUser ? FB.currentUser.uid : null;
-      var all = [];
-      
-      // 1) الإشعارات العامة (بدون userId أو isGlobal)
-      try {
-        var globalSnap = await FB.db.collection('notifications').orderBy('createdAt', 'desc').limit(50).get();
-        globalSnap.forEach(function(doc) {
-          var d = doc.data();
-          d.id = doc.id;
-          if (!d.userId || d.userId === uid || d.isGlobal) {
-            all.push(d);
-          }
-        });
-      } catch(e) {
-        console.warn('Global notifs error:', e);
-      }
-      
-      // ترتيب حسب التاريخ
-      all.sort(function(a, b) {
-        var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
-        var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
-        return tb - ta;
-      });
-      
-      this.notifications = all;
-      
-      if (!all.length) {
-        c.innerHTML = '<div class="cempty"><p>لا توجد إشعارات</p></div>';
-        return;
-      }
-      
-      var typeIcons = {
-        'booking': '✈️',
-        'order': '🛒',
-        'points': '💎',
-        'referral': '🎟️',
-        'promo': '🎁',
-        'system': '🔔',
-        'general': '📢'
-      };
-      
-      var typeColors = {
-        'booking': '#3b82f6',
-        'order': '#10b981',
-        'points': '#8b5cf6',
-        'referral': '#f59e0b',
-        'promo': '#ec4899',
-        'system': '#6b7280',
-        'general': '#6A1B9A'
-      };
-      
-      c.innerHTML = all.map(function(n) {
-        var timeStr = '';
-        if (n.createdAt && n.createdAt.toDate) {
-          var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
-          if (diff < 1) timeStr = 'الآن';
-          else if (diff < 60) timeStr = 'قبل ' + diff + ' دقيقة';
-          else if (diff < 1440) timeStr = 'قبل ' + Math.floor(diff / 60) + ' ساعة';
-          else timeStr = 'قبل ' + Math.floor(diff / 1440) + ' يوم';
-        }
-        
-        var type = n.type || 'general';
-        var icon = typeIcons[type] || '🔔';
-        var color = typeColors[type] || '#6A1B9A';
-        var isSelected = window._selectedNotifs && window._selectedNotifs.indexOf(n.id) !== -1;
-        var isUnread = n.read === false;
-        
-        return '<div class="notif-card' + (isSelected ? ' selected' : '') + (isUnread ? ' unread' : '') + '" data-id="' + n.id + '"' +
-          ' ontouchstart="notifTouchStart(event, \'' + n.id + '\')"' +
-          ' ontouchend="notifTouchEnd(event)"' +
-          ' ontouchmove="notifTouchEnd(event)"' +
-          ' onclick="notifClick(event, \'' + n.id + '\')">' +
-          '<div class="notif-checkbox"></div>' +
-          '<div class="notif-content" style="display:flex; gap:12px; align-items:flex-start;">' +
-            '<div style="width:38px; height:38px; border-radius:50%; background:' + color + '15; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;">' + icon + '</div>' +
-            '<div style="flex:1;">' +
-              '<div style="color:#1f2937; font-weight:900; font-size:14px;">' + esc(n.title || '') + '</div>' +
-              '<div style="color:#6b7280; font-size:13px; margin-top:4px; line-height:1.6;">' + esc(n.body || '') + '</div>' +
-              (timeStr ? '<div style="color:#9ca3af; font-size:11px; margin-top:6px;">' + timeStr + '</div>' : '') +
-            '</div>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-    } catch(e) {
-      console.error('Notifs error:', e);
-      c.innerHTML = '<div class="cempty"><p>حدث خطأ في التحميل</p></div>';
+    var uid = window.FB && FB.currentUser ? FB.currentUser.uid : null;
+    if (!uid) {
+      c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;font-family:Tajawal,sans-serif;"><div style="font-size:48px;margin-bottom:14px;">🔐</div><div style="font-weight:800;font-size:14px;">سجّل دخول لعرض إشعاراتك</div></div>';
+      return;
     }
+    if (!window.FB || !FB.db) {
+      c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;">غير متصل</div>';
+      return;
+    }
+    nrfRenderAndListen(uid, c);
   },
 
   
@@ -10548,56 +10462,59 @@ document.addEventListener('keydown', function(e) {
 
 
 
-<script id="chz-notifs-ultimate-v2">
+
+<script id="chz-notifs-helper">
 (function(){
   'use strict';
-  var LOG = function(){ if (window.__nrfDebug) console.log.apply(console, ['[NRF]'].concat(Array.from(arguments))); };
+  var LOG = function(){};
   
-  // ═══ الألوان حسب الوضع ═══
-  function isLight() { return document.documentElement.getAttribute('data-theme') === 'light'; }
-  function C() {
-    return isLight() ? {
-      cardBg: '#ffffff', cardBorder: '#e5e7eb',
-      textPrimary: '#1a1a2e', textSecondary: '#4b5563', textMuted: '#9ca3af',
-      divider: '#f3f4f6', inputBg: '#ffffff', inputBorder: '#e5e7eb',
-      pink: '#ec4899', purple: '#8b5cf6',
-      tabBg: '#ffffff', tabBorder: '#e5e7eb', tabText: '#6b7280',
-      groupLabel: '#9ca3af'
-    } : {
-      cardBg: '#1a2035', cardBorder: '#252b42',
-      textPrimary: '#ffffff', textSecondary: '#b8c0d8', textMuted: '#6b7591',
-      divider: '#252b42', inputBg: '#131929', inputBorder: '#252b42',
+  var NRF = {
+    cacheKey: 'chz_notifs_c4',
+    cacheTTL: 1000 * 60 * 60 * 24,
+    listener: null,
+    listeningUID: null,
+    state: { list: [], filter: 'all', search: '' }
+  };
+  
+  window.__NRF = NRF;
+  
+  function isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+  
+  function getC() {
+    if (isLight()) {
+      return {
+        card: '#ffffff', cardTrans: '#fafbfc', border: '#e5e7eb', borderUnread: '#ec4899',
+        title: '#1a1a2e', body: '#4b5563', muted: '#9ca3af', divider: '#f3f4f6',
+        inputBg: '#ffffff', inputBorder: '#e5e7eb',
+        pink: '#ec4899', purple: '#8b5cf6',
+        tabBg: '#ffffff', tabBorder: '#e5e7eb', tabText: '#6b7280',
+        groupLabel: '#9ca3af', emptyBg: 'rgba(236,72,153,0.1)', emptyIcon: '#ec4899'
+      };
+    }
+    return {
+      card: '#1a2035', cardTrans: '#212a44', border: '#252b42', borderUnread: '#ff4d94',
+      title: '#ffffff', body: '#b8c0d8', muted: '#6b7591', divider: '#252b42',
+      inputBg: '#131929', inputBorder: '#252b42',
       pink: '#ff4d94', purple: '#a855f7',
       tabBg: '#1a2035', tabBorder: '#252b42', tabText: '#b8c0d8',
-      groupLabel: '#6b7591'
+      groupLabel: '#6b7591', emptyBg: 'rgba(255,77,148,0.15)', emptyIcon: '#ff4d94'
     };
   }
   
   var TYPES = {
-    'booking':  { icon: '✈️', color: '#3b82f6', label: 'حجز' },
-    'order':    { icon: '🛒', color: '#10b981', label: 'طلب' },
-    'points':   { icon: '💎', color: '#a855f7', label: 'نقاط' },
-    'referral': { icon: '🎟️', color: '#f59e0b', label: 'إحالة' },
-    'promo':    { icon: '🎁', color: '#ec4899', label: 'عرض' },
-    'system':   { icon: '🔔', color: '#64748b', label: 'نظام' },
-    'general':  { icon: '📢', color: '#a855f7', label: 'عام' },
-    'welcome':  { icon: '🎉', color: '#10b981', label: 'ترحيب' },
-    'returning':{ icon: '👋', color: '#f59e0b', label: 'عودة' }
+    booking:   { icon: '✈️', color: '#3b82f6', label: 'حجز' },
+    order:     { icon: '🛒', color: '#10b981', label: 'طلب' },
+    points:    { icon: '💎', color: '#a855f7', label: 'نقاط' },
+    referral:  { icon: '🎟️', color: '#f59e0b', label: 'إحالة' },
+    promo:     { icon: '🎁', color: '#ec4899', label: 'عرض' },
+    system:    { icon: '🔔', color: '#64748b', label: 'نظام' },
+    general:   { icon: '📢', color: '#a855f7', label: 'عام' },
+    welcome:   { icon: '🎉', color: '#10b981', label: 'ترحيب' },
+    returning: { icon: '👋', color: '#f59e0b', label: 'عودة' }
   };
   
-  var CACHE_KEY = 'chizen_notifs_cache_v3';
-  var CACHE_TTL = 1000 * 60 * 60 * 24; // يوم
-  
-  var state = {
-    data: [],
-    filter: 'all',
-    search: '',
-    uid: null,
-    listener: null,
-    listening: false
-  };
-  
-  // ═══ أدوات ═══
   function esc(x) {
     return String(x == null ? '' : x).replace(/[&<>"']/g, function(c) {
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
@@ -10614,13 +10531,12 @@ document.addEventListener('keydown', function(e) {
     return n.createdAt.toDate().toLocaleDateString('ar');
   }
   
-  // ═══ كاش ═══
   function loadCache() {
     try {
-      var raw = localStorage.getItem(CACHE_KEY);
+      var raw = localStorage.getItem(NRF.cacheKey);
       if (!raw) return [];
       var obj = JSON.parse(raw);
-      if (!obj.ts || Date.now() - obj.ts > CACHE_TTL) return [];
+      if (!obj.ts || Date.now() - obj.ts > NRF.cacheTTL) return [];
       return (obj.list || []).map(function(n) {
         if (n.createdAt && typeof n.createdAt === 'string') {
           n.createdAt = { toDate: function() { return new Date(n.createdAt); } };
@@ -10639,11 +10555,10 @@ document.addEventListener('keydown', function(e) {
         }
         return c;
       });
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ list: serial, ts: Date.now() }));
+      localStorage.setItem(NRF.cacheKey, JSON.stringify({ list: serial, ts: Date.now() }));
     } catch(e) {}
   }
   
-  // ═══ تجميع حسب التاريخ ═══
   function groupByDate(list) {
     var now = new Date();
     var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -10662,42 +10577,29 @@ document.addEventListener('keydown', function(e) {
     return groups;
   }
   
-  // ═══ رسم الواجهة ═══
-  function render() {
-    var c = document.getElementById('notif-list');
-    if (!c) { LOG('notif-list missing'); return; }
+  // ═══ رسم الواجهة — inline styles ═══
+  function paint(c) {
+    var colors = getC();
+    var uid = window.FB && FB.currentUser ? FB.currentUser.uid : null;
+    if (!uid) return;
     
-    var uid = FB.currentUser ? FB.currentUser.uid : null;
-    if (!uid) {
-      c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;">' +
-        '<div style="font-size:48px;margin-bottom:14px;">🔐</div>' +
-        '<div style="font-weight:800;font-size:14px;">سجّل دخول لعرض إشعاراتك</div>' +
-      '</div>';
-      return;
-    }
-    
-    var colors = C();
-    
-    // فلترة دفاعية
-    var safe = state.data.filter(function(n) {
+    var safe = NRF.state.list.filter(function(n) {
       return n.userId === uid || n.isGlobal === true;
     });
     
-    // فلترة حسب النوع
-    var byType = state.filter === 'all' ? safe : safe.filter(function(n) {
-      return (n.type || 'general') === state.filter;
+    var byType = NRF.state.filter === 'all' ? safe : safe.filter(function(n) {
+      return (n.type || 'general') === NRF.state.filter;
     });
     
-    // بحث
-    var searched = state.search ? byType.filter(function(n) {
-      var q = state.search.toLowerCase();
+    var searched = NRF.state.search ? byType.filter(function(n) {
+      var q = NRF.state.search.toLowerCase();
       return (n.title || '').toLowerCase().indexOf(q) > -1 ||
              (n.body || '').toLowerCase().indexOf(q) > -1;
     }) : byType;
     
     var unread = safe.filter(function(n) { return n.read === false; }).length;
     
-    // ═══ التبويبات (ثابتة دائماً) ═══
+    // ═══ التبويبات ═══
     var tabs = [
       { key: 'all', label: 'الكل', icon: '📬' },
       { key: 'order', label: 'الطلبات', icon: '🛒' },
@@ -10706,16 +10608,16 @@ document.addEventListener('keydown', function(e) {
       { key: 'system', label: 'النظام', icon: '🔔' }
     ];
     
-    var tabsHtml = '<div class="nrf-tabs" style="display:flex;gap:8px;overflow-x:auto;padding:10px 0 14px;margin-bottom:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;">';
+    var tabsHtml = '<div style="display:flex;gap:8px;overflow-x:auto;padding:10px 0 12px;margin-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;">';
     tabs.forEach(function(t) {
-      var active = state.filter === t.key;
+      var active = NRF.state.filter === t.key;
       var cnt = t.key === 'all' ? safe.length : safe.filter(function(n){ return (n.type || 'general') === t.key; }).length;
-      tabsHtml += '<button onclick="window.nrfSetFilter(&quot;' + t.key + '&quot;)" style="' +
+      tabsHtml += '<button onclick="window.__nrfSetFilter(&quot;' + t.key + '&quot;)" style="' +
         'flex-shrink:0;padding:9px 14px;border-radius:20px;' +
         'border:1.5px solid ' + (active ? 'transparent' : colors.tabBorder) + ';' +
         'background:' + (active ? 'linear-gradient(135deg, #ec4899, #8b5cf6)' : colors.tabBg) + ';' +
         'color:' + (active ? '#ffffff' : colors.tabText) + ';' +
-        'font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;' +
+        'font-family:Tajawal,sans-serif;font-weight:800;font-size:11px;cursor:pointer;' +
         'display:flex;align-items:center;gap:5px;white-space:nowrap;">' +
         t.icon + ' ' + t.label +
         ' <span style="background:' + (active ? 'rgba(255,255,255,0.25)' : colors.divider) + ';padding:1px 6px;border-radius:8px;font-size:9px;">' + cnt + '</span>' +
@@ -10723,24 +10625,24 @@ document.addEventListener('keydown', function(e) {
     });
     tabsHtml += '</div>';
     
-    // ═══ البحث + زر "الكل مقروء" ═══
+    // ═══ شريط البحث ═══
     var toolbarHtml = '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
       '<div style="flex:1;position:relative;">' +
-        '<input type="text" placeholder="ابحث في الإشعارات..." value="' + esc(state.search) + '" oninput="window.nrfSearch(this.value)" style="' +
+        '<input type="text" id="nrf-search-input" placeholder="ابحث في الإشعارات..." value="' + esc(NRF.state.search) + '" oninput="window.__nrfSearch(this.value)" style="' +
           'width:100%;padding:11px 38px 11px 14px;border-radius:12px;' +
           'border:1px solid ' + colors.inputBorder + ';' +
           'background:' + colors.inputBg + ';' +
-          'color:' + colors.textPrimary + ';' +
-          'font-family:inherit;font-size:12px;box-sizing:border-box;outline:none;' +
+          'color:' + colors.title + ';' +
+          'font-family:Tajawal,sans-serif;font-size:12px;box-sizing:border-box;outline:none;' +
         '">' +
-        '<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:' + colors.textMuted + ';font-size:14px;pointer-events:none;">🔍</span>' +
+        '<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:' + colors.muted + ';font-size:14px;pointer-events:none;">🔍</span>' +
       '</div>' +
-      (unread > 0 ? '<button onclick="window.nrfMarkAllRead()" style="' +
+      (unread > 0 ? '<button onclick="window.__nrfMarkAllRead()" style="' +
         'padding:0 14px;border-radius:12px;' +
         'border:1px solid ' + colors.pink + '55;' +
         'background:' + colors.pink + '15;' +
         'color:' + colors.pink + ';' +
-        'font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;white-space:nowrap;' +
+        'font-family:Tajawal,sans-serif;font-weight:800;font-size:11px;cursor:pointer;white-space:nowrap;' +
       '">✓ الكل</button>' : '') +
     '</div>';
     
@@ -10748,16 +10650,13 @@ document.addEventListener('keydown', function(e) {
     var contentHtml = '';
     
     if (searched.length === 0) {
-      var emptyMsg = state.search 
-        ? 'لا توجد نتائج للبحث'
-        : (state.filter === 'all' ? 'ستظهر هنا إشعاراتك الجديدة' : 'لا توجد إشعارات في هذا التصنيف');
+      var msg = NRF.state.search ? 'لا توجد نتائج للبحث' :
+        (NRF.state.filter === 'all' ? 'ستظهر هنا إشعاراتك الجديدة' : 'لا توجد إشعارات في هذا التصنيف');
       
-      contentHtml = '<div style="text-align:center;padding:60px 20px;">' +
-        '<div style="width:80px;height:80px;margin:0 auto 20px;border-radius:50%;' +
-          'background:' + (isLight() ? 'rgba(236,72,153,0.1)' : 'rgba(255,77,148,0.15)') + ';' +
-          'display:flex;align-items:center;justify-content:center;font-size:36px;">🔔</div>' +
-        '<div style="font-size:16px;font-weight:900;color:' + colors.textPrimary + ';margin-bottom:8px;">لا توجد إشعارات</div>' +
-        '<div style="font-size:12px;color:' + colors.textMuted + ';max-width:240px;margin:0 auto;">' + emptyMsg + '</div>' +
+      contentHtml = '<div style="text-align:center;padding:50px 20px;">' +
+        '<div style="width:80px;height:80px;margin:0 auto 20px;border-radius:50%;background:' + colors.emptyBg + ';display:flex;align-items:center;justify-content:center;font-size:36px;">🔔</div>' +
+        '<div style="font-size:16px;font-weight:900;color:' + colors.title + ';margin-bottom:8px;">لا توجد إشعارات</div>' +
+        '<div style="font-size:12px;color:' + colors.muted + ';max-width:240px;margin:0 auto;">' + msg + '</div>' +
       '</div>';
     } else {
       var groups = groupByDate(searched);
@@ -10766,7 +10665,7 @@ document.addEventListener('keydown', function(e) {
       Object.keys(labels).forEach(function(key) {
         if (groups[key].length === 0) return;
         contentHtml += '<div style="margin-bottom:16px;">';
-        contentHtml += '<div style="font-size:11px;font-weight:900;color:' + colors.groupLabel + ';margin-bottom:8px;padding:0 4px;letter-spacing:0.3px;">' + labels[key] + ' · ' + groups[key].length + '</div>';
+        contentHtml += '<div style="font-size:11px;font-weight:900;color:' + colors.groupLabel + ';margin-bottom:8px;padding:0 4px;">' + labels[key] + ' · ' + groups[key].length + '</div>';
         groups[key].forEach(function(n) {
           contentHtml += buildCard(n, colors);
         });
@@ -10785,86 +10684,43 @@ document.addEventListener('keydown', function(e) {
     
     return '<div data-id="' + esc(n.id) + '" onclick="if(window.notifClick)notifClick(event,&quot;' + n.id + '&quot;)" style="' +
       'position:relative;display:flex;gap:12px;padding:14px;margin-bottom:8px;' +
-      'background:' + (isUnread ? c.cardBg : 'transparent') + ';' +
-      'border:1px solid ' + (isUnread ? c.pink + '66' : c.cardBorder) + ';' +
-      'border-radius:14px;cursor:pointer;transition:background 0.15s;' +
-    '">' +
+      'background:' + (isUnread ? c.card : 'transparent') + ';' +
+      'border:1px solid ' + (isUnread ? c.borderUnread + '80' : c.border) + ';' +
+      'border-radius:14px;cursor:pointer;">' +
       (isUnread ? '<div style="position:absolute;top:14px;right:14px;width:8px;height:8px;background:' + c.pink + ';border-radius:50%;box-shadow:0 0 6px ' + c.pink + ';"></div>' : '') +
       '<div style="width:44px;height:44px;border-radius:12px;background:' + t.color + '22;border:1px solid ' + t.color + '44;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + t.icon + '</div>' +
       '<div style="flex:1;min-width:0;padding-left:16px;">' +
-        '<div style="font-weight:900;font-size:13px;color:' + c.textPrimary + ';margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(n.title || '') + '</div>' +
-        '<div style="font-size:12px;color:' + c.textSecondary + ';line-height:1.5;margin-bottom:6px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">' + esc(n.body || '') + '</div>' +
+        '<div style="font-weight:900;font-size:13px;color:' + c.title + ';margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:Tajawal,sans-serif;">' + esc(n.title || '') + '</div>' +
+        '<div style="font-size:12px;color:' + c.body + ';line-height:1.5;margin-bottom:6px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-family:Tajawal,sans-serif;">' + esc(n.body || '') + '</div>' +
         '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
-          '<span style="font-size:9px;color:' + t.color + ';font-weight:800;background:' + t.color + '18;padding:2px 7px;border-radius:8px;">' + t.label + '</span>' +
-          (time ? '<span style="font-size:10px;color:' + c.textMuted + ';">' + time + '</span>' : '') +
+          '<span style="font-size:9px;color:' + t.color + ';font-weight:800;background:' + t.color + '18;padding:2px 7px;border-radius:8px;font-family:Tajawal,sans-serif;">' + t.label + '</span>' +
+          (time ? '<span style="font-size:10px;color:' + c.muted + ';font-family:Tajawal,sans-serif;">' + time + '</span>' : '') +
         '</div>' +
       '</div>' +
-      '<button onclick="event.stopPropagation();window.nrfDeleteNotif(&quot;' + esc(n.id) + '&quot;)" style="position:absolute;bottom:8px;left:8px;width:26px;height:26px;border-radius:50%;background:transparent;border:none;color:' + c.textMuted + ';cursor:pointer;font-size:14px;">✕</button>' +
+      '<button onclick="event.stopPropagation();window.__nrfDelete(&quot;' + esc(n.id) + '&quot;)" style="position:absolute;bottom:8px;left:8px;width:26px;height:26px;border-radius:50%;background:transparent;border:none;color:' + c.muted + ';cursor:pointer;font-size:14px;">✕</button>' +
     '</div>';
   }
   
-  // ═══ الأحداث ═══
-  window.nrfSetFilter = function(f) {
-    state.filter = f;
-    render();
-  };
-  
-  window.nrfSearch = function(q) {
-    state.search = q || '';
-    clearTimeout(window.__nrfSearchTimer);
-    window.__nrfSearchTimer = setTimeout(render, 150);
-  };
-  
-  window.nrfMarkAllRead = async function() {
-    var uid = FB.currentUser ? FB.currentUser.uid : null;
-    if (!uid || !FB.db) return;
-    var unread = state.data.filter(function(n) { return n.userId === uid && n.read === false; });
-    for (var i = 0; i < unread.length; i++) {
-      try {
-        await FB.db.collection('notifications').doc(unread[i].id).update({ read: true });
-        unread[i].read = true;
-      } catch(e) {}
-    }
-    render();
-  };
-  
-  window.nrfDeleteNotif = async function(id) {
-    if (!confirm('حذف هذا الإشعار؟')) return;
+  // ═══ onSnapshot ═══
+  function startListener(uid, c) {
+    if (NRF.listeningUID === uid && NRF.listener) return;
+    if (NRF.listener) { try { NRF.listener(); } catch(e) {} NRF.listener = null; }
+    NRF.listeningUID = uid;
+    
     try {
-      if (FB && FB.db) await FB.db.collection('notifications').doc(id).delete();
-      state.data = state.data.filter(function(n) { return n.id !== id; });
-      if (window.APP) APP.notifications = state.data;
-      saveCache(state.data);
-      render();
-    } catch(e) { alert('فشل الحذف'); }
-  };
-  
-  // ═══ onSnapshot للـ realtime ═══
-  function startListening(uid) {
-    if (state.listening && state.uid === uid) return;
-    if (state.listener) { try { state.listener(); } catch(e) {} state.listener = null; }
-    state.uid = uid;
-    state.listening = true;
-    
-    if (!FB || !FB.db) return;
-    
-    LOG('starting listener for', uid.substring(0, 8));
-    
-    // مستمع واحد رئيسي (userId)
-    try {
-      state.listener = FB.db.collection('notifications')
+      NRF.listener = FB.db.collection('notifications')
         .where('userId', '==', uid)
         .onSnapshot(function(snap) {
-          var userNotifs = [];
+          var userList = [];
           snap.forEach(function(doc) {
             var d = doc.data();
             d.id = doc.id;
-            userNotifs.push(d);
+            userList.push(d);
           });
           
-          // ادمج مع العامة (احفظ العامة من الحالة السابقة)
-          var globals = state.data.filter(function(n) { return n.isGlobal === true; });
-          var merged = userNotifs.concat(globals);
+          // احتفظ بالعامة من الحالة السابقة
+          var globals = NRF.state.list.filter(function(n) { return n.isGlobal === true; });
+          var merged = userList.concat(globals);
           
           // احذف المكرر
           var seen = {};
@@ -10874,81 +10730,122 @@ document.addEventListener('keydown', function(e) {
             return true;
           });
           
-          // رتب
           unique.sort(function(a, b) {
             var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
             var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
             return tb - ta;
           });
           
-          state.data = unique;
+          NRF.state.list = unique;
           if (window.APP) APP.notifications = unique;
           saveCache(unique);
-          render();
-          LOG('updated:', unique.length, 'notifications');
+          paint(c);
         }, function(err) {
-          LOG('listener error:', err.message);
+          LOG('listener err:', err.message);
         });
     } catch(e) {
-      LOG('startListening failed:', e.message);
+      LOG('listener fail:', e.message);
     }
   }
   
-  // ═══ override APP.renderNotifs ═══
-  function install() {
-    if (!window.APP) { setTimeout(install, 150); return; }
-    if (APP.__nrfV2) return;
-    APP.__nrfV2 = true;
+  window.nrfRenderAndListen = function(uid, c) {
+    // 1) عرض الكاش فوراً
+    var cached = loadCache();
+    if (cached.length > 0) {
+      NRF.state.list = cached;
+      paint(c);
+    } else {
+      NRF.state.list = [];
+      paint(c);
+    }
     
-    APP.renderNotifs = function() {
-      var uid = FB.currentUser ? FB.currentUser.uid : null;
-      if (!uid) { render(); return; }
-      
-      // 1) عرض الكاش فوراً
-      var cached = loadCache();
-      if (cached.length > 0) {
-        state.data = cached;
-        render();
-        LOG('cache rendered:', cached.length);
-      } else {
-        state.data = [];
-        render(); // يظهر التبويبات + الحالة الفارغة
-      }
-      
-      // 2) بدء onSnapshot (تحديث حي)
-      startListening(uid);
-    };
+    // 2) بدء onSnapshot
+    startListener(uid, c);
     
-    LOG('APP.renderNotifs installed');
-  }
-  install();
+    // 3) في حال لم يكن هناك كاش — جلب أولي
+    if (cached.length === 0) {
+      FB.db.collection('notifications')
+        .where('userId', '==', uid).limit(100).get()
+        .then(function(snap) {
+          var userList = [];
+          snap.forEach(function(doc) {
+            var d = doc.data();
+            d.id = doc.id;
+            userList.push(d);
+          });
+          
+          userList.sort(function(a, b) {
+            var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+            var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+            return tb - ta;
+          });
+          
+          NRF.state.list = userList;
+          if (window.APP) APP.notifications = userList;
+          saveCache(userList);
+          paint(c);
+        }).catch(function(e) {
+          LOG('initial fetch err:', e.message);
+        });
+    }
+  };
   
-  // ═══ مراقبة Auth ═══
-  function watchAuth() {
-    if (!window.FB || !FB.auth) { setTimeout(watchAuth, 300); return; }
-    FB.auth.onAuthStateChanged(function(u) {
-      if (u) {
-        state.uid = null;
-        state.listening = false;
-        if (document.getElementById('sc-notifications') &&
-            document.getElementById('sc-notifications').classList.contains('active')) {
-          APP.renderNotifs();
-        }
-      } else {
-        if (state.listener) { try { state.listener(); } catch(e) {} state.listener = null; }
-        state.listening = false;
-        state.data = [];
-      }
-    });
-  }
-  watchAuth();
+  // ═══ أحداث عامة ═══
+  window.__nrfSetFilter = function(f) {
+    NRF.state.filter = f;
+    var c = document.getElementById('notif-list');
+    if (c) paint(c);
+  };
+  
+  window.__nrfSearch = function(q) {
+    NRF.state.search = q || '';
+    clearTimeout(window.__nrfSearchTimer);
+    window.__nrfSearchTimer = setTimeout(function() {
+      var c = document.getElementById('notif-list');
+      if (c) paint(c);
+    }, 150);
+  };
+  
+  window.__nrfMarkAllRead = async function() {
+    var uid = FB.currentUser ? FB.currentUser.uid : null;
+    if (!uid || !FB.db) return;
+    var unread = NRF.state.list.filter(function(n) { return n.userId === uid && n.read === false; });
+    for (var i = 0; i < unread.length; i++) {
+      try {
+        await FB.db.collection('notifications').doc(unread[i].id).update({ read: true });
+        unread[i].read = true;
+      } catch(e) {}
+    }
+    var c = document.getElementById('notif-list');
+    if (c) paint(c);
+  };
+  
+  window.__nrfDelete = async function(id) {
+    if (!confirm('حذف هذا الإشعار؟')) return;
+    try {
+      if (FB && FB.db) await FB.db.collection('notifications').doc(id).delete();
+      NRF.state.list = NRF.state.list.filter(function(n) { return n.id !== id; });
+      if (window.APP) APP.notifications = NRF.state.list;
+      saveCache(NRF.state.list);
+      var c = document.getElementById('notif-list');
+      if (c) paint(c);
+    } catch(e) { alert('فشل الحذف'); }
+  };
   
   // ═══ إعادة الرسم عند تغيير الثيم ═══
-  new MutationObserver(function() { 
-    if (document.getElementById('notif-list')) render(); 
+  new MutationObserver(function() {
+    var c = document.getElementById('notif-list');
+    if (c && c.querySelector('button')) paint(c);
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   
-  LOG('ULTIMATE V2 ready');
+  // ═══ مسح الكاش القديم ═══
+  try {
+    localStorage.removeItem('chizen_notifs_cache_v2');
+    localStorage.removeItem('chizen_notifs_cache_v3');
+    localStorage.removeItem('chizen_notifs');
+  } catch(e) {}
+  
+  console.log('[NOTIFS-HELPER] ready');
 })();
 </script>
 </body>
