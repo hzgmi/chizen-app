@@ -10868,5 +10868,52 @@ document.addEventListener('keydown', function(e) {
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
 </script>
+<script id="chz-notifs-theme-v3">
+(function(){
+  var lastTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  
+  function triggerRerender() {
+    if (!window.APP || !APP.renderNotifs) return;
+    var screen = document.getElementById('sc-notifications');
+    if (!screen) return;
+    
+    var isActive = screen.classList.contains('active') || 
+                   (screen.offsetWidth > 0 && screen.offsetHeight > 0);
+    if (!isActive) return;
+    
+    console.log('[NOTIFS-THEME] re-rendering for', lastTheme);
+    APP.renderNotifs();
+  }
+  
+  function check() {
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    if (current !== lastTheme) {
+      lastTheme = current;
+      setTimeout(triggerRerender, 150);
+    }
+  }
+  
+  // 1) Observer
+  try {
+    new MutationObserver(check).observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['data-theme'] 
+    });
+  } catch(e) {}
+  
+  // 2) Polling fallback
+  setInterval(check, 400);
+  
+  // 3) Body class observer (احتياطي)
+  try {
+    new MutationObserver(check).observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  } catch(e) {}
+  
+  console.log('[NOTIFS-THEME-V3] active');
+})();
+</script>
 </body>
 </html>
