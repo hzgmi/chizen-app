@@ -5058,6 +5058,231 @@ html[data-theme="light"] .ss-wrapper {
   border: 1px solid #e5e7eb !important;
 }
 </style>
+<style id="chz-details-fix-v2">
+/* ═══════════════════════════════════════════════════════════════
+   إصلاح صفحة تفاصيل المنتج — الوضعين
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ══════════ صندوق المميزات ══════════ */
+
+/* الوضع الداكن */
+html:not([data-theme="light"]) #det-features-block,
+html:not([data-theme="light"]) #det-features-block[style] {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  margin-top: 16px !important;
+}
+
+html:not([data-theme="light"]) #det-features-block .det-features-title,
+html:not([data-theme="light"]) #det-features-block [style*="font-weight:900"],
+html:not([data-theme="light"]) #det-features-block > div:first-child {
+  color: #a78bfa !important;
+  -webkit-text-fill-color: #a78bfa !important;
+}
+
+html:not([data-theme="light"]) #det-features-block li,
+html:not([data-theme="light"]) #det-features-block ul li {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+  border-bottom: 1px dashed #252b42 !important;
+  font-size: 13px !important;
+}
+
+html:not([data-theme="light"]) #det-features-block li span,
+html:not([data-theme="light"]) #det-features-block li::before {
+  color: #10b981 !important;
+  -webkit-text-fill-color: #10b981 !important;
+}
+
+/* الوضع الفاتح */
+html[data-theme="light"] #det-features-block {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  margin-top: 16px !important;
+}
+
+html[data-theme="light"] #det-features-block .det-features-title,
+html[data-theme="light"] #det-features-block > div:first-child {
+  color: #8b5cf6 !important;
+  -webkit-text-fill-color: #8b5cf6 !important;
+}
+
+html[data-theme="light"] #det-features-block li {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+  border-bottom: 1px dashed #e5e7eb !important;
+  font-size: 13px !important;
+}
+
+html[data-theme="light"] #det-features-block li span,
+html[data-theme="light"] #det-features-block li::before {
+  color: #10b981 !important;
+  -webkit-text-fill-color: #10b981 !important;
+}
+
+/* ══════════ صندوق الكمية ══════════ */
+
+html:not([data-theme="light"]) .qs {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  border-radius: 14px !important;
+  padding: 12px 16px !important;
+}
+
+html:not([data-theme="light"]) .qsl {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html:not([data-theme="light"]) .qs .qb2 {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html:not([data-theme="light"]) .qs .qn2 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] .qs {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 14px !important;
+  padding: 12px 16px !important;
+}
+
+html[data-theme="light"] .qsl {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+html[data-theme="light"] .qs .qb2 {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+html[data-theme="light"] .qs .qn2 {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ══════════ زر "أضف للسلة" ══════════ */
+
+html:not([data-theme="light"]) .btn-c {
+  background: #1f2640 !important;
+  background-color: #1f2640 !important;
+  border: 1px solid #2d3554 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] .btn-c {
+  background: #f3f4f6 !important;
+  background-color: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ══════════ زر "اشتر الآن" ══════════ */
+.btn-b {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ══════════ الأزرار داخل #sc-details ══════════ */
+#sc-details .det-a {
+  display: flex !important;
+  gap: 10px !important;
+  padding: 0 16px 20px !important;
+}
+
+/* ══════════ حاوية التفاصيل ══════════ */
+html:not([data-theme="light"]) #sc-details,
+html:not([data-theme="light"]) #sc-details .det-b {
+  background: #0a0e1a !important;
+  background-color: #0a0e1a !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] #sc-details,
+html[data-theme="light"] #sc-details .det-b {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  color: #1a1a2e !important;
+}
+
+/* ══════════ الصور المصغّرة ══════════ */
+html:not([data-theme="light"]) #variant-strip {
+  background: transparent !important;
+}
+
+html[data-theme="light"] #variant-strip {
+  background: transparent !important;
+}
+
+html:not([data-theme="light"]) .variant-label {
+  color: #a78bfa !important;
+  -webkit-text-fill-color: #a78bfa !important;
+}
+
+html[data-theme="light"] .variant-label {
+  color: #8b5cf6 !important;
+  -webkit-text-fill-color: #8b5cf6 !important;
+}
+
+html:not([data-theme="light"]) .thumb-item {
+  background: #1a2035 !important;
+  border: 2px solid #252b42 !important;
+}
+
+html[data-theme="light"] .thumb-item {
+  background: #ffffff !important;
+  border: 2px solid #e5e7eb !important;
+}
+
+.thumb-item.active {
+  border-color: #ec4899 !important;
+  box-shadow: 0 0 0 2px rgba(236,72,153,0.3) !important;
+}
+
+/* ══════════ حاوية الصورة الرئيسية ══════════ */
+html:not([data-theme="light"]) .det-i {
+  background: #131929 !important;
+  background-color: #131929 !important;
+}
+
+html[data-theme="light"] .det-i {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+}
+
+/* ══════════ نصوص المميزات خلف الصندوق (المكررة) ══════════ */
+html:not([data-theme="light"]) #det-desc {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+html[data-theme="light"] #det-desc {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
