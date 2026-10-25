@@ -11219,104 +11219,29 @@ document.addEventListener('keydown', function(e) {
   'use strict';
   console.log('[PICKUP-V3] loading...');
 
-  var ADEN_AREAS = [
-    { name: 'المعلا', city: 'عدن', lat: 12.7895, lng: 45.0099, icon: '🌊', points: [
-      { name: 'المركز الرئيسي', lat: 12.7895, lng: 45.0099, icon: '🏢' },
-      { name: 'بقالة الشعب', lat: 12.7890, lng: 45.0105, icon: '🏪' },
-      { name: 'صيدلية النور', lat: 12.7900, lng: 45.0090, icon: '💊' }
-    ]},
-    { name: 'كريتر', city: 'عدن', lat: 12.7790, lng: 45.0357, icon: '🏛️', points: [
-      { name: 'سوق كريتر', lat: 12.7790, lng: 45.0357, icon: '🏪' },
-      { name: 'مسجد النور', lat: 12.7785, lng: 45.0365, icon: '🕌' }
-    ]},
-    { name: 'المنصورة', city: 'عدن', lat: 12.8595, lng: 44.9822, icon: '🌆', points: [
-      { name: 'المركز الرئيسي', lat: 12.8595, lng: 44.9822, icon: '🏢' },
-      { name: 'بقالة الوفاء', lat: 12.8600, lng: 44.9830, icon: '🏪' },
-      { name: 'مستشفى النور', lat: 12.8585, lng: 44.9810, icon: '🏥' }
-    ]},
-    { name: 'الشيخ عثمان', city: 'عدن', lat: 12.8645, lng: 45.0368, icon: '🏘️', points: [
-      { name: 'المركز الرئيسي', lat: 12.8645, lng: 45.0368, icon: '🏢' },
-      { name: 'بقالة الصفوة', lat: 12.8650, lng: 45.0375, icon: '🏪' }
-    ]},
-    { name: 'خور مكسر', city: 'عدن', lat: 12.8345, lng: 45.0289, icon: '✈️', points: [
-      { name: 'المركز الرئيسي', lat: 12.8345, lng: 45.0289, icon: '🏢' },
-      { name: 'بقالة المطار', lat: 12.8350, lng: 45.0295, icon: '🏪' }
-    ]},
-    { name: 'البريقة', city: 'عدن', lat: 13.1266, lng: 45.1731, icon: '⚓', points: [
-      { name: 'المركز الرئيسي', lat: 13.1266, lng: 45.1731, icon: '🏢' },
-      { name: 'بقالة البحر', lat: 13.1270, lng: 45.1740, icon: '🏪' }
-    ]},
-    { name: 'دار سعد', city: 'عدن', lat: 12.8873, lng: 44.9664, icon: '🏙️', points: [
-      { name: 'المركز الرئيسي', lat: 12.8873, lng: 44.9664, icon: '🏢' },
-      { name: 'بقالة الأمل', lat: 12.8880, lng: 44.9670, icon: '🏪' }
-    ]},
-    { name: 'التواهي', city: 'عدن', lat: 12.7914, lng: 44.9886, icon: '🚢', points: [
-      { name: 'ميناء التواهي', lat: 12.7914, lng: 44.9886, icon: '⚓' },
-      { name: 'بقالة الميناء', lat: 12.7920, lng: 44.9895, icon: '🏪' }
-    ]},
-    { name: 'الشعب', city: 'عدن', lat: 12.7834, lng: 45.0108, icon: '🏖️', points: [
-      { name: 'المركز الرئيسي', lat: 12.7834, lng: 45.0108, icon: '🏢' },
-      { name: 'بقالة الشاطئ', lat: 12.7840, lng: 45.0115, icon: '🏪' }
-    ]},
-    { name: 'المدينة', city: 'عدن', lat: 12.7863, lng: 45.0365, icon: '🕌', points: [
-      { name: 'المركز الرئيسي', lat: 12.7863, lng: 45.0365, icon: '🏢' },
-      { name: 'سوق المدينة', lat: 12.7870, lng: 45.0370, icon: '🏪' }
-    ]}
-  ];
-
-  var YEMEN_CITIES = [
-    { name: 'صنعاء', city: 'صنعاء', lat: 15.3694, lng: 44.1910, icon: '🏛️', points: [
-      { name: 'المركز الرئيسي', lat: 15.3694, lng: 44.1910, icon: '🏢' },
-      { name: 'بقالة حدة', lat: 15.3500, lng: 44.2000, icon: '🏪' },
-      { name: 'سوق شملان', lat: 15.3800, lng: 44.1850, icon: '🏪' }
-    ]},
-    { name: 'تعز', city: 'تعز', lat: 13.5795, lng: 44.0209, icon: '🏰', points: [
-      { name: 'المركز الرئيسي', lat: 13.5795, lng: 44.0209, icon: '🏢' },
-      { name: 'بقالة الحوبان', lat: 13.5850, lng: 44.0250, icon: '🏪' }
-    ]},
-    { name: 'الحديدة', city: 'الحديدة', lat: 14.7978, lng: 42.9545, icon: '⚓', points: [
-      { name: 'المركز الرئيسي', lat: 14.7978, lng: 42.9545, icon: '🏢' },
-      { name: 'بقالة الميناء', lat: 14.8000, lng: 42.9550, icon: '🏪' }
-    ]},
-    { name: 'إب', city: 'إب', lat: 13.9667, lng: 44.1667, icon: '🌿', points: [
-      { name: 'المركز الرئيسي', lat: 13.9667, lng: 44.1667, icon: '🏢' }
-    ]},
-    { name: 'المكلا', city: 'حضرموت', lat: 14.5426, lng: 49.1242, icon: '🌊', points: [
-      { name: 'المركز الرئيسي', lat: 14.5426, lng: 49.1242, icon: '🏢' },
-      { name: 'بقالة الساحل', lat: 14.5450, lng: 49.1260, icon: '🏪' }
-    ]},
-    { name: 'سيئون', city: 'حضرموت', lat: 15.9380, lng: 48.7810, icon: '🕌', points: [
-      { name: 'المركز الرئيسي', lat: 15.9380, lng: 48.7810, icon: '🏢' }
-    ]},
-    { name: 'مأرب', city: 'مأرب', lat: 15.4624, lng: 45.3257, icon: '🏛️', points: [
-      { name: 'المركز الرئيسي', lat: 15.4624, lng: 45.3257, icon: '🏢' }
-    ]},
-    { name: 'البيضاء', city: 'البيضاء', lat: 13.9859, lng: 45.5728, icon: '🌄', points: [
-      { name: 'المركز الرئيسي', lat: 13.9859, lng: 45.5728, icon: '🏢' }
-    ]},
-    { name: 'ذمار', city: 'ذمار', lat: 14.5428, lng: 44.4053, icon: '🏔️', points: [
-      { name: 'المركز الرئيسي', lat: 14.5428, lng: 44.4053, icon: '🏢' }
-    ]},
-    { name: 'عمران', city: 'عمران', lat: 15.6594, lng: 43.9437, icon: '🏞️', points: [
-      { name: 'المركز الرئيسي', lat: 15.6594, lng: 43.9437, icon: '🏢' }
-    ]},
-    { name: 'صعدة', city: 'صعدة', lat: 16.9402, lng: 43.7639, icon: '🏔️', points: [
-      { name: 'المركز الرئيسي', lat: 16.9402, lng: 43.7639, icon: '🏢' }
-    ]},
-    { name: 'حجة', city: 'حجة', lat: 15.6943, lng: 43.6008, icon: '⛰️', points: [
-      { name: 'المركز الرئيسي', lat: 15.6943, lng: 43.6008, icon: '🏢' }
-    ]},
-    { name: 'زبيد', city: 'الحديدة', lat: 14.1953, lng: 43.3152, icon: '🏰', points: [
-      { name: 'المركز الرئيسي', lat: 14.1953, lng: 43.3152, icon: '🏢' }
-    ]},
-    { name: 'رداع', city: 'البيضاء', lat: 14.0722, lng: 44.9397, icon: '🏘️', points: [
-      { name: 'المركز الرئيسي', lat: 14.0722, lng: 44.9397, icon: '🏢' }
-    ]},
-    { name: 'يريم', city: 'إب', lat: 14.3017, lng: 44.3783, icon: '🌾', points: [
-      { name: 'المركز الرئيسي', lat: 14.3017, lng: 44.3783, icon: '🏢' }
-    ]}
-  ];
-
+  var ADEN_AREAS = [];  // loaded from Firestore
+  var YEMEN_CITIES = [];  // loaded from Firestore
+  var dataLoaded = false;
+  
+  function loadPickupData() {
+    return new Promise(function(resolve) {
+      if (dataLoaded || !window.FB || !FB.db) { resolve(); return; }
+      FB.db.collection('config').doc('pickup_areas').get().then(function(doc) {
+        if (doc.exists) {
+          var d = doc.data();
+          ADEN_AREAS = d.aden || [];
+          YEMEN_CITIES = d.yemen || [];
+          dataLoaded = true;
+          console.log('[PICKUP-V3] loaded from Firestore:', ADEN_AREAS.length, 'aden +', YEMEN_CITIES.length, 'yemen');
+        }
+        resolve();
+      }).catch(function(e) {
+        console.warn('[PICKUP-V3] load error:', e.message);
+        resolve();
+      });
+    });
+  }
+  
   var state = {
     tab: 'aden',
     view: 'districts',
@@ -11478,24 +11403,26 @@ document.addEventListener('keydown', function(e) {
   }
 
   window.__openPickupV2 = function() {
-    if (isOpen()) return;
-    var wrapper = document.createElement('div');
-    wrapper.innerHTML = buildHTML();
-    document.body.appendChild(wrapper.firstElementChild);
-    state.tab = 'aden';
-    state.view = 'districts';
-    state.district = null;
-    state.searchQuery = '';
-    setTimeout(updateUI, 250);
-    setTimeout(function() {
-      var inp = document.getElementById('pickup-search-v3');
-      if (inp) {
-        inp.addEventListener('input', function() {
-          state.searchQuery = this.value || '';
-          renderContent();
-        });
-      }
-    }, 300);
+    loadPickupData().then(function() {
+      if (isOpen()) return;
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = buildHTML();
+      document.body.appendChild(wrapper.firstElementChild);
+      state.tab = 'aden';
+      state.view = 'districts';
+      state.district = null;
+      state.searchQuery = '';
+      setTimeout(updateUI, 250);
+      setTimeout(function() {
+        var inp = document.getElementById('pickup-search-v3');
+        if (inp) {
+          inp.addEventListener('input', function() {
+            state.searchQuery = this.value || '';
+            renderContent();
+          });
+        }
+      }, 300);
+    });
   };
 
   window.__pickupSwitchTab = function(tab) {
