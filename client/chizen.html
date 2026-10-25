@@ -4918,6 +4918,146 @@ input[type="number"], input[type="password"], textarea, select {
 #cats { min-height: clamp(200px, 55vw, 300px) !important; }
 #prods, .prods { min-height: 200px !important; }
 </style>
+<style id="chz-dark-fix-v3">
+/* ═══════════════════════════════════════════════════════════════
+   إصلاحات الوضع الداكن — تجاوز القواعد القديمة
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ────── 1) إخفاء body::before و body::after (تأثيرات قديمة) ────── */
+html:not([data-theme="light"]) body::before,
+html:not([data-theme="light"]) body::after,
+html:not([data-theme="light"]) #app::before,
+html:not([data-theme="light"]) #app::after {
+  display: none !important;
+  background: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ────── 2) الخلفية الأساسية بأعلى أولوية ────── */
+html:not([data-theme="light"]),
+html:not([data-theme="light"]) body,
+html:not([data-theme="light"]) #app,
+html:not([data-theme="light"]) #screens,
+html:not([data-theme="light"]) .screen,
+html:not([data-theme="light"]) #sc-home,
+html:not([data-theme="light"]) #sc-cat,
+html:not([data-theme="light"]) #sc-category {
+  background: #0a0e1a !important;
+  background-color: #0a0e1a !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+/* ────── 3) شريط الحجز — تجاوز القاعدة القديمة ────── */
+html:not([data-theme="light"]) .booking-row-container,
+html:not([data-theme="light"]) #sc-home .booking-row-container {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+}
+html:not([data-theme="light"]) .booking-label,
+html:not([data-theme="light"]) .booking-item span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html:not([data-theme="light"]) .booking-divider {
+  background: #252b42 !important;
+}
+
+/* ────── 4) الأيقونات في الهيدر — تجاوز الأبيض ────── */
+html:not([data-theme="light"]) .chz-icons-group,
+html:not([data-theme="light"]) .chz-profile-group {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+}
+html:not([data-theme="light"]) .chz-icon-box svg {
+  stroke: #ffffff !important;
+}
+
+/* ────── 5) شريط البحث ────── */
+html:not([data-theme="light"]) .ss-wrapper,
+html:not([data-theme="light"]) .sw {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+}
+html:not([data-theme="light"]) .ss-input {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+/* ────── 6) شريط الولاء — الحفاظ على التدرج ────── */
+html:not([data-theme="light"]) .loy {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  background-color: #ec4899 !important;
+  border: 1px solid #252b42 !important;
+}
+
+/* ────── 7) الحاويات (cd, cs, ci-inf) ────── */
+html:not([data-theme="light"]) .cd,
+html:not([data-theme="light"]) .cs,
+html:not([data-theme="light"]) .ci-inf,
+html:not([data-theme="light"]) .rw,
+html:not([data-theme="light"]) .emp,
+html:not([data-theme="light"]) .sw,
+html:not([data-theme="light"]) .cat-i {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  color: #ffffff !important;
+  border-color: #252b42 !important;
+}
+
+/* ────── 8) بطاقات المنتجات ────── */
+html:not([data-theme="light"]) .cat-prod-card,
+html:not([data-theme="light"]) .prod,
+html:not([data-theme="light"]) .p-card {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+}
+html:not([data-theme="light"]) .cat-prod-card .name,
+html:not([data-theme="light"]) .cat-prod-card .p-name,
+html:not([data-theme="light"]) .prod .prod-n,
+html:not([data-theme="light"]) .prod .name,
+html:not([data-theme="light"]) .p-card .p-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html:not([data-theme="light"]) .cat-prod-card .price,
+html:not([data-theme="light"]) .cat-prod-card .p-price,
+html:not([data-theme="light"]) .prod .price,
+html:not([data-theme="light"]) .p-card .p-price {
+  color: #ec4899 !important;
+  -webkit-text-fill-color: #ec4899 !important;
+}
+
+/* ────── 9) أي حاوية أخرى بيضاء في الوضع الداكن ────── */
+html:not([data-theme="light"]) [style*="background: #fff"],
+html:not([data-theme="light"]) [style*="background:#fff"],
+html:not([data-theme="light"]) [style*="background: #ffffff"],
+html:not([data-theme="light"]) [style*="background:#ffffff"],
+html:not([data-theme="light"]) [style*="background: white"] {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+}
+
+/* ────── 10) الوضع الفاتح — الحفاظ عليه ────── */
+html[data-theme="light"] .booking-row-container {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+html[data-theme="light"] .chz-icons-group,
+html[data-theme="light"] .chz-profile-group {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+html[data-theme="light"] .ss-wrapper {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
