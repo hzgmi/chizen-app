@@ -5283,6 +5283,232 @@ html[data-theme="light"] #det-desc {
   -webkit-text-fill-color: #4b5563 !important;
 }
 </style>
+<style id="chz-cart-fix">
+/* ═══════════════════════════════════════════════════════════════
+   إصلاح صفحة السلة — الوضعين
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ══════════ 1) خلفية السلة ══════════ */
+
+html:not([data-theme="light"]) #sc-cart {
+  background: #0a0e1a !important;
+  background-color: #0a0e1a !important;
+}
+
+html[data-theme="light"] #sc-cart {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+}
+
+/* ══════════ 2) عنوان السلة ══════════ */
+html:not([data-theme="light"]) #sc-cart .sh2 .st2 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #sc-cart .sh2 .st2 {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ══════════ 3) بطاقة المنتج (.ci) ══════════ */
+
+html:not([data-theme="light"]) .ci {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  border-radius: 14px !important;
+}
+
+html[data-theme="light"] .ci {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 14px !important;
+}
+
+/* ══════════ 4) اسم المنتج في السلة ══════════ */
+html:not([data-theme="light"]) .ci-n {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="light"] .ci-n {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-weight: 700 !important;
+}
+
+/* ══════════ 5) سعر المنتج في السلة ══════════ */
+html:not([data-theme="light"]) .ci-p {
+  color: #ec4899 !important;
+  -webkit-text-fill-color: #ec4899 !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="light"] .ci-p {
+  color: #ec4899 !important;
+  -webkit-text-fill-color: #ec4899 !important;
+  font-weight: 700 !important;
+}
+
+/* ══════════ 6) حاوية صورة المنتج ══════════ */
+html:not([data-theme="light"]) .ci-i {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border-radius: 12px !important;
+}
+
+html[data-theme="light"] .ci-i {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border-radius: 12px !important;
+}
+
+/* ══════════ 7) أزرار الكمية داخل السلة ══════════ */
+html:not([data-theme="light"]) .ci .qb {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] .ci .qb {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+html:not([data-theme="light"]) .ci .qn {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] .ci .qn {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+/* ══════════ 8) صندوق الإجمالي/الكوبون (.tb) ══════════ */
+
+html:not([data-theme="light"]) .tb {
+  background: #1a2035 !important;
+  background-color: #1a2035 !important;
+  border: 1px solid #252b42 !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+}
+
+html[data-theme="light"] .tb {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+}
+
+/* ══════════ 9) صفوف الإجمالي (.tr, .tf) ══════════ */
+html:not([data-theme="light"]) .tr,
+html:not([data-theme="light"]) .tf {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+  border-color: #252b42 !important;
+}
+
+html[data-theme="light"] .tr,
+html[data-theme="light"] .tf {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* السعر الإجمالي — وردي في الوضعين */
+html:not([data-theme="light"]) .tf {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+html[data-theme="light"] .tf {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+}
+
+/* ══════════ 10) حقل كود الخصم ══════════ */
+html:not([data-theme="light"]) #coupon-in {
+  background: #131929 !important;
+  background-color: #131929 !important;
+  border: 1px solid #252b42 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="light"] #coupon-in {
+  background: #f5f7fb !important;
+  background-color: #f5f7fb !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+html:not([data-theme="light"]) #coupon-in::placeholder {
+  color: #6b7591 !important;
+  -webkit-text-fill-color: #6b7591 !important;
+}
+
+html[data-theme="light"] #coupon-in::placeholder {
+  color: #9ca3af !important;
+  -webkit-text-fill-color: #9ca3af !important;
+}
+
+/* ══════════ 11) زر "إتمام الشراء" ══════════ */
+#sc-cart .btn-p {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ══════════ 12) زر حذف المنتج (.cr) ══════════ */
+html:not([data-theme="light"]) .cr svg {
+  stroke: #ef4444 !important;
+}
+
+html[data-theme="light"] .cr svg {
+  stroke: #ef4444 !important;
+}
+
+/* ══════════ 13) الحالة الفارغة للسلة ══════════ */
+html:not([data-theme="light"]) .cempty {
+  color: #b8c0d8 !important;
+}
+
+html[data-theme="light"] .cempty {
+  color: #4b5563 !important;
+}
+
+html:not([data-theme="light"]) .cempty p {
+  color: #b8c0d8 !important;
+  -webkit-text-fill-color: #b8c0d8 !important;
+}
+
+html[data-theme="light"] .cempty p {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+}
+
+/* ══════════ 14) الشحن المجاني — أخضر ══════════ */
+html:not([data-theme="light"]) .tr span:last-child,
+html[data-theme="light"] .tr span:last-child {
+  /* لا نغيّر */
+}
+</style>
 </head>
 <body>
 <div id="app">
