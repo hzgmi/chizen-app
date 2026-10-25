@@ -283,18 +283,18 @@ APP.closeCategory = function() {
 <style>
 
 :root {
-  --bg: #f4f6fa; /* أسود عميق */
-  --nav: #ffffff; /* رمادي داكن شفاف */
+  --bg: #0a0820; /* أسود عميق */
+  --nav: rgba(15,10,35,0.98); /* رمادي داكن شفاف */
   --bd: #e5e7eb; /* حدود ذهبية خفيفة */
-  --cr: #1f2937; /* أبيض كريمي */
-  --mt: #6b7280; /* رمادي للنصوص الثانوية */
+  --cr: #f5f5ff; /* أبيض كريمي */
+  --mt: #a5a5c5; /* رمادي للنصوص الثانوية */
   --grad: linear-gradient(135deg, #D81B60, #6A1B9A); /* تدرج ذهبي */
   --grad2: linear-gradient(135deg, #ff8bc2, #d986ff);
   --pk: #D81B60; /* الذهبي بدل الوردي */
   --pl: #6A1B9A;
 }
 
-html[data-theme="light"]{--bg: #f4f6fa;--bg2:#fff;--cd:#fff;--ce:#f0f2ff;--cr: #1f2937;--mt: #6b7280;--mt2:#8a98c0;--nav-bg:rgba(255,255,255,.95);--bd: #e5e7eb;--nav: #ffffff;}
+html[data-theme="light"]{--bg: #f4f6fa;--bg2: #151030;--cd: #1a1535;--ce: #221840;--cr: #f5f5ff;--mt: #a5a5c5;--mt2: #8888aa;--nav-bg: rgba(10,8,30,0.95);--bd: #e5e7eb;--nav: rgba(15,10,35,0.98);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{height:100%;}
 body{height:100%;overflow:hidden;font-family:'Tajawal',system-ui,sans-serif;background:radial-gradient(ellipse at 50% 45%,#07195b 0%,#040b31 38%,#02051b 72%,#00010a 100%);color:var(--cr);overscroll-behavior:none;-webkit-user-select:none;user-select:none;}
@@ -637,9 +637,9 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 /* ═══ CHIZEN LIGHT COMFORT THEME ═══ */
 :root {
   --bg: #f4f6fa; /* رمادي/أزرق فاتح جداً مريح للعين */
-  --nav: #ffffff; /* أبيض نقي للبطاقات */
-  --cr: #1f2937; /* رمادي غامق للنصوص (أريح من الأسود الصارخ) */
-  --mt: #6b7280; /* رمادي متوسط للنصوص الثانوية */
+  --nav: rgba(15,10,35,0.98); /* أبيض نقي للبطاقات */
+  --cr: #f5f5ff; /* رمادي غامق للنصوص (أريح من الأسود الصارخ) */
+  --mt: #a5a5c5; /* رمادي متوسط للنصوص الثانوية */
   --mt2: #A0AEC0 !important;
   --bd: #e5e7eb; /* حدود ناعمة جداً */
   --grad: linear-gradient(135deg, #D81B60, #6A1B9A); /* بنفسجي ووردي هادئ */
@@ -2507,603 +2507,13 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
 </style>
 
 
-<style id="chizen-dark-theme">
-  /* ══════════════════════════════════════════════════
-     CHIZEN DARK LUXURY THEME (مستوحاة من صفحة الدخول)
-     ══════════════════════════════════════════════════ */
-  :root {
-    --chz-bg: #02051b;
-    --chz-bg-mid: #040b31;
-    --chz-bg-deep: #00010a;
-    --chz-pink: #ff27c9;
-    --chz-purple: #8d24ff;
-    --chz-blue: #075cff;
-    --chz-cyan: #00dfff;
-    --chz-orange: #ff8b45;
-    --chz-white: #f8f9ff;
-    --chz-muted: #b8c5ee;
-    --chz-muted-2: #6b7ba8;
-    --chz-error: #ff4d6d;
-    --chz-success: #00d4a0;
-    --chz-border: rgba(120, 150, 255, 0.16);
-    --chz-card-bg: rgba(7, 23, 71, 0.55);
-    --chz-glass: rgba(7, 23, 71, 0.45);
-    --chz-grad-main: linear-gradient(95deg, #ff9a4e 0%, #ff356f 18%, #ff20c6 39%, #a72bff 59%, #4269ff 78%, #00cfff 100%);
-    --chz-grad-pink-purple: linear-gradient(135deg, #ff27c9, #8d24ff);
-    --chz-grad-blue-cyan: linear-gradient(135deg, #075cff, #00dfff);
-  }
-
-  /* ═══ الخلفية العامة ═══ */
-  html, body {
-    background: radial-gradient(ellipse at top, #040b31 0%, #02051b 40%, #00010a 100%) !important;
-    background-attachment: fixed !important;
-    color: var(--chz-white) !important;
-  }
-  #app, #screens, .screen {
-    background: transparent !important;
-    color: var(--chz-white) !important;
-  }
-  /* توهج خلفي */
-  body::before {
-    content: '';
-    position: fixed;
-    top: -200px; left: -200px;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(255, 39, 201, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-    animation: chzGlow 8s ease-in-out infinite;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: -200px; right: -200px;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(141, 36, 255, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-    animation: chzGlow 10s ease-in-out infinite reverse;
-  }
-  @keyframes chzGlow {
-    0%, 100% { opacity: 0.8; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.1); }
-  }
-
-  /* ═══ الشريط السفلي ═══ */
-  #bottom-nav {
-    background: rgba(7, 23, 71, 0.85) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-top: 1px solid var(--chz-border) !important;
-    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.4) !important;
-  }
-  #bottom-nav .bn-it { color: var(--chz-muted-2) !important; }
-  #bottom-nav .bn-it.active { color: var(--chz-pink) !important; }
-  #bottom-nav .bn-it.active svg { stroke: var(--chz-pink) !important; filter: drop-shadow(0 0 6px var(--chz-pink)); }
-
-  /* ═══ الهيدر (chz-main) ═══ */
-  .chz-main {
-    background: linear-gradient(105deg, rgba(4, 11, 49, 0.9), rgba(37, 7, 76, 0.9)) !important;
-    border: 1px solid var(--chz-border) !important;
-    box-shadow: 0 8px 30px rgba(255, 39, 201, 0.15), 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-    backdrop-filter: blur(20px) !important;
-  }
-  .chz-banner {
-    background: var(--chz-grad-main) !important;
-    box-shadow: 0 4px 15px rgba(255, 39, 201, 0.3) !important;
-  }
-  .chz-glass-icon {
-    background: rgba(7, 23, 71, 0.55) !important;
-    border: 1px solid rgba(120, 150, 255, 0.25) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
-  }
-  .chz-glass-icon svg { stroke: var(--chz-pink) !important; }
-  .chz-badge {
-    background: linear-gradient(135deg, #ff4d6d, #ff27c9) !important;
-    box-shadow: 0 0 10px rgba(255, 39, 201, 0.6) !important;
-  }
-  .chz-logo {
-    background: linear-gradient(135deg, #25074c, #040b31) !important;
-    border: 1px solid var(--chz-border) !important;
-    box-shadow: 0 4px 15px rgba(141, 36, 255, 0.4) !important;
-  }
-  .chz-en {
-    background: linear-gradient(135deg, #ff27c9, #00dfff, #ff8b45) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    filter: drop-shadow(0 2px 8px rgba(255, 39, 201, 0.4));
-  }
-  .chz-ar { color: var(--chz-white) !important; }
-  .chz-tag { color: var(--chz-muted) !important; }
-  .chz-prof-name { color: var(--chz-white) !important; }
-  .chz-prof-welcome { color: var(--chz-muted) !important; }
-  .chz-prof-avatar {
-    background: linear-gradient(135deg, #ff27c9, #8d24ff) !important;
-    box-shadow: 0 0 15px rgba(255, 39, 201, 0.5) !important;
-    border: 2px solid rgba(255, 255, 255, 0.2) !important;
-  }
-
-  /* ═══ الكروت العامة ═══ */
-  .loy, .sw, .booking-row-container, .cat-i, 
-  .notif-card, .oc, .ch, .cs, .tb, .bank, 
-  .booking-form, .cd, .sg, .ph {
-    background: var(--chz-card-bg) !important;
-    border: 1px solid var(--chz-border) !important;
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
-  }
-  .loy-t, .search, .ci-n, .det-n, .det-br, .det-d, 
-  .fl, .fll, .pt-at, .pt-hn, .sgt, .sit-ti, .stl, 
-  .brand-name, .lux-cat-name, .photo-cat-name {
-    color: var(--chz-white) !important;
-  }
-  .loy-p, .ci-p, .det-p, .pt-ap, .buy-btn, .price {
-    color: var(--chz-pink) !important;
-  }
-  .search::placeholder, .fi::placeholder, input::placeholder, textarea::placeholder {
-    color: var(--chz-muted-2) !important;
-  }
-
-  /* ═══ الحقول ═══ */
-  .fi, input[type="text"], input[type="email"], input[type="tel"], 
-  input[type="password"], input[type="number"], input[type="date"], 
-  input[type="time"], textarea, select {
-    background: rgba(7, 23, 71, 0.6) !important;
-    border: 1px solid var(--chz-border) !important;
-    color: var(--chz-white) !important;
-    border-radius: 12px !important;
-  }
-  .fi:focus, input:focus, textarea:focus, select:focus {
-    border-color: var(--chz-pink) !important;
-    box-shadow: 0 0 0 3px rgba(255, 39, 201, 0.15) !important;
-  }
-  select option { background: #040b31 !important; color: var(--chz-white) !important; }
-
-  /* ═══ الأزرار ═══ */
-  .btn-p, .btn-b, .booking-form button, .danger-b {
-    background: var(--chz-grad-main) !important;
-    border: none !important;
-    color: #fff !important;
-    box-shadow: 0 6px 25px rgba(255, 39, 201, 0.4) !important;
-    transition: all 0.3s !important;
-  }
-  .btn-p:active, .btn-b:active {
-    transform: scale(0.97) !important;
-    box-shadow: 0 3px 15px rgba(255, 39, 201, 0.5) !important;
-  }
-  .btn-c {
-    background: rgba(7, 23, 71, 0.8) !important;
-    border: 1px solid var(--chz-border) !important;
-    color: var(--chz-pink) !important;
-  }
-
-  /* ═══ العناوين والـ sh2 ═══ */
-  .sh2 {
-    background: rgba(4, 11, 49, 0.8) !important;
-    backdrop-filter: blur(15px) !important;
-    border-bottom: 1px solid var(--chz-border) !important;
-  }
-  .st2 {
-    color: var(--chz-white) !important;
-    background: linear-gradient(135deg, #ff27c9, #00dfff) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-  }
-  .hd {
-    background: rgba(4, 11, 49, 0.9) !important;
-    backdrop-filter: blur(15px) !important;
-    border-bottom: 1px solid var(--chz-border) !important;
-  }
-  .hd > div[onclick] {
-    background: rgba(255, 39, 201, 0.15) !important;
-  }
-  .hd svg { stroke: var(--chz-pink) !important; }
-
-  /* ═══ النوافذ المنبثقة (السلة، الحجز، إلخ) ═══ */
-  #modal .ms, #dlg .dlb, #pts-purchase-modal > div, 
-  #ref-modal-box, #ref-error-box, #ref-success-box,
-  #universal-success-box {
-    background: linear-gradient(135deg, #040b31, #25074c) !important;
-    border: 1px solid var(--chz-border) !important;
-    color: var(--chz-white) !important;
-    box-shadow: 0 25px 70px rgba(255, 39, 201, 0.3) !important;
-  }
-  #modal .mt2, #universal-success-title, .success-title,
-  #ref-modal-box .modal-title, #ref-error-box .err-title,
-  #ref-success-box .err-title {
-    color: var(--chz-white) !important;
-  }
-  #universal-success-message, .success-message,
-  #ref-modal-box .modal-subtitle, #ref-error-box .err-message,
-  #ref-success-box .err-message {
-    color: var(--chz-muted) !important;
-  }
-  #universal-success-overlay, #ref-modal-overlay,
-  #ref-error-overlay, #ref-success-overlay, #pts-purchase-modal {
-    background: rgba(2, 5, 27, 0.85) !important;
-    backdrop-filter: blur(12px) !important;
-  }
-
-  /* ═══ Toast ═══ */
-  .toast {
-    background: linear-gradient(135deg, rgba(255, 39, 201, 0.95), rgba(141, 36, 255, 0.95)) !important;
-    color: #fff !important;
-    box-shadow: 0 8px 25px rgba(255, 39, 201, 0.5) !important;
-  }
-
-  /* ═══ النقاط ═══ */
-  .pt-hero {
-    background: linear-gradient(135deg, #ff27c9, #8d24ff) !important;
-    box-shadow: 0 8px 25px rgba(255, 39, 201, 0.4) !important;
-  }
-  .pt-btn-card, .pts-package {
-    background: rgba(7, 23, 71, 0.6) !important;
-    border: 1px solid var(--chz-border) !important;
-  }
-  .pt-btn-card:hover, .pts-package:hover {
-    border-color: var(--chz-pink) !important;
-    box-shadow: 0 4px 20px rgba(255, 39, 201, 0.3) !important;
-  }
-
-  /* ═══ الحجوزات ═══ */
-  .booking-tabs { background: rgba(4, 11, 49, 0.6) !important; }
-  .booking-tab {
-    background: rgba(7, 23, 71, 0.6) !important;
-    border: 1px solid var(--chz-border) !important;
-    color: var(--chz-muted) !important;
-  }
-  .booking-tab.active {
-    background: var(--chz-grad-main) !important;
-    border-color: transparent !important;
-    color: #fff !important;
-    box-shadow: 0 4px 15px rgba(255, 39, 201, 0.4) !important;
-  }
-  .booking-label { color: var(--chz-white) !important; }
-  .booking-divider { background: var(--chz-border) !important; }
-
-  /* ═══ الماركات ═══ */
-  .lux-cat-img, .photo-cat-circle {
-    background: rgba(7, 23, 71, 0.5) !important;
-    border-color: var(--chz-border) !important;
-  }
-
-  /* ═══ البحث الذكي ═══ */
-  .ss-wrapper {
-    background: rgba(7, 23, 71, 0.7) !important;
-    border: 1px solid var(--chz-border) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-  }
-  .ss-input { color: var(--chz-white) !important; }
-  .ss-input::placeholder { color: var(--chz-muted-2) !important; }
-  .ss-icon { stroke: var(--chz-pink) !important; }
-  .ss-dropdown {
-    background: #040b31 !important;
-    border: 1px solid var(--chz-border) !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important;
-  }
-  .ss-item { border-bottom: 1px solid var(--chz-border) !important; }
-  .ss-item:hover { background: rgba(255, 39, 201, 0.1) !important; }
-  .ss-item-name { color: var(--chz-white) !important; }
-  .ss-item-cat { color: var(--chz-muted) !important; }
-  .ss-item-price { color: var(--chz-pink) !important; }
-
-  /* ═══ السلة والدفع ═══ */
-  .cn {
-    background: var(--chz-grad-pink-purple) !important;
-    color: #fff !important;
-  }
-  .cst { color: var(--chz-white) !important; }
-  .tb .tr { color: var(--chz-muted) !important; }
-  .tb .tf { color: var(--chz-pink) !important; border-top: 1px solid var(--chz-border) !important; }
-  .bank-n { color: var(--chz-white) !important; }
-  .bank-d { color: var(--chz-muted) !important; }
-
-  /* ═══ الحساب والإعدادات ═══ */
-  .ph { background: transparent !important; }
-  .pn { color: var(--chz-white) !important; }
-  .pe { color: var(--chz-muted) !important; }
-  .av {
-    background: var(--chz-grad-main) !important;
-    box-shadow: 0 8px 25px rgba(255, 39, 201, 0.4) !important;
-  }
-  .sgt { 
-    background: rgba(255, 39, 201, 0.1) !important;
-    color: var(--chz-pink) !important;
-    border-bottom: 1px solid var(--chz-border) !important;
-  }
-  .sit { border-bottom: 1px solid var(--chz-border) !important; }
-  .sii { background: rgba(7, 23, 71, 0.6) !important; }
-  .sii svg { stroke: var(--chz-pink) !important; }
-  .sit-d, .mi-v { color: var(--chz-muted) !important; }
-  .mi-a { color: var(--chz-muted-2) !important; }
-  .tog { background: rgba(7, 23, 71, 0.8) !important; border: 1px solid var(--chz-border) !important; }
-  .tog.on { background: var(--chz-grad-pink-purple) !important; }
-
-  /* ═══ زر AI ═══ */
-  #ai-btn, .ai-fab, [class*="ai-button"] {
-    background: var(--chz-grad-main) !important;
-    box-shadow: 0 8px 25px rgba(255, 39, 201, 0.5) !important;
-  }
-
-  /* ═══ النصوص العامة ═══ */
-  h1, h2, h3, h4, h5, h6, p, span, div, label, a {
-    color: inherit;
-  }
-
-  /* ═══ شريط الخصم ═══ */
-  .top-marquee {
-    background: var(--chz-grad-main) !important;
-    box-shadow: 0 2px 10px rgba(255, 39, 201, 0.3) !important;
-  }
-
-  /* ═══ البحث القديم (إذا وُجد) ═══ */
-  .sw .sb {
-    background: rgba(7, 23, 71, 0.7) !important;
-    border: 1px solid var(--chz-border) !important;
-  }
-  .sw .sb .search { color: var(--chz-white) !important; }
-
-  /* ═══ التقييمات والنجوم ═══ */
-  .rating, .stars { color: #FFC107 !important; }
-
-  /* ═══ القوائم الفارغة ═══ */
-  .cempty { color: var(--chz-muted) !important; }
-
-  /* ═══ تحسين عام للأيقونات ═══ */
-  svg:not([fill]) { stroke: currentColor; }
-
-  /* ═══ حقول الملفات ═══ */
-  input[type="file"] {
-    background: rgba(7, 23, 71, 0.6) !important;
-    color: var(--chz-muted) !important;
-    border: 1px dashed var(--chz-border) !important;
-  }
-</style>
 
 
-<style id="force-dark-bg">
-  /* ═══ إجبار الخلفية الداكنة على كل الطبقات ═══ */
-  html,
-  body,
-  #app,
-  #screens,
-  .screen,
-  #sc-home,
-  #sc-cart,
-  #sc-orders,
-  #sc-profile,
-  #sc-settings,
-  #sc-points,
-  #sc-favorites,
-  #sc-notifications,
-  #sc-help,
-  #sc-booking,
-  #sc-details,
-  #sc-checkout,
-  #sc-cat,
-  #sc-addresses,
-  #sc-wishlist,
-  #sc-success {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-  }
-  
-  /* لكن نضع الخلفية الداكنة على html/body */
-  html, body {
-    background: radial-gradient(ellipse at top, #040b31 0%, #02051b 50%, #00010a 100%) !important;
-    background-attachment: fixed !important;
-  }
-  
-  /* إزالة أي خلفية بيضاء من الأقسام الداخلية */
-  .sec, .sec *, 
-  #sc-home > *:not(.chz-main):not(.chz-banner):not(.booking-row-container),
-  #sc-home > div:not(.chz-main):not(.chz-banner):not(.booking-row-container) {
-    background-color: transparent !important;
-  }
-  
-  /* البطاقات فقط داكنة شفافة */
-  .loy, .sw, .ss-wrapper, .booking-row-container,
-  .cat-i, .photo-cat-circle, .notif-card, .oc,
-  .ch, .cs, .tb, .bank, .booking-form, .cd, .sg, .ph,
-  .pt-btn-card, .pts-package, .pt-a, .sit, .sh2 {
-    background: rgba(7, 23, 71, 0.55) !important;
-  }
-  
-  /* إزالة أي خلفية بيضاء من البحث */
-  .sw, .sb, .search, #global-search {
-    background: rgba(7, 23, 71, 0.7) !important;
-  }
-  
-  /* إزالة أي خلفية بيضاء من الحقول */
-  input, textarea, select, .fi {
-    background: rgba(7, 23, 71, 0.6) !important;
-    color: #f8f9ff !important;
-  }
-  
-  /* النصوص البيضاء على داكن */
-  .pt-num, .pt-hn, .loy-p, .ci-p, .det-p,
-  .price, .pt-ap, .tt, .total, .tf span {
-    color: #ff27c9 !important;
-  }
-  
-  /* الخلفية العامة لكل الشاشات بدون استثناء */
-  #sc-home::before,
-  #sc-cart::before,
-  #sc-orders::before {
-    content: none !important;
-    background: none !important;
-  }
-  
-  /* إجبار أي خلفية فاتحة على الاختفاء */
-  [style*="background: #f"],
-  [style*="background:#f"],
-  [style*="background: white"],
-  [style*="background:white"],
-  [style*="background:#fff"],
-  [style*="background: #fff"],
-  [style*="background-color: white"],
-  [style*="background-color:white"] {
-    background: rgba(7, 23, 71, 0.55) !important;
-  }
-</style>
 
 
-<style id="light-mode-override">
-  /* ═══ الوضع الفاتح (يُفعّل عبر data-theme="light") ═══ */
-  html[data-theme="light"] body,
-  html[data-theme="light"] #app,
-  html[data-theme="light"] #screens,
-  html[data-theme="light"] .screen {
-    background: linear-gradient(180deg, #F5EFFF 0%, #FCEBF3 50%, #F8F9FA 100%) !important;
-    background-attachment: fixed !important;
-    color: #1f2937 !important;
-  }
-  html[data-theme="light"] body::before,
-  html[data-theme="light"] body::after { display: none !important; }
-  
-  html[data-theme="light"] .loy,
-  html[data-theme="light"] .sw,
-  html[data-theme="light"] .ss-wrapper,
-  html[data-theme="light"] .booking-row-container,
-  html[data-theme="light"] .notif-card,
-  html[data-theme="light"] .oc,
-  html[data-theme="light"] .ch,
-  html[data-theme="light"] .cs,
-  html[data-theme="light"] .tb,
-  html[data-theme="light"] .booking-form,
-  html[data-theme="light"] .cd,
-  html[data-theme="light"] .sg,
-  html[data-theme="light"] .pt-btn-card,
-  html[data-theme="light"] .sit,
-  html[data-theme="light"] .sh2 {
-    background: #ffffff !important;
-    border-color: #e5e7eb !important;
-    box-shadow: 0 4px 15px rgba(106, 27, 154, 0.05) !important;
-  }
-  
-  html[data-theme="light"] .st2,
-  html[data-theme="light"] .stl,
-  html[data-theme="light"] .loy-t,
-  html[data-theme="light"] .sit-ti,
-  html[data-theme="light"] .ci-n,
-  html[data-theme="light"] .det-n {
-    color: #1f2937 !important;
-    -webkit-text-fill-color: #1f2937 !important;
-  }
-  
-  html[data-theme="light"] input,
-  html[data-theme="light"] textarea,
-  html[data-theme="light"] select,
-  html[data-theme="light"] .fi {
-    background: #f4f6fa !important;
-    color: #1f2937 !important;
-    border-color: #e5e7eb !important;
-  }
-  html[data-theme="light"] input::placeholder,
-  html[data-theme="light"] textarea::placeholder,
-  html[data-theme="light"] .search::placeholder {
-    color: #9ca3af !important;
-  }
-  
-  html[data-theme="light"] #bottom-nav {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-top: 1px solid #e5e7eb !important;
-  }
-  html[data-theme="light"] #bottom-nav .bn-it { color: #9ca3af !important; }
-  html[data-theme="light"] #bottom-nav .bn-it.active { color: #D81B60 !important; }
-  html[data-theme="light"] #bottom-nav .bn-it.active svg { stroke: #D81B60 !important; filter: none; }
-  
-  html[data-theme="light"] .chz-main {
-    background: linear-gradient(105deg, #ffffff 0%, #f8f9fa 100%) !important;
-    border-color: #e5e7eb !important;
-  }
-  html[data-theme="light"] .chz-glass-icon {
-    background: #ffffff !important;
-    border-color: #e5e7eb !important;
-  }
-  html[data-theme="light"] .chz-glass-icon svg { stroke: #6A1B9A !important; }
-  html[data-theme="light"] .chz-logo {
-    background: linear-gradient(135deg, #f0f0ff, #ffffff) !important;
-    border-color: #e5e7eb !important;
-  }
-  html[data-theme="light"] .chz-ar { color: #1f2937 !important; }
-  html[data-theme="light"] .chz-tag { color: #6b7280 !important; }
-  html[data-theme="light"] .chz-prof-name { color: #1f2937 !important; }
-  html[data-theme="light"] .chz-prof-welcome { color: #6b7280 !important; }
-  
-  html[data-theme="light"] .ss-dropdown {
-    background: #ffffff !important;
-    box-shadow: 0 10px 40px rgba(106, 27, 154, 0.15) !important;
-  }
-  html[data-theme="light"] .ss-item-name { color: #1f2937 !important; }
-  html[data-theme="light"] .ss-item-cat { color: #6b7280 !important; }
-  html[data-theme="light"] .ss-item:hover { background: #fdf2f8 !important; }
-  
-  html[data-theme="light"] .booking-tab {
-    background: #f4f6fa !important;
-    color: #6b7280 !important;
-    border-color: #e5e7eb !important;
-  }
-  html[data-theme="light"] .booking-tab.active {
-    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
-    color: #fff !important;
-  }
-  html[data-theme="light"] .booking-label { color: #374151 !important; }
-  
-  html[data-theme="light"] .sgt {
-    background: #f4f6fa !important;
-    color: #6A1B9A !important;
-    border-bottom: 1px solid #e5e7eb !important;
-  }
-  html[data-theme="light"] .sii { background: #f4f6fa !important; }
-  html[data-theme="light"] .sii svg { stroke: #6A1B9A !important; }
-  html[data-theme="light"] .sit-d,
-  html[data-theme="light"] .mi-v { color: #6b7280 !important; }
-  
-  /* النوافذ المنبثقة */
-  html[data-theme="light"] #ref-modal-box,
-  html[data-theme="light"] #pts-purchase-modal > div,
-  html[data-theme="light"] #universal-success-box,
-  html[data-theme="light"] #ref-error-box,
-  html[data-theme="light"] #ref-success-box,
-  html[data-theme="light"] #modal .ms {
-    background: #ffffff !important;
-    color: #1f2937 !important;
-  }
-  html[data-theme="light"] #ref-modal-box .modal-title,
-  html[data-theme="light"] #universal-success-title,
-  html[data-theme="light"] #ref-error-box .err-title,
-  html[data-theme="light"] #ref-success-box .err-title {
-    color: #1f2937 !important;
-  }
-  html[data-theme="light"] #ref-modal-box .modal-subtitle,
-  html[data-theme="light"] #universal-success-message,
-  html[data-theme="light"] #ref-error-box .err-message,
-  html[data-theme="light"] #ref-success-box .err-message {
-    color: #6b7280 !important;
-  }
-  
-  html[data-theme="light"] .toast {
-    background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
-    color: #fff !important;
-  }
-  
-  html[data-theme="light"] .pt-hn,
-  html[data-theme="light"] .pt-hl,
-  html[data-theme="light"] .pt-hi { color: #fff !important; }
-  
-  html[data-theme="light"] .cempty { color: #6b7280 !important; }
-  
-  html[data-theme="light"] .photo-cat-circle {
-    background: #ffffff !important;
-    border-color: #e5e7eb !important;
-  }
-  html[data-theme="light"] .lux-cat-img {
-    background: #ffffff !important;
-  }
-</style>
+
+
+
 
 
 <style id="brand-refine">
@@ -9501,679 +8911,8 @@ document.addEventListener('keydown', function(e) {
 
 
 
-<style id="chz-master-v2">
-/* ═══════════════════════════════════════════════════════════
-   CHIZEN MASTER CSS v2 — بناء نظيف
-   ═══════════════════════════════════════════════════════════ */
 
-/* ────── 1) متغيرات الوضعين ────── */
-:root {
-  --chz-bg: #0a0820;
-  --chz-bg2: #151030;
-  --chz-card: #1a1535;
-  --chz-card-hi: #221840;
-  --chz-text: #f5f5ff;
-  --chz-sub: #a5a5c5;
-  --chz-muted: #8888aa;
-  --chz-border: rgba(168,85,247,0.25);
-  --chz-border-hi: rgba(168,85,247,0.4);
-  --chz-pink: #ff4d94;
-  --chz-purple: #a855f7;
-  --chz-green: #10b981;
-  --chz-red: #ef4444;
-  --chz-amber: #f59e0b;
-  --chz-nav-bg: rgba(10,8,30,0.95);
-  --chz-nav: rgba(15,10,35,0.98);
-}
-html[data-theme="light"] {
-  --chz-bg: #f4f6fa;
-  --chz-bg2: #ffffff;
-  --chz-card: #ffffff;
-  --chz-card-hi: #f9fafb;
-  --chz-text: #1f2937;
-  --chz-sub: #4b5563;
-  --chz-muted: #9ca3af;
-  --chz-border: #e5e7eb;
-  --chz-border-hi: #d1d5db;
-  --chz-pink: #d81b60;
-  --chz-purple: #7c3aed;
-  --chz-nav-bg: rgba(255,255,255,0.95);
-  --chz-nav: #ffffff;
-}
 
-/* ────── 2) بطاقات المنتجات ────── */
-.cat-prod-card, .prod, .p-card {
-  background: var(--chz-card) !important;
-  border: 1px solid var(--chz-border) !important;
-  border-radius: 14px !important;
-  overflow: hidden !important;
-  color: var(--chz-text) !important;
-}
-html[data-theme="dark"] .cat-prod-card,
-html:not([data-theme="light"]) .cat-prod-card {
-  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
-}
-
-.cat-prod-card img, .prod-i img, .p-card img {
-  width: 100% !important;
-  height: 160px !important;
-  object-fit: cover !important;
-  display: block !important;
-}
-
-.cat-prod-card .name,
-.cat-prod-card .p-name,
-.prod .prod-n,
-.prod .name,
-.p-card .p-name {
-  color: var(--chz-text) !important;
-  -webkit-text-fill-color: var(--chz-text) !important;
-  font-weight: 700 !important;
-  font-size: 13px !important;
-  padding: 10px 10px 4px !important;
-}
-
-.cat-prod-card .price,
-.cat-prod-card .p-price,
-.prod .price,
-.p-card .p-price {
-  color: var(--chz-pink) !important;
-  -webkit-text-fill-color: var(--chz-pink) !important;
-  font-weight: 900 !important;
-  font-size: 15px !important;
-  padding: 4px 10px 8px !important;
-}
-
-/* ────── 3) صفحة تفاصيل المنتج ────── */
-.det-br { color: var(--chz-purple) !important; -webkit-text-fill-color: var(--chz-purple) !important; font-weight: 800 !important; }
-.det-n { color: var(--chz-text) !important; -webkit-text-fill-color: var(--chz-text) !important; }
-.det-d, .det-d * { color: var(--chz-sub) !important; -webkit-text-fill-color: var(--chz-sub) !important; }
-.det-p { color: var(--chz-pink) !important; -webkit-text-fill-color: var(--chz-pink) !important; }
-.qsl, .qn2 { color: var(--chz-text) !important; }
-
-/* ────── 4) حقول الإدخال ────── */
-.fi, .dli,
-.booking-form input,
-.booking-form select,
-.booking-form textarea,
-input[type="text"], input[type="email"], input[type="tel"],
-input[type="number"], input[type="password"], textarea, select {
-  background: var(--chz-bg2) !important;
-  color: var(--chz-text) !important;
-  -webkit-text-fill-color: var(--chz-text) !important;
-  border-color: var(--chz-border-hi) !important;
-}
-.fi::placeholder, .dli::placeholder, input::placeholder, textarea::placeholder {
-  color: var(--chz-muted) !important;
-}
-
-/* ────── 5) تبويبات الحجز — مرئية دائماً ────── */
-#service-tabs, .booking-tabs {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  min-height: 62px !important;
-}
-.booking-tab, #tab-flight, #tab-bus, #tab-hajj, #tab-hotel {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  background: rgba(168,85,247,0.12) !important;
-  border: 1.5px solid var(--chz-border) !important;
-  color: var(--chz-text) !important;
-}
-.booking-tab.active {
-  background: linear-gradient(135deg, #d81b60, #6a1b9a) !important;
-  border-color: transparent !important;
-  color: #ffffff !important;
-}
-html[data-theme="light"] .booking-tab {
-  background: #f3f4f6 !important;
-  color: #1f2937 !important;
-}
-html[data-theme="light"] .booking-tab.active {
-  background: linear-gradient(135deg, #d81b60, #6a1b9a) !important;
-  color: #ffffff !important;
-}
-
-/* ────── 6) منع القفزات (CLS) ────── */
-#slides { min-height: clamp(150px, 42vw, 240px) !important; contain: layout size !important; }
-.booking-row-container { min-height: clamp(90px, 23vw, 115px) !important; }
-#cats { min-height: clamp(200px, 55vw, 300px) !important; }
-.loy { min-height: clamp(48px, 12vw, 60px) !important; }
-.ss-wrapper { min-height: clamp(44px, 11vw, 56px) !important; }
-#prods, .prods { min-height: 200px !important; }
-
-/* ────── 7) صفحات الأقسام ────── */
-#sc-cat, #sc-category {
-  background: var(--chz-bg) !important;
-}
-html[data-theme="dark"] #sc-cat,
-html:not([data-theme="light"]) #sc-cat {
-  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important;
-}
-#cat-title { color: var(--chz-text) !important; }
-
-/* ────── 8) الشريط السفلي ────── */
-#bottom-nav, .bnav, .nav-bar {
-  background: var(--chz-nav) !important;
-  border-color: var(--chz-border) !important;
-}
-#bottom-nav .bn-it { color: var(--chz-sub) !important; }
-#bottom-nav .bn-it.active { color: var(--chz-pink) !important; }
-#bottom-nav .bn-it svg { stroke: var(--chz-sub) !important; }
-#bottom-nav .bn-it.active svg { stroke: var(--chz-pink) !important; }
-
-/* ────── 9) أزرار الإعدادات (قيم) ────── */
-.set-val, .setting-value, .settings-value {
-  background: linear-gradient(135deg, #a855f7, #ec4899) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  font-weight: 700 !important;
-}
-
-/* ────── 10) النصوص العامة ────── */
-body { color: var(--chz-text); }
-.cd, .cs, .ci-inf {
-  background: var(--chz-card) !important;
-  color: var(--chz-text) !important;
-  border-color: var(--chz-border) !important;
-}
-
-/* ────── 11) الصور المصغّرة في تفاصيل المنتج ────── */
-#variant-strip {
-  padding: 12px 16px 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.variant-label {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--chz-purple);
-}
-.thumb-strip {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 4px 0;
-  scrollbar-width: none;
-}
-.thumb-strip::-webkit-scrollbar { display: none; }
-.thumb-item {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  flex-shrink: 0;
-  border: 2px solid var(--chz-border);
-  background: var(--chz-card);
-  transition: all 0.25s ease;
-  position: relative;
-}
-.thumb-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.thumb-item.active {
-  border-color: var(--chz-pink);
-  box-shadow: 0 0 0 2px rgba(255,77,148,0.3), 0 4px 14px rgba(255,77,148,0.4);
-  transform: scale(1.05);
-}
-.thumb-item.active::after {
-  content: '✓';
-  position: absolute;
-  top: 3px; right: 3px;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: var(--chz-green);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ────── 12) responsive ────── */
-@media (max-width: 360px) {
-  .thumb-item { width: 54px !important; height: 54px !important; }
-  .chz-tag { font-size: 8px !important; }
-}
-</style>
-<style id="chz-master-v3">
-/* ═══════════════════════════════════════════════════════════════
-   CHIZEN MASTER V3 — شامل ومتكامل
-   يستخدم html[data-theme] + body:not(.chz-light) كـ fallback
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ────── متغيرات الوضع الداكن (افتراضي) ────── */
-:root,
-html:not([data-theme="light"]) {
-  --chz-bg: #0a0820;
-  --chz-bg2: #151030;
-  --chz-card: #1a1535;
-  --chz-card-hi: #221840;
-  --chz-text: #f5f5ff;
-  --chz-sub: #a5a5c5;
-  --chz-muted: #8888aa;
-  --chz-border: rgba(168,85,247,0.25);
-  --chz-border-hi: rgba(168,85,247,0.4);
-  --chz-pink: #ff4d94;
-  --chz-purple: #a855f7;
-  --chz-green: #10b981;
-  --chz-amber: #f59e0b;
-  --chz-nav-bg: rgba(10,8,30,0.95);
-  --chz-nav: rgba(15,10,35,0.98);
-}
-
-html[data-theme="light"] {
-  --chz-bg: #f4f6fa;
-  --chz-bg2: #ffffff;
-  --chz-card: #ffffff;
-  --chz-card-hi: #f9fafb;
-  --chz-text: #1f2937;
-  --chz-sub: #4b5563;
-  --chz-muted: #9ca3af;
-  --chz-border: #e5e7eb;
-  --chz-border-hi: #d1d5db;
-  --chz-pink: #d81b60;
-  --chz-purple: #7c3aed;
-  --chz-nav-bg: rgba(255,255,255,0.95);
-  --chz-nav: #ffffff;
-}
-
-/* ═══════════════════════════════════════════
-   1) بطاقات المنتجات — صفحة الأقسام والرئيسية
-   ═══════════════════════════════════════════ */
-
-/* الوضع الداكن */
-html:not([data-theme="light"]) .cat-prod-card,
-html:not([data-theme="light"]) .prod,
-html:not([data-theme="light"]) .p-card,
-html:not([data-theme="light"]) [class*="prod-card"] {
-  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
-  border: 1px solid rgba(168,85,247,0.3) !important;
-  border-radius: 14px !important;
-  color: #f5f5ff !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.35) !important;
-}
-
-html:not([data-theme="light"]) .cat-prod-card .name,
-html:not([data-theme="light"]) .cat-prod-card .p-name,
-html:not([data-theme="light"]) .prod .prod-n,
-html:not([data-theme="light"]) .prod .name,
-html:not([data-theme="light"]) .p-card .p-name {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  font-weight: 700 !important;
-}
-
-html:not([data-theme="light"]) .cat-prod-card .price,
-html:not([data-theme="light"]) .cat-prod-card .p-price,
-html:not([data-theme="light"]) .prod .price,
-html:not([data-theme="light"]) .p-card .p-price {
-  color: #ff4d94 !important;
-  -webkit-text-fill-color: #ff4d94 !important;
-  font-weight: 900 !important;
-}
-
-/* الوضع الفاتح */
-html[data-theme="light"] .cat-prod-card,
-html[data-theme="light"] .prod,
-html[data-theme="light"] .p-card,
-html[data-theme="light"] [class*="prod-card"] {
-  background: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-  color: #1f2937 !important;
-}
-
-html[data-theme="light"] .cat-prod-card .name,
-html[data-theme="light"] .cat-prod-card .p-name,
-html[data-theme="light"] .prod .prod-n,
-html[data-theme="light"] .p-card .p-name {
-  color: #1f2937 !important;
-  -webkit-text-fill-color: #1f2937 !important;
-}
-
-html[data-theme="light"] .cat-prod-card .price,
-html[data-theme="light"] .cat-prod-card .p-price,
-html[data-theme="light"] .prod .price,
-html[data-theme="light"] .p-card .p-price {
-  color: #d81b60 !important;
-  -webkit-text-fill-color: #d81b60 !important;
-}
-
-/* صور البطاقات */
-.cat-prod-card img,
-.prod-i img,
-.p-card img {
-  width: 100% !important;
-  height: 160px !important;
-  object-fit: cover !important;
-  display: block !important;
-}
-
-/* ═══════════════════════════════════════════
-   2) الأقسام (دوائر الصفحة الرئيسية)
-   ═══════════════════════════════════════════ */
-
-html:not([data-theme="light"]) .photo-cat-name {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html[data-theme="light"] .photo-cat-name {
-  color: #1f2937 !important;
-  -webkit-text-fill-color: #1f2937 !important;
-}
-
-/* ═══════════════════════════════════════════
-   3) صندوق المميزات في تفاصيل المنتج
-   ═══════════════════════════════════════════ */
-
-#det-features-block {
-  margin-top: 16px !important;
-  padding: 14px 16px !important;
-  border-radius: 14px !important;
-}
-
-html:not([data-theme="light"]) #det-features-block {
-  background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(255,77,148,0.05)) !important;
-  border: 1px solid rgba(168,85,247,0.3) !important;
-}
-
-html:not([data-theme="light"]) #det-features-block .det-features-title,
-html:not([data-theme="light"]) #det-features-block [class*="title"] {
-  color: #a855f7 !important;
-}
-
-html:not([data-theme="light"]) #det-features-block li {
-  color: #d5d5e8 !important;
-  -webkit-text-fill-color: #d5d5e8 !important;
-  border-bottom-color: rgba(168,85,247,0.2) !important;
-}
-
-html[data-theme="light"] #det-features-block {
-  background: #f9fafb !important;
-  border: 1px solid #e5e7eb !important;
-}
-
-html[data-theme="light"] #det-features-block .det-features-title {
-  color: #7c3aed !important;
-}
-
-html[data-theme="light"] #det-features-block li {
-  color: #4b5563 !important;
-  -webkit-text-fill-color: #4b5563 !important;
-  border-bottom-color: #e5e7eb !important;
-}
-
-/* إخفاء الوصف تماماً إذا كان فارغاً (بعد strip) */
-#det-desc:empty,
-#det-desc[data-cleaned="1"] {
-  display: none !important;
-}
-
-/* ═══════════════════════════════════════════
-   4) أزرار الكمية في تفاصيل المنتج
-   ═══════════════════════════════════════════ */
-
-html:not([data-theme="light"]) .qb2 {
-  background: rgba(168,85,247,0.15) !important;
-  border: 1px solid rgba(168,85,247,0.4) !important;
-  color: #ffffff !important;
-}
-
-html:not([data-theme="light"]) .qn2 {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html[data-theme="light"] .qb2 {
-  background: #f3f4f6 !important;
-  border: 1px solid #e5e7eb !important;
-  color: #1f2937 !important;
-}
-
-html[data-theme="light"] .qn2 {
-  color: #1f2937 !important;
-}
-
-/* ═══════════════════════════════════════════
-   5) حقول الحجز ونماذج الطلب
-   ═══════════════════════════════════════════ */
-
-html:not([data-theme="light"]) .booking-form {
-  background: linear-gradient(135deg, #1e1937, #14102a) !important;
-  border: 1px solid rgba(168,85,247,0.3) !important;
-}
-
-html:not([data-theme="light"]) .booking-form input,
-html:not([data-theme="light"]) .booking-form select,
-html:not([data-theme="light"]) .booking-form textarea,
-html:not([data-theme="light"]) .fi,
-html:not([data-theme="light"]) .dli,
-html:not([data-theme="light"]) input[type="text"],
-html:not([data-theme="light"]) input[type="email"],
-html:not([data-theme="light"]) input[type="tel"],
-html:not([data-theme="light"]) input[type="number"],
-html:not([data-theme="light"]) textarea {
-  background: #151030 !important;
-  color: #f5f5ff !important;
-  -webkit-text-fill-color: #f5f5ff !important;
-  border-color: rgba(168,85,247,0.4) !important;
-}
-
-html:not([data-theme="light"]) input::placeholder,
-html:not([data-theme="light"]) textarea::placeholder {
-  color: #8a8a9e !important;
-  -webkit-text-fill-color: #8a8a9e !important;
-}
-
-html[data-theme="light"] .booking-form {
-  background: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-}
-
-html[data-theme="light"] .booking-form input,
-html[data-theme="light"] .booking-form select,
-html[data-theme="light"] .booking-form textarea,
-html[data-theme="light"] .fi,
-html[data-theme="light"] .dli,
-html[data-theme="light"] input,
-html[data-theme="light"] textarea {
-  background: #f9fafb !important;
-  color: #1f2937 !important;
-  -webkit-text-fill-color: #1f2937 !important;
-  border-color: #d1d5db !important;
-}
-
-/* ═══════════════════════════════════════════
-   6) تبويبات الحجز — دائماً مرئية
-   ═══════════════════════════════════════════ */
-
-#service-tabs, .booking-tabs {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  min-height: 62px !important;
-}
-
-.booking-tab, #tab-flight, #tab-bus, #tab-hajj, #tab-hotel {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-html:not([data-theme="light"]) .booking-tab {
-  background: rgba(168,85,247,0.15) !important;
-  border: 1.5px solid rgba(168,85,247,0.4) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html:not([data-theme="light"]) .booking-tab.active {
-  background: linear-gradient(135deg, #d81b60, #6a1b9a) !important;
-  border-color: transparent !important;
-  color: #ffffff !important;
-}
-
-html[data-theme="light"] .booking-tab {
-  background: #f3f4f6 !important;
-  border: 1.5px solid #e5e7eb !important;
-  color: #1f2937 !important;
-}
-
-html[data-theme="light"] .booking-tab.active {
-  background: linear-gradient(135deg, #d81b60, #6a1b9a) !important;
-  color: #ffffff !important;
-  border-color: transparent !important;
-}
-
-/* ═══════════════════════════════════════════
-   7) أزرار الإعدادات (قيم مثل "العربية/داكن")
-   ═══════════════════════════════════════════ */
-
-html:not([data-theme="light"]) .set-val,
-html:not([data-theme="light"]) .setting-value,
-html:not([data-theme="light"]) .settings-value,
-html:not([data-theme="light"]) [class*="settings"] [class*="val"] {
-  background: linear-gradient(135deg, #a855f7, #ec4899) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  font-weight: 700 !important;
-}
-
-html[data-theme="light"] .set-val,
-html[data-theme="light"] .setting-value,
-html[data-theme="light"] .settings-value,
-html[data-theme="light"] [class*="settings"] [class*="val"] {
-  background: linear-gradient(135deg, #a855f7, #ec4899) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  font-weight: 700 !important;
-}
-
-/* ═══════════════════════════════════════════
-   8) الهيدر في الوضع الفاتح (كان داكناً على فاتح)
-   ═══════════════════════════════════════════ */
-
-html[data-theme="light"] .chz-hdr {
-  background: rgba(255,255,255,0.95) !important;
-  border-bottom: 1px solid #e5e7eb !important;
-}
-
-html[data-theme="light"] .chz-icons-group,
-html[data-theme="light"] .chz-profile-group {
-  background: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
-}
-
-html[data-theme="light"] .chz-icon-box svg {
-  stroke: #374151 !important;
-}
-
-html[data-theme="light"] .chz-ar {
-  color: #1f2937 !important;
-}
-
-html[data-theme="light"] .chz-prof-avatar {
-  background: linear-gradient(135deg, #f3e8ff, #fce7f3) !important;
-  border: 2px solid #d81b60 !important;
-}
-
-html[data-theme="light"] .chz-prof-avatar svg {
-  stroke: #d81b60 !important;
-  fill: #d81b60 !important;
-}
-
-html[data-theme="light"] .chz-prof-name {
-  color: #1f2937 !important;
-  -webkit-text-fill-color: #1f2937 !important;
-}
-
-html[data-theme="light"] .chz-prof-welcome {
-  color: #6b7280 !important;
-}
-
-/* ═══════════════════════════════════════════
-   9) الشريط السفلي
-   ═══════════════════════════════════════════ */
-
-html:not([data-theme="light"]) #bottom-nav {
-  background: rgba(10,8,30,0.97) !important;
-  border-top: 1px solid rgba(168,85,247,0.3) !important;
-}
-
-html:not([data-theme="light"]) #bottom-nav .bn-it {
-  color: rgba(255,255,255,0.6) !important;
-}
-
-html:not([data-theme="light"]) #bottom-nav .bn-it.active {
-  color: #ff4d94 !important;
-}
-
-html[data-theme="light"] #bottom-nav {
-  background: #ffffff !important;
-  border-top: 1px solid #e5e7eb !important;
-}
-
-html[data-theme="light"] #bottom-nav .bn-it {
-  color: #6b7280 !important;
-}
-
-html[data-theme="light"] #bottom-nav .bn-it.active {
-  color: #d81b60 !important;
-}
-
-/* ═══════════════════════════════════════════
-   10) شريط الحجز (الفنادق/حج/باصات/طيران)
-   ═══════════════════════════════════════════ */
-
-html:not([data-theme="light"]) .booking-row-container {
-  background: linear-gradient(135deg, rgba(13,17,39,0.9), rgba(30,27,75,0.8)) !important;
-  border: 1px solid rgba(106,27,154,0.4) !important;
-}
-
-html:not([data-theme="light"]) .booking-label {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-html[data-theme="light"] .booking-row-container {
-  background: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06) !important;
-}
-
-html[data-theme="light"] .booking-label {
-  color: #1f2937 !important;
-  -webkit-text-fill-color: #1f2937 !important;
-}
-
-/* ═══════════════════════════════════════════
-   11) حماية شاملة من أي خلفية بيضاء في الوضع الداكن
-   ═══════════════════════════════════════════ */
-
-html:not([data-theme="light"]) .cd,
-html:not([data-theme="light"]) .cs,
-html:not([data-theme="light"]) .ci-inf,
-html:not([data-theme="light"]) .sw {
-  background: var(--chz-card) !important;
-  color: var(--chz-text) !important;
-  border-color: var(--chz-border) !important;
-}
-
-/* ═══════════════════════════════════════════
-   12) منع القفزات (CLS)
-   ═══════════════════════════════════════════ */
-
-#slides { min-height: clamp(150px, 42vw, 240px) !important; }
-.booking-row-container { min-height: clamp(90px, 23vw, 115px) !important; }
-#cats { min-height: clamp(200px, 55vw, 300px) !important; }
-#prods, .prods { min-height: 200px !important; }
-</style>
 <script id="chz-nuke-final">
 (function(){
   function isDark(){
@@ -10279,5 +9018,400 @@ html:not([data-theme="light"]) .sw {
   console.log('[NUKE-FINAL] active');
 })();
 </script>
+<style id="chz-master-v4">
+/* ═══════════════════════════════════════════════════════════
+   CHIZEN MASTER v4 — ألوان كاملة للوضعين
+   ═══════════════════════════════════════════════════════════ */
+
+/* ────── 1) المتغيرات (وضع داكن افتراضي) ────── */
+:root,
+html:not([data-theme="light"]) {
+  --bg: #0a0820 !important;
+  --bg2: #151030 !important;
+  --cd: #1a1535 !important;
+  --ce: #221840 !important;
+  --cr: #f5f5ff !important;
+  --mt: #a5a5c5 !important;
+  --mt2: #8888aa !important;
+  --bd: rgba(168,85,247,0.25) !important;
+  --nav-bg: rgba(10,8,30,0.95) !important;
+  --nav: rgba(15,10,35,0.98) !important;
+  --chz-pink: #ff4d94;
+  --chz-purple: #a855f7;
+  --chz-green: #10b981;
+  --chz-text: #f5f5ff;
+  --chz-sub: #a5a5c5;
+  --chz-card: #1a1535;
+  --chz-border: rgba(168,85,247,0.25);
+}
+
+html[data-theme="light"] {
+  --bg: #f4f6fa !important;
+  --bg2: #ffffff !important;
+  --cd: #ffffff !important;
+  --ce: #f0f2ff !important;
+  --cr: #1f2937 !important;
+  --mt: #6b7280 !important;
+  --mt2: #8a98c0 !important;
+  --bd: #e5e7eb !important;
+  --nav-bg: rgba(255,255,255,0.95) !important;
+  --nav: #ffffff !important;
+  --chz-pink: #d81b60;
+  --chz-purple: #7c3aed;
+  --chz-text: #1f2937;
+  --chz-sub: #4b5563;
+  --chz-card: #ffffff;
+  --chz-border: #e5e7eb;
+}
+
+/* ────── 2) الخلفيات الأساسية ────── */
+html:not([data-theme="light"]) body,
+html:not([data-theme="light"]) #app,
+html:not([data-theme="light"]) .screen {
+  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important;
+  color: #f5f5ff !important;
+}
+html[data-theme="light"] body,
+html[data-theme="light"] #app,
+html[data-theme="light"] .screen {
+  background: linear-gradient(135deg, #f8f9fc 0%, #eef2ff 100%) !important;
+  color: #1f2937 !important;
+}
+
+/* ────── 3) بطاقات المنتجات (كل الأنواع) ────── */
+html:not([data-theme="light"]) .cat-prod-card,
+html:not([data-theme="light"]) .prod,
+html:not([data-theme="light"]) .p-card {
+  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
+  border: 1px solid rgba(168,85,247,0.3) !important;
+  color: #f5f5ff !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.35) !important;
+}
+html[data-theme="light"] .cat-prod-card,
+html[data-theme="light"] .prod,
+html[data-theme="light"] .p-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1f2937 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+
+.cat-prod-card img, .prod-i img, .p-card img {
+  width: 100% !important;
+  height: 160px !important;
+  object-fit: cover !important;
+  display: block !important;
+  mix-blend-mode: normal !important;
+}
+
+/* أسماء المنتجات */
+html:not([data-theme="light"]) .cat-prod-card .name,
+html:not([data-theme="light"]) .cat-prod-card .p-name,
+html:not([data-theme="light"]) .prod .prod-n,
+html:not([data-theme="light"]) .prod .name,
+html:not([data-theme="light"]) .p-card .p-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+html[data-theme="light"] .cat-prod-card .name,
+html[data-theme="light"] .cat-prod-card .p-name,
+html[data-theme="light"] .prod .prod-n,
+html[data-theme="light"] .p-card .p-name {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  font-weight: 700 !important;
+}
+
+/* الأسعار */
+html:not([data-theme="light"]) .cat-prod-card .price,
+html:not([data-theme="light"]) .cat-prod-card .p-price,
+html:not([data-theme="light"]) .prod .price,
+html:not([data-theme="light"]) .p-card .p-price {
+  color: #ff4d94 !important;
+  -webkit-text-fill-color: #ff4d94 !important;
+  font-weight: 900 !important;
+}
+html[data-theme="light"] .cat-prod-card .price,
+html[data-theme="light"] .cat-prod-card .p-price,
+html[data-theme="light"] .prod .price,
+html[data-theme="light"] .p-card .p-price {
+  color: #d81b60 !important;
+  -webkit-text-fill-color: #d81b60 !important;
+  font-weight: 900 !important;
+}
+
+/* ────── 4) صفحة القسم ────── */
+html:not([data-theme="light"]) #sc-cat,
+html:not([data-theme="light"]) #sc-category {
+  background: radial-gradient(circle at 50% 0%, #151b3a 0%, #07091d 80%) !important;
+}
+html[data-theme="light"] #sc-cat,
+html[data-theme="light"] #sc-category {
+  background: #f4f6fa !important;
+}
+html:not([data-theme="light"]) #cat-title { color: #ffffff !important; }
+html[data-theme="light"] #cat-title { color: #1f2937 !important; }
+
+/* ────── 5) صفحة تفاصيل المنتج ────── */
+html:not([data-theme="light"]) .det-br { color: #a855f7 !important; -webkit-text-fill-color: #a855f7 !important; }
+html[data-theme="light"] .det-br { color: #7c3aed !important; -webkit-text-fill-color: #7c3aed !important; }
+
+html:not([data-theme="light"]) .det-n { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+html[data-theme="light"] .det-n { color: #1f2937 !important; -webkit-text-fill-color: #1f2937 !important; }
+
+html:not([data-theme="light"]) .det-d,
+html:not([data-theme="light"]) .det-d * { color: #d5d5e8 !important; -webkit-text-fill-color: #d5d5e8 !important; }
+html[data-theme="light"] .det-d,
+html[data-theme="light"] .det-d * { color: #4b5563 !important; -webkit-text-fill-color: #4b5563 !important; }
+
+html:not([data-theme="light"]) .det-p { color: #ff4d94 !important; -webkit-text-fill-color: #ff4d94 !important; }
+html[data-theme="light"] .det-p { color: #d81b60 !important; -webkit-text-fill-color: #d81b60 !important; }
+
+/* صندوق المميزات */
+#det-features-block {
+  margin-top: 16px !important;
+  padding: 14px 16px !important;
+  border-radius: 14px !important;
+}
+html:not([data-theme="light"]) #det-features-block {
+  background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(255,77,148,0.05)) !important;
+  border: 1px solid rgba(168,85,247,0.3) !important;
+}
+html:not([data-theme="light"]) #det-features-block li {
+  color: #d5d5e8 !important;
+  -webkit-text-fill-color: #d5d5e8 !important;
+}
+html[data-theme="light"] #det-features-block {
+  background: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+}
+html[data-theme="light"] #det-features-block li {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+}
+
+/* إخفاء الوصف إذا كان فارغاً */
+#det-desc:empty,
+#det-desc[data-cleaned="1"] {
+  display: none !important;
+}
+
+/* أزرار الكمية */
+html:not([data-theme="light"]) .qb2 {
+  background: rgba(168,85,247,0.15) !important;
+  border: 1px solid rgba(168,85,247,0.4) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html[data-theme="light"] .qb2 {
+  background: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+html:not([data-theme="light"]) .qn2 { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+html[data-theme="light"] .qn2 { color: #1f2937 !important; -webkit-text-fill-color: #1f2937 !important; }
+
+/* ────── 6) حقول الإدخال ────── */
+html:not([data-theme="light"]) .fi,
+html:not([data-theme="light"]) .dli,
+html:not([data-theme="light"]) .booking-form input,
+html:not([data-theme="light"]) .booking-form select,
+html:not([data-theme="light"]) .booking-form textarea {
+  background: #151030 !important;
+  color: #f5f5ff !important;
+  -webkit-text-fill-color: #f5f5ff !important;
+  border-color: rgba(168,85,247,0.4) !important;
+}
+html[data-theme="light"] .fi,
+html[data-theme="light"] .dli,
+html[data-theme="light"] .booking-form input,
+html[data-theme="light"] .booking-form select,
+html[data-theme="light"] .booking-form textarea {
+  background: #f9fafb !important;
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  border-color: #d1d5db !important;
+}
+
+html:not([data-theme="light"]) .booking-form {
+  background: linear-gradient(135deg, #1e1937, #14102a) !important;
+  border: 1px solid rgba(168,85,247,0.3) !important;
+}
+html[data-theme="light"] .booking-form {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+/* ────── 7) تبويبات الحجز ────── */
+#service-tabs, .booking-tabs {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 62px !important;
+}
+.booking-tab, #tab-flight, #tab-bus, #tab-hajj, #tab-hotel {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+html:not([data-theme="light"]) .booking-tab {
+  background: rgba(168,85,247,0.15) !important;
+  border: 1.5px solid rgba(168,85,247,0.4) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html:not([data-theme="light"]) .booking-tab.active {
+  background: linear-gradient(135deg, #d81b60, #6a1b9a) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+html[data-theme="light"] .booking-tab {
+  background: #f3f4f6 !important;
+  border: 1.5px solid #e5e7eb !important;
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+html[data-theme="light"] .booking-tab.active {
+  background: linear-gradient(135deg, #d81b60, #6a1b9a) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+/* ────── 8) الهيدر ────── */
+html:not([data-theme="light"]) .chz-hdr {
+  background: rgba(10,8,30,0.85) !important;
+  border-bottom: 1px solid rgba(168,85,247,0.2) !important;
+}
+html[data-theme="light"] .chz-hdr {
+  background: rgba(255,255,255,0.95) !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+html:not([data-theme="light"]) .chz-ar { color: #ffffff !important; }
+html[data-theme="light"] .chz-ar { color: #1f2937 !important; }
+
+html:not([data-theme="light"]) .chz-icons-group,
+html:not([data-theme="light"]) .chz-profile-group {
+  background: rgba(20,15,45,0.85) !important;
+  border: 1px solid rgba(168,85,247,0.35) !important;
+}
+html[data-theme="light"] .chz-icons-group,
+html[data-theme="light"] .chz-profile-group {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+html:not([data-theme="light"]) .chz-icon-box svg { stroke: #ffffff !important; }
+html[data-theme="light"] .chz-icon-box svg { stroke: #374151 !important; }
+
+html:not([data-theme="light"]) .chz-prof-name { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+html[data-theme="light"] .chz-prof-name { color: #1f2937 !important; -webkit-text-fill-color: #1f2937 !important; }
+
+html:not([data-theme="light"]) .chz-prof-welcome { color: rgba(255,255,255,0.65) !important; }
+html[data-theme="light"] .chz-prof-welcome { color: #6b7280 !important; }
+
+html:not([data-theme="light"]) .chz-prof-avatar {
+  background: radial-gradient(circle at 30% 30%, rgba(168,85,247,0.3), rgba(20,15,45,0.9)) !important;
+  border: 2px solid #a855f7 !important;
+}
+html[data-theme="light"] .chz-prof-avatar {
+  background: linear-gradient(135deg, #f3e8ff, #fce7f3) !important;
+  border: 2px solid #d81b60 !important;
+}
+html:not([data-theme="light"]) .chz-prof-avatar svg { stroke: #ffffff !important; fill: #ffffff !important; }
+html[data-theme="light"] .chz-prof-avatar svg { stroke: #d81b60 !important; fill: #d81b60 !important; }
+
+/* ────── 9) الشريط السفلي ────── */
+html:not([data-theme="light"]) #bottom-nav {
+  background: rgba(10,8,30,0.97) !important;
+  border-top: 1px solid rgba(168,85,247,0.3) !important;
+}
+html:not([data-theme="light"]) #bottom-nav .bn-it { color: rgba(255,255,255,0.6) !important; }
+html:not([data-theme="light"]) #bottom-nav .bn-it svg { stroke: rgba(255,255,255,0.6) !important; }
+html:not([data-theme="light"]) #bottom-nav .bn-it.active { color: #ff4d94 !important; }
+html:not([data-theme="light"]) #bottom-nav .bn-it.active svg { stroke: #ff4d94 !important; }
+
+html[data-theme="light"] #bottom-nav {
+  background: #ffffff !important;
+  border-top: 1px solid #e5e7eb !important;
+}
+html[data-theme="light"] #bottom-nav .bn-it { color: #6b7280 !important; }
+html[data-theme="light"] #bottom-nav .bn-it svg { stroke: #6b7280 !important; }
+html[data-theme="light"] #bottom-nav .bn-it.active { color: #d81b60 !important; }
+html[data-theme="light"] #bottom-nav .bn-it.active svg { stroke: #d81b60 !important; }
+
+/* ────── 10) شريط الحجز ────── */
+html:not([data-theme="light"]) .booking-row-container {
+  background: linear-gradient(135deg, rgba(13,17,39,0.9), rgba(30,27,75,0.8)) !important;
+  border: 1px solid rgba(106,27,154,0.4) !important;
+}
+html:not([data-theme="light"]) .booking-label { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+html[data-theme="light"] .booking-row-container {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06) !important;
+}
+html[data-theme="light"] .booking-label { color: #1f2937 !important; -webkit-text-fill-color: #1f2937 !important; }
+
+/* ────── 11) أزرار الإعدادات ────── */
+.set-val, .setting-value, .settings-value {
+  background: linear-gradient(135deg, #a855f7, #ec4899) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* ────── 12) الحاويات ────── */
+html:not([data-theme="light"]) .cd,
+html:not([data-theme="light"]) .cs,
+html:not([data-theme="light"]) .ci-inf {
+  background: #1a1535 !important;
+  color: #f5f5ff !important;
+  border-color: rgba(168,85,247,0.25) !important;
+}
+html[data-theme="light"] .cd,
+html[data-theme="light"] .cs,
+html[data-theme="light"] .ci-inf {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* ────── 13) النصوص العامة ────── */
+html:not([data-theme="light"]) .stl,
+html:not([data-theme="light"]) .ctl,
+html:not([data-theme="light"]) .rti,
+html:not([data-theme="light"]) h1,
+html:not([data-theme="light"]) h2,
+html:not([data-theme="light"]) h3 {
+  color: #f5f5ff !important;
+}
+html[data-theme="light"] .stl,
+html[data-theme="light"] .ctl,
+html[data-theme="light"] .rti,
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"]) h3 {
+  color: #1f2937 !important;
+}
+
+/* ────── 14) الأقسام (دوائر) ────── */
+html:not([data-theme="light"]) .photo-cat-name { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+html[data-theme="light"] .photo-cat-name { color: #1f2937 !important; -webkit-text-fill-color: #1f2937 !important; }
+
+/* ────── 15) منع القفزات ────── */
+#slides { min-height: clamp(150px, 42vw, 240px) !important; }
+.booking-row-container { min-height: clamp(90px, 23vw, 115px) !important; }
+#cats { min-height: clamp(200px, 55vw, 300px) !important; }
+#prods, .prods { min-height: 200px !important; }
+
+/* ────── 16) إخفاء الصور المصغّرة عناصر الألوان ────── */
+#variant-strip .color-strip,
+#variant-strip .color-item { display: none !important; }
+</style>
 </body>
 </html>
