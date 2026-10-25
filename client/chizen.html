@@ -10096,225 +10096,7 @@ document.addEventListener('keydown', function(e) {
   console.log('[USERNAME] dynamic name updater loaded');
 })();
 </script>
-<script id="chz-notifs-v2">
-(function(){
-  function esc(x){ return String(x==null?'':x).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];}); }
-  
-  // ═══ 1. إعادة بناء renderNotifs — لكل مستخدم إشعاراته فقط ═══
-  function rebuildRenderNotifs() {
-    if (!window.APP) { setTimeout(rebuildRenderNotifs, 300); return; }
-    if (APP.__notifsV2) return;
-    APP.__notifsV2 = true;
-    
-    APP.renderNotifs = async function() {
-      var c = document.getElementById('notif-list');
-      if (!c) return;
-      
-      c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">⏳ جاري التحميل...</div>';
-      
-      if (!window.FB || !FB.db) {
-        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">غير متصل</div>';
-        return;
-      }
-      
-      var uid = FB.currentUser ? FB.currentUser.uid : null;
-      if (!uid) {
-        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">سجّل دخول لعرض إشعاراتك</div>';
-        return;
-      }
-      
-      var all = [];
-      var seen = {};
-      
-      // أ) إشعارات المستخدم الخاصة
-      try {
-        var userSnap = await FB.db.collection('notifications')
-          .where('userId', '==', uid)
-          .orderBy('createdAt', 'desc')
-          .limit(100).get();
-        userSnap.forEach(function(doc) {
-          var d = doc.data();
-          d.id = doc.id;
-          if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
-        });
-      } catch(e) {
-        console.warn('user notifs:', e.message);
-      }
-      
-      // ب) الإشعارات العامة (userId فارغ أو isGlobal)
-      try {
-        var globalSnap = await FB.db.collection('notifications')
-          .where('isGlobal', '==', true)
-          .orderBy('createdAt', 'desc')
-          .limit(30).get();
-        globalSnap.forEach(function(doc) {
-          var d = doc.data();
-          d.id = doc.id;
-          if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
-        });
-      } catch(e) {
-        // fallback: بدون isGlobal
-        try {
-          var snap2 = await FB.db.collection('notifications').orderBy('createdAt','desc').limit(50).get();
-          snap2.forEach(function(doc) {
-            var d = doc.data();
-            d.id = doc.id;
-            if (!d.userId && !seen[d.id]) { seen[d.id] = 1; all.push(d); }
-          });
-        } catch(e2) {}
-      }
-      
-      // ترتيب حسب التاريخ
-      all.sort(function(a, b) {
-        var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
-        var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
-        return tb - ta;
-      });
-      
-      this.notifications = all;
-      window.__notifCache = all;
-      this.renderNotifsUI(all);
-    };
-    
-    APP.renderNotifsUI = function(list) {
-      var c = document.getElementById('notif-list');
-      if (!c) return;
-      
-      if (!list.length) {
-        c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;"><div style="font-size:52px;margin-bottom:12px;">🔔</div><div style="font-weight:700;font-size:15px;">لا توجد إشعارات</div><div style="font-size:12px;margin-top:8px;color:#666;">ستظهر هنا إشعاراتك الجديدة</div></div>';
-        return;
-      }
-      
-      var typeIcons = { booking:'✈️', order:'🛒', points:'💎', referral:'🎟️', promo:'🎁', system:'🔔', general:'📢', welcome:'🎉', returning:'👋' };
-      var typeColors = { booking:'#3b82f6', order:'#10b981', points:'#a855f7', referral:'#f59e0b', promo:'#ec4899', system:'#6b7280', general:'#a855f7', welcome:'#10b981', returning:'#f59e0b' };
-      var typeLabels = { booking:'حجز', order:'طلب', points:'نقاط', referral:'إحالة', promo:'عرض', system:'نظام', general:'عام', welcome:'ترحيب', returning:'عودة' };
-      
-      var filter = window.__notifFilter || 'all';
-      var filtered = filter === 'all' ? list : list.filter(function(n){ return (n.type||'general') === filter; });
-      
-      // تبويبات
-      var tabs = [
-        { key:'all', label:'الكل', icon:'📬' },
-        { key:'order', label:'الطلبات', icon:'🛒' },
-        { key:'booking', label:'الحجوزات', icon:'✈️' },
-        { key:'promo', label:'العروض', icon:'🎁' },
-        { key:'system', label:'النظام', icon:'🔔' }
-      ];
-      
-      var tabsHtml = '<div style="display:flex;gap:6px;overflow-x:auto;padding:8px 0 12px;scrollbar-width:none;">';
-      tabs.forEach(function(t) {
-        var active = filter === t.key;
-        var count = t.key === 'all' ? list.length : list.filter(function(n){ return (n.type||'general') === t.key; }).length;
-        tabsHtml += '<button onclick="window.__setNotifFilter(\'' + t.key + '\')" style="flex-shrink:0;padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#ff4d94' : 'rgba(168,85,247,0.25)') + ';background:' + (active ? 'linear-gradient(135deg,#ff4d94,#a855f7)' : 'rgba(168,85,247,0.08)') + ';color:' + (active ? '#fff' : '#b8b8d0') + ';font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;">' + t.icon + ' ' + t.label + ' <span style="background:rgba(255,255,255,0.2);padding:1px 6px;border-radius:8px;font-size:9px;">' + count + '</span></button>';
-      });
-      tabsHtml += '</div>';
-      
-      if (!filtered.length) {
-        c.innerHTML = tabsHtml + '<div style="text-align:center;padding:50px 20px;color:#888;"><div style="font-size:44px;margin-bottom:10px;">📭</div><div style="font-size:13px;">لا توجد إشعارات في هذا التصنيف</div></div>';
-        return;
-      }
-      
-      var cards = filtered.map(function(n) {
-        var timeStr = '';
-        if (n.createdAt && n.createdAt.toDate) {
-          var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
-          if (diff < 1) timeStr = 'الآن';
-          else if (diff < 60) timeStr = 'قبل ' + diff + ' دقيقة';
-          else if (diff < 1440) timeStr = 'قبل ' + Math.floor(diff/60) + ' ساعة';
-          else if (diff < 10080) timeStr = 'قبل ' + Math.floor(diff/1440) + ' يوم';
-          else timeStr = n.createdAt.toDate().toLocaleDateString('ar');
-        }
-        
-        var type = n.type || 'general';
-        var icon = typeIcons[type] || '🔔';
-        var color = typeColors[type] || '#a855f7';
-        var label = typeLabels[type] || 'عام';
-        var isUnread = n.read === false;
-        
-        return '<div onclick="if(window.notifClick)notifClick(event,\'' + n.id + '\')" style="position:relative;display:flex;gap:12px;padding:14px;margin-bottom:10px;background:linear-gradient(135deg,rgba(168,85,247,0.06),rgba(255,77,148,0.04));border:1px solid ' + (isUnread ? 'rgba(255,77,148,0.4)' : 'rgba(168,85,247,0.15)') + ';border-radius:14px;cursor:pointer;transition:all 0.2s;">' +
-          (isUnread ? '<div style="position:absolute;top:12px;left:12px;width:8px;height:8px;background:#ff4d94;border-radius:50%;box-shadow:0 0 8px rgba(255,77,148,0.6);"></div>' : '') +
-          '<div style="width:42px;height:42px;border-radius:12px;background:' + color + '22;border:1px solid ' + color + '55;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + icon + '</div>' +
-          '<div style="flex:1;min-width:0;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;">' +
-              '<div style="font-weight:900;font-size:13px;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(n.title || '') + '</div>' +
-              '<span style="font-size:9px;color:' + color + ';font-weight:800;background:' + color + '18;padding:2px 7px;border-radius:8px;white-space:nowrap;flex-shrink:0;">' + label + '</span>' +
-            '</div>' +
-            '<div style="font-size:12px;color:#c5c5d8;line-height:1.6;margin-bottom:6px;">' + esc(n.body || '') + '</div>' +
-            (timeStr ? '<div style="font-size:10px;color:#8a8a9e;">🕐 ' + timeStr + '</div>' : '') +
-          '</div>' +
-        '</div>';
-      }).join('');
-      
-      c.innerHTML = tabsHtml + cards;
-    };
-    
-    window.__setNotifFilter = function(f) {
-      window.__notifFilter = f;
-      if (APP.renderNotifsUI) APP.renderNotifsUI(window.__notifCache || APP.notifications || []);
-    };
-    
-    console.log('[NOTIFS V2] loaded');
-  }
-  
-  // ═══ 2. إصلاح تكرار المميزات في صفحة المنتج ═══
-  function fixProductDup() {
-    if (!window.APP || !APP.openProduct) { setTimeout(fixProductDup, 300); return; }
-    if (APP.__prodFix) return;
-    APP.__prodFix = true;
-    
-    var orig = APP.openProduct;
-    APP.openProduct = function(id) {
-      orig.call(this, id);
-      setTimeout(function() {
-        var prod = APP.currentProd;
-        var descEl = document.getElementById('det-desc');
-        if (!prod || !descEl) return;
-        
-        // احذف صندوق المميزات القديم
-        var oldBox = document.getElementById('det-features-block');
-        if (oldBox) oldBox.remove();
-        
-        // نظّف الوصف من أي ميزات مكررة
-        var rawDesc = String(prod.desc || '').trim();
-        var features = Array.isArray(prod.features) ? prod.features.filter(function(f){ return f && String(f).trim(); }) : [];
-        
-        if (features.length > 0 && rawDesc) {
-          var fset = {};
-          features.forEach(function(f){ fset[String(f).trim().toLowerCase()] = 1; });
-          var lines = rawDesc.split(/\n|\r\n/);
-          var cleaned = lines.filter(function(l){ 
-            var trimmed = l.trim().toLowerCase();
-            return trimmed && !fset[trimmed];
-          }).join('\n').trim();
-          rawDesc = cleaned;
-        }
-        
-        descEl.textContent = rawDesc;
-        descEl.style.display = rawDesc ? '' : 'none';
-        
-        // أضف صندوق المميزات الجديد
-        if (features.length > 0) {
-          var html = '<div id="det-features-block" style="margin-top:16px;padding:14px 16px;background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(255,77,148,0.05));border:1px solid rgba(168,85,247,0.25);border-radius:14px;">' +
-            '<div style="font-size:13px;font-weight:900;color:#a855f7;margin-bottom:10px;display:flex;align-items:center;gap:6px;">✨ المميزات</div>' +
-            '<ul style="list-style:none;padding:0;margin:0;">';
-          features.forEach(function(f) {
-            html += '<li style="padding:6px 0;font-size:13px;color:#d5d5e8;position:relative;padding-right:22px;border-bottom:1px dashed rgba(168,85,247,0.15);">' +
-              '<span style="position:absolute;right:0;top:6px;color:#10b981;font-weight:900;font-size:14px;">✓</span>' +
-              esc(f) + '</li>';
-          });
-          html += '</ul></div>';
-          descEl.insertAdjacentHTML('afterend', html);
-        }
-      }, 100);
-    };
-    
-    console.log('[PRODUCT FIX] loaded');
-  }
-  
-  rebuildRenderNotifs();
-  fixProductDup();
-})();
-</script>
+
 <script id="chz-tabs-flicker-js">
 (function(){
   var attempts = 0;
@@ -10757,6 +10539,176 @@ document.addEventListener('keydown', function(e) {
   }
   
   console.log('[ULTIMATE] active');
+})();
+</script>
+<script id="chz-notifs-real">
+(function(){
+  function isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+  
+  // ═══════════════════════════════════════════════════
+  // 1) إعادة كتابة renderNotifs — فلترة حسب المستخدم
+  // ═══════════════════════════════════════════════════
+  function installRenderNotifs() {
+    if (!window.APP) { setTimeout(installRenderNotifs, 200); return; }
+    if (APP.__notifsReal) return;
+    APP.__notifsReal = true;
+    
+    APP.renderNotifs = async function() {
+      var c = document.getElementById('notif-list');
+      if (!c) return;
+      
+      c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">⏳ جاري التحميل...</div>';
+      
+      if (!window.FB || !FB.db) {
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">غير متصل</div>';
+        return;
+      }
+      
+      var uid = FB.currentUser ? FB.currentUser.uid : null;
+      if (!uid) {
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">سجّل دخول لعرض إشعاراتك</div>';
+        return;
+      }
+      
+      var all = [];
+      var seen = {};
+      
+      // أ) إشعارات المستخدم الحالي فقط
+      try {
+        var userSnap = await FB.db.collection('notifications')
+          .where('userId', '==', uid)
+          .limit(100).get();
+        userSnap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
+        });
+      } catch(e) {
+        console.warn('user notifs error:', e.message);
+      }
+      
+      // ب) الإشعارات العامة (isGlobal=true فقط — وليس بدون userId)
+      try {
+        var globalSnap = await FB.db.collection('notifications')
+          .where('isGlobal', '==', true)
+          .limit(30).get();
+        globalSnap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
+        });
+      } catch(e) {
+        console.warn('global notifs error:', e.message);
+      }
+      
+      // ترتيب حسب التاريخ
+      all.sort(function(a, b) {
+        var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+        var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+        return tb - ta;
+      });
+      
+      this.notifications = all;
+      window.__notifCache = all;
+      this.renderNotifsUI(all);
+    };
+    
+    APP.renderNotifsUI = function(list) {
+      var c = document.getElementById('notif-list');
+      if (!c) return;
+      
+      // احذف أي تبويبات قديمة
+      var oldTabs = c.querySelector('.notif-tabs-bar');
+      if (oldTabs) oldTabs.remove();
+      
+      if (!list || !list.length) {
+        c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;">' +
+          '<div style="font-size:52px;margin-bottom:12px;">🔔</div>' +
+          '<div style="font-weight:700;font-size:15px;">لا توجد إشعارات</div>' +
+          '<div style="font-size:12px;margin-top:8px;color:#666;">ستظهر هنا إشعاراتك الجديدة</div>' +
+        '</div>';
+        return;
+      }
+      
+      var typeIcons = {
+        'booking': '✈️', 'order': '🛒', 'points': '💎',
+        'referral': '🎟️', 'promo': '🎁', 'system': '🔔',
+        'general': '📢', 'welcome': '🎉', 'returning': '👋'
+      };
+      var typeColors = {
+        'booking': '#3b82f6', 'order': '#10b981', 'points': '#a855f7',
+        'referral': '#f59e0b', 'promo': '#ec4899', 'system': '#6b7280',
+        'general': '#a855f7', 'welcome': '#10b981', 'returning': '#f59e0b'
+      };
+      var typeLabels = {
+        'booking': 'حجز', 'order': 'طلب', 'points': 'نقاط',
+        'referral': 'إحالة', 'promo': 'عرض', 'system': 'نظام',
+        'general': 'عام', 'welcome': 'ترحيب', 'returning': 'عودة'
+      };
+      
+      var light = isLight();
+      var html = '';
+      
+      list.forEach(function(n) {
+        var timeStr = '';
+        if (n.createdAt && n.createdAt.toDate) {
+          var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
+          if (diff < 1) timeStr = 'الآن';
+          else if (diff < 60) timeStr = 'قبل ' + diff + ' دقيقة';
+          else if (diff < 1440) timeStr = 'قبل ' + Math.floor(diff/60) + ' ساعة';
+          else if (diff < 10080) timeStr = 'قبل ' + Math.floor(diff/1440) + ' يوم';
+          else timeStr = n.createdAt.toDate().toLocaleDateString('ar');
+        }
+        
+        var type = n.type || 'general';
+        var icon = typeIcons[type] || '🔔';
+        var color = typeColors[type] || '#a855f7';
+        var label = typeLabels[type] || 'عام';
+        var isUnread = n.read === false;
+        
+        var bgCard = light ? '#ffffff' : '#1a2035';
+        var borderCard = isUnread 
+          ? (light ? '#ec4899' : '#ff4d94')
+          : (light ? '#e5e7eb' : '#252b42');
+        var titleColor = light ? '#1a1a2e' : '#ffffff';
+        var bodyColor = light ? '#4b5563' : '#b8c0d8';
+        var timeColor = light ? '#9ca3af' : '#6b7591';
+        
+        html += '<div class="chz-notif-item" onclick="if(window.notifClick)notifClick(event,\'' + n.id + '\')" style="' +
+          'position:relative;display:flex;gap:12px;padding:14px;margin-bottom:10px;' +
+          'background:' + bgCard + ';' +
+          'border:1px solid ' + borderCard + ';' +
+          'border-radius:14px;cursor:pointer;' +
+        '">' +
+          (isUnread ? '<div style="position:absolute;top:12px;left:12px;width:8px;height:8px;background:#ec4899;border-radius:50%;box-shadow:0 0 8px rgba(236,72,153,0.6);"></div>' : '') +
+          '<div style="width:42px;height:42px;border-radius:12px;background:' + color + '22;border:1px solid ' + color + '55;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + icon + '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;">' +
+              '<div style="font-weight:900;font-size:13px;color:' + titleColor + ';flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (n.title || '').replace(/[<>&]/g, function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}) + '</div>' +
+              '<span style="font-size:9px;color:' + color + ';font-weight:800;background:' + color + '18;padding:2px 7px;border-radius:8px;white-space:nowrap;flex-shrink:0;">' + label + '</span>' +
+            '</div>' +
+            '<div style="font-size:12px;color:' + bodyColor + ';line-height:1.6;margin-bottom:6px;">' + (n.body || '').replace(/[<>&]/g, function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}) + '</div>' +
+            (timeStr ? '<div style="font-size:10px;color:' + timeColor + ';">🕐 ' + timeStr + '</div>' : '') +
+          '</div>' +
+        '</div>';
+      });
+      
+      c.innerHTML = html;
+    };
+    
+    // إعادة رسم عند تغيير الوضع
+    new MutationObserver(function() {
+      if (APP.notifications && APP.notifications.length && APP.renderNotifsUI) {
+        APP.renderNotifsUI(APP.notifications);
+      }
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    
+    console.log('[NOTIFS-REAL] installed');
+  }
+  
+  installRenderNotifs();
 })();
 </script>
 </body>
