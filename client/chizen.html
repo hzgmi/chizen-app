@@ -6418,31 +6418,192 @@ html[data-theme="light"] .booking-tab.active {
     
     <!-- CHECKOUT -->
     <div class="screen" id="sc-checkout">
-      <div class="st"></div>
-      <div class="sh2"><button class="back" onclick="APP.goTab('cart')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></div></div>
-      <div style="padding:0 20px 20px;">
-        <div class="cs"><div class="cst"><div class="cn">1</div><span data-i18n="checkout.delivery" data-i18n-ar="نقطة التسليم">نقطة التسليم</span></div>
-          <div class="f"><label class="fl"><span data-i18n="checkout.choose_delivery" data-i18n-ar="اختر نقطة التسليم">اختر نقطة التسليم</span></label>
-            <button id="pickup-btn" onclick="APP.openPickup()" style="width:100%;padding:14px;background: #f4f6fa;border:1.5px solid var(--bd);border-radius:12px;color:var(--mt);font-family:'Tajawal',sans-serif;font-size:14px;text-align:right;display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
-              <span id="pickup-txt">📍 اختر نقطة التسليم</span><span style="color:var(--mt2);font-size:18px;">›</span>
-            </button>
-            <input type="hidden" id="pickup-val" value="">
-          </div>
-        </div>
-        <div class="cs"><div class="cst"><div class="cn">2</div><span data-i18n="checkout.contact" data-i18n-ar="معلومات الاتصال">معلومات الاتصال</span></div>
-          <div class="f"><label class="fl"><span data-i18n="checkout.name" data-i18n-ar="الاسم">الاسم</span></label><input class="fi" id="co-name" placeholder="اسمك الكامل" data-i18n-placeholder="checkout.name_placeholder" data-i18n-placeholder-ar="اسمك الكامل"></div>
-          <div class="f"><label class="fl"><span data-i18n="checkout.phone" data-i18n-ar="الهاتف">الهاتف</span></label><input class="fi" id="co-phone" type="tel" placeholder="+967 7XX XXX XXX"></div>
-        </div>
-        <div class="cs"><div class="cst"><div class="cn">3</div><span data-i18n="checkout.payment" data-i18n-ar="طريقة الدفع">طريقة الدفع</span></div><div class="bank-l" id="bank-list"></div></div>
-        <div class="tb"><div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span id="co-sub">0 ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span id="co-ship"><span data-i18n="cart.free" data-i18n-ar="مجاني">مجاني</span></span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span id="co-total">0 ر.س</span></div></div>
-        
-      <div style="margin:15px 0;padding:15px;background:rgba(255,255,255,.05);border:1px dashed #D81B60;border-radius:12px;text-align:center">
-        <div style="color:#fff;font-weight:bold;margin-bottom:10px;font-family:'Tajawal'">📎 ارفق صورة إيصال التحويل (اختياري)</div>
-        <input type="file" id="co-receipt" accept="image/*" style="color:#aaa;font-family:'Tajawal';width:100%">
+  <div class="st"></div>
+  
+  <!-- ═══ Header ═══ -->
+  <div class="sh2" style="background:transparent;border:none;box-shadow:none;margin-bottom:4px;">
+    <button class="back" onclick="APP.goTab('cart')" style="background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.4);border-radius:12px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--cr);"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <div class="st2" style="color:var(--cr);font-weight:900;font-size:20px;">
+      <span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span>
+    </div>
+  </div>
+
+  <div style="padding:0 16px 24px;display:flex;flex-direction:column;gap:16px;">
+
+    <!-- ═══ Progress Steps ═══ -->
+    <div id="co-progress" style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--cd);border:1px solid var(--bd);border-radius:16px;">
+      <div class="co-step" data-step="1" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;">
+        <div class="co-step-circle" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;box-shadow:0 4px 12px rgba(236,72,153,0.3);">1</div>
+        <div class="co-step-label" style="font-size:10px;font-weight:800;color:var(--cr);text-align:center;line-height:1.2;">نقطة التسليم</div>
       </div>
-<button class="btn-p" style="margin-top:16px;" onclick="APP.confirmOrder()"><span data-i18n="checkout.confirm" data-i18n-ar="تأكيد الطلب">تأكيد الطلب</span></button>
+      <div style="flex:0 0 20px;height:2px;background:rgba(168,85,247,0.3);margin-top:-18px;border-radius:2px;"></div>
+      <div class="co-step" data-step="2" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div class="co-step-circle" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:2px solid rgba(168,85,247,0.4);color:var(--cr);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;">2</div>
+        <div class="co-step-label" style="font-size:10px;font-weight:800;color:var(--mt);text-align:center;line-height:1.2;">معلومات الاتصال</div>
+      </div>
+      <div style="flex:0 0 20px;height:2px;background:rgba(168,85,247,0.3);margin-top:-18px;border-radius:2px;"></div>
+      <div class="co-step" data-step="3" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div class="co-step-circle" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:2px solid rgba(168,85,247,0.4);color:var(--cr);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;">3</div>
+        <div class="co-step-label" style="font-size:10px;font-weight:800;color:var(--mt);text-align:center;line-height:1.2;">طريقة الدفع</div>
       </div>
     </div>
+
+    <!-- ═══ 1) نقطة التسليم ═══ -->
+    <div class="co-card" style="background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:18px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(168,85,247,0.15));border:1.5px solid rgba(59,130,246,0.4);display:flex;align-items:center;justify-content:center;font-size:20px;">🚚</div>
+        <div>
+          <div style="font-weight:900;font-size:15px;color:var(--cr);">
+            <span data-i18n="checkout.delivery" data-i18n-ar="نقطة التسليم">نقطة التسليم</span>
+          </div>
+          <div style="font-size:11px;color:var(--mt);margin-top:2px;">
+            <span data-i18n="checkout.choose_delivery" data-i18n-ar="اختر نقطة التسليم">اختر نقطة التسليم</span>
+          </div>
+        </div>
+      </div>
+      
+      <button id="pickup-btn" onclick="APP.openPickup()" type="button" style="width:100%;padding:14px 16px;background:var(--bg2);border:1.5px solid var(--bd);border-radius:14px;color:var(--cr);font-family:'Tajawal',sans-serif;font-size:14px;text-align:right;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;">
+        <span id="pickup-txt" style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span data-i18n="checkout.choose_delivery" data-i18n-ar="اختر نقطة التسليم">اختر نقطة التسليم</span>
+        </span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--mt);"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <input type="hidden" id="pickup-val" value="">
+    </div>
+
+    <!-- ═══ 2) معلومات الاتصال ═══ -->
+    <div class="co-card" style="background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:18px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(59,130,246,0.15));border:1.5px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;font-size:20px;">👤</div>
+        <div>
+          <div style="font-weight:900;font-size:15px;color:var(--cr);">
+            <span data-i18n="checkout.contact" data-i18n-ar="معلومات الاتصال">معلومات الاتصال</span>
+          </div>
+          <div style="font-size:11px;color:var(--mt);margin-top:2px;">
+            <span data-i18n="checkout.contact_desc" data-i18n-ar="بيانات للتواصل معك">بيانات للتواصل معك</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <label style="display:block;font-size:11px;font-weight:800;color:var(--mt);margin-bottom:6px;">
+          <span data-i18n="checkout.name" data-i18n-ar="الاسم">الاسم</span>
+        </label>
+        <div style="position:relative;">
+          <input class="fi" id="co-name" type="text" placeholder="اسمك الكامل" data-i18n-placeholder="checkout.name_placeholder" data-i18n-placeholder-ar="اسمك الكامل" style="width:100%;padding:12px 14px 12px 42px;background:var(--bg2);border:1.5px solid var(--bd);border-radius:12px;color:var(--cr);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mt);pointer-events:none;">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div>
+        <label style="display:block;font-size:11px;font-weight:800;color:var(--mt);margin-bottom:6px;">
+          <span data-i18n="checkout.phone" data-i18n-ar="الهاتف">الهاتف</span>
+        </label>
+        <div style="position:relative;">
+          <input class="fi" id="co-phone" type="tel" placeholder="+967 7XX XXX XXX" style="width:100%;padding:12px 14px 12px 42px;background:var(--bg2);border:1.5px solid var(--bd);border-radius:12px;color:var(--cr);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mt);pointer-events:none;">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 3) طريقة الدفع ═══ -->
+    <div class="co-card" style="background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:18px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(168,85,247,0.15));border:1.5px solid rgba(236,72,153,0.4);display:flex;align-items:center;justify-content:center;font-size:20px;">💳</div>
+        <div>
+          <div style="font-weight:900;font-size:15px;color:var(--cr);">
+            <span data-i18n="checkout.payment" data-i18n-ar="طريقة الدفع">طريقة الدفع</span>
+          </div>
+          <div style="font-size:11px;color:var(--mt);margin-top:2px;">
+            <span data-i18n="checkout.payment_desc" data-i18n-ar="اختر طريقة الدفع">اختر طريقة الدفع</span>
+          </div>
+        </div>
+      </div>
+      <div class="bank-l" id="bank-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+
+    <!-- ═══ ملخص الطلب ═══ -->
+    <div class="co-card" style="background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:18px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(236,72,153,0.15));border:1.5px solid rgba(245,158,11,0.4);display:flex;align-items:center;justify-content:center;font-size:20px;">🧾</div>
+        <div style="flex:1;">
+          <div style="font-weight:900;font-size:15px;color:var(--cr);">
+            <span data-i18n="checkout.summary" data-i18n-ar="ملخص الطلب">ملخص الطلب</span>
+          </div>
+        </div>
+      </div>
+      
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--bd);">
+        <span style="font-size:13px;color:var(--mt);">
+          <span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span>
+        </span>
+        <span id="co-sub" style="font-size:13px;font-weight:700;color:var(--cr);">0 ر.س</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--bd);">
+        <span style="font-size:13px;color:var(--mt);">
+          <span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span>
+        </span>
+        <span id="co-ship" style="font-size:13px;font-weight:700;color:#10b981;">
+          <span data-i18n="cart.free" data-i18n-ar="مجاني">مجاني</span>
+        </span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:14px 0 4px;">
+        <span style="font-size:15px;font-weight:900;color:var(--cr);">
+          <span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span>
+        </span>
+        <span id="co-total" style="font-size:20px;font-weight:900;background:linear-gradient(135deg,#ec4899,#8b5cf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">0 ر.س</span>
+      </div>
+    </div>
+
+    <!-- ═══ رفع الإيصال ═══ -->
+    <div class="co-card" style="background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:18px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(59,130,246,0.15));border:1.5px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;font-size:20px;">📎</div>
+        <div style="flex:1;">
+          <div style="font-weight:900;font-size:15px;color:var(--cr);">
+            <span data-i18n="checkout.receipt" data-i18n-ar="إيصال التحويل">إيصال التحويل</span>
+          </div>
+          <div style="font-size:11px;color:var(--mt);margin-top:2px;">
+            <span data-i18n="checkout.receipt_optional" data-i18n-ar="اختياري — يسرّع المراجعة">اختياري — يسرّع المراجعة</span>
+          </div>
+        </div>
+      </div>
+      
+      <label for="co-receipt" id="receipt-label" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;background:var(--bg2);border:2px dashed rgba(168,85,247,0.4);border-radius:14px;cursor:pointer;transition:all 0.2s;">
+        <div id="receipt-preview-icon" style="font-size:36px;">📸</div>
+        <div id="receipt-preview-text" style="font-size:12px;font-weight:700;color:var(--mt);text-align:center;">
+          <span data-i18n="checkout.receipt_click" data-i18n-ar="اضغط لرفع صورة الإيصال">اضغط لرفع صورة الإيصال</span>
+        </div>
+        <img id="receipt-preview-img" style="display:none;max-width:100%;max-height:200px;border-radius:8px;margin-top:8px;">
+      </label>
+      <input type="file" id="co-receipt" accept="image/*" style="display:none;">
+    </div>
+
+    <!-- ═══ زر التأكيد ═══ -->
+    <button onclick="APP.confirmOrder()" type="button" style="width:100%;padding:18px;background:linear-gradient(135deg,#ec4899 0%,#8b5cf6 100%);color:#fff;border:none;border-radius:16px;font-family:'Tajawal',sans-serif;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 8px 24px rgba(236,72,153,0.4);display:flex;align-items:center;justify-content:center;gap:10px;transition:transform 0.15s;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+      <span data-i18n="checkout.confirm" data-i18n-ar="تأكيد الطلب">تأكيد الطلب</span>
+    </button>
+
+    <!-- ═══ ملاحظة الأمان ═══ -->
+    <div style="text-align:center;padding:4px;">
+      <div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--mt);background:rgba(16,185,129,0.1);padding:8px 14px;border-radius:20px;border:1px solid rgba(16,185,129,0.2);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="checkout.secure" data-i18n-ar="مدفوعاتك آمنة ومشفرة">مدفوعاتك آمنة ومشفرة</span>
+      </div>
+    </div>
+
+  </div>
+</div>
 
     <!-- ORDERS -->
     <div class="screen" id="sc-orders"><div class="st"></div><div class="sh2"><div class="st2" data-i18n="orders.title" data-i18n-ar="طلباتي">طلباتي</div></div><div style="padding:4px 20px 20px;" id="orders-list"></div></div>
@@ -11057,6 +11218,181 @@ document.addEventListener('keydown', function(e) {
   }
   
   install();
+})();
+</script>
+<script id="chz-checkout-rebuild">
+(function(){
+  'use strict';
+  
+  // ═══ 1) معاينة الإيصال عند الرفع ═══
+  function setupReceiptPreview() {
+    var input = document.getElementById('co-receipt');
+    var img = document.getElementById('receipt-preview-img');
+    var icon = document.getElementById('receipt-preview-icon');
+    var text = document.getElementById('receipt-preview-text');
+    var label = document.getElementById('receipt-label');
+    
+    if (!input || input.__previewSetup) return;
+    input.__previewSetup = true;
+    
+    input.addEventListener('change', function() {
+      var file = this.files && this.files[0];
+      if (!file) return;
+      
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        if (img) { img.src = e.target.result; img.style.display = 'block'; }
+        if (icon) icon.style.display = 'none';
+        if (text) {
+          text.innerHTML = '<span style="color:#10b981;font-weight:900;">✅ تم اختيار الصورة</span><br><span style="font-size:10px;opacity:0.7;">اضغط لتغييرها</span>';
+        }
+        if (label) {
+          label.style.borderColor = '#10b981';
+          label.style.background = 'rgba(16,185,129,0.1)';
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  // ═══ 2) تتبع تقدم الخطوات ═══
+  function updateProgress() {
+    var pickupVal = document.getElementById('pickup-val');
+    var name = document.getElementById('co-name');
+    var phone = document.getElementById('co-phone');
+    var bankList = document.getElementById('bank-list');
+    
+    var steps = document.querySelectorAll('.co-step');
+    if (steps.length < 3) return;
+    
+    // Step 1: pickup
+    var step1Done = pickupVal && pickupVal.value && pickupVal.value.trim().length > 0;
+    // Step 2: name + phone
+    var step2Done = name && name.value.trim().length > 0 && phone && phone.value.trim().length >= 8;
+    // Step 3: bank selected
+    var step3Done = false;
+    if (bankList) {
+      step3Done = !!bankList.querySelector('.bank[style*="ec4899"], .bank.selected, .bank[style*="D81B60"], .bank[style*="ff4d94"]');
+    }
+    
+    [step1Done, step2Done, step3Done].forEach(function(done, idx) {
+      var circle = steps[idx].querySelector('.co-step-circle');
+      var lbl = steps[idx].querySelector('.co-step-label');
+      if (!circle) return;
+      
+      if (done) {
+        circle.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+        circle.style.border = 'none';
+        circle.style.color = '#fff';
+        circle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
+        if (lbl) lbl.style.color = '#10b981';
+      } else {
+        var isCurrent = (idx === 0 && !step1Done) || (idx === 1 && step1Done && !step2Done) || (idx === 2 && step2Done && !step3Done);
+        if (isCurrent) {
+          circle.style.background = 'linear-gradient(135deg,#ec4899,#8b5cf6)';
+          circle.style.border = 'none';
+          circle.style.color = '#fff';
+          circle.innerHTML = (idx + 1).toString();
+          if (lbl) lbl.style.color = 'var(--cr)';
+        } else {
+          circle.style.background = 'rgba(168,85,247,0.15)';
+          circle.style.border = '2px solid rgba(168,85,247,0.4)';
+          circle.style.color = 'var(--cr)';
+          circle.innerHTML = (idx + 1).toString();
+          if (lbl) lbl.style.color = 'var(--mt)';
+        }
+      }
+    });
+  }
+  
+  // ═══ 3) تصميم بطاقات البنك بعد رسمها ═══
+  function styleBankCards() {
+    var bankList = document.getElementById('bank-list');
+    if (!bankList) return;
+    
+    var banks = bankList.querySelectorAll('.bank');
+    banks.forEach(function(bank) {
+      bank.style.cssText = 'display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg2);border:2px solid var(--bd);border-radius:14px;cursor:pointer;transition:all 0.2s;';
+      
+      var icon = bank.querySelector('.bank-i');
+      if (icon) {
+        icon.style.cssText = 'width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;';
+      }
+      
+      // النصوص داخل البطاقة
+      bank.querySelectorAll('div:not(.bank-i)').forEach(function(div) {
+        if (!div.getAttribute('style')) {
+          div.style.color = 'var(--cr)';
+        }
+      });
+      
+      // إذا كانت مختارة - تدرج
+      var hasGradient = (bank.getAttribute('style') || '').includes('ec4899') || 
+                        (bank.getAttribute('style') || '').includes('D81B60') ||
+                        (bank.getAttribute('style') || '').includes('ff4d94');
+      if (hasGradient || bank.classList.contains('selected')) {
+        bank.style.borderColor = '#ec4899';
+        bank.style.background = 'rgba(236,72,153,0.08)';
+        bank.style.boxShadow = '0 4px 15px rgba(236,72,153,0.2)';
+      }
+    });
+  }
+  
+  // ═══ 4) تشغيل عند فتح الصفحة ═══
+  function init() {
+    setupReceiptPreview();
+    updateProgress();
+    styleBankCards();
+  }
+  
+  // ═══ 5) مراقبة التغييرات ═══
+  function watchChanges() {
+    var checkout = document.getElementById('sc-checkout');
+    if (!checkout) return;
+    
+    // إعادة تصميم البطاقات عند إضافتها
+    new MutationObserver(function() {
+      styleBankCards();
+      updateProgress();
+    }).observe(checkout, { childList: true, subtree: true });
+    
+    // مراقبة حقول الإدخال
+    ['co-name', 'co-phone'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && !el.__stepWatch) {
+        el.__stepWatch = true;
+        el.addEventListener('input', updateProgress);
+      }
+    });
+    
+    var pickupVal = document.getElementById('pickup-val');
+    if (pickupVal && !pickupVal.__stepWatch) {
+      pickupVal.__stepWatch = true;
+      new MutationObserver(updateProgress).observe(pickupVal, { attributes: true });
+    }
+  }
+  
+  // ═══ 6) إعادة التهيئة عند الدخول للشاشة ═══
+  if (window.APP && APP.goTab) {
+    var origGoTab = APP.goTab;
+    APP.goTab = function(tab) {
+      origGoTab.apply(this, arguments);
+      if (tab === 'checkout') {
+        setTimeout(init, 100);
+        setTimeout(watchChanges, 200);
+      }
+    };
+  }
+  
+  // ═══ 7) بدء أولي ═══
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 500); setTimeout(watchChanges, 800); });
+  } else {
+    setTimeout(init, 500);
+    setTimeout(watchChanges, 800);
+  }
+  
+  console.log('[CHECKOUT-REBUILD] active');
 })();
 </script>
 </body>
