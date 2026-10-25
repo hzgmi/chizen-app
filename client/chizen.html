@@ -10626,5 +10626,164 @@ document.addEventListener('keydown', function(e) {
   console.log('[NOTIFS-HELPER] ready');
 })();
 </script>
+<script id="chz-orders-fix">
+(function(){
+  'use strict';
+  
+  function isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+  
+  function forceOrders() {
+    var screen = document.getElementById('sc-orders');
+    if (!screen) return;
+    
+    var light = isLight();
+    
+    // 1) خلفية الشاشة
+    screen.style.setProperty('background', light ? '#f5f7fb' : '#0a0e1a', 'important');
+    screen.style.setProperty('background-color', light ? '#f5f7fb' : '#0a0e1a', 'important');
+    
+    // 2) كل الحاويات والبطاقات داخل طلباتي
+    var containers = screen.querySelectorAll('.cd, .cs, .card, .item, .oc, [class*="order-card"], [class*="order-item"]');
+    containers.forEach(function(el) {
+      el.style.setProperty('background', light ? '#ffffff' : '#1a2035', 'important');
+      el.style.setProperty('background-color', light ? '#ffffff' : '#1a2035', 'important');
+      el.style.setProperty('background-image', 'none', 'important');
+      el.style.setProperty('border', '1px solid ' + (light ? '#e5e7eb' : '#252b42'), 'important');
+      el.style.setProperty('border-radius', '14px', 'important');
+      el.style.setProperty('box-shadow', light ? '0 1px 3px rgba(0,0,0,0.05)' : 'none', 'important');
+    });
+    
+    // 3) النصوص الرئيسية (رقم الطلب)
+    screen.querySelectorAll('.ctl, .rti, .oi-id, [class*="order-id"], [class*="order-num"]').forEach(function(el) {
+      el.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#1a1a2e' : '#ffffff', 'important');
+    });
+    
+    // 4) النصوص الثانوية (السعر والمنتجات)
+    screen.querySelectorAll('.rs, .oc-d, [class*="order-total"], [class*="order-date"], [class*="order-info"]').forEach(function(el) {
+      el.style.setProperty('color', light ? '#4b5563' : '#b8c0d8', 'important');
+      el.style.setProperty('-webkit-text-fill-color', light ? '#4b5563' : '#b8c0d8', 'important');
+    });
+    
+    // 5) أي نص داخل البطاقة
+    containers.forEach(function(container) {
+      container.querySelectorAll('div, span, p').forEach(function(el) {
+        var currentColor = window.getComputedStyle(el).color;
+        // إذا كان النص فاتح على خلفية فاتحة أو العكس
+        if (light) {
+          // في الفاتح - نجعل النصوص داكنة إذا كانت فاتحة جداً
+          var rgb = currentColor.match(/\d+/g);
+          if (rgb && rgb.length >= 3) {
+            var r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
+            var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            if (lum > 0.7) {
+              el.style.setProperty('color', '#1a1a2e', 'important');
+              el.style.setProperty('-webkit-text-fill-color', '#1a1a2e', 'important');
+            }
+          }
+        }
+      });
+    });
+    
+    // 6) شارة "قيد المعالجة" - نحافظ على لونها الأصفر
+    screen.querySelectorAll('[class*="badge"], [class*="status"]').forEach(function(el) {
+      // لا نغير الشارات - لها ألوانها الخاصة
+    });
+    
+    // 7) عناوين القوائم
+    screen.querySelectorAll('.ctl, .sh2 .st2').forEach(function(el) {
+      el.style.setProperty('color', light ? '#1a1a2e' : '#ffffff', 'important');
+    });
+    
+    // 8) نص "لا توجد طلبات"
+    screen.querySelectorAll('[style*="text-align:center"]').forEach(function(el) {
+      if (el.textContent.includes('لا') || el.textContent.includes('طلبات')) {
+        el.style.setProperty('color', light ? '#6b7280' : '#b8c0d8', 'important');
+      }
+    });
+  }
+  
+  function injectCSS() {
+    var existing = document.getElementById('chz-orders-css');
+    if (existing) existing.remove();
+    var style = document.createElement('style');
+    style.id = 'chz-orders-css';
+    style.textContent = `
+      /* طلباتي — الوضع الفاتح */
+      html[data-theme="light"] #sc-orders { background: #f5f7fb !important; }
+      html[data-theme="light"] #sc-orders .cd,
+      html[data-theme="light"] #sc-orders .cs,
+      html[data-theme="light"] #sc-orders .card,
+      html[data-theme="light"] #sc-orders .oc,
+      html[data-theme="light"] #sc-orders [class*="order"] {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        background-image: none !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        border-radius: 14px !important;
+      }
+      html[data-theme="light"] #sc-orders .ctl,
+      html[data-theme="light"] #sc-orders .rti,
+      html[data-theme="light"] #sc-orders [class*="order-id"] {
+        color: #1a1a2e !important;
+        -webkit-text-fill-color: #1a1a2e !important;
+      }
+      html[data-theme="light"] #sc-orders .rs {
+        color: #4b5563 !important;
+        -webkit-text-fill-color: #4b5563 !important;
+      }
+      
+      /* طلباتي — الوضع الداكن */
+      html:not([data-theme="light"]) #sc-orders { background: #0a0e1a !important; }
+      html:not([data-theme="light"]) #sc-orders .cd,
+      html:not([data-theme="light"]) #sc-orders .cs,
+      html:not([data-theme="light"]) #sc-orders .oc,
+      html:not([data-theme="light"]) #sc-orders [class*="order"] {
+        background: #1a2035 !important;
+        background-image: none !important;
+        border: 1px solid #252b42 !important;
+      }
+      html:not([data-theme="light"]) #sc-orders .ctl,
+      html:not([data-theme="light"]) #sc-orders .rti {
+        color: #ffffff !important;
+      }
+      html:not([data-theme="light"]) #sc-orders .rs {
+        color: #b8c0d8 !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  function run() {
+    injectCSS();
+    forceOrders();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  
+  setInterval(forceOrders, 800);
+  
+  new MutationObserver(forceOrders).observe(document.documentElement, { 
+    attributes: true, 
+    attributeFilter: ['data-theme'] 
+  });
+  
+  if (document.body) {
+    new MutationObserver(function(){ setTimeout(forceOrders, 100); }).observe(document.body, { 
+      childList: true, 
+      subtree: true 
+    });
+  }
+  
+  console.log('[ORDERS-FIX] active');
+})();
+</script>
 </body>
 </html>
