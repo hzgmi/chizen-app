@@ -6106,27 +6106,6 @@ html[data-theme="light"] .booking-tab.active {
 </style>
 
 
-<script id="chz-intervals-throttle">
-(function(){
-  // احفظ setInterval الأصلي
-  var _setInterval = window.setInterval;
-  var _clearInterval = window.clearInterval;
-  
-  // ═══ تقييد setInterval ليكون ≥ 3000ms ═══
-  window.setInterval = function(fn, delay) {
-    var args = Array.prototype.slice.call(arguments);
-    // إذا كان التأخير < 3000ms، ارفعه إلى 3000ms
-    if (typeof delay === 'number' && delay < 3000 && delay > 0) {
-      args[1] = 3000;
-    }
-    return _setInterval.apply(window, args);
-  };
-  
-  window.clearInterval = _clearInterval;
-  
-  console.log('[THROTTLE] setInterval limited to ≥ 3000ms');
-})();
-</script>
 </head>
 <body>
 <div id="app">
