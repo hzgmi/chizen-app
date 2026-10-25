@@ -10915,5 +10915,122 @@ document.addEventListener('keydown', function(e) {
   console.log('[NOTIFS-THEME-V3] active');
 })();
 </script>
+<script id="chz-notifs-refresh">
+(function(){
+  'use strict';
+  
+  // ═══ 1) مسح كاش الإشعارات عند التحميل ═══
+  try {
+    localStorage.removeItem('chizen_notifs');
+    localStorage.removeItem('chizen_notifs_cache');
+    sessionStorage.removeItem('chizen_notifs');
+  } catch(e) {}
+  
+  // ═══ 2) اعتراض goTab — إعادة تحميل عند فتح الإشعارات ═══
+  function hookGoTab() {
+    if (!window.APP || !APP.goTab) { setTimeout(hookGoTab, 200); return; }
+    if (APP.__notifRefreshHook) return;
+    APP.__notifRefreshHook = true;
+    
+    var origGoTab = APP.goTab;
+    APP.goTab = function(tab, skipHistory) {
+      origGoTab.call(this, tab, skipHistory);
+      
+      if (tab === 'notifications') {
+        // انتظر ظهور الشاشة ثم أعد التحميل
+        setTimeout(function() {
+          if (APP.renderNotifs) {
+            console.log('[NOTIFS-REFRESH] reloading from Firestore...');
+            // مسح البيانات القديمة أولاً
+            APP.notifications = [];
+            if (window.__nrfState) window.__nrfState.data = [];
+            APP.renderNotifs();
+          }
+        }, 250);
+      }
+    };
+    console.log('[NOTIFS-REFRESH] goTab hooked');
+  }
+  hookGoTab();
+  
+  // ═══ 3) اعتراض زر الهيدر (الجرس) أيضاً ═══
+  setTimeout(function() {
+    var bellIcon = document.querySelector('.chz-icons-group .chz-icon-box');
+    // أيقونة الجرس هي الأولى عادة - لها onclick="APP.goTab('notifications')"
+    var allIcons = document.querySelectorAll('.chz-icon-box');
+    allIcons.forEach(function(icon) {
+      var onclick = icon.getAttribute('onclick') || '';
+      if (onclick.includes('notifications')) {
+        var origClick = icon.onclick;
+        icon.onclick = function(e) {
+          if (origClick) origClick.call(this, e);
+          setTimeout(function() {
+            if (APP.renderNotifs) {
+              APP.notifications = [];
+              APP.renderNotifs();
+            }
+          }, 250);
+        };
+      }
+    });
+  }, 1500);
+  
+  // ═══ 4) اعتراض التحميل الدوري للإشعارات من مصدره ═══
+  function hookFB() {
+    if (!window.FB || !FB.getNotifications) { setTimeout(hookFB, 200); return; }
+    if (FB.__notifRefreshHook) return;
+    FB.__notifRefreshHook = true;
+    
+    var orig = FB.getNotifications;
+    FB.getNotifications = async function() {
+      var uid = FB.currentUser ? FB.currentUser.uid : null;
+      if (!uid) return [];
+      
+      var all = [];
+      var seen = {};
+      
+      // استعلام مباشر بدون كاش
+      try {
+        var userSnap = await FB.db.collection('notifications')
+          .where('userId', '==', uid).limit(100).get();
+        userSnap.forEach(function(doc) {
+          var d = doc.data(); d.id = doc.id;
+          if (d.userId === uid && !seen[d.id]) { seen[d.id] = 1; all.push(d); }
+        });
+      } catch(e) {}
+      
+      try {
+        var globalSnap = await FB.db.collection('notifications')
+          .where('isGlobal', '==', true).limit(30).get();
+        globalSnap.forEach(function(doc) {
+          var d = doc.data(); d.id = doc.id;
+          if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
+        });
+      } catch(e) {}
+      
+      return all;
+    };
+    console.log('[NOTIFS-REFRESH] FB.getNotifications wrapped');
+  }
+  hookFB();
+  
+  // ═══ 5) عند العودة إلى التطبيق (visibility) — إعادة تحميل ═══
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+      var notifScreen = document.getElementById('sc-notifications');
+      if (notifScreen && (notifScreen.classList.contains('active') || notifScreen.style.display !== 'none')) {
+        setTimeout(function() {
+          if (APP.renderNotifs) {
+            APP.notifications = [];
+            APP.renderNotifs();
+          }
+        }, 300);
+      }
+    }
+  });
+  
+  console.log('[NOTIFS-REFRESH] active');
+})();
+</script>
 </body>
 </html>
