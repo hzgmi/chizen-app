@@ -11491,5 +11491,345 @@ document.addEventListener('keydown', function(e) {
   console.log('[PICKUP-V3] READY');
 })();
 </script>
+<script id="chz-settings-engine">
+(function(){
+  'use strict';
+  console.log('[SETTINGS-ENGINE] loading...');
+
+  // ═══ 1) الحالة العالمية ═══
+  window.CHIZEN_SETTINGS = {
+    // Defaults
+    phone: '',
+    whatsapp: '',
+    email: '',
+    address: '',
+    workingHours: '',
+    shippingFee: 0,
+    freeShippingAbove: 0,
+    deliveryTime: '2-4 ساعات',
+    shippingEnabled: true,
+    currency: 'SAR',
+    pointValue: 0.1,
+    dailyBonus: 1,
+    referralBonus: 10,
+    minOrder: 0,
+    minPointsRedeem: 100,
+    servFlight: true,
+    servHotel: true,
+    servBus: true,
+    servHajj: true,
+    servShop: true,
+    maintenance: false,
+    appName: 'CHIZEN',
+    tagline: 'تسوق ذكي.. لحياة أجمل',
+    logoUrl: '',
+    welcomeMessage: '',
+    defaultTheme: 'dark',
+    pushEnabled: true,
+    waOrders: false,
+    notifyNewOrder: true,
+    notifyPayment: true,
+    notifyDelivery: true,
+    welcomeTitle: '🎉 أهلاً بك في CHIZEN!',
+    welcomeBody: 'شكراً لانضمامك. استمتع بتجربة تسوق ذكية!',
+    couponsEnabled: true,
+    welcomeCoupon: 15,
+    minCouponOrder: 0,
+    firstOrderCoupon: false,
+    pinEnabled: false,
+    biometricEnabled: true,
+    sessionTimeout: 30,
+    loginRequired: false,
+    defaultDriver: '',
+    defaultDriverPhone: '',
+    supportMessage: 'تواصل معنا',
+    appVersion: '1.0.0',
+    _loaded: false
+  };
+
+  // ═══ 2) رموز العملات ═══
+  var CURRENCY_SYMBOLS = {
+    'SAR': 'ر.س',
+    'YER': 'ر.ي',
+    'USD': '$',
+    'AED': 'د.إ'
+  };
+
+  function getSymbol() {
+    return CURRENCY_SYMBOLS[window.CHIZEN_SETTINGS.currency] || 'ر.س';
+  }
+
+  // ═══ 3) تحميل الإعدادات ═══
+  window.__loadChizenSettings = function() {
+    return new Promise(function(resolve) {
+      if (!window.FB || !FB.db) { resolve(); return; }
+      
+      FB.db.collection('config').doc('settings').get().then(function(doc) {
+        if (doc.exists) {
+          var data = doc.data() || {};
+          Object.keys(data).forEach(function(k) {
+            if (k !== 'updatedAt' && k !== 'updatedBy') {
+              window.CHIZEN_SETTINGS[k] = data[k];
+            }
+          });
+          console.log('[SETTINGS-ENGINE] loaded:', Object.keys(data).length, 'fields');
+        } else {
+          console.log('[SETTINGS-ENGINE] no settings doc, using defaults');
+        }
+        window.CHIZEN_SETTINGS._loaded = true;
+        resolve();
+      }).catch(function(e) {
+        console.warn('[SETTINGS-ENGINE] load error:', e.message);
+        resolve();
+      });
+    });
+  };
+
+  // ═══ 4) تطبيق الإعدادات على الواجهة ═══
+  window.__applyChizenSettings = function() {
+    var S = window.CHIZEN_SETTINGS;
+    
+    // 4.1) العملة — استبدال "ر.س" في كل السطور المرئية
+    var symbol = getSymbol();
+    document.querySelectorAll('.price-c').forEach(function(el) {
+      el.textContent = symbol;
+    });
+    
+    // 4.2) اسم التطبيق + الشعار
+    document.querySelectorAll('.chz-en').forEach(function(el) {
+      if (el.textContent.trim() === 'CHIZEN' || !el.textContent.trim()) {
+        el.textContent = S.appName;
+      }
+    });
+    document.querySelectorAll('.chz-tag').forEach(function(el) {
+      el.textContent = S.tagline;
+    });
+    document.querySelectorAll('.chz-en-row img.chz-logo img, .chz-logo img').forEach(function(img) {
+      if (S.logoUrl) img.src = S.logoUrl;
+    });
+    
+    // 4.3) وضع الصيانة
+    var existing = document.getElementById('chz-maintenance-overlay');
+    if (S.maintenance) {
+      if (!existing) {
+        var overlay = document.createElement('div');
+        overlay.id = 'chz-maintenance-overlay';
+        overlay.style.cssText = 'position:fixed;inset:0;background:#0a0e1a;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;font-family:Tajawal,sans-serif;color:#fff;';
+        overlay.innerHTML = 
+          '<div style="font-size:80px;margin-bottom:20px;">🛠️</div>' +
+          '<div style="font-size:24px;font-weight:900;margin-bottom:12px;color:#a855f7;">' + (S.appName || 'CHIZEN') + ' تحت الصيانة</div>' +
+          '<div style="font-size:14px;color:#b8c0d8;max-width:400px;line-height:1.8;margin-bottom:20px;">نعمل حالياً على تحسينات جديدة. سنعود قريباً بأفضل خدمة لكم.</div>' +
+          (S.phone ? '<div style="font-size:12px;color:#888;">📞 للاستفسار: ' + S.phone + '</div>' : '');
+        document.body.appendChild(overlay);
+      }
+    } else if (existing) {
+      existing.remove();
+    }
+    
+    // 4.4) إخفاء خدمات معطلة
+    var serviceMap = {
+      'tab-flight': S.servFlight,
+      'tab-hotel': S.servHotel,
+      'tab-bus': S.servBus,
+      'tab-hajj': S.servHajj
+    };
+    Object.keys(serviceMap).forEach(function(id) {
+      var tab = document.getElementById(id);
+      if (tab) {
+        tab.style.display = serviceMap[id] ? '' : 'none';
+      }
+    });
+    
+    // إخفاء شريط الحجز إذا كل الخدمات معطلة
+    var bookingRow = document.querySelector('.booking-row-container');
+    if (bookingRow) {
+      var anyService = S.servFlight || S.servHotel || S.servBus || S.servHajj;
+      bookingRow.style.display = anyService ? '' : 'none';
+    }
+    
+    // إخفاء التسوق إذا معطل
+    if (window.APP) {
+      APP.__shopDisabled = (S.servShop === false);
+    }
+    
+    // 4.5) تطبيق الثيم الافتراضي (مرة واحدة فقط)
+    if (S._loaded && S.defaultTheme) {
+      try {
+        var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        var savedTheme = localStorage.getItem('chizen_theme');
+        if (!savedTheme) {
+          document.documentElement.setAttribute('data-theme', S.defaultTheme);
+        }
+      } catch(e) {}
+    }
+    
+    // 4.6) بيانات السائق الافتراضي (متاحة للنماذج)
+    if (window.APP && S.defaultDriver) {
+      APP.__defaultDriver = {
+        name: S.defaultDriver,
+        phone: S.defaultDriverPhone
+      };
+    }
+    
+    console.log('[SETTINGS-ENGINE] applied to UI');
+  };
+
+  // ═══ 5) تطبيق على السلة — الشحن والعملة ═══
+  function patchCartTotal() {
+    if (!window.APP || !APP.renderCart) { setTimeout(patchCartTotal, 200); return; }
+    if (APP.__cartPatched) return;
+    APP.__cartPaged = true;
+    APP.__cartPatched = true;
+    
+    // نطبق داخل renderCart
+    var origRenderCart = APP.renderCart;
+    APP.renderCart = function() {
+      // قبل الرسم، حدّث this.shipping من الإعدادات
+      var S = window.CHIZEN_SETTINGS;
+      if (S._loaded) {
+        this.shipping = {
+          fee: S.shippingFee || 0,
+          freeAbove: S.freeShippingAbove || 0
+        };
+      }
+      
+      // شغّل الأصلي
+      var result = origRenderCart.call(this);
+      
+      // بعد الرسم: استبدل "ر.س" بالعملة الحالية
+      var symbol = getSymbol();
+      var cartDiv = document.getElementById('cart-items');
+      if (cartDiv) {
+        cartDiv.querySelectorAll('*').forEach(function(el) {
+          if (el.children.length === 0 && el.textContent.includes('ر.س')) {
+            el.textContent = el.textContent.replace(/ر.س/g, symbol);
+          }
+        });
+      }
+      
+      return result;
+    };
+  }
+
+  // ═══ 6) تطبيق على checkout — العملة + الشحن ═══
+  function patchCheckout() {
+    if (!window.APP || !APP.goCheckout) { setTimeout(patchCheckout, 200); return; }
+    if (APP.__coPatched) return;
+    APP.__coPatched = true;
+    
+    var orig = APP.goCheckout;
+    APP.goCheckout = function() {
+      var S = window.CHIZEN_SETTINGS;
+      if (S._loaded) {
+        this.shipping = {
+          fee: S.shippingFee || 0,
+          freeAbove: S.freeShippingAbove || 0
+        };
+      }
+      
+      orig.call(this);
+      
+      // بعد الرسم: استبدل العملة
+      setTimeout(function() {
+        var symbol = getSymbol();
+        var checkout = document.getElementById('sc-checkout');
+        if (checkout) {
+          checkout.querySelectorAll('*').forEach(function(el) {
+            if (el.children.length === 0 && el.textContent.includes('ر.س')) {
+              el.textContent = el.textContent.replace(/ر.س/g, symbol);
+            }
+          });
+        }
+      }, 100);
+    };
+  }
+
+  // ═══ 7) فحص الصيانة عند بدء التطبيق ═══
+  function checkMaintenance() {
+    if (window.CHIZEN_SETTINGS.maintenance) {
+      // يظهر overlay من applyChizenSettings
+      window.__applyChizenSettings();
+    }
+  }
+
+  // ═══ 8) مهلة الجلسة ═══
+  function setupSessionTimeout() {
+    var S = window.CHIZEN_SETTINGS;
+    if (!S.sessionTimeout || S.sessionTimeout === 0) return;
+    
+    var timeoutMs = S.sessionTimeout * 60 * 1000;
+    var lastActivity = Date.now();
+    
+    ['click', 'touchstart', 'keydown', 'scroll'].forEach(function(evt) {
+      document.addEventListener(evt, function() {
+        lastActivity = Date.now();
+      }, { passive: true });
+    });
+    
+    setInterval(function() {
+      if (Date.now() - lastActivity > timeoutMs) {
+        if (window.FB && FB.currentUser) {
+          console.log('[SETTINGS-ENGINE] session timeout — logging out');
+          try { firebase.auth().signOut(); } catch(e) {}
+          try { localStorage.clear(); } catch(e) {}
+          window.location.reload();
+        }
+      }
+    }, 30000); // فحص كل 30 ثانية
+  }
+
+  // ═══ 9) onSnapshot — تحديث فوري ═══
+  function setupRealtimeListener() {
+    if (!window.FB || !FB.db) { setTimeout(setupRealtimeListener, 500); return; }
+    if (window.__settingsListenerActive) return;
+    window.__settingsListenerActive = true;
+    
+    try {
+      FB.db.collection('config').doc('settings').onSnapshot(function(doc) {
+        if (doc.exists) {
+          var data = doc.data() || {};
+          var changed = false;
+          Object.keys(data).forEach(function(k) {
+            if (k !== 'updatedAt' && k !== 'updatedBy') {
+              if (window.CHIZEN_SETTINGS[k] !== data[k]) {
+                window.CHIZEN_SETTINGS[k] = data[k];
+                changed = true;
+              }
+            }
+          });
+          if (changed) {
+            console.log('[SETTINGS-ENGINE] real-time update detected');
+            window.__applyChizenSettings();
+          }
+        }
+      }, function(err) {
+        console.warn('[SETTINGS-ENGINE] listener error:', err.message);
+      });
+    } catch(e) {
+      console.warn('[SETTINGS-ENGINE] listener setup failed:', e.message);
+    }
+  }
+
+  // ═══ 10) التهيئة ═══
+  async function init() {
+    await window.__loadChizenSettings();
+    window.__applyChizenSettings();
+    patchCartTotal();
+    patchCheckout();
+    checkMaintenance();
+    setupSessionTimeout();
+    setupRealtimeListener();
+    
+    console.log('[SETTINGS-ENGINE] ready');
+  }
+
+  // بدء بعد تحميل Firebase
+  setTimeout(init, 1000);
+
+  // ═══ أدوات مساعدة عالمية ═══
+  window.getCurrencySymbol = getSymbol;
+  window.getSetting = function(key) { return window.CHIZEN_SETTINGS[key]; };
+})();
+</script>
 </body>
 </html>
