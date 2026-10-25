@@ -10541,41 +10541,207 @@ document.addEventListener('keydown', function(e) {
   console.log('[ULTIMATE] active');
 })();
 </script>
-<script id="chz-notifs-real">
+
+<script id="chz-notifs-nuclear">
 (function(){
+  // ═══ ألوان الوضعين ═══
   function isLight() {
     return document.documentElement.getAttribute('data-theme') === 'light';
   }
   
-  // ═══════════════════════════════════════════════════
-  // 1) إعادة كتابة renderNotifs — فلترة حسب المستخدم
-  // ═══════════════════════════════════════════════════
-  function installRenderNotifs() {
-    if (!window.APP) { setTimeout(installRenderNotifs, 200); return; }
-    if (APP.__notifsReal) return;
-    APP.__notifsReal = true;
+  function colors() {
+    if (isLight()) {
+      return {
+        bg: '#f5f7fb',
+        card: '#ffffff',
+        cardBorder: '#e5e7eb',
+        cardBorderUnread: '#ec4899',
+        title: '#1a1a2e',
+        body: '#4b5563',
+        time: '#9ca3af',
+        empty: '#6b7280',
+        tabBg: '#ffffff',
+        tabBorder: '#e5e7eb',
+        tabActive: '#ec4899',
+        tabText: '#6b7280',
+        tabActiveText: '#ffffff'
+      };
+    }
+    return {
+      bg: '#0a0e1a',
+      card: '#1a2035',
+      cardBorder: '#252b42',
+      cardBorderUnread: '#ff4d94',
+      title: '#ffffff',
+      body: '#b8c0d8',
+      time: '#6b7591',
+      empty: '#b8c0d8',
+      tabBg: '#1a2035',
+      tabBorder: '#252b42',
+      tabActive: '#ec4899',
+      tabText: '#b8c0d8',
+      tabActiveText: '#ffffff'
+    };
+  }
+  
+  // ═══ نوع الإشعار: أيقونة + لون + تسمية ═══
+  var TYPES = {
+    'booking':  { icon: '✈️', color: '#3b82f6', label: 'حجز' },
+    'order':    { icon: '🛒', color: '#10b981', label: 'طلب' },
+    'points':   { icon: '💎', color: '#a855f7', label: 'نقاط' },
+    'referral': { icon: '🎟️', color: '#f59e0b', label: 'إحالة' },
+    'promo':    { icon: '🎁', color: '#ec4899', label: 'عرض' },
+    'system':   { icon: '🔔', color: '#6b7280', label: 'نظام' },
+    'general':  { icon: '📢', color: '#a855f7', label: 'عام' },
+    'welcome':  { icon: '🎉', color: '#10b981', label: 'ترحيب' },
+    'returning':{ icon: '👋', color: '#f59e0b', label: 'عودة' }
+  };
+  
+  // ═══ الفلتر الحالي ═══
+  window.__notifFilter = 'all';
+  
+  // ═══ escape HTML ═══
+  function esc(x) {
+    return String(x == null ? '' : x).replace(/[&<>"']/g, function(c) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  
+  // ═══ الوقت ═══
+  function timeAgo(n) {
+    if (!n.createdAt || !n.createdAt.toDate) return '';
+    var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
+    if (diff < 1) return 'الآن';
+    if (diff < 60) return 'قبل ' + diff + ' دقيقة';
+    if (diff < 1440) return 'قبل ' + Math.floor(diff/60) + ' ساعة';
+    if (diff < 10080) return 'قبل ' + Math.floor(diff/1440) + ' يوم';
+    return n.createdAt.toDate().toLocaleDateString('ar');
+  }
+  
+  // ═══ رسم واجهة الإشعارات ═══
+  function renderUI(list) {
+    var c = document.getElementById('notif-list');
+    if (!c) return;
+    
+    var C = colors();
+    var filter = window.__notifFilter || 'all';
+    
+    // تصفية حسب التبويب
+    var filtered = filter === 'all' ? list : list.filter(function(n) {
+      return (n.type || 'general') === filter;
+    });
+    
+    // ═══ التبويبات ═══
+    var tabs = [
+      { key: 'all', label: 'الكل', icon: '📬' },
+      { key: 'order', label: 'الطلبات', icon: '🛒' },
+      { key: 'booking', label: 'الحجوزات', icon: '✈️' },
+      { key: 'promo', label: 'العروض', icon: '🎁' },
+      { key: 'system', label: 'النظام', icon: '🔔' }
+    ];
+    
+    var tabsHtml = '<div style="display:flex;gap:8px;overflow-x:auto;padding:8px 0 14px;margin-bottom:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;">';
+    tabs.forEach(function(t) {
+      var active = filter === t.key;
+      var count = t.key === 'all' 
+        ? list.length 
+        : list.filter(function(n){ return (n.type || 'general') === t.key; }).length;
+      
+      tabsHtml += '<button onclick="window.__setNotifFilter(\'' + t.key + '\')" style="' +
+        'flex-shrink:0;padding:9px 14px;border-radius:20px;border:1.5px solid ' + (active ? C.tabActive : C.tabBorder) + ';' +
+        'background:' + (active ? C.tabActive : C.tabBg) + ';' +
+        'color:' + (active ? C.tabActiveText : C.tabText) + ';' +
+        'font-family:inherit;font-weight:800;font-size:11px;cursor:pointer;' +
+        'display:flex;align-items:center;gap:5px;white-space:nowrap;' +
+        'transition:all 0.2s;' +
+      '">' + t.icon + ' ' + t.label + ' <span style="' +
+        'background:' + (active ? 'rgba(255,255,255,0.25)' : C.cardBorder) + ';' +
+        'padding:1px 6px;border-radius:8px;font-size:9px;' +
+      '">' + count + '</span></button>';
+    });
+    tabsHtml += '</div>';
+    
+    // ═══ حالة فارغة ═══
+    if (!filtered.length) {
+      c.innerHTML = tabsHtml + 
+        '<div style="text-align:center;padding:60px 20px;color:' + C.empty + ';">' +
+          '<div style="font-size:52px;margin-bottom:14px;">🔔</div>' +
+          '<div style="font-weight:800;font-size:15px;color:' + C.title + ';margin-bottom:6px;">لا توجد إشعارات</div>' +
+          '<div style="font-size:12px;">' + (filter === 'all' ? 'ستظهر هنا إشعاراتك الجديدة' : 'لا توجد إشعارات في هذا التصنيف') + '</div>' +
+        '</div>';
+      return;
+    }
+    
+    // ═══ بطاقات الإشعارات ═══
+    var cardsHtml = filtered.map(function(n) {
+      var type = n.type || 'general';
+      var t = TYPES[type] || TYPES['general'];
+      var isUnread = n.read === false;
+      var time = timeAgo(n);
+      
+      return '<div class="chz-notif-card" onclick="if(window.notifClick)notifClick(event,\'' + n.id + '\')" style="' +
+        'position:relative;display:flex;gap:12px;padding:14px;margin-bottom:10px;' +
+        'background:' + C.card + ';' +
+        'border:1px solid ' + (isUnread ? C.cardBorderUnread : C.cardBorder) + ';' +
+        'border-radius:14px;cursor:pointer;transition:transform 0.15s;' +
+      '">' +
+        // نقطة غير مقروء
+        (isUnread 
+          ? '<div style="position:absolute;top:12px;left:12px;width:8px;height:8px;background:#ec4899;border-radius:50%;box-shadow:0 0 8px rgba(236,72,153,0.6);"></div>' 
+          : '') +
+        // أيقونة النوع
+        '<div style="width:42px;height:42px;border-radius:12px;background:' + t.color + '22;border:1px solid ' + t.color + '55;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + t.icon + '</div>' +
+        // المحتوى
+        '<div style="flex:1;min-width:0;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;">' +
+            '<div style="font-weight:900;font-size:13px;color:' + C.title + ';flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(n.title || '') + '</div>' +
+            '<span style="font-size:9px;color:' + t.color + ';font-weight:800;background:' + t.color + '18;padding:2px 7px;border-radius:8px;white-space:nowrap;flex-shrink:0;">' + t.label + '</span>' +
+          '</div>' +
+          '<div style="font-size:12px;color:' + C.body + ';line-height:1.6;margin-bottom:6px;">' + esc(n.body || '') + '</div>' +
+          (time ? '<div style="font-size:10px;color:' + C.time + ';">🕐 ' + time + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    
+    c.innerHTML = tabsHtml + cardsHtml;
+  }
+  
+  // ═══ تغيير الفلتر ═══
+  window.__setNotifFilter = function(f) {
+    window.__notifFilter = f;
+    if (window.APP && window.APP.notifications) {
+      renderUI(window.APP.notifications);
+    }
+  };
+  
+  // ═══ تثبيت renderNotifs الجديدة ═══
+  function install() {
+    if (!window.APP) { setTimeout(install, 200); return; }
+    if (APP.__notifsNuclear) return;
+    APP.__notifsNuclear = true;
     
     APP.renderNotifs = async function() {
       var c = document.getElementById('notif-list');
       if (!c) return;
       
-      c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">⏳ جاري التحميل...</div>';
+      var C = colors();
+      c.innerHTML = '<div style="text-align:center;padding:40px;color:' + C.empty + ';">⏳ جاري التحميل...</div>';
       
       if (!window.FB || !FB.db) {
-        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">غير متصل</div>';
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:' + C.empty + ';">غير متصل</div>';
         return;
       }
       
       var uid = FB.currentUser ? FB.currentUser.uid : null;
       if (!uid) {
-        c.innerHTML = '<div style="text-align:center;padding:40px;color:#888;">سجّل دخول لعرض إشعاراتك</div>';
+        c.innerHTML = '<div style="text-align:center;padding:40px;color:' + C.empty + ';">سجّل دخول لعرض إشعاراتك</div>';
         return;
       }
       
       var all = [];
       var seen = {};
       
-      // أ) إشعارات المستخدم الحالي فقط
+      // ═══ أ) إشعارات المستخدم فقط ═══
       try {
         var userSnap = await FB.db.collection('notifications')
           .where('userId', '==', uid)
@@ -10586,10 +10752,10 @@ document.addEventListener('keydown', function(e) {
           if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
         });
       } catch(e) {
-        console.warn('user notifs error:', e.message);
+        console.warn('[NOTIFS] user query:', e.message);
       }
       
-      // ب) الإشعارات العامة (isGlobal=true فقط — وليس بدون userId)
+      // ═══ ب) الإشعارات العامة فقط ═══
       try {
         var globalSnap = await FB.db.collection('notifications')
           .where('isGlobal', '==', true)
@@ -10600,10 +10766,10 @@ document.addEventListener('keydown', function(e) {
           if (!seen[d.id]) { seen[d.id] = 1; all.push(d); }
         });
       } catch(e) {
-        console.warn('global notifs error:', e.message);
+        console.warn('[NOTIFS] global query:', e.message);
       }
       
-      // ترتيب حسب التاريخ
+      // ترتيب
       all.sort(function(a, b) {
         var ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
         var tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
@@ -10611,104 +10777,29 @@ document.addEventListener('keydown', function(e) {
       });
       
       this.notifications = all;
-      window.__notifCache = all;
-      this.renderNotifsUI(all);
+      renderUI(all);
+      console.log('[NOTIFS] loaded:', all.length, 'notifications for user', uid.substring(0, 8) + '...');
     };
     
-    APP.renderNotifsUI = function(list) {
-      var c = document.getElementById('notif-list');
-      if (!c) return;
-      
-      // احذف أي تبويبات قديمة
-      var oldTabs = c.querySelector('.notif-tabs-bar');
-      if (oldTabs) oldTabs.remove();
-      
-      if (!list || !list.length) {
-        c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;">' +
-          '<div style="font-size:52px;margin-bottom:12px;">🔔</div>' +
-          '<div style="font-weight:700;font-size:15px;">لا توجد إشعارات</div>' +
-          '<div style="font-size:12px;margin-top:8px;color:#666;">ستظهر هنا إشعاراتك الجديدة</div>' +
-        '</div>';
-        return;
-      }
-      
-      var typeIcons = {
-        'booking': '✈️', 'order': '🛒', 'points': '💎',
-        'referral': '🎟️', 'promo': '🎁', 'system': '🔔',
-        'general': '📢', 'welcome': '🎉', 'returning': '👋'
-      };
-      var typeColors = {
-        'booking': '#3b82f6', 'order': '#10b981', 'points': '#a855f7',
-        'referral': '#f59e0b', 'promo': '#ec4899', 'system': '#6b7280',
-        'general': '#a855f7', 'welcome': '#10b981', 'returning': '#f59e0b'
-      };
-      var typeLabels = {
-        'booking': 'حجز', 'order': 'طلب', 'points': 'نقاط',
-        'referral': 'إحالة', 'promo': 'عرض', 'system': 'نظام',
-        'general': 'عام', 'welcome': 'ترحيب', 'returning': 'عودة'
-      };
-      
-      var light = isLight();
-      var html = '';
-      
-      list.forEach(function(n) {
-        var timeStr = '';
-        if (n.createdAt && n.createdAt.toDate) {
-          var diff = Math.floor((Date.now() - n.createdAt.toDate().getTime()) / 60000);
-          if (diff < 1) timeStr = 'الآن';
-          else if (diff < 60) timeStr = 'قبل ' + diff + ' دقيقة';
-          else if (diff < 1440) timeStr = 'قبل ' + Math.floor(diff/60) + ' ساعة';
-          else if (diff < 10080) timeStr = 'قبل ' + Math.floor(diff/1440) + ' يوم';
-          else timeStr = n.createdAt.toDate().toLocaleDateString('ar');
-        }
-        
-        var type = n.type || 'general';
-        var icon = typeIcons[type] || '🔔';
-        var color = typeColors[type] || '#a855f7';
-        var label = typeLabels[type] || 'عام';
-        var isUnread = n.read === false;
-        
-        var bgCard = light ? '#ffffff' : '#1a2035';
-        var borderCard = isUnread 
-          ? (light ? '#ec4899' : '#ff4d94')
-          : (light ? '#e5e7eb' : '#252b42');
-        var titleColor = light ? '#1a1a2e' : '#ffffff';
-        var bodyColor = light ? '#4b5563' : '#b8c0d8';
-        var timeColor = light ? '#9ca3af' : '#6b7591';
-        
-        html += '<div class="chz-notif-item" onclick="if(window.notifClick)notifClick(event,\'' + n.id + '\')" style="' +
-          'position:relative;display:flex;gap:12px;padding:14px;margin-bottom:10px;' +
-          'background:' + bgCard + ';' +
-          'border:1px solid ' + borderCard + ';' +
-          'border-radius:14px;cursor:pointer;' +
-        '">' +
-          (isUnread ? '<div style="position:absolute;top:12px;left:12px;width:8px;height:8px;background:#ec4899;border-radius:50%;box-shadow:0 0 8px rgba(236,72,153,0.6);"></div>' : '') +
-          '<div style="width:42px;height:42px;border-radius:12px;background:' + color + '22;border:1px solid ' + color + '55;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">' + icon + '</div>' +
-          '<div style="flex:1;min-width:0;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;">' +
-              '<div style="font-weight:900;font-size:13px;color:' + titleColor + ';flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (n.title || '').replace(/[<>&]/g, function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}) + '</div>' +
-              '<span style="font-size:9px;color:' + color + ';font-weight:800;background:' + color + '18;padding:2px 7px;border-radius:8px;white-space:nowrap;flex-shrink:0;">' + label + '</span>' +
-            '</div>' +
-            '<div style="font-size:12px;color:' + bodyColor + ';line-height:1.6;margin-bottom:6px;">' + (n.body || '').replace(/[<>&]/g, function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];}) + '</div>' +
-            (timeStr ? '<div style="font-size:10px;color:' + timeColor + ';">🕐 ' + timeStr + '</div>' : '') +
-          '</div>' +
-        '</div>';
-      });
-      
-      c.innerHTML = html;
-    };
-    
-    // إعادة رسم عند تغيير الوضع
-    new MutationObserver(function() {
-      if (APP.notifications && APP.notifications.length && APP.renderNotifsUI) {
-        APP.renderNotifsUI(APP.notifications);
-      }
-    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    
-    console.log('[NOTIFS-REAL] installed');
+    console.log('[NOTIFS-NUCLEAR] installed');
   }
   
-  installRenderNotifs();
+  install();
+  
+  // ═══ إعادة الرسم عند تغيير الوضع ═══
+  new MutationObserver(function() {
+    if (window.APP && APP.notifications && APP.notifications.length) {
+      renderUI(APP.notifications);
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  
+  // ═══ مراقبة إضافية: إذا أضاف أي كود تبويبات قديمة، نعيد الرسم ═══
+  setInterval(function() {
+    var c = document.getElementById('notif-list');
+    if (c && c.querySelector('button') && !c.innerHTML.includes('__setNotifFilter')) {
+      if (window.APP && APP.notifications) renderUI(APP.notifications);
+    }
+  }, 3000);
 })();
 </script>
 </body>
