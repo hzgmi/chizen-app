@@ -9146,7 +9146,7 @@ window.renderCategoryProducts = function(catKey, catName) {
 /* تصميم صفحة القسم */
 #sc-category { background: var(--bg, #0A0515); min-height: 100vh; }
 #cat-products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-.cat-prod-card { background: var(--card, #1F0D35); border-radius: 12px; overflow: hidden; padding-bottom: 10px; text-align: center; }
+/* [DISABLED] old cat-prod-card */
 .cat-prod-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px 12px 0 0; }
 .cat-prod-card .name { color: #fff; font-size: 13px; font-weight: bold; padding: 8px 10px 0; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 .cat-prod-card .price { color: #D81B60; font-size: 14px; font-weight: bold; padding: 5px 10px; }
@@ -11896,6 +11896,200 @@ html:not([data-theme="light"]) .dli {
   } else {
     setTimeout(install, 300);
   }
+})();
+</script>
+<style id="chz-final-v3">
+/* ═══════════════════════════════════════════════════════
+   FINAL V3 — يفوز على كل شيء بدون الاعتماد على data-theme
+   ═══════════════════════════════════════════════════════ */
+
+/* ────────────── بطاقات المنتجات في صفحة القسم ────────────── */
+.cat-prod-card {
+  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  padding-bottom: 10px !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+.cat-prod-card img {
+  width: 100% !important;
+  height: 160px !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #150a25 !important;
+}
+.cat-prod-card .name,
+.cat-prod-card .p-name,
+.cat-prod-card .prod-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  padding: 10px 10px 4px !important;
+  min-height: 36px !important;
+  display: block !important;
+}
+.cat-prod-card .price,
+.cat-prod-card .p-price,
+.cat-prod-card .prod-price {
+  color: #ff4d94 !important;
+  -webkit-text-fill-color: #ff4d94 !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  padding: 4px 10px 8px !important;
+}
+
+/* ────────────── الوضع الفاتح ────────────── */
+html[data-theme="light"] .cat-prod-card {
+  background: #ffffff !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+html[data-theme="light"] .cat-prod-card .name,
+html[data-theme="light"] .cat-prod-card .p-name {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+html[data-theme="light"] .cat-prod-card .price,
+html[data-theme="light"] .cat-prod-card .p-price {
+  color: #d81b60 !important;
+  -webkit-text-fill-color: #d81b60 !important;
+}
+
+/* ────────────── إخفاء المميزات المكررة (احتياط) ────────────── */
+#det-desc:empty,
+#det-desc[data-cleaned="1"] {
+  display: none !important;
+}
+
+/* ────────────── أزرار الإعدادات في الوضع الفاتح ────────────── */
+html[data-theme="light"] .settings-row-btn,
+html[data-theme="light"] [class*="setting"] [style*="background"] {
+  background: #f9fafb !important;
+  color: #1f2937 !important;
+}
+
+html[data-theme="light"] .set-val,
+html[data-theme="light"] .setting-value {
+  background: linear-gradient(135deg, #a855f7, #ec4899) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ────────────── حماية شاملة لأي بطاقة بيضاء في الوضع الداكن ────────────── */
+html:not([data-theme="light"]) .cat-prod-card,
+html:not([data-theme="light"]) .prod,
+html:not([data-theme="light"]) .p-card {
+  background: linear-gradient(135deg, #1e1937 0%, #14102a 100%) !important;
+  color: #ffffff !important;
+}
+html:not([data-theme="light"]) .cat-prod-card .name,
+html:not([data-theme="light"]) .cat-prod-card .p-name,
+html:not([data-theme="light"]) .prod .name,
+html:not([data-theme="light"]) .prod .prod-n {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+</style>
+<script id="chz-final-v3-js">
+(function(){
+  console.log('[FINAL V3] loaded');
+  
+  // ═══ 1. إصلاح تكرار المميزات في تفاصيل المنتج ═══
+  function fixProductDesc() {
+    if (!window.APP || !APP.currentProd) return;
+    var prod = APP.currentProd;
+    var descEl = document.getElementById('det-desc');
+    if (!descEl) return;
+    
+    var features = Array.isArray(prod.features) ? prod.features.filter(function(f){ return f && String(f).trim(); }) : [];
+    if (features.length === 0) return;
+    
+    // اقرأ النص الحالي
+    var current = (descEl.textContent || '').trim();
+    if (!current) return;
+    
+    // أنشئ set من المميزات (lowercase للتنظيف)
+    var fset = {};
+    features.forEach(function(f){ fset[String(f).trim().toLowerCase()] = 1; });
+    
+    // اقسم إلى سطور ونظف
+    var lines = current.split(/\n|\r\n/);
+    var cleaned = lines.filter(function(l){ 
+      var t = l.trim().toLowerCase();
+      return t && !fset[t];
+    }).join('\n').trim();
+    
+    if (cleaned !== current) {
+      descEl.textContent = cleaned;
+      if (!cleaned) {
+        descEl.style.display = 'none';
+        descEl.setAttribute('data-cleaned', '1');
+      }
+      console.log('[FINAL V3] cleaned desc for:', prod.name);
+    }
+  }
+  
+  // تطبيق بعد فتح المنتج
+  if (window.APP) {
+    var origOpen = APP.openProduct;
+    APP.openProduct = function(id) {
+      origOpen.call(this, id);
+      // تنظيف متكرر (لأن العناصر قد تُرسم بعد تأخير)
+      [50, 150, 300, 600].forEach(function(ms) {
+        setTimeout(fixProductDesc, ms);
+      });
+    };
+  }
+  
+  // ═══ 2. إجبار بطاقات المنتجات على الأنماط الصحيحة ═══
+  function enforceCardStyles() {
+    var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    var cards = document.querySelectorAll('.cat-prod-card');
+    cards.forEach(function(card) {
+      if (theme === 'light') {
+        card.style.setProperty('background', '#ffffff', 'important');
+        card.style.setProperty('border', '1px solid #e5e7eb', 'important');
+        var name = card.querySelector('.name, .p-name');
+        if (name) {
+          name.style.setProperty('color', '#1f2937', 'important');
+          name.style.setProperty('-webkit-text-fill-color', '#1f2937', 'important');
+        }
+        var price = card.querySelector('.price, .p-price');
+        if (price) {
+          price.style.setProperty('color', '#d81b60', 'important');
+          price.style.setProperty('-webkit-text-fill-color', '#d81b60', 'important');
+        }
+      } else {
+        card.style.setProperty('background', 'linear-gradient(135deg, #1e1937, #14102a)', 'important');
+        card.style.setProperty('border', '1px solid rgba(168,85,247,0.35)', 'important');
+        var name = card.querySelector('.name, .p-name');
+        if (name) {
+          name.style.setProperty('color', '#ffffff', 'important');
+          name.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+        }
+        var price = card.querySelector('.price, .p-price');
+        if (price) {
+          price.style.setProperty('color', '#ff4d94', 'important');
+          price.style.setProperty('-webkit-text-fill-color', '#ff4d94', 'important');
+        }
+      }
+    });
+  }
+  
+  // شغّل عند تحميل الصفحة + عند تغيير الصفحات
+  setInterval(enforceCardStyles, 1000);
+  
+  // Observer لمراقبة البطاقات الجديدة
+  var mo = new MutationObserver(function() {
+    setTimeout(enforceCardStyles, 100);
+  });
+  if (document.body) {
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
+  
+  console.log('[FINAL V3] all enforced');
 })();
 </script>
 </body>
