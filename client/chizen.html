@@ -6131,20 +6131,27 @@ html[data-theme="light"] {
       
       
 <!-- الأقسام -->
-<div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
+
 
 <!-- ═══ العلامات التجارية ═══ -->
-<div class="sec" id="brands-sec">
-  <div class="brands" id="brands-list"></div>
-</div>
+
 
 <!-- ═══ ⚡ عروض خاطفة ═══ -->
-<div class="sec" id="flash-sec">
-  <div class="sh">
-    <div class="stl">⚡ عروض خاطفة</div>
-    <a class="flash-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a>
-  </div>
-  <div id="flash-c" class="flash-row"></div>
+
+
+
+
+
+
+
+
+
+
+<!-- المنتجات -->
+<!-- البنر -->
+<div style="margin:15px; position:relative;">
+  <div id="slides" style="position:relative; border-radius:16px; overflow:hidden; aspect-ratio:16/9;"></div>
+  <div id="dots" style="display:flex; justify-content:center; gap:6px; margin-top:10px;"></div>
 </div>
 
 <div class="tvl-portal">
@@ -6187,17 +6194,20 @@ html[data-theme="light"] {
   </div>
 </div>
 
+<div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
 
-
-
-
-<!-- البنر -->
-<div style="margin:15px; position:relative;">
-  <div id="slides" style="position:relative; border-radius:16px; overflow:hidden; aspect-ratio:16/9;"></div>
-  <div id="dots" style="display:flex; justify-content:center; gap:6px; margin-top:10px;"></div>
+<div class="sec" id="brands-sec">
+  <div class="brands" id="brands-list"></div>
 </div>
 
-<!-- المنتجات -->
+<div class="sec" id="flash-sec">
+  <div class="sh">
+    <div class="stl">⚡ عروض خاطفة</div>
+    <a class="flash-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a>
+  </div>
+  <div id="flash-c" class="flash-row"></div>
+</div>
+
 <div class="sec">
   <div class="sh" style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px;">
     <div class="stl" style="font-weight:900; font-size:20px; color:#1f2937;" data-i18n="home.best_sellers" data-i18n-ar="🛍️ السوق">🛍️ السوق</div>
@@ -7437,6 +7447,66 @@ body #sc-booking .tvl-form[data-not-ready="1"] .price-preview {
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
+}
+</style>
+
+<style id="chz-tvl-portal-v33-small">
+/* Portal - smaller than banner */
+.tvl-portal {
+  margin: 12px 15px !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px rgba(155,77,255,0.28) !important;
+}
+.tvl-portal-body {
+  padding: 16px 16px 14px !important;
+}
+.tvl-portal-badge {
+  font-size: 8.5px !important;
+  padding: 3px 10px !important;
+  margin-bottom: 8px !important;
+  letter-spacing: 1.2px !important;
+}
+.tvl-portal-title {
+  font-size: 18px !important;
+  margin-bottom: 4px !important;
+  line-height: 1.2 !important;
+}
+.tvl-portal-sub {
+  font-size: 10.5px !important;
+  margin-bottom: 12px !important;
+  line-height: 1.4 !important;
+}
+.tvl-portal-services {
+  gap: 6px !important;
+  margin-bottom: 12px !important;
+}
+.tvl-portal-svc {
+  padding: 8px 3px 6px !important;
+  border-radius: 12px !important;
+  gap: 3px !important;
+}
+.tvl-portal-svc-i {
+  font-size: 18px !important;
+}
+.tvl-portal-svc-n {
+  font-size: 9px !important;
+}
+.tvl-portal-cta {
+  padding: 11px 16px !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+  gap: 6px !important;
+}
+.tvl-portal-cta svg {
+  width: 15px !important;
+  height: 15px !important;
+}
+@media (max-width: 359px) {
+  .tvl-portal-body { padding: 14px 14px 12px !important; }
+  .tvl-portal-title { font-size: 16px !important; }
+  .tvl-portal-sub { font-size: 10px !important; }
+  .tvl-portal-svc-i { font-size: 16px !important; }
+  .tvl-portal-svc-n { font-size: 8.5px !important; }
 }
 </style>
 
