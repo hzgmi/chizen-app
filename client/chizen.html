@@ -16914,5 +16914,290 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-commerce-v52-js">
+(function(){
+  "use strict";
+  window.APP = window.APP || {};
+  APP.cmAll = [];
+  APP.cmFilterType = "all";
+  APP.cmSearchTerm = "";
+  APP.cmSelectedType = null;
+  APP.cmFiles = [];
+
+  function esc(s){ return String(s || "").replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+
+  var CAR_KW = ["سيارة","سيارات","تويوتا","كامري","هايلكس","كورولا","لاندكروزر","برادو","افالون","يارس","نيسان","التيما","صني","باترول","هونداي","النترا","اكسنت","سوناتا","توسان","سنتافي","كيا","سيراتو","سبورتاج","هوندا","اكورد","سيفيك","لكزس","مرسيدس","بي ام","bmw","اودي","فولكس","باسات","شفرولية","تاهو","فورد","اكسبلورر","ميتسوبيشي","لانسر","باجيرو","سوزوكي","شيري","جيلي","بيجو","رينو","باص","شاحنة","قلاب","موتور","محرك","بنزين","ديزل","اوتوماتيك","قير","جير","عجلات","كفرات","بودي","موديل"];
+  var PHONE_KW = ["هاتف","موبايل","جوال","تلفون","ايفون","iphone","ابل","apple","سامسونج","samsung","جالاكسي","galaxy","نوت","note","شاومي","xiaomi","ريدمي","redmi","بوكو","poco","هواوي","huawei","اوبو","oppo","فيفو","vivo","ريلمي","realme","ون بلس","oneplus","نوكيا","nokia","هونر","honor","تكنو","tecno","انفينكس","infinix","ايباد","ipad","تابلت","شاشة","بطارية","رام","ram","ذاكرة","جيجا","gb","تيرا","tb","برو","pro","ماكس","max","بلس","plus","الترا","ultra","ميني","mini"];
+
+  function detect(text) {
+    var t = String(text || "").toLowerCase();
+    var c = 0, ph = 0;
+    for (var i = 0; i < CAR_KW.length; i++) { if (t.indexOf(CAR_KW[i].toLowerCase()) > -1) c++; }
+    for (var j = 0; j < PHONE_KW.length; j++) { if (t.indexOf(PHONE_KW[j].toLowerCase()) > -1) ph++; }
+    if (c > ph && c > 0) return "car";
+    if (ph > c && ph > 0) return "phone";
+    return null;
+  }
+
+  APP.cmModal = function(icon, title, msg) {
+    var iconEl = document.getElementById("cm-modal-icon");
+    var titleEl = document.getElementById("cm-modal-title");
+    var msgEl = document.getElementById("cm-modal-msg");
+    var modal = document.getElementById("cm-modal");
+    if (iconEl) iconEl.textContent = icon;
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.textContent = msg;
+    if (modal) modal.style.display = "flex";
+  };
+
+  APP.cmLoad = function(){
+    var grid = document.getElementById("cm-listings");
+    var count = document.getElementById("cm-count");
+    if (!grid) return;
+    var done = false;
+    setTimeout(function(){
+      if (!done && grid.querySelector(".cm-skeleton")) {
+        grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">📭</div>لا توجد إعلانات بعد<br><small>كن أول من ينشر!</small></div>';
+        if (count) count.textContent = "0 إعلان";
+      }
+    }, 4000);
+    if (!window.FB || !FB.db) { setTimeout(APP.cmLoad, 800); return; }
+    FB.db.collection("listings").where("status", "==", "active").limit(100).get()
+      .then(function(snap){
+        done = true;
+        APP.cmAll = [];
+        snap.forEach(function(d){ APP.cmAll.push(Object.assign({ id: d.id }, d.data())); });
+        APP.cmAll.sort(function(a,b){ var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0; var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0; return tb - ta; });
+        var cars = APP.cmAll.filter(function(l){ return l.type === "car"; }).length;
+        var phones = APP.cmAll.filter(function(l){ return l.type === "phone"; }).length;
+        if (count) count.textContent = cars + " سيارة · " + phones + " هاتف";
+        APP.cmRender();
+      }).catch(function(e){
+        done = true;
+        console.warn("[cm]", e.message);
+        grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">⚠️</div>تعذر التحميل<br><small>' + (e.message || "") + '</small></div>';
+      });
+  };
+
+  APP.cmRender = function(){
+    var grid = document.getElementById("cm-listings");
+    if (!grid) return;
+    var list = APP.cmAll.slice();
+    if (APP.cmFilterType !== "all") list = list.filter(function(l){ return l.type === APP.cmFilterType; });
+    if (APP.cmSearchTerm) {
+      var q = APP.cmSearchTerm.toLowerCase();
+      list = list.filter(function(l){ return ((l.title||"").toLowerCase().indexOf(q) > -1) || ((l.description||"").toLowerCase().indexOf(q) > -1) || ((l.city||"").toLowerCase().indexOf(q) > -1); });
+    }
+    if (!list.length) {
+      grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">🛍️</div>لا توجد إعلانات<br><small>كن أول من ينشر!</small></div>';
+      return;
+    }
+    grid.innerHTML = list.map(function(l){
+      var images = l.images || (l.image ? [l.image] : []);
+      var img = images[0] || "";
+      return '<div class="cm-card" onclick="APP.cmOpen(\'' + l.id + '\')">' +
+        '<div class="cm-card-img">' + (img ? '<img src="' + esc(img) + '" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+        '<div class="cm-card-badge">' + (l.type === "car" ? "🚗" : "📱") + '</div></div>' +
+        '<div class="cm-card-body"><div class="cm-card-title">' + esc(l.title || "") + '</div>' +
+        '<div class="cm-card-price">' + (l.price||0).toLocaleString("ar-EG") + ' <small>ر.س</small></div>' +
+        '<div class="cm-card-city">📍 ' + esc(l.city || "") + '</div></div></div>';
+    }).join("");
+  };
+
+  APP.cmFilter = function(type, btn){
+    APP.cmFilterType = type;
+    var btns = document.querySelectorAll(".cm-filter");
+    for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
+    if (btn) btn.classList.add("active");
+    APP.cmRender();
+  };
+
+  APP.cmSearch = function(q){ APP.cmSearchTerm = q; APP.cmRender(); };
+
+  APP.cmNew = function(){
+    APP.cmSelectedType = null;
+    APP.cmFiles = [];
+    ["cm-f-title","cm-f-brand","cm-f-model","cm-f-year","cm-f-km","cm-f-desc","cm-f-price","cm-f-city","cm-f-phone"].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ""; });
+    var pv = document.getElementById("cm-previews"); if (pv) pv.innerHTML = "";
+    var btns = document.querySelectorAll(".cm-type-btn");
+    for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
+    var ce = document.getElementById("cm-car-extra"); if (ce) ce.style.display = "none";
+    var ce2 = document.getElementById("cm-car-extra2"); if (ce2) ce2.style.display = "none";
+    var pe = document.getElementById("cm-phone-extra"); if (pe) pe.style.display = "none";
+    APP.goTab("commerce-new");
+  };
+
+  APP.cmSelectType = function(type, btn){
+    APP.cmSelectedType = type;
+    var btns = document.querySelectorAll(".cm-type-btn");
+    for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
+    if (btn) btn.classList.add("active");
+    var ce = document.getElementById("cm-car-extra"); if (ce) ce.style.display = type === "car" ? "grid" : "none";
+    var ce2 = document.getElementById("cm-car-extra2"); if (ce2) ce2.style.display = type === "car" ? "grid" : "none";
+    var pe = document.getElementById("cm-phone-extra"); if (pe) pe.style.display = type === "phone" ? "grid" : "none";
+  };
+
+  APP.cmFilesSelected = function(e){
+    var files = Array.prototype.slice.call(e.target.files).slice(0, 5);
+    APP.cmFiles = files;
+    APP.cmRenderPreviews();
+  };
+
+  APP.cmRenderPreviews = function(){
+    var previews = document.getElementById("cm-previews");
+    if (!previews) return;
+    previews.innerHTML = "";
+    APP.cmFiles.forEach(function(file, i){
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        var div = document.createElement("div");
+        div.className = "cm-preview";
+        div.innerHTML = '<img src="' + ev.target.result + '"><button class="cm-preview-rm" onclick="event.stopPropagation();APP.cmRemoveFile(' + i + ')">×</button>';
+        previews.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  APP.cmRemoveFile = function(idx){
+    APP.cmFiles.splice(idx, 1);
+    APP.cmRenderPreviews();
+  };
+
+  async function uploadFiles(files){
+    var urls = [];
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      if (file.size > 5 * 1024 * 1024) { console.warn("large:", file.name); continue; }
+      var uploaded = false;
+      try {
+        var fd1 = new FormData();
+        fd1.append("reqtype", "fileupload");
+        fd1.append("fileToUpload", file);
+        var r1 = await fetch("https://catbox.moe/user/api.php", { method: "POST", body: fd1 });
+        var txt1 = await r1.text();
+        if (txt1 && txt1.indexOf("https://") === 0) { urls.push(txt1.trim()); uploaded = true; }
+      } catch(e) { console.warn("catbox:", e.message); }
+      if (!uploaded) {
+        try {
+          var fd2 = new FormData();
+          fd2.append("file", file);
+          var r2 = await fetch("https://tmpfiles.org/api/v1/upload", { method: "POST", body: fd2 });
+          var j2 = await r2.json();
+          if (j2 && j2.data && j2.data.url) { urls.push(j2.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/")); uploaded = true; }
+        } catch(e) { console.warn("tmpfiles:", e.message); }
+      }
+      if (!uploaded) console.warn("فشل رفع:", file.name);
+    }
+    return urls;
+  }
+
+  APP.cmSubmit = async function(){
+    var btn = event && event.target;
+    var type = APP.cmSelectedType;
+    if (!type) return APP.cmModal("⚠️", "اختر النوع", "اختر سيارة أو هاتف أولاً");
+    var title = (document.getElementById("cm-f-title")||{}).value || "";
+    var desc = (document.getElementById("cm-f-desc")||{}).value || "";
+    var price = parseFloat((document.getElementById("cm-f-price")||{}).value || 0);
+    var city = (document.getElementById("cm-f-city")||{}).value || "";
+    var phone = (document.getElementById("cm-f-phone")||{}).value || "";
+    if (!title.trim()) return APP.cmModal("📝", "العنوان مطلوب", "اكتب عنواناً واضحاً");
+    if (!desc.trim()) return APP.cmModal("📝", "الوصف مطلوب", "اكتب وصفاً دقيقاً");
+    if (!price || price <= 0) return APP.cmModal("💰", "السعر مطلوب", "أدخل سعراً صحيحاً");
+    if (!city.trim()) return APP.cmModal("📍", "المدينة مطلوبة", "أدخل المدينة");
+    if (!phone.trim()) return APP.cmModal("📞", "الجوال مطلوب", "أدخل رقم جوالك");
+    if (!APP.cmFiles.length) return APP.cmModal("📸", "الصورة مطلوبة", "ارفع صورة واحدة على الأقل");
+    var detected = detect(title + " " + desc + " " + city);
+    if (type === "car" && detected === "phone") return APP.cmModal("📱", "هذا إعلان هاتف!", "أنت في قسم السيارات — غيّر النوع أو عدّل العنوان");
+    if (type === "phone" && detected === "car") return APP.cmModal("🚗", "هذا إعلان سيارة!", "أنت في قسم الهواتف — غيّر النوع أو عدّل العنوان");
+    if (type === "car" && detected !== "car") return APP.cmModal("🚫", "لم نتعرف على سيارة", "اكتب ماركة السيارة بوضوح");
+    if (type === "phone" && detected !== "phone") return APP.cmModal("🚫", "لم نتعرف على هاتف", "اكتب ماركة الهاتف بوضوح");
+    if (btn) { btn.disabled = true; var span = btn.querySelector("span"); if (span) span.textContent = "⏳ جاري الرفع..."; }
+    try {
+      var images = await uploadFiles(APP.cmFiles);
+      if (!images.length) throw new Error("فشل رفع الصور");
+      var data = {
+        type: type, title: title.trim(), description: desc.trim(), price: price, city: city.trim(), phone: phone.trim(),
+        images: images, image: images[0],
+        sellerId: (window.FB && FB.currentUser) ? FB.currentUser.uid : "",
+        sellerName: (window.FB && FB.currentUser) ? (FB.currentUser.displayName || "مستخدم") : "مستخدم",
+        status: "active", views: 0,
+        createdAt: (window.firebase && firebase.firestore && firebase.firestore.FieldValue) ? firebase.firestore.FieldValue.serverTimestamp() : new Date()
+      };
+      if (type === "car") {
+        data.brand = (document.getElementById("cm-f-brand")||{}).value || "";
+        data.model = (document.getElementById("cm-f-model")||{}).value || "";
+        data.year = parseInt((document.getElementById("cm-f-year")||{}).value || 0) || null;
+        data.km = parseInt((document.getElementById("cm-f-km")||{}).value || 0) || null;
+      } else {
+        data.phoneBrand = data.brand;
+        data.phoneModel = data.model;
+        data.storage = (document.getElementById("cm-f-storage")||{}).value || "128";
+        data.condition = (document.getElementById("cm-f-condition")||{}).value || "used";
+      }
+      await FB.db.collection("listings").add(data);
+      APP.cmModal("✅", "تم نشر إعلانك!", "إعلانك ظاهر الآن في سوق شيزن");
+      APP.goTab("commerce");
+      setTimeout(APP.cmLoad, 500);
+    } catch(e) {
+      APP.cmModal("⚠️", "خطأ", e.message || "تعذر النشر");
+    } finally {
+      if (btn) { btn.disabled = false; var span2 = btn.querySelector("span"); if (span2) span2.textContent = "نشر الإعلان"; }
+    }
+  };
+
+  APP.cmOpen = function(id){
+    var l = APP.cmAll.find(function(x){ return x.id === id; });
+    if (!l) return;
+    var c = document.getElementById("cm-detail");
+    if (!c) return;
+    var images = l.images || (l.image ? [l.image] : []);
+    if (!images.length) images = [""];
+    var extra = "";
+    if (l.type === "car") {
+      if (l.brand) extra += "<span>🏭 " + esc(l.brand) + "</span>";
+      if (l.model) extra += "<span>🚗 " + esc(l.model) + "</span>";
+      if (l.year) extra += "<span>📅 " + l.year + "</span>";
+      if (l.km) extra += "<span>🛣️ " + l.km.toLocaleString("ar-EG") + " كم</span>";
+    } else {
+      if (l.phoneBrand) extra += "<span>🏭 " + esc(l.phoneBrand) + "</span>";
+      if (l.phoneModel) extra += "<span>📱 " + esc(l.phoneModel) + "</span>";
+      if (l.storage) extra += "<span>💾 " + l.storage + " جيجا</span>";
+      if (l.condition) { var cl = {new:"جديد","like-new":"كالجديد",used:"مستعمل"}[l.condition] || l.condition; extra += "<span>✨ " + cl + "</span>"; }
+    }
+    var wa = String(l.phone||"").replace(/\D/g,"");
+    if (wa.length > 9 && wa.indexOf("967") !== 0) wa = "967" + wa.replace(/^0+/, "");
+    var waText = encodeURIComponent("مرحباً، أستفسر عن إعلانك في شيزن: " + (l.title||""));
+    c.innerHTML =
+      '<div class="cm-detail-img"><img id="cm-main-img" src="' + esc(images[0]) + '" onerror="this.style.display=\'none\'"></div>' +
+      (images.length > 1 ? '<div class="cm-detail-thumbs">' + images.map(function(u,i){ return '<div class="cm-detail-thumb' + (i===0?" active":"") + '" onclick="APP.cmSwapImg(\'' + esc(u) + '\',this)"><img src="' + esc(u) + '"></div>'; }).join("") + '</div>' : '') +
+      '<div class="cm-detail-body"><div class="cm-detail-title">' + esc(l.title||"") + '</div>' +
+      '<div class="cm-detail-price">' + (l.price||0).toLocaleString("ar-EG") + ' <small>ر.س</small></div>' +
+      (extra ? '<div class="cm-detail-meta">' + extra + '<span>📍 ' + esc(l.city||"") + '</span></div>' : '') +
+      '<div class="cm-detail-desc">' + esc(l.description||"") + '</div>' +
+      '<div class="cm-detail-seller"><div class="cm-detail-seller-label">البائع</div><div class="cm-detail-seller-name">' + esc(l.sellerName||"مستخدم") + '</div></div>' +
+      '<button class="cm-wa-btn" onclick="window.open(\'https://wa.me/' + wa + '?text=' + waText + '\',\'_blank\')">💬 تواصل عبر واتساب</button></div>';
+    APP.goTab("commerce-detail");
+  };
+
+  APP.cmSwapImg = function(url, el){
+    var img = document.getElementById("cm-main-img");
+    if (img) img.src = url;
+    var thumbs = document.querySelectorAll(".cm-detail-thumb");
+    for (var i = 0; i < thumbs.length; i++) thumbs[i].classList.remove("active");
+    if (el) el.classList.add("active");
+  };
+
+  var origNav = APP.navigate;
+  if (origNav) {
+    APP.navigate = function(screen){
+      origNav.call(this, screen);
+      if (screen === "commerce") setTimeout(APP.cmLoad, 300);
+    };
+  }
+
+  console.log("[commerce v52-js] ready");
+})();
+</script>
 </body>
 </html>
