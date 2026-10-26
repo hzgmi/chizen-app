@@ -6777,6 +6777,80 @@ html[data-theme="light"] {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style id="chz-cats-v13-css">
+
+/* v13 categories grid 4x2 */
+body #sc-home #cats {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 14px 10px !important;
+  padding: 16px 12px !important;
+  overflow: visible !important;
+  overflow-x: visible !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+body #sc-home #cats .photo-cat-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+body #sc-home #cats .photo-cat-circle {
+  width: clamp(56px, 17vw, 74px) !important;
+  height: clamp(56px, 17vw, 74px) !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.22), 0 0 0 2px rgba(255,61,154,0.35) !important;
+  background: linear-gradient(135deg, #6A1B9A, #D81B60) !important;
+  position: relative !important;
+}
+body #sc-home #cats .photo-cat-circle img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  transition: transform .3s ease !important;
+}
+body #sc-home #cats .photo-cat-card:active .photo-cat-circle img {
+  transform: scale(0.94) !important;
+}
+body #sc-home #cats .photo-cat-name,
+body #sc-home #cats .photo-cat-card > div:last-child {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: var(--chz-text, #1a1a2e) !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+}
+html:not([data-theme="light"]) body #sc-home #cats .photo-cat-name,
+html:not([data-theme="light"]) body #sc-home #cats .photo-cat-card > div:last-child {
+  color: #e8ecf5 !important;
+}
+@media (max-width: 359px) {
+  body #sc-home #cats { gap: 12px 6px !important; padding: 14px 8px !important; }
+  body #sc-home #cats .photo-cat-circle { width: 54px !important; height: 54px !important; }
+  body #sc-home #cats .photo-cat-name,
+  body #sc-home #cats .photo-cat-card > div:last-child { font-size: 10px !important; }
+}
+@media (min-width: 431px) {
+  body #sc-home #cats .photo-cat-circle { width: 84px !important; height: 84px !important; }
+  body #sc-home #cats .photo-cat-name,
+  body #sc-home #cats .photo-cat-card > div:last-child { font-size: 12px !important; }
+}
+
+</style>
+
 <style id="chz-banner-v10-css">
 body #sc-home #slides {
   position: relative !important;
@@ -7059,13 +7133,14 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 
 // ================= الأقسام الأساسية المثبتة =================
 window.FIXED_CATS = [
-  { key: 'electronics', name: 'الإلكترونيات', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop' }, 
-  { key: 'fashion', name: 'الأزياء', img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=300&auto=format&fit=crop' }, 
-  { key: 'home', name: 'المنزل', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=300&auto=format&fit=crop' }, 
-  { key: 'beauty', name: 'الجمال', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=300&auto=format&fit=crop' }, 
-  { key: 'kids', name: 'الأطفال', img: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=300&auto=format&fit=crop' }, 
-  { key: 'sports', name: 'الرياضة', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop' }, 
-  { key: 'tools', name: 'الأدوات', img: 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?q=80&w=300&auto=format&fit=crop' } 
+  { key: 'electronics', name: 'إلكترونيات',       img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop' },
+  { key: 'fashion',     name: 'أزياء',            img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=300&auto=format&fit=crop' },
+  { key: 'clothing',    name: 'ملابس',            img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=300&auto=format&fit=crop' },
+  { key: 'sports',      name: 'أدوات رياضية',     img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop' },
+  { key: 'beauty',      name: 'جمال وعطور',       img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=300&auto=format&fit=crop' },
+  { key: 'kids',        name: 'مستلزمات أطفال',   img: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=300&auto=format&fit=crop' },
+  { key: 'tools',       name: 'أدوات منزلية',     img: 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?q=80&w=300&auto=format&fit=crop' },
+  { key: 'home',        name: 'منزل وأثاث',       img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=300&auto=format&fit=crop' }
 ];
 // ============================================================
 
@@ -7133,7 +7208,7 @@ var APP={
   });
   
   // دمج الأقسام الثابتة (أولاً) + الجديدة
-  self.cats = window.FIXED_CATS.concat(extraCats);
+  self.cats = window.FIXED_CATS.slice(); /* v13: fixed 8 only */
   self.renderCats();
   if(self.checkServices) self.checkServices();
   if(self.renderBrands) self.renderBrands();
