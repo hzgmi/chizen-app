@@ -6793,6 +6793,66 @@ html[data-theme="light"] {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style id="chizen-header-v2-override">
+body #sc-home .chz-hdr { margin: 0 12px 16px; padding-top: env(safe-area-inset-top, 0px); position: relative; }
+body #sc-home .chz-banner { height: 32px; border-radius: 14px; overflow: hidden; position: relative; background: linear-gradient(90deg,#FF8A00 0%,#FF3D9A 30%,#7C3AED 65%,#2E5AFF 100%); box-shadow: 0 4px 14px rgba(255,61,154,0.22); margin-bottom: 10px; }
+body #sc-home .chz-banner::after { content:''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent 55%); }
+body #sc-home .chz-main { height: 68px; padding: 8px 14px; border-radius: 20px; background: linear-gradient(135deg, rgba(46,90,255,0.92), rgba(124,58,237,0.92) 55%, rgba(255,61,154,0.92)); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); box-shadow: 0 8px 28px rgba(124,58,237,0.28), 0 1px 0 rgba(255,255,255,0.18) inset, 0 0 0 1px rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 100; transition: height 0.25s ease, border-radius 0.25s ease, box-shadow 0.25s ease; }
+body #sc-home .chz-main.chz-compact { height: 56px; border-radius: 0 0 20px 20px; box-shadow: 0 6px 24px rgba(124,58,237,0.35); }
+body #sc-home .chz-profile-group { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 4px; border-radius: 14px; transition: background 0.2s ease; -webkit-tap-highlight-color: transparent; }
+body #sc-home .chz-profile-group:active { background: rgba(255,255,255,0.1); }
+body #sc-home .chz-prof-avatar { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3); }
+body #sc-home .chz-prof-avatar svg { width: 18px; height: 18px; }
+body #sc-home .chz-prof-txt { display: flex; flex-direction: column; gap: 1px; line-height: 1.2; }
+body #sc-home .chz-prof-name { font-size: 13px; font-weight: 800; color: #fff; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+body #sc-home .chz-prof-welcome { font-size: 10px; color: rgba(255,255,255,0.75); font-weight: 500; }
+body #sc-home .chz-brand-group { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; }
+body #sc-home .chz-en-row { display: flex; align-items: center; gap: 6px; direction: rtl; margin: 0; }
+body #sc-home .chz-logo { width: 32px; height: 32px; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.3); }
+body #sc-home .chz-logo img { width: 100%; height: 100%; object-fit: cover; }
+body #sc-home .chz-en { font-size: 20px; font-weight: 900; font-family: 'Poppins', sans-serif; color: #FFD700; letter-spacing: 0.5px; line-height: 1; text-shadow: 0 2px 6px rgba(0,0,0,0.25); -webkit-text-fill-color: #FFD700; background: none; }
+body #sc-home .chz-ar { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.9); margin-top: 1px; line-height: 1; }
+body #sc-home .chz-tag { font-size: 8px; color: rgba(255,255,255,0.7); margin-top: 2px; line-height: 1; white-space: nowrap; }
+body #sc-home .chz-icons-group { display: flex; gap: 7px; direction: rtl; }
+body #sc-home .chz-icon-box { width: 36px; height: 36px; border-radius: 12px; position: relative; cursor: pointer; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; transition: transform 0.15s ease, background 0.15s ease; -webkit-tap-highlight-color: transparent; }
+body #sc-home .chz-icon-box:active { transform: scale(0.92); background: rgba(255,255,255,0.22); }
+body #sc-home .chz-icon-box svg { width: 17px; height: 17px; }
+body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: linear-gradient(135deg, #FF3D9A, #FF8A00); border: 1.5px solid #fff; color: #fff; font-size: 9px; font-weight: 900; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(255,61,154,0.5); }
+@media (max-width: 359px) {
+  body #sc-home .chz-main { height: 60px; padding: 6px 10px; border-radius: 16px; }
+  body #sc-home .chz-prof-avatar { width: 32px; height: 32px; }
+  body #sc-home .chz-prof-avatar svg { width: 15px; height: 15px; }
+  body #sc-home .chz-prof-name { font-size: 11px; max-width: 55px; }
+  body #sc-home .chz-prof-welcome { display: none; }
+  body #sc-home .chz-logo { width: 26px; height: 26px; }
+  body #sc-home .chz-en { font-size: 16px; }
+  body #sc-home .chz-ar { font-size: 9px; }
+  body #sc-home .chz-tag { display: none; }
+  body #sc-home .chz-icon-box { width: 32px; height: 32px; border-radius: 10px; }
+  body #sc-home .chz-icon-box svg { width: 15px; height: 15px; }
+  body #sc-home .chz-icons-group { gap: 5px; }
+}
+@media (min-width: 431px) {
+  body #sc-home .chz-main { height: 74px; }
+  body #sc-home .chz-en { font-size: 22px; }
+  body #sc-home .chz-icon-box { width: 40px; height: 40px; }
+}
+</style>
+<script>
+(function(){
+  var mainBar = null;
+  function check() {
+    if (!mainBar || !mainBar.isConnected) mainBar = document.querySelector('#sc-home .chz-main');
+    if (!mainBar) return;
+    var y = window.scrollY || document.documentElement.scrollTop || 0;
+    if (y > 30) mainBar.classList.add('chz-compact');
+    else mainBar.classList.remove('chz-compact');
+  }
+  window.addEventListener('scroll', check, {passive:true});
+  document.addEventListener('DOMContentLoaded', check);
+  setInterval(check, 500);
+})();
+</script>
 <script src="firebase-config.js"></script>
 <script src="firebase-service.js"></script>
 <script src="notification-sound.js"></script>
