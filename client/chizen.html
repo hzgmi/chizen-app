@@ -6950,6 +6950,45 @@ html:not([data-theme="light"]) .det-thumb.active {
 }
 </style>
 
+<style id="chz-brands-v19-css">
+body #sc-home #brands-list .brand-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 5px 14px 5px 6px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+}
+body #sc-home #brands-list .brand-chip img {
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  padding: 3px !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15) !important;
+}
+body #sc-home #brands-list .brand-chip .bc-initial {
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #ff4d94, #a855f7) !important;
+  color: #fff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  flex-shrink: 0 !important;
+}
+html:not([data-theme="light"]) body #sc-home #brands-list .brand-chip img {
+  background: #fff !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4) !important;
+}
+</style>
+
 <style id="chz-home-v18-css">
 body #sc-home #brands-sec { margin: 8px 0 4px; }
 body #sc-home #brands-list { display: flex; gap: 8px; overflow-x: auto; padding: 6px 15px 10px; scrollbar-width: none; }
@@ -7831,16 +7870,23 @@ var APP={
 
   renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
-    if(!this.products||!this.products.length){c.innerHTML='';return;}
-    var counts={};
-    this.products.forEach(function(p){
-      if(p.brand&&p.brand.trim()){var b=p.brand.trim();counts[b]=(counts[b]||0)+1;}
-    });
-    var brands=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
-    if(!brands.length){c.innerHTML='';return;}
-    c.innerHTML=brands.map(function(b){
-      return '<div class="brand-chip" onclick="APP.filterBrand(\''+esc(b)+'\')">'+esc(b)+'</div>';
-    }).join('');
+    var self=this;
+    if(!window.FB||!FB.db){setTimeout(function(){self.renderBrands();},400);return;}
+    FB.db.collection('config').doc('brands').get().then(function(doc){
+      var list=(doc.exists&&doc.data().list)?doc.data().list:[];
+      list=list.filter(function(b){return b&&b.active!==false;});
+      if(!list.length){c.innerHTML='';return;}
+      c.innerHTML=list.map(function(b){
+        var name=b.nameAr||b.nameEn||(typeof b==='string'?b:'');
+        var logo=b.logo||'';
+        var filterKey=b.nameEn||name;
+        var initial=(b.nameAr||b.nameEn||'?').charAt(0);
+        var logoEl = logo
+          ? '<img src="'+esc(logo)+'" alt="" onerror="this.style.display=\'none\';var s=this.nextElementSibling;if(s)s.style.display=\'inline-flex\'"><span class="bc-initial" style="display:none">'+esc(initial)+'</span>'
+          : '<span class="bc-initial">'+esc(initial)+'</span>';
+        return '<div class="brand-chip" onclick="APP.filterBrand(\''+esc(filterKey)+'\')">'+logoEl+'<span>'+esc(name)+'</span></div>';
+      }).join('');
+    }).catch(function(){c.innerHTML='';});
   },
 
   filterBrand:function(brand){
