@@ -17706,5 +17706,144 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-spa-v58">
+(function(){
+  'use strict';
+  
+  // ═══ 1. Firestore Persistence — data cached locally ═══
+  function enablePersistence(){
+    if (!window.firebase || !firebase.firestore) { setTimeout(enablePersistence, 200); return; }
+    try {
+      firebase.firestore().enablePersistence({ synchronizeTabs: true })
+        .then(function(){ console.log('✓ Firestore persistence enabled'); })
+        .catch(function(err){
+          if (err.code === 'failed-precondition') console.log('persistence: multi-tab');
+          else if (err.code === 'unimplemented') console.log('persistence: unsupported');
+          else console.log('persistence:', err.message);
+        });
+    } catch(e) { console.log('persistence err:', e.message); }
+  }
+  enablePersistence();
+  
+  // ═══ 2. Listings — real-time onSnapshot ═══
+  function startListingsListener(){
+    if (!window.APP || !window.FB || !window.FB.db) { setTimeout(startListingsListener, 400); return; }
+    
+    // Replace cmLoad with onSnapshot
+    APP.cmLoad = function() {
+      var grid = document.getElementById('cm-listings');
+      if (!grid) return;
+      if (!window.FB || !FB.db) { setTimeout(APP.cmLoad, 800); return; }
+      
+      // Already subscribed? Don't duplicate
+      if (APP._cmUnsub) return;
+      
+      APP._cmUnsub = FB.db.collection('listings')
+        .where('status', '==', 'active')
+        .limit(100)
+        .onSnapshot(function(snap) {
+          APP.cmAll = [];
+          snap.forEach(function(d){ APP.cmAll.push(Object.assign({ id: d.id }, d.data())); });
+          APP.cmAll.sort(function(a,b){
+            var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+            var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+            return tb - ta;
+          });
+          var count = document.getElementById('cm-count');
+          if (count) {
+            var cars = APP.cmAll.filter(function(l){ return l.type === 'car'; }).length;
+            var phones = APP.cmAll.filter(function(l){ return l.type === 'phone'; }).length;
+            count.textContent = cars + ' سيارة · ' + phones + ' هاتف';
+          }
+          APP.cmRender();
+        }, function(e) {
+          console.warn('[cm] listener error:', e.message);
+        });
+    };
+    
+    // When listing created, don't need to call cmLoad again — onSnapshot handles it
+    var origSubmit = APP.cmSubmit;
+    if (origSubmit) {
+      APP.cmSubmit = async function(){
+        var r = await origSubmit.apply(this, arguments);
+        // Don't call cmLoad — onSnapshot already pushes new data
+        return r;
+      };
+    }
+    
+    console.log('[spa] listings onSnapshot ready');
+  }
+  startListingsListener();
+  
+  // ═══ 3. Products — real-time onSnapshot (background) ═══
+  function startProductsListener(){
+    if (!window.APP || !window.FB || !window.FB.db) { setTimeout(startProductsListener, 500); return; }
+    if (APP._productsUnsub) return;
+    
+    APP._productsUnsub = FB.db.collection('products').limit(200)
+      .onSnapshot(function(snap) {
+        if (snap.metadata.hasPendingWrites) return;
+        var products = [];
+        snap.forEach(function(d){ products.push(Object.assign({ id: d.id }, d.data())); });
+        // Only update if actually changed
+        var newSig = products.length + '_' + products.map(function(p){ return p.id + (p.price||''); }).join(',');
+        if (APP._productsSig === newSig) return;
+        APP._productsSig = newSig;
+        APP.products = products;
+        if (APP.renderProducts) APP.renderProducts();
+        console.log('[spa] products updated:', products.length);
+      }, function(e) {
+        console.warn('[spa] products listener:', e.message);
+      });
+  }
+  startProductsListener();
+  
+  // ═══ 4. Config — real-time settings ═══
+  function startConfigListener(){
+    if (!window.APP || !window.FB || !window.FB.db) { setTimeout(startConfigListener, 600); return; }
+    if (APP._configUnsub) return;
+    
+    APP._configUnsub = FB.db.collection('config').doc('settings')
+      .onSnapshot(function(doc) {
+        if (!doc.exists) return;
+        var data = doc.data() || {};
+        window.CHIZEN_SETTINGS = window.CHIZEN_SETTINGS || {};
+        Object.keys(data).forEach(function(k){
+          if (k !== 'updatedAt' && k !== 'updatedBy') window.CHIZEN_SETTINGS[k] = data[k];
+        });
+        if (window.__applyChizenSettings) window.__applyChizenSettings();
+      }, function(e){
+        console.warn('[spa] config listener:', e.message);
+      });
+  }
+  startConfigListener();
+  
+  // ═══ 5. Prevent unnecessary reloads ═══
+  // Override location.reload to do soft refresh instead
+  var origReload = location.reload;
+  var reloadCount = 0;
+  var lastReload = 0;
+  try {
+    location.reload = function() {
+      var now = Date.now();
+      if (now - lastReload < 3000) {
+        console.warn('[spa] reload blocked (too fast)');
+        return;
+      }
+      lastReload = now;
+      reloadCount++;
+      if (reloadCount > 5) {
+        console.warn('[spa] too many reloads — showing home');
+        if (window.APP && APP.goTab) APP.goTab('home');
+        return;
+      }
+      origReload.call(location);
+    };
+  } catch(e) {}
+  
+  console.log('[spa v58] ready — persistence + real-time + no reloads');
+})();
+</script>
+
 </body>
 </html>
