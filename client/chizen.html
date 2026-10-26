@@ -6151,9 +6151,10 @@ html[data-theme="light"] {
 
 
 
-<!-- CHIZEN Banner v8 -->
-<div id="chzBnrWrap"><div id="chzBnr"></div><div id="chzBnrDots"></div></div>
-
+<!-- البنر -->
+<div style="margin:15px; position:relative;">
+  <div id="slides" style="position:relative; border-radius:16px; overflow:hidden; aspect-ratio:16/9;"></div>
+  <div id="dots" style="display:flex; justify-content:center; gap:6px; margin-top:10px;"></div>
 </div>
 
 <!-- المنتجات -->
@@ -6792,33 +6793,6 @@ html[data-theme="light"] {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<style id="chz-banner-v8-css">
-#chzBnrWrap { margin: 15px; position: relative; }
-#chzBnr {
-  position: relative; aspect-ratio: 16 / 9; border-radius: 16px;
-  overflow: hidden; background: linear-gradient(135deg, #6A1B9A, #D81B60);
-  box-shadow: 0 8px 24px rgba(124,58,237,0.18);
-}
-#chzBnr img {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; opacity: 0; transition: opacity .8s ease;
-  display: block; will-change: opacity;
-}
-#chzBnr img.active { opacity: 1; }
-#chzBnrDots {
-  display: flex; justify-content: center; gap: 6px; margin-top: 10px;
-}
-#chzBnrDots .cbd {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(0,0,0,0.18); transition: all .3s ease; cursor: pointer;
-}
-html:not([data-theme="light"]) #chzBnrDots .cbd { background: rgba(255,255,255,0.3); }
-#chzBnrDots .cbd.active {
-  width: 22px; border-radius: 4px;
-  background: linear-gradient(135deg, #FF3D9A, #7C3AED);
-}
-</style>
-
 <style id="chizen-header-v2-override">
 body #sc-home .chz-hdr { margin: 0 12px 16px; padding-top: env(safe-area-inset-top, 0px); position: relative; }
 body #sc-home .chz-banner { height: 32px; border-radius: 14px; overflow: hidden; position: relative; background: linear-gradient(90deg,#FF8A00 0%,#FF3D9A 30%,#7C3AED 65%,#2E5AFF 100%); box-shadow: 0 4px 14px rgba(255,61,154,0.22); margin-bottom: 10px; }
@@ -6871,6 +6845,56 @@ body #sc-home .chz-main { overflow: visible !important; }
 body #sc-home .chz-brand-group { overflow: visible !important; height: auto !important; min-height: 0 !important; }
 body #sc-home .chz-tag { display: block !important; visibility: visible !important; opacity: 1 !important; height: auto !important; max-height: none !important; overflow: visible !important; clip: auto !important; clip-path: none !important; position: static !important; font-size: 9.5px !important; line-height: 1.2 !important; margin: 3px 0 0 0 !important; padding: 0 !important; color: rgba(255,255,255,0.92) !important; text-align: center !important; white-space: nowrap !important; letter-spacing: 0.2px !important; font-weight: 600 !important; text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important; }
 html[data-theme="light"] body #sc-home .chz-main { background: linear-gradient(135deg, #eef2ff 0%, #f5f0ff 55%, #ffeef7 100%) !important; box-shadow: 0 8px 28px rgba(124,58,237,0.15), 0 1px 0 rgba(255,255,255,0.9) inset, 0 0 0 1px rgba(124,58,237,0.08) !important; }
+/* v6 banner carousel */
+body #sc-home #slides {
+  display: flex !important;
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  transition: transform .6s cubic-bezier(.16,1,.3,1) !important;
+  will-change: transform;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+body #sc-home #slides .slide {
+  min-width: 100% !important;
+  flex: 0 0 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+  padding: 0 !important;
+  display: block !important;
+  background: linear-gradient(135deg, #6A1B9A, #D81B60);
+}
+body #sc-home #slides .slide img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+body #sc-home #dots {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin-top: 10px !important;
+  padding: 0 !important;
+}
+body #sc-home #dots .dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: rgba(0,0,0,0.18) !important;
+  transition: all .3s ease !important;
+  cursor: pointer !important;
+}
+html:not([data-theme="light"]) body #sc-home #dots .dot {
+  background: rgba(255,255,255,0.3) !important;
+}
+body #sc-home #dots .dot.active {
+  width: 22px !important;
+  border-radius: 4px !important;
+  background: linear-gradient(135deg, #FF3D9A, #7C3AED) !important;
+}
 html[data-theme="light"] body #sc-home .chz-main.chz-compact { box-shadow: 0 6px 24px rgba(124,58,237,0.18) !important; }
 html[data-theme="light"] body #sc-home .chz-prof-name { color: #1a1a2e !important; text-shadow: none !important; }
 html[data-theme="light"] body #sc-home .chz-prof-welcome { color: #6b7280 !important; }
@@ -6938,63 +6962,6 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
   setInterval(check, 500);
 })();
 </script>
-<script id="chz-banner-v8-js">
-(function(){
-  function initChzBnr(){
-    var imgs = [
-      'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg',
-      'https://i.ibb.co/dwtG9sPT/dwtG9sPT.jpg',
-      'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg',
-      'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg',
-      'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg'
-    ];
-    var bnr = document.getElementById('chzBnr');
-    var dots = document.getElementById('chzBnrDots');
-    if (!bnr || !dots) { setTimeout(initChzBnr, 300); return; }
-    if (bnr.dataset.init === '1') return;
-    bnr.dataset.init = '1';
-
-    bnr.innerHTML = imgs.map(function(src, i){
-      return '<img src="' + src + '" class="' + (i===0?'active':'') + '" alt="banner ' + (i+1) + '"' + (i===0?'':' loading="lazy"') + '>';
-    }).join('');
-    dots.innerHTML = imgs.map(function(_, i){
-      return '<div class="cbd ' + (i===0?'active':'') + '" data-i="' + i + '"></div>';
-    }).join('');
-
-    var idx = 0;
-    var timer = null;
-    function go(i){
-      idx = ((i % imgs.length) + imgs.length) % imgs.length;
-      bnr.querySelectorAll('img').forEach(function(el, j){ el.classList.toggle('active', j === idx); });
-      dots.querySelectorAll('.cbd').forEach(function(el, j){ el.classList.toggle('active', j === idx); });
-    }
-    function start(){
-      if (timer) clearInterval(timer);
-      timer = setInterval(function(){ go(idx + 1); }, 4500);
-    }
-    function reset(i){ go(i); start(); }
-
-    dots.addEventListener('click', function(e){
-      var t = e.target.closest('.cbd');
-      if (!t) return;
-      reset(parseInt(t.dataset.i, 10));
-    });
-
-    var sx = 0;
-    bnr.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, {passive:true});
-    bnr.addEventListener('touchend', function(e){
-      var dx = e.changedTouches[0].clientX - sx;
-      if (Math.abs(dx) > 40) reset(idx + (dx < 0 ? 1 : -1));
-    }, {passive:true});
-
-    start();
-    console.log('[v8] banner: ' + imgs.length + ' slides, 4.5s autoplay');
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initChzBnr);
-  else initChzBnr();
-})();
-</script>
-
 <script src="firebase-config.js"></script>
 <script src="firebase-service.js"></script>
 <script src="notification-sound.js"></script>
@@ -7066,7 +7033,7 @@ var APP={
     if(window.FB){
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
       FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();}});
-      // [DISABLED v8] banner handled separately
+      FB.getConfig('banners').then(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
       FB.getConfig('categories').then(function(c){
   var dbCats = (c && c.list) ? c.list : [];
   // إزالة أي قسم مكرر من الداتابيس يطابق الأقسام الثابتة
@@ -7437,6 +7404,40 @@ var APP={
     c.innerHTML=items.map(function(p){return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-i"><img src="'+esc(p.img||'')+'"><div class="prod-b">⚡ '+esc(p.badge)+'</div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-o">'+esc(p.old)+'</span></div></div></div>';}).join('');
   },
   
+  renderBanners: function() {
+    var s = document.getElementById('slides');
+    var d = document.getElementById('dots');
+    if (!s) return;
+    var DEFAULT_BANNERS = [
+      { img: 'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg' },
+      { img: 'https://i.ibb.co/dwtG9sPT/dwtG9sPT.jpg' },
+      { img: 'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg' },
+      { img: 'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg' },
+      { img: 'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg' }
+    ];
+    var fsBanners = (this.banners || []).filter(function(b){ return b && b.img && b.img.indexOf('http') === 0; });
+    var list = (fsBanners.length >= 2) ? fsBanners : DEFAULT_BANNERS;
+    s.style.transform = 'translateX(0%)';
+    if (!list.length) { s.innerHTML = ''; if (d) d.innerHTML = ''; return; }
+    s.innerHTML = list.map(function(b) {
+      var img = b.img
+        ? '<img src="' + esc(b.img) + '" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" alt="banner">'
+        : '<div style="width:100%;height:100%;background:linear-gradient(135deg,#6A1B9A,#D81B60);"></div>';
+      return '<div class="slide" style="min-width:100%;flex:0 0 100%;position:relative;overflow:hidden;padding:0;">' + img + '</div>';
+    }).join('');
+    if (d) d.innerHTML = list.map(function(_, i) {
+      return '<div class="dot' + (i === 0 ? ' active' : '') + '" onclick="APP.goSlide(' + i + ')"></div>';
+    }).join('');
+    if (this.startSlideAutoplay) this.startSlideAutoplay();
+  },
+  
+  goSlide:function(i){
+    var s=document.getElementById('slides');if(!s)return;
+    s.style.transform='translateX('+(this.state.lang==='ar'?i*100:-i*100)+'%)';
+    document.querySelectorAll('.dot').forEach(function(d,j){if(j===i)d.classList.add('active');else d.classList.remove('active');});
+  },
+  
+
   openCatPage: function(key, name, icon) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     var catScreen = document.getElementById('sc-cat');
@@ -9858,6 +9859,56 @@ document.addEventListener('keydown', function(e) {
 <script id="v10-autoplay">
 /* ═══ V10: بانر يدور تلقائياً + تحسين شريط الحجز ═══ */
 (function(){
+  function installAutoplay(){
+    if (!window.APP) return false;
+    if (window.APP._v10Installed) return true;
+    
+    var currentIdx = 0;
+    var timer = null;
+    
+    // تعريف الدالة المفقودة
+    window.APP.startSlideAutoplay = function(){
+      if (timer) clearInterval(timer);
+      var slidesEl = document.getElementById('slides');
+      var realCount = slidesEl ? slidesEl.querySelectorAll('.slide').length : 0;
+      var total = realCount || 0;
+      if (total <= 1) { currentIdx = 0; return; }
+      currentIdx = 0;
+      window.APP.goSlide(0);
+      var self = this;
+      timer = setInterval(function(){
+        currentIdx = (currentIdx + 1) % total;
+        self.goSlide(currentIdx);
+      }, 4500);
+      console.log('[v7] autoplay: ' + total + ' real slides, 4.5s');
+    };
+    
+    // إعادة ضبط المؤشر عند تغيير يدوي (سحب/نقر)
+    var origGoSlide = window.APP.goSlide;
+    window.APP.goSlide = function(i){
+      currentIdx = i;
+      if (origGoSlide) origGoSlide.call(this, i);
+    };
+    
+    window.APP._v10Installed = true;
+    return true;
+  }
+  
+  // التثبيت عند الجاهزية
+  function tryInstall(n){
+    if (installAutoplay()) {
+      console.log('[V10] installed');
+      return;
+    }
+    if (n > 30) return;
+    setTimeout(function(){ tryInstall(n+1); }, 300);
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ tryInstall(0); });
+  } else {
+    tryInstall(0);
+  }
 })();
 </script>
 <script id="chz-details-features-js">
