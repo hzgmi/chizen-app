@@ -6503,6 +6503,110 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
   }, 100);
 })();
 </script>
+<style id="chz-orders-v68">
+/* Header */
+.ord-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: linear-gradient(135deg, #4D8CFF 0%, #9B4DFF 60%, #FF3D9A 100%); border-radius: 0 0 20px 20px; box-shadow: 0 6px 20px rgba(77,140,255,0.25); direction: rtl; }
+.ord-back { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.ord-back svg { width: 18px; height: 18px; transform: rotate(180deg); }
+.ord-back:active { transform: scale(0.92); }
+.ord-header-text { flex: 1; min-width: 0; }
+.ord-header-title { font-size: 17px; font-weight: 900; color: #fff; font-family: 'Tajawal', sans-serif; }
+.ord-header-sub { font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 600; margin-top: 2px; font-family: 'Tajawal', sans-serif; }
+
+/* Filter tabs */
+.ord-tabs { display: flex; gap: 8px; padding: 14px 16px 8px; overflow-x: auto; scrollbar-width: none; }
+.ord-tabs::-webkit-scrollbar { display: none; }
+.ord-tab { flex-shrink: 0; padding: 9px 16px; background: var(--nav, #f8fafc); color: var(--mt, #6b7280); border: 1.5px solid rgba(77,140,255,0.15); border-radius: 20px; font-family: 'Tajawal', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; transition: all .2s ease; -webkit-tap-highlight-color: transparent; white-space: nowrap; }
+html:not([data-theme="light"]) .ord-tab { background: #1e2438; border-color: rgba(255,255,255,0.08); color: #9ca3af; }
+.ord-tab:active { transform: scale(0.96); }
+.ord-tab.active { background: linear-gradient(135deg, #4D8CFF, #9B4DFF); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(77,140,255,0.35); }
+
+/* Order list */
+.ord-list { padding: 8px 16px 100px; display: flex; flex-direction: column; gap: 12px; direction: rtl; }
+.ord-loading { text-align: center; padding: 40px 20px; color: #9ca3af; font-family: 'Tajawal', sans-serif; font-size: 13px; }
+.ord-empty { text-align: center; padding: 60px 20px; color: var(--mt, #9ca3af); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 600; line-height: 1.7; }
+.ord-empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.6; }
+
+/* Order card */
+.ord-card { background: #fff; border: 1px solid rgba(77,140,255,0.12); border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; box-shadow: 0 3px 12px rgba(0,0,0,0.05); -webkit-tap-highlight-color: transparent; }
+.ord-card:active { transform: scale(0.98); box-shadow: 0 6px 20px rgba(77,140,255,0.15); }
+html:not([data-theme="light"]) .ord-card { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+
+.ord-card-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 8px; border-bottom: 1px dashed rgba(77,140,255,0.15); }
+.ord-card-id { font-size: 12px; font-weight: 900; color: #4D8CFF; font-family: 'Tajawal', sans-serif; }
+.ord-card-date { font-size: 10.5px; color: var(--mt2, #9ca3af); font-weight: 600; font-family: 'Tajawal', sans-serif; }
+.ord-status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 10px; font-size: 10.5px; font-weight: 900; font-family: 'Tajawal', sans-serif; }
+.ord-status-badge.st-pending { background: rgba(245,158,11,0.12); color: #d97706; }
+.ord-status-badge.st-awaiting_verification { background: rgba(245,158,11,0.12); color: #d97706; }
+.ord-status-badge.st-awaiting_categories { background: rgba(139,92,246,0.12); color: #7c3aed; }
+.ord-status-badge.st-ready_to_send { background: rgba(77,140,255,0.12); color: #2563eb; }
+.ord-status-badge.st-sent_to_customer { background: rgba(77,140,255,0.12); color: #2563eb; }
+.ord-status-badge.st-shipped { background: rgba(77,140,255,0.12); color: #2563eb; }
+.ord-status-badge.st-delivered { background: rgba(16,185,129,0.12); color: #059669; }
+.ord-status-badge.st-completed { background: rgba(16,185,129,0.12); color: #059669; }
+.ord-status-badge.st-cancelled { background: rgba(239,68,68,0.12); color: #dc2626; }
+.ord-status-badge.st-payment_rejected { background: rgba(239,68,68,0.12); color: #dc2626; }
+
+.ord-card-body { padding: 10px 14px 12px; }
+.ord-card-products { display: flex; gap: 6px; margin-bottom: 8px; overflow: hidden; }
+.ord-card-prod-img { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; background: #f4f6fa; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.05); }
+.ord-card-prod-img img { width: 100%; height: 100%; object-fit: cover; }
+.ord-card-prod-more { width: 44px; height: 44px; border-radius: 10px; background: rgba(77,140,255,0.1); color: #4D8CFF; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; flex-shrink: 0; font-family: 'Tajawal', sans-serif; }
+
+.ord-card-summary { display: flex; justify-content: space-between; align-items: center; }
+.ord-card-count { font-size: 11.5px; color: var(--mt, #6b7280); font-weight: 600; font-family: 'Tajawal', sans-serif; }
+.ord-card-total { font-size: 15px; font-weight: 900; color: #4D8CFF; font-family: 'Tajawal', sans-serif; }
+.ord-card-total small { font-size: 10px; color: #4D8CFF; }
+.ord-card-arrow { display: flex; align-items: center; justify-content: center; padding: 8px 14px; background: rgba(77,140,255,0.05); border-top: 1px solid rgba(77,140,255,0.1); font-size: 11px; font-weight: 800; color: #4D8CFF; font-family: 'Tajawal', sans-serif; gap: 6px; }
+.ord-card-arrow svg { width: 12px; height: 12px; }
+
+/* Detail screen */
+#ord-detail-content { direction: rtl; font-family: 'Tajawal', sans-serif; }
+.ord-detail-section { margin: 16px; padding: 16px; background: #fff; border-radius: 16px; border: 1px solid rgba(77,140,255,0.1); box-shadow: 0 3px 12px rgba(0,0,0,0.04); }
+html:not([data-theme="light"]) .ord-detail-section { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+.ord-detail-title { font-size: 13px; font-weight: 900; color: #4D8CFF; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1.5px solid rgba(77,140,255,0.15); display: flex; align-items: center; gap: 6px; }
+
+.ord-status-hero { margin: 16px; padding: 20px; border-radius: 20px; text-align: center; position: relative; overflow: hidden; }
+.ord-status-hero.st-pending, .ord-status-hero.st-awaiting_verification { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); }
+.ord-status-hero.st-awaiting_categories { background: linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%); }
+.ord-status-hero.st-ready_to_send, .ord-status-hero.st-sent_to_customer, .ord-status-hero.st-shipped { background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); }
+.ord-status-hero.st-delivered, .ord-status-hero.st-completed { background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); }
+.ord-status-hero.st-cancelled, .ord-status-hero.st-payment_rejected { background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); }
+html:not([data-theme="light"]) .ord-status-hero { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); }
+.ord-status-hero-icon { font-size: 56px; line-height: 1; margin-bottom: 10px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)); }
+.ord-status-hero-title { font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 4px; }
+html:not([data-theme="light"]) .ord-status-hero-title { color: #fff; }
+.ord-status-hero-sub { font-size: 12px; color: #6b7280; font-weight: 600; }
+html:not([data-theme="light"]) .ord-status-hero-sub { color: #d1d5db; }
+
+.ord-product-row { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); }
+.ord-product-row:last-child { border-bottom: none; }
+.ord-product-img { width: 56px; height: 56px; border-radius: 10px; overflow: hidden; background: #f4f6fa; flex-shrink: 0; }
+.ord-product-img img { width: 100%; height: 100%; object-fit: cover; }
+.ord-product-info { flex: 1; min-width: 0; }
+.ord-product-name { font-size: 12.5px; font-weight: 800; color: #1f2937; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html:not([data-theme="light"]) .ord-product-name { color: #e8ecf5; }
+.ord-product-meta { font-size: 10.5px; color: #6b7280; font-weight: 600; }
+.ord-product-price { font-size: 13px; font-weight: 900; color: #4D8CFF; white-space: nowrap; }
+
+.ord-info-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 12px; }
+.ord-info-row-label { color: #6b7280; font-weight: 600; }
+html:not([data-theme="light"]) .ord-info-row-label { color: #9ca3af; }
+.ord-info-row-value { color: #1f2937; font-weight: 800; }
+html:not([data-theme="light"]) .ord-info-row-value { color: #e8ecf5; }
+
+.ord-timeline-item { display: flex; gap: 10px; padding: 8px 0; }
+.ord-timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: #4D8CFF; margin-top: 5px; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(77,140,255,0.15); }
+.ord-timeline-content { flex: 1; }
+.ord-timeline-text { font-size: 12px; font-weight: 700; color: #1f2937; }
+html:not([data-theme="light"]) .ord-timeline-text { color: #e8ecf5; }
+.ord-timeline-time { font-size: 10.5px; color: #6b7280; font-weight: 600; margin-top: 2px; }
+
+.ord-action-btn { width: 100%; padding: 14px; border-radius: 14px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; -webkit-tap-highlight-color: transparent; }
+.ord-action-wa { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; box-shadow: 0 8px 22px rgba(37,211,102,0.35); }
+.ord-action-wa:active { transform: scale(0.97); }
+</style>
+
 <style id="chz-haraj-hero-css">
 /* ═══ حراج شيزن — Hero Banner ═══ */
 .chz-haraj-hero {
@@ -7732,7 +7836,47 @@ body.chz-auth-ok {
 </div>
 
     <!-- ORDERS -->
-    <div class="screen" id="sc-orders"><div class="st"></div><div class="sh2"><div class="st2" data-i18n="orders.title" data-i18n-ar="طلباتي">طلباتي</div></div><div style="padding:4px 20px 20px;" id="orders-list"></div></div>
+    <!-- ═══ ORDERS v68 ═══ -->
+    <div class="screen" id="sc-orders">
+      <div class="st"></div>
+      <div class="ord-header">
+        <button class="ord-back" onclick="APP.goTab('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="ord-header-text">
+          <div class="ord-header-title">📦 طلباتي</div>
+          <div class="ord-header-sub" id="ord-count">جاري التحميل...</div>
+        </div>
+      </div>
+
+      <div class="ord-tabs" id="ord-tabs">
+        <button class="ord-tab active" data-filter="all" onclick="APP.ordFilter('all',this)">الكل</button>
+        <button class="ord-tab" data-filter="pending" onclick="APP.ordFilter('pending',this)">⏳ قيد المراجعة</button>
+        <button class="ord-tab" data-filter="processing" onclick="APP.ordFilter('processing',this)">📦 قيد التجهيز</button>
+        <button class="ord-tab" data-filter="shipping" onclick="APP.ordFilter('shipping',this)">🚚 في الطريق</button>
+        <button class="ord-tab" data-filter="completed" onclick="APP.ordFilter('completed',this)">✅ مكتمل</button>
+        <button class="ord-tab" data-filter="cancelled" onclick="APP.ordFilter('cancelled',this)">❌ ملغي</button>
+      </div>
+
+      <div id="orders-list" class="ord-list">
+        <div class="ord-loading">جاري تحميل طلباتك...</div>
+      </div>
+    </div>
+
+    <!-- ═══ ORDER DETAIL v68 ═══ -->
+    <div class="screen" id="sc-order-detail">
+      <div class="st"></div>
+      <div class="ord-header">
+        <button class="ord-back" onclick="APP.goTab('orders')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="ord-header-text">
+          <div class="ord-header-title">تفاصيل الطلب</div>
+          <div class="ord-header-sub" id="ord-detail-number"></div>
+        </div>
+      </div>
+      <div id="ord-detail-content" style="padding-bottom:100px;"></div>
+    </div>
 
     <!-- NOTIFICATIONS -->
     <div class="screen" id="sc-notifications"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2" data-i18n="notifications.title" data-i18n-ar="الإشعارات"><span data-i18n="settings.notifications" data-i18n-ar="الإشعارات">الإشعارات</span></div><button style="margin-right:auto;background:none;border:none;color:#D81B60;font-family:inherit;font-size:12px;font-weight:bold;" onclick="APP.clearAllNotifs()">مسح الكل 🗑️</button></div><div style="padding:4px 20px 20px;" id="notif-list"></div></div>
