@@ -10,7 +10,7 @@
   html:not(.chz-auth-ok) body > * {
     display: none !important;
   }
-  html:not(.chz-auth-ok) #chz-splash-v62 {
+  html:not(.chz-auth-ok) #chz-splash-v63 {
     display: flex !important;
     visibility: visible !important;
   }
@@ -20,32 +20,148 @@
   }
 </style>
 
-<div id="chz-splash-v62" style="position:fixed;inset:0;z-index:2147483647;background:radial-gradient(ellipse at 50% 40%, #0a0e2a 0%, #02051b 60%, #000008 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;font-family:'Tajawal',sans-serif;overflow:hidden;">
+<div id="chz-splash-v63" style="position:fixed;inset:0;z-index:2147483647;background:#02051b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;font-family:'Tajawal',sans-serif;overflow:hidden;">
+  <style>
+    #chz-splash-v63 {
+      --splash-bg: #02051b;
+      --splash-glow-1: rgba(155,77,255,0.35);
+      --splash-glow-2: rgba(255,61,154,0.28);
+      --splash-text: #ffffff;
+    }
+    html[data-theme="light"] #chz-splash-v63,
+    html.chz-light #chz-splash-v63 {
+      --splash-bg: #f8fafc;
+      --splash-glow-1: rgba(155,77,255,0.25);
+      --splash-glow-2: rgba(255,61,154,0.2);
+      --splash-text: #1a1a2e;
+    }
+    html[data-theme="light"] #chz-splash-v63,
+    html.chz-light #chz-splash-v63 {
+      background: radial-gradient(ellipse at 50% 40%, #eef2ff 0%, #f8fafc 60%, #ffffff 100%) !important;
+    }
+    #chz-splash-v63 .chz-sp-bg {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    #chz-splash-v63 .chz-sp-glow-1 {
+      position: absolute;
+      top: 42%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--splash-glow-1) 0%, transparent 65%);
+      animation: chzSpGlow 3.5s ease-in-out infinite;
+    }
+    #chz-splash-v63 .chz-sp-glow-2 {
+      position: absolute;
+      top: 42%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--splash-glow-2) 0%, transparent 70%);
+      animation: chzSpGlow 3.5s ease-in-out 1.75s infinite;
+    }
+    #chz-splash-v63 .chz-sp-logo-wrap {
+      position: relative;
+      z-index: 2;
+      width: 180px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: chzSpFloat 3s ease-in-out infinite;
+    }
+    #chz-splash-v63 .chz-sp-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      -webkit-mask-image: radial-gradient(circle at center, #000 42%, rgba(0,0,0,0.85) 55%, transparent 78%);
+      mask-image: radial-gradient(circle at center, #000 42%, rgba(0,0,0,0.85) 55%, transparent 78%);
+      filter: drop-shadow(0 0 25px rgba(155,77,255,0.7)) drop-shadow(0 0 50px rgba(255,61,154,0.35));
+    }
+    html[data-theme="light"] #chz-splash-v63 .chz-sp-logo,
+    html.chz-light #chz-splash-v63 .chz-sp-logo {
+      filter: drop-shadow(0 0 20px rgba(155,77,255,0.55)) drop-shadow(0 0 40px rgba(255,61,154,0.3));
+    }
+    #chz-splash-v63 .chz-sp-fallback {
+      display: none;
+      font-family: 'Bodoni Moda', serif;
+      font-size: 110px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #FF3D9A, #9B4DFF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #chz-splash-v63 .chz-sp-tagline {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      direction: rtl;
+    }
+    #chz-splash-v63 .chz-sp-tag-text {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      background: linear-gradient(90deg, #FF3D9A 0%, #9B4DFF 25%, #4D8CFF 50%, #9B4DFF 75%, #FF3D9A 100%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: chzSpTagShine 3.5s linear infinite;
+    }
+    #chz-splash-v63 .chz-sp-dots {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+    }
+    #chz-splash-v63 .chz-sp-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: chzSpDot 1.4s ease-in-out infinite;
+    }
+    #chz-splash-v63 .chz-sp-dot:nth-child(1) { background: #FF3D9A; }
+    #chz-splash-v63 .chz-sp-dot:nth-child(2) { background: #9B4DFF; animation-delay: 0.2s; }
+    #chz-splash-v63 .chz-sp-dot:nth-child(3) { background: #4D8CFF; animation-delay: 0.4s; }
 
-  <!-- Animated light rays background -->
-  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;">
-    <div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(155,77,255,0.25) 0%,transparent 60%);animation:chzSplashGlow 3s ease-in-out infinite;"></div>
-    <div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,61,154,0.3) 0%,transparent 70%);animation:chzSplashGlow 3s ease-in-out infinite 1.5s;"></div>
+    @keyframes chzSpFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes chzSpGlow {
+      0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.18); }
+    }
+    @keyframes chzSpTagShine {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    @keyframes chzSpDot {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1.2); opacity: 1; }
+    }
+  </style>
+
+  <div class="chz-sp-bg">
+    <div class="chz-sp-glow-1"></div>
+    <div class="chz-sp-glow-2"></div>
   </div>
 
-  <!-- Logo — mix-blend-mode screen hides black bg -->
-  <div style="position:relative;z-index:2;animation:chzLogoFloat 3s ease-in-out infinite;">
-    <img src="https://i.ibb.co/FkvCmDwy/logo.png" alt="CHIZEN"
-      style="width:160px;height:160px;object-fit:contain;mix-blend-mode:screen;filter:drop-shadow(0 0 30px rgba(155,77,255,0.8)) drop-shadow(0 0 60px rgba(255,61,154,0.4));"
+  <div class="chz-sp-logo-wrap">
+    <img src="https://i.ibb.co/FkvCmDwy/logo.png" alt="CHIZEN" class="chz-sp-logo"
       onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-    <div style="display:none;font-family:'Bodoni Moda',serif;font-size:100px;font-weight:900;background:linear-gradient(135deg,#FF3D9A,#9B4DFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">C</div>
+    <div class="chz-sp-fallback">C</div>
   </div>
 
-  <!-- Tagline with animation -->
-  <div style="z-index:2;text-align:center;direction:rtl;">
-    <div style="font-size:16px;font-weight:900;letter-spacing:1px;background:linear-gradient(90deg,#FF3D9A,#9B4DFF,#4D8CFF,#FF3D9A);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:chzTaglineShine 3s linear infinite;">تسوق شامل_لحياة أجمل</div>
-    <div style="margin-top:14px;display:flex;justify-content:center;gap:6px;">
-      <span style="width:8px;height:8px;border-radius:50%;background:#FF3D9A;animation:chzSplashDot 1.4s ease-in-out infinite;"></span>
-      <span style="width:8px;height:8px;border-radius:50%;background:#9B4DFF;animation:chzSplashDot 1.4s ease-in-out 0.2s infinite;"></span>
-      <span style="width:8px;height:8px;border-radius:50%;background:#4D8CFF;animation:chzSplashDot 1.4s ease-in-out 0.4s infinite;"></span>
+  <div class="chz-sp-tagline">
+    <div class="chz-sp-tag-text">تسوق شامل_لحياة أجمل</div>
+    <div class="chz-sp-dots">
+      <span class="chz-sp-dot"></span>
+      <span class="chz-sp-dot"></span>
+      <span class="chz-sp-dot"></span>
     </div>
   </div>
-
 </div>
 <style>
 @keyframes chzLogoFloat {
@@ -9872,7 +9988,7 @@ var APP={
       if(u){
         // ✅ Authenticated — show app
         document.documentElement.classList.add('chz-auth-ok');
-        var splash = document.getElementById('chz-splash-v62');
+        var splash = document.getElementById('chz-splash-v63');
         if (splash) {
           splash.style.opacity = '0';
           splash.style.transition = 'opacity 0.4s ease';
