@@ -9744,6 +9744,8 @@ var APP={
   init:async function(){
     // v59: render cats immediately (before Firestore)
     try { this.renderCats(); } catch(e){ console.warn('cats early:', e.message); }
+    var _catRetry = 0;
+    var _catTimer = setInterval(function(){ var el = document.getElementById('cats'); if (el && el.children.length > 0) { clearInterval(_catTimer); return; } if (++_catRetry > 10) { clearInterval(_catTimer); return; } try { window.APP.renderCats(); } catch(e){} }, 300);
     try { if (this.renderBrands) this.renderBrands(); } catch(e){}
     // chz-active-coupon-restore
     try {
@@ -9919,13 +9921,20 @@ var APP={
   closeDlg:function(){document.getElementById('dlg').classList.remove('active');},
   
   renderCats:function(){
-    var c = document.getElementById('cats'); 
+    var c = document.getElementById('cats');
     if(!c) return;
-    
-    c.innerHTML = this.cats.map(function(cat) {
+    // v59b: ALWAYS use FIXED_CATS first — never wait for Firestore
+    var base = (window.FIXED_CATS || []).slice();
+    var extra = (this.cats || []).filter(function(cat){
+      var fixedKeys = base.map(function(x){ return x.key; });
+      return fixedKeys.indexOf(cat.key) === -1;
+    });
+    var list = base.concat(extra);
+    if (!list.length) return;
+    c.innerHTML = list.map(function(cat) {
       return '<div class="photo-cat-card" onclick="APP.openCatPage(\'' + esc(cat.key) + '\',\'' + esc(cat.name) + '\',\'\')">' +
              '  <div class="photo-cat-circle">' +
-             '    <img src="' + cat.img + '" alt="' + cat.name + '" loading="lazy">' +
+             '    <img src="' + cat.img + '" alt="' + esc(cat.name) + '" loading="lazy">' +
              '  </div>' +
              '  <div class="photo-cat-name">' + esc(cat.name) + '</div>' +
              '</div>';
