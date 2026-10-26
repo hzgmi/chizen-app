@@ -7511,6 +7511,21 @@ html[data-theme="light"] body #sc-home #flash-c .fcard-name {
 }
 </style>
 
+<style id="chz-track-v39">
+/* Header really flush to top — kill .st spacer */
+body #sc-home > .st,
+body #sc-home .screen-content > .st { display: none !important; height: 0 !important; min-height: 0 !important; }
+
+body #sc-home .chz-hdr {
+  margin-top: 0 !important;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 6px) !important;
+}
+
+/* Track strip visible with data */
+#chz-track-strip.on { display: flex !important; }
+#chz-track-strip.demo { display: flex !important; background: linear-gradient(135deg, #999, #666) !important; opacity: 0.95; }
+</style>
+
 <style id="chz-track-v38">
 /* ═══ Header flush top ═══ */
 body #sc-home .chz-hdr {
@@ -15522,6 +15537,100 @@ document.addEventListener('keydown', function(e) {
     setTimeout(check, 800);
   }
   setInterval(check, 6000);
+})();
+</script>
+
+<script id="chz-track-v39-js">
+(function(){
+  var STATUS = {
+    pending: { label: 'قيد المراجعة', icon: '⏳' },
+    confirmed: { label: 'تم تأكيد الطلب', icon: '✅' },
+    shipped: { label: 'في الطريق إليك', icon: '🚚' },
+    awaiting_verification: { label: 'بانتظار مراجعة الدفع', icon: '⏳' },
+    awaiting_categories: { label: 'جاري التجهيز', icon: '📦' },
+    ready_to_send: { label: 'جاهز للإرسال', icon: '📤' },
+    sent_to_customer: { label: 'في الطريق إليك', icon: '🚚' },
+    delivered: { label: 'تم التسليم', icon: '🎉' },
+    completed: { label: 'تم التسليم', icon: '🎉' }
+  };
+  var DEBUG = window.location.search.indexOf('track=1') !== -1;
+
+  function showStrip(o, id, s, demo){
+    var strip = document.getElementById('chz-track-strip');
+    if (!strip) return;
+    var icon = strip.querySelector('#chz-track-icon');
+    var sub = strip.querySelector('#chz-track-sub');
+    var title = strip.querySelector('#chz-track-title');
+    if (icon) icon.textContent = s.icon;
+    if (title) title.textContent = demo ? 'تتبع طلبك (تجريبي)' : 'تتبع طلبك';
+    var orderId = o.orderNumber || ('#' + String(id).slice(-6));
+    var total = (o.total || 0).toLocaleString('ar-EG');
+    if (sub) sub.textContent = s.label + ' · ' + orderId + ' · ' + total + ' ر.س';
+    strip.classList.remove('demo');
+    if (demo) strip.classList.add('demo');
+    strip.classList.add('on');
+    strip.onclick = function(){
+      if (window.APP && APP.goTab) APP.goTab('myorders');
+    };
+  }
+
+  function check(){
+    var strip = document.getElementById('chz-track-strip');
+    if (!strip) { setTimeout(check, 600); return; }
+
+    // Test mode: ?track=1 forces demo
+    if (DEBUG) {
+      showStrip({ total: 145, orderNumber: '#DEMO01' }, 'demo01',
+        { label: 'في الطريق إليك', icon: '🚚' }, true);
+      return;
+    }
+
+    if (!window.FB || !window.FB.currentUser || !window.FB.db) {
+      console.log('[track] no user, strip hidden');
+      setTimeout(check, 1500);
+      return;
+    }
+    var uid = window.FB.currentUser.uid;
+    var email = window.FB.currentUser.email || '';
+    var phone = (window.FB.currentUser.phoneNumber || '').replace(/\D/g, '');
+
+    console.log('[track] user:', uid.slice(-8), '| email:', email);
+
+    // Query by customerId first
+    window.FB.db.collection('orders')
+      .where('customerId', '==', uid)
+      .limit(15)
+      .get()
+      .then(function(snap){
+        console.log('[track] customerId query →', snap.size, 'orders');
+        var active = null;
+        snap.forEach(function(doc){
+          var o = doc.data();
+          var st = o.status || 'pending';
+          if (st === 'cancelled' || st === 'completed') return;
+          if (!active) active = { id: doc.id, data: o };
+        });
+        if (!active) {
+          // Try fallback: query ALL orders (only for testing/debug)
+          console.log('[track] no active orders for user');
+          strip.classList.remove('on');
+          return;
+        }
+        var o = active.data;
+        var wf = o.workflowStatus || o.status || 'pending';
+        var s = STATUS[wf] || STATUS[o.status] || { label: 'قيد المعالجة', icon: '📋' };
+        showStrip(o, active.id, s, false);
+        console.log('[track] showing order:', active.id);
+      })
+      .catch(function(e){ console.warn('[track] query error:', e.message); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(check, 800); });
+  } else {
+    setTimeout(check, 800);
+  }
+  setInterval(check, 8000);
 })();
 </script>
 
