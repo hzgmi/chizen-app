@@ -6190,312 +6190,505 @@ html[data-theme="light"] {
 
     
     
-    <!-- BOOKINGS FULL SCREEN V3 -->
-    <div class="screen" id="sc-booking">
-      <div class="hd" style="display:flex; align-items:center; gap:15px; padding:15px; position:sticky; top:0; background: rgba(255,255,255,0.95); backdrop-filter:blur(10px); z-index:100;">
-        <div onclick="APP.goTab('home')" style="cursor:pointer; display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    <!-- ═══ BOOKING SCREEN V22 (Rebuilt) ═══ -->
+<div class="screen" id="sc-booking">
+
+  <!-- HEADER -->
+  <div class="bk-header">
+    <button class="bk-back" onclick="APP.goTab('home')" aria-label="رجوع">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </button>
+    <div class="bk-header-text">
+      <div class="bk-header-title">مركز الحجوزات</div>
+      <div class="bk-header-sub">احجز رحلتك بكل سهولة</div>
+    </div>
+  </div>
+
+  <!-- SERVICE CARDS -->
+  <div class="bk-services" id="service-tabs">
+    <div id="tab-flight" class="bk-service active" data-type="flight" onclick="APP.switchBookingTab('flight')">
+      <div class="bk-service-icon">✈️</div>
+      <div class="bk-service-name">طيران</div>
+      <div class="bk-service-desc">داخلي ودولي</div>
+    </div>
+    <div id="tab-bus" class="bk-service" data-type="bus" onclick="APP.switchBookingTab('bus')">
+      <div class="bk-service-icon">🚌</div>
+      <div class="bk-service-name">باصات</div>
+      <div class="bk-service-desc">رحلات برية</div>
+    </div>
+    <div id="tab-hajj" class="bk-service" data-type="hajj" onclick="APP.switchBookingTab('hajj')">
+      <div class="bk-service-icon">🕋</div>
+      <div class="bk-service-name">حج وعمرة</div>
+      <div class="bk-service-desc">باقات متكاملة</div>
+    </div>
+    <div id="tab-hotel" class="bk-service" data-type="hotel" onclick="APP.switchBookingTab('hotel')">
+      <div class="bk-service-icon">🏨</div>
+      <div class="bk-service-name">فنادق</div>
+      <div class="bk-service-desc">إقامة فاخرة</div>
+    </div>
+  </div>
+
+  <!-- FORMS -->
+  <div class="bk-forms-container">
+
+    <!-- ═══ FLIGHT ═══ -->
+    <div id="form-flight" class="booking-form bk-form active">
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">✈️</span>
+          <span>تفاصيل الرحلة</span>
         </div>
-        <div style="font-weight:900; font-size:20px; color: #1f2937; font-family:'Tajawal',sans-serif;"><span data-i18n="booking.center" data-i18n-ar="مركز الحجوزات">مركز الحجوزات</span></div>
+        <div class="bk-field">
+          <label>شركة الطيران</label>
+          <select id="fly-airline">
+            <option value="yemenia">الخطوط الجوية اليمنية</option>
+            <option value="qutaibi">طيران عدن (القطيبي)</option>
+            <option value="other">أخرى</option>
+          </select>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>من</label>
+            <input id="fly-from" type="text" value="عدن" placeholder="عدن" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')">
+          </div>
+          <div class="bk-field">
+            <label>إلى</label>
+            <input id="fly-to" type="text" placeholder="صنعاء / القاهرة..." oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')">
+          </div>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>التاريخ</label>
+            <input id="fly-date" type="date">
+          </div>
+          <div class="bk-field">
+            <label>المسافرون</label>
+            <input id="fly-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')">
+          </div>
+        </div>
+        <div class="bk-field">
+          <label>الدرجة</label>
+          <select id="fly-class" onchange="APP.updateBookingPrice('flight')">
+            <option value="economy">اقتصادية</option>
+            <option value="business">رجال الأعمال (VIP)</option>
+          </select>
+        </div>
       </div>
-      
-      <div class="booking-tabs" id="service-tabs">
-         <button id="tab-flight" class="booking-tab active" onclick="APP.switchBookingTab('flight')"><span data-i18n="booking.flight_tab" data-i18n-ar="✈️ طيران">✈️ طيران</span></button>
-         <button id="tab-bus" class="booking-tab" onclick="APP.switchBookingTab('bus')"><span data-i18n="booking.bus_tab" data-i18n-ar="🚌 باصات">🚌 باصات</span></button>
-         <button id="tab-hajj" class="booking-tab" onclick="APP.switchBookingTab('hajj')"><span data-i18n="booking.hajj_tab" data-i18n-ar="🕋 حج وعمرة">🕋 حج وعمرة</span></button>
-         <button id="tab-hotel" class="booking-tab" onclick="APP.switchBookingTab('hotel')"><span data-i18n="booking.hotel_tab" data-i18n-ar="🏨 فنادق">🏨 فنادق</span></button>
+
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">👤</span>
+          <span>بيانات المسافر</span>
+        </div>
+        <div class="bk-field">
+          <label>الاسم الكامل (كما في الجواز)</label>
+          <input id="fly-name" type="text" placeholder="الاسم الكامل" autocomplete="name">
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>رقم الجواز</label>
+            <input id="fly-passport" type="text" placeholder="رقم الجواز">
+          </div>
+          <div class="bk-field">
+            <label>رقم الجوال</label>
+            <input id="fly-phone" type="tel" placeholder="7xx xxx xxx" autocomplete="tel">
+          </div>
+        </div>
       </div>
 
-      <div style="padding:0 15px 100px 15px;">
-         <div id="form-flight" class="booking-form active">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.flight_details" data-i18n-ar="✈️ تفاصيل الرحلة">✈️ تفاصيل الرحلة</span></div>
-            <label><span data-i18n="booking.airline" data-i18n-ar="شركة الطيران">شركة الطيران</span></label>
-            <select id="fly-airline">
-               <option value="yemenia">الخطوط الجوية اليمنية</option>
-               <option value="qutaibi">طيران عدن (القطيبي)</option>
-               <option value="other">أخرى</option>
+      <div class="bk-section bk-delivery-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">🚗</span>
+          <span>توصيل داخل عدن</span>
+          <span class="bk-optional">(اختياري)</span>
+        </div>
+        <label class="bk-check">
+          <input type="checkbox" id="delivery-chk-flight" onchange="(function(cb){var f=document.getElementById('delivery-fields-flight');if(cb.checked)f.classList.add('active');else f.classList.remove('active');APP.updateBookingPrice('flight');})(this)">
+          <span>أحتاج توصيل من/إلى الموقع</span>
+        </label>
+        <div class="bk-delivery-fields" id="delivery-fields-flight">
+          <div class="bk-field">
+            <label>من</label>
+            <select id="delivery-from-flight" onchange="APP.updateBookingPrice('flight')">
+                  <option value="">— اختر —</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
             </select>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.from" data-i18n-ar="من">من</span></label><input id="fly-from" type="text" value="عدن" placeholder="من" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.to" data-i18n-ar="إلى">إلى</span></label><input id="fly-to" type="text" placeholder="إلى" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')"></div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.date" data-i18n-ar="التاريخ">التاريخ</span></label><input id="fly-date" type="date"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.passengers" data-i18n-ar="المسافرين">المسافرين</span></label><input id="fly-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')"></div>
-            </div>
-            <label><span data-i18n="booking.class" data-i18n-ar="الدرجة">الدرجة</span></label>
-            <select id="fly-class" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')">
-               <option value="economy">اقتصادية</option>
-               <option value="business">رجال الأعمال (VIP)</option>
+          </div>
+          <div class="bk-field">
+            <label>إلى</label>
+            <select id="delivery-to-flight" onchange="APP.updateBookingPrice('flight')">
+                  <option value="">— اختر —</option>
+                  <option value="airport">✈️ مطار عدن</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
             </select>
-            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="fly-name" type="text" placeholder="الاسم كما في الجواز" data-i18n-placeholder="ph.الاسم كما في الجواز" data-i18n-placeholder-ar="الاسم كما في الجواز">
-            <label><span data-i18n="booking.passport" data-i18n-ar="رقم الجواز">رقم الجواز</span></label><input id="fly-passport" type="text" placeholder="رقم الجواز" data-i18n-placeholder="ph.رقم الجواز" data-i18n-placeholder-ar="رقم الجواز">
-            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="fly-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
-            
-            <!-- التوصيل داخل عدن -->
-            <div class="delivery-box">
-              <label class="dchk">
-                <input type="checkbox" id="delivery-chk-flight" onchange="(function(){var f=document.getElementById('delivery-fields-flight');f.classList.toggle('active',this.checked);APP.updateBookingPrice('flight');})();">
-                🚗 أحتاج توصيل داخل عدن
-              </label>
-              <div class="delivery-fields" id="delivery-fields-flight">
-                <label>من</label>
-                <select id="delivery-from-flight" onchange="APP.updateBookingPrice('flight')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>إلى</label>
-                <select id="delivery-to-flight" onchange="APP.updateBookingPrice('flight')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="airport">✈️ مطار عدن</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>نوع السيارة</label>
-                <select id="delivery-car-flight" onchange="APP.updateBookingPrice('flight')">
-                  <option value="economy">🚗 اقتصادي</option>
-                  <option value="family">🚐 عائلي</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- السعر التقريبي -->
-            <div class="price-preview" id="price-preview-flight"></div>
-            
-            <button onclick="APP.submitFlight()"><span data-i18n="booking.confirm_flight" data-i18n-ar="تأكيد حجز الطيران">تأكيد حجز الطيران</span></button>
-         </div>
-
-         <div id="form-bus" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.bus_details" data-i18n-ar="🚌 تفاصيل رحلة الباص">🚌 تفاصيل رحلة الباص</span></div>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.from" data-i18n-ar="من">من</span></label><input type="text" value="عدن" disabled style="opacity:0.7;"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.to" data-i18n-ar="إلى">إلى</span></label>
-                    <select id="bus-to" oninput="APP.updateBookingPrice('bus')" onchange="APP.updateBookingPrice('bus')">
-                        <option value="صنعاء">صنعاء</option>
-                        <option value="تعز">تعز</option>
-                        <option value="إب">إب</option>
-                        <option value="المكلا">المكلا</option>
-                        <option value="سيئون">سيئون</option>
-                    </select>
-                </div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.date" data-i18n-ar="التاريخ">التاريخ</span></label><input id="bus-date" type="date"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.time" data-i18n-ar="الوقت">الوقت</span></label><input id="bus-time" type="time"></div>
-            </div>
-            <label><span data-i18n="booking.seats" data-i18n-ar="عدد المقاعد">عدد المقاعد</span></label><input id="bus-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('bus')" onchange="APP.updateBookingPrice('bus')">
-            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="bus-name" type="text" placeholder="الاسم" data-i18n-placeholder="ph.الاسم" data-i18n-placeholder-ar="الاسم" data-i18n-placeholder="checkout.name" data-i18n-placeholder-ar="الاسم">
-            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="bus-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
-            
-            <!-- التوصيل داخل عدن -->
-            <div class="delivery-box">
-              <label class="dchk">
-                <input type="checkbox" id="delivery-chk-bus" onchange="(function(){var f=document.getElementById('delivery-fields-bus');f.classList.toggle('active',this.checked);APP.updateBookingPrice('bus');})();">
-                🚗 أحتاج توصيل داخل عدن
-              </label>
-              <div class="delivery-fields" id="delivery-fields-bus">
-                <label>من</label>
-                <select id="delivery-from-bus" onchange="APP.updateBookingPrice('bus')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>إلى</label>
-                <select id="delivery-to-bus" onchange="APP.updateBookingPrice('bus')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="airport">✈️ مطار عدن</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>نوع السيارة</label>
-                <select id="delivery-car-bus" onchange="APP.updateBookingPrice('bus')">
-                  <option value="economy">🚗 اقتصادي</option>
-                  <option value="family">🚐 عائلي</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- السعر التقريبي -->
-            <div class="price-preview" id="price-preview-bus"></div>
-            
-            <button onclick="APP.submitBus()"><span data-i18n="booking.confirm_bus" data-i18n-ar="تأكيد حجز الباص">تأكيد حجز الباص</span></button>
-         </div>
-
-         <div id="form-hajj" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.hajj_details" data-i18n-ar="🕋 رحلات الحج والعمرة">🕋 رحلات الحج والعمرة</span></div>
-            <label><span data-i18n="booking.trip_type" data-i18n-ar="نوع الرحلة">نوع الرحلة</span></label>
-            <select id="hajj-type" oninput="APP.updateBookingPrice('hajj')" onchange="APP.updateBookingPrice('hajj')">
-                <option value="umrah"><span data-i18n="booking.umrah" data-i18n-ar="عمرة">عمرة</span></option>
-                <option value="hajj"><span data-i18n="booking.hajj" data-i18n-ar="حج">حج</span></option>
+          </div>
+          <div class="bk-field">
+            <label>نوع السيارة</label>
+            <select id="delivery-car-flight" onchange="APP.updateBookingPrice('flight')">
+              <option value="economy">🚗 اقتصادي</option>
+              <option value="family">🚐 عائلي</option>
             </select>
-            <label><span data-i18n="booking.travel_date" data-i18n-ar="تاريخ السفر التقريبي">تاريخ السفر التقريبي</span></label><input id="hajj-date" type="date">
-            <label><span data-i18n="booking.people" data-i18n-ar="عدد الأشخاص">عدد الأشخاص</span></label><input id="hajj-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('hajj')" onchange="APP.updateBookingPrice('hajj')">
-            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="hajj-name" type="text" placeholder="الاسم كما في الجواز" data-i18n-placeholder="ph.الاسم كما في الجواز" data-i18n-placeholder-ar="الاسم كما في الجواز">
-            <label><span data-i18n="booking.passport" data-i18n-ar="رقم الجواز">رقم الجواز</span></label><input id="hajj-passport" type="text" placeholder="رقم الجواز" data-i18n-placeholder="ph.رقم الجواز" data-i18n-placeholder-ar="رقم الجواز">
-            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="hajj-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
-            
-            <!-- التوصيل داخل عدن -->
-            <div class="delivery-box">
-              <label class="dchk">
-                <input type="checkbox" id="delivery-chk-hajj" onchange="(function(){var f=document.getElementById('delivery-fields-hajj');f.classList.toggle('active',this.checked);APP.updateBookingPrice('hajj');})();">
-                🚗 أحتاج توصيل داخل عدن
-              </label>
-              <div class="delivery-fields" id="delivery-fields-hajj">
-                <label>من</label>
-                <select id="delivery-from-hajj" onchange="APP.updateBookingPrice('hajj')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>إلى</label>
-                <select id="delivery-to-hajj" onchange="APP.updateBookingPrice('hajj')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="airport">✈️ مطار عدن</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>نوع السيارة</label>
-                <select id="delivery-car-hajj" onchange="APP.updateBookingPrice('hajj')">
-                  <option value="economy">🚗 اقتصادي</option>
-                  <option value="family">🚐 عائلي</option>
-                </select>
-              </div>
-            </div>
+          </div>
+        </div>
+      </div>
 
-            <!-- السعر التقريبي -->
-            <div class="price-preview" id="price-preview-hajj"></div>
-            
-            <button onclick="APP.submitHajj()"><span data-i18n="booking.confirm_hajj" data-i18n-ar="تأكيد الحجز">تأكيد الحجز</span></button>
-         </div>
-
-         <div id="form-hotel" class="booking-form">
-            <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.hotel_details" data-i18n-ar="🏨 تفاصيل الفندق">🏨 تفاصيل الفندق</span></div>
-            <label><span data-i18n="booking.city" data-i18n-ar="المدينة">المدينة</span></label><input id="hotel-city" type="text" placeholder="مثال: القاهرة" data-i18n-placeholder="ph.مثال: القاهرة" data-i18n-placeholder-ar="مثال: القاهرة" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')">
-            <label><span data-i18n="booking.hotel_name" data-i18n-ar="اسم الفندق (إن وجد)">اسم الفندق (إن وجد)</span></label><input id="hotel-name" type="text" placeholder="اسم الفندق">
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.checkin" data-i18n-ar="تاريخ الدخول">تاريخ الدخول</span></label><input id="hotel-in" type="date" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.checkout" data-i18n-ar="تاريخ الخروج">تاريخ الخروج</span></label><input id="hotel-out" type="date" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')"></div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.rooms" data-i18n-ar="الغرف">الغرف</span></label><input id="hotel-rooms" type="number" min="1" value="1" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.guests" data-i18n-ar="الضيوف">الضيوف</span></label><input id="hotel-guests" type="number" min="1" value="1"></div>
-            </div>
-            <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="hotel-client-name" type="text" placeholder="الاسم" data-i18n-placeholder="ph.الاسم" data-i18n-placeholder-ar="الاسم" data-i18n-placeholder="checkout.name" data-i18n-placeholder-ar="الاسم">
-            <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="hotel-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
-            
-            <!-- التوصيل داخل عدن -->
-            <div class="delivery-box">
-              <label class="dchk">
-                <input type="checkbox" id="delivery-chk-hotel" onchange="(function(){var f=document.getElementById('delivery-fields-hotel');f.classList.toggle('active',this.checked);APP.updateBookingPrice('hotel');})();">
-                🚗 أحتاج توصيل داخل عدن
-              </label>
-              <div class="delivery-fields" id="delivery-fields-hotel">
-                <label>من</label>
-                <select id="delivery-from-hotel" onchange="APP.updateBookingPrice('hotel')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>إلى</label>
-                <select id="delivery-to-hotel" onchange="APP.updateBookingPrice('hotel')">
-                  
-                    <option value="">— اختر —</option>
-                    <option value="airport">✈️ مطار عدن</option>
-                    <option value="crater">كريتر</option>
-                    <option value="mansoura">المنصورة</option>
-                    <option value="khormaksar">خور مكسر</option>
-                    <option value="sheikh-othman">الشيخ عثمان</option>
-                    <option value="dar-saad">دار سعد</option>
-                    <option value="boraiga">البريقة</option>
-                    <option value="mualla">المعلا</option>
-                    <option value="tawahi">التواهي</option>
-                    <option value="shab">الشعب</option>
-                </select>
-                <label>نوع السيارة</label>
-                <select id="delivery-car-hotel" onchange="APP.updateBookingPrice('hotel')">
-                  <option value="economy">🚗 اقتصادي</option>
-                  <option value="family">🚐 عائلي</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- السعر التقريبي -->
-            <div class="price-preview" id="price-preview-hotel"></div>
-            
-            <button onclick="APP.submitHotel()"><span data-i18n="booking.confirm_hotel" data-i18n-ar="تأكيد حجز الفندق">تأكيد حجز الفندق</span></button>
-         </div>
+      <div class="bk-footer">
+        <div class="price-preview" id="price-preview-flight"></div>
+        <button class="bk-submit" onclick="APP.submitFlight()">تأكيد حجز الطيران</button>
       </div>
     </div>
 
-    <!-- SUCCESS MODAL -->
-    <div id="booking-success-modal" class="success-modal">
-      <div class="success-card">
-        <div class="success-icon">✓</div>
-        <h2>تم حجزك بنجاح!</h2>
-        <p>لقد استلمنا طلبك، وسيقوم فريقنا بالتواصل معك قريباً لتأكيد التفاصيل وإتمام الدفع.</p>
-        <button onclick="APP.closeSuccessModal()">العودة للرئيسية</button>
+    <!-- ═══ BUS ═══ -->
+    <div id="form-bus" class="booking-form bk-form">
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">🚌</span>
+          <span>تفاصيل الرحلة</span>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>من</label>
+            <input type="text" value="عدن" disabled>
+          </div>
+          <div class="bk-field">
+            <label>إلى</label>
+            <select id="bus-to" onchange="APP.updateBookingPrice('bus')">
+              <option value="صنعاء">صنعاء</option>
+              <option value="تعز">تعز</option>
+              <option value="إب">إب</option>
+              <option value="المكلا">المكلا</option>
+              <option value="سيئون">سيئون</option>
+              <option value="الحديدة">الحديدة</option>
+            </select>
+          </div>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>التاريخ</label>
+            <input id="bus-date" type="date">
+          </div>
+          <div class="bk-field">
+            <label>الوقت</label>
+            <input id="bus-time" type="time">
+          </div>
+        </div>
+        <div class="bk-field">
+          <label>عدد المقاعد</label>
+          <input id="bus-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('bus')" onchange="APP.updateBookingPrice('bus')">
+        </div>
+      </div>
+
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">👤</span>
+          <span>بيانات المسافر</span>
+        </div>
+        <div class="bk-field">
+          <label>الاسم الكامل</label>
+          <input id="bus-name" type="text" placeholder="الاسم الكامل" autocomplete="name">
+        </div>
+        <div class="bk-field">
+          <label>رقم الجوال</label>
+          <input id="bus-phone" type="tel" placeholder="7xx xxx xxx" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="bk-section bk-delivery-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">🚗</span>
+          <span>توصيل داخل عدن</span>
+          <span class="bk-optional">(اختياري)</span>
+        </div>
+        <label class="bk-check">
+          <input type="checkbox" id="delivery-chk-bus" onchange="(function(cb){var f=document.getElementById('delivery-fields-bus');if(cb.checked)f.classList.add('active');else f.classList.remove('active');APP.updateBookingPrice('bus');})(this)">
+          <span>أحتاج توصيل من/إلى الموقع</span>
+        </label>
+        <div class="bk-delivery-fields" id="delivery-fields-bus">
+          <div class="bk-field">
+            <label>من</label>
+            <select id="delivery-from-bus" onchange="APP.updateBookingPrice('bus')">
+                  <option value="">— اختر —</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
+            </select>
+          </div>
+          <div class="bk-field">
+            <label>إلى</label>
+            <select id="delivery-to-bus" onchange="APP.updateBookingPrice('bus')">
+                  <option value="">— اختر —</option>
+                  <option value="airport">✈️ مطار عدن</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
+            </select>
+          </div>
+          <div class="bk-field">
+            <label>نوع السيارة</label>
+            <select id="delivery-car-bus" onchange="APP.updateBookingPrice('bus')">
+              <option value="economy">🚗 اقتصادي</option>
+              <option value="family">🚐 عائلي</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bk-footer">
+        <div class="price-preview" id="price-preview-bus"></div>
+        <button class="bk-submit" onclick="APP.submitBus()">تأكيد حجز الباص</button>
       </div>
     </div>
 
-    <!-- DETAILS -->
-    <div class="screen" id="sc-details"><div id="related-products"></div>
+    <!-- ═══ HAJJ ═══ -->
+    <div id="form-hajj" class="booking-form bk-form">
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">🕋</span>
+          <span>تفاصيل الرحلة</span>
+        </div>
+        <div class="bk-field">
+          <label>نوع الرحلة</label>
+          <select id="hajj-type" onchange="APP.updateBookingPrice('hajj')">
+            <option value="umrah">عمرة</option>
+            <option value="hajj">حج</option>
+          </select>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>تاريخ السفر التقريبي</label>
+            <input id="hajj-date" type="date">
+          </div>
+          <div class="bk-field">
+            <label>عدد الأشخاص</label>
+            <input id="hajj-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('hajj')" onchange="APP.updateBookingPrice('hajj')">
+          </div>
+        </div>
+      </div>
+
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">👤</span>
+          <span>بيانات المسافر</span>
+        </div>
+        <div class="bk-field">
+          <label>الاسم الكامل (كما في الجواز)</label>
+          <input id="hajj-name" type="text" placeholder="الاسم الكامل" autocomplete="name">
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>رقم الجواز</label>
+            <input id="hajj-passport" type="text" placeholder="رقم الجواز">
+          </div>
+          <div class="bk-field">
+            <label>رقم الجوال</label>
+            <input id="hajj-phone" type="tel" placeholder="7xx xxx xxx" autocomplete="tel">
+          </div>
+        </div>
+      </div>
+
+      <div class="bk-section bk-delivery-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">🚗</span>
+          <span>توصيل داخل عدن</span>
+          <span class="bk-optional">(اختياري)</span>
+        </div>
+        <label class="bk-check">
+          <input type="checkbox" id="delivery-chk-hajj" onchange="(function(cb){var f=document.getElementById('delivery-fields-hajj');if(cb.checked)f.classList.add('active');else f.classList.remove('active');APP.updateBookingPrice('hajj');})(this)">
+          <span>أحتاج توصيل من/إلى الموقع</span>
+        </label>
+        <div class="bk-delivery-fields" id="delivery-fields-hajj">
+          <div class="bk-field">
+            <label>من</label>
+            <select id="delivery-from-hajj" onchange="APP.updateBookingPrice('hajj')">
+                  <option value="">— اختر —</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
+            </select>
+          </div>
+          <div class="bk-field">
+            <label>إلى</label>
+            <select id="delivery-to-hajj" onchange="APP.updateBookingPrice('hajj')">
+                  <option value="">— اختر —</option>
+                  <option value="airport">✈️ مطار عدن</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
+            </select>
+          </div>
+          <div class="bk-field">
+            <label>نوع السيارة</label>
+            <select id="delivery-car-hajj" onchange="APP.updateBookingPrice('hajj')">
+              <option value="economy">🚗 اقتصادي</option>
+              <option value="family">🚐 عائلي</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bk-footer">
+        <div class="price-preview" id="price-preview-hajj"></div>
+        <button class="bk-submit" onclick="APP.submitHajj()">تأكيد الحجز</button>
+      </div>
+    </div>
+
+    <!-- ═══ HOTEL ═══ -->
+    <div id="form-hotel" class="booking-form bk-form">
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">🏨</span>
+          <span>تفاصيل الإقامة</span>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>المدينة</label>
+            <input id="hotel-city" type="text" placeholder="مكة / القاهرة..." oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')">
+          </div>
+          <div class="bk-field">
+            <label>اسم الفندق (اختياري)</label>
+            <input id="hotel-name" type="text" placeholder="اسم الفندق">
+          </div>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>تاريخ الدخول</label>
+            <input id="hotel-in" type="date" onchange="APP.updateBookingPrice('hotel')">
+          </div>
+          <div class="bk-field">
+            <label>تاريخ الخروج</label>
+            <input id="hotel-out" type="date" onchange="APP.updateBookingPrice('hotel')">
+          </div>
+        </div>
+        <div class="bk-row">
+          <div class="bk-field">
+            <label>عدد الغرف</label>
+            <input id="hotel-rooms" type="number" min="1" value="1" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')">
+          </div>
+          <div class="bk-field">
+            <label>عدد الضيوف</label>
+            <input id="hotel-guests" type="number" min="1" value="1">
+          </div>
+        </div>
+      </div>
+
+      <div class="bk-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">👤</span>
+          <span>بيانات الضيف</span>
+        </div>
+        <div class="bk-field">
+          <label>الاسم الكامل</label>
+          <input id="hotel-client-name" type="text" placeholder="الاسم الكامل" autocomplete="name">
+        </div>
+        <div class="bk-field">
+          <label>رقم الجوال</label>
+          <input id="hotel-phone" type="tel" placeholder="7xx xxx xxx" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="bk-section bk-delivery-section">
+        <div class="bk-section-title">
+          <span class="bk-section-icon">🚗</span>
+          <span>توصيل داخل عدن</span>
+          <span class="bk-optional">(اختياري)</span>
+        </div>
+        <label class="bk-check">
+          <input type="checkbox" id="delivery-chk-hotel" onchange="(function(cb){var f=document.getElementById('delivery-fields-hotel');if(cb.checked)f.classList.add('active');else f.classList.remove('active');APP.updateBookingPrice('hotel');})(this)">
+          <span>أحتاج توصيل من/إلى الموقع</span>
+        </label>
+        <div class="bk-delivery-fields" id="delivery-fields-hotel">
+          <div class="bk-field">
+            <label>من</label>
+            <select id="delivery-from-hotel" onchange="APP.updateBookingPrice('hotel')">
+                  <option value="">— اختر —</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
+            </select>
+          </div>
+          <div class="bk-field">
+            <label>إلى</label>
+            <select id="delivery-to-hotel" onchange="APP.updateBookingPrice('hotel')">
+                  <option value="">— اختر —</option>
+                  <option value="airport">✈️ مطار عدن</option>
+                  <option value="crater">كريتر</option>
+                  <option value="mansoura">المنصورة</option>
+                  <option value="khormaksar">خور مكسر</option>
+                  <option value="sheikh-othman">الشيخ عثمان</option>
+                  <option value="dar-saad">دار سعد</option>
+                  <option value="boraiga">البريقة</option>
+                  <option value="mualla">المعلا</option>
+                  <option value="tawahi">التواهي</option>
+                  <option value="shab">الشعب</option>
+            </select>
+          </div>
+          <div class="bk-field">
+            <label>نوع السيارة</label>
+            <select id="delivery-car-hotel" onchange="APP.updateBookingPrice('hotel')">
+              <option value="economy">🚗 اقتصادي</option>
+              <option value="family">🚐 عائلي</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="bk-footer">
+        <div class="price-preview" id="price-preview-hotel"></div>
+        <button class="bk-submit" onclick="APP.submitHotel()">تأكيد حجز الفندق</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="screen" id="sc-details"><div id="related-products"></div>
       <div class="st"></div>
       <div class="det-i" id="det-img"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
       <div class="det-b">
@@ -7142,316 +7335,7 @@ html:not([data-theme="light"]) .det-thumb.active {
 }
 </style>
 
-<style id="chz-booking-v21-css">
-/* ═══ BOOKING PAGE — Premium v21 ═══ */
-#sc-booking {
-  padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)) !important;
-}
 
-/* Header */
-#sc-booking .hd {
-  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 55%, #7c3aed 100%) !important;
-  backdrop-filter: none !important;
-  box-shadow: 0 6px 24px rgba(255,77,148,0.28) !important;
-  padding: 18px 16px !important;
-  border-radius: 0 0 24px 24px;
-}
-#sc-booking .hd > div[style*="font-weight:900"] {
-  color: #fff !important;
-  font-size: 19px !important;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-#sc-booking .hd > div[onclick] {
-  background: rgba(255,255,255,0.2) !important;
-  border: 1px solid rgba(255,255,255,0.3) !important;
-  -webkit-tap-highlight-color: transparent;
-}
-#sc-booking .hd > div[onclick] svg { stroke: #fff !important; }
-#sc-booking .hd > div[onclick]:active { transform: scale(0.92); }
-
-/* Service cards */
-.bk-services {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 16px;
-  direction: rtl;
-}
-.bk-service {
-  padding: 16px 14px;
-  background: linear-gradient(180deg, rgba(30,36,56,0.95), rgba(24,29,48,0.95));
-  border: 1.5px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s ease;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
-  overflow: hidden;
-}
-html[data-theme="light"] .bk-service {
-  background: linear-gradient(180deg, #ffffff, #fafaff);
-  border-color: rgba(124,58,237,0.12);
-  box-shadow: 0 4px 16px rgba(124,58,237,0.06);
-}
-.bk-service:active { transform: scale(0.96); }
-.bk-service.active {
-  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 55%, #7c3aed 100%);
-  border-color: transparent;
-  box-shadow: 0 8px 24px rgba(255,77,148,0.35), 0 1px 0 rgba(255,255,255,0.2) inset;
-}
-.bk-service-icon {
-  font-size: 28px;
-  line-height: 1;
-  margin-bottom: 8px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-}
-.bk-service-name {
-  font-size: 14px;
-  font-weight: 900;
-  color: #fff;
-  font-family: 'Tajawal', sans-serif;
-  margin-bottom: 3px;
-}
-html[data-theme="light"] .bk-service:not(.active) .bk-service-name { color: #1a1a2e; }
-.bk-service-desc {
-  font-size: 10px;
-  color: rgba(255,255,255,0.65);
-  font-weight: 600;
-}
-html[data-theme="light"] .bk-service:not(.active) .bk-service-desc { color: #6b7280; }
-.bk-service.active .bk-service-name,
-.bk-service.active .bk-service-desc { color: #fff !important; }
-
-/* Form wrapper */
-#sc-booking > div[style*="padding:0 15px 100px"] {
-  padding: 8px 14px calc(150px + env(safe-area-inset-bottom, 0px)) 14px !important;
-}
-
-/* Section titles in forms (inserted via ::before) */
-.booking-form > div[style*="font-size:20px"][style*="font-weight:900"] {
-  font-size: 15px !important;
-  font-weight: 900 !important;
-  color: #ff4d94 !important;
-  margin-bottom: 16px !important;
-  padding-bottom: 12px !important;
-  border-bottom: 2px solid rgba(255,77,148,0.15) !important;
-  display: flex !important;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Tajawal', sans-serif;
-}
-
-/* Bigger, premium form background */
-.booking-form {
-  background: linear-gradient(180deg, rgba(26,21,53,0.98) 0%, rgba(15,10,36,0.98) 100%) !important;
-  border: 1px solid rgba(255,77,148,0.12) !important;
-  border-radius: 24px !important;
-  padding: 22px 18px !important;
-  box-shadow: 0 12px 44px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.05) inset !important;
-}
-html[data-theme="light"] .booking-form {
-  background: linear-gradient(180deg, #ffffff, #fafaff) !important;
-  border-color: rgba(124,58,237,0.15) !important;
-  box-shadow: 0 10px 32px rgba(124,58,237,0.08) !important;
-}
-
-/* Inputs — premium */
-.booking-form input,
-.booking-form select {
-  background: rgba(10,14,26,0.85) !important;
-  color: #fff !important;
-  border: 1.5px solid rgba(255,77,148,0.12) !important;
-  border-radius: 14px !important;
-  padding: 14px 16px !important;
-  font-size: 14px !important;
-  font-family: 'Tajawal', sans-serif !important;
-  margin-bottom: 14px !important;
-  transition: all .2s ease !important;
-  -webkit-appearance: none !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  font-weight: 600 !important;
-}
-html[data-theme="light"] .booking-form input,
-html[data-theme="light"] .booking-form select {
-  background: #f8fafc !important;
-  color: #1a1a2e !important;
-  border-color: #e2e8f0 !important;
-}
-.booking-form input::placeholder { color: rgba(255,255,255,0.35) !important; }
-html[data-theme="light"] .booking-form input::placeholder { color: #9ca3af !important; }
-.booking-form input:focus,
-.booking-form select:focus {
-  border-color: #ff4d94 !important;
-  box-shadow: 0 0 0 4px rgba(255,77,148,0.15) !important;
-  outline: none !important;
-  background: rgba(20,15,40,0.95) !important;
-}
-html[data-theme="light"] .booking-form input:focus,
-html[data-theme="light"] .booking-form select:focus {
-  background: #ffffff !important;
-  box-shadow: 0 0 0 4px rgba(255,77,148,0.1) !important;
-}
-.booking-form select option {
-  background: #1a1535 !important;
-  color: #fff !important;
-  padding: 10px !important;
-}
-html[data-theme="light"] .booking-form select option {
-  background: #fff !important;
-  color: #1a1a2e !important;
-}
-
-/* Labels */
-.booking-form label {
-  display: block !important;
-  font-size: 11.5px !important;
-  color: rgba(255,255,255,0.7) !important;
-  font-weight: 800 !important;
-  margin-bottom: 6px !important;
-  padding-right: 4px;
-  font-family: 'Tajawal', sans-serif !important;
-  letter-spacing: 0.2px;
-}
-html[data-theme="light"] .booking-form label { color: #4b5563 !important; }
-
-/* Two-column rows */
-.booking-form > div[style*="display:flex"][style*="gap:10px"] {
-  gap: 10px !important;
-  margin-bottom: 0 !important;
-}
-.booking-form > div[style*="display:flex"][style*="gap:10px"] > div {
-  flex: 1 !important;
-  min-width: 0 !important;
-}
-
-/* Delivery box */
-.delivery-box {
-  margin-top: 18px !important;
-  padding: 16px !important;
-  background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(255,77,148,0.08)) !important;
-  border: 1.5px dashed rgba(168,85,247,0.4) !important;
-  border-radius: 16px !important;
-}
-html[data-theme="light"] .delivery-box {
-  background: linear-gradient(135deg, rgba(168,85,247,0.06), rgba(255,77,148,0.04)) !important;
-}
-.delivery-box .dchk {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  cursor: pointer !important;
-  font-weight: 900 !important;
-  font-size: 13.5px !important;
-  color: #a855f7 !important;
-  margin: 0 !important;
-}
-.delivery-box .dchk input {
-  width: 22px !important;
-  height: 22px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  accent-color: #a855f7;
-  flex-shrink: 0;
-}
-.delivery-fields {
-  margin-top: 14px !important;
-  display: none !important;
-}
-.delivery-fields.active {
-  display: block !important;
-  animation: bkFadeIn .35s ease;
-}
-@keyframes bkFadeIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Price preview — sticky bar */
-.price-preview {
-  display: none;
-  margin-top: 16px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, rgba(255,77,148,0.15), rgba(168,85,247,0.15));
-  border: 1.5px solid rgba(255,77,148,0.35);
-  animation: bkFadeIn .3s ease;
-}
-.price-preview .pp-row {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  color: #fff !important;
-}
-.price-preview .pp-row b {
-  font-size: 22px !important;
-  background: linear-gradient(135deg, #ff4d94, #a855f7);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: 'Tajawal', sans-serif;
-}
-html[data-theme="light"] .price-preview .pp-row { color: #1a1a2e !important; }
-.price-preview .pp-detail {
-  font-size: 11.5px;
-  color: rgba(255,255,255,0.7);
-  margin-top: 6px;
-  display: flex;
-  justify-content: space-between;
-}
-html[data-theme="light"] .price-preview .pp-detail { color: #6b7280; }
-.price-preview .pp-note {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px dashed rgba(255,77,148,0.3);
-  font-size: 10.5px;
-  color: rgba(255,255,255,0.65);
-  text-align: center;
-  line-height: 1.4;
-}
-html[data-theme="light"] .price-preview .pp-note { color: #6b7280; }
-
-/* Submit button */
-.booking-form button[onclick*="submit"] {
-  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 55%, #7c3aed 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 16px !important;
-  padding: 17px 24px !important;
-  font-weight: 900 !important;
-  font-size: 15px !important;
-  font-family: 'Tajawal', sans-serif !important;
-  letter-spacing: 0.3px !important;
-  box-shadow: 0 10px 30px rgba(255,77,148,0.4), 0 1px 0 rgba(255,255,255,0.2) inset !important;
-  transition: transform .15s ease, box-shadow .15s ease !important;
-  margin-top: 20px !important;
-  width: 100% !important;
-  cursor: pointer !important;
-  -webkit-tap-highlight-color: transparent !important;
-  position: relative;
-  overflow: hidden;
-}
-.booking-form button[onclick*="submit"]:active {
-  transform: scale(0.97) !important;
-  box-shadow: 0 4px 16px rgba(255,77,148,0.5) !important;
-}
-.booking-form button[onclick*="submit"]:disabled {
-  opacity: 0.6 !important;
-  cursor: not-allowed !important;
-}
-
-/* Responsive */
-@media (max-width: 359px) {
-  .bk-services { gap: 8px; padding: 12px; }
-  .bk-service { padding: 12px 8px; }
-  .bk-service-icon { font-size: 24px; }
-  .bk-service-name { font-size: 12px; }
-  .bk-service-desc { font-size: 9px; }
-}
-</style>
 
 <style id="chz-booking-v20-css">
 /* ═══ Booking Form — Premium ═══ */
@@ -7613,6 +7497,390 @@ html[data-theme="light"] .booking-tab {
   border-color: transparent !important;
   box-shadow: 0 6px 20px rgba(255,77,148,0.35) !important;
   transform: translateY(-1px);
+}
+</style>
+
+<style id="chz-booking-v22-css">
+/* ═════ BOOKING V22 — FULL PREMIUM REDESIGN ═════ */
+#sc-booking {
+  background: linear-gradient(180deg, #0a0e1a 0%, #0f1424 100%) !important;
+  padding: 0 0 calc(90px + env(safe-area-inset-bottom, 0px)) 0 !important;
+  min-height: 100vh;
+}
+html[data-theme="light"] #sc-booking {
+  background: linear-gradient(180deg, #f5f7fb 0%, #eef2ff 100%) !important;
+}
+
+/* Hide old CSS artifacts */
+#sc-booking .booking-tabs,
+#sc-booking .booking-tab,
+#sc-booking .delivery-box,
+#sc-booking .booking-form > div[style*="font-size:20px"] {
+  display: none !important;
+}
+
+/* ═══ HEADER ═══ */
+.bk-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) 18px 20px;
+  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 55%, #7c3aed 100%);
+  border-radius: 0 0 28px 28px;
+  box-shadow: 0 10px 40px rgba(255,77,148,0.28);
+  position: relative;
+  overflow: hidden;
+}
+.bk-header::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -20%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%);
+  pointer-events: none;
+}
+.bk-back {
+  width: 42px; height: 42px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.28);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+  color: #fff;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.bk-back:active { transform: scale(0.92); background: rgba(255,255,255,0.28); }
+.bk-back svg { width: 20px; height: 20px; }
+.bk-header-text { flex: 1; min-width: 0; }
+.bk-header-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  margin-bottom: 2px;
+}
+.bk-header-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+  font-weight: 600;
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* ═══ SERVICE CARDS ═══ */
+.bk-services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 20px 16px 8px;
+  direction: rtl;
+}
+.bk-service {
+  padding: 18px 12px;
+  background: linear-gradient(180deg, rgba(30,36,56,0.95), rgba(24,29,48,0.95));
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+html[data-theme="light"] .bk-service {
+  background: linear-gradient(180deg, #ffffff, #fafaff);
+  border-color: rgba(124,58,237,0.12);
+  box-shadow: 0 4px 16px rgba(124,58,237,0.06);
+}
+.bk-service:active { transform: scale(0.96); }
+.bk-service.active {
+  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 55%, #7c3aed 100%);
+  border-color: transparent;
+  box-shadow: 0 10px 28px rgba(255,77,148,0.35);
+}
+.bk-service-icon {
+  font-size: 30px;
+  line-height: 1;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+.bk-service-name {
+  font-size: 14px;
+  font-weight: 900;
+  color: #e8ecf5;
+  font-family: 'Tajawal', sans-serif;
+  margin-bottom: 3px;
+}
+html[data-theme="light"] .bk-service-name { color: #1a1a2e; }
+.bk-service-desc {
+  font-size: 10px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 600;
+}
+html[data-theme="light"] .bk-service-desc { color: #6b7280; }
+.bk-service.active .bk-service-name,
+.bk-service.active .bk-service-desc { color: #fff !important; }
+
+/* ═══ FORMS CONTAINER ═══ */
+.bk-forms-container {
+  padding: 12px 14px calc(20px + env(safe-area-inset-bottom, 0px));
+}
+.booking-form.bk-form {
+  display: none;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.booking-form.bk-form.active {
+  display: block;
+  animation: bkFadeIn .3s ease;
+}
+@keyframes bkFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══ SECTIONS ═══ */
+.bk-section {
+  background: linear-gradient(180deg, rgba(26,21,53,0.98), rgba(15,10,36,0.98));
+  border: 1px solid rgba(255,77,148,0.12);
+  border-radius: 22px;
+  padding: 18px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+}
+html[data-theme="light"] .bk-section {
+  background: #ffffff;
+  border-color: rgba(124,58,237,0.1);
+  box-shadow: 0 6px 24px rgba(124,58,237,0.06);
+}
+.bk-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #ff4d94;
+  font-family: 'Tajawal', sans-serif;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid rgba(255,77,148,0.15);
+}
+.bk-section-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.bk-optional {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+  margin-right: auto;
+}
+html[data-theme="light"] .bk-optional { color: #9ca3af; }
+
+/* ═══ FIELDS ═══ */
+.bk-field {
+  margin-bottom: 12px;
+}
+.bk-field:last-child { margin-bottom: 0; }
+.bk-field label {
+  display: block;
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.72);
+  font-weight: 800;
+  margin-bottom: 7px;
+  padding-right: 2px;
+  font-family: 'Tajawal', sans-serif;
+  letter-spacing: 0.2px;
+}
+html[data-theme="light"] .bk-field label { color: #4b5563; }
+.bk-field input,
+.bk-field select {
+  width: 100% !important;
+  padding: 14px 16px !important;
+  background: rgba(10,14,26,0.85) !important;
+  color: #fff !important;
+  border: 1.5px solid rgba(255,77,148,0.12) !important;
+  border-radius: 14px !important;
+  font-size: 14px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-weight: 600 !important;
+  transition: all .2s ease !important;
+  box-sizing: border-box !important;
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+html[data-theme="light"] .bk-field input,
+html[data-theme="light"] .bk-field select {
+  background: #f8fafc !important;
+  color: #1a1a2e !important;
+  border-color: #e2e8f0 !important;
+}
+.bk-field input::placeholder { color: rgba(255,255,255,0.35) !important; }
+html[data-theme="light"] .bk-field input::placeholder { color: #9ca3af !important; }
+.bk-field input:focus,
+.bk-field select:focus {
+  border-color: #ff4d94 !important;
+  box-shadow: 0 0 0 4px rgba(255,77,148,0.14) !important;
+  outline: none !important;
+  background: rgba(20,15,40,0.95) !important;
+}
+html[data-theme="light"] .bk-field input:focus,
+html[data-theme="light"] .bk-field select:focus {
+  background: #fff !important;
+  box-shadow: 0 0 0 4px rgba(255,77,148,0.1) !important;
+}
+.bk-field input:disabled,
+.bk-field select:disabled {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+}
+.bk-field select option {
+  background: #1a1535 !important;
+  color: #fff !important;
+}
+html[data-theme="light"] .bk-field select option {
+  background: #fff !important;
+  color: #1a1a2e !important;
+}
+
+/* Rows */
+.bk-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ═══ DELIVERY SECTION ═══ */
+.bk-delivery-section {
+  background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(255,77,148,0.06));
+  border: 1.5px dashed rgba(168,85,247,0.35);
+}
+html[data-theme="light"] .bk-delivery-section {
+  background: linear-gradient(135deg, rgba(168,85,247,0.05), rgba(255,77,148,0.03));
+}
+.bk-check {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 900 !important;
+  font-size: 13.5px !important;
+  color: #a855f7 !important;
+  margin: 0 !important;
+  padding: 4px 0;
+  font-family: 'Tajawal', sans-serif;
+}
+.bk-check input {
+  width: 22px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  accent-color: #a855f7 !important;
+  flex-shrink: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.bk-delivery-fields {
+  display: none;
+  margin-top: 14px;
+}
+.bk-delivery-fields.active {
+  display: block;
+  animation: bkFadeIn .3s ease;
+}
+
+/* ═══ FOOTER (price + submit) ═══ */
+.bk-footer {
+  margin-top: 20px;
+}
+.price-preview {
+  display: none;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255,77,148,0.15), rgba(168,85,247,0.15));
+  border: 1.5px solid rgba(255,77,148,0.35);
+  margin-bottom: 14px;
+  animation: bkFadeIn .3s ease;
+}
+.price-preview .pp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+}
+.price-preview .pp-row b {
+  font-size: 22px;
+  background: linear-gradient(135deg, #ff4d94, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html[data-theme="light"] .price-preview .pp-row { color: #1a1a2e; }
+.price-preview .pp-detail {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+html[data-theme="light"] .price-preview .pp-detail { color: #6b7280; }
+.price-preview .pp-note {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255,77,148,0.3);
+  font-size: 10.5px;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  line-height: 1.4;
+}
+html[data-theme="light"] .price-preview .pp-note { color: #6b7280; }
+
+/* Submit */
+.bk-submit {
+  width: 100% !important;
+  padding: 18px 24px !important;
+  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 55%, #7c3aed 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 18px !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  font-family: 'Tajawal', sans-serif !important;
+  letter-spacing: 0.3px !important;
+  box-shadow: 0 12px 32px rgba(255,77,148,0.4), 0 1px 0 rgba(255,255,255,0.25) inset !important;
+  transition: transform .15s ease, box-shadow .15s ease !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+  margin: 0 !important;
+}
+.bk-submit:active {
+  transform: scale(0.97) !important;
+  box-shadow: 0 6px 18px rgba(255,77,148,0.5) !important;
+}
+.bk-submit:disabled {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+}
+
+/* Responsive */
+@media (max-width: 359px) {
+  .bk-services { gap: 8px; padding: 16px 12px 6px; }
+  .bk-service { padding: 14px 8px; border-radius: 16px; }
+  .bk-service-icon { font-size: 24px; }
+  .bk-service-name { font-size: 12px; }
+  .bk-service-desc { font-size: 9px; }
+  .bk-header-title { font-size: 17px; }
+  .bk-header-sub { font-size: 11px; }
+  .bk-row { grid-template-columns: 1fr; }
 }
 </style>
 
