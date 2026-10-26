@@ -6768,7 +6768,7 @@ html:not([data-theme="light"]) #bottom-nav.chz-bottom-nav-v64 {
 #bottom-nav .bn-item[data-tab="home"].active { color: #FF3D9A !important; }
 #bottom-nav .bn-item[data-tab="booking"].active { color: #9B4DFF !important; }
 #bottom-nav .bn-item[data-tab="commerce"].active { color: #10b981 !important; }
-#bottom-nav .bn-item[data-tab="orders"].active { color: #4D8CFF !important; }
+#bottom-nav .bn-item[data-tab="cart"].active { color: #4D8CFF !important; }
 #bottom-nav .bn-item[data-tab="profile"].active { color: #6b7280 !important; }
 
 /* Non-active hover state on mobile */
@@ -6887,6 +6887,10 @@ body.chz-auth-ok {
 
     <!-- LEFT SIDE (Icons) - الأيقونات على اليسار -->
     <div class="chz-icons-group">
+      <div class="chz-icon-box" onclick="APP.toggleThemeMode()" title="الوضع الداكن/الفاتح">
+        <svg class="chz-moon-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="chz-sun-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </div>
       <div class="chz-icon-box" onclick="APP.goTab('notifications')">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="chz-badge" id="notif-badge" style="display:none;">0</span>
@@ -6895,9 +6899,9 @@ body.chz-auth-ok {
         <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         <span class="chz-badge" id="wishlist-badge" style="display:none;">0</span>
       </div>
-      <div class="chz-icon-box" onclick="APP.goTab('cart')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span class="chz-badge" id="cart-badge" style="display:none;">0</span>
+      <div class="chz-icon-box" onclick="APP.goTab('orders')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+        <span class="chz-badge" id="orders-badge-header" style="display:none;">0</span>
       </div>
     </div>
 
@@ -12295,12 +12299,12 @@ window.addEventListener('load', function() {
     <span class="bn-label">حراج شيزن</span>
   </button>
 
-  <button class="bn-item" data-tab="orders" onclick="APP.goTab('orders', this)">
+  <button class="bn-item" data-tab="cart" onclick="APP.goTab('cart', this)">
     <div class="bn-icon-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-      <span class="bn-badge" id="bn-badge-orders" style="display:none">0</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="bn-badge" id="bn-badge-cart" style="display:none">0</span>
     </div>
-    <span class="bn-label">طلباتي</span>
+    <span class="bn-label">السلة</span>
   </button>
 
   <button class="bn-item" data-tab="profile" onclick="APP.goTab('profile', this)">
@@ -18519,14 +18523,25 @@ document.addEventListener('keydown', function(e) {
     if (!window.FB || !FB.currentUser || !FB.db) return;
     var uid = FB.currentUser.uid;
     try {
-      // 1) Orders — active
+      // 1) Cart — from localStorage
+      try {
+        var cart = JSON.parse(localStorage.getItem('chizen_cart') || '[]');
+        var cartCount = cart.reduce(function(s, i){ return s + (i.qty || 1); }, 0);
+        updateNavBadge('cart', cartCount);
+      } catch(e) {}
+      
+      // 1b) Orders badge in HEADER
       var ordSnap = await FB.db.collection('orders').where('customerId', '==', uid).limit(50).get();
       var activeOrders = 0;
       ordSnap.forEach(function(d){
         var s = d.data().status || 'pending';
         if (s !== 'cancelled' && s !== 'completed' && s !== 'delivered') activeOrders++;
       });
-      updateNavBadge('orders', activeOrders);
+      var ordBadge = document.getElementById('orders-badge-header');
+      if (ordBadge) {
+        if (activeOrders > 0) { ordBadge.textContent = activeOrders > 99 ? '99+' : activeOrders; ordBadge.style.display = 'flex'; }
+        else { ordBadge.style.display = 'none'; }
+      }
       
       // 2) Commerce — my active listings
       var lstSnap = await FB.db.collection('listings')
@@ -18577,6 +18592,43 @@ document.addEventListener('keydown', function(e) {
   setTimeout(hookCommerce, 1500);
 
   console.log('[nav v64] ready');
+})();
+</script>
+
+<script id="chz-theme-toggle-v66">
+(function(){
+  'use strict';
+  function updateIcons(){
+    var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    var moons = document.querySelectorAll('.chz-moon-icon');
+    var suns = document.querySelectorAll('.chz-sun-icon');
+    if (theme === 'light') {
+      moons.forEach(function(m){ m.style.display = 'none'; });
+      suns.forEach(function(s){ s.style.display = 'block'; });
+    } else {
+      moons.forEach(function(m){ m.style.display = 'block'; });
+      suns.forEach(function(s){ s.style.display = 'none'; });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateIcons);
+  } else {
+    updateIcons();
+  }
+  // Hook toggleThemeMode to refresh icons after toggle
+  var check = setInterval(function(){
+    if (window.APP && window.APP.toggleThemeMode && !window.APP._themeHooked) {
+      var orig = window.APP.toggleThemeMode;
+      window.APP.toggleThemeMode = function(){
+        orig.call(this);
+        setTimeout(updateIcons, 100);
+      };
+      window.APP._themeHooked = true;
+      clearInterval(check);
+    }
+  }, 500);
+  // Also watch theme attribute changes
+  new MutationObserver(updateIcons).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
 </script>
 
