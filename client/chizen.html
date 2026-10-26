@@ -15756,5 +15756,168 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-track-v41-js">
+(function(){
+  'use strict';
+  var STATUS = {
+    pending: { label: 'قيد المراجعة', icon: '⏳' },
+    confirmed: { label: 'تم تأكيد الطلب', icon: '✅' },
+    shipped: { label: 'في الطريق إليك', icon: '🚚' },
+    awaiting_verification: { label: 'بانتظار مراجعة الدفع', icon: '⏳' },
+    awaiting_categories: { label: 'جاري التجهيز', icon: '📦' },
+    ready_to_send: { label: 'جاهز للإرسال', icon: '📤' },
+    sent_to_customer: { label: 'في الطريق إليك', icon: '🚚' },
+    delivered: { label: 'تم التسليم', icon: '🎉' },
+    completed: { label: 'تم التسليم', icon: '🎉' }
+  };
+  var DEBUG = window.location.search.indexOf('track=1') !== -1;
+  var DONE = false;
+
+  function showStrip(o, id, s, demo){
+    var strip = document.getElementById('chz-track-strip');
+    if (!strip) return;
+    var icon = strip.querySelector('#chz-track-icon');
+    var sub = strip.querySelector('#chz-track-sub');
+    var title = strip.querySelector('#chz-track-title');
+    if (icon) icon.textContent = s.icon;
+    if (title) title.textContent = demo ? 'تتبع طلبك (تجريبي)' : 'تتبع طلبك';
+    var orderId = o.orderNumber || ('#' + String(id).slice(-6));
+    var total = (o.total || 0).toLocaleString('ar-EG');
+    if (sub) sub.textContent = s.label + ' · ' + orderId + ' · ' + total + ' ر.س';
+    strip.classList.remove('demo');
+    if (demo) strip.classList.add('demo');
+    strip.classList.add('on');
+    strip.onclick = function(){
+      if (window.APP && APP.goTab) APP.goTab('myorders');
+    };
+  }
+
+  function findActive(list){
+    for (var i = 0; i < list.length; i++) {
+      var o = list[i];
+      var st = o.status || 'pending';
+      if (st === 'cancelled' || st === 'completed' || st === 'delivered') continue;
+      return o;
+    }
+    return null;
+  }
+
+  function pickFirst(snap){
+    var arr = [];
+    snap.forEach(function(d){ arr.push({ id: d.id, data: d.data() }); });
+    // sort by createdAt desc
+    arr.sort(function(a, b){
+      var ta = a.data.createdAt ? (a.data.createdAt.seconds || 0) : 0;
+      var tb = b.data.createdAt ? (b.data.createdAt.seconds || 0) : 0;
+      return tb - ta;
+    });
+    return arr;
+  }
+
+  function attempt(){
+    if (DONE) return;
+    var strip = document.getElementById('chz-track-strip');
+    if (!strip) { setTimeout(attempt, 600); return; }
+
+    if (DEBUG) {
+      showStrip({ total: 145, orderNumber: '#DEMO01' }, 'demo01',
+        { label: 'في الطريق إليك', icon: '🚚' }, true);
+      DONE = true;
+      return;
+    }
+
+    if (!window.FB || !window.FB.db) { setTimeout(attempt, 800); return; }
+
+    var uid = window.FB.currentUser ? window.FB.currentUser.uid : '';
+    var email = window.FB.currentUser ? (window.FB.currentUser.email || '') : '';
+    var phone = window.FB.currentUser ? (window.FB.currentUser.phoneNumber || '').replace(/\D/g, '') : '';
+    var displayName = window.FB.currentUser ? (window.FB.currentUser.displayName || '') : '';
+
+    if (!uid && !email) {
+      console.log('[track] no user');
+      DONE = true;
+      return;
+    }
+
+    console.log('[track] user uid=', uid.slice(-8), 'email=', email, 'name=', displayName);
+
+    // Try 3 queries in sequence
+    var queries = [];
+
+    // 1) customerId
+    if (uid) queries.push(window.FB.db.collection('orders').where('customerId', '==', uid).limit(20).get());
+
+    // 2) phone (if displayName has digits? skip — use user phone)
+    // 3) userPhone field
+    if (phone) queries.push(window.FB.db.collection('orders').where('userPhone', '==', phone).limit(20).get());
+
+    // If none succeeded, try all orders for name match
+    function tryNext(idx){
+      if (idx >= queries.length) {
+        // Final fallback: search ALL orders
+        return window.FB.db.collection('orders').limit(50).get().then(function(snap){
+          var arr = pickFirst(snap);
+          var matched = null;
+          for (var i = 0; i < arr.length; i++) {
+            var d = arr[i].data;
+            var custName = (d.customerName || d.name || '').trim();
+            var custPhone = (d.phone || d.userPhone || '').replace(/\D/g, '');
+            if ((displayName && custName === displayName) ||
+                (phone && custPhone === phone) ||
+                (email && d.userEmail === email)) {
+              var st = d.status || 'pending';
+              if (st === 'cancelled' || st === 'completed') continue;
+              matched = arr[i];
+              break;
+            }
+          }
+          if (matched) {
+            var o = matched.data;
+            var wf = o.workflowStatus || o.status || 'pending';
+            var s = STATUS[wf] || STATUS[o.status] || { label: 'قيد المعالجة', icon: '📋' };
+            showStrip(o, matched.id, s, false);
+            DONE = true;
+            console.log('[track] found via name/phone:', matched.id);
+          } else {
+            console.log('[track] no active orders (final fallback)');
+            DONE = true;
+          }
+        });
+      }
+      return queries[idx].then(function(snap){
+        if (snap.empty) return tryNext(idx + 1);
+        var arr = pickFirst(snap);
+        var active = findActive(arr.map(function(x){ return x.data; }));
+        if (!active) return tryNext(idx + 1);
+        // Find the matching entry
+        var entry = null;
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].data === active) { entry = arr[i]; break; }
+        }
+        if (!entry) entry = arr[0];
+        var o = entry.data;
+        var wf = o.workflowStatus || o.status || 'pending';
+        var s = STATUS[wf] || { label: 'قيد المعالجة', icon: '📋' };
+        showStrip(o, entry.id, s, false);
+        DONE = true;
+        console.log('[track] found via query', idx, ':', entry.id);
+      }).catch(function(e){
+        console.warn('[track] query', idx, 'error:', e.message);
+        return tryNext(idx + 1);
+      });
+    }
+    tryNext(0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(attempt, 1000); });
+  } else {
+    setTimeout(attempt, 1000);
+  }
+  // Retry once after 5s if user changes
+  setTimeout(function(){ DONE = false; attempt(); }, 6000);
+})();
+</script>
+
 </body>
 </html>
