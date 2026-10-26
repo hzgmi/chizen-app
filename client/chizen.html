@@ -7335,6 +7335,73 @@ html:not([data-theme="light"]) .tvl-cs-cancel {
 }
 </style>
 
+<style id="chz-travel-v31-css">
+/* Back button - subtle circular with correct RTL arrow */
+.tvl-back {
+  width: 40px !important;
+  height: 40px !important;
+  background: rgba(255,255,255,0.15) !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  border-radius: 12px !important;
+}
+.tvl-back svg {
+  width: 18px !important;
+  height: 18px !important;
+  transform: rotate(180deg); /* RTL - arrow points right = back */
+}
+.tvl-back:active { background: rgba(255,255,255,0.28) !important; }
+
+/* Delivery arrow - use SVG-like styling */
+.tvl-dlv-arrow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 26px !important;
+  height: 26px !important;
+  background: rgba(255,255,255,0.1) !important;
+  border-radius: 50% !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  color: inherit !important;
+}
+.tvl-dlv-card.active .tvl-dlv-arrow {
+  background: rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+}
+
+/* Chips - cohesive but softer */
+body #sc-booking .tvl-chip:not(.active) {
+  background: linear-gradient(135deg, rgba(255,61,154,0.06) 0%, rgba(155,77,255,0.06) 100%) !important;
+  color: #FF3D9A !important;
+  border: 1.5px solid rgba(255,61,154,0.22) !important;
+  box-shadow: none !important;
+}
+html:not([data-theme="light"]) body #sc-booking .tvl-chip:not(.active) {
+  background: linear-gradient(135deg, rgba(255,61,154,0.1) 0%, rgba(155,77,255,0.1) 100%) !important;
+  color: #f5b8d6 !important;
+  border-color: rgba(255,61,154,0.3) !important;
+}
+body #sc-booking .tvl-chip:not(.active):active {
+  background: linear-gradient(135deg, rgba(255,61,154,0.15) 0%, rgba(155,77,255,0.15) 100%) !important;
+}
+
+/* Hide v30 badge after load (just verification) */
+#chz-v30-badge { transition: opacity 0.5s ease; }
+
+/* STRICT price hide when form not-ready */
+body #sc-booking .tvl-form[data-not-ready="1"] .price-preview {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+</style>
+
 <style id="chz-travel-v30">
 /* ═══ CHIPS: cohesive pink theme ═══ */
 body #sc-booking .tvl-chip:not(.active) {
@@ -14623,6 +14690,200 @@ document.addEventListener('keydown', function(e) {
   document.addEventListener('DOMContentLoaded', function(){ setInterval(enforce, 300); });
 
   console.log('[v30] guard active');
+})();
+</script>
+
+<script id="chz-travel-v31-js">
+(function(){
+  'use strict';
+
+  function get(id){ var el = document.getElementById(id); return el ? (el.value || '').trim() : ''; }
+  function num(id){ var v = get(id); var n = parseInt(v); return isNaN(n) ? 0 : n; }
+  function fmt(n){ return (window.formatPrice ? window.formatPrice(n) : n.toLocaleString('ar-EG') + ' ر.س'); }
+
+  // ═══ PRICING TABLES ═══
+  var FLIGHTS = {
+    'عدن-صنعاء': 55000, 'صنعاء-عدن': 55000,
+    'عدن-القاهرة': 220000, 'القاهرة-عدن': 220000,
+    'عدن-جدة': 180000, 'جدة-عدن': 180000,
+    'عدن-عمان': 195000, 'عمان-عدن': 195000, 'عدن-عمّان': 195000, 'عمّان-عدن': 195000,
+    'عدن-دبي': 165000, 'دبي-عدن': 165000,
+    'عدن-اسطنبول': 285000, 'اسطنبول-عدن': 285000, 'عدن-إسطنبول': 285000, 'إسطنبول-عدن': 285000,
+    'صنعاء-القاهرة': 195000, 'القاهرة-صنعاء': 195000,
+    'المكلا-جدة': 165000, 'جدة-المكلا': 165000
+  };
+  var BUSES = {
+    'عدن-صنعاء': 9500, 'صنعاء-عدن': 9500, 'عدن-تعز': 6500, 'تعز-عدن': 6500,
+    'عدن-إب': 7000, 'إب-عدن': 7000, 'عدن-المكلا': 12000, 'المكلا-عدن': 12000,
+    'عدن-سيئون': 11000, 'سيئون-عدن': 11000, 'عدن-الحديدة': 13500, 'الحديدة-عدن': 13500
+  };
+  var HOTELS = { 'مكة': 600, 'المدينة': 500, 'جدة': 450, 'القاهرة': 400, 'دبي': 550, 'اسطنبول': 500, 'صنعاء': 250, 'عدن': 220, 'تعز': 200 };
+  var DISTANCES = {
+    'crater-mansoura': 8, 'crater-khormaksar': 6, 'crater-airport': 10, 'airport-crater': 10,
+    'mansoura-airport': 5, 'airport-mansoura': 5, 'khormaksar-airport': 2, 'airport-khormaksar': 2,
+    'sheikh-othman-airport': 7, 'airport-sheikh-othman': 7, 'boraiga-airport': 15, 'airport-boraiga': 15,
+    'mualla-airport': 9, 'airport-mualla': 9, 'tawahi-airport': 8, 'airport-tawahi': 8,
+    'dar-saad-airport': 12, 'airport-dar-saad': 12, 'shab-airport': 14, 'airport-shab': 14
+  };
+
+  function cFlight(){ 
+    var from = get('fly-from'), to = get('fly-to'), pax = num('fly-pax') || 1;
+    if (!from || !to) return 0;
+    var base = FLIGHTS[from + '-' + to] || 55000;
+    var cls = get('fly-class') || 'economy';
+    var m = cls === 'business' ? 2.6 : cls === 'first' ? 4 : cls === 'premium' ? 1.35 : 1;
+    return Math.round(base * pax * m);
+  }
+  function cBus(){
+    var to = get('bus-to'), pax = num('bus-pax') || 1;
+    if (!to) return 0;
+    var base = BUSES['عدن-' + to] || 9500;
+    var cls = get('bus-class') || 'economy';
+    var m = cls === 'vip' ? 1.8 : cls === 'comfort' ? 1.3 : 1;
+    return Math.round(base * pax * m);
+  }
+  function cHotel(){
+    var city = get('hotel-city'), ci = get('hotel-in'), co = get('hotel-out'), rooms = num('hotel-rooms') || 1;
+    if (!city || !ci || !co) return 0;
+    var d1 = new Date(ci), d2 = new Date(co);
+    var nights = Math.max(1, Math.floor((d2 - d1) / 86400000) || 1);
+    var key = city.replace(/[^\u0621-\u064A]/g, '');
+    var night = 350;
+    for (var k in HOTELS) { if (key.indexOf(k) > -1) { night = HOTELS[k]; break; } }
+    return Math.round(rooms * nights * night);
+  }
+  function cHajj(){
+    var pax = num('hajj-pax') || 1;
+    var type = get('hajj-type') || 'umrah';
+    var base = type === 'hajj' ? 28000 : 8500;
+    var pkg = get('hajj-package') || 'eco';
+    var m = pkg === 'premium' ? 2.2 : pkg === 'comfort' ? 1.5 : 1;
+    return Math.round(base * pax * m);
+  }
+  function cDelivery(from, to, car){
+    if (!from || !to) return 0;
+    var km = DISTANCES[from + '-' + to] || 8;
+    var base = car === 'family' ? 2500 : car === 'large' ? 3500 : 1500;
+    var perKm = car === 'family' ? 500 : car === 'large' ? 700 : 350;
+    return Math.round(base + km * perKm);
+  }
+
+  // ═══ STRICT tvlCalc — replaces old ═══
+  window.APP.tvlCalc = function(type){
+    var pp = document.getElementById('tvl-pp-' + type);
+    var form = document.getElementById('form-' + type);
+    var submit = document.querySelector('#form-' + type + ' .tvl-submit');
+    if (!pp || !form) return;
+
+    // ═══ ESSENTIAL FIELDS CHECK ═══
+    var ready = false;
+    if (type === 'flight') ready = !!(get('fly-from') && get('fly-to'));
+    else if (type === 'bus') ready = !!get('bus-to');
+    else if (type === 'hotel') ready = !!(get('hotel-city') && get('hotel-in') && get('hotel-out'));
+    else if (type === 'hajj') ready = true; // الحج بياناته كافية بمجرد الفتح
+    else if (type === 'delivery') ready = !!(get('dlv-from') && get('dlv-to'));
+
+    // ═══ STRICT HIDE if not ready ═══
+    if (!ready) {
+      pp.setAttribute('data-ready', '0');
+      pp.style.cssText = 'display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;';
+      pp.innerHTML = '';
+      form.setAttribute('data-not-ready', '1');
+      if (submit) { submit.classList.remove('ready'); submit.classList.add('locked'); }
+      return;
+    }
+
+    form.removeAttribute('data-not-ready');
+
+    // ═══ COMPUTE ═══
+    var trip = 0;
+    if (type === 'flight') trip = cFlight();
+    else if (type === 'bus') trip = cBus();
+    else if (type === 'hotel') trip = cHotel();
+    else if (type === 'hajj') trip = cHajj();
+
+    var delivery = 0;
+    if (type === 'delivery') {
+      delivery = cDelivery(get('dlv-from'), get('dlv-to'), get('dlv-car'));
+      trip = 0;
+    } else {
+      var chk = document.getElementById('dlv-chk-' + type);
+      if (chk && chk.checked) {
+        var df = get('dlv-from-' + type), dt = get('dlv-to-' + type), dc = get('dlv-car-' + type);
+        if (df && dt) delivery = cDelivery(df, dt, dc);
+      }
+    }
+
+    var total = trip + delivery;
+
+    if (!total) {
+      pp.setAttribute('data-ready', '0');
+      pp.style.cssText = 'display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important;';
+      pp.innerHTML = '';
+      if (submit) { submit.classList.remove('ready'); submit.classList.add('locked'); }
+      return;
+    }
+
+    // ═══ SHOW PRICE ═══
+    pp.setAttribute('data-ready', '1');
+    pp.style.cssText = 'display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;';
+
+    var html = '';
+    if (type === 'delivery') {
+      html += '<div class="pp-row"><span>💰 تكلفة التوصيل التقديرية</span><b>' + fmt(total) + '</b></div>';
+    } else {
+      html += '<div class="pp-row"><span>💰 السعر التقديري</span><b>' + fmt(total) + '</b></div>';
+      if (delivery > 0) {
+        html += '<div class="pp-detail"><span>الخدمة الأساسية</span><span>' + fmt(trip) + '</span></div>';
+        html += '<div class="pp-detail"><span>التوصيل</span><span>' + fmt(delivery) + '</span></div>';
+      }
+    }
+    html += '<div class="pp-note">⚠️ سعر تقديري — سيتم تأكيد السعر النهائي بعد المراجعة</div>';
+    html += '<button type="button" class="tvl-confirm" onclick="APP.tvlConfirm(\'' + type + '\', this)">✓ تأكيد السعر والمتابعة</button>';
+    pp.innerHTML = html;
+
+    if (submit) { submit.classList.remove('ready'); submit.classList.add('locked'); }
+  };
+
+  // ═══ tvlConfirm ═══
+  window.APP.tvlConfirm = function(type, btn){
+    if (!btn || btn.classList.contains('confirmed')) return;
+    btn.classList.add('confirmed');
+    btn.innerHTML = '✓ تم تأكيد السعر — يمكنك الإرسال';
+    var submit = document.querySelector('#form-' + type + ' .tvl-submit');
+    if (submit) { submit.classList.remove('locked'); submit.classList.add('ready'); }
+  };
+
+  // ═══ AGGRESSIVE ENFORCER — every 200ms ═══
+  function enforceAll(){
+    ['flight','bus','hotel','hajj','delivery'].forEach(function(t){
+      var pp = document.getElementById('tvl-pp-' + t);
+      if (!pp) return;
+      // For flight/bus/hotel/delivery: if essential fields empty, hard-hide
+      var ready = true;
+      if (t === 'flight') ready = !!(get('fly-from') && get('fly-to'));
+      else if (t === 'bus') ready = !!get('bus-to');
+      else if (t === 'hotel') ready = !!(get('hotel-city') && get('hotel-in') && get('hotel-out'));
+      else if (t === 'delivery') ready = !!(get('dlv-from') && get('dlv-to'));
+      
+      if (!ready) {
+        pp.setAttribute('data-ready', '0');
+        pp.style.cssText = 'display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;overflow:hidden!important;';
+        if (pp.innerHTML) pp.innerHTML = '';
+      }
+    });
+  }
+  setInterval(enforceAll, 200);
+  document.addEventListener('input', enforceAll, true);
+  document.addEventListener('change', enforceAll, true);
+
+  // ═══ Hide v30 badge after 3s ═══
+  setTimeout(function(){
+    var badge = document.getElementById('chz-v30-badge');
+    if (badge) badge.style.opacity = '0';
+  }, 3000);
+
+  console.log('[CHIZEN TRAVEL v31] strict calc + enforce ready');
 })();
 </script>
 
