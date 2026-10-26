@@ -7415,8 +7415,9 @@ var APP={
       { img: 'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg' },
       { img: 'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg' }
     ];
-    var hasReal = this.banners && this.banners.length && this.banners.some(function(b){ return b && b.img; });
-    var list = hasReal ? this.banners : DEFAULT_BANNERS;
+    var fsBanners = (this.banners || []).filter(function(b){ return b && b.img && b.img.indexOf('http') === 0; });
+    var list = (fsBanners.length >= 2) ? fsBanners : DEFAULT_BANNERS;
+    s.style.transform = 'translateX(0%)';
     if (!list.length) { s.innerHTML = ''; if (d) d.innerHTML = ''; return; }
     s.innerHTML = list.map(function(b) {
       var img = b.img
@@ -9868,19 +9869,18 @@ document.addEventListener('keydown', function(e) {
     // تعريف الدالة المفقودة
     window.APP.startSlideAutoplay = function(){
       if (timer) clearInterval(timer);
-      var total = (this.banners && this.banners.length) || 0;
-      if (total <= 1) {
-        // بانر واحد: ثابت
-        currentIdx = 0;
-        return;
-      }
+      var slidesEl = document.getElementById('slides');
+      var realCount = slidesEl ? slidesEl.querySelectorAll('.slide').length : 0;
+      var total = realCount || 0;
+      if (total <= 1) { currentIdx = 0; return; }
       currentIdx = 0;
+      window.APP.goSlide(0);
       var self = this;
       timer = setInterval(function(){
         currentIdx = (currentIdx + 1) % total;
         self.goSlide(currentIdx);
-      }, 4000);
-      console.log('[V10] autoplay started: ' + total + ' banners, 4s interval');
+      }, 4500);
+      console.log('[v7] autoplay: ' + total + ' real slides, 4.5s');
     };
     
     // إعادة ضبط المؤشر عند تغيير يدوي (سحب/نقر)
