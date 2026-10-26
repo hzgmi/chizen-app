@@ -6503,6 +6503,158 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
   }, 100);
 })();
 </script>
+<style id="chz-bottom-nav-v64">
+#bottom-nav.chz-bottom-nav-v64 {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  border-top: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: 0 -4px 24px rgba(106,27,154,0.10) !important;
+  height: auto !important;
+}
+
+html:not([data-theme="light"]) #bottom-nav.chz-bottom-nav-v64 {
+  background: rgba(10, 14, 26, 0.94) !important;
+  border-top-color: rgba(255,255,255,0.08) !important;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.5) !important;
+}
+
+#bottom-nav .bn-item {
+  flex: 1;
+  background: none !important;
+  border: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  padding: 4px 2px !important;
+  cursor: pointer !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: #9ca3af !important;
+  -webkit-tap-highlight-color: transparent !important;
+  transition: color 0.2s ease !important;
+  position: relative !important;
+}
+
+#bottom-nav .bn-icon-wrap {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+}
+
+#bottom-nav .bn-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+  transition: all 0.25s ease;
+}
+
+#bottom-nav .bn-label {
+  font-size: 10px;
+  line-height: 1;
+  margin-top: 3px;
+  font-weight: 700;
+  transition: font-weight 0.2s ease;
+}
+
+/* ACTIVE STATE - colored circle */
+#bottom-nav .bn-item.active .bn-icon-wrap {
+  background: currentColor !important;
+  box-shadow: 0 4px 14px currentColor;
+  transform: translateY(-2px);
+}
+
+#bottom-nav .bn-item.active .bn-icon-wrap svg {
+  stroke: #fff !important;
+}
+
+#bottom-nav .bn-item.active .bn-label {
+  font-weight: 900;
+}
+
+/* Colors per tab */
+#bottom-nav .bn-item[data-tab="home"].active { color: #FF3D9A !important; }
+#bottom-nav .bn-item[data-tab="booking"].active { color: #9B4DFF !important; }
+#bottom-nav .bn-item[data-tab="commerce"].active { color: #10b981 !important; }
+#bottom-nav .bn-item[data-tab="orders"].active { color: #4D8CFF !important; }
+#bottom-nav .bn-item[data-tab="profile"].active { color: #6b7280 !important; }
+
+/* Non-active hover state on mobile */
+#bottom-nav .bn-item:active .bn-icon-wrap {
+  transform: scale(0.92);
+}
+
+/* Badge */
+#bottom-nav .bn-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: linear-gradient(135deg, #FF3D9A, #FF8A00);
+  border: 2px solid #fff;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', 'Tajawal', sans-serif;
+  box-shadow: 0 2px 6px rgba(255,61,154,0.6);
+  z-index: 3;
+  animation: bnBadgePop 0.3s ease;
+}
+
+@keyframes bnBadgePop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+html:not([data-theme="light"]) #bottom-nav .bn-badge {
+  border-color: #0a0e1a;
+}
+
+/* When active, badge goes white to stand out */
+#bottom-nav .bn-item.active .bn-badge {
+  background: #fff !important;
+  color: #FF3D9A !important;
+  border-color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+/* Adjust body bottom padding to accommodate new nav */
+body.chz-auth-ok {
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+}
+#screens {
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* Responsive */
+@media (max-width: 359px) {
+  #bottom-nav .bn-icon-wrap { width: 30px; height: 30px; }
+  #bottom-nav .bn-icon-wrap svg { width: 20px; height: 20px; }
+  #bottom-nav .bn-label { font-size: 9px; }
+}
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -11906,22 +12058,46 @@ window.addEventListener('load', function() {
 </script>
 
 
-<!-- ═══ BOTTOM NAV ═══ -->
-<div id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;display:flex;justify-content:space-around;align-items:center;background:#ffffff;box-shadow:0 -4px 20px rgba(106,27,154,0.08);border-top:1px solid #e5e7eb;height:65px;">
-  
-  <button class="bn-it active" onclick="APP.goTab('home', this)" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#D81B60;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;padding:8px 0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span data-i18n="nav.home" data-i18n-ar="الرئيسية">الرئيسية</span>
+<!-- ═══ BOTTOM NAV v64 ═══ -->
+<div id="bottom-nav" class="chz-bottom-nav-v64">
+  <button class="bn-item active" data-tab="home" onclick="APP.goTab('home', this)">
+    <div class="bn-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <span class="bn-label">الرئيسية</span>
   </button>
 
-  <button class="bn-it" onclick="APP.goTab('orders', this)" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#9ca3af;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;padding:8px 0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg><span data-i18n="nav.orders" data-i18n-ar="طلباتي">طلباتي</span>
+  <button class="bn-item" data-tab="booking" onclick="APP.goTab('booking', this)">
+    <div class="bn-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+      <span class="bn-badge" id="bn-badge-booking" style="display:none">0</span>
+    </div>
+    <span class="bn-label">الحجز</span>
   </button>
 
-  <button class="bn-it" onclick="APP.goTab('cart', this)" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#9ca3af;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;padding:8px 0;position:relative;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span data-i18n="nav.cart" data-i18n-ar="السلة">السلة</span>
-    <div id="cart-b" style="display:none;">0</div>
+  <button class="bn-item" data-tab="commerce" onclick="APP.goTab('commerce', this)">
+    <div class="bn-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="bn-badge" id="bn-badge-commerce" style="display:none">0</span>
+    </div>
+    <span class="bn-label">السوق</span>
   </button>
 
-  <button class="bn-it" onclick="APP.goTab('profile', this)" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#9ca3af;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;padding:8px 0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span data-i18n="nav.profile" data-i18n-ar="حسابي">حسابي</span>
+  <button class="bn-item" data-tab="orders" onclick="APP.goTab('orders', this)">
+    <div class="bn-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      <span class="bn-badge" id="bn-badge-orders" style="display:none">0</span>
+    </div>
+    <span class="bn-label">طلباتي</span>
   </button>
 
+  <button class="bn-item" data-tab="profile" onclick="APP.goTab('profile', this)">
+    <div class="bn-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="bn-badge" id="bn-badge-profile" style="display:none">0</span>
+    </div>
+    <span class="bn-label">حسابي</span>
+  </button>
 </div>
 <!-- ═══ نهاية BOTTOM NAV ═══ -->
 
@@ -18081,6 +18257,114 @@ document.addEventListener('keydown', function(e) {
   } catch(e) {}
   
   console.log('[spa v58] ready — persistence + real-time + no reloads');
+})();
+</script>
+
+<script id="chz-bottom-nav-v64-js">
+(function(){
+  'use strict';
+
+  // ─── Override goTab to work with new .bn-item ───
+  function hookGoTab(){
+    if (!window.APP || !window.APP.goTab) { setTimeout(hookGoTab, 400); return; }
+    if (window.APP._goTabV64) return;
+    window.APP._goTabV64 = true;
+    
+    var orig = window.APP.goTab;
+    window.APP.goTab = function(id, el) {
+      orig.call(this, id, el);
+      try {
+        // Clear all nav items
+        document.querySelectorAll('#bottom-nav .bn-item').forEach(function(b){
+          b.classList.remove('active');
+          b.style.color = '';
+        });
+        // Set active
+        var target = el;
+        if (!target || !target.classList || !target.classList.contains('bn-item')) {
+          target = document.querySelector('#bottom-nav .bn-item[data-tab="' + id + '"]');
+        }
+        if (target) target.classList.add('active');
+      } catch(e) {}
+    };
+    console.log('[nav v64] goTab hooked');
+  }
+  hookGoTab();
+
+  // ─── Nav badges update ───
+  function updateNavBadge(tab, count){
+    var el = document.getElementById('bn-badge-' + tab);
+    if (!el) return;
+    if (count > 0) {
+      el.textContent = count > 99 ? '99+' : count;
+      el.style.display = 'flex';
+    } else {
+      el.style.display = 'none';
+    }
+  }
+
+  window.updateNavBadges = async function(){
+    if (!window.FB || !FB.currentUser || !FB.db) return;
+    var uid = FB.currentUser.uid;
+    try {
+      // 1) Orders — active
+      var ordSnap = await FB.db.collection('orders').where('customerId', '==', uid).limit(50).get();
+      var activeOrders = 0;
+      ordSnap.forEach(function(d){
+        var s = d.data().status || 'pending';
+        if (s !== 'cancelled' && s !== 'completed' && s !== 'delivered') activeOrders++;
+      });
+      updateNavBadge('orders', activeOrders);
+      
+      // 2) Commerce — my active listings
+      var lstSnap = await FB.db.collection('listings')
+        .where('sellerId', '==', uid)
+        .where('status', '==', 'active')
+        .limit(50).get();
+      updateNavBadge('commerce', lstSnap.size);
+      
+      // 3) Booking — active bookings
+      var bkSnap = await FB.db.collection('bookings').where('userId', '==', uid).limit(50).get();
+      var activeBk = 0;
+      bkSnap.forEach(function(d){
+        var s = d.data().status || 'pending';
+        if (s !== 'cancelled' && s !== 'completed' && s !== 'rejected') activeBk++;
+      });
+      updateNavBadge('booking', activeBk);
+      
+      // 4) Profile — unread notifications
+      var nSnap = await FB.db.collection('notifications')
+        .where('userId', '==', uid)
+        .where('read', '==', false)
+        .limit(99).get();
+      updateNavBadge('profile', nSnap.size);
+    } catch(e) {
+      console.warn('[nav badges]', e.message);
+    }
+  };
+
+  // Run immediately + every 8s
+  setTimeout(function(){ if (window.updateNavBadges) window.updateNavBadges(); }, 2000);
+  setInterval(function(){ if (window.updateNavBadges) window.updateNavBadges(); }, 8000);
+
+  // Hook into commerce actions — instant update after create/delete
+  function hookCommerce(){
+    if (!window.APP) return;
+    ['cmSubmit', 'cmDeleteListing', 'cmSetStatus'].forEach(function(fn){
+      if (window.APP['_' + fn + '_hooked']) return;
+      var orig = window.APP[fn];
+      if (typeof orig !== 'function') return;
+      window.APP[fn] = async function(){
+        var r = await orig.apply(this, arguments);
+        setTimeout(function(){ if (window.updateNavBadges) window.updateNavBadges(); }, 500);
+        return r;
+      };
+      window.APP['_' + fn + '_hooked'] = true;
+    });
+  }
+  setTimeout(hookCommerce, 1500);
+
+  console.log('[nav v64] ready');
 })();
 </script>
 
