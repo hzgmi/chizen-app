@@ -15919,5 +15919,58 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-kill-ghost-v42">
+(function(){
+  'use strict';
+  // يحذف أي عنصر "شبح" يحوي نصوص التتبع القديمة
+  var BAD_TEXTS = ['قيد التتبع', 'اضغط لتتبع', 'طلبك #', 'اضغط للتتبع'];
+  var KILLED = 0;
+  function kill(){
+    // فحص كل div صغير
+    var all = document.querySelectorAll('#sc-home div, #sc-home section, #sc-home article');
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      // تجاهل عناصر v40 الجديدة
+      if (el.id === 'chz-track-strip') continue;
+      if (el.closest('#chz-track-strip')) continue;
+      var txt = (el.textContent || '').trim();
+      if (txt.length > 200) continue; // تجاهل النصوص الطويلة (حاويات كبيرة)
+      for (var b = 0; b < BAD_TEXTS.length; b++) {
+        if (txt.indexOf(BAD_TEXTS[b]) !== -1) {
+          // احذف العنصر الأب إذا كان وحده
+          var target = el;
+          var parent = el.parentElement;
+          if (parent && parent.children.length === 1 && parent.id !== 'sc-home') {
+            target = parent;
+          }
+          if (target && target.parentElement) {
+            target.parentElement.removeChild(target);
+            KILLED++;
+            console.log('[v42] killed ghost track bar #' + KILLED);
+          }
+          break;
+        }
+      }
+    }
+    if (KILLED > 0 && KILLED < 5) {
+      // مزيد من البحث
+      setTimeout(kill, 200);
+    }
+  }
+  function start(){
+    if (!document.getElementById('sc-home')) { setTimeout(start, 300); return; }
+    kill();
+    setInterval(kill, 700);
+    console.log('[v42] ghost killer active');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+})();
+</script>
+
+
 </body>
 </html>
