@@ -7429,6 +7429,80 @@ body #sc-booking .tvl-form[data-not-ready="1"] .price-preview {
 }
 </style>
 
+<style id="chz-flash-v37">
+/* ═══ FLASH SALE — horizontal forced ═══ */
+body #sc-home #flash-c,
+body #sc-home .flash-row {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 4px 15px 12px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  scroll-snap-type: x mandatory !important;
+  -webkit-overflow-scrolling: touch !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+body #sc-home #flash-c::-webkit-scrollbar { display: none !important; }
+
+body #sc-home #flash-c .fcard,
+body #sc-home .flash-row .fcard {
+  flex: 0 0 145px !important;
+  min-width: 145px !important;
+  max-width: 145px !important;
+  width: 145px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  scroll-snap-align: start !important;
+  box-sizing: border-box !important;
+}
+
+/* ═══ Light theme — visible "عروض خاطفة" ═══ */
+html[data-theme="light"] body #sc-home #flash-sec .stl {
+  background: none !important;
+  -webkit-text-fill-color: #FF3D9A !important;
+  color: #FF3D9A !important;
+}
+html[data-theme="light"] body #sc-home #flash-sec .flash-view-all {
+  color: #FF3D9A !important;
+}
+
+/* Make sure flash-sec not hidden in light */
+html[data-theme="light"] body #sc-home #flash-sec {
+  display: block !important;
+}
+
+/* fcard styling in light theme */
+html[data-theme="light"] body #sc-home #flash-c .fcard {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08) !important;
+}
+html[data-theme="light"] body #sc-home #flash-c .fcard-img {
+  background: #f4f6fa !important;
+}
+html[data-theme="light"] body #sc-home #flash-c .fcard-name {
+  color: #1f2937 !important;
+}
+
+@media (max-width: 359px) {
+  body #sc-home #flash-c .fcard,
+  body #sc-home .flash-row .fcard {
+    flex: 0 0 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    width: 130px !important;
+  }
+}
+</style>
+
 <style id="chz-tvl-portal-v34-strip">
 /* ═══ LUXURY TRAVEL STRIP ═══ */
 .tvl-portal.tvl-strip {
