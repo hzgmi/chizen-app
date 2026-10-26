@@ -1,6 +1,67 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><script>
+<head>
+<!-- ═══ AUTH GUARD v60 ═══ -->
+<style id="chz-auth-guard-v60">
+  /* Hide everything until authenticated */
+  html:not(.chz-auth-ok) body {
+    visibility: hidden !important;
+    overflow: hidden !important;
+  }
+  html:not(.chz-auth-ok) body > * {
+    display: none !important;
+  }
+  /* Splash always visible during check */
+  html:not(.chz-auth-ok) #chz-splash-v60 {
+    display: flex !important;
+    visibility: visible !important;
+  }
+</style>
+
+<div id="chz-splash-v60" style="position:fixed;inset:0;z-index:2147483647;background:linear-gradient(135deg,#02051b 0%,#0a0e2a 50%,#151030 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;font-family:Tajawal,sans-serif;">
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+    <div style="position:absolute;width:120px;height:120px;border-radius:50%;background:conic-gradient(from 0deg,#FF3D9A,#9B4DFF,#4D8CFF,#FF8A00,#FF3D9A);animation:chzSplashSpin 2s linear infinite;filter:blur(8px);opacity:0.7;"></div>
+    <div style="position:relative;width:90px;height:90px;border-radius:50%;background:#02051b;display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(155,77,255,0.5),inset 0 0 30px rgba(155,77,255,0.2);">
+      <span style="font-family:'Bodoni Moda',serif;font-size:48px;font-weight:900;background:linear-gradient(135deg,#FF3D9A,#9B4DFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">C</span>
+    </div>
+  </div>
+  <div style="font-family:'Bodoni Moda',serif;font-size:32px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,#FF3D9A 0%,#9B4DFF 50%,#4D8CFF 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 40px rgba(155,77,255,0.4);">CHIZEN</div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <div style="display:flex;gap:8px;">
+      <span class="chz-dot" style="width:10px;height:10px;border-radius:50%;background:#FF3D9A;animation:chzDot 1.2s ease-in-out infinite;"></span>
+      <span class="chz-dot" style="width:10px;height:10px;border-radius:50%;background:#9B4DFF;animation:chzDot 1.2s ease-in-out 0.2s infinite;"></span>
+      <span class="chz-dot" style="width:10px;height:10px;border-radius:50%;background:#4D8CFF;animation:chzDot 1.2s ease-in-out 0.4s infinite;"></span>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:0.5px;">جاري التحقق من حسابك...</div>
+  </div>
+</div>
+<style>
+@keyframes chzSplashSpin { to { transform: rotate(360deg); } }
+@keyframes chzDot {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+  40% { transform: scale(1.1); opacity: 1; }
+}
+</style>
+<script>
+(function(){
+  // Track auth state — if takes too long, redirect
+  window.__chzAuthStarted = Date.now();
+  window.__chzRedirect = function(why){
+    try { console.log('[auth-guard] redirect:', why); } catch(e){}
+    var target = 'index.html';
+    try { sessionStorage.setItem('chz_return', 'home'); } catch(e){}
+    window.location.replace(target);
+  };
+  // Safety: if not resolved in 8s → redirect
+  setTimeout(function(){
+    if (!document.documentElement.classList.contains('chz-auth-ok')) {
+      window.__chzRedirect('timeout');
+    }
+  }, 8000);
+})();
+</script>
+<!-- ═══ END AUTH GUARD ═══ -->
+<script>
 (function(){
   // اضبط data-theme فوراً قبل تحميل الصفحة
   var saved = 'dark';
@@ -6285,6 +6346,26 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
 }
 </style>
 
+
+<script>
+(function(){
+  // v60: early check — if Firebase has cached auth, verify in 500ms
+  var checked = 0;
+  var timer = setInterval(function(){
+    checked++;
+    if (checked > 20) { clearInterval(timer); return; }
+    if (!window.firebase || !firebase.auth) return;
+    var u = firebase.auth().currentUser;
+    if (u) {
+      document.documentElement.classList.add('chz-auth-ok');
+      clearInterval(timer);
+    } else if (checked >= 10 && !document.documentElement.classList.contains('chz-auth-ok')) {
+      // 1 second passed with no user
+      // But onAuthStateChanged may still fire — wait for it
+    }
+  }, 100);
+})();
+</script>
 </head>
 <body>
 <div id="app">
@@ -9767,8 +9848,21 @@ var APP={
     if(!window.FB||!FB.ready){setTimeout(function(){self.syncBg();},200);return;}
     if(FB.currentUser){self.onUserReady(FB.currentUser);return;}
     FB.auth.onAuthStateChanged(function(u){
-      if(u){self.onUserReady(u);}
-      else{setTimeout(function(){if(!FB.currentUser)window.location.replace('index.html');},3000);}
+      if(u){
+        // ✅ Authenticated — show app
+        document.documentElement.classList.add('chz-auth-ok');
+        var splash = document.getElementById('chz-splash-v60');
+        if (splash) {
+          splash.style.opacity = '0';
+          splash.style.transition = 'opacity 0.4s ease';
+          setTimeout(function(){ if (splash.parentNode) splash.parentNode.removeChild(splash); }, 400);
+        }
+        self.onUserReady(u);
+      } else {
+        // ❌ Not authenticated — redirect IMMEDIATELY (no 3s wait)
+        try { console.log('[auth] no user — redirecting to login'); } catch(e){}
+        window.__chzRedirect('no-user');
+      }
     });
   },
   
