@@ -6216,21 +6216,69 @@ html[data-theme="light"] {
                <option value="other">أخرى</option>
             </select>
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.from" data-i18n-ar="من">من</span></label><input id="fly-from" type="text" value="عدن" placeholder="من"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.to" data-i18n-ar="إلى">إلى</span></label><input id="fly-to" type="text" placeholder="إلى"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.from" data-i18n-ar="من">من</span></label><input id="fly-from" type="text" value="عدن" placeholder="من" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.to" data-i18n-ar="إلى">إلى</span></label><input id="fly-to" type="text" placeholder="إلى" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')"></div>
             </div>
             <div style="display:flex; gap:10px;">
                 <div style="flex:1;"><label><span data-i18n="booking.date" data-i18n-ar="التاريخ">التاريخ</span></label><input id="fly-date" type="date"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.passengers" data-i18n-ar="المسافرين">المسافرين</span></label><input id="fly-pax" type="number" min="1" value="1"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.passengers" data-i18n-ar="المسافرين">المسافرين</span></label><input id="fly-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')"></div>
             </div>
             <label><span data-i18n="booking.class" data-i18n-ar="الدرجة">الدرجة</span></label>
-            <select id="fly-class">
+            <select id="fly-class" oninput="APP.updateBookingPrice('flight')" onchange="APP.updateBookingPrice('flight')">
                <option value="economy">اقتصادية</option>
                <option value="business">رجال الأعمال (VIP)</option>
             </select>
             <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="fly-name" type="text" placeholder="الاسم كما في الجواز" data-i18n-placeholder="ph.الاسم كما في الجواز" data-i18n-placeholder-ar="الاسم كما في الجواز">
             <label><span data-i18n="booking.passport" data-i18n-ar="رقم الجواز">رقم الجواز</span></label><input id="fly-passport" type="text" placeholder="رقم الجواز" data-i18n-placeholder="ph.رقم الجواز" data-i18n-placeholder-ar="رقم الجواز">
             <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="fly-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            
+            <!-- التوصيل داخل عدن -->
+            <div class="delivery-box">
+              <label class="dchk">
+                <input type="checkbox" id="delivery-chk-flight" onchange="(function(){var f=document.getElementById('delivery-fields-flight');f.classList.toggle('active',this.checked);APP.updateBookingPrice('flight');})();">
+                🚗 أحتاج توصيل داخل عدن
+              </label>
+              <div class="delivery-fields" id="delivery-fields-flight">
+                <label>من</label>
+                <select id="delivery-from-flight" onchange="APP.updateBookingPrice('flight')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>إلى</label>
+                <select id="delivery-to-flight" onchange="APP.updateBookingPrice('flight')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="airport">✈️ مطار عدن</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>نوع السيارة</label>
+                <select id="delivery-car-flight" onchange="APP.updateBookingPrice('flight')">
+                  <option value="economy">🚗 اقتصادي</option>
+                  <option value="family">🚐 عائلي</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- السعر التقريبي -->
+            <div class="price-preview" id="price-preview-flight"></div>
+            
             <button onclick="APP.submitFlight()"><span data-i18n="booking.confirm_flight" data-i18n-ar="تأكيد حجز الطيران">تأكيد حجز الطيران</span></button>
          </div>
 
@@ -6239,7 +6287,7 @@ html[data-theme="light"] {
             <div style="display:flex; gap:10px;">
                 <div style="flex:1;"><label><span data-i18n="booking.from" data-i18n-ar="من">من</span></label><input type="text" value="عدن" disabled style="opacity:0.7;"></div>
                 <div style="flex:1;"><label><span data-i18n="booking.to" data-i18n-ar="إلى">إلى</span></label>
-                    <select id="bus-to">
+                    <select id="bus-to" oninput="APP.updateBookingPrice('bus')" onchange="APP.updateBookingPrice('bus')">
                         <option value="صنعاء">صنعاء</option>
                         <option value="تعز">تعز</option>
                         <option value="إب">إب</option>
@@ -6252,41 +6300,185 @@ html[data-theme="light"] {
                 <div style="flex:1;"><label><span data-i18n="booking.date" data-i18n-ar="التاريخ">التاريخ</span></label><input id="bus-date" type="date"></div>
                 <div style="flex:1;"><label><span data-i18n="booking.time" data-i18n-ar="الوقت">الوقت</span></label><input id="bus-time" type="time"></div>
             </div>
-            <label><span data-i18n="booking.seats" data-i18n-ar="عدد المقاعد">عدد المقاعد</span></label><input id="bus-pax" type="number" min="1" value="1">
+            <label><span data-i18n="booking.seats" data-i18n-ar="عدد المقاعد">عدد المقاعد</span></label><input id="bus-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('bus')" onchange="APP.updateBookingPrice('bus')">
             <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="bus-name" type="text" placeholder="الاسم" data-i18n-placeholder="ph.الاسم" data-i18n-placeholder-ar="الاسم" data-i18n-placeholder="checkout.name" data-i18n-placeholder-ar="الاسم">
             <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="bus-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            
+            <!-- التوصيل داخل عدن -->
+            <div class="delivery-box">
+              <label class="dchk">
+                <input type="checkbox" id="delivery-chk-bus" onchange="(function(){var f=document.getElementById('delivery-fields-bus');f.classList.toggle('active',this.checked);APP.updateBookingPrice('bus');})();">
+                🚗 أحتاج توصيل داخل عدن
+              </label>
+              <div class="delivery-fields" id="delivery-fields-bus">
+                <label>من</label>
+                <select id="delivery-from-bus" onchange="APP.updateBookingPrice('bus')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>إلى</label>
+                <select id="delivery-to-bus" onchange="APP.updateBookingPrice('bus')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="airport">✈️ مطار عدن</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>نوع السيارة</label>
+                <select id="delivery-car-bus" onchange="APP.updateBookingPrice('bus')">
+                  <option value="economy">🚗 اقتصادي</option>
+                  <option value="family">🚐 عائلي</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- السعر التقريبي -->
+            <div class="price-preview" id="price-preview-bus"></div>
+            
             <button onclick="APP.submitBus()"><span data-i18n="booking.confirm_bus" data-i18n-ar="تأكيد حجز الباص">تأكيد حجز الباص</span></button>
          </div>
 
          <div id="form-hajj" class="booking-form">
             <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.hajj_details" data-i18n-ar="🕋 رحلات الحج والعمرة">🕋 رحلات الحج والعمرة</span></div>
             <label><span data-i18n="booking.trip_type" data-i18n-ar="نوع الرحلة">نوع الرحلة</span></label>
-            <select id="hajj-type">
+            <select id="hajj-type" oninput="APP.updateBookingPrice('hajj')" onchange="APP.updateBookingPrice('hajj')">
                 <option value="umrah"><span data-i18n="booking.umrah" data-i18n-ar="عمرة">عمرة</span></option>
                 <option value="hajj"><span data-i18n="booking.hajj" data-i18n-ar="حج">حج</span></option>
             </select>
             <label><span data-i18n="booking.travel_date" data-i18n-ar="تاريخ السفر التقريبي">تاريخ السفر التقريبي</span></label><input id="hajj-date" type="date">
-            <label><span data-i18n="booking.people" data-i18n-ar="عدد الأشخاص">عدد الأشخاص</span></label><input id="hajj-pax" type="number" min="1" value="1">
+            <label><span data-i18n="booking.people" data-i18n-ar="عدد الأشخاص">عدد الأشخاص</span></label><input id="hajj-pax" type="number" min="1" value="1" oninput="APP.updateBookingPrice('hajj')" onchange="APP.updateBookingPrice('hajj')">
             <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="hajj-name" type="text" placeholder="الاسم كما في الجواز" data-i18n-placeholder="ph.الاسم كما في الجواز" data-i18n-placeholder-ar="الاسم كما في الجواز">
             <label><span data-i18n="booking.passport" data-i18n-ar="رقم الجواز">رقم الجواز</span></label><input id="hajj-passport" type="text" placeholder="رقم الجواز" data-i18n-placeholder="ph.رقم الجواز" data-i18n-placeholder-ar="رقم الجواز">
             <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="hajj-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            
+            <!-- التوصيل داخل عدن -->
+            <div class="delivery-box">
+              <label class="dchk">
+                <input type="checkbox" id="delivery-chk-hajj" onchange="(function(){var f=document.getElementById('delivery-fields-hajj');f.classList.toggle('active',this.checked);APP.updateBookingPrice('hajj');})();">
+                🚗 أحتاج توصيل داخل عدن
+              </label>
+              <div class="delivery-fields" id="delivery-fields-hajj">
+                <label>من</label>
+                <select id="delivery-from-hajj" onchange="APP.updateBookingPrice('hajj')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>إلى</label>
+                <select id="delivery-to-hajj" onchange="APP.updateBookingPrice('hajj')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="airport">✈️ مطار عدن</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>نوع السيارة</label>
+                <select id="delivery-car-hajj" onchange="APP.updateBookingPrice('hajj')">
+                  <option value="economy">🚗 اقتصادي</option>
+                  <option value="family">🚐 عائلي</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- السعر التقريبي -->
+            <div class="price-preview" id="price-preview-hajj"></div>
+            
             <button onclick="APP.submitHajj()"><span data-i18n="booking.confirm_hajj" data-i18n-ar="تأكيد الحجز">تأكيد الحجز</span></button>
          </div>
 
          <div id="form-hotel" class="booking-form">
             <div style="font-size:20px; font-weight:900; color:#D81B60; margin-bottom:15px;"><span data-i18n="booking.hotel_details" data-i18n-ar="🏨 تفاصيل الفندق">🏨 تفاصيل الفندق</span></div>
-            <label><span data-i18n="booking.city" data-i18n-ar="المدينة">المدينة</span></label><input id="hotel-city" type="text" placeholder="مثال: القاهرة" data-i18n-placeholder="ph.مثال: القاهرة" data-i18n-placeholder-ar="مثال: القاهرة">
+            <label><span data-i18n="booking.city" data-i18n-ar="المدينة">المدينة</span></label><input id="hotel-city" type="text" placeholder="مثال: القاهرة" data-i18n-placeholder="ph.مثال: القاهرة" data-i18n-placeholder-ar="مثال: القاهرة" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')">
             <label><span data-i18n="booking.hotel_name" data-i18n-ar="اسم الفندق (إن وجد)">اسم الفندق (إن وجد)</span></label><input id="hotel-name" type="text" placeholder="اسم الفندق">
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.checkin" data-i18n-ar="تاريخ الدخول">تاريخ الدخول</span></label><input id="hotel-in" type="date"></div>
-                <div style="flex:1;"><label><span data-i18n="booking.checkout" data-i18n-ar="تاريخ الخروج">تاريخ الخروج</span></label><input id="hotel-out" type="date"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.checkin" data-i18n-ar="تاريخ الدخول">تاريخ الدخول</span></label><input id="hotel-in" type="date" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.checkout" data-i18n-ar="تاريخ الخروج">تاريخ الخروج</span></label><input id="hotel-out" type="date" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')"></div>
             </div>
             <div style="display:flex; gap:10px;">
-                <div style="flex:1;"><label><span data-i18n="booking.rooms" data-i18n-ar="الغرف">الغرف</span></label><input id="hotel-rooms" type="number" min="1" value="1"></div>
+                <div style="flex:1;"><label><span data-i18n="booking.rooms" data-i18n-ar="الغرف">الغرف</span></label><input id="hotel-rooms" type="number" min="1" value="1" oninput="APP.updateBookingPrice('hotel')" onchange="APP.updateBookingPrice('hotel')"></div>
                 <div style="flex:1;"><label><span data-i18n="booking.guests" data-i18n-ar="الضيوف">الضيوف</span></label><input id="hotel-guests" type="number" min="1" value="1"></div>
             </div>
             <label><span data-i18n="booking.full_name" data-i18n-ar="الاسم الكامل">الاسم الكامل</span></label><input id="hotel-client-name" type="text" placeholder="الاسم" data-i18n-placeholder="ph.الاسم" data-i18n-placeholder-ar="الاسم" data-i18n-placeholder="checkout.name" data-i18n-placeholder-ar="الاسم">
             <label><span data-i18n="booking.phone" data-i18n-ar="رقم الجوال">رقم الجوال</span></label><input id="hotel-phone" type="tel" placeholder="رقم الجوال" data-i18n-placeholder="ph.رقم الجوال" data-i18n-placeholder-ar="رقم الجوال">
+            
+            <!-- التوصيل داخل عدن -->
+            <div class="delivery-box">
+              <label class="dchk">
+                <input type="checkbox" id="delivery-chk-hotel" onchange="(function(){var f=document.getElementById('delivery-fields-hotel');f.classList.toggle('active',this.checked);APP.updateBookingPrice('hotel');})();">
+                🚗 أحتاج توصيل داخل عدن
+              </label>
+              <div class="delivery-fields" id="delivery-fields-hotel">
+                <label>من</label>
+                <select id="delivery-from-hotel" onchange="APP.updateBookingPrice('hotel')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>إلى</label>
+                <select id="delivery-to-hotel" onchange="APP.updateBookingPrice('hotel')">
+                  
+                    <option value="">— اختر —</option>
+                    <option value="airport">✈️ مطار عدن</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                </select>
+                <label>نوع السيارة</label>
+                <select id="delivery-car-hotel" onchange="APP.updateBookingPrice('hotel')">
+                  <option value="economy">🚗 اقتصادي</option>
+                  <option value="family">🚐 عائلي</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- السعر التقريبي -->
+            <div class="price-preview" id="price-preview-hotel"></div>
+            
             <button onclick="APP.submitHotel()"><span data-i18n="booking.confirm_hotel" data-i18n-ar="تأكيد حجز الفندق">تأكيد حجز الفندق</span></button>
          </div>
       </div>
@@ -6947,6 +7139,169 @@ html:not([data-theme="light"]) .det-thumb.active {
 @media (max-width: 359px) {
   .det-thumb { width: 54px; height: 54px; border-radius: 12px; }
   .det-thumbs-host { padding: 10px 10px 12px; }
+}
+</style>
+
+<style id="chz-booking-v20-css">
+/* ═══ Booking Form — Premium ═══ */
+.booking-form {
+  background: linear-gradient(180deg, #1a1535 0%, #0f0a24 100%) !important;
+  border-radius: 22px !important;
+  padding: 22px 20px !important;
+  border: 1px solid rgba(255,77,148,0.15) !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
+}
+html[data-theme="light"] .booking-form {
+  background: linear-gradient(180deg, #ffffff 0%, #fafaff 100%) !important;
+  border-color: rgba(255,77,148,0.2) !important;
+  box-shadow: 0 8px 30px rgba(124,58,237,0.08) !important;
+}
+.booking-form label {
+  color: #ff4d94 !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+html[data-theme="light"] .booking-form label { color: #d81b60 !important; }
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+  background: rgba(10,14,26,0.9) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255,77,148,0.15) !important;
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  font-size: 14px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  margin-bottom: 14px !important;
+  transition: all .2s ease !important;
+  -webkit-appearance: none !important;
+}
+html[data-theme="light"] .booking-form input,
+html[data-theme="light"] .booking-form select,
+html[data-theme="light"] .booking-form textarea {
+  background: #f8fafc !important;
+  color: #1a1a2e !important;
+  border-color: #e5e7eb !important;
+}
+.booking-form input::placeholder { color: rgba(255,255,255,0.35) !important; }
+html[data-theme="light"] .booking-form input::placeholder { color: #9ca3af !important; }
+.booking-form input:focus,
+.booking-form select:focus,
+.booking-form textarea:focus {
+  border-color: #ff4d94 !important;
+  box-shadow: 0 0 0 4px rgba(255,77,148,0.12) !important;
+  outline: none !important;
+}
+.booking-form select option {
+  background: #1a1535 !important; color: #fff !important;
+}
+html[data-theme="light"] .booking-form select option {
+  background: #fff !important; color: #1a1a2e !important;
+}
+
+/* ═══ Submit Buttons — Premium ═══ */
+.booking-form button[onclick*="submit"] {
+  background: linear-gradient(135deg, #ff4d94 0%, #a855f7 55%, #7c3aed 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 17px 24px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  letter-spacing: 0.3px !important;
+  box-shadow: 0 10px 30px rgba(255,77,148,0.35), 0 1px 0 rgba(255,255,255,0.2) inset !important;
+  transition: transform .15s ease, box-shadow .15s ease !important;
+  margin-top: 18px !important;
+  width: 100% !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+.booking-form button[onclick*="submit"]:active {
+  transform: scale(0.97) !important;
+  box-shadow: 0 4px 16px rgba(255,77,148,0.4) !important;
+}
+
+/* ═══ Price Preview Box ═══ */
+.price-preview {
+  display: none;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255,77,148,0.12), rgba(168,85,247,0.12));
+  border: 1.5px solid rgba(255,77,148,0.3);
+  animation: ppIn .3s ease;
+}
+@keyframes ppIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.price-preview .pp-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 14px; font-weight: 800; color: #fff;
+}
+.price-preview .pp-row b {
+  font-size: 18px; color: #ff4d94;
+  background: linear-gradient(135deg, #ff4d94, #a855f7);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html[data-theme="light"] .price-preview .pp-row { color: #1a1a2e; }
+.price-preview .pp-detail {
+  font-size: 11.5px; color: rgba(255,255,255,0.65);
+  margin-top: 5px; display: flex; justify-content: space-between;
+}
+html[data-theme="light"] .price-preview .pp-detail { color: #6b7280; }
+.price-preview .pp-note {
+  margin-top: 10px; padding-top: 8px;
+  border-top: 1px dashed rgba(255,77,148,0.3);
+  font-size: 10.5px; color: rgba(255,255,255,0.6); text-align: center;
+}
+html[data-theme="light"] .price-preview .pp-note { color: #6b7280; }
+
+/* ═══ Delivery Box ═══ */
+.delivery-box {
+  margin-top: 16px; padding: 14px;
+  background: rgba(168,85,247,0.08);
+  border: 1.5px dashed rgba(168,85,247,0.35);
+  border-radius: 14px;
+}
+html[data-theme="light"] .delivery-box { background: rgba(168,85,247,0.05); }
+.delivery-box .dchk {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; font-weight: 800; font-size: 13px;
+  color: #a855f7 !important;
+}
+.delivery-box .dchk input {
+  width: 20px !important; height: 20px !important;
+  margin: 0 !important; padding: 0 !important;
+  accent-color: #a855f7;
+}
+.delivery-fields { margin-top: 12px; display: none; }
+.delivery-fields.active { display: block; animation: ppIn .3s ease; }
+
+/* ═══ Tabs — Premium ═══ */
+.booking-tab {
+  padding: 12px 20px !important;
+  border-radius: 14px !important;
+  background: rgba(255,77,148,0.06) !important;
+  color: rgba(255,255,255,0.65) !important;
+  border: 1.5px solid rgba(255,77,148,0.15) !important;
+  transition: all .25s ease !important;
+}
+html[data-theme="light"] .booking-tab {
+  background: rgba(255,77,148,0.05) !important;
+  color: #6b7280 !important;
+  border-color: rgba(255,77,148,0.2) !important;
+}
+.booking-tab.active {
+  background: linear-gradient(135deg, #ff4d94, #a855f7) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 20px rgba(255,77,148,0.35) !important;
+  transform: translateY(-1px);
 }
 </style>
 
@@ -8027,6 +8382,7 @@ var APP={
     var btn = document.getElementById('tab-' + tab);
     if(form) form.classList.add('active');
     if(btn) btn.classList.add('active');
+    setTimeout(function(){ if(APP.updateBookingPrice) APP.updateBookingPrice(""); }, 100);
   },
   closeSuccessModal: function() {
     document.getElementById('booking-success-modal').classList.remove('active');
@@ -12623,54 +12979,147 @@ document.addEventListener('keydown', function(e) {
   console.log('[BOOKING-V2] loading...');
 
   // ═══ 1) حاسبة السعر التقريبي ═══
+  // ═══ v20: جدول أسعار يمني واقعي ═══
+  var CHZ_FLIGHT_ROUTES = {
+    'عدن-صنعاء': 55000, 'صنعاء-عدن': 55000,
+    'عدن-القاهرة': 220000, 'القاهرة-عدن': 220000,
+    'عدن-جدة': 180000, 'جدة-عدن': 180000,
+    'عدن-عمّان': 195000, 'عمّان-عدن': 195000,
+    'عدن-دبي': 165000, 'دبي-عدن': 165000,
+    'عدن-إسطنبول': 285000, 'إسطنبول-عدن': 285000,
+    'صنعاء-القاهرة': 195000, 'القاهرة-صنعاء': 195000,
+    'صنعاء-عمّان': 175000, 'عمّان-صنعاء': 175000,
+    'المكلا-جدة': 165000, 'جدة-المكلا': 165000
+  };
+  var CHZ_BUS_ROUTES = {
+    'عدن-صنعاء': 9500, 'صنعاء-عدن': 9500,
+    'عدن-تعز': 6500, 'تعز-عدن': 6500,
+    'عدن-إب': 7000, 'إب-عدن': 7000,
+    'عدن-المكلا': 12000, 'المكلا-عدن': 12000,
+    'عدن-سيئون': 11000, 'سيئون-عدن': 11000,
+    'عدن-الحديدة': 13500, 'الحديدة-عدن': 13500
+  };
+  var CHZ_HOTEL_CITIES = {
+    'مكة': 600, 'المدينة': 500, 'جدة': 450,
+    'القاهرة': 400, 'دبي': 550, 'إسطنبول': 500,
+    'صنعاء': 250, 'عدن': 220, 'تعز': 200
+  };
+  var CHZ_HAJJ_PACKAGES = { 'عمرة': 8500, 'حج': 28000 };
+
   window.estimateBookingPrice = function(type, data) {
     data = data || {};
     try {
+      var pax = Math.max(1, parseInt(data.passengers || data.pax || 1) || 1);
+
       if (type === 'flight') {
-        var pax = parseInt(data.pax) || 1;
-        var base = 500;
-        // زيادة لو الوجهة دولية
-        if (data.to && data.to.toLowerCase().indexOf('دولي') > -1) base = 1500;
-        // إضافة للمسافة بين المحافظات
-        if (data.from && data.to && data.from !== data.to) base += 150;
-        // درجة الأعمال
-        if (data.class && (data.class.indexOf('أعمال') > -1 || data.class.indexOf('أولى') > -1)) {
-          base = base * 2.5;
-        }
-        return Math.round(pax * base);
+        var key = (data.from || '').trim() + '-' + (data.to || '').trim();
+        var basePax = CHZ_FLIGHT_ROUTES[key] || 55000;
+        var clsMult = 1;
+        if (data.class === 'business' || (data.class||'').indexOf('أعمال') > -1) clsMult = 2.6;
+        else if (data.class === 'first' || (data.class||'').indexOf('أولى') > -1) clsMult = 4;
+        return Math.round(basePax * pax * clsMult);
       }
-      
+
       if (type === 'bus') {
-        var pax = parseInt(data.pax) || 1;
-        return Math.round(pax * 100);
+        var key = (data.from || 'عدن').trim() + '-' + (data.to || '').trim();
+        var basePax = CHZ_BUS_ROUTES[key] || 9500;
+        return Math.round(basePax * pax);
       }
-      
-      if (type === 'hajj') {
-        var pax = parseInt(data.pax) || 1;
-        var base = (data.type && data.type.indexOf('حج') > -1) ? 10000 : 4000;
-        return Math.round(pax * base);
-      }
-      
+
       if (type === 'hotel') {
-        var rooms = parseInt(data.rooms) || 1;
+        var rooms = Math.max(1, parseInt(data.rooms) || 1);
         var nights = 1;
-        if (data.in && data.out) {
-          var d1 = new Date(data.in);
-          var d2 = new Date(data.out);
-          var diff = Math.floor((d2 - d1) / (24*60*60*1000));
-          nights = Math.max(1, diff);
+        if (data.checkin && data.checkout) {
+          var d1 = new Date(data.checkin), d2 = new Date(data.checkout);
+          var diff = Math.floor((d2 - d1) / 86400000);
+          nights = Math.max(1, diff || 1);
         }
-        // حسب المدينة
-        var base = 300;
-        if (data.city && (data.city.indexOf('مكة') > -1 || data.city.indexOf('المدينة') > -1)) {
-          base = 500;
-        }
-        return Math.round(rooms * nights * base);
+        var cityKey = (data.city || '').replace(/[^ء-ي]/g, '');
+        var foundCity = null;
+        for (var k in CHZ_HOTEL_CITIES) { if (cityKey.indexOf(k) > -1) { foundCity = k; break; } }
+        var nightPrice = foundCity ? CHZ_HOTEL_CITIES[foundCity] : 350;
+        return Math.round(rooms * nights * nightPrice);
       }
-    } catch(e) {
-      console.warn('[BOOKING-V2] estimate error:', e.message);
-    }
+
+      if (type === 'hajj') {
+        var t = data.type || 'umrah';
+        var pkgBase = 8500;
+        if ((data.type || '').indexOf('حج') > -1 || t === 'hajj') pkgBase = 28000;
+        return Math.round(pax * pkgBase);
+      }
+    } catch(e) { console.warn('[BOOKING-V20] estimate:', e.message); }
     return 0;
+  };
+
+  // ═══ v20: توصيل داخل عدن ═══
+  var CHZ_ADEN_DISTANCES = {
+    'crater-mansoura': 8, 'crater-khormaksar': 6, 'crater-airport': 10,
+    'mansoura-airport': 5, 'mansoura-khormaksar': 4,
+    'khormaksar-airport': 2, 'sheikh-othman-airport': 7,
+    'boraiga-airport': 15, 'mualla-airport': 9,
+    'tawahi-airport': 8, 'dar-saad-airport': 12, 'shab-airport': 14
+  };
+
+  window.estimateDelivery = function(data) {
+    if (!data || !data.needDelivery) return 0;
+    var from = data.deliveryFrom || '';
+    var to = data.deliveryTo || '';
+    var carType = data.deliveryCar || 'economy';
+    var km = 8;
+    var pairKey = from + '-' + to;
+    if (CHZ_ADEN_DISTANCES[pairKey]) km = CHZ_ADEN_DISTANCES[pairKey];
+    else {
+      var reverseKey = to + '-' + from;
+      if (CHZ_ADEN_DISTANCES[reverseKey]) km = CHZ_ADEN_DISTANCES[reverseKey];
+    }
+    var baseFee = carType === 'family' ? 2500 : 1500;
+    var perKm = carType === 'family' ? 500 : 350;
+    return Math.round(baseFee + (km * perKm));
+  };
+
+  // ═══ v20: تحديث السعر الفوري ═══
+  window.updateBookingPrice = function(type) {
+    var preview = document.getElementById('price-preview-' + type);
+    if (!preview) return;
+    var data = {};
+    if (type === 'flight') {
+      data.from = (document.getElementById('fly-from')||{}).value || '';
+      data.to = (document.getElementById('fly-to')||{}).value || '';
+      data.passengers = (document.getElementById('fly-pax')||{}).value || '1';
+      data.class = (document.getElementById('fly-class')||{}).value || 'economy';
+    } else if (type === 'bus') {
+      data.from = 'عدن';
+      data.to = (document.getElementById('bus-to')||{}).value || '';
+      data.passengers = (document.getElementById('bus-pax')||{}).value || '1';
+    } else if (type === 'hotel') {
+      data.city = (document.getElementById('hotel-city')||{}).value || '';
+      data.checkin = (document.getElementById('hotel-in')||{}).value || '';
+      data.checkout = (document.getElementById('hotel-out')||{}).value || '';
+      data.rooms = (document.getElementById('hotel-rooms')||{}).value || '1';
+    } else if (type === 'hajj') {
+      data.type = (document.getElementById('hajj-type')||{}).value || 'umrah';
+      data.passengers = (document.getElementById('hajj-pax')||{}).value || '1';
+    }
+    // توصيل
+    var dChk = document.getElementById('delivery-chk-' + type);
+    if (dChk && dChk.checked) {
+      data.needDelivery = true;
+      data.deliveryFrom = (document.getElementById('delivery-from-' + type)||{}).value || '';
+      data.deliveryTo = (document.getElementById('delivery-to-' + type)||{}).value || '';
+      data.deliveryCar = (document.getElementById('delivery-car-' + type)||{}).value || 'economy';
+    }
+    var base = window.estimateBookingPrice(type, data);
+    var delivery = window.estimateDelivery(data);
+    var total = base + delivery;
+    if (!total) { preview.style.display = 'none'; return; }
+    preview.style.display = 'block';
+    var html = '<div class="pp-row"><span>💰 السعر التقريبي</span><b>' + (window.formatPrice ? formatPrice(total) : total + ' ر.س') + '</b></div>';
+    if (delivery > 0) {
+      html += '<div class="pp-detail">الرحلة: ' + (window.formatPrice ? formatPrice(base) : base + ' ر.س') + '</div>';
+      html += '<div class="pp-detail">التوصيل: ' + (window.formatPrice ? formatPrice(delivery) : delivery + ' ر.س') + '</div>';
+    }
+    html += '<div class="pp-note">💡 هذا سعر تقريبي — سنؤكد السعر النهائي بعد المراجعة</div>';
+    preview.innerHTML = html;
   };
 
   // ═══ 2) تنسيق السعر بالعملة ═══
