@@ -6129,6 +6129,26 @@ html[data-theme="light"] {
 <!-- الأقسام -->
 <div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
 
+<!-- ═══ ⚡ عروض خاطفة ═══ -->
+<div class="sec" id="flash-sec">
+  <div class="sh">
+    <div class="stl">⚡ عروض خاطفة</div>
+    <a class="flash-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a>
+  </div>
+  <div id="flash-timer" class="flash-timer">
+    <span class="ft-icon">⏱️</span>
+    <span class="ft-label">ينتهي خلال</span>
+    <span class="ft-clock" id="ft-hours">00</span><span class="ft-sep">:</span><span class="ft-clock" id="ft-mins">00</span><span class="ft-sep">:</span><span class="ft-clock" id="ft-secs">00</span>
+  </div>
+  <div id="flash-c" class="flash-row"></div>
+</div>
+
+<!-- ═══ العلامات التجارية ═══ -->
+<div class="sec" id="brands-sec">
+  <div class="sh"><div class="stl">🏷️ العلامات التجارية</div></div>
+  <div class="brands" id="brands-list"></div>
+</div>
+
 <div class="booking-row-container"><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hotel', null);"><div class="booking-icon" style="color: #6A1B9A;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg></div><span class="booking-label" data-i18n="booking.hotels" data-i18n-ar="فنادق">فنادق</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('bus', null);"><div class="booking-icon" style="color: #f97316;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></div><span class="booking-label" data-i18n="booking.buses" data-i18n-ar="حافلات">حافلات</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hajj', null);"><div class="booking-icon" style="color: #D81B60;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="3"/></svg></div><span class="booking-label" data-i18n="booking.hajj" data-i18n-ar="حج وعمرة">حج وعمرة</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('flight', null);"><div class="booking-icon" style="color: #3b82f6;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div><span class="booking-label" data-i18n="booking.flights" data-i18n-ar="رحلات طيران">رحلات طيران</span></div></div>
 
 
@@ -6150,10 +6170,7 @@ html[data-theme="light"] {
   <div id="prods" class="prods" style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; padding:0 15px;"></div>
 </div>
 
-<div class="sec" id="brands-sec" style="display:none;">
-        <div class="sh"><div class="stl">العلامات التجارية</div></div>
-        <div class="brands" id="brands-list" style="display:flex; gap:10px; overflow-x:auto; padding:10px 15px;"></div>
-      </div>
+
 
       
     </div>
@@ -6939,6 +6956,153 @@ html:not([data-theme="light"]) .det-thumb.active {
 }
 </style>
 
+<style id="chz-flash-v17-css">
+body #sc-home #flash-sec {
+  margin: 16px 0 8px;
+  padding: 0;
+}
+body #sc-home #flash-sec .sh {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 15px 6px;
+}
+body #sc-home #flash-sec .stl {
+  font-weight: 900; font-size: 18px;
+  background: linear-gradient(90deg, #ff4d94, #a855f7);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body #sc-home #flash-sec .flash-view-all {
+  font-size: 12px; font-weight: 700;
+  color: #ff4d94; cursor: pointer;
+}
+body #sc-home .flash-timer {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 15px 10px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(255,77,148,0.12), rgba(168,85,247,0.12));
+  border: 1px solid rgba(255,77,148,0.3);
+  border-radius: 20px;
+  font-size: 11px; font-weight: 700;
+  color: #ff4d94;
+}
+body #sc-home .flash-timer .ft-icon { font-size: 14px; }
+body #sc-home .flash-timer .ft-clock {
+  background: #1f2937; color: #fff;
+  padding: 2px 6px; border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-weight: 900; font-size: 11px;
+}
+body #sc-home .flash-timer .ft-sep { color: #ff4d94; font-weight: 900; }
+html:not([data-theme="light"]) body #sc-home .flash-timer {
+  background: rgba(255,77,148,0.08);
+  border-color: rgba(255,77,148,0.4);
+}
+body #sc-home .flash-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 15px 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+}
+body #sc-home .flash-row::-webkit-scrollbar { display: none; }
+body #sc-home .fcard {
+  flex: 0 0 145px;
+  min-width: 145px;
+  max-width: 145px;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: transform .2s ease, box-shadow .2s ease;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+body #sc-home .fcard:active { transform: scale(0.96); }
+body #sc-home .fcard-img {
+  position: relative; width: 100%; height: 130px;
+  background: #f4f6fa; overflow: hidden;
+}
+body #sc-home .fcard-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+body #sc-home .fcard-disc {
+  position: absolute; top: 6px; right: 6px;
+  background: linear-gradient(135deg, #ff4d94, #f97316);
+  color: #fff; font-weight: 900; font-size: 11px;
+  padding: 3px 8px; border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(255,77,148,0.4);
+}
+body #sc-home .fcard-body { padding: 8px 10px 10px; }
+body #sc-home .fcard-name {
+  font-size: 11px; font-weight: 700;
+  color: #1f2937; line-height: 1.3;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 28px;
+}
+body #sc-home .fcard-price {
+  display: flex; align-items: baseline; gap: 3px;
+  font-size: 13px;
+}
+body #sc-home .fcard-price .fp-new { color: #ff4d94; font-weight: 900; }
+body #sc-home .fcard-price .fp-cur { color: #ff4d94; font-size: 10px; }
+body #sc-home .fcard-price .fp-old {
+  color: #9ca3af; font-size: 10px;
+  text-decoration: line-through; margin-left: auto;
+}
+html:not([data-theme="light"]) body #sc-home .fcard {
+  background: linear-gradient(180deg, #1e2438, #181d30);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
+html:not([data-theme="light"]) body #sc-home .fcard-img { background: #131829; }
+html:not([data-theme="light"]) body #sc-home .fcard-name { color: #e8ecf5; }
+html:not([data-theme="light"]) body #sc-home .fcard-price .fp-old { color: #6b7280; }
+html:not([data-theme="light"]) body #sc-home .flash-timer .ft-clock { background: #0a0e1a; }
+body #sc-home #brands-sec {
+  margin: 12px 0 4px;
+}
+body #sc-home #brands-sec .sh { padding: 0 15px 8px; }
+body #sc-home #brands-sec .stl { font-weight: 900; font-size: 16px; color: var(--chz-text, #1f2937); }
+html:not([data-theme="light"]) body #sc-home #brands-sec .stl { color: #e8ecf5; }
+body #sc-home #brands-list {
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  padding: 4px 15px 12px;
+  scrollbar-width: none;
+}
+body #sc-home #brands-list::-webkit-scrollbar { display: none; }
+body #sc-home #brands-list .brand-chip {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: var(--bg2, #f4f6fa);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 20px;
+  font-weight: 700; font-size: 12px;
+  color: var(--chz-text, #1f2937);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+}
+body #sc-home #brands-list .brand-chip:active { transform: scale(0.94); }
+html:not([data-theme="light"]) body #sc-home #brands-list .brand-chip {
+  background: #1e2438;
+  border-color: rgba(255,255,255,0.08);
+  color: #e8ecf5;
+}
+@media (max-width: 359px) {
+  body #sc-home .fcard { flex: 0 0 130px; min-width: 130px; max-width: 130px; }
+  body #sc-home .fcard-img { height: 115px; }
+  body #sc-home #flash-sec .stl { font-size: 16px; }
+}
+</style>
+
 <style id="chz-banner-v10-css">
 body #sc-home #slides {
   position: relative !important;
@@ -7220,6 +7384,24 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 <script>
 
 // ================= الأقسام الأساسية المثبتة =================
+// v17: flash timer (ends at midnight)
+function startFlashTimer(){
+  function tick(){
+    var now=new Date();
+    var end=new Date();end.setHours(23,59,59,999);
+    var diff=Math.max(0,end-now);
+    var h=Math.floor(diff/3600000);
+    var m=Math.floor((diff%3600000)/60000);
+    var s=Math.floor((diff%60000)/1000);
+    var eh=document.getElementById('ft-hours');
+    var em=document.getElementById('ft-mins');
+    var es=document.getElementById('ft-secs');
+    if(eh)eh.textContent=String(h).padStart(2,'0');
+    if(em)em.textContent=String(m).padStart(2,'0');
+    if(es)es.textContent=String(s).padStart(2,'0');
+  }
+  tick();setInterval(tick,1000);
+}
 window.FIXED_CATS = [
   { key: 'electronics', name: 'إلكترونيات',       img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop' },
   { key: 'fashion',     name: 'أزياء',            img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=300&auto=format&fit=crop' },
@@ -7652,8 +7834,19 @@ var APP={
   
   renderFlash:function(){
     var c=document.getElementById('flash-c');if(!c)return;
-    var items=this.products.filter(function(p){return p.old&&(p.old-p.price)/p.old>0.15;}).slice(0,6);
-    c.innerHTML=items.map(function(p){return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-i"><img src="'+esc(p.img||'')+'"><div class="prod-b">⚡ '+esc(p.badge)+'</div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-o">'+esc(p.old)+'</span></div></div></div>';}).join('');
+    var items=this.products.filter(function(p){return p.old&&p.price&&(p.old-p.price)/p.old>=0.1;}).slice(0,10);
+    if(!items.length){var fs=document.getElementById('flash-sec');if(fs)fs.style.display='none';return;}
+    c.innerHTML=items.map(function(p){
+      var disc=Math.round(((p.old-p.price)/p.old)*100);
+      return '<div class="fcard" onclick="APP.openProduct(\''+esc(p.id)+'\')">'+
+        '<div class="fcard-img"><img src="'+esc(p.img||'')+'" loading="lazy"><div class="fcard-disc">-'+disc+'%</div></div>'+
+        '<div class="fcard-body">'+
+          '<div class="fcard-name">'+esc(p.name)+'</div>'+
+          '<div class="fcard-price"><span class="fp-new">'+esc(p.price)+'</span><span class="fp-cur">ر.س</span><span class="fp-old">'+esc(p.old)+'</span></div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+    startFlashTimer();
   },
   
   renderBanners: function() {
