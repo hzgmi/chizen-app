@@ -17064,30 +17064,80 @@ document.addEventListener('keydown', function(e) {
     APP.cmRenderPreviews();
   };
 
+  // v54: upload with 15s timeout per image + clear errors
+  async function fetchWithTimeout(url, opts, ms){
+    var ctrl = new AbortController();
+    var t = setTimeout(function(){ ctrl.abort(); }, ms);
+    try {
+      var r = await fetch(url, Object.assign({}, opts, { signal: ctrl.signal }));
+      clearTimeout(t);
+      return r;
+    } catch(e) {
+      clearTimeout(t);
+      throw e;
+    }
+  }
+
   async function uploadFiles(files){
     var urls = [];
+    var errors = [];
     for (var i = 0; i < files.length; i++) {
       var file = files[i];
-      if (file.size > 5 * 1024 * 1024) { console.warn("large:", file.name); continue; }
+      if (file.size > 5 * 1024 * 1024) {
+        errors.push(file.name + " (حجم كبير)");
+        continue;
+      }
       var uploaded = false;
+      
+      // Catbox (15s timeout)
       try {
+        console.log("[upload] catbox →", file.name);
         var fd1 = new FormData();
         fd1.append("reqtype", "fileupload");
         fd1.append("fileToUpload", file);
-        var r1 = await fetch("https://catbox.moe/user/api.php", { method: "POST", body: fd1 });
+        var r1 = await fetchWithTimeout("https://catbox.moe/user/api.php", { method: "POST", body: fd1 }, 15000);
         var txt1 = await r1.text();
-        if (txt1 && txt1.indexOf("https://") === 0) { urls.push(txt1.trim()); uploaded = true; }
-      } catch(e) { console.warn("catbox:", e.message); }
+        if (txt1 && txt1.trim().indexOf("https://") === 0) {
+          urls.push(txt1.trim());
+          uploaded = true;
+          console.log("[upload] catbox ✓", txt1.trim());
+        } else {
+          errors.push("catbox رد غير متوقع");
+        }
+      } catch(e) {
+        console.warn("[upload] catbox ✗", e.message);
+        if (e.name === "AbortError") errors.push("catbox بطيء (15 ثانية)");
+        else errors.push("catbox: " + e.message);
+      }
+      
+      // tmpfiles (12s timeout) — احتياطي
       if (!uploaded) {
         try {
+          console.log("[upload] tmpfiles →", file.name);
           var fd2 = new FormData();
           fd2.append("file", file);
-          var r2 = await fetch("https://tmpfiles.org/api/v1/upload", { method: "POST", body: fd2 });
+          var r2 = await fetchWithTimeout("https://tmpfiles.org/api/v1/upload", { method: "POST", body: fd2 }, 12000);
           var j2 = await r2.json();
-          if (j2 && j2.data && j2.data.url) { urls.push(j2.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/")); uploaded = true; }
-        } catch(e) { console.warn("tmpfiles:", e.message); }
+          if (j2 && j2.data && j2.data.url) {
+            urls.push(j2.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/"));
+            uploaded = true;
+            console.log("[upload] tmpfiles ✓");
+          } else {
+            errors.push("tmpfiles رد غير متوقع");
+          }
+        } catch(e) {
+          console.warn("[upload] tmpfiles ✗", e.message);
+          if (e.name === "AbortError") errors.push("tmpfiles بطيء (12 ثانية)");
+          else errors.push("tmpfiles: " + e.message);
+        }
       }
-      if (!uploaded) console.warn("فشل رفع:", file.name);
+      
+      if (!uploaded) {
+        console.error("[upload] فشل نهائي:", file.name);
+      }
+    }
+    if (!urls.length && errors.length) {
+      throw new Error("فشل رفع الصور:\n" + errors.join("\n") + "\n\nتأكد من الإنترنت أو استخدم شبكة أخرى");
     }
     return urls;
   }
@@ -17108,14 +17158,27 @@ document.addEventListener('keydown', function(e) {
     if (!phone.trim()) return APP.cmModal("📞", "الجوال مطلوب", "أدخل رقم جوالك");
     if (!APP.cmFiles.length) return APP.cmModal("📸", "الصورة مطلوبة", "ارفع صورة واحدة على الأقل");
     var detected = detect(title + " " + desc + " " + city);
-    if (type === "car" && detected === "phone") return APP.cmModal("📱", "هذا إعلان هاتف!", "أنت في قسم السيارات — غيّر النوع أو عدّل العنوان");
-    if (type === "phone" && detected === "car") return APP.cmModal("🚗", "هذا إعلان سيارة!", "أنت في قسم الهواتف — غيّر النوع أو عدّل العنوان");
+    if (type === "car" && detected === "phone") return APP.cmModal("📱", "هذا إعلان هاتف!", "أنت في قسم السيارات — غيّر النوع");
+    if (type === "phone" && detected === "car") return APP.cmModal("🚗", "هذا إعلان سيارة!", "أنت في قسم الهواتف — غيّر النوع");
     if (type === "car" && detected !== "car") return APP.cmModal("🚫", "لم نتعرف على سيارة", "اكتب ماركة السيارة بوضوح");
     if (type === "phone" && detected !== "phone") return APP.cmModal("🚫", "لم نتعرف على هاتف", "اكتب ماركة الهاتف بوضوح");
-    if (btn) { btn.disabled = true; var span = btn.querySelector("span"); if (span) span.textContent = "⏳ جاري الرفع..."; }
+
+    // ═══ Global timeout: 40s ═══
+    var timedOut = false;
+    var globalTimer = setTimeout(function(){
+      timedOut = true;
+      if (btn) { btn.disabled = false; var s = btn.querySelector("span"); if (s) s.textContent = "نشر الإعلان"; }
+      APP.cmModal("⏱️", "انتهت مهلة النشر", "استغرق الرفع أكثر من 40 ثانية. تأكد من الإنترنت وحاول مرة أخرى.");
+    }, 40000);
+
+    if (btn) { btn.disabled = true; var span = btn.querySelector("span"); if (span) span.textContent = "⏳ جاري رفع الصور..."; }
     try {
       var images = await uploadFiles(APP.cmFiles);
-      if (!images.length) throw new Error("فشل رفع الصور");
+      if (timedOut) return;
+      if (!images.length) throw new Error("لم تُرفع أي صورة");
+      
+      if (btn) { var span2 = btn.querySelector("span"); if (span2) span2.textContent = "⏳ جاري الحفظ..."; }
+      
       var data = {
         type: type, title: title.trim(), description: desc.trim(), price: price, city: city.trim(), phone: phone.trim(),
         images: images, image: images[0],
@@ -17130,19 +17193,27 @@ document.addEventListener('keydown', function(e) {
         data.year = parseInt((document.getElementById("cm-f-year")||{}).value || 0) || null;
         data.km = parseInt((document.getElementById("cm-f-km")||{}).value || 0) || null;
       } else {
-        data.phoneBrand = data.brand;
-        data.phoneModel = data.model;
+        data.phoneBrand = (document.getElementById("cm-f-brand")||{}).value || "";
+        data.phoneModel = (document.getElementById("cm-f-model")||{}).value || "";
         data.storage = (document.getElementById("cm-f-storage")||{}).value || "128";
         data.condition = (document.getElementById("cm-f-condition")||{}).value || "used";
       }
+      
       await FB.db.collection("listings").add(data);
+      clearTimeout(globalTimer);
+      if (timedOut) return;
+      
       APP.cmModal("✅", "تم نشر إعلانك!", "إعلانك ظاهر الآن في سوق شيزن");
       APP.goTab("commerce");
       setTimeout(APP.cmLoad, 500);
     } catch(e) {
-      APP.cmModal("⚠️", "خطأ", e.message || "تعذر النشر");
+      clearTimeout(globalTimer);
+      if (timedOut) return;
+      console.error("[cmSubmit]", e);
+      APP.cmModal("⚠️", "فشل النشر", e.message || "حدث خطأ غير متوقع");
     } finally {
-      if (btn) { btn.disabled = false; var span2 = btn.querySelector("span"); if (span2) span2.textContent = "نشر الإعلان"; }
+      clearTimeout(globalTimer);
+      if (btn) { btn.disabled = false; var s3 = btn.querySelector("span"); if (s3) s3.textContent = "نشر الإعلان"; }
     }
   };
 
