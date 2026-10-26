@@ -68,34 +68,79 @@
     if (homeScreen) {
       var prodsSection = homeScreen.querySelector('.sec:last-child');
       if (prodsSection) {
-        var extraHTML = 
-          '<div id="tracking-w" style="padding:0 20px;margin-top:8px;"></div>' +
-          '<div style="margin:16px 20px 0;padding:8px;background:var(--nav);border:1px dashed var(--bd);border-radius:14px;text-align:center;min-height:56px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mt);position:relative;">' +
-            '<span style="position:absolute;top:4px;right:8px;font-size:9px;color:var(--mt2);">إعلان</span>' +
-            'مساحة إعلانية' +
+        var extraHTML =
+          // ═══ chz-world-v47 — "عالم آخر" ═══
+          '<div id="chz-world" style="position:relative;overflow:hidden;margin-top:32px;padding:40px 20px 30px;background:linear-gradient(180deg,transparent 0%,rgba(155,77,255,0.05) 30%,rgba(255,61,154,0.08) 70%,rgba(155,77,255,0.12) 100%);text-align:center;">' +
+            // نجوم متحركة
+            '<div class="chz-w-stars">' +
+              '<span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span>' +
+            '</div>' +
+            // أيقونة "باب عالم آخر"
+            '<div class="chz-w-portal">' +
+              '<div class="chz-w-portal-ring"></div>' +
+              '<div class="chz-w-portal-icon">🌌</div>' +
+            '</div>' +
+            // العنوان
+            '<div class="chz-w-title">لم تنتهِ الحكاية بعد</div>' +
+            '<div class="chz-w-sub">هناك عوالم أخرى تنتظرك داخل شيزن</div>' +
+            // 4 أبواب لعوالم
+            '<div class="chz-w-worlds">' +
+              '<div class="chz-w-world" onclick="APP.goTab(\'cart\')"><div class="chz-w-world-i">🛍️</div><div class="chz-w-world-n">السوق</div></div>' +
+              '<div class="chz-w-world" onclick="APP.goTab(\'booking\')"><div class="chz-w-world-i">✈️</div><div class="chz-w-world-n">السفر</div></div>' +
+              '<div class="chz-w-world" onclick="APP.goTab(\'points\')"><div class="chz-w-world-i">💎</div><div class="chz-w-world-n">النقاط</div></div>' +
+              '<div class="chz-w-world" onclick="APP.goTab(\'orders\')"><div class="chz-w-world-i">📦</div><div class="chz-w-world-n">طلباتي</div></div>' +
+            '</div>' +
+            // زر العودة للأعلى
+            '<button class="chz-w-top" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="18 15 12 9 6 15"/></svg>' +
+              '<span>العودة للأعلى</span>' +
+            '</button>' +
+            // Footer
+            '<div class="chz-w-footer">' +
+              '<div class="chz-w-logo">CHIZEN</div>' +
+              '<div class="chz-w-tagline">✨ عالمك للتسوق والسفر ✨</div>' +
+              '<div class="chz-w-copy">© 2026 CHIZEN — جميع الحقوق محفوظة</div>' +
+            '</div>' +
           '</div>' +
-          '<div class="sec" style="display:none;" id="flash-sec">' +
-            '<div class="sh"><div class="stl">⚡ عروض خاطفة</div></div>' +
-            '<div style="display:flex;gap:10px;overflow-x:auto;" id="flash-c"></div>' +
-          '</div>' +
-          '<div class="sec" id="brands-sec" style="display:none;">' +
-            '<div class="sh"><div class="stl">🏷️ العلامات التجارية</div></div>' +
-            '<div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;" id="brands"></div>' +
-          '</div>' +
-          '<div style="margin:22px 20px 0;padding:20px;background:linear-gradient(135deg,#592cff,#a72bff,#ff20c6,#ff8b45);border-radius:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;">' +
-            '<div><div style="font-size:16px;font-weight:900;color:#fff;">خصم إضافي 20%</div><div style="font-size:11px;color:rgba(255,255,255,.92);margin-top:4px;">على طلبك الأول</div><div style="display:inline-block;margin-top:8px;padding:6px 14px;background:rgba(0,0,0,.32);border:1px dashed rgba(255,255,255,.65);border-radius:8px;color:#fff;font-size:12px;font-weight:900;letter-spacing:2px;font-family:monospace;">CHIZEN20</div></div>' +
-            '<div style="font-size:48px;">🎁</div>' +
-          '</div>' +
-          '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:20px;margin-top:10px;">' +
-            '<div style="background:var(--nav);border:1.5px solid var(--bd);border-radius:12px;padding:12px 6px;text-align:center;"><div style="font-size:20px;">🔒</div><div style="font-size:9px;color:var(--cr);font-weight:700;margin-top:4px;">دفع آمن</div></div>' +
-            '<div style="background:var(--nav);border:1.5px solid var(--bd);border-radius:12px;padding:12px 6px;text-align:center;"><div style="font-size:20px;">🚚</div><div style="font-size:9px;color:var(--cr);font-weight:700;margin-top:4px;">شحن سريع</div></div>' +
-            '<div style="background:var(--nav);border:1.5px solid var(--bd);border-radius:12px;padding:12px 6px;text-align:center;"><div style="font-size:20px;">↩️</div><div style="font-size:9px;color:var(--cr);font-weight:700;margin-top:4px;">إرجاع</div></div>' +
-            '<div style="background:var(--nav);border:1.5px solid var(--bd);border-radius:12px;padding:12px 6px;text-align:center;"><div style="font-size:20px;">💬</div><div style="font-size:9px;color:var(--cr);font-weight:700;margin-top:4px;">دعم 24/7</div></div>' +
-          '</div>' +
-          '<div style="padding:24px 20px 40px;text-align:center;">' +
-            '<div style="font-family:Playfair Display,serif;font-size:28px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">CHIZEN</div>' +
-            '<div style="font-size:11px;color:var(--mt2);margin-top:6px;">© 2025 CHIZEN</div>' +
-          '</div>';
+          // CSS مدمج
+          '<style id="chz-world-v47-css">' +
+            '#chz-world{font-family:Tajawal,sans-serif;direction:rtl;}' +
+            '.chz-w-stars{position:absolute;inset:0;pointer-events:none;opacity:.4;}' +
+            '.chz-w-stars span{position:absolute;font-size:10px;color:#fff;animation:wSparkle 3s ease-in-out infinite;}' +
+            '.chz-w-stars span:nth-child(1){top:8%;left:15%;animation-delay:0s;}' +
+            '.chz-w-stars span:nth-child(2){top:15%;left:75%;animation-delay:.3s;}' +
+            '.chz-w-stars span:nth-child(3){top:25%;left:30%;animation-delay:.6s;}' +
+            '.chz-w-stars span:nth-child(4){top:12%;left:55%;animation-delay:.9s;}' +
+            '.chz-w-stars span:nth-child(5){top:35%;left:85%;animation-delay:1.2s;}' +
+            '.chz-w-stars span:nth-child(6){top:45%;left:10%;animation-delay:1.5s;}' +
+            '.chz-w-stars span:nth-child(7){top:55%;left:70%;animation-delay:.4s;}' +
+            '.chz-w-stars span:nth-child(8){top:65%;left:25%;animation-delay:.8s;}' +
+            '.chz-w-stars span:nth-child(9){top:20%;left:45%;animation-delay:1.1s;}' +
+            '.chz-w-stars span:nth-child(10){top:40%;left:60%;animation-delay:.2s;}' +
+            '.chz-w-stars span:nth-child(11){top:70%;left:80%;animation-delay:.7s;}' +
+            '.chz-w-stars span:nth-child(12){top:30%;left:5%;animation-delay:1.4s;}' +
+            '@keyframes wSparkle{0%,100%{opacity:.2;transform:scale(.8);}50%{opacity:1;transform:scale(1.3);}}' +
+            '.chz-w-portal{position:relative;width:100px;height:100px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;}' +
+            '.chz-w-portal-ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#FF3D9A,#9B4DFF,#4D8CFF,#FF8A00,#FF3D9A);animation:wRotate 8s linear infinite;filter:blur(6px);opacity:.7;}' +
+            '.chz-w-portal-ring::after{content:\'\';position:absolute;inset:8px;background:var(--bg,#07091d);border-radius:50%;}' +
+            '.chz-w-portal-icon{position:relative;font-size:44px;z-index:1;filter:drop-shadow(0 0 20px rgba(155,77,255,.8));animation:wFloat 3s ease-in-out infinite;}' +
+            '@keyframes wRotate{to{transform:rotate(360deg);}}' +
+            '@keyframes wFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}' +
+            '.chz-w-title{font-size:22px;font-weight:900;color:var(--chz-text,#fff);margin-bottom:6px;letter-spacing:-.3px;}' +
+            '.chz-w-sub{font-size:13px;color:var(--mt,#9ca3af);font-weight:600;margin-bottom:24px;line-height:1.5;}' +
+            '.chz-w-worlds{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}' +
+            '.chz-w-world{background:var(--nav,#1e2438);border:1.5px solid rgba(255,61,154,.15);border-radius:14px;padding:12px 4px;cursor:pointer;transition:all .2s ease;-webkit-tap-highlight-color:transparent;}' +
+            '.chz-w-world:active{transform:scale(.94);background:rgba(255,61,154,.1);}' +
+            '.chz-w-world-i{font-size:24px;line-height:1;margin-bottom:6px;}' +
+            '.chz-w-world-n{font-size:10px;font-weight:800;color:var(--chz-text,#e8ecf5);}' +
+            '.chz-w-top{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:linear-gradient(135deg,rgba(255,61,154,.12),rgba(155,77,255,.12));border:1.5px solid rgba(255,61,154,.3);border-radius:20px;color:#FF3D9A;font-family:Tajawal,sans-serif;font-size:12px;font-weight:900;cursor:pointer;margin-bottom:32px;-webkit-tap-highlight-color:transparent;transition:all .15s ease;}' +
+            '.chz-w-top:active{transform:scale(.95);}' +
+            '.chz-w-footer{border-top:1px solid rgba(155,77,255,.15);padding-top:24px;margin-top:8px;}' +
+            '.chz-w-logo{font-family:Playfair Display,serif;font-size:32px;font-weight:900;background:linear-gradient(135deg,#FF3D9A 0%,#9B4DFF 50%,#4D8CFF 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:8px;}' +
+            '.chz-w-tagline{font-size:12px;color:var(--mt,#9ca3af);font-weight:700;margin-bottom:6px;}' +
+            '.chz-w-copy{font-size:10px;color:var(--mt2,#6b7280);font-weight:600;}' +
+            '@media(max-width:359px){.chz-w-title{font-size:18px;}.chz-w-sub{font-size:11px;}.chz-w-portal{width:80px;height:80px;}.chz-w-portal-icon{font-size:36px;}.chz-w-logo{font-size:26px;}}' +
+          '</style>';
         var prodsDiv = homeScreen.querySelector('#prods');
         if (prodsDiv && prodsDiv.parentElement) {
           prodsDiv.parentElement.insertAdjacentHTML('afterend', extraHTML);
