@@ -6044,6 +6044,14 @@ html[data-theme="light"] {
       <div class="st"></div>
 
 <!-- CHIZEN PRO HEADER -->
+<div id="chz-track-strip" onclick="APP.goTab('myorders')">
+  <div id="chz-track-icon">📦</div>
+  <div id="chz-track-body">
+    <div id="chz-track-title">تتبع طلبك</div>
+    <div id="chz-track-sub">جاري التحميل...</div>
+  </div>
+  <svg id="chz-track-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+</div>
 <div class="chz-hdr">
   <!-- TOP BANNER -->
   
@@ -7500,6 +7508,78 @@ html[data-theme="light"] body #sc-home #flash-c .fcard-name {
     max-width: 130px !important;
     width: 130px !important;
   }
+}
+</style>
+
+<style id="chz-track-v38">
+/* ═══ Header flush top ═══ */
+body #sc-home .chz-hdr {
+  margin-top: 0 !important;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 4px) !important;
+}
+
+/* ═══ Order track strip ═══ */
+#chz-track-strip {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  margin: 6px 12px 6px;
+  background: linear-gradient(135deg, #FF8A00 0%, #FF3D9A 55%, #9B4DFF 100%);
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255,61,154,0.28);
+  font-family: 'Tajawal', sans-serif;
+  color: #fff;
+  min-height: 40px;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s ease;
+}
+#chz-track-strip.on { display: flex; }
+#chz-track-strip:active { transform: scale(0.98); }
+#chz-track-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+#chz-track-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+#chz-track-title {
+  font-size: 11.5px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: #fff;
+}
+#chz-track-sub {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#chz-track-arrow {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: rgba(255,255,255,0.9);
+}
+@media (max-width: 359px) {
+  #chz-track-strip { padding: 6px 10px; gap: 8px; margin: 4px 10px; }
+  #chz-track-title { font-size: 10.5px; }
+  #chz-track-sub { font-size: 9px; }
 }
 </style>
 
@@ -15387,6 +15467,63 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+
+<script id="chz-track-v38-js">
+(function(){
+  var STATUS = {
+    pending: { label: 'قيد المراجعة', icon: '⏳' },
+    confirmed: { label: 'تم تأكيد الطلب', icon: '✅' },
+    shipped: { label: 'في الطريق إليك', icon: '🚚' },
+    awaiting_verification: { label: 'بانتظار مراجعة الدفع', icon: '⏳' },
+    awaiting_categories: { label: 'جاري التجهيز', icon: '📦' },
+    ready_to_send: { label: 'جاهز للإرسال', icon: '📤' },
+    sent_to_customer: { label: 'في الطريق إليك', icon: '🚚' },
+    delivered: { label: 'تم التسليم', icon: '🎉' },
+    completed: { label: 'تم التسليم', icon: '🎉' },
+    cancelled: { label: 'ملغي', icon: '❌' },
+    payment_rejected: { label: 'مرفوض', icon: '⚠️' }
+  };
+  var SEEN = false;
+  function check(){
+    var strip = document.getElementById('chz-track-strip');
+    if (!strip) { setTimeout(check, 800); return; }
+    if (!window.FB || !window.FB.currentUser || !window.FB.db) {
+      setTimeout(check, 1000);
+      return;
+    }
+    window.FB.db.collection('orders')
+      .where('customerId', '==', window.FB.currentUser.uid)
+      .limit(15)
+      .get()
+      .then(function(snap){
+        var active = null;
+        snap.forEach(function(doc){
+          var o = doc.data();
+          if (o.status === 'cancelled' || o.status === 'completed' || o.status === 'delivered') return;
+          if (!active) active = { id: doc.id, data: o };
+        });
+        if (!active) { strip.classList.remove('on'); return; }
+        var o = active.data;
+        var wf = o.workflowStatus || o.status || 'pending';
+        var s = STATUS[wf] || STATUS[o.status] || { label: 'قيد المعالجة', icon: '📋' };
+        var icon = strip.querySelector('#chz-track-icon');
+        var sub = strip.querySelector('#chz-track-sub');
+        if (icon) icon.textContent = s.icon;
+        var orderId = o.orderNumber || ('#' + active.id.slice(-6));
+        var total = (o.total || 0).toLocaleString('ar-EG');
+        if (sub) sub.textContent = s.label + ' · ' + orderId + ' · ' + total + ' ر.س';
+        strip.classList.add('on');
+      })
+      .catch(function(e){ console.warn('[track]', e.message); });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(check, 800); });
+  } else {
+    setTimeout(check, 800);
+  }
+  setInterval(check, 6000);
+})();
+</script>
 
 </body>
 </html>
