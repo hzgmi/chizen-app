@@ -7138,6 +7138,199 @@ html:not([data-theme="light"]) .det-thumb.active {
 
 
 
+<style id="chz-travel-v29-final">
+/* ═══ PRICE hidden unless data-ready=1 — bulletproof ═══ */
+#sc-booking .price-preview:not([data-ready="1"]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  max-height: 0 !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+#sc-booking .price-preview[data-ready="1"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 16px 18px !important;
+  margin-bottom: 14px !important;
+}
+
+/* ═══ CUSTOM SELECT ═══ */
+body #sc-booking .tvl-custom-select {
+  position: relative;
+  width: 100%;
+}
+body #sc-booking .tvl-custom-btn {
+  width: 100%;
+  padding: 13px 14px 13px 38px;
+  background: #f8fafc;
+  color: #1a1a2e;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 13px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: right;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+body #sc-booking .tvl-custom-btn::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #FF3D9A;
+  border-bottom: 2px solid #FF3D9A;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+html:not([data-theme="light"]) body #sc-booking .tvl-custom-btn {
+  background: rgba(10,14,26,0.85);
+  color: #fff;
+  border-color: rgba(255,61,154,0.12);
+}
+body #sc-booking .tvl-custom-btn:active {
+  border-color: #FF3D9A;
+  box-shadow: 0 0 0 3px rgba(255,61,154,0.1);
+}
+body #sc-booking .tvl-custom-btn .tvl-cs-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ═══ MODAL OVERLAY ═══ */
+.tvl-cs-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: flex-end;
+  animation: tvlCsIn .25s ease;
+}
+@keyframes tvlCsIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.tvl-cs-sheet {
+  width: 100%;
+  max-height: 75vh;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  padding: 8px 0 calc(16px + env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+  animation: tvlCsSlideUp .3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.25);
+}
+html:not([data-theme="light"]) .tvl-cs-sheet {
+  background: #1e2438;
+}
+@keyframes tvlCsSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.tvl-cs-handle {
+  width: 40px;
+  height: 4px;
+  background: #d1d5db;
+  border-radius: 2px;
+  margin: 8px auto 12px;
+}
+html:not([data-theme="light"]) .tvl-cs-handle { background: rgba(255,255,255,0.2); }
+.tvl-cs-title {
+  padding: 0 20px 12px;
+  font-size: 15px;
+  font-weight: 900;
+  color: #1a1a2e;
+  font-family: 'Tajawal', sans-serif;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+html:not([data-theme="light"]) .tvl-cs-title {
+  color: #e8ecf5;
+  border-color: rgba(255,255,255,0.08);
+}
+.tvl-cs-list {
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 6px 0;
+  scrollbar-width: thin;
+}
+.tvl-cs-list::-webkit-scrollbar { width: 4px; }
+.tvl-cs-list::-webkit-scrollbar-thumb { background: rgba(155,77,255,0.3); border-radius: 2px; }
+.tvl-cs-option {
+  padding: 16px 22px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: background .15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+html:not([data-theme="light"]) .tvl-cs-option { color: #e8ecf5; }
+.tvl-cs-option:active { background: rgba(155,77,255,0.1); }
+.tvl-cs-option.selected {
+  background: rgba(255,61,154,0.08);
+  color: #FF3D9A;
+  font-weight: 900;
+}
+html:not([data-theme="light"]) .tvl-cs-option.selected {
+  background: rgba(255,61,154,0.15);
+}
+.tvl-cs-option.selected::after {
+  content: '✓';
+  color: #10b981;
+  font-weight: 900;
+  font-size: 18px;
+}
+.tvl-cs-cancel {
+  width: 100%;
+  padding: 16px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  color: #6b7280;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+html:not([data-theme="light"]) .tvl-cs-cancel {
+  border-color: rgba(255,255,255,0.08);
+  color: #9ca3af;
+}
+
+/* Hide native selects inside booking (they are replaced) */
+#sc-booking .tvl-form select[data-tvl-custom="1"] {
+  display: none !important;
+}
+</style>
+
 <style id="chz-travel-final-css">
 #sc-booking {
   background: var(--bg, #07091d);
@@ -14210,6 +14403,131 @@ document.addEventListener('keydown', function(e) {
     console.log('[CHIZEN TRAVEL final] ready');
   }
   ready();
+})();
+</script>
+
+
+<script id="chz-travel-v29-js">
+(function(){
+  'use strict';
+
+  // ═══ A) PRICE GUARD — force hide until form completes ═══
+  function priceGuard(){
+    var TYPES = ['flight','bus','hotel','hajj','delivery'];
+    TYPES.forEach(function(t){
+      var pp = document.getElementById('tvl-pp-' + t);
+      if (!pp) return;
+      if (pp.getAttribute('data-ready') !== '1') {
+        pp.style.display = 'none';
+        pp.style.visibility = 'hidden';
+      }
+    });
+  }
+  function initGuard(){
+    if (!document.body) { setTimeout(initGuard, 200); return; }
+    new MutationObserver(priceGuard).observe(document.body, {
+      childList: true, subtree: true, attributes: true,
+      attributeFilter: ['data-ready','style','class']
+    });
+    setInterval(priceGuard, 800);
+  }
+  initGuard();
+
+  // ═══ B) CUSTOM SELECT — transform every <select> in booking ═══
+  function customSelect(sel){
+    if (!sel || sel.dataset.tvlCustom === '1') return;
+    sel.dataset.tvlCustom = '1';
+    var parent = sel.parentNode;
+    if (!parent) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'tvl-custom-select';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'tvl-custom-btn';
+
+    var lbl = document.createElement('span');
+    lbl.className = 'tvl-cs-label';
+    btn.appendChild(lbl);
+
+    // Set initial label
+    function syncLabel(){
+      var opt = sel.options[sel.selectedIndex];
+      lbl.textContent = opt ? opt.textContent : 'اختر';
+    }
+    syncLabel();
+
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      openSheet(sel, syncLabel);
+    });
+
+    wrap.appendChild(btn);
+    parent.insertBefore(wrap, sel);
+    // sel stays hidden via CSS
+  }
+
+  function openSheet(sel, syncLabel){
+    var opts = Array.prototype.slice.call(sel.options);
+    if (!opts.length) return;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'tvl-cs-overlay';
+
+    var sheet = document.createElement('div');
+    sheet.className = 'tvl-cs-sheet';
+
+    sheet.innerHTML = '<div class="tvl-cs-handle"></div><div class="tvl-cs-title">اختر</div>';
+
+    var list = document.createElement('div');
+    list.className = 'tvl-cs-list';
+
+    opts.forEach(function(opt){
+      var row = document.createElement('div');
+      row.className = 'tvl-cs-option';
+      if (opt.selected) row.classList.add('selected');
+      row.textContent = opt.textContent;
+      row.addEventListener('click', function(){
+        sel.value = opt.value;
+        syncLabel();
+        overlay.remove();
+        // dispatch change + input
+        sel.dispatchEvent(new Event('change', {bubbles: true}));
+        sel.dispatchEvent(new Event('input', {bubbles: true}));
+      });
+      list.appendChild(row);
+    });
+
+    var cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.className = 'tvl-cs-cancel';
+    cancel.textContent = 'إلغاء';
+    cancel.addEventListener('click', function(){ overlay.remove(); });
+
+    sheet.appendChild(list);
+    sheet.appendChild(cancel);
+    overlay.appendChild(sheet);
+    overlay.addEventListener('click', function(e){
+      if (e.target === overlay) overlay.remove();
+    });
+    document.body.appendChild(overlay);
+  }
+
+  // Re-scan every time
+  function scanSelects(){
+    var selects = document.querySelectorAll('#sc-booking .tvl-form select:not([data-tvl-custom="1"])');
+    selects.forEach(function(s){ customSelect(s); });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(scanSelects, 100); });
+  } else {
+    setTimeout(scanSelects, 100);
+  }
+  setInterval(scanSelects, 1500);
+
+  console.log('[CHIZEN TRAVEL v29] guards + custom selects ready');
 })();
 </script>
 
