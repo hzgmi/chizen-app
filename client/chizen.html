@@ -9253,6 +9253,12 @@ var APP={
   currentProd:null,currentQty:1,selectedBank:null,currentSc:'home',
   
   init:async function(){
+    // chz-active-coupon-restore
+    try {
+      var saved = localStorage.getItem('chizen_active_coupon');
+      if (saved) { this.appliedCoupon = JSON.parse(saved); }
+    } catch(e){}
+
     var self=this;
     try{var s=localStorage.getItem('chizen_state');if(s){var p=JSON.parse(s);for(var k in p)if(p[k]!==undefined&&p[k]!==null)self.state[k]=p[k];}}catch(e){}
     try{self.cart=JSON.parse(localStorage.getItem('chizen_cart')||'[]');}catch(e){}
@@ -9949,13 +9955,45 @@ var APP={
     c.innerHTML=html;
   },
   
-  applyCoupon:function(){
+  applyCoupon:async function(){
     var code=(document.getElementById('coupon-in').value||'').trim().toUpperCase();
     if(!code)return;
-    var cp=null;this.coupons.forEach(function(c){if(c.code===code&&c.active)cp=c;});
-    if(!cp){try{var local=localStorage.getItem('chizen_welcome_coupon');if(local&&local===code)cp={code:code,type:'percent',value:15,active:true};}catch(e){}}
-    if(!cp){this.toast('كود غير صالح');return;}
-    this.appliedCoupon=cp;this.toast('تم تطبيق الخصم ✓');this.renderCart();
+    var self=this;
+    var cp=null;
+    // 1) from loaded coupons
+    if(this.coupons){this.coupons.forEach(function(c){if((c.code||'').toUpperCase()===code&&c.active!==false)cp=c;});}
+    // 2) from Firestore config/coupons
+    if(!cp&&window.FB&&FB.db){
+      try{
+        var doc=await FB.db.collection('config').doc('coupons').get();
+        if(doc.exists&&doc.data().list){
+          doc.data().list.forEach(function(c){if((c.code||'').toUpperCase()===code&&c.active!==false)cp=c;});
+        }
+      }catch(e){}
+    }
+    // 3) fallback welcome coupon
+    if(!cp){try{var local=localStorage.getItem('chizen_welcome_coupon');if(local&&local.toUpperCase()===code)cp={code:code,type:'percent',value:15,active:true};}catch(e){}}
+    if(!cp){this.toast('كود غير صالح','err');return;}
+    // 4) check one-per-customer
+    if(cp.onePerCustomer&&window.FB&&FB.currentUser&&FB.db){
+      try{
+        var u=await FB.db.collection('coupon_usage').doc(FB.currentUser.uid+'_'+code).get();
+        if(u.exists){this.toast('استخدمت هذا الكوبون سابقاً','err');return;}
+      }catch(e){}
+    }
+    // 5) check first purchase
+    if(cp.firstPurchaseOnly&&window.FB&&FB.currentUser&&FB.db){
+      try{
+        var o=await FB.db.collection('orders').where('customerId','==',FB.currentUser.uid).where('status','==','completed').limit(1).get();
+        if(!o.empty){this.toast('هذا الكوبون لأول شراء فقط','err');return;}
+      }catch(e){}
+    }
+    // 6) normalize value/discount
+    if(cp.value==null&&cp.discount!=null)cp.value=cp.discount;
+    if(cp.value==null)cp.value=0;
+    this.appliedCoupon=cp;
+    this.toast('تم تطبيق الخصم ✓');
+    this.renderCart();
   },
   rmCoupon:function(){this.appliedCoupon=null;this.renderCart();},
   
@@ -10042,6 +10080,7 @@ var APP={
       }catch(e){console.log('[Order] save error:',e);}
     }
     this.orders.push(order);
+    try{localStorage.removeItem('chizen_active_coupon');}catch(e){} /* chz-clear-coupon-local */
     this.cart=[];this.appliedCoupon=null;this.saveCart();this.updateCartB();
     this.toast('✓ تم استلام طلبك — بانتظار المراجعة');
     this.goTab('orders');
@@ -16240,7 +16279,7 @@ document.addEventListener('keydown', function(e) {
   var DEFAULT_COUPONS = [
     {
       code: 'CHIZEN20',
-      discount: 20,
+      value: 20,
       type: 'percent',
       occasion: 'بمناسبة انطلاق CHIZEN',
       message: 'شكراً لوصولك إلى هنا! هذه هدية صغيرة منا — خصم خاص على أول شراء لك.',
@@ -16346,6 +16385,29 @@ document.addEventListener('keydown', function(e) {
     modal.addEventListener('click', function(e){
       if (e.target === modal) modal.classList.remove('on');
     });
+    var applyBtn = document.getElementById('csb-apply-btn');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', function(){
+        var code = document.getElementById('csb-code').textContent.trim();
+        if (!code || code === 'CHIZEN20' && document.querySelector('.csb-card.used')) {
+          showToast('هذه المكافأة غير متاحة');
+          return;
+        }
+        window.APP.appliedCoupon = {
+          code: code,
+          type: (LOADED_COUPONS && LOADED_COUPONS[0] && LOADED_COUPONS[0].type) || 'percent',
+          value: (LOADED_COUPONS && LOADED_COUPONS[0] && (LOADED_COUPONS[0].value != null ? LOADED_COUPONS[0].value : LOADED_COUPONS[0].discount)) || 20,
+          active: true
+        };
+        try { localStorage.setItem('chizen_active_coupon', JSON.stringify(window.APP.appliedCoupon)); } catch(e){}
+        document.getElementById('chz-surprise-modal').classList.remove('on');
+        showToast('✓ تم تطبيق ' + code);
+        setTimeout(function(){
+          if (window.APP && APP.renderCart) APP.renderCart();
+          if (window.APP && APP.goTab) APP.goTab('cart');
+        }, 300);
+      });
+    }
     document.getElementById('csb-copy-btn').addEventListener('click', function(){
       var code = document.getElementById('csb-code').textContent;
       if (navigator.clipboard) {
@@ -16398,9 +16460,10 @@ document.addEventListener('keydown', function(e) {
       code.textContent = coupon.code || 'CHIZEN20';
       occasion.textContent = '🎉 ' + (coupon.occasion || 'بمناسبة خاصة');
       var dType = coupon.type || 'percent';
+      var dVal = coupon.value != null ? coupon.value : (coupon.discount || 0);
       discount.textContent = dType === 'percent'
-        ? ('خصم ' + coupon.discount + '%')
-        : ('خصم ' + coupon.discount + ' ر.س');
+        ? ('خصم ' + dVal + '%')
+        : ('خصم ' + dVal + ' ر.س');
 
       // Check used
       Promise.all([
