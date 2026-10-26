@@ -6129,24 +6129,18 @@ html[data-theme="light"] {
 <!-- الأقسام -->
 <div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
 
+<!-- ═══ العلامات التجارية ═══ -->
+<div class="sec" id="brands-sec">
+  <div class="brands" id="brands-list"></div>
+</div>
+
 <!-- ═══ ⚡ عروض خاطفة ═══ -->
 <div class="sec" id="flash-sec">
   <div class="sh">
     <div class="stl">⚡ عروض خاطفة</div>
     <a class="flash-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a>
   </div>
-  <div id="flash-timer" class="flash-timer">
-    <span class="ft-icon">⏱️</span>
-    <span class="ft-label">ينتهي خلال</span>
-    <span class="ft-clock" id="ft-hours">00</span><span class="ft-sep">:</span><span class="ft-clock" id="ft-mins">00</span><span class="ft-sep">:</span><span class="ft-clock" id="ft-secs">00</span>
-  </div>
   <div id="flash-c" class="flash-row"></div>
-</div>
-
-<!-- ═══ العلامات التجارية ═══ -->
-<div class="sec" id="brands-sec">
-  <div class="sh"><div class="stl">🏷️ العلامات التجارية</div></div>
-  <div class="brands" id="brands-list"></div>
 </div>
 
 <div class="booking-row-container"><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hotel', null);"><div class="booking-icon" style="color: #6A1B9A;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg></div><span class="booking-label" data-i18n="booking.hotels" data-i18n-ar="فنادق">فنادق</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('bus', null);"><div class="booking-icon" style="color: #f97316;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></div><span class="booking-label" data-i18n="booking.buses" data-i18n-ar="حافلات">حافلات</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('hajj', null);"><div class="booking-icon" style="color: #D81B60;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="3"/></svg></div><span class="booking-label" data-i18n="booking.hajj" data-i18n-ar="حج وعمرة">حج وعمرة</span></div><div class="booking-divider"></div><div class="booking-item" onclick="APP.goTab('booking'); if(APP.switchBookingTab) APP.switchBookingTab('flight', null);"><div class="booking-icon" style="color: #3b82f6;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div><span class="booking-label" data-i18n="booking.flights" data-i18n-ar="رحلات طيران">رحلات طيران</span></div></div>
@@ -6164,7 +6158,7 @@ html[data-theme="light"] {
 <!-- المنتجات -->
 <div class="sec">
   <div class="sh" style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px;">
-    <div class="stl" style="font-weight:900; font-size:20px; color:#1f2937;" data-i18n="home.best_sellers" data-i18n-ar="🔥 الأكثر مبيعاً">🔥 الأكثر مبيعاً</div>
+    <div class="stl" style="font-weight:900; font-size:20px; color:#1f2937;" data-i18n="home.best_sellers" data-i18n-ar="🛍️ السوق">🛍️ السوق</div>
     <a onclick="APP.filterCat('all')" style="color:#D81B60; font-size:13px; font-weight:bold; cursor:pointer;" data-i18n="home.view_all" data-i18n-ar="عرض الكل">عرض الكل</a>
   </div>
   <div id="prods" class="prods" style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; padding:0 15px;"></div>
@@ -6956,6 +6950,26 @@ html:not([data-theme="light"]) .det-thumb.active {
 }
 </style>
 
+<style id="chz-home-v18-css">
+body #sc-home #brands-sec { margin: 8px 0 4px; }
+body #sc-home #brands-list { display: flex; gap: 8px; overflow-x: auto; padding: 6px 15px 10px; scrollbar-width: none; }
+body #sc-home #brands-list::-webkit-scrollbar { display: none; }
+body #sc-home #brands-list .brand-chip {
+  flex-shrink: 0; padding: 9px 18px;
+  background: linear-gradient(135deg, rgba(255,77,148,0.1), rgba(168,85,247,0.1));
+  border: 1px solid rgba(255,77,148,0.25);
+  border-radius: 20px;
+  font-weight: 800; font-size: 12px;
+  color: #ff4d94;
+  white-space: nowrap; cursor: pointer;
+  transition: all .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+body #sc-home #brands-list .brand-chip:active { transform: scale(0.94); }
+html:not([data-theme="light"]) body #sc-home #brands-list .brand-chip { color: #f5b8d6; border-color: rgba(255,77,148,0.35); }
+body #sc-home #flash-timer { display: none !important; }
+</style>
+
 <style id="chz-flash-v17-css">
 body #sc-home #flash-sec {
   margin: 16px 0 8px;
@@ -6975,28 +6989,11 @@ body #sc-home #flash-sec .flash-view-all {
   font-size: 12px; font-weight: 700;
   color: #ff4d94; cursor: pointer;
 }
-body #sc-home .flash-timer {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin: 0 15px 10px;
-  padding: 6px 12px;
-  background: linear-gradient(135deg, rgba(255,77,148,0.12), rgba(168,85,247,0.12));
-  border: 1px solid rgba(255,77,148,0.3);
-  border-radius: 20px;
-  font-size: 11px; font-weight: 700;
-  color: #ff4d94;
-}
-body #sc-home .flash-timer .ft-icon { font-size: 14px; }
-body #sc-home .flash-timer .ft-clock {
-  background: #1f2937; color: #fff;
-  padding: 2px 6px; border-radius: 5px;
-  font-family: 'Courier New', monospace;
-  font-weight: 900; font-size: 11px;
-}
-body #sc-home .flash-timer .ft-sep { color: #ff4d94; font-weight: 900; }
-html:not([data-theme="light"]) body #sc-home .flash-timer {
-  background: rgba(255,77,148,0.08);
-  border-color: rgba(255,77,148,0.4);
-}
+
+
+
+
+html:not([data-theme="light"]) 
 body #sc-home .flash-row {
   display: flex;
   gap: 10px;
@@ -7064,7 +7061,7 @@ html:not([data-theme="light"]) body #sc-home .fcard {
 html:not([data-theme="light"]) body #sc-home .fcard-img { background: #131829; }
 html:not([data-theme="light"]) body #sc-home .fcard-name { color: #e8ecf5; }
 html:not([data-theme="light"]) body #sc-home .fcard-price .fp-old { color: #6b7280; }
-html:not([data-theme="light"]) body #sc-home .flash-timer .ft-clock { background: #0a0e1a; }
+html:not([data-theme="light"]) 
 body #sc-home #brands-sec {
   margin: 12px 0 4px;
 }
@@ -7384,24 +7381,6 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 <script>
 
 // ================= الأقسام الأساسية المثبتة =================
-// v17: flash timer (ends at midnight)
-function startFlashTimer(){
-  function tick(){
-    var now=new Date();
-    var end=new Date();end.setHours(23,59,59,999);
-    var diff=Math.max(0,end-now);
-    var h=Math.floor(diff/3600000);
-    var m=Math.floor((diff%3600000)/60000);
-    var s=Math.floor((diff%60000)/1000);
-    var eh=document.getElementById('ft-hours');
-    var em=document.getElementById('ft-mins');
-    var es=document.getElementById('ft-secs');
-    if(eh)eh.textContent=String(h).padStart(2,'0');
-    if(em)em.textContent=String(m).padStart(2,'0');
-    if(es)es.textContent=String(s).padStart(2,'0');
-  }
-  tick();setInterval(tick,1000);
-}
 window.FIXED_CATS = [
   { key: 'electronics', name: 'إلكترونيات',       img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop' },
   { key: 'fashion',     name: 'أزياء',            img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=300&auto=format&fit=crop' },
@@ -7466,7 +7445,7 @@ var APP={
 
     if(window.FB){
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
-      FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();}});
+      FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();self.renderBrands();}});
       FB.getConfig('banners').then(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
       FB.getConfig('categories').then(function(c){
   var dbCats = (c && c.list) ? c.list : [];
@@ -7821,7 +7800,9 @@ var APP={
         return;
     }
     
-    if(!list)list=this.products;
+    if(!list){
+      list = this.products.slice().sort(function(){ return Math.random() - 0.5; });
+    }
     if(!list.length){
         c.innerHTML='<div class="empty-state"><div class="empty-icon">🛍️</div><div class="empty-title">لا توجد منتجات حالياً</div><div class="empty-sub">تفقدنا قريباً، نعمل على إضافة منتجات رائعة لك!</div></div>';
         return;
@@ -7846,9 +7827,28 @@ var APP={
         '</div>'+
       '</div>';
     }).join('');
-    startFlashTimer();
   },
-  
+
+  renderBrands:function(){
+    var c=document.getElementById('brands-list');if(!c)return;
+    if(!this.products||!this.products.length){c.innerHTML='';return;}
+    var counts={};
+    this.products.forEach(function(p){
+      if(p.brand&&p.brand.trim()){var b=p.brand.trim();counts[b]=(counts[b]||0)+1;}
+    });
+    var brands=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
+    if(!brands.length){c.innerHTML='';return;}
+    c.innerHTML=brands.map(function(b){
+      return '<div class="brand-chip" onclick="APP.filterBrand(\''+esc(b)+'\')">'+esc(b)+'</div>';
+    }).join('');
+  },
+
+  filterBrand:function(brand){
+    var list=this.products.filter(function(p){return (p.brand||'').trim()===brand;});
+    this.filterCat('all');
+    setTimeout(function(){APP.renderProducts(list);},100);
+  },
+
   renderBanners: function() {
     return; /* v10: disabled — v10 script handles banner */
     var s = document.getElementById('slides');
