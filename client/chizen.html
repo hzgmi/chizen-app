@@ -6795,6 +6795,8 @@ html[data-theme="light"] {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="firebase-service.js"></script>
+<script src="notification-sound.js"></script>
+<script src="web-push-client.js"></script>
 <script>
 
 // ================= الأقسام الأساسية المثبتة =================
@@ -11585,6 +11587,53 @@ document.addEventListener('keydown', function(e) {
     });
   };
 
+
+  // === 3.5) CURRENCY OBSERVER — replaces ر.س everywhere dynamically ===
+  (function(){
+    var ALL_SYMS_RE = /ر\.س|﷼|د\.إ/g;
+    var targetSym = 'ر.س';
+    function shouldSkip(tag) {
+      return tag === 'SCRIPT' || tag === 'STYLE' || tag === 'INPUT' ||
+             tag === 'TEXTAREA' || tag === 'CODE' || tag === 'PRE';
+    }
+    function walkReplace(node) {
+      if (!node) return;
+      if (node.nodeType === 3) {
+        if (node.nodeValue && targetSym !== 'ر.س') {
+          ALL_SYMS_RE.lastIndex = 0;
+          if (ALL_SYMS_RE.test(node.nodeValue)) {
+            ALL_SYMS_RE.lastIndex = 0;
+            node.nodeValue = node.nodeValue.replace(ALL_SYMS_RE, targetSym);
+          }
+        }
+        ALL_SYMS_RE.lastIndex = 0;
+      } else if (node.nodeType === 1 && !shouldSkip(node.tagName)) {
+        for (var i = 0; i < node.childNodes.length; i++) walkReplace(node.childNodes[i]);
+      }
+    }
+    var obs = new MutationObserver(function(muts){
+      if (targetSym === 'ر.س') return;
+      for (var i=0;i<muts.length;i++){
+        var m = muts[i];
+        if (m.type === 'childList') {
+          for (var j=0;j<m.addedNodes.length;j++) walkReplace(m.addedNodes[j]);
+        } else if (m.type === 'characterData') {
+          walkReplace(m.target);
+        }
+      }
+    });
+    function startObs() {
+      if (document.body) obs.observe(document.body, {childList:true,subtree:true,characterData:true});
+      else document.addEventListener('DOMContentLoaded', startObs);
+    }
+    startObs();
+    window.__applyCurrencySymbol = function(sym) {
+      if (!sym || sym === targetSym) return;
+      targetSym = sym;
+      if (sym !== 'ر.س') walkReplace(document.body);
+    };
+  })();
+
   // ═══ 4) تطبيق الإعدادات على الواجهة ═══
   window.__applyChizenSettings = function() {
     var S = window.CHIZEN_SETTINGS;
@@ -11594,6 +11643,7 @@ document.addEventListener('keydown', function(e) {
     document.querySelectorAll('.price-c').forEach(function(el) {
       el.textContent = symbol;
     });
+    if (window.__applyCurrencySymbol) window.__applyCurrencySymbol(symbol);
     
     // 4.2) اسم التطبيق + الشعار
     document.querySelectorAll('.chz-en').forEach(function(el) {
