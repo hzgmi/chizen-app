@@ -9742,6 +9742,9 @@ var APP={
   currentProd:null,currentQty:1,selectedBank:null,currentSc:'home',
   
   init:async function(){
+    // v59: render cats immediately (before Firestore)
+    try { this.renderCats(); } catch(e){ console.warn('cats early:', e.message); }
+    try { if (this.renderBrands) this.renderBrands(); } catch(e){}
     // chz-active-coupon-restore
     try {
       var saved = localStorage.getItem('chizen_active_coupon');
@@ -10145,7 +10148,13 @@ var APP={
     }
     
     if(!list){
-      list = this.products.slice().sort(function(){ return Math.random() - 0.5; });
+      // v59: stable order (newest first, then by name)
+      list = this.products.slice().sort(function(a, b){
+        var ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+        var tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+        if (ta !== tb) return tb - ta;
+        return String(a.name || '').localeCompare(String(b.name || ''), 'ar');
+      });
     }
     if(!list.length){
         c.innerHTML='<div class="empty-state"><div class="empty-icon">🛍️</div><div class="empty-title">لا توجد منتجات حالياً</div><div class="empty-sub">تفقدنا قريباً، نعمل على إضافة منتجات رائعة لك!</div></div>';
