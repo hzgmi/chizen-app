@@ -6020,6 +6020,9 @@ html[data-theme="light"] {
 .pickup-tab-v3 { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid var(--pk-border); background: var(--pk-input); color: var(--pk-sub); font-family: Tajawal, sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; }
 .pickup-tab-v3.active { background: linear-gradient(135deg, #ec4899, #8b5cf6); color: #fff; border-color: transparent; }
 </style>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 </head>
 <body>
 <div id="app">
@@ -6195,6 +6198,7 @@ html[data-theme="light"] {
 <!-- CHIZEN TRAVEL v28 -->
 <div class="screen" id="sc-booking">
   <div class="tvl-hero">
+    <div id="chz-v30-badge" style="position:absolute;top:8px;left:10px;padding:3px 8px;background:rgba(0,0,0,0.35);color:#fff;font-size:9px;font-weight:900;border-radius:6px;z-index:10;">v30</div>
     <div class="tvl-hero-top">
       <button class="tvl-back" onclick="APP.goTab('home')" aria-label="رجوع">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -7328,6 +7332,49 @@ html:not([data-theme="light"]) .tvl-cs-cancel {
 /* Hide native selects inside booking (they are replaced) */
 #sc-booking .tvl-form select[data-tvl-custom="1"] {
   display: none !important;
+}
+</style>
+
+<style id="chz-travel-v30">
+/* ═══ CHIPS: cohesive pink theme ═══ */
+body #sc-booking .tvl-chip:not(.active) {
+  background: linear-gradient(135deg, rgba(255,61,154,0.08), rgba(155,77,255,0.08)) !important;
+  color: #FF3D9A !important;
+  border: 1.5px solid rgba(255,61,154,0.28) !important;
+  box-shadow: 0 2px 6px rgba(255,61,154,0.06) !important;
+}
+html:not([data-theme="light"]) body #sc-booking .tvl-chip:not(.active) {
+  background: linear-gradient(135deg, rgba(255,61,154,0.14), rgba(155,77,255,0.14)) !important;
+  color: #f5b8d6 !important;
+  border-color: rgba(255,61,154,0.35) !important;
+}
+body #sc-booking .tvl-chip.active {
+  background: linear-gradient(135deg, #FF3D9A 0%, #9B4DFF 100%) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 20px rgba(255,61,154,0.4), 0 0 0 3px rgba(255,61,154,0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ═══ PRICE hard hide ═══ */
+body #sc-booking .tvl-form[data-not-ready="1"] .price-preview {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+body #sc-booking .price-preview[data-ready="0"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 </style>
 
@@ -14531,6 +14578,53 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+
+<script id="chz-travel-v30-js">
+(function(){
+  'use strict';
+
+  function getVal(id){ var el = document.getElementById(id); return el ? (el.value || '').trim() : ''; }
+
+  function isReady(t){
+    if (t === 'flight') return !!(getVal('fly-from') && getVal('fly-to'));
+    if (t === 'bus') return !!getVal('bus-to');
+    if (t === 'hotel') return !!(getVal('hotel-city') && getVal('hotel-in') && getVal('hotel-out'));
+    if (t === 'hajj') return true;
+    if (t === 'delivery') return !!(getVal('dlv-from') && getVal('dlv-to'));
+    return false;
+  }
+
+  function enforce(){
+    ['flight','bus','hotel','hajj','delivery'].forEach(function(t){
+      var pp = document.getElementById('tvl-pp-' + t);
+      var form = document.getElementById('form-' + t);
+      if (!pp) return;
+      var r = isReady(t);
+      if (!r) {
+        pp.setAttribute('data-ready','0');
+        pp.style.cssText = 'display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;';
+        if (pp.innerHTML) pp.innerHTML = '';
+        if (form) form.setAttribute('data-not-ready','1');
+      } else {
+        if (form) form.removeAttribute('data-not-ready');
+        // let tvlCalc decide whether to show price (it may still be hidden if no price yet)
+        pp.style.cssText = '';
+        if (pp.getAttribute('data-ready') === '1') {
+          pp.style.cssText = 'display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;';
+        }
+      }
+    });
+  }
+
+  // Run aggressively
+  setInterval(enforce, 300);
+  document.addEventListener('input', enforce, true);
+  document.addEventListener('change', enforce, true);
+  document.addEventListener('DOMContentLoaded', function(){ setInterval(enforce, 300); });
+
+  console.log('[v30] guard active');
+})();
+</script>
 
 </body>
 </html>
