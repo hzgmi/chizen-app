@@ -7261,6 +7261,121 @@ html:not([data-theme="light"]) .det-thumb.active {
 
 
 
+<style id="chz-travel-v24-css">
+/* ═══ CHIPS: gray until active ═══ */
+body #sc-booking .trv-chip,
+body #sc-booking button.trv-chip {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: none !important;
+  font-weight: 800 !important;
+}
+html:not([data-theme="light"]) body #sc-booking .trv-chip,
+html:not([data-theme="light"]) body #sc-booking button.trv-chip {
+  background: rgba(255,255,255,0.06) !important;
+  color: rgba(255,255,255,0.65) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+body #sc-booking .trv-chip.active,
+body #sc-booking button.trv-chip.active {
+  background: linear-gradient(135deg, #FF3D9A, #9B4DFF) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(255,61,154,0.3) !important;
+}
+
+/* ═══ ALL OTHER BUTTONS in booking form: neutralize ═══ */
+body #sc-booking .booking-form > button:not(.trv-submit):not(.trv-chip),
+body #sc-booking .booking-form > div > button:not(.trv-submit):not(.trv-chip):not(.trv-price-confirm) {
+  background: #f1f5f9 !important;
+  color: #1a1a2e !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: none !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+}
+html:not([data-theme="light"]) body #sc-booking .booking-form > button:not(.trv-submit):not(.trv-chip),
+html:not([data-theme="light"]) body #sc-booking .booking-form > div > button:not(.trv-submit):not(.trv-chip):not(.trv-price-confirm) {
+  background: rgba(255,255,255,0.06) !important;
+  color: rgba(255,255,255,0.7) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+
+/* ═══ SUBMIT BUTTON: disabled gray, ready green ═══ */
+body #sc-booking .trv-submit {
+  background: linear-gradient(135deg, #FF3D9A, #9B4DFF) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(255,61,154,0.35) !important;
+  padding: 17px 24px !important;
+  border-radius: 16px !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  transition: all .2s ease !important;
+  width: 100% !important;
+}
+body #sc-booking .trv-submit:disabled,
+body #sc-booking .trv-submit.trv-locked {
+  background: #e5e7eb !important;
+  color: #9ca3af !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+html:not([data-theme="light"]) body #sc-booking .trv-submit:disabled,
+html:not([data-theme="light"]) body #sc-booking .trv-submit.trv-locked {
+  background: rgba(255,255,255,0.08) !important;
+  color: rgba(255,255,255,0.4) !important;
+}
+body #sc-booking .trv-submit.trv-ready {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  box-shadow: 0 10px 30px rgba(16,185,129,0.4) !important;
+}
+body #sc-booking .trv-submit.trv-ready:active {
+  transform: scale(0.97) !important;
+}
+
+/* ═══ PRICE CONFIRM BUTTON (green) ═══ */
+.trv-price-confirm {
+  display: flex;
+  width: 100%;
+  padding: 13px 18px;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13.5px;
+  font-weight: 900;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 6px 18px rgba(16,185,129,0.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.trv-price-confirm:active { transform: scale(0.97); }
+.trv-price-confirm.confirmed {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  box-shadow: 0 4px 12px rgba(5,150,105,0.4);
+  cursor: default;
+}
+.trv-price-confirm.confirmed::before {
+  content: '✓';
+  font-weight: 900;
+}
+
+/* ═══ Price preview — hide warning when locked ═══ */
+.price-preview.pp-locked .pp-note {
+  color: #059669 !important;
+  border-top-color: rgba(16,185,129,0.4) !important;
+}
+html:not([data-theme="light"]) .price-preview.pp-locked .pp-note { color: #34d399 !important; }
+</style>
+
 <style id="chz-booking-v23-css">
 /* ═════ CHIZEN TRAVEL — v23 Premium ═════ */
 #sc-booking {
@@ -14040,8 +14155,9 @@ document.addEventListener('keydown', function(e) {
     window.APP.updateBookingPrice = function(type) {
       var preview = document.getElementById('price-preview-' + type);
       if (!preview) return;
+      var submitBtn = document.querySelector('#form-' + type + ' .trv-submit');
       var data = {};
-      var dChk, dFrom, dTo, dCar;
+      var dChk;
 
       if (type === 'flight') {
         data.from = (document.getElementById('fly-from')||{}).value || '';
@@ -14076,7 +14192,6 @@ document.addEventListener('keydown', function(e) {
         data.deliveryCar = (document.getElementById('dlv-car')||{}).value || 'economy';
       }
 
-      // التوصيل المرفق (للرحلات)
       if (type !== 'delivery') {
         dChk = document.getElementById('delivery-chk-' + type);
         if (dChk && dChk.checked) {
@@ -14087,15 +14202,51 @@ document.addEventListener('keydown', function(e) {
         }
       }
 
+      // تحقق من اكتمال البيانات الأساسية
+      var ready = false;
+      if (type === 'flight') {
+        ready = !!(data.from && data.to && data.passengers >= 1);
+      } else if (type === 'bus') {
+        ready = !!(data.to && data.passengers >= 1);
+      } else if (type === 'hotel') {
+        ready = !!(data.city && data.checkin && data.checkout && data.rooms >= 1);
+      } else if (type === 'hajj') {
+        ready = !!(data.passengers >= 1);
+      } else if (type === 'delivery') {
+        ready = !!(data.deliveryFrom && data.deliveryTo);
+      }
+
+      // التوصيل يجب أن يكتمل إذا مُفعّل
+      var deliveryIncomplete = data.needDelivery && type !== 'delivery' && (!data.deliveryFrom || !data.deliveryTo);
+
+      if (!ready) {
+        preview.style.display = 'none';
+        preview.innerHTML = '';
+        preview.classList.remove('pp-locked');
+        if (submitBtn) { submitBtn.classList.remove('trv-ready'); submitBtn.classList.add('trv-locked'); submitBtn.textContent = submitBtn.dataset.defaultLabel || 'إرسال الطلب'; }
+        return;
+      }
+
+      if (deliveryIncomplete) {
+        preview.style.display = 'block';
+        preview.classList.remove('pp-locked');
+        preview.innerHTML = '<div class="pp-note" style="border:none;padding:0;">🚗 أكمل بيانات التوصيل (من / إلى) لعرض السعر الكامل</div>';
+        if (submitBtn) { submitBtn.classList.remove('trv-ready'); submitBtn.classList.add('trv-locked'); }
+        return;
+      }
+
       var base = window.estimateBookingPrice(type === 'delivery' ? 'flight' : type, data);
       if (type === 'delivery') base = 0;
       var delivery = window.estimateDelivery ? window.estimateDelivery(data) : 0;
       var total = base + delivery;
-      if (!total && type !== 'delivery') { preview.style.display = 'none'; return; }
-      if (!total && type === 'delivery') {
-        preview.style.display = 'none'; return;
+      if (!total) {
+        preview.style.display = 'none';
+        if (submitBtn) { submitBtn.classList.remove('trv-ready'); submitBtn.classList.add('trv-locked'); }
+        return;
       }
+
       preview.style.display = 'block';
+      preview.classList.remove('pp-locked');
       var fp = window.formatPrice || function(x){ return x.toLocaleString('ar-EG') + ' ر.س'; };
       var html = '';
       if (type === 'delivery') {
@@ -14107,8 +14258,30 @@ document.addEventListener('keydown', function(e) {
           html += '<div class="pp-detail"><span>التوصيل</span><span>' + fp(delivery) + '</span></div>';
         }
       }
-      html += '<div class="pp-note">⚠️ سعر تقديري — سنؤكد السعر النهائي بعد مراجعة الفريق</div>';
+      html += '<div class="pp-note">⚠️ سعر تقديري — سيتم تأكيد السعر النهائي بعد مراجعة الفريق</div>';
+      html += '<button type="button" class="trv-price-confirm" onclick="APP.confirmPrice(\'' + type + '\', this)">✓ تأكيد السعر والمتابعة</button>';
       preview.innerHTML = html;
+
+      // زر الإرسال - يبقى مقفلاً حتى يؤكد المستخدم السعر
+      if (submitBtn) {
+        submitBtn.classList.remove('trv-ready');
+        submitBtn.classList.add('trv-locked');
+        submitBtn.dataset.defaultLabel = submitBtn.dataset.defaultLabel || submitBtn.textContent;
+      }
+    };
+
+    window.APP.confirmPrice = function(type, btn) {
+      var preview = document.getElementById('price-preview-' + type);
+      var submitBtn = document.querySelector('#form-' + type + ' .trv-submit');
+      if (!preview || !btn) return;
+      if (btn.classList.contains('confirmed')) return;
+      btn.classList.add('confirmed');
+      btn.innerHTML = '✓ تم تأكيد السعر — يمكنك الإرسال الآن';
+      preview.classList.add('pp-locked');
+      if (submitBtn) {
+        submitBtn.classList.remove('trv-locked');
+        submitBtn.classList.add('trv-ready');
+      }
     };
 
     // ═══ 3. switchBookingTab يدعم delivery ═══
