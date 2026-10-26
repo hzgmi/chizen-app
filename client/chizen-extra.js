@@ -69,77 +69,103 @@
       var prodsSection = homeScreen.querySelector('.sec:last-child');
       if (prodsSection) {
         var extraHTML =
-          // ═══ chz-world-v47 — "عالم آخر" ═══
-          '<div id="chz-world" style="position:relative;overflow:hidden;margin-top:32px;padding:40px 20px 30px;background:linear-gradient(180deg,transparent 0%,rgba(155,77,255,0.05) 30%,rgba(255,61,154,0.08) 70%,rgba(155,77,255,0.12) 100%);text-align:center;">' +
-            // نجوم متحركة
-            '<div class="chz-w-stars">' +
-              '<span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span>' +
-            '</div>' +
-            // أيقونة "باب عالم آخر"
+          // ═══ chz-world-v48 — Premium Marketing Portal ═══
+          '<div id="chz-world" style="position:relative;overflow:hidden;margin-top:36px;padding:44px 20px 32px;background:radial-gradient(ellipse at 50% 0%,rgba(155,77,255,.15) 0%,transparent 60%),linear-gradient(180deg,transparent 0%,rgba(155,77,255,.04) 40%,rgba(255,61,154,.08) 100%);text-align:center;direction:rtl;font-family:Tajawal,sans-serif;">' +
+            // نجوم
+            '<div class="chz-w-stars"><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>' +
+            // شعار CHIZEN في البوابة
             '<div class="chz-w-portal">' +
               '<div class="chz-w-portal-ring"></div>' +
-              '<div class="chz-w-portal-icon">🌌</div>' +
+              '<div class="chz-w-portal-orb">' +
+                '<img src="https://i.ibb.co/FkvCmDwy/logo.png" class="chz-w-portal-logo" alt="CHIZEN" onerror="this.style.display=\'none\';if(this.nextElementSibling)this.nextElementSibling.style.display=\'flex\';" />' +
+                '<span class="chz-w-portal-fallback">C</span>' +
+              '</div>' +
             '</div>' +
-            // العنوان
-            '<div class="chz-w-title">لم تنتهِ الحكاية بعد</div>' +
-            '<div class="chz-w-sub">هناك عوالم أخرى تنتظرك داخل شيزن</div>' +
-            // 4 أبواب لعوالم
+            // شارة تسويقية
+            '<div class="chz-w-badge">🌟 عوالم شيزن</div>' +
+            // عنوان تسويقي
+            '<div class="chz-w-title">رحلتك معنا لا تنتهي</div>' +
+            '<div class="chz-w-sub">سوق ذكي، سفر بلا حدود، تجارة موثوقة — كل شيء في مكان واحد</div>' +
+            // مؤشرات الثقة التسويقية
+            '<div class="chz-w-trust">' +
+              '<span class="chz-w-trust-item">⚡ توصيل سريع</span>' +
+              '<span class="chz-w-trust-item">✓ ضمان الجودة</span>' +
+              '<span class="chz-w-trust-item">🎁 مكافآت</span>' +
+            '</div>' +
+            // 5 عوالم (أضفت التجارة)
             '<div class="chz-w-worlds">' +
               '<div class="chz-w-world" onclick="APP.goTab(\'cart\')"><div class="chz-w-world-i">🛍️</div><div class="chz-w-world-n">السوق</div></div>' +
               '<div class="chz-w-world" onclick="APP.goTab(\'booking\')"><div class="chz-w-world-i">✈️</div><div class="chz-w-world-n">السفر</div></div>' +
+              '<div class="chz-w-world chz-w-world-new" onclick="APP.goTab(\'commerce\')"><div class="chz-w-world-i">💼</div><div class="chz-w-world-n">التجارة</div><div class="chz-w-world-badge">جديد</div></div>' +
               '<div class="chz-w-world" onclick="APP.goTab(\'points\')"><div class="chz-w-world-i">💎</div><div class="chz-w-world-n">النقاط</div></div>' +
               '<div class="chz-w-world" onclick="APP.goTab(\'orders\')"><div class="chz-w-world-i">📦</div><div class="chz-w-world-n">طلباتي</div></div>' +
             '</div>' +
+            // CTA رئيسي
+            '<button class="chz-w-cta" onclick="APP.goTab(\'home\');window.scrollTo({top:0,behavior:\'smooth\'})">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="18 15 12 9 6 15"/></svg>' +
+              '<span>اكتشف المزيد</span>' +
+            '</button>' +
             // زر العودة للأعلى
             '<button class="chz-w-top" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">' +
-              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="18 15 12 9 6 15"/></svg>' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><polyline points="18 15 12 9 6 15"/></svg>' +
               '<span>العودة للأعلى</span>' +
             '</button>' +
             // Footer
             '<div class="chz-w-footer">' +
               '<div class="chz-w-logo">CHIZEN</div>' +
-              '<div class="chz-w-tagline">✨ عالمك للتسوق والسفر ✨</div>' +
+              '<div class="chz-w-tagline">✨ تسوق ذكي .. لحياة أجمل ✨</div>' +
               '<div class="chz-w-copy">© 2026 CHIZEN — جميع الحقوق محفوظة</div>' +
+              '<div class="chz-w-links"><a>الشروط والأحكام</a> · <a>سياسة الخصوصية</a> · <a>اتصل بنا</a></div>' +
             '</div>' +
           '</div>' +
-          // CSS مدمج
-          '<style id="chz-world-v47-css">' +
-            '#chz-world{font-family:Tajawal,sans-serif;direction:rtl;}' +
-            '.chz-w-stars{position:absolute;inset:0;pointer-events:none;opacity:.4;}' +
-            '.chz-w-stars span{position:absolute;font-size:10px;color:#fff;animation:wSparkle 3s ease-in-out infinite;}' +
-            '.chz-w-stars span:nth-child(1){top:8%;left:15%;animation-delay:0s;}' +
-            '.chz-w-stars span:nth-child(2){top:15%;left:75%;animation-delay:.3s;}' +
-            '.chz-w-stars span:nth-child(3){top:25%;left:30%;animation-delay:.6s;}' +
-            '.chz-w-stars span:nth-child(4){top:12%;left:55%;animation-delay:.9s;}' +
-            '.chz-w-stars span:nth-child(5){top:35%;left:85%;animation-delay:1.2s;}' +
-            '.chz-w-stars span:nth-child(6){top:45%;left:10%;animation-delay:1.5s;}' +
-            '.chz-w-stars span:nth-child(7){top:55%;left:70%;animation-delay:.4s;}' +
-            '.chz-w-stars span:nth-child(8){top:65%;left:25%;animation-delay:.8s;}' +
-            '.chz-w-stars span:nth-child(9){top:20%;left:45%;animation-delay:1.1s;}' +
-            '.chz-w-stars span:nth-child(10){top:40%;left:60%;animation-delay:.2s;}' +
-            '.chz-w-stars span:nth-child(11){top:70%;left:80%;animation-delay:.7s;}' +
-            '.chz-w-stars span:nth-child(12){top:30%;left:5%;animation-delay:1.4s;}' +
+          '<style id="chz-world-v48-css">' +
+            '#chz-world{position:relative;}' +
+            '.chz-w-stars{position:absolute;inset:0;pointer-events:none;opacity:.4;z-index:0;}' +
+            '.chz-w-stars span{position:absolute;font-size:10px;color:#FFD700;animation:wSparkle 3s ease-in-out infinite;}' +
+            '.chz-w-stars span:nth-child(1){top:6%;left:15%;animation-delay:0s;}' +
+            '.chz-w-stars span:nth-child(2){top:14%;left:75%;animation-delay:.3s;}' +
+            '.chz-w-stars span:nth-child(3){top:24%;left:30%;animation-delay:.6s;}' +
+            '.chz-w-stars span:nth-child(4){top:10%;left:55%;animation-delay:.9s;}' +
+            '.chz-w-stars span:nth-child(5){top:38%;left:85%;animation-delay:1.2s;}' +
+            '.chz-w-stars span:nth-child(6){top:48%;left:8%;animation-delay:1.5s;}' +
+            '.chz-w-stars span:nth-child(7){top:58%;left:72%;animation-delay:.4s;}' +
+            '.chz-w-stars span:nth-child(8){top:68%;left:22%;animation-delay:.8s;}' +
+            '.chz-w-stars span:nth-child(9){top:18%;left:45%;animation-delay:1.1s;}' +
+            '.chz-w-stars span:nth-child(10){top:42%;left:62%;animation-delay:.2s;}' +
+            '.chz-w-stars span:nth-child(11){top:72%;left:82%;animation-delay:.7s;}' +
+            '.chz-w-stars span:nth-child(12){top:32%;left:4%;animation-delay:1.4s;}' +
             '@keyframes wSparkle{0%,100%{opacity:.2;transform:scale(.8);}50%{opacity:1;transform:scale(1.3);}}' +
-            '.chz-w-portal{position:relative;width:100px;height:100px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;}' +
-            '.chz-w-portal-ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#FF3D9A,#9B4DFF,#4D8CFF,#FF8A00,#FF3D9A);animation:wRotate 8s linear infinite;filter:blur(6px);opacity:.7;}' +
-            '.chz-w-portal-ring::after{content:\'\';position:absolute;inset:8px;background:var(--bg,#07091d);border-radius:50%;}' +
-            '.chz-w-portal-icon{position:relative;font-size:44px;z-index:1;filter:drop-shadow(0 0 20px rgba(155,77,255,.8));animation:wFloat 3s ease-in-out infinite;}' +
+            '.chz-w-portal{position:relative;width:120px;height:120px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;z-index:1;}' +
+            '.chz-w-portal-ring{position:absolute;inset:-8px;border-radius:50%;background:conic-gradient(from 0deg,#FF3D9A,#9B4DFF,#4D8CFF,#FF8A00,#FF3D9A);animation:wRotate 8s linear infinite;filter:blur(10px);opacity:.85;}' +
             '@keyframes wRotate{to{transform:rotate(360deg);}}' +
-            '@keyframes wFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}' +
-            '.chz-w-title{font-size:22px;font-weight:900;color:var(--chz-text,#fff);margin-bottom:6px;letter-spacing:-.3px;}' +
-            '.chz-w-sub{font-size:13px;color:var(--mt,#9ca3af);font-weight:600;margin-bottom:24px;line-height:1.5;}' +
-            '.chz-w-worlds{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}' +
-            '.chz-w-world{background:var(--nav,#1e2438);border:1.5px solid rgba(255,61,154,.15);border-radius:14px;padding:12px 4px;cursor:pointer;transition:all .2s ease;-webkit-tap-highlight-color:transparent;}' +
-            '.chz-w-world:active{transform:scale(.94);background:rgba(255,61,154,.1);}' +
-            '.chz-w-world-i{font-size:24px;line-height:1;margin-bottom:6px;}' +
-            '.chz-w-world-n{font-size:10px;font-weight:800;color:var(--chz-text,#e8ecf5);}' +
-            '.chz-w-top{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:linear-gradient(135deg,rgba(255,61,154,.12),rgba(155,77,255,.12));border:1.5px solid rgba(255,61,154,.3);border-radius:20px;color:#FF3D9A;font-family:Tajawal,sans-serif;font-size:12px;font-weight:900;cursor:pointer;margin-bottom:32px;-webkit-tap-highlight-color:transparent;transition:all .15s ease;}' +
-            '.chz-w-top:active{transform:scale(.95);}' +
-            '.chz-w-footer{border-top:1px solid rgba(155,77,255,.15);padding-top:24px;margin-top:8px;}' +
-            '.chz-w-logo{font-family:Playfair Display,serif;font-size:32px;font-weight:900;background:linear-gradient(135deg,#FF3D9A 0%,#9B4DFF 50%,#4D8CFF 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:8px;}' +
-            '.chz-w-tagline{font-size:12px;color:var(--mt,#9ca3af);font-weight:700;margin-bottom:6px;}' +
-            '.chz-w-copy{font-size:10px;color:var(--mt2,#6b7280);font-weight:600;}' +
-            '@media(max-width:359px){.chz-w-title{font-size:18px;}.chz-w-sub{font-size:11px;}.chz-w-portal{width:80px;height:80px;}.chz-w-portal-icon{font-size:36px;}.chz-w-logo{font-size:26px;}}' +
+            '.chz-w-portal-orb{position:relative;width:104px;height:104px;border-radius:50%;background:linear-gradient(135deg,#1a1535,#0f0a24);border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 40px rgba(155,77,255,.5),inset 0 0 20px rgba(155,77,255,.2);animation:wFloat 4s ease-in-out infinite;}' +
+            '@keyframes wFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}' +
+            '.chz-w-portal-logo{width:78%;height:78%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.4));}' +
+            '.chz-w-portal-fallback{display:none;width:100%;height:100%;align-items:center;justify-content:center;font-family:Playfair Display,serif;font-size:48px;font-weight:900;background:linear-gradient(135deg,#FF3D9A,#9B4DFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}' +
+            '.chz-w-badge{display:inline-block;padding:5px 14px;background:linear-gradient(135deg,rgba(255,61,154,.15),rgba(155,77,255,.15));border:1px solid rgba(255,61,154,.35);border-radius:20px;font-size:11px;font-weight:900;color:#FF3D9A;margin-bottom:14px;letter-spacing:.5px;position:relative;z-index:1;}' +
+            '.chz-w-title{font-size:23px;font-weight:900;color:var(--chz-text,#fff);margin-bottom:8px;letter-spacing:-.3px;position:relative;z-index:1;}' +
+            '.chz-w-sub{font-size:13px;color:var(--mt,#9ca3af);font-weight:600;margin-bottom:16px;line-height:1.6;max-width:340px;margin-left:auto;margin-right:auto;position:relative;z-index:1;}' +
+            '.chz-w-trust{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:22px;position:relative;z-index:1;}' +
+            '.chz-w-trust-item{padding:5px 10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:14px;font-size:10px;font-weight:800;color:#10b981;white-space:nowrap;}' +
+            '.chz-w-worlds{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:22px;position:relative;z-index:1;}' +
+            '.chz-w-world{background:var(--nav,#1e2438);border:1.5px solid rgba(155,77,255,.2);border-radius:12px;padding:10px 2px 8px;cursor:pointer;transition:all .2s ease;-webkit-tap-highlight-color:transparent;position:relative;}' +
+            '.chz-w-world:active{transform:scale(.94);background:rgba(255,61,154,.12);}' +
+            '.chz-w-world-i{font-size:22px;line-height:1;margin-bottom:5px;}' +
+            '.chz-w-world-n{font-size:9.5px;font-weight:800;color:var(--chz-text,#e8ecf5);}' +
+            '.chz-w-world-new{border-color:rgba(255,138,0,.4);background:linear-gradient(135deg,rgba(255,138,0,.08),rgba(255,61,154,.08));}' +
+            '.chz-w-world-badge{position:absolute;top:-6px;right:50%;transform:translateX(50%);padding:2px 6px;background:linear-gradient(135deg,#FF8A00,#FF3D9A);color:#fff;font-size:8px;font-weight:900;border-radius:8px;white-space:nowrap;letter-spacing:.3px;}' +
+            '.chz-w-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:280px;padding:14px 20px;background:linear-gradient(135deg,#FF3D9A 0%,#9B4DFF 100%);color:#fff;border:none;border-radius:16px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:900;cursor:pointer;margin-bottom:14px;box-shadow:0 8px 24px rgba(255,61,154,.35);-webkit-tap-highlight-color:transparent;transition:all .15s ease;position:relative;z-index:1;}' +
+            '.chz-w-cta:active{transform:scale(.97);box-shadow:0 4px 16px rgba(255,61,154,.5);}' +
+            '.chz-w-top{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:transparent;border:1px solid rgba(155,77,255,.25);border-radius:16px;color:var(--mt,#9ca3af);font-family:Tajawal,sans-serif;font-size:11px;font-weight:800;cursor:pointer;margin-bottom:30px;-webkit-tap-highlight-color:transparent;position:relative;z-index:1;transition:all .15s ease;}' +
+            '.chz-w-top:active{transform:scale(.95);background:rgba(155,77,255,.1);}' +
+            '.chz-w-footer{border-top:1px solid rgba(155,77,255,.15);padding-top:24px;margin-top:8px;position:relative;z-index:1;}' +
+            '.chz-w-logo{font-family:Playfair Display,serif;font-size:34px;font-weight:900;background:linear-gradient(135deg,#FF3D9A 0%,#9B4DFF 50%,#4D8CFF 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:5px;margin-bottom:8px;text-shadow:0 0 30px rgba(155,77,255,.4);}' +
+            '.chz-w-tagline{font-size:12px;color:var(--mt,#9ca3af);font-weight:700;margin-bottom:8px;}' +
+            '.chz-w-copy{font-size:10px;color:var(--mt2,#6b7280);font-weight:600;margin-bottom:10px;}' +
+            '.chz-w-links{font-size:10px;color:var(--mt2,#6b7280);font-weight:600;}' +
+            '.chz-w-links a{color:var(--mt,#9ca3af);cursor:pointer;text-decoration:none;padding:0 2px;}' +
+            '.chz-w-links a:active{color:#FF3D9A;}' +
+            '@media(max-width:359px){.chz-w-title{font-size:19px;}.chz-w-sub{font-size:11.5px;}.chz-w-portal{width:100px;height:100px;}.chz-w-portal-orb{width:88px;height:88px;}.chz-w-portal-logo{width:80%;height:80%;}.chz-w-logo{font-size:28px;letter-spacing:4px;}.chz-w-world-i{font-size:19px;}.chz-w-world-n{font-size:8.5px;}}' +
           '</style>';
         var prodsDiv = homeScreen.querySelector('#prods');
         if (prodsDiv && prodsDiv.parentElement) {
