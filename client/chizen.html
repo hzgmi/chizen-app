@@ -6799,218 +6799,117 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
 
 
 
-<!-- ═══ CHIZEN COMMERCE v51 ═══ -->
+<!-- ═══ CHIZEN COMMERCE v52 — full marketplace ═══ -->
 
-<!-- Hub -->
 <div class="screen" id="sc-commerce">
-  <div class="st"></div>
-  <div class="chz-cm-header">
-    <button class="chz-cm-back" onclick="APP.goTab('home')">
+  <div class="cm-top">
+    <button class="cm-back" onclick="APP.goTab('home')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
-    <div class="chz-cm-header-text">
-      <div class="chz-cm-header-title">🛍️ سوق شيزن</div>
-      <div class="chz-cm-header-sub">سيارات وهواتف فقط — بيع وشراء</div>
+    <div class="cm-title-wrap">
+      <div class="cm-title">🛍️ سوق شيزن</div>
+      <div class="cm-subtitle" id="cm-count">جاري التحميل...</div>
     </div>
-  </div>
-
-  <div class="chz-cm-hub">
-    <div class="chz-cm-hub-card chz-cm-hub-car">
-      <div class="chz-cm-hub-glow"></div>
-      <div class="chz-cm-hub-icon">🚗</div>
-      <div class="chz-cm-hub-title">السيارات</div>
-      <div class="chz-cm-hub-desc">بيع وشراء السيارات المستعملة والجديدة</div>
-      <div class="chz-cm-hub-actions">
-        <button class="chz-cm-btn chz-cm-btn-buy" onclick="APP.cmBrowse('car')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <span>شراء</span>
-        </button>
-        <button class="chz-cm-btn chz-cm-btn-sell" onclick="APP.cmSell('car')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <span>بيع</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="chz-cm-hub-card chz-cm-hub-phone">
-      <div class="chz-cm-hub-glow"></div>
-      <div class="chz-cm-hub-icon">📱</div>
-      <div class="chz-cm-hub-title">الهواتف</div>
-      <div class="chz-cm-hub-desc">بيع وشراء الهواتف الذكية المستعملة والجديدة</div>
-      <div class="chz-cm-hub-actions">
-        <button class="chz-cm-btn chz-cm-btn-buy" onclick="APP.cmBrowse('phone')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <span>شراء</span>
-        </button>
-        <button class="chz-cm-btn chz-cm-btn-sell" onclick="APP.cmSell('phone')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <span>بيع</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div class="chz-cm-rules">
-    <div class="chz-cm-rules-title">📋 قواعد السوق</div>
-    <div class="chz-cm-rules-list">
-      <div>✓ السيارات والهواتف فقط</div>
-      <div>✓ صور حقيقية للمنتج</div>
-      <div>✓ معلومات صحيحة</div>
-      <div>✗ لا يُقبل أي منتج آخر</div>
-    </div>
-  </div>
-</div>
-
-<!-- Browse -->
-<div class="screen" id="sc-commerce-browse">
-  <div class="st"></div>
-  <div class="chz-cm-header">
-    <button class="chz-cm-back" onclick="APP.goTab('commerce')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-    <div class="chz-cm-header-text">
-      <div class="chz-cm-header-title" id="cm-browse-title">🚗 السيارات</div>
-      <div class="chz-cm-header-sub">تصفح الإعلانات المتاحة</div>
-    </div>
-    <button class="chz-cm-add-btn" onclick="APP.cmSell(APP.cmType || 'car')">
+    <button class="cm-new-btn" onclick="APP.cmNew()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>انشر</span>
     </button>
   </div>
-  <div id="cm-listings" class="chz-cm-listings">
-    <div class="chz-cm-loading">جاري التحميل...</div>
+
+  <div class="cm-filters" id="cm-filters">
+    <button class="cm-filter active" data-type="all" onclick="APP.cmFilter('all',this)">الكل</button>
+    <button class="cm-filter" data-type="car" onclick="APP.cmFilter('car',this)">🚗 سيارات</button>
+    <button class="cm-filter" data-type="phone" onclick="APP.cmFilter('phone',this)">📱 هواتف</button>
+  </div>
+
+  <div class="cm-search">
+    <svg class="cm-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="cm-search-input" type="text" placeholder="ابحث عن سيارة أو هاتف..." oninput="APP.cmSearch(this.value)">
+  </div>
+
+  <div id="cm-listings" class="cm-grid">
+    <div class="cm-skeleton"></div><div class="cm-skeleton"></div><div class="cm-skeleton"></div><div class="cm-skeleton"></div>
   </div>
 </div>
 
-<!-- Sell Form -->
 <div class="screen" id="sc-commerce-new">
-  <div class="st"></div>
-  <div class="chz-cm-header">
-    <button class="chz-cm-back" onclick="APP.goTab('commerce')">
+  <div class="cm-top cm-top-form">
+    <button class="cm-back" onclick="APP.goTab('commerce')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
-    <div class="chz-cm-header-text">
-      <div class="chz-cm-header-title" id="cm-new-title">🚗 بيع سيارة</div>
-      <div class="chz-cm-header-sub">انشر إعلانك مجاناً</div>
+    <div class="cm-title-wrap">
+      <div class="cm-title">نشر إعلان جديد</div>
+      <div class="cm-subtitle">سيارات وهواتف فقط</div>
     </div>
   </div>
 
-  <div class="chz-cm-form">
-    <div class="chz-cm-form-row">
-      <label>عنوان الإعلان *</label>
-      <input id="cm-title" type="text" placeholder="مثال: تويوتا كامري 2020 للبيع" maxlength="80">
+  <div class="cm-form">
+    <div class="cm-form-label">نوع المنتج *</div>
+    <div class="cm-type-select">
+      <button class="cm-type-btn" data-type="car" onclick="APP.cmSelectType('car',this)">
+        <div class="cm-type-icon">🚗</div><div class="cm-type-name">سيارة</div>
+      </button>
+      <button class="cm-type-btn" data-type="phone" onclick="APP.cmSelectType('phone',this)">
+        <div class="cm-type-icon">📱</div><div class="cm-type-name">هاتف</div>
+      </button>
     </div>
 
-    <div id="cm-car-fields">
-      <div class="chz-cm-form-2">
-        <div class="chz-cm-form-row">
-          <label>الماركة *</label>
-          <input id="cm-car-brand" type="text" placeholder="تويوتا / هونداي...">
-        </div>
-        <div class="chz-cm-form-row">
-          <label>الموديل *</label>
-          <input id="cm-car-model" type="text" placeholder="كامري / اكسنت...">
-        </div>
-      </div>
-      <div class="chz-cm-form-2">
-        <div class="chz-cm-form-row">
-          <label>سنة الصنع</label>
-          <input id="cm-car-year" type="number" placeholder="2020" min="1980" max="2026">
-        </div>
-        <div class="chz-cm-form-row">
-          <label>عدد الكيلومترات</label>
-          <input id="cm-car-km" type="number" placeholder="50000" min="0">
-        </div>
-      </div>
+    <div class="cm-field"><label>عنوان الإعلان *</label><input id="cm-f-title" type="text" placeholder="مثال: تويوتا كامري 2020 فل أوبشن" maxlength="80"></div>
+
+    <div class="cm-row" id="cm-car-extra" style="display:none">
+      <div class="cm-field"><label>الماركة *</label><input id="cm-f-brand" type="text" placeholder="تويوتا / ابل..."></div>
+      <div class="cm-field"><label>الموديل *</label><input id="cm-f-model" type="text" placeholder="كامري / ايفون 15..."></div>
+    </div>
+    <div class="cm-row" id="cm-car-extra2" style="display:none">
+      <div class="cm-field"><label>سنة الصنع</label><input id="cm-f-year" type="number" placeholder="2020" min="1980" max="2026"></div>
+      <div class="cm-field"><label>العداد (كم)</label><input id="cm-f-km" type="number" placeholder="50000" min="0"></div>
+    </div>
+    <div class="cm-row" id="cm-phone-extra" style="display:none">
+      <div class="cm-field"><label>السعة</label><select id="cm-f-storage"><option value="64">64 جيجا</option><option value="128" selected>128 جيجا</option><option value="256">256 جيجا</option><option value="512">512 جيجا</option><option value="1024">1 تيرا</option></select></div>
+      <div class="cm-field"><label>الحالة</label><select id="cm-f-condition"><option value="new">جديد</option><option value="like-new">كالجديد</option><option value="used" selected>مستعمل</option></select></div>
     </div>
 
-    <div id="cm-phone-fields" style="display:none;">
-      <div class="chz-cm-form-2">
-        <div class="chz-cm-form-row">
-          <label>الماركة *</label>
-          <input id="cm-phone-brand" type="text" placeholder="ابل / سامسونج...">
-        </div>
-        <div class="chz-cm-form-row">
-          <label>الموديل *</label>
-          <input id="cm-phone-model" type="text" placeholder="ايفون 15 برو / S24...">
-        </div>
-      </div>
-      <div class="chz-cm-form-2">
-        <div class="chz-cm-form-row">
-          <label>السعة</label>
-          <select id="cm-phone-storage">
-            <option value="64">64 جيجا</option>
-            <option value="128" selected>128 جيجا</option>
-            <option value="256">256 جيجا</option>
-            <option value="512">512 جيجا</option>
-            <option value="1024">1 تيرا</option>
-          </select>
-        </div>
-        <div class="chz-cm-form-row">
-          <label>الحالة</label>
-          <select id="cm-phone-condition">
-            <option value="new">جديد</option>
-            <option value="like-new">كالجديد</option>
-            <option value="used" selected>مستعمل</option>
-          </select>
-        </div>
-      </div>
+    <div class="cm-field"><label>الوصف *</label><textarea id="cm-f-desc" rows="4" placeholder="اكتب وصفاً دقيقاً: الحالة، المميزات، أي عيوب..."></textarea></div>
+
+    <div class="cm-row">
+      <div class="cm-field"><label>السعر (ر.س) *</label><input id="cm-f-price" type="number" placeholder="5000" min="1"></div>
+      <div class="cm-field"><label>المدينة *</label><input id="cm-f-city" type="text" placeholder="عدن / صنعاء..."></div>
     </div>
 
-    <div class="chz-cm-form-row">
-      <label>الوصف *</label>
-      <textarea id="cm-desc" rows="4" placeholder="اكتب وصفاً دقيقاً: الحالة، المميزات، أي عيوب..."></textarea>
+    <div class="cm-form-label">الصور * (حتى 5 صور)</div>
+    <div class="cm-upload" onclick="document.getElementById('cm-file').click()">
+      <div class="cm-upload-icon">📸</div>
+      <div class="cm-upload-text">اضغط لاختيار صور</div>
+      <div class="cm-upload-hint">JPG / PNG — حتى 5 صور</div>
+      <input id="cm-file" type="file" accept="image/*" multiple hidden onchange="APP.cmFilesSelected(event)">
     </div>
+    <div id="cm-previews" class="cm-previews"></div>
 
-    <div class="chz-cm-form-2">
-      <div class="chz-cm-form-row">
-        <label>السعر (ر.س) *</label>
-        <input id="cm-price" type="number" placeholder="5000" min="1">
-      </div>
-      <div class="chz-cm-form-row">
-        <label>المدينة *</label>
-        <input id="cm-city" type="text" placeholder="عدن / صنعاء...">
-      </div>
-    </div>
+    <div class="cm-field"><label>رقم الجوال *</label><input id="cm-f-phone" type="tel" placeholder="7xx xxx xxx"></div>
 
-    <div class="chz-cm-form-row">
-      <label>رابط الصورة *</label>
-      <input id="cm-img" type="url" placeholder="https://...">
-      <div class="chz-cm-form-hint">أرفع صورة على imgbb.com وضع الرابط المباشر</div>
-    </div>
-
-    <div class="chz-cm-form-row">
-      <label>رقم الجوال *</label>
-      <input id="cm-phone" type="tel" placeholder="7xx xxx xxx">
-    </div>
-
-    <button class="chz-cm-submit" onclick="APP.cmSubmit()">
+    <button class="cm-submit" onclick="APP.cmSubmit()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M12 5v14M5 12h14"/></svg>
       <span>نشر الإعلان</span>
     </button>
   </div>
 </div>
 
-<!-- Detail -->
 <div class="screen" id="sc-commerce-detail">
-  <div class="st"></div>
-  <div class="chz-cm-header">
-    <button class="chz-cm-back" onclick="APP.cmBack()">
+  <div class="cm-top">
+    <button class="cm-back" onclick="APP.goTab('commerce')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
-    <div class="chz-cm-header-text">
-      <div class="chz-cm-header-title">تفاصيل الإعلان</div>
-    </div>
+    <div class="cm-title-wrap"><div class="cm-title">تفاصيل الإعلان</div></div>
   </div>
-  <div id="cm-detail-content" style="padding-bottom:100px;"></div>
+  <div id="cm-detail" style="padding-bottom:100px;"></div>
 </div>
 
-<!-- Rejection Modal -->
-<div id="cm-reject-modal" class="chz-cm-modal">
-  <div class="chz-cm-modal-card">
-    <div class="chz-cm-modal-emoji" id="cm-rej-emoji">⚠️</div>
-    <div class="chz-cm-modal-title" id="cm-rej-title"></div>
-    <div class="chz-cm-modal-msg" id="cm-rej-msg"></div>
-    <button class="chz-cm-modal-btn" onclick="document.getElementById('cm-reject-modal').style.display='none'">حسناً، فهمت</button>
+<div id="cm-modal" class="cm-modal">
+  <div class="cm-modal-card">
+    <div class="cm-modal-emoji" id="cm-modal-icon">⚠️</div>
+    <div class="cm-modal-title" id="cm-modal-title"></div>
+    <div class="cm-modal-msg" id="cm-modal-msg"></div>
+    <button class="cm-modal-btn" onclick="document.getElementById('cm-modal').style.display='none'">حسناً، فهمت</button>
   </div>
 </div>
 
@@ -8216,115 +8115,140 @@ body #sc-home .chz-hdr {
 }
 </style>
 
-<style id="chz-commerce-v51">
+
+
+<style id="chz-commerce-v52">
 /* Header */
-.chz-cm-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: linear-gradient(135deg, #10b981 0%, #059669 60%, #FFB800 100%); border-radius: 0 0 20px 20px; box-shadow: 0 6px 20px rgba(16,185,129,0.25); direction: rtl; }
-.chz-cm-back { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
-.chz-cm-back svg { width: 18px; height: 18px; transform: rotate(180deg); }
-.chz-cm-back:active { transform: scale(0.92); background: rgba(255,255,255,0.3); }
-.chz-cm-header-text { flex: 1; min-width: 0; }
-.chz-cm-header-title { font-size: 17px; font-weight: 900; color: #fff; font-family: 'Tajawal', sans-serif; line-height: 1.2; }
-.chz-cm-header-sub { font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 600; margin-top: 2px; font-family: 'Tajawal', sans-serif; }
-.chz-cm-add-btn { width: 40px; height: 40px; border-radius: 12px; background: #fff; border: none; display: flex; align-items: center; justify-content: center; color: #059669; cursor: pointer; flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.15); -webkit-tap-highlight-color: transparent; }
-.chz-cm-add-btn svg { width: 18px; height: 18px; }
-.chz-cm-add-btn:active { transform: scale(0.92); }
+.cm-top { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: linear-gradient(135deg, #10b981 0%, #059669 60%, #FFB800 100%); border-radius: 0 0 20px 20px; box-shadow: 0 6px 20px rgba(16,185,129,0.25); position: sticky; top: 0; z-index: 50; direction: rtl; }
+.cm-top-form { background: linear-gradient(135deg, #9B4DFF 0%, #FF3D9A 100%); }
+.cm-back { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.cm-back svg { width: 18px; height: 18px; transform: rotate(180deg); }
+.cm-back:active { transform: scale(0.92); }
+.cm-title-wrap { flex: 1; min-width: 0; }
+.cm-title { font-size: 17px; font-weight: 900; color: #fff; font-family: 'Tajawal', sans-serif; line-height: 1.2; }
+.cm-subtitle { font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 600; margin-top: 2px; font-family: 'Tajawal', sans-serif; }
+.cm-new-btn { display: flex; align-items: center; gap: 5px; padding: 8px 12px; background: #fff; border: none; border-radius: 12px; color: #059669; font-family: 'Tajawal', sans-serif; font-size: 12px; font-weight: 900; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.15); -webkit-tap-highlight-color: transparent; }
+.cm-new-btn svg { width: 14px; height: 14px; }
+.cm-new-btn:active { transform: scale(0.94); }
 
-/* Hub Cards */
-.chz-cm-hub { padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; }
-.chz-cm-hub-card { position: relative; padding: 22px 18px; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 32px rgba(0,0,0,0.15); }
-.chz-cm-hub-car { background: linear-gradient(135deg, #FF8A00 0%, #FF3D9A 60%, #9B4DFF 100%); }
-.chz-cm-hub-phone { background: linear-gradient(135deg, #4D8CFF 0%, #9B4DFF 60%, #FF3D9A 100%); }
-.chz-cm-hub-glow { position: absolute; top: -40%; right: -20%; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%); pointer-events: none; }
-.chz-cm-hub-icon { font-size: 52px; line-height: 1; margin-bottom: 10px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.25)); position: relative; z-index: 1; }
-.chz-cm-hub-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 4px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); font-family: 'Tajawal', sans-serif; position: relative; z-index: 1; }
-.chz-cm-hub-desc { font-size: 12px; color: rgba(255,255,255,0.92); font-weight: 600; margin-bottom: 16px; line-height: 1.5; font-family: 'Tajawal', sans-serif; position: relative; z-index: 1; }
-.chz-cm-hub-actions { display: flex; gap: 10px; position: relative; z-index: 1; }
-.chz-cm-btn { flex: 1; padding: 13px 16px; border-radius: 14px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; -webkit-tap-highlight-color: transparent; transition: transform .15s ease; }
-.chz-cm-btn:active { transform: scale(0.96); }
-.chz-cm-btn svg { width: 16px; height: 16px; }
-.chz-cm-btn-buy { background: #fff; color: #059669; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
-.chz-cm-btn-sell { background: rgba(0,0,0,0.28); color: #fff; border: 1.5px solid rgba(255,255,255,0.35); }
+/* Filters */
+.cm-filters { display: flex; gap: 8px; padding: 14px 16px 8px; overflow-x: auto; scrollbar-width: none; }
+.cm-filters::-webkit-scrollbar { display: none; }
+.cm-filter { flex-shrink: 0; padding: 10px 18px; background: var(--nav, #f8fafc); color: var(--mt, #6b7280); border: 1.5px solid rgba(16,185,129,0.15); border-radius: 20px; font-family: 'Tajawal', sans-serif; font-size: 12.5px; font-weight: 800; cursor: pointer; transition: all .2s ease; -webkit-tap-highlight-color: transparent; }
+html:not([data-theme="light"]) .cm-filter { background: #1e2438; border-color: rgba(255,255,255,0.08); color: #9ca3af; }
+.cm-filter:active { transform: scale(0.96); }
+.cm-filter.active { background: linear-gradient(135deg, #10b981, #059669); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(16,185,129,0.35); }
 
-/* Rules */
-.chz-cm-rules { margin: 0 16px 20px; padding: 16px 18px; background: rgba(16,185,129,0.06); border: 1.5px dashed rgba(16,185,129,0.3); border-radius: 16px; direction: rtl; }
-.chz-cm-rules-title { font-size: 13px; font-weight: 900; color: #10b981; margin-bottom: 10px; font-family: 'Tajawal', sans-serif; }
-.chz-cm-rules-list { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; color: var(--mt, #9ca3af); font-family: 'Tajawal', sans-serif; line-height: 1.5; }
-.chz-cm-rules-list > div { padding: 2px 0; }
+/* Search */
+.cm-search { position: relative; margin: 0 16px 12px; }
+.cm-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #10b981; }
+.cm-search input { width: 100%; padding: 12px 16px 12px 40px; background: var(--nav, #f8fafc); border: 1.5px solid rgba(16,185,129,0.15); border-radius: 12px; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 600; color: var(--chz-text, #1f2937); box-sizing: border-box; outline: none; }
+html:not([data-theme="light"]) .cm-search input { background: #1e2438; border-color: rgba(255,255,255,0.08); color: #e8ecf5; }
+.cm-search input:focus { border-color: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.1); }
 
-/* Listings */
-.chz-cm-listings { padding: 16px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; direction: rtl; }
-.chz-cm-loading { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: #9ca3af; font-family: 'Tajawal', sans-serif; font-size: 13px; }
-.chz-cm-empty { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: #9ca3af; font-family: 'Tajawal', sans-serif; font-size: 13px; background: rgba(16,185,129,0.05); border: 1px dashed rgba(16,185,129,0.2); border-radius: 14px; }
-.chz-cm-listing-card { background: #fff; border: 1px solid rgba(16,185,129,0.12); border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 3px 12px rgba(0,0,0,0.06); transition: transform .15s ease; -webkit-tap-highlight-color: transparent; }
-.chz-cm-listing-card:active { transform: scale(0.97); }
-html:not([data-theme="light"]) .chz-cm-listing-card { background: #1e2438; border-color: rgba(255,255,255,0.08); }
-.chz-cm-listing-img { width: 100%; aspect-ratio: 1; background: #f4f6fa; overflow: hidden; position: relative; }
-.chz-cm-listing-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.chz-cm-listing-badge { position: absolute; top: 8px; right: 8px; padding: 3px 8px; background: rgba(16,185,129,0.95); color: #fff; font-size: 9px; font-weight: 900; border-radius: 6px; font-family: 'Tajawal', sans-serif; }
-.chz-cm-listing-body { padding: 10px; }
-.chz-cm-listing-title { font-size: 12px; font-weight: 800; color: #1f2937; line-height: 1.35; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: 'Tajawal', sans-serif; min-height: 34px; }
-html:not([data-theme="light"]) .chz-cm-listing-title { color: #e8ecf5; }
-.chz-cm-listing-price { font-size: 14px; font-weight: 900; color: #10b981; font-family: 'Tajawal', sans-serif; }
-.chz-cm-listing-price small { font-size: 10px; color: #10b981; }
-.chz-cm-listing-city { font-size: 10px; color: #6b7280; font-weight: 600; margin-top: 3px; font-family: 'Tajawal', sans-serif; }
+/* Grid */
+.cm-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 8px 16px 100px; }
+.cm-skeleton { aspect-ratio: 3/4; background: linear-gradient(90deg, var(--nav, #f4f6fa) 25%, rgba(16,185,129,0.05) 50%, var(--nav, #f4f6fa) 75%); background-size: 200% 100%; animation: cmShimmer 1.5s infinite; border-radius: 16px; }
+@keyframes cmShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+html:not([data-theme="light"]) .cm-skeleton { background: linear-gradient(90deg, #1e2438 25%, #252b42 50%, #1e2438 75%); background-size: 200% 100%; }
+.cm-empty { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--mt, #9ca3af); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 600; line-height: 1.6; }
+.cm-empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.6; }
 
-/* Detail */
-.chz-cm-detail-img { width: 100%; aspect-ratio: 4/3; background: #f4f6fa; overflow: hidden; }
-.chz-cm-detail-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.chz-cm-detail-body { padding: 18px 16px; }
-.chz-cm-detail-title { font-size: 20px; font-weight: 900; color: var(--chz-text, #1f2937); margin-bottom: 8px; font-family: 'Tajawal', sans-serif; line-height: 1.3; }
-html:not([data-theme="light"]) .chz-cm-detail-title { color: #e8ecf5; }
-.chz-cm-detail-price { font-size: 26px; font-weight: 900; color: #10b981; margin-bottom: 14px; font-family: 'Tajawal', sans-serif; }
-.chz-cm-detail-price small { font-size: 14px; }
-.chz-cm-detail-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
-.chz-cm-detail-meta > span { padding: 6px 12px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); border-radius: 10px; font-size: 11px; font-weight: 800; color: #10b981; font-family: 'Tajawal', sans-serif; }
-.chz-cm-detail-desc { padding: 14px 16px; background: var(--nav, #f8fafc); border-radius: 14px; font-size: 13px; line-height: 1.7; color: var(--chz-text, #4b5563); font-family: 'Tajawal', sans-serif; margin-bottom: 16px; white-space: pre-wrap; }
-html:not([data-theme="light"]) .chz-cm-detail-desc { background: #1e2438; color: #d1d5db; }
-.chz-cm-detail-seller { padding: 14px 16px; background: rgba(255,184,0,0.06); border: 1.5px solid rgba(255,184,0,0.25); border-radius: 14px; margin-bottom: 16px; font-family: 'Tajawal', sans-serif; }
-.chz-cm-detail-seller-label { font-size: 10px; font-weight: 800; color: #FFB800; margin-bottom: 4px; }
-.chz-cm-detail-seller-name { font-size: 14px; font-weight: 900; color: var(--chz-text, #1f2937); }
-html:not([data-theme="light"]) .chz-cm-detail-seller-name { color: #e8ecf5; }
-.chz-cm-whatsapp { width: 100%; padding: 16px 20px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: #fff; border: none; border-radius: 16px; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 22px rgba(37,211,102,0.4); -webkit-tap-highlight-color: transparent; }
-.chz-cm-whatsapp:active { transform: scale(0.97); }
-.chz-cm-whatsapp svg { width: 22px; height: 22px; }
+/* Card */
+.cm-card { background: #fff; border: 1px solid rgba(16,185,129,0.1); border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05); -webkit-tap-highlight-color: transparent; }
+.cm-card:active { transform: scale(0.97); box-shadow: 0 4px 16px rgba(16,185,129,0.2); }
+html:not([data-theme="light"]) .cm-card { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+.cm-card-img { width: 100%; aspect-ratio: 1; background: #f4f6fa; overflow: hidden; position: relative; }
+html:not([data-theme="light"]) .cm-card-img { background: #131829; }
+.cm-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cm-card-badge { position: absolute; top: 8px; right: 8px; padding: 4px 9px; background: rgba(16,185,129,0.95); color: #fff; font-size: 11px; font-weight: 900; border-radius: 8px; font-family: 'Tajawal', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.cm-card-body { padding: 10px 10px 12px; }
+.cm-card-title { font-size: 12.5px; font-weight: 800; color: #1f2937; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: 'Tajawal', sans-serif; min-height: 33px; }
+html:not([data-theme="light"]) .cm-card-title { color: #e8ecf5; }
+.cm-card-price { font-size: 15px; font-weight: 900; color: #10b981; font-family: 'Tajawal', sans-serif; display: flex; align-items: baseline; gap: 3px; margin-bottom: 4px; }
+.cm-card-price small { font-size: 10px; font-weight: 800; }
+.cm-card-city { font-size: 10.5px; color: var(--mt2, #6b7280); font-weight: 600; font-family: 'Tajawal', sans-serif; }
 
 /* Form */
-.chz-cm-form { padding: 18px 16px 100px; direction: rtl; }
-.chz-cm-form-row { margin-bottom: 14px; }
-.chz-cm-form-row label { display: block; font-size: 12px; font-weight: 800; color: var(--chz-text, #4b5563); margin-bottom: 6px; font-family: 'Tajawal', sans-serif; }
-html:not([data-theme="light"]) .chz-cm-form-row label { color: #d1d5db; }
-.chz-cm-form-row input, .chz-cm-form-row select, .chz-cm-form-row textarea { width: 100%; padding: 13px 14px; background: var(--nav, #f8fafc); color: var(--chz-text, #1f2937); border: 1.5px solid #e2e8f0; border-radius: 13px; font-family: 'Tajawal', sans-serif; font-size: 13.5px; font-weight: 600; box-sizing: border-box; outline: none; transition: border-color .2s ease; }
-html:not([data-theme="light"]) .chz-cm-form-row input,
-html:not([data-theme="light"]) .chz-cm-form-row select,
-html:not([data-theme="light"]) .chz-cm-form-row textarea { background: #1e2438; color: #e8ecf5; border-color: rgba(255,255,255,0.1); }
-.chz-cm-form-row input:focus, .chz-cm-form-row select:focus, .chz-cm-form-row textarea:focus { border-color: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
-.chz-cm-form-row textarea { resize: vertical; min-height: 80px; }
-.chz-cm-form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.chz-cm-form-hint { font-size: 10px; color: #9ca3af; margin-top: 5px; font-family: 'Tajawal', sans-serif; }
-.chz-cm-submit { width: 100%; padding: 16px 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; border-radius: 16px; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; box-shadow: 0 8px 24px rgba(16,185,129,0.4); -webkit-tap-highlight-color: transparent; transition: transform .15s ease; }
-.chz-cm-submit:active { transform: scale(0.97); }
+.cm-form { padding: 18px 16px 100px; direction: rtl; font-family: 'Tajawal', sans-serif; }
+.cm-form-label { font-size: 12px; font-weight: 800; color: var(--chz-text, #4b5563); margin-bottom: 8px; }
+html:not([data-theme="light"]) .cm-form-label { color: #d1d5db; }
+.cm-type-select { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.cm-type-btn { padding: 18px 12px; background: var(--nav, #f8fafc); border: 2px solid rgba(16,185,129,0.15); border-radius: 16px; cursor: pointer; text-align: center; transition: all .2s ease; -webkit-tap-highlight-color: transparent; }
+html:not([data-theme="light"]) .cm-type-btn { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+.cm-type-btn.active { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.15)); border-color: #10b981; box-shadow: 0 4px 14px rgba(16,185,129,0.2); }
+.cm-type-icon { font-size: 36px; line-height: 1; margin-bottom: 6px; }
+.cm-type-name { font-size: 13px; font-weight: 900; color: var(--chz-text, #1f2937); }
+html:not([data-theme="light"]) .cm-type-name { color: #e8ecf5; }
+.cm-type-btn.active .cm-type-name { color: #10b981; }
+.cm-field { margin-bottom: 14px; }
+.cm-field label { display: block; font-size: 12px; font-weight: 800; color: var(--chz-text, #4b5563); margin-bottom: 6px; }
+html:not([data-theme="light"]) .cm-field label { color: #d1d5db; }
+.cm-field input, .cm-field select, .cm-field textarea { width: 100%; padding: 13px 14px; background: var(--nav, #f8fafc); color: var(--chz-text, #1f2937); border: 1.5px solid rgba(16,185,129,0.2); border-radius: 12px; font-family: 'Tajawal', sans-serif; font-size: 13.5px; font-weight: 600; box-sizing: border-box; outline: none; transition: border-color .2s ease; }
+html:not([data-theme="light"]) .cm-field input,
+html:not([data-theme="light"]) .cm-field select,
+html:not([data-theme="light"]) .cm-field textarea { background: #1e2438; color: #e8ecf5; border-color: rgba(255,255,255,0.1); }
+.cm-field input:focus, .cm-field select:focus, .cm-field textarea:focus { border-color: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
+.cm-field textarea { resize: vertical; min-height: 90px; }
+.cm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cm-upload { padding: 24px; border: 2px dashed rgba(16,185,129,0.35); border-radius: 16px; text-align: center; cursor: pointer; background: rgba(16,185,129,0.04); transition: all .2s ease; -webkit-tap-highlight-color: transparent; }
+.cm-upload:active { transform: scale(0.98); background: rgba(16,185,129,0.1); }
+html:not([data-theme="light"]) .cm-upload { background: rgba(16,185,129,0.08); }
+.cm-upload-icon { font-size: 36px; margin-bottom: 8px; }
+.cm-upload-text { font-size: 13px; font-weight: 800; color: #10b981; margin-bottom: 4px; }
+.cm-upload-hint { font-size: 10.5px; color: var(--mt2, #6b7280); font-weight: 600; }
+.cm-previews { display: flex; gap: 8px; overflow-x: auto; padding: 12px 0; scrollbar-width: none; margin-top: 8px; }
+.cm-previews::-webkit-scrollbar { display: none; }
+.cm-preview { position: relative; flex-shrink: 0; width: 80px; height: 80px; border-radius: 12px; overflow: hidden; border: 1.5px solid rgba(16,185,129,0.3); }
+.cm-preview img { width: 100%; height: 100%; object-fit: cover; }
+.cm-preview-rm { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,59,48,0.95); color: #fff; border: 2px solid #fff; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; -webkit-tap-highlight-color: transparent; }
+.cm-submit { width: 100%; padding: 16px 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; border-radius: 16px; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; box-shadow: 0 8px 24px rgba(16,185,129,0.4); -webkit-tap-highlight-color: transparent; transition: transform .15s ease; }
+.cm-submit:active { transform: scale(0.97); }
+.cm-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Detail */
+.cm-detail-img { width: 100%; aspect-ratio: 4/3; background: #f4f6fa; overflow: hidden; }
+.cm-detail-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.cm-detail-thumbs { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; scrollbar-width: none; }
+.cm-detail-thumbs::-webkit-scrollbar { display: none; }
+.cm-detail-thumb { flex-shrink: 0; width: 60px; height: 60px; border-radius: 10px; overflow: hidden; border: 2px solid transparent; cursor: pointer; opacity: 0.6; transition: all .2s ease; }
+.cm-detail-thumb.active { border-color: #10b981; opacity: 1; }
+.cm-detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.cm-detail-body { padding: 12px 16px; }
+.cm-detail-title { font-size: 20px; font-weight: 900; color: var(--chz-text, #1f2937); margin-bottom: 8px; line-height: 1.3; font-family: 'Tajawal', sans-serif; }
+html:not([data-theme="light"]) .cm-detail-title { color: #e8ecf5; }
+.cm-detail-price { font-size: 26px; font-weight: 900; color: #10b981; margin-bottom: 14px; font-family: 'Tajawal', sans-serif; }
+.cm-detail-price small { font-size: 14px; }
+.cm-detail-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.cm-detail-meta > span { padding: 6px 12px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); border-radius: 10px; font-size: 11px; font-weight: 800; color: #10b981; font-family: 'Tajawal', sans-serif; }
+.cm-detail-desc { padding: 14px 16px; background: var(--nav, #f8fafc); border-radius: 14px; font-size: 13px; line-height: 1.7; color: var(--chz-text, #4b5563); margin-bottom: 16px; white-space: pre-wrap; font-family: 'Tajawal', sans-serif; }
+html:not([data-theme="light"]) .cm-detail-desc { background: #1e2438; color: #d1d5db; }
+.cm-detail-seller { padding: 14px 16px; background: rgba(255,184,0,0.06); border: 1.5px solid rgba(255,184,0,0.25); border-radius: 14px; margin-bottom: 16px; font-family: 'Tajawal', sans-serif; }
+.cm-detail-seller-label { font-size: 10px; font-weight: 800; color: #FFB800; margin-bottom: 4px; }
+.cm-detail-seller-name { font-size: 14px; font-weight: 900; color: var(--chz-text, #1f2937); }
+html:not([data-theme="light"]) .cm-detail-seller-name { color: #e8ecf5; }
+.cm-wa-btn { width: 100%; padding: 16px 20px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: #fff; border: none; border-radius: 16px; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 22px rgba(37,211,102,0.4); -webkit-tap-highlight-color: transparent; }
+.cm-wa-btn:active { transform: scale(0.97); }
+.cm-wa-btn svg { width: 22px; height: 22px; }
 
 /* Modal */
-.chz-cm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 24px; }
-.chz-cm-modal-card { background: #fff; border-radius: 24px; padding: 32px 24px 24px; max-width: 360px; width: 100%; text-align: center; direction: rtl; font-family: 'Tajawal', sans-serif; box-shadow: 0 20px 60px rgba(0,0,0,0.4); animation: cmPop .4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.cm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 24px; }
+.cm-modal-card { background: #fff; border-radius: 24px; padding: 32px 24px 24px; max-width: 360px; width: 100%; text-align: center; direction: rtl; font-family: 'Tajawal', sans-serif; box-shadow: 0 20px 60px rgba(0,0,0,0.4); animation: cmPop .4s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes cmPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-html:not([data-theme="light"]) .chz-cm-modal-card { background: #1e2438; }
-.chz-cm-modal-emoji { font-size: 64px; line-height: 1; margin-bottom: 16px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.15)); }
-.chz-cm-modal-title { font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 10px; line-height: 1.4; }
-html:not([data-theme="light"]) .chz-cm-modal-title { color: #e8ecf5; }
-.chz-cm-modal-msg { font-size: 13px; font-weight: 600; color: #6b7280; line-height: 1.6; margin-bottom: 20px; }
-html:not([data-theme="light"]) .chz-cm-modal-msg { color: #9ca3af; }
-.chz-cm-modal-btn { width: 100%; padding: 14px 20px; background: linear-gradient(135deg, #FF3D9A, #9B4DFF); color: #fff; border: none; border-radius: 14px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 18px rgba(255,61,154,0.35); -webkit-tap-highlight-color: transparent; }
-.chz-cm-modal-btn:active { transform: scale(0.97); }
+html:not([data-theme="light"]) .cm-modal-card { background: #1e2438; }
+.cm-modal-emoji { font-size: 64px; line-height: 1; margin-bottom: 16px; }
+.cm-modal-title { font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 10px; line-height: 1.4; }
+html:not([data-theme="light"]) .cm-modal-title { color: #e8ecf5; }
+.cm-modal-msg { font-size: 13px; font-weight: 600; color: #6b7280; line-height: 1.6; margin-bottom: 20px; }
+html:not([data-theme="light"]) .cm-modal-msg { color: #9ca3af; }
+.cm-modal-btn { width: 100%; padding: 14px 20px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; border-radius: 14px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 18px rgba(16,185,129,0.35); -webkit-tap-highlight-color: transparent; }
+.cm-modal-btn:active { transform: scale(0.97); }
 
 @media (max-width: 359px) {
-  .chz-cm-hub { padding: 16px 12px; }
-  .chz-cm-hub-icon { font-size: 44px; }
-  .chz-cm-hub-title { font-size: 19px; }
-  .chz-cm-hub-desc { font-size: 11px; }
-  .chz-cm-btn { font-size: 13px; padding: 11px 12px; }
-  .chz-cm-listings { grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; }
-  .chz-cm-form-2 { grid-template-columns: 1fr; gap: 0; }
+  .cm-row { grid-template-columns: 1fr; }
+  .cm-filter { padding: 8px 14px; font-size: 11px; }
+  .cm-title { font-size: 15px; }
+  .cm-subtitle { font-size: 10px; }
 }
 </style>
 
