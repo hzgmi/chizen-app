@@ -6797,42 +6797,220 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
 
 
 
-<!-- ═══ CHIZEN COMMERCE SCREEN ═══ -->
+
+
+<!-- ═══ CHIZEN COMMERCE v51 ═══ -->
+
+<!-- Hub -->
 <div class="screen" id="sc-commerce">
   <div class="st"></div>
-  <div class="sh2" style="background:linear-gradient(135deg,#10b981,#059669);padding:16px 18px;border-radius:0 0 20px 20px;box-shadow:0 6px 20px rgba(16,185,129,0.25);">
-    <button class="back" onclick="APP.goTab('home')" style="color:#fff;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);">
+  <div class="chz-cm-header">
+    <button class="chz-cm-back" onclick="APP.goTab('home')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
-    <div class="st2" style="color:#fff;font-family:Tajawal,sans-serif;font-weight:900;">🛍️ سوق شيزن</div>
+    <div class="chz-cm-header-text">
+      <div class="chz-cm-header-title">🛍️ سوق شيزن</div>
+      <div class="chz-cm-header-sub">سيارات وهواتف فقط — بيع وشراء</div>
+    </div>
   </div>
 
-  <div style="padding:60px 24px 40px;text-align:center;">
-    <div style="font-size:80px;line-height:1;margin-bottom:20px;filter:drop-shadow(0 10px 30px rgba(16,185,129,0.4));">🛍️</div>
-    <div style="font-size:24px;font-weight:900;color:var(--chz-text,#fff);margin-bottom:10px;font-family:Tajawal,sans-serif;">قريباً جداً</div>
-    <div style="font-size:14px;color:var(--mt,#9ca3af);line-height:1.7;font-family:Tajawal,sans-serif;max-width:320px;margin:0 auto;">
-      سوق شيزن للبيع والشراء<br>
-      <span style="color:#10b981;font-weight:800;">اعرض ما لا تحتاجه • اشتري ما تحتاجه</span>
-    </div>
-
-    <div style="display:flex;justify-content:center;gap:20px;margin-top:40px;flex-wrap:wrap;">
-      <div style="padding:16px 20px;background:rgba(16,185,129,0.1);border:1.5px solid rgba(16,185,129,0.3);border-radius:16px;text-align:center;min-width:100px;">
-        <div style="font-size:28px;">📸</div>
-        <div style="font-size:11px;font-weight:800;color:#10b981;margin-top:6px;font-family:Tajawal,sans-serif;">انشر إعلان</div>
-      </div>
-      <div style="padding:16px 20px;background:rgba(255,184,0,0.1);border:1.5px solid rgba(255,184,0,0.3);border-radius:16px;text-align:center;min-width:100px;">
-        <div style="font-size:28px;">🔍</div>
-        <div style="font-size:11px;font-weight:800;color:#FFB800;margin-top:6px;font-family:Tajawal,sans-serif;">ابحث عن سلعة</div>
-      </div>
-      <div style="padding:16px 20px;background:rgba(255,61,154,0.1);border:1.5px solid rgba(255,61,154,0.3);border-radius:16px;text-align:center;min-width:100px;">
-        <div style="font-size:28px;">💬</div>
-        <div style="font-size:11px;font-weight:800;color:#FF3D9A;margin-top:6px;font-family:Tajawal,sans-serif;">تواصل مباشر</div>
+  <div class="chz-cm-hub">
+    <div class="chz-cm-hub-card chz-cm-hub-car">
+      <div class="chz-cm-hub-glow"></div>
+      <div class="chz-cm-hub-icon">🚗</div>
+      <div class="chz-cm-hub-title">السيارات</div>
+      <div class="chz-cm-hub-desc">بيع وشراء السيارات المستعملة والجديدة</div>
+      <div class="chz-cm-hub-actions">
+        <button class="chz-cm-btn chz-cm-btn-buy" onclick="APP.cmBrowse('car')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>شراء</span>
+        </button>
+        <button class="chz-cm-btn chz-cm-btn-sell" onclick="APP.cmSell('car')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>بيع</span>
+        </button>
       </div>
     </div>
 
-    <button onclick="APP.goTab('home')" style="margin-top:40px;padding:14px 32px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:14px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 8px 24px rgba(16,185,129,0.35);-webkit-tap-highlight-color:transparent;">
-      العودة للرئيسية
+    <div class="chz-cm-hub-card chz-cm-hub-phone">
+      <div class="chz-cm-hub-glow"></div>
+      <div class="chz-cm-hub-icon">📱</div>
+      <div class="chz-cm-hub-title">الهواتف</div>
+      <div class="chz-cm-hub-desc">بيع وشراء الهواتف الذكية المستعملة والجديدة</div>
+      <div class="chz-cm-hub-actions">
+        <button class="chz-cm-btn chz-cm-btn-buy" onclick="APP.cmBrowse('phone')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>شراء</span>
+        </button>
+        <button class="chz-cm-btn chz-cm-btn-sell" onclick="APP.cmSell('phone')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>بيع</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chz-cm-rules">
+    <div class="chz-cm-rules-title">📋 قواعد السوق</div>
+    <div class="chz-cm-rules-list">
+      <div>✓ السيارات والهواتف فقط</div>
+      <div>✓ صور حقيقية للمنتج</div>
+      <div>✓ معلومات صحيحة</div>
+      <div>✗ لا يُقبل أي منتج آخر</div>
+    </div>
+  </div>
+</div>
+
+<!-- Browse -->
+<div class="screen" id="sc-commerce-browse">
+  <div class="st"></div>
+  <div class="chz-cm-header">
+    <button class="chz-cm-back" onclick="APP.goTab('commerce')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
+    <div class="chz-cm-header-text">
+      <div class="chz-cm-header-title" id="cm-browse-title">🚗 السيارات</div>
+      <div class="chz-cm-header-sub">تصفح الإعلانات المتاحة</div>
+    </div>
+    <button class="chz-cm-add-btn" onclick="APP.cmSell(APP.cmType || 'car')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+  </div>
+  <div id="cm-listings" class="chz-cm-listings">
+    <div class="chz-cm-loading">جاري التحميل...</div>
+  </div>
+</div>
+
+<!-- Sell Form -->
+<div class="screen" id="sc-commerce-new">
+  <div class="st"></div>
+  <div class="chz-cm-header">
+    <button class="chz-cm-back" onclick="APP.goTab('commerce')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="chz-cm-header-text">
+      <div class="chz-cm-header-title" id="cm-new-title">🚗 بيع سيارة</div>
+      <div class="chz-cm-header-sub">انشر إعلانك مجاناً</div>
+    </div>
+  </div>
+
+  <div class="chz-cm-form">
+    <div class="chz-cm-form-row">
+      <label>عنوان الإعلان *</label>
+      <input id="cm-title" type="text" placeholder="مثال: تويوتا كامري 2020 للبيع" maxlength="80">
+    </div>
+
+    <div id="cm-car-fields">
+      <div class="chz-cm-form-2">
+        <div class="chz-cm-form-row">
+          <label>الماركة *</label>
+          <input id="cm-car-brand" type="text" placeholder="تويوتا / هونداي...">
+        </div>
+        <div class="chz-cm-form-row">
+          <label>الموديل *</label>
+          <input id="cm-car-model" type="text" placeholder="كامري / اكسنت...">
+        </div>
+      </div>
+      <div class="chz-cm-form-2">
+        <div class="chz-cm-form-row">
+          <label>سنة الصنع</label>
+          <input id="cm-car-year" type="number" placeholder="2020" min="1980" max="2026">
+        </div>
+        <div class="chz-cm-form-row">
+          <label>عدد الكيلومترات</label>
+          <input id="cm-car-km" type="number" placeholder="50000" min="0">
+        </div>
+      </div>
+    </div>
+
+    <div id="cm-phone-fields" style="display:none;">
+      <div class="chz-cm-form-2">
+        <div class="chz-cm-form-row">
+          <label>الماركة *</label>
+          <input id="cm-phone-brand" type="text" placeholder="ابل / سامسونج...">
+        </div>
+        <div class="chz-cm-form-row">
+          <label>الموديل *</label>
+          <input id="cm-phone-model" type="text" placeholder="ايفون 15 برو / S24...">
+        </div>
+      </div>
+      <div class="chz-cm-form-2">
+        <div class="chz-cm-form-row">
+          <label>السعة</label>
+          <select id="cm-phone-storage">
+            <option value="64">64 جيجا</option>
+            <option value="128" selected>128 جيجا</option>
+            <option value="256">256 جيجا</option>
+            <option value="512">512 جيجا</option>
+            <option value="1024">1 تيرا</option>
+          </select>
+        </div>
+        <div class="chz-cm-form-row">
+          <label>الحالة</label>
+          <select id="cm-phone-condition">
+            <option value="new">جديد</option>
+            <option value="like-new">كالجديد</option>
+            <option value="used" selected>مستعمل</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="chz-cm-form-row">
+      <label>الوصف *</label>
+      <textarea id="cm-desc" rows="4" placeholder="اكتب وصفاً دقيقاً: الحالة، المميزات، أي عيوب..."></textarea>
+    </div>
+
+    <div class="chz-cm-form-2">
+      <div class="chz-cm-form-row">
+        <label>السعر (ر.س) *</label>
+        <input id="cm-price" type="number" placeholder="5000" min="1">
+      </div>
+      <div class="chz-cm-form-row">
+        <label>المدينة *</label>
+        <input id="cm-city" type="text" placeholder="عدن / صنعاء...">
+      </div>
+    </div>
+
+    <div class="chz-cm-form-row">
+      <label>رابط الصورة *</label>
+      <input id="cm-img" type="url" placeholder="https://...">
+      <div class="chz-cm-form-hint">أرفع صورة على imgbb.com وضع الرابط المباشر</div>
+    </div>
+
+    <div class="chz-cm-form-row">
+      <label>رقم الجوال *</label>
+      <input id="cm-phone" type="tel" placeholder="7xx xxx xxx">
+    </div>
+
+    <button class="chz-cm-submit" onclick="APP.cmSubmit()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M12 5v14M5 12h14"/></svg>
+      <span>نشر الإعلان</span>
+    </button>
+  </div>
+</div>
+
+<!-- Detail -->
+<div class="screen" id="sc-commerce-detail">
+  <div class="st"></div>
+  <div class="chz-cm-header">
+    <button class="chz-cm-back" onclick="APP.cmBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="chz-cm-header-text">
+      <div class="chz-cm-header-title">تفاصيل الإعلان</div>
+    </div>
+  </div>
+  <div id="cm-detail-content" style="padding-bottom:100px;"></div>
+</div>
+
+<!-- Rejection Modal -->
+<div id="cm-reject-modal" class="chz-cm-modal">
+  <div class="chz-cm-modal-card">
+    <div class="chz-cm-modal-emoji" id="cm-rej-emoji">⚠️</div>
+    <div class="chz-cm-modal-title" id="cm-rej-title"></div>
+    <div class="chz-cm-modal-msg" id="cm-rej-msg"></div>
+    <button class="chz-cm-modal-btn" onclick="document.getElementById('cm-reject-modal').style.display='none'">حسناً، فهمت</button>
   </div>
 </div>
 
@@ -8035,6 +8213,118 @@ body #sc-home .chz-hdr {
   #chz-track-strip { padding: 6px 10px; gap: 8px; margin: 4px 10px; }
   #chz-track-title { font-size: 10.5px; }
   #chz-track-sub { font-size: 9px; }
+}
+</style>
+
+<style id="chz-commerce-v51">
+/* Header */
+.chz-cm-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: linear-gradient(135deg, #10b981 0%, #059669 60%, #FFB800 100%); border-radius: 0 0 20px 20px; box-shadow: 0 6px 20px rgba(16,185,129,0.25); direction: rtl; }
+.chz-cm-back { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.chz-cm-back svg { width: 18px; height: 18px; transform: rotate(180deg); }
+.chz-cm-back:active { transform: scale(0.92); background: rgba(255,255,255,0.3); }
+.chz-cm-header-text { flex: 1; min-width: 0; }
+.chz-cm-header-title { font-size: 17px; font-weight: 900; color: #fff; font-family: 'Tajawal', sans-serif; line-height: 1.2; }
+.chz-cm-header-sub { font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 600; margin-top: 2px; font-family: 'Tajawal', sans-serif; }
+.chz-cm-add-btn { width: 40px; height: 40px; border-radius: 12px; background: #fff; border: none; display: flex; align-items: center; justify-content: center; color: #059669; cursor: pointer; flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.15); -webkit-tap-highlight-color: transparent; }
+.chz-cm-add-btn svg { width: 18px; height: 18px; }
+.chz-cm-add-btn:active { transform: scale(0.92); }
+
+/* Hub Cards */
+.chz-cm-hub { padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; }
+.chz-cm-hub-card { position: relative; padding: 22px 18px; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 32px rgba(0,0,0,0.15); }
+.chz-cm-hub-car { background: linear-gradient(135deg, #FF8A00 0%, #FF3D9A 60%, #9B4DFF 100%); }
+.chz-cm-hub-phone { background: linear-gradient(135deg, #4D8CFF 0%, #9B4DFF 60%, #FF3D9A 100%); }
+.chz-cm-hub-glow { position: absolute; top: -40%; right: -20%; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%); pointer-events: none; }
+.chz-cm-hub-icon { font-size: 52px; line-height: 1; margin-bottom: 10px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.25)); position: relative; z-index: 1; }
+.chz-cm-hub-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 4px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); font-family: 'Tajawal', sans-serif; position: relative; z-index: 1; }
+.chz-cm-hub-desc { font-size: 12px; color: rgba(255,255,255,0.92); font-weight: 600; margin-bottom: 16px; line-height: 1.5; font-family: 'Tajawal', sans-serif; position: relative; z-index: 1; }
+.chz-cm-hub-actions { display: flex; gap: 10px; position: relative; z-index: 1; }
+.chz-cm-btn { flex: 1; padding: 13px 16px; border-radius: 14px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; -webkit-tap-highlight-color: transparent; transition: transform .15s ease; }
+.chz-cm-btn:active { transform: scale(0.96); }
+.chz-cm-btn svg { width: 16px; height: 16px; }
+.chz-cm-btn-buy { background: #fff; color: #059669; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+.chz-cm-btn-sell { background: rgba(0,0,0,0.28); color: #fff; border: 1.5px solid rgba(255,255,255,0.35); }
+
+/* Rules */
+.chz-cm-rules { margin: 0 16px 20px; padding: 16px 18px; background: rgba(16,185,129,0.06); border: 1.5px dashed rgba(16,185,129,0.3); border-radius: 16px; direction: rtl; }
+.chz-cm-rules-title { font-size: 13px; font-weight: 900; color: #10b981; margin-bottom: 10px; font-family: 'Tajawal', sans-serif; }
+.chz-cm-rules-list { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; color: var(--mt, #9ca3af); font-family: 'Tajawal', sans-serif; line-height: 1.5; }
+.chz-cm-rules-list > div { padding: 2px 0; }
+
+/* Listings */
+.chz-cm-listings { padding: 16px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; direction: rtl; }
+.chz-cm-loading { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: #9ca3af; font-family: 'Tajawal', sans-serif; font-size: 13px; }
+.chz-cm-empty { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: #9ca3af; font-family: 'Tajawal', sans-serif; font-size: 13px; background: rgba(16,185,129,0.05); border: 1px dashed rgba(16,185,129,0.2); border-radius: 14px; }
+.chz-cm-listing-card { background: #fff; border: 1px solid rgba(16,185,129,0.12); border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 3px 12px rgba(0,0,0,0.06); transition: transform .15s ease; -webkit-tap-highlight-color: transparent; }
+.chz-cm-listing-card:active { transform: scale(0.97); }
+html:not([data-theme="light"]) .chz-cm-listing-card { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+.chz-cm-listing-img { width: 100%; aspect-ratio: 1; background: #f4f6fa; overflow: hidden; position: relative; }
+.chz-cm-listing-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.chz-cm-listing-badge { position: absolute; top: 8px; right: 8px; padding: 3px 8px; background: rgba(16,185,129,0.95); color: #fff; font-size: 9px; font-weight: 900; border-radius: 6px; font-family: 'Tajawal', sans-serif; }
+.chz-cm-listing-body { padding: 10px; }
+.chz-cm-listing-title { font-size: 12px; font-weight: 800; color: #1f2937; line-height: 1.35; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: 'Tajawal', sans-serif; min-height: 34px; }
+html:not([data-theme="light"]) .chz-cm-listing-title { color: #e8ecf5; }
+.chz-cm-listing-price { font-size: 14px; font-weight: 900; color: #10b981; font-family: 'Tajawal', sans-serif; }
+.chz-cm-listing-price small { font-size: 10px; color: #10b981; }
+.chz-cm-listing-city { font-size: 10px; color: #6b7280; font-weight: 600; margin-top: 3px; font-family: 'Tajawal', sans-serif; }
+
+/* Detail */
+.chz-cm-detail-img { width: 100%; aspect-ratio: 4/3; background: #f4f6fa; overflow: hidden; }
+.chz-cm-detail-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.chz-cm-detail-body { padding: 18px 16px; }
+.chz-cm-detail-title { font-size: 20px; font-weight: 900; color: var(--chz-text, #1f2937); margin-bottom: 8px; font-family: 'Tajawal', sans-serif; line-height: 1.3; }
+html:not([data-theme="light"]) .chz-cm-detail-title { color: #e8ecf5; }
+.chz-cm-detail-price { font-size: 26px; font-weight: 900; color: #10b981; margin-bottom: 14px; font-family: 'Tajawal', sans-serif; }
+.chz-cm-detail-price small { font-size: 14px; }
+.chz-cm-detail-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.chz-cm-detail-meta > span { padding: 6px 12px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); border-radius: 10px; font-size: 11px; font-weight: 800; color: #10b981; font-family: 'Tajawal', sans-serif; }
+.chz-cm-detail-desc { padding: 14px 16px; background: var(--nav, #f8fafc); border-radius: 14px; font-size: 13px; line-height: 1.7; color: var(--chz-text, #4b5563); font-family: 'Tajawal', sans-serif; margin-bottom: 16px; white-space: pre-wrap; }
+html:not([data-theme="light"]) .chz-cm-detail-desc { background: #1e2438; color: #d1d5db; }
+.chz-cm-detail-seller { padding: 14px 16px; background: rgba(255,184,0,0.06); border: 1.5px solid rgba(255,184,0,0.25); border-radius: 14px; margin-bottom: 16px; font-family: 'Tajawal', sans-serif; }
+.chz-cm-detail-seller-label { font-size: 10px; font-weight: 800; color: #FFB800; margin-bottom: 4px; }
+.chz-cm-detail-seller-name { font-size: 14px; font-weight: 900; color: var(--chz-text, #1f2937); }
+html:not([data-theme="light"]) .chz-cm-detail-seller-name { color: #e8ecf5; }
+.chz-cm-whatsapp { width: 100%; padding: 16px 20px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: #fff; border: none; border-radius: 16px; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 22px rgba(37,211,102,0.4); -webkit-tap-highlight-color: transparent; }
+.chz-cm-whatsapp:active { transform: scale(0.97); }
+.chz-cm-whatsapp svg { width: 22px; height: 22px; }
+
+/* Form */
+.chz-cm-form { padding: 18px 16px 100px; direction: rtl; }
+.chz-cm-form-row { margin-bottom: 14px; }
+.chz-cm-form-row label { display: block; font-size: 12px; font-weight: 800; color: var(--chz-text, #4b5563); margin-bottom: 6px; font-family: 'Tajawal', sans-serif; }
+html:not([data-theme="light"]) .chz-cm-form-row label { color: #d1d5db; }
+.chz-cm-form-row input, .chz-cm-form-row select, .chz-cm-form-row textarea { width: 100%; padding: 13px 14px; background: var(--nav, #f8fafc); color: var(--chz-text, #1f2937); border: 1.5px solid #e2e8f0; border-radius: 13px; font-family: 'Tajawal', sans-serif; font-size: 13.5px; font-weight: 600; box-sizing: border-box; outline: none; transition: border-color .2s ease; }
+html:not([data-theme="light"]) .chz-cm-form-row input,
+html:not([data-theme="light"]) .chz-cm-form-row select,
+html:not([data-theme="light"]) .chz-cm-form-row textarea { background: #1e2438; color: #e8ecf5; border-color: rgba(255,255,255,0.1); }
+.chz-cm-form-row input:focus, .chz-cm-form-row select:focus, .chz-cm-form-row textarea:focus { border-color: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
+.chz-cm-form-row textarea { resize: vertical; min-height: 80px; }
+.chz-cm-form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chz-cm-form-hint { font-size: 10px; color: #9ca3af; margin-top: 5px; font-family: 'Tajawal', sans-serif; }
+.chz-cm-submit { width: 100%; padding: 16px 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; border-radius: 16px; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; box-shadow: 0 8px 24px rgba(16,185,129,0.4); -webkit-tap-highlight-color: transparent; transition: transform .15s ease; }
+.chz-cm-submit:active { transform: scale(0.97); }
+
+/* Modal */
+.chz-cm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 24px; }
+.chz-cm-modal-card { background: #fff; border-radius: 24px; padding: 32px 24px 24px; max-width: 360px; width: 100%; text-align: center; direction: rtl; font-family: 'Tajawal', sans-serif; box-shadow: 0 20px 60px rgba(0,0,0,0.4); animation: cmPop .4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes cmPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+html:not([data-theme="light"]) .chz-cm-modal-card { background: #1e2438; }
+.chz-cm-modal-emoji { font-size: 64px; line-height: 1; margin-bottom: 16px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.15)); }
+.chz-cm-modal-title { font-size: 18px; font-weight: 900; color: #1f2937; margin-bottom: 10px; line-height: 1.4; }
+html:not([data-theme="light"]) .chz-cm-modal-title { color: #e8ecf5; }
+.chz-cm-modal-msg { font-size: 13px; font-weight: 600; color: #6b7280; line-height: 1.6; margin-bottom: 20px; }
+html:not([data-theme="light"]) .chz-cm-modal-msg { color: #9ca3af; }
+.chz-cm-modal-btn { width: 100%; padding: 14px 20px; background: linear-gradient(135deg, #FF3D9A, #9B4DFF); color: #fff; border: none; border-radius: 14px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 18px rgba(255,61,154,0.35); -webkit-tap-highlight-color: transparent; }
+.chz-cm-modal-btn:active { transform: scale(0.97); }
+
+@media (max-width: 359px) {
+  .chz-cm-hub { padding: 16px 12px; }
+  .chz-cm-hub-icon { font-size: 44px; }
+  .chz-cm-hub-title { font-size: 19px; }
+  .chz-cm-hub-desc { font-size: 11px; }
+  .chz-cm-btn { font-size: 13px; padding: 11px 12px; }
+  .chz-cm-listings { grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; }
+  .chz-cm-form-2 { grid-template-columns: 1fr; gap: 0; }
 }
 </style>
 
