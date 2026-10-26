@@ -17163,7 +17163,6 @@ document.addEventListener('keydown', function(e) {
     if (type === "car" && detected !== "car") return APP.cmModal("🚫", "لم نتعرف على سيارة", "اكتب ماركة السيارة بوضوح");
     if (type === "phone" && detected !== "phone") return APP.cmModal("🚫", "لم نتعرف على هاتف", "اكتب ماركة الهاتف بوضوح");
 
-    // ═══ Global timeout: 40s ═══
     var timedOut = false;
     var globalTimer = setTimeout(function(){
       timedOut = true;
@@ -17175,31 +17174,55 @@ document.addEventListener('keydown', function(e) {
     try {
       var images = await uploadFiles(APP.cmFiles);
       if (timedOut) return;
-      if (!images.length) throw new Error("لم تُرفع أي صورة");
+      if (!images.length) throw new Error("لم تُرفع أي صورة — تحقق من الإنترنت");
       
       if (btn) { var span2 = btn.querySelector("span"); if (span2) span2.textContent = "⏳ جاري الحفظ..."; }
       
+      // ═══ Build data — only valid fields ═══
       var data = {
-        type: type, title: title.trim(), description: desc.trim(), price: price, city: city.trim(), phone: phone.trim(),
-        images: images, image: images[0],
+        type: type,
+        title: title.trim(),
+        description: desc.trim(),
+        price: price,
+        city: city.trim(),
+        phone: phone.trim(),
+        images: images,
+        image: images[0],
         sellerId: (window.FB && FB.currentUser) ? FB.currentUser.uid : "",
         sellerName: (window.FB && FB.currentUser) ? (FB.currentUser.displayName || "مستخدم") : "مستخدم",
-        status: "active", views: 0,
+        status: "active",
+        views: 0,
         createdAt: (window.firebase && firebase.firestore && firebase.firestore.FieldValue) ? firebase.firestore.FieldValue.serverTimestamp() : new Date()
       };
+      
       if (type === "car") {
-        data.brand = (document.getElementById("cm-f-brand")||{}).value || "";
-        data.model = (document.getElementById("cm-f-model")||{}).value || "";
-        data.year = parseInt((document.getElementById("cm-f-year")||{}).value || 0) || null;
-        data.km = parseInt((document.getElementById("cm-f-km")||{}).value || 0) || null;
-      } else {
-        data.phoneBrand = (document.getElementById("cm-f-brand")||{}).value || "";
-        data.phoneModel = (document.getElementById("cm-f-model")||{}).value || "";
-        data.storage = (document.getElementById("cm-f-storage")||{}).value || "128";
-        data.condition = (document.getElementById("cm-f-condition")||{}).value || "used";
+        var brand = (document.getElementById("cm-f-brand")||{}).value || "";
+        var model = (document.getElementById("cm-f-model")||{}).value || "";
+        var yearV = parseInt((document.getElementById("cm-f-year")||{}).value || 0) || 0;
+        var kmV = parseInt((document.getElementById("cm-f-km")||{}).value || 0) || 0;
+        if (brand.trim()) data.brand = brand.trim();
+        if (model.trim()) data.model = model.trim();
+        if (yearV > 0) data.year = yearV;
+        if (kmV > 0) data.km = kmV;
+      } else if (type === "phone") {
+        var pBrand = (document.getElementById("cm-f-brand")||{}).value || "";
+        var pModel = (document.getElementById("cm-f-model")||{}).value || "";
+        var storage = (document.getElementById("cm-f-storage")||{}).value || "128";
+        var condition = (document.getElementById("cm-f-condition")||{}).value || "used";
+        if (pBrand.trim()) data.phoneBrand = pBrand.trim();
+        if (pModel.trim()) data.phoneModel = pModel.trim();
+        data.storage = storage;
+        data.condition = condition;
       }
       
-      await FB.db.collection("listings").add(data);
+      // ═══ Clean undefined/null/empty ═══
+      var clean = {};
+      Object.keys(data).forEach(function(k){
+        var v = data[k];
+        if (v !== undefined && v !== null) clean[k] = v;
+      });
+      
+      await FB.db.collection("listings").add(clean);
       clearTimeout(globalTimer);
       if (timedOut) return;
       
@@ -17222,8 +17245,9 @@ document.addEventListener('keydown', function(e) {
     if (!l) return;
     var c = document.getElementById("cm-detail");
     if (!c) return;
-    var images = l.images || (l.image ? [l.image] : []);
-    if (!images.length) images = [""];
+    var rawImages = l.images || (l.image ? [l.image] : []);
+    var validImages = rawImages.filter(function(u){ return u && typeof u === "string" && u.length > 10; });
+    if (!validImages.length) validImages = [APP.cmPlaceholder];
     var extra = "";
     if (l.type === "car") {
       if (l.brand) extra += "<span>🏭 " + esc(l.brand) + "</span>";
@@ -17239,9 +17263,28 @@ document.addEventListener('keydown', function(e) {
     var wa = String(l.phone||"").replace(/\D/g,"");
     if (wa.length > 9 && wa.indexOf("967") !== 0) wa = "967" + wa.replace(/^0+/, "");
     var waText = encodeURIComponent("مرحباً، أستفسر عن إعلانك في شيزن: " + (l.title||""));
+    var onerr = "if(window.APP && APP.cmPlaceholder){this.src=APP.cmPlaceholder;this.onerror=null;}";
+    var thumbsHTML = "";
+    if (validImages.length > 1) {
+      thumbsHTML = '<div class="cm-detail-thumbs">';
+      for (var i = 0; i < validImages.length; i++) {
+        thumbsHTML += '<div class="cm-detail-thumb' + (i===0?" active":"") + '" data-url="' + esc(validImages[i]) + '" onclick="APP.cmSwapImg(this.dataset.url,this)"><img src="' + esc(validImages[i]) + '" onerror="' + onerr + '"></div>';
+      }
+      thumbsHTML += '</div>';
+    }
     c.innerHTML =
-      '<div class="cm-detail-img"><img id="cm-main-img" src="' + esc(images[0]) + '" onerror="this.style.display=\'none\'"></div>' +
-      (images.length > 1 ? '<div class="cm-detail-thumbs">' + images.map(function(u,i){ return '<div class="cm-detail-thumb' + (i===0?" active":"") + '" onclick="APP.cmSwapImg(\'' + esc(u) + '\',this)"><img src="' + esc(u) + '"></div>'; }).join("") + '</div>' : '') +
+      '<div class="cm-detail-img"><img id="cm-main-img" src="' + esc(validImages[0]) + '" onerror="' + onerr + '"></div>' +
+      thumbsHTML +
+      '<div class="cm-detail-body"><div class="cm-detail-title">' + esc(l.title||"") + '</div>' +
+      '<div class="cm-detail-price">' + (l.price||0).toLocaleString("ar-EG") + ' <small>ر.س</small></div>' +
+      (extra ? '<div class="cm-detail-meta">' + extra + '<span>📍 ' + esc(l.city||"") + '</span></div>' : '') +
+      '<div class="cm-detail-desc">' + esc(l.description||"") + '</div>' +
+      '<div class="cm-detail-seller"><div class="cm-detail-seller-label">البائع</div><div class="cm-detail-seller-name">' + esc(l.sellerName||"مستخدم") + '</div></div>' +
+      '<button class="cm-wa-btn" onclick="window.open(\'https://wa.me/' + wa + '?text=' + waText + '\',\'_blank\')">💬 تواصل عبر واتساب</button></div>';
+    APP.goTab("commerce-detail");
+  };
+
+  APP.cmSwapImg(\'' + esc(u) + '\',this)"><img src="' + esc(u) + '"></div>'; }).join("") + '</div>' : '') +
       '<div class="cm-detail-body"><div class="cm-detail-title">' + esc(l.title||"") + '</div>' +
       '<div class="cm-detail-price">' + (l.price||0).toLocaleString("ar-EG") + ' <small>ر.س</small></div>' +
       (extra ? '<div class="cm-detail-meta">' + extra + '<span>📍 ' + esc(l.city||"") + '</span></div>' : '') +
@@ -17269,6 +17312,10 @@ document.addEventListener('keydown', function(e) {
 
   console.log("[commerce v52-js] ready");
 })();
+</script>
+<script id="chz-commerce-v55">
+  window.APP = window.APP || {};
+  APP.cmPlaceholder = "data:image/svg+xml;charset=utf-8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="#eef2f7"/><text x="200" y="140" font-size="64" text-anchor="middle" fill="#9ca3af">📷</text><text x="200" y="195" font-size="14" text-anchor="middle" fill="#9ca3af" font-family="Arial,sans-serif">لا توجد صورة</text></svg>');
 </script>
 </body>
 </html>
