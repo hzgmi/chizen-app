@@ -7416,7 +7416,7 @@ var APP={
       { img: 'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg' }
     ];
     var fsBanners = (this.banners || []).filter(function(b){ return b && b.img && b.img.indexOf('http') === 0; });
-    var list = (fsBanners.length >= 2) ? fsBanners : DEFAULT_BANNERS;
+    var list = DEFAULT_BANNERS; /* v9: ignore Firestore until fixed from admin */
     s.style.transform = 'translateX(0%)';
     if (!list.length) { s.innerHTML = ''; if (d) d.innerHTML = ''; return; }
     s.innerHTML = list.map(function(b) {
