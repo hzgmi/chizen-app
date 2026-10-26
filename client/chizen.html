@@ -6884,6 +6884,14 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
       <input id="cm-file" type="file" accept="image/*" multiple hidden onchange="APP.cmFilesSelected(event)">
     </div>
     <div id="cm-previews" class="cm-previews"></div>
+    <div class="cm-field">
+      <label>أو الصق رابط الصورة مباشرة</label>
+      <input id="cm-f-img-url" type="url" placeholder="https://i.ibb.co/...">
+      <div style="font-size:10px;color:#9ca3af;margin-top:4px;">ارفع على <a href="https://imgbb.com" target="_blank" style="color:#10b981;text-decoration:underline;">imgbb.com</a> وضع الرابط المباشر (Direct Link)</div>
+    </div>
+    <div id="cm-url-preview" style="display:none;margin-bottom:14px;text-align:center;">
+      <img id="cm-url-preview-img" style="max-width:100%;max-height:200px;border-radius:12px;" src="">
+    </div>
 
     <div class="cm-field"><label>رقم الجوال *</label><input id="cm-f-phone" type="tel" placeholder="7xx xxx xxx"></div>
 
@@ -17156,7 +17164,11 @@ document.addEventListener('keydown', function(e) {
     if (!price || price <= 0) return APP.cmModal("💰", "السعر مطلوب", "أدخل سعراً صحيحاً");
     if (!city.trim()) return APP.cmModal("📍", "المدينة مطلوبة", "أدخل المدينة");
     if (!phone.trim()) return APP.cmModal("📞", "الجوال مطلوب", "أدخل رقم جوالك");
-    if (!APP.cmFiles.length) return APP.cmModal("📸", "الصورة مطلوبة", "ارفع صورة واحدة على الأقل");
+    var manualUrlCheck = (document.getElementById("cm-f-img-url") || {}).value || "";
+    manualUrlCheck = manualUrlCheck.trim();
+    if (!APP.cmFiles.length && !(manualUrlCheck && manualUrlCheck.length > 10 && (manualUrlCheck.indexOf("http://") === 0 || manualUrlCheck.indexOf("https://") === 0))) {
+      return APP.cmModal("📸", "الصورة مطلوبة", "ارفع صورة أو الصق رابطاً مباشراً");
+    }
     var detected = detect(title + " " + desc + " " + city);
     if (type === "car" && detected === "phone") return APP.cmModal("📱", "هذا إعلان هاتف!", "أنت في قسم السيارات — غيّر النوع");
     if (type === "phone" && detected === "car") return APP.cmModal("🚗", "هذا إعلان سيارة!", "أنت في قسم الهواتف — غيّر النوع");
@@ -17172,9 +17184,20 @@ document.addEventListener('keydown', function(e) {
 
     if (btn) { btn.disabled = true; var span = btn.querySelector("span"); if (span) span.textContent = "⏳ جاري رفع الصور..."; }
     try {
-      var images = await uploadFiles(APP.cmFiles);
-      if (timedOut) return;
-      if (!images.length) throw new Error("لم تُرفع أي صورة — تحقق من الإنترنت");
+      var images = [];
+      var manualUrl = (document.getElementById("cm-f-img-url") || {}).value || "";
+      manualUrl = manualUrl.trim();
+      
+      if (manualUrl && manualUrl.length > 10 && (manualUrl.indexOf("http://") === 0 || manualUrl.indexOf("https://") === 0)) {
+        // Use manual URL directly
+        images = [manualUrl];
+        console.log("[cmSubmit] using manual URL:", manualUrl);
+      } else {
+        // Upload via catbox/tmpfiles
+        images = await uploadFiles(APP.cmFiles);
+        if (timedOut) return;
+        if (!images.length) throw new Error("لم تُرفع أي صورة — استخدم حقل رابط الصورة اليدوي");
+      }
       
       if (btn) { var span2 = btn.querySelector("span"); if (span2) span2.textContent = "⏳ جاري الحفظ..."; }
       
@@ -17317,5 +17340,21 @@ document.addEventListener('keydown', function(e) {
   window.APP = window.APP || {};
   APP.cmPlaceholder = "data:image/svg+xml;charset=utf-8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="#eef2f7"/><text x="200" y="140" font-size="64" text-anchor="middle" fill="#9ca3af">📷</text><text x="200" y="195" font-size="14" text-anchor="middle" fill="#9ca3af" font-family="Arial,sans-serif">لا توجد صورة</text></svg>');
 </script>
+<script id="chz-commerce-v56">
+(function(){
+  var input = document.getElementById("cm-f-img-url");
+  if (!input) { document.addEventListener("DOMContentLoaded", function(){ var i=document.getElementById("cm-f-img-url"); if(i) setup(i); }); } else { setup(input); }
+  function setup(inp){
+    inp.addEventListener("input", function(){
+      var url = inp.value.trim();
+      var prev = document.getElementById("cm-url-preview");
+      var img = document.getElementById("cm-url-preview-img");
+      if (!prev || !img) return;
+      if (url.length > 10) { img.src = url; prev.style.display = "block"; } else { prev.style.display = "none"; }
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
