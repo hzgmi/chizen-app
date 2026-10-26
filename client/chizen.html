@@ -7261,6 +7261,90 @@ html:not([data-theme="light"]) .det-thumb.active {
 
 
 
+<style id="chz-travel-v27-css">
+/* ═══ PRICE: hidden unless data-ready=1 ═══ */
+body #sc-booking .price-preview:not([data-ready="1"]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+body #sc-booking .price-preview[data-ready="1"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ═══ CHIPS: gray unless .active ═══ */
+body #sc-booking .trv-chip:not(.active) {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03) !important;
+}
+html:not([data-theme="light"]) body #sc-booking .trv-chip:not(.active) {
+  background: rgba(255,255,255,0.06) !important;
+  color: rgba(255,255,255,0.55) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+body #sc-booking .trv-chip.active {
+  background: linear-gradient(135deg, #FF3D9A 0%, #9B4DFF 100%) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 20px rgba(255,61,154,0.35) !important;
+}
+
+/* ═══ SUBMIT: gray locked, green ready ═══ */
+body #sc-booking .trv-submit.trv-locked {
+  background: #e5e7eb !important;
+  color: #9ca3af !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
+html:not([data-theme="light"]) body #sc-booking .trv-submit.trv-locked {
+  background: rgba(255,255,255,0.08) !important;
+  color: rgba(255,255,255,0.4) !important;
+}
+body #sc-booking .trv-submit.trv-ready {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  box-shadow: 0 10px 30px rgba(16,185,129,0.45) !important;
+  color: #fff !important;
+}
+
+/* ═══ GREEN CONFIRM BUTTON ═══ */
+body #sc-booking .trv-price-confirm {
+  display: flex !important;
+  width: 100% !important;
+  padding: 13px 18px !important;
+  margin-top: 12px !important;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 6px 18px rgba(16,185,129,0.35) !important;
+}
+body #sc-booking .trv-price-confirm.confirmed {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+  cursor: default !important;
+}
+</style>
+
 <style id="chz-travel-v25-css">
 /* ═══ FORCE hide price unless form ready ═══ */
 body #sc-booking .booking-form:not(.trv-form-ready) .price-preview {
@@ -14248,37 +14332,27 @@ document.addEventListener('keydown', function(e) {
     window.APP.updateBookingPrice = function(type) {
       var preview = document.getElementById('price-preview-' + type);
       if (!preview) return;
-      var form = document.getElementById('form-' + type);
       var submitBtn = document.querySelector('#form-' + type + ' .trv-submit');
-      var data = {};
-      var dChk;
+      var data = {}, dChk;
 
       if (type === 'flight') {
         data.from = (document.getElementById('fly-from')||{}).value || '';
         data.to = (document.getElementById('fly-to')||{}).value || '';
         data.passengers = parseInt((document.getElementById('fly-pax')||{}).value||1) || 1;
-        data.children = parseInt((document.getElementById('fly-children')||{}).value||0) || 0;
-        data.infants = parseInt((document.getElementById('fly-infants')||{}).value||0) || 0;
         data.class = (document.getElementById('fly-class')||{}).value || 'economy';
-        data.tripType = (document.getElementById('fly-trip-type')||{}).value || 'oneway';
       } else if (type === 'bus') {
         data.from = 'عدن';
         data.to = (document.getElementById('bus-to')||{}).value || '';
         data.passengers = parseInt((document.getElementById('bus-pax')||{}).value||1) || 1;
         data.class = (document.getElementById('bus-class')||{}).value || 'economy';
-        data.tripType = (document.getElementById('bus-trip')||{}).value || 'oneway';
       } else if (type === 'hotel') {
         data.city = (document.getElementById('hotel-city')||{}).value || '';
         data.checkin = (document.getElementById('hotel-in')||{}).value || '';
         data.checkout = (document.getElementById('hotel-out')||{}).value || '';
         data.rooms = parseInt((document.getElementById('hotel-rooms')||{}).value||1) || 1;
-        data.children = parseInt((document.getElementById('hotel-children')||{}).value||0) || 0;
-        data.breakfast = (document.getElementById('hotel-breakfast')||{}).value || 'no';
       } else if (type === 'hajj') {
         data.type = (document.getElementById('hajj-type')||{}).value || 'umrah';
         data.passengers = parseInt((document.getElementById('hajj-pax')||{}).value||1) || 1;
-        data.children = parseInt((document.getElementById('hajj-children')||{}).value||0) || 0;
-        data.package = (document.getElementById('hajj-package')||{}).value || 'eco';
       } else if (type === 'delivery') {
         data.needDelivery = true;
         data.deliveryFrom = (document.getElementById('dlv-from')||{}).value || '';
@@ -14303,26 +14377,9 @@ document.addEventListener('keydown', function(e) {
       else if (type === 'hajj') ready = !!(data.passengers >= 1);
       else if (type === 'delivery') ready = !!(data.deliveryFrom && data.deliveryTo);
 
-      var deliveryIncomplete = data.needDelivery && type !== 'delivery' && (!data.deliveryFrom || !data.deliveryTo);
-
-      // ═══ فرض الإخفاء عبر form class ═══
-      if (form) {
-        if (!ready || deliveryIncomplete) form.classList.remove('trv-form-ready');
-        else form.classList.add('trv-form-ready');
-      }
-
       if (!ready) {
-        preview.style.display = 'none';
+        preview.removeAttribute('data-ready');
         preview.innerHTML = '';
-        preview.classList.remove('pp-locked');
-        if (submitBtn) { submitBtn.classList.remove('trv-ready'); submitBtn.classList.add('trv-locked'); }
-        return;
-      }
-
-      if (deliveryIncomplete) {
-        preview.style.display = 'block';
-        preview.classList.remove('pp-locked');
-        preview.innerHTML = '<div class="pp-note" style="border:none;padding:0;">🚗 أكمل بيانات التوصيل (من / إلى) لعرض السعر الكامل</div>';
         if (submitBtn) { submitBtn.classList.remove('trv-ready'); submitBtn.classList.add('trv-locked'); }
         return;
       }
@@ -14332,33 +14389,24 @@ document.addEventListener('keydown', function(e) {
       var delivery = window.estimateDelivery ? window.estimateDelivery(data) : 0;
       var total = base + delivery;
       if (!total) {
-        preview.style.display = 'none';
-        if (form) form.classList.remove('trv-form-ready');
+        preview.removeAttribute('data-ready');
+        preview.innerHTML = '';
         if (submitBtn) { submitBtn.classList.remove('trv-ready'); submitBtn.classList.add('trv-locked'); }
         return;
       }
 
-      preview.style.display = 'block';
-      preview.classList.remove('pp-locked');
+      preview.setAttribute('data-ready', '1');
       var fp = window.formatPrice || function(x){ return x.toLocaleString('ar-EG') + ' ر.س'; };
-      var html = '';
-      if (type === 'delivery') {
-        html += '<div class="pp-row"><span>💰 تكلفة التوصيل التقديرية</span><b>' + fp(total) + '</b></div>';
-      } else {
-        html += '<div class="pp-row"><span>💰 السعر التقديري</span><b>' + fp(total) + '</b></div>';
-        if (delivery > 0) {
-          html += '<div class="pp-detail"><span>الرحلة الأساسية</span><span>' + fp(base) + '</span></div>';
-          html += '<div class="pp-detail"><span>التوصيل</span><span>' + fp(delivery) + '</span></div>';
-        }
+      var html = '<div class="pp-row"><span>💰 السعر التقديري</span><b>' + fp(total) + '</b></div>';
+      if (delivery > 0 && type !== 'delivery') {
+        html += '<div class="pp-detail"><span>الرحلة الأساسية</span><span>' + fp(base) + '</span></div>';
+        html += '<div class="pp-detail"><span>التوصيل</span><span>' + fp(delivery) + '</span></div>';
       }
       html += '<div class="pp-note">⚠️ سعر تقديري — سيتم تأكيد السعر النهائي بعد مراجعة الفريق</div>';
       html += '<button type="button" class="trv-price-confirm" onclick="APP.confirmPrice(\'' + type + '\', this)">✓ تأكيد السعر والمتابعة</button>';
       preview.innerHTML = html;
 
-      if (submitBtn) {
-        submitBtn.classList.remove('trv-ready');
-        submitBtn.classList.add('trv-locked');
-      }
+      if (submitBtn) { submitBtn.classList.remove('trv-ready'); submitBtn.classList.add('trv-locked'); }
     };
 
         window.APP.confirmPrice = function(type, btn) {
