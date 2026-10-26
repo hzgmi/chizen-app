@@ -18798,5 +18798,248 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-orders-v69-js">
+(function(){
+  'use strict';
+  var installed = false;
+  var attempts = 0;
+
+  function install(){
+    attempts++;
+    // Wait until window.APP with renderOrders exists
+    if (!window.APP || typeof window.APP.renderOrders !== 'function') {
+      if (attempts < 100) setTimeout(install, 100);
+      return;
+    }
+    if (installed) return;
+    installed = true;
+
+    // ─── Status map ───
+    var STATUS_MAP = {
+      pending:               { label: 'قيد المراجعة', icon: '⏳', color: 'st-pending' },
+      awaiting_verification: { label: 'بانتظار مراجعة الدفع', icon: '💳', color: 'st-awaiting_verification' },
+      awaiting_categories:   { label: 'قيد التجهيز', icon: '📦', color: 'st-awaiting_categories' },
+      ready_to_send:         { label: 'جاهز للإرسال', icon: '📤', color: 'st-ready_to_send' },
+      sent_to_customer:      { label: 'في الطريق إليك', icon: '🚚', color: 'st-sent_to_customer' },
+      shipped:               { label: 'تم الشحن', icon: '🚚', color: 'st-shipped' },
+      delivered:             { label: 'تم التسليم', icon: '✅', color: 'st-delivered' },
+      completed:             { label: 'مكتمل', icon: '✅', color: 'st-completed' },
+      cancelled:             { label: 'ملغي', icon: '❌', color: 'st-cancelled' },
+      payment_rejected:      { label: 'الدفع مرفوض', icon: '⚠️', color: 'st-payment_rejected' }
+    };
+    function getStatus(o){ return STATUS_MAP[o.workflowStatus || o.status || 'pending'] || STATUS_MAP.pending; }
+    function filterGroup(o){
+      var wf = o.workflowStatus || o.status || 'pending';
+      if (wf === 'cancelled' || wf === 'payment_rejected') return 'cancelled';
+      if (wf === 'completed' || wf === 'delivered') return 'completed';
+      if (wf === 'shipped' || wf === 'sent_to_customer') return 'shipping';
+      if (wf === 'awaiting_categories' || wf === 'ready_to_send') return 'processing';
+      return 'pending';
+    }
+    function fmtDate(ts){
+      if (!ts) return '';
+      var d = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts);
+      if (isNaN(d.getTime())) return '';
+      var m = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+      return d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+    }
+    function fmtTime(ts){
+      if (!ts) return '';
+      var d = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts);
+      if (isNaN(d.getTime())) return '';
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+    function esc(s){ return String(s||'').replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+    // ─── Replace renderOrders ───
+    window.APP.ordFilterType = window.APP.ordFilterType || 'all';
+    window.APP.ordData = [];
+
+    window.APP.renderOrders = async function(){
+      var c = document.getElementById('orders-list');
+      if (!c) return;
+      c.innerHTML = '<div class="ord-loading">⏳ جاري التحميل...</div>';
+
+      if (!window.FB || !FB.currentUser || !FB.db) {
+        c.innerHTML = '<div class="ord-empty"><div class="ord-empty-icon">🔒</div>سجل الدخول لعرض طلباتك</div>';
+        return;
+      }
+
+      var orders = [];
+      try {
+        var snap = await FB.db.collection('orders').where('customerId', '==', FB.currentUser.uid).limit(50).get();
+        snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; orders.push(d); });
+      } catch(e){ console.warn('[ord] q1:', e.message); }
+      if (!orders.length) {
+        try {
+          var snap2 = await FB.db.collection('orders').where('userId', '==', FB.currentUser.uid).limit(50).get();
+          snap2.forEach(function(doc){ var d = doc.data(); d.id = doc.id; orders.push(d); });
+        } catch(e){ console.warn('[ord] q2:', e.message); }
+      }
+
+      orders.sort(function(a,b){
+        var ta = a.createdAt ? (a.createdAt.seconds||0) : 0;
+        var tb = b.createdAt ? (b.createdAt.seconds||0) : 0;
+        return tb - ta;
+      });
+
+      window.APP.ordData = orders;
+      var cnt = document.getElementById('ord-count');
+      if (cnt) cnt.textContent = orders.length + ' طلب';
+
+      if (!orders.length) {
+        c.innerHTML = '<div class="ord-empty"><div class="ord-empty-icon">📭</div>لا توجد طلبات بعد<br><small>ابدأ التسوق لإنشاء أول طلب</small></div>';
+        return;
+      }
+
+      var filtered = window.APP.ordFilterType === 'all' ? orders : orders.filter(function(o){ return filterGroup(o) === window.APP.ordFilterType; });
+      if (!filtered.length) {
+        c.innerHTML = '<div class="ord-empty"><div class="ord-empty-icon">📂</div>لا توجد طلبات في هذه الحالة</div>';
+        return;
+      }
+
+      c.innerHTML = filtered.map(function(o){
+        var s = getStatus(o);
+        var items = o.items || [];
+        var totalQty = items.reduce(function(s2,i){ return s2 + (i.qty||1); }, 0);
+        var dateStr = fmtDate(o.createdAt);
+        var orderNum = '#' + String(o.orderNumber || o.id || '').substring(0, 8).toUpperCase();
+
+        var prodsHTML = '';
+        var showCount = Math.min(items.length, 3);
+        for (var i=0; i<showCount; i++){
+          var img = items[i].img || '';
+          prodsHTML += '<div class="ord-card-prod-img">' + (img ? '<img src="' + esc(img) + '" onerror="this.style.display=\'none\'">' : '') + '</div>';
+        }
+        if (items.length > 3) prodsHTML += '<div class="ord-card-prod-more">+' + (items.length - 3) + '</div>';
+
+        return '<div class="ord-card" onclick="APP.openOrderDetail(\'' + o.id + '\')">' +
+          '<div class="ord-card-top">' +
+            '<div><div class="ord-card-id">' + esc(orderNum) + '</div>' +
+            (dateStr ? '<div class="ord-card-date">📅 ' + dateStr + '</div>' : '') + '</div>' +
+            '<div class="ord-status-badge ' + s.color + '">' + s.icon + ' ' + s.label + '</div>' +
+          '</div>' +
+          '<div class="ord-card-body">' +
+            (prodsHTML ? '<div class="ord-card-products">' + prodsHTML + '</div>' : '') +
+            '<div class="ord-card-summary">' +
+              '<div class="ord-card-count">' + totalQty + ' منتج</div>' +
+              '<div class="ord-card-total">' + (o.total||0).toLocaleString('ar-EG') + ' <small>ر.س</small></div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="ord-card-arrow">عرض التفاصيل <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>' +
+        '</div>';
+      }).join('');
+      console.log('[ord v69] rendered', filtered.length, 'orders');
+    };
+
+    window.APP.ordFilter = function(filter, btn){
+      window.APP.ordFilterType = filter;
+      document.querySelectorAll('.ord-tab').forEach(function(t){ t.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+      window.APP.renderOrders();
+    };
+
+    window.APP.openOrderDetail = function(id){
+      console.log('[ord v69] open detail:', id);
+      var o = window.APP.ordData.find(function(x){ return x.id === id; });
+      if (!o) { console.warn('[ord] order not found in ordData'); return; }
+      var c = document.getElementById('ord-detail-content');
+      if (!c) { console.warn('[ord] no detail container'); return; }
+
+      var s = getStatus(o);
+      var items = o.items || [];
+      var orderNum = '#' + String(o.orderNumber || o.id || '').substring(0, 8).toUpperCase();
+      var numEl = document.getElementById('ord-detail-number');
+      if (numEl) numEl.textContent = orderNum;
+
+      var hero = '<div class="ord-status-hero ' + s.color + '">' +
+        '<div class="ord-status-hero-icon">' + s.icon + '</div>' +
+        '<div class="ord-status-hero-title">' + s.label + '</div>' +
+        '<div class="ord-status-hero-sub">' + (o.createdAt ? 'طلب بتاريخ ' + fmtDate(o.createdAt) : '') + '</div>' +
+      '</div>';
+
+      var prods = '<div class="ord-detail-section">' +
+        '<div class="ord-detail-title">📦 المنتجات (' + items.length + ')</div>';
+      items.forEach(function(item){
+        var img = item.img || '';
+        var sub = (item.price||0) * (item.qty||1);
+        prods += '<div class="ord-product-row">' +
+          '<div class="ord-product-img">' + (img ? '<img src="' + esc(img) + '" onerror="this.style.display=\'none\'">' : '') + '</div>' +
+          '<div class="ord-product-info">' +
+            '<div class="ord-product-name">' + esc(item.name || 'منتج') + '</div>' +
+            '<div class="ord-product-meta">' + (item.qty||1) + ' × ' + (item.price||0).toLocaleString('ar-EG') + ' ر.س</div>' +
+          '</div>' +
+          '<div class="ord-product-price">' + sub.toLocaleString('ar-EG') + ' ر.س</div>' +
+        '</div>';
+      });
+      prods += '</div>';
+
+      var prices = '<div class="ord-detail-section">' +
+        '<div class="ord-detail-title">💰 ملخص الدفع</div>' +
+        '<div class="ord-info-row"><span class="ord-info-row-label">المجموع</span><span class="ord-info-row-value">' + (o.subtotal||0).toLocaleString('ar-EG') + ' ر.س</span></div>' +
+        (o.discount > 0 ? '<div class="ord-info-row"><span class="ord-info-row-label">الخصم</span><span class="ord-info-row-value" style="color:#059669;">-' + o.discount.toLocaleString('ar-EG') + ' ر.س</span></div>' : '') +
+        (o.shipping > 0 ? '<div class="ord-info-row"><span class="ord-info-row-label">التوصيل</span><span class="ord-info-row-value">' + o.shipping.toLocaleString('ar-EG') + ' ر.س</span></div>' : '') +
+        '<div class="ord-info-row" style="border-top:1.5px solid rgba(77,140,255,0.15); padding-top:12px; margin-top:6px;"><span class="ord-info-row-label" style="font-size:14px;color:#4D8CFF;font-weight:900;">الإجمالي</span><span class="ord-info-row-value" style="font-size:16px;color:#4D8CFF;">' + (o.total||0).toLocaleString('ar-EG') + ' ر.س</span></div>' +
+      '</div>';
+
+      var delivery = '';
+      if (o.pickup || o.deliveryInfo) {
+        var pk = o.pickup || '';
+        if (typeof pk === 'object') pk = pk.name || '';
+        var di = o.deliveryInfo || {};
+        delivery = '<div class="ord-detail-section">' +
+          '<div class="ord-detail-title">📍 التوصيل</div>' +
+          (pk ? '<div class="ord-info-row"><span class="ord-info-row-label">نقطة التسليم</span><span class="ord-info-row-value">' + esc(pk) + '</span></div>' : '') +
+          (di.driverName ? '<div class="ord-info-row"><span class="ord-info-row-label">السائق</span><span class="ord-info-row-value">' + esc(di.driverName) + '</span></div>' : '') +
+          (di.driverPhone ? '<div class="ord-info-row"><span class="ord-info-row-label">هاتف السائق</span><span class="ord-info-row-value">' + esc(di.driverPhone) + '</span></div>' : '') +
+        '</div>';
+      }
+
+      var timeline = '<div class="ord-detail-section">' +
+        '<div class="ord-detail-title">⏱️ سجل الطلب</div>' +
+        '<div class="ord-timeline-item"><div class="ord-timeline-dot"></div><div class="ord-timeline-content"><div class="ord-timeline-text">تم إنشاء الطلب</div><div class="ord-timeline-time">' + (o.createdAt ? fmtDate(o.createdAt) + ' · ' + fmtTime(o.createdAt) : '—') + '</div></div></div>';
+      if (o.payment && o.payment.verifiedAt) {
+        timeline += '<div class="ord-timeline-item"><div class="ord-timeline-dot" style="background:#059669;"></div><div class="ord-timeline-content"><div class="ord-timeline-text">تم التحقق من الدفع</div><div class="ord-timeline-time">' + fmtDate(o.payment.verifiedAt) + ' · ' + fmtTime(o.payment.verifiedAt) + '</div></div></div>';
+      }
+      if (o.deliveredAt) {
+        timeline += '<div class="ord-timeline-item"><div class="ord-timeline-dot" style="background:#059669;"></div><div class="ord-timeline-content"><div class="ord-timeline-text">تم التسليم</div><div class="ord-timeline-time">' + fmtDate(o.deliveredAt) + ' · ' + fmtTime(o.deliveredAt) + '</div></div></div>';
+      }
+      timeline += '</div>';
+
+      var waBtn = '<div style="margin:0 16px 16px;"><button class="ord-action-btn ord-action-wa" onclick="window.open(\'https://wa.me/967777777777?text=' + encodeURIComponent('مرحباً، أستفسر عن طلبي ' + orderNum) + '\',\'_blank\')">💬 تواصل مع الدعم</button></div>';
+
+      c.innerHTML = hero + prods + prices + delivery + timeline + waBtn;
+      window.APP.goTab('order-detail');
+    };
+
+    // Hook goTab to force render
+    if (!window.APP._ordGoTabHooked) {
+      var origGoTab = window.APP.goTab;
+      window.APP.goTab = function(id, el){
+        origGoTab.apply(this, arguments);
+        if (id === 'orders') setTimeout(function(){ window.APP.renderOrders(); }, 30);
+      };
+      window.APP._ordGoTabHooked = true;
+    }
+
+    console.log('[ord v69] INSTALLED ✓');
+    // Immediately render if on orders screen
+    if (document.getElementById('sc-orders') && document.getElementById('sc-orders').classList.contains('active')) {
+      window.APP.renderOrders();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install);
+  } else {
+    install();
+  }
+  // Retry checks in case APP loads late
+  setTimeout(install, 500);
+  setTimeout(install, 1500);
+  setTimeout(install, 3000);
+})();
+</script>
+
 </body>
 </html>
