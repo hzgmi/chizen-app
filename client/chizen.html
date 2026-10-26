@@ -17491,16 +17491,6 @@ document.addEventListener('keydown', function(e) {
     APP.goTab("commerce-detail");
   };
 
-  APP.cmSwapImg(\'' + esc(u) + '\',this)"><img src="' + esc(u) + '"></div>'; }).join("") + '</div>' : '') +
-      '<div class="cm-detail-body"><div class="cm-detail-title">' + esc(l.title||"") + '</div>' +
-      '<div class="cm-detail-price">' + (l.price||0).toLocaleString("ar-EG") + ' <small>ر.س</small></div>' +
-      (extra ? '<div class="cm-detail-meta">' + extra + '<span>📍 ' + esc(l.city||"") + '</span></div>' : '') +
-      '<div class="cm-detail-desc">' + esc(l.description||"") + '</div>' +
-      '<div class="cm-detail-seller"><div class="cm-detail-seller-label">البائع</div><div class="cm-detail-seller-name">' + esc(l.sellerName||"مستخدم") + '</div></div>' +
-      '<button class="cm-wa-btn" onclick="window.open(\'https://wa.me/' + wa + '?text=' + waText + '\',\'_blank\')">💬 تواصل عبر واتساب</button></div>';
-    APP.goTab("commerce-detail");
-  };
-
   APP.cmSwapImg = function(url, el){
     var img = document.getElementById("cm-main-img");
     if (img) img.src = url;
