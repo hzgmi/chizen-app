@@ -6810,6 +6810,7 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
       <div class="cm-title">🛍️ سوق شيزن</div>
       <div class="cm-subtitle" id="cm-count">جاري التحميل...</div>
     </div>
+    <button class="cm-my-btn" onclick="APP.cmMyListings()" title="إعلاناتي">👤</button>
     <button class="cm-new-btn" onclick="APP.cmNew()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span>انشر</span>
@@ -6829,6 +6830,22 @@ html:not([data-theme="light"]) #chz-surprise-modal .csb-coupon-wrap::after { bac
 
   <div id="cm-listings" class="cm-grid">
     <div class="cm-skeleton"></div><div class="cm-skeleton"></div><div class="cm-skeleton"></div><div class="cm-skeleton"></div>
+  </div>
+</div>
+
+
+<div class="screen" id="sc-commerce-mine">
+  <div class="cm-top cm-top-form">
+    <button class="cm-back" onclick="APP.goTab('commerce')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="cm-title-wrap">
+      <div class="cm-title">📋 إعلاناتي</div>
+      <div class="cm-subtitle" id="cm-mine-count">جاري التحميل...</div>
+    </div>
+  </div>
+  <div id="cm-mine-list" class="cm-mine-list">
+    <div class="cm-loading">جاري التحميل...</div>
   </div>
 </div>
 
@@ -8124,6 +8141,61 @@ body #sc-home .chz-hdr {
 </style>
 
 
+
+<style id="chz-commerce-v57">
+.cm-my-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.cm-my-btn:active { transform: scale(0.92); }
+
+.cm-mine-list { padding: 16px; display: flex; flex-direction: column; gap: 12px; direction: rtl; }
+.cm-loading { text-align: center; padding: 40px 20px; color: #9ca3af; font-family: 'Tajawal', sans-serif; font-size: 13px; }
+.cm-mine-empty { text-align: center; padding: 60px 20px; color: var(--mt, #9ca3af); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 600; line-height: 1.7; }
+.cm-mine-empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.6; }
+
+.cm-mine-card { background: #fff; border: 1px solid rgba(16,185,129,0.12); border-radius: 16px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,0.05); }
+html:not([data-theme="light"]) .cm-mine-card { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+.cm-mine-head { display: flex; gap: 12px; padding: 12px; }
+.cm-mine-img { width: 90px; height: 90px; border-radius: 12px; overflow: hidden; background: #f4f6fa; flex-shrink: 0; position: relative; }
+.cm-mine-img img { width: 100%; height: 100%; object-fit: cover; }
+.cm-mine-status { position: absolute; top: 4px; right: 4px; padding: 2px 7px; border-radius: 6px; font-size: 8px; font-weight: 900; color: #fff; font-family: 'Tajawal', sans-serif; }
+.cm-mine-status.st-active { background: #10b981; }
+.cm-mine-status.st-sold { background: #6b7280; }
+.cm-mine-status.st-reserved { background: #f59e0b; }
+.cm-mine-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.cm-mine-title { font-size: 13px; font-weight: 800; color: #1f2937; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: 'Tajawal', sans-serif; }
+html:not([data-theme="light"]) .cm-mine-title { color: #e8ecf5; }
+.cm-mine-price { font-size: 15px; font-weight: 900; color: #10b981; font-family: 'Tajawal', sans-serif; margin-bottom: 4px; }
+.cm-mine-price small { font-size: 10px; }
+.cm-mine-date { font-size: 10px; color: var(--mt2, #9ca3af); font-family: 'Tajawal', sans-serif; font-weight: 600; margin-top: auto; }
+
+.cm-mine-actions { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; padding: 0 12px 12px; }
+.cm-mine-action { padding: 10px 6px; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 10.5px; font-weight: 800; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .15s ease; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.cm-mine-action:active { transform: scale(0.94); }
+.cm-mine-action svg { width: 16px; height: 16px; }
+.cm-mine-edit { background: rgba(59,130,246,0.12); color: #2563eb; }
+.cm-mine-sold { background: rgba(107,114,128,0.12); color: #4b5563; }
+.cm-mine-reserve { background: rgba(245,158,11,0.12); color: #d97706; }
+.cm-mine-delete { background: rgba(239,68,68,0.12); color: #dc2626; }
+.cm-mine-action.active-state { opacity: 0.5; }
+html:not([data-theme="light"]) .cm-mine-edit { background: rgba(59,130,246,0.2); color: #60a5fa; }
+html:not([data-theme="light"]) .cm-mine-sold { background: rgba(107,114,128,0.2); color: #9ca3af; }
+html:not([data-theme="light"]) .cm-mine-reserve { background: rgba(245,158,11,0.2); color: #fbbf24; }
+html:not([data-theme="light"]) .cm-mine-delete { background: rgba(239,68,68,0.2); color: #f87171; }
+
+.cm-confirm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 24px; }
+.cm-confirm-card { background: #fff; border-radius: 24px; padding: 28px 22px 22px; max-width: 340px; width: 100%; text-align: center; direction: rtl; font-family: 'Tajawal', sans-serif; box-shadow: 0 20px 60px rgba(0,0,0,0.4); animation: cmPop .4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+html:not([data-theme="light"]) .cm-confirm-card { background: #1e2438; }
+.cm-confirm-icon { font-size: 56px; margin-bottom: 14px; }
+.cm-confirm-title { font-size: 17px; font-weight: 900; color: #1f2937; margin-bottom: 8px; }
+html:not([data-theme="light"]) .cm-confirm-title { color: #e8ecf5; }
+.cm-confirm-msg { font-size: 13px; color: #6b7280; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+html:not([data-theme="light"]) .cm-confirm-msg { color: #9ca3af; }
+.cm-confirm-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cm-confirm-btn { padding: 13px; border: none; border-radius: 12px; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.cm-confirm-btn-cancel { background: #f1f5f9; color: #6b7280; }
+html:not([data-theme="light"]) .cm-confirm-btn-cancel { background: rgba(255,255,255,0.08); color: #d1d5db; }
+.cm-confirm-btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 6px 18px rgba(239,68,68,0.35); }
+.cm-confirm-btn-primary { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 6px 18px rgba(16,185,129,0.35); }
+</style>
 
 <style id="chz-commerce-v52">
 /* Header */
@@ -17353,6 +17425,284 @@ document.addEventListener('keydown', function(e) {
       if (url.length > 10) { img.src = url; prev.style.display = "block"; } else { prev.style.display = "none"; }
     });
   }
+})();
+</script>
+
+<script id="chz-commerce-v57-js">
+(function(){
+  'use strict';
+  window.APP = window.APP || {};
+  APP.cmMine = [];
+  APP.cmEditId = null;
+
+  function esc(s){ return String(s || '').replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  APP.cmMyListings = function(){
+    APP.goTab('commerce-mine');
+    APP.cmLoadMine();
+  };
+
+  APP.cmLoadMine = function(){
+    var list = document.getElementById('cm-mine-list');
+    var count = document.getElementById('cm-mine-count');
+    if (!list) return;
+    if (!window.FB || !FB.currentUser) {
+      list.innerHTML = '<div class="cm-mine-empty"><div class="cm-mine-empty-icon">🔒</div>سجل الدخول لعرض إعلاناتك</div>';
+      if (count) count.textContent = 'سجل دخول أولاً';
+      return;
+    }
+    if (!FB.db) { setTimeout(APP.cmLoadMine, 500); return; }
+    list.innerHTML = '<div class="cm-loading">جاري التحميل...</div>';
+    FB.db.collection('listings').where('sellerId', '==', FB.currentUser.uid).limit(50).get()
+      .then(function(snap){
+        APP.cmMine = [];
+        snap.forEach(function(d){ APP.cmMine.push(Object.assign({ id: d.id }, d.data())); });
+        APP.cmMine.sort(function(a,b){
+          var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+          var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+          return tb - ta;
+        });
+        if (count) count.textContent = APP.cmMine.length + ' إعلان';
+        if (!APP.cmMine.length) {
+          list.innerHTML = '<div class="cm-mine-empty"><div class="cm-mine-empty-icon">📭</div>لا توجد إعلانات<br><small>اضغط + لنشر أول إعلان</small></div>';
+          return;
+        }
+        list.innerHTML = APP.cmMine.map(function(l){
+          var st = l.status || 'active';
+          var stLabel = { active: 'نشط', sold: 'تم البيع', reserved: 'محجوز' }[st] || st;
+          var img = (l.image || (l.images && l.images[0]) || '').trim();
+          var dateStr = l.createdAt && l.createdAt.seconds ? new Date(l.createdAt.seconds * 1000).toLocaleDateString('ar-EG') : '';
+          var imgSrc = img && img.length > 10 ? esc(img) : (APP.cmPlaceholder || '');
+          return '<div class="cm-mine-card">' +
+            '<div class="cm-mine-head">' +
+              '<div class="cm-mine-img"><img src="' + imgSrc + '" onerror="this.src=APP.cmPlaceholder"><div class="cm-mine-status st-' + st + '">' + stLabel + '</div></div>' +
+              '<div class="cm-mine-info">' +
+                '<div class="cm-mine-title">' + esc(l.title || '') + '</div>' +
+                '<div class="cm-mine-price">' + (l.price||0).toLocaleString('ar-EG') + ' <small>ر.س</small></div>' +
+                '<div class="cm-mine-date">📅 ' + dateStr + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="cm-mine-actions">' +
+              '<button class="cm-mine-action cm-mine-edit" onclick="APP.cmEditListing(\'' + l.id + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>تعديل</button>' +
+              '<button class="cm-mine-action cm-mine-reserve' + (st==='reserved'?' active-state':'') + '" onclick="APP.cmMarkStatus(\'' + l.id + '\',\'reserved\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>محجوز</button>' +
+              '<button class="cm-mine-action cm-mine-sold' + (st==='sold'?' active-state':'') + '" onclick="APP.cmMarkStatus(\'' + l.id + '\',\'sold\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>تم البيع</button>' +
+              '<button class="cm-mine-action cm-mine-delete" onclick="APP.cmDeleteListing(\'' + l.id + '\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>حذف</button>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      })
+      .catch(function(e){
+        list.innerHTML = '<div class="cm-mine-empty"><div class="cm-mine-empty-icon">⚠️</div>تعذر التحميل<br><small>' + (e.message||'') + '</small></div>';
+      });
+  };
+
+  // ═══ Confirm modal helper ═══
+  APP.cmConfirm = function(icon, title, msg, danger, onConfirm){
+    var old = document.getElementById('cm-confirm-modal');
+    if (old) old.remove();
+    var modal = document.createElement('div');
+    modal.id = 'cm-confirm-modal';
+    modal.className = 'cm-confirm-modal';
+    modal.style.display = 'flex';
+    modal.innerHTML = '<div class="cm-confirm-card">' +
+      '<div class="cm-confirm-icon">' + icon + '</div>' +
+      '<div class="cm-confirm-title">' + title + '</div>' +
+      '<div class="cm-confirm-msg">' + msg + '</div>' +
+      '<div class="cm-confirm-btns">' +
+        '<button class="cm-confirm-btn cm-confirm-btn-cancel" onclick="document.getElementById(\'cm-confirm-modal\').remove()">إلغاء</button>' +
+        '<button class="cm-confirm-btn ' + (danger ? 'cm-confirm-btn-danger' : 'cm-confirm-btn-primary') + '" id="cm-confirm-ok">تأكيد</button>' +
+      '</div>' +
+    '</div>';
+    modal.addEventListener('click', function(e){ if (e.target === modal) modal.remove(); });
+    document.body.appendChild(modal);
+    document.getElementById('cm-confirm-ok').addEventListener('click', function(){
+      modal.remove();
+      onConfirm();
+    });
+  };
+
+  // ═══ Mark status (sold/reserved/active) ═══
+  APP.cmMarkStatus = function(id, status){
+    var l = APP.cmMine.find(function(x){ return x.id === id; });
+    if (!l) return;
+    var current = l.status || 'active';
+    if (current === status) {
+      // toggle back to active
+      APP.cmSetStatus(id, 'active');
+      return;
+    }
+    var labels = { sold: 'تم البيع', reserved: 'محجوز' };
+    APP.cmConfirm('✓', 'تغيير الحالة', 'تعيين هذا الإعلان كـ "' + labels[status] + '"؟ لن يظهر للمشترين.', false, function(){
+      APP.cmSetStatus(id, status);
+    });
+  };
+
+  APP.cmSetStatus = function(id, status){
+    if (!window.FB || !FB.db) return;
+    FB.db.collection('listings').doc(id).update({ status: status })
+      .then(function(){
+        console.log('[cm] status updated:', status);
+        APP.cmLoadMine();
+        APP.cmLoad();
+      })
+      .catch(function(e){
+        APP.cmModal('⚠️', 'خطأ', e.message || 'تعذر تحديث الحالة');
+      });
+  };
+
+  // ═══ Delete listing ═══
+  APP.cmDeleteListing = function(id){
+    var l = APP.cmMine.find(function(x){ return x.id === id; });
+    if (!l) return;
+    APP.cmConfirm('🗑️', 'حذف الإعلان؟', 'سيتم حذف "' + (l.title||'').substring(0, 40) + '..." نهائياً.', true, function(){
+      if (!window.FB || !FB.db) return;
+      FB.db.collection('listings').doc(id).delete()
+        .then(function(){
+          console.log('[cm] deleted:', id);
+          APP.cmLoadMine();
+          APP.cmLoad();
+        })
+        .catch(function(e){
+          APP.cmModal('⚠️', 'خطأ', e.message || 'تعذر الحذف');
+        });
+    });
+  };
+
+  // ═══ Edit listing — load data into form ═══
+  APP.cmEditListing = function(id){
+    var l = APP.cmMine.find(function(x){ return x.id === id; });
+    if (!l) return;
+    APP.cmEditId = id;
+    APP.cmSelectedType = l.type;
+    APP.cmFiles = [];
+
+    // Title of screen
+    var nt = document.getElementById('cm-new-title');
+    if (nt) nt.textContent = '✏️ تعديل الإعلان';
+
+    // Highlight type button
+    document.querySelectorAll('.cm-type-btn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.type === l.type);
+    });
+
+    // Show/hide fields
+    var ce = document.getElementById('cm-car-extra');
+    var ce2 = document.getElementById('cm-car-extra2');
+    var pe = document.getElementById('cm-phone-extra');
+    if (ce) ce.style.display = l.type === 'car' ? 'grid' : 'none';
+    if (ce2) ce2.style.display = l.type === 'car' ? 'grid' : 'none';
+    if (pe) pe.style.display = l.type === 'phone' ? 'grid' : 'none';
+
+    // Fill fields
+    document.getElementById('cm-f-title').value = l.title || '';
+    document.getElementById('cm-f-desc').value = l.description || '';
+    document.getElementById('cm-f-price').value = l.price || '';
+    document.getElementById('cm-f-city').value = l.city || '';
+    document.getElementById('cm-f-phone').value = l.phone || '';
+    document.getElementById('cm-f-brand').value = l.brand || l.phoneBrand || '';
+    document.getElementById('cm-f-model').value = l.model || l.phoneModel || '';
+    if (l.type === 'car') {
+      document.getElementById('cm-f-year').value = l.year || '';
+      document.getElementById('cm-f-km').value = l.km || '';
+    } else {
+      document.getElementById('cm-f-storage').value = l.storage || '128';
+      document.getElementById('cm-f-condition').value = l.condition || 'used';
+    }
+    // Fill image URL
+    var urlField = document.getElementById('cm-f-img-url');
+    if (urlField) urlField.value = (l.image || (l.images && l.images[0]) || '');
+    var urlPreview = document.getElementById('cm-url-preview');
+    var urlPreviewImg = document.getElementById('cm-url-preview-img');
+    if (urlField && urlField.value.length > 10 && urlPreview && urlPreviewImg) {
+      urlPreviewImg.src = urlField.value;
+      urlPreview.style.display = 'block';
+    }
+
+    // Update submit button text
+    var submitBtn = document.querySelector('.cm-submit span');
+    if (submitBtn) submitBtn.textContent = 'حفظ التعديل';
+
+    // Change the button onclick
+    var submitButton = document.querySelector('.cm-submit');
+    if (submitButton) submitButton.setAttribute('onclick', 'APP.cmSaveEdit()');
+
+    APP.goTab('commerce-new');
+  };
+
+  // ═══ Save edit ═══
+  APP.cmSaveEdit = async function(){
+    var id = APP.cmEditId;
+    if (!id) {
+      // fall back to new listing
+      return APP.cmSubmit();
+    }
+    var type = APP.cmSelectedType;
+    var title = (document.getElementById('cm-f-title')||{}).value || '';
+    var desc = (document.getElementById('cm-f-desc')||{}).value || '';
+    var price = parseFloat((document.getElementById('cm-f-price')||{}).value || 0);
+    var city = (document.getElementById('cm-f-city')||{}).value || '';
+    var phone = (document.getElementById('cm-f-phone')||{}).value || '';
+    var manualUrl = ((document.getElementById('cm-f-img-url')||{}).value || '').trim();
+
+    if (!title.trim()) return APP.cmModal('📝', 'العنوان مطلوب', '');
+    if (!desc.trim()) return APP.cmModal('📝', 'الوصف مطلوب', '');
+    if (!price || price <= 0) return APP.cmModal('💰', 'السعر مطلوب', '');
+    if (!city.trim()) return APP.cmModal('📍', 'المدينة مطلوبة', '');
+    if (!phone.trim()) return APP.cmModal('📞', 'الجوال مطلوب', '');
+
+    var data = {
+      title: title.trim(),
+      description: desc.trim(),
+      price: price,
+      city: city.trim(),
+      phone: phone.trim()
+    };
+
+    if (manualUrl && manualUrl.length > 10 && (manualUrl.indexOf('http://') === 0 || manualUrl.indexOf('https://') === 0)) {
+      data.image = manualUrl;
+      data.images = [manualUrl];
+    } else if (APP.cmFiles.length) {
+      // upload new files
+      try {
+        var up = await uploadFiles(APP.cmFiles);
+        if (up.length) { data.image = up[0]; data.images = up; }
+      } catch(e) { console.warn('[edit] upload fail:', e.message); }
+    }
+
+    if (type === 'car') {
+      var brand = (document.getElementById('cm-f-brand')||{}).value || '';
+      var model = (document.getElementById('cm-f-model')||{}).value || '';
+      var yearV = parseInt((document.getElementById('cm-f-year')||{}).value || 0) || 0;
+      var kmV = parseInt((document.getElementById('cm-f-km')||{}).value || 0) || 0;
+      if (brand.trim()) data.brand = brand.trim();
+      if (model.trim()) data.model = model.trim();
+      if (yearV > 0) data.year = yearV;
+      if (kmV > 0) data.km = kmV;
+    } else if (type === 'phone') {
+      var pb = (document.getElementById('cm-f-brand')||{}).value || '';
+      var pm = (document.getElementById('cm-f-model')||{}).value || '';
+      if (pb.trim()) data.phoneBrand = pb.trim();
+      if (pm.trim()) data.phoneModel = pm.trim();
+      data.storage = (document.getElementById('cm-f-storage')||{}).value || '128';
+      data.condition = (document.getElementById('cm-f-condition')||{}).value || 'used';
+    }
+
+    try {
+      await FB.db.collection('listings').doc(id).update(data);
+      APP.cmModal('✅', 'تم الحفظ!', 'تم تحديث الإعلان بنجاح.');
+      APP.cmEditId = null;
+      var submitBtn = document.querySelector('.cm-submit');
+      if (submitBtn) submitBtn.setAttribute('onclick', 'APP.cmSubmit()');
+      var span = submitBtn && submitBtn.querySelector('span');
+      if (span) span.textContent = 'نشر الإعلان';
+      APP.cmMyListings();
+      setTimeout(APP.cmLoad, 300);
+    } catch(e) {
+      APP.cmModal('⚠️', 'خطأ', e.message || 'تعذر الحفظ');
+    }
+  };
+
+  console.log('[commerce v57] ready — my listings management');
 })();
 </script>
 
