@@ -15240,5 +15240,79 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-brands-v36-force">
+(function(){
+  'use strict';
+  var BRANDS = [
+    {ar:'آبل', en:'Apple', d:'apple.com'},
+    {ar:'سامسونج', en:'Samsung', d:'samsung.com'},
+    {ar:'سوني', en:'Sony', d:'sony.com'},
+    {ar:'نايكي', en:'Nike', d:'nike.com'},
+    {ar:'أديداس', en:'Adidas', d:'adidas.com'},
+    {ar:'ايكيا', en:'IKEA', d:'ikea.com'},
+    {ar:'شانيل', en:'Chanel', d:'chanel.com'},
+    {ar:'غوتشي', en:'Gucci', d:'gucci.com'},
+    {ar:'راي بان', en:'Ray-Ban', d:'ray-ban.com'},
+    {ar:'زارا', en:'Zara', d:'zara.com'},
+    {ar:'هوغو بوس', en:'Hugo Boss', d:'hugoboss.com'},
+    {ar:'ليفايس', en:"Levi's", d:'levi.com'},
+    {ar:'لوريال', en:"L'Oréal", d:'loreal.com'},
+    {ar:'بوش', en:'Bosch', d:'bosch.com'},
+    {ar:'ستانلي', en:'Stanley', d:'stanleytools.com'},
+    {ar:'فيليبس', en:'Philips', d:'philips.com'},
+    {ar:'ليغو', en:'LEGO', d:'lego.com'},
+    {ar:'بامبرز', en:'Pampers', d:'pampers.com'},
+    {ar:'غارمين', en:'Garmin', d:'garmin.com'},
+    {ar:'يونيكلو', en:'Uniqlo', d:'uniqlo.com'},
+    {ar:'شاومي', en:'Xiaomi', d:'mi.com'},
+    {ar:'كانون', en:'Canon', d:'canon.com'},
+    {ar:'ديل', en:'Dell', d:'dell.com'},
+    {ar:'رولكس', en:'Rolex', d:'rolex.com'}
+  ];
+  function buildChips(){
+    return BRANDS.map(function(b){
+      var logo = 'https://www.google.com/s2/favicons?domain=' + b.d + '&sz=128';
+      return '<div style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:linear-gradient(135deg,rgba(255,61,154,0.1),rgba(155,77,255,0.1));border:1.5px solid rgba(255,61,154,0.28);border-radius:20px;font-family:Tajawal,sans-serif;font-weight:800;font-size:12px;color:#FF3D9A;white-space:nowrap;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;" onclick="event.stopPropagation();if(window.APP&&APP.filterBrand)APP.filterBrand(\'' + b.en + '\')">' +
+        '<img src="' + logo + '" style="width:20px;height:20px;border-radius:50%;background:#fff;padding:2px;object-fit:contain;flex-shrink:0;" onerror="this.style.display=\'none\'">' +
+        '<span>' + b.ar + '</span>' +
+      '</div>';
+    }).join('');
+  }
+  function enforce(){
+    var sec = document.getElementById('brands-sec');
+    var c = document.getElementById('brands-list');
+    if (!c) return;
+    if (!c.innerHTML || c.innerHTML.trim() === '' || !c.querySelector('img')) {
+      c.innerHTML = buildChips();
+      console.log('[BRANDS v36] built', BRANDS.length, 'chips');
+    }
+    if (sec) {
+      sec.style.setProperty('display', 'block', 'important');
+      sec.style.setProperty('visibility', 'visible', 'important');
+      sec.style.setProperty('opacity', '1', 'important');
+      sec.style.setProperty('height', 'auto', 'important');
+      sec.style.setProperty('min-height', '70px', 'important');
+      sec.style.setProperty('margin', '8px 0 4px', 'important');
+    }
+    c.style.setProperty('display', 'flex', 'important');
+    c.style.setProperty('gap', '8px', 'important');
+    c.style.setProperty('overflow-x', 'auto', 'important');
+    c.style.setProperty('padding', '8px 15px 12px', 'important');
+    c.style.setProperty('flex-wrap', 'nowrap', 'important');
+    c.style.setProperty('scrollbar-width', 'none', 'important');
+    c.style.setProperty('min-height', '50px', 'important');
+    c.style.setProperty('width', '100%', 'important');
+    c.style.setProperty('box-sizing', 'border-box', 'important');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enforce);
+  } else {
+    enforce();
+  }
+  setInterval(enforce, 800);
+})();
+</script>
+
+
 </body>
 </html>
