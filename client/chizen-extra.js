@@ -113,7 +113,7 @@
             // Footer
             '<div class="chz-w-footer">' +
               '<div class="chz-w-logo">CHIZEN</div>' +
-              '<div class="chz-w-tagline">✨ تسوق ذكي .. لحياة أجمل ✨</div>' +
+              '<div class="chz-w-tagline">✨ تسوق شامل_لحياة أجمل ✨</div>' +
               '<div class="chz-w-copy">© 2026 CHIZEN — جميع الحقوق محفوظة</div>' +
               '<div class="chz-w-links"><a>الشروط والأحكام</a> · <a>سياسة الخصوصية</a> · <a>اتصل بنا</a></div>' +
             '</div>' +
