@@ -9295,19 +9295,6 @@ var APP={
   
   
 
-  renderBrands: function() {
-    var self = this;
-    firebase.firestore().collection('config').doc('brands').get().then(function(doc) {
-       if(doc.exists && doc.data().list && doc.data().list.length > 0) {
-           var brands = doc.data().list;
-           document.getElementById('brands-sec').style.display = 'block';
-           document.getElementById('brands-list').innerHTML = brands.map(function(b) {
-               return '<div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:10px 20px; border-radius:20px; white-space:nowrap; font-weight:bold; color:#fff; font-size:14px; cursor:pointer;" onclick="APP.search(\''+b.name+'\')">'+b.name+'</div>';
-           }).join('');
-       }
-    });
-  },
-
   filterCat:function(k){
     if(k==='all'){this.renderProducts();return;}
     this.renderProducts(this.products.filter(function(p){return p.category===k;}));
