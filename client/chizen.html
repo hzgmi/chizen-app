@@ -6795,6 +6795,7 @@ html[data-theme="light"] {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style id="chz-banner-v10-css">
 body #sc-home #slides {
+  background: radial-gradient(circle at 50% 50%, #1a0a2e 0%, #0a0a1a 100%) !important;
   position: relative !important;
   aspect-ratio: 16/9 !important;
   display: block !important;
@@ -6811,9 +6812,11 @@ body #sc-home #slides img.v10img {
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
+  object-fit: contain !important;
   display: block !important;
   transition: opacity .8s ease !important;
+  image-rendering: -webkit-optimize-contrast;
+  border-radius: 14px;
   will-change: opacity;
 }
 body #sc-home #dots .v10dot {
