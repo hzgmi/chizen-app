@@ -4362,7 +4362,7 @@ body, #app, .screen { background: var(--bg-main) !important; color: var(--text-m
     border-radius: 50% !important;
   }
   .chz-prof-avatar svg { stroke: #ff3d9a !important; }
-  .chz-prof-txt { display: none !important; } /* إخفاء الاسم لتبدو دائرة */
+  /* v3: name always visible — was hiding it */
 
   /* 3. شريط النقاط */
   .loy {
@@ -6799,7 +6799,7 @@ body #sc-home .chz-banner { height: 32px; border-radius: 14px; overflow: hidden;
 body #sc-home .chz-banner::after { content:''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent 55%); }
 body #sc-home .chz-main { height: 68px; padding: 8px 14px; border-radius: 20px; background: linear-gradient(135deg, rgba(46,90,255,0.92), rgba(124,58,237,0.92) 55%, rgba(255,61,154,0.92)); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); box-shadow: 0 8px 28px rgba(124,58,237,0.28), 0 1px 0 rgba(255,255,255,0.18) inset, 0 0 0 1px rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 100; transition: height 0.25s ease, border-radius 0.25s ease, box-shadow 0.25s ease; }
 /* v3 profile balance */
-body #sc-home .chz-prof-name { font-size: 14px; font-weight: 800; color: #fff; max-width: 88px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.2px; }
+body #sc-home .chz-prof-name { font-size: 14px; font-weight: 800; color: #fff !important; max-width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.2px; display: block !important; text-shadow: 0 1px 3px rgba(0,0,0,0.35); }
 body #sc-home .chz-brand-group { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1; }
 body #sc-home .chz-en-row { margin-bottom: 1px; }
 body #sc-home .chz-ar { font-size: 11px; font-weight: 800; color: #fff; margin-top: 1px; line-height: 1; letter-spacing: 0.3px; }
@@ -6809,7 +6809,7 @@ body #sc-home .chz-profile-group { display: flex; align-items: center; gap: 10px
 body #sc-home .chz-profile-group:active { background: rgba(255,255,255,0.1); }
 body #sc-home .chz-prof-avatar { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3); }
 body #sc-home .chz-prof-avatar svg { width: 18px; height: 18px; }
-body #sc-home .chz-prof-txt { display: flex; flex-direction: column; gap: 1px; line-height: 1.2; }
+body #sc-home .chz-prof-txt { display: flex !important; flex-direction: column; gap: 1px; line-height: 1.2; align-items: flex-start; }
 body #sc-home .chz-prof-name { font-size: 13px; font-weight: 800; color: #fff; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 body #sc-home .chz-prof-welcome { font-size: 10px; color: rgba(255,255,255,0.75); font-weight: 500; }
 body #sc-home .chz-brand-group { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; }
