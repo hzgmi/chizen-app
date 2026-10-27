@@ -1,5 +1,5 @@
 // CHIZEN Service Worker v77 — Smart caching
-const CACHE_NAME = 'chizen-v77';
+const CACHE_NAME = 'chizen-v78';
 const PRECACHE = [
   '/chizen.html',
   '/firebase-config.js',
@@ -40,6 +40,12 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(e) {
   if (e.request.method !== 'GET') return;
+
+  // ═══ ADMIN BYPASS — never touch admin panel ═══
+  if (url.pathname.indexOf('chizen-admin-panel') > -1 ||
+      url.pathname.indexOf('/admin') > -1) {
+    return; // Let browser handle normally — no caching, no SW interference
+  }
   const url = new URL(e.request.url);
 
   // 1. Firebase — always network
