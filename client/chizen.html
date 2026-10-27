@@ -19979,5 +19979,111 @@ html:not([data-theme="light"]) .chz-feedback-switch { background: #4b5563; }
   setTimeout(install, 1000);
 })();
 </script>
+<script id="chz-auto-refresh-v75">
+(function(){
+  'use strict';
+  
+  var lastAttempt = 0;
+  var MIN_INTERVAL = 5 * 60 * 1000; // 5 minutes
+  
+  async function autoRefresh(){
+    // Skip if too soon
+    var now = Date.now();
+    if (now - lastAttempt < MIN_INTERVAL) {
+      console.log('[auto-refresh] skipped (too soon)');
+      return;
+    }
+    
+    if (!window.FB || !FB.currentUser) {
+      console.log('[auto-refresh] no user');
+      return;
+    }
+    
+    if (!window.ChizenNotifications) {
+      setTimeout(autoRefresh, 1000);
+      return;
+    }
+    
+    try {
+      var status = await window.ChizenNotifications.status();
+      console.log('[auto-refresh] status:', status.health, '| platform:', status.platform);
+      
+      // Only auto-refresh if needed
+      if (status.health === 'ok') {
+        console.log('[auto-refresh] ✓ already healthy');
+        return;
+      }
+      
+      if (status.health === 'blocked' || status.health === 'unsupported' || status.health === 'error') {
+        console.log('[auto-refresh] cannot fix automatically:', status.health);
+        return;
+      }
+      
+      // needs_refresh or needs_permission → try
+      console.log('[auto-refresh] attempting refresh...');
+      lastAttempt = now;
+      
+      // Silent refresh — no UI feedback
+      var result = await window.ChizenNotifications.refresh();
+      console.log('[auto-refresh] ✓ success:', result);
+      
+      // Silent re-render bars if visible
+      if (window.__chzRenderAllNotifBars) {
+        setTimeout(window.__chzRenderAllNotifBars, 500);
+      }
+      
+    } catch(e) {
+      console.log('[auto-refresh] failed:', e.message);
+      lastAttempt = now; // avoid spam
+    }
+  }
+  
+  // ─── Trigger points ───
+  
+  // 1. On app load (after user is ready, 5s delay)
+  function scheduleOnLoad() {
+    if (window.FB && FB.currentUser) {
+      setTimeout(autoRefresh, 5000);
+    } else if (window.FB && FB.auth) {
+      FB.auth.onAuthStateChanged(function(u){
+        if (u) setTimeout(autoRefresh, 5000);
+      });
+    }
+  }
+  
+  // 2. When entering notifications screen
+  function hookGoTab() {
+    if (!window.APP || !window.APP.goTab) { setTimeout(hookGoTab, 500); return; }
+    if (window.APP._autoRefreshHook) return;
+    window.APP._autoRefreshHook = true;
+    var orig = window.APP.goTab;
+    window.APP.goTab = function(id, el) {
+      orig.apply(this, arguments);
+      if (id === 'notifications') {
+        setTimeout(autoRefresh, 1500);
+      }
+    };
+  }
+  
+  // 3. When app becomes visible (from background)
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden && window.FB && FB.currentUser) {
+      setTimeout(autoRefresh, 2000);
+    }
+  });
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){
+      scheduleOnLoad();
+      hookGoTab();
+    });
+  } else {
+    scheduleOnLoad();
+    hookGoTab();
+  }
+  
+  console.log('[auto-refresh v75] ready');
+})();
+</script>
 </body>
 </html>
