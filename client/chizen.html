@@ -6633,6 +6633,78 @@ html:not([data-theme="light"]) .ord-timeline-text { color: #e8ecf5; }
 .ord-action-wa:active { transform: scale(0.97); }
 </style>
 
+<style id="chz-notif-v71">
+/* Header */
+.notif-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: linear-gradient(135deg, #FF3D9A 0%, #9B4DFF 60%, #4D8CFF 100%); border-radius: 0 0 20px 20px; box-shadow: 0 6px 20px rgba(255,61,154,0.25); direction: rtl; }
+.notif-back { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.notif-back svg { width: 18px; height: 18px; transform: rotate(180deg); }
+.notif-back:active { transform: scale(0.92); }
+.notif-header-text { flex: 1; min-width: 0; }
+.notif-header-title { font-size: 17px; font-weight: 900; color: #fff; font-family: 'Tajawal', sans-serif; }
+.notif-header-sub { font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 600; margin-top: 2px; font-family: 'Tajawal', sans-serif; }
+.notif-clear { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+.notif-clear svg { width: 16px; height: 16px; }
+.notif-clear:active { transform: scale(0.92); background: rgba(255,255,255,0.3); }
+
+/* Toggle wrapper */
+.notif-toggle-wrap { display: flex; align-items: center; gap: 12px; margin: 14px 16px 8px; padding: 14px 16px; background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(5,150,105,0.06)); border: 1.5px solid rgba(16,185,129,0.25); border-radius: 16px; direction: rtl; -webkit-tap-highlight-color: transparent; }
+html:not([data-theme="light"]) .notif-toggle-wrap { background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(5,150,105,0.08)); }
+.notif-toggle-wrap.off { background: linear-gradient(135deg, rgba(107,114,128,0.08), rgba(75,85,99,0.06)); border-color: rgba(107,114,128,0.2); }
+html:not([data-theme="light"]) .notif-toggle-wrap.off { background: linear-gradient(135deg, rgba(107,114,128,0.12), rgba(75,85,99,0.1)); }
+
+.notif-toggle-icon { width: 44px; height: 44px; border-radius: 12px; background: #10b981; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+.notif-toggle-wrap.off .notif-toggle-icon { background: #9ca3af; box-shadow: none; }
+
+.notif-toggle-text { flex: 1; min-width: 0; }
+.notif-toggle-title { font-size: 13px; font-weight: 900; color: #1f2937; font-family: 'Tajawal', sans-serif; margin-bottom: 2px; }
+html:not([data-theme="light"]) .notif-toggle-title { color: #e8ecf5; }
+.notif-toggle-sub { font-size: 10.5px; font-weight: 600; color: #6b7280; font-family: 'Tajawal', sans-serif; margin-bottom: 3px; line-height: 1.4; }
+html:not([data-theme="light"]) .notif-toggle-sub { color: #9ca3af; }
+.notif-toggle-note { font-size: 9.5px; font-weight: 700; color: #10b981; font-family: 'Tajawal', sans-serif; opacity: 0.85; }
+html:not([data-theme="light"]) .notif-toggle-note { color: #34d399; }
+
+/* Toggle switch */
+.notif-toggle-switch { width: 48px; height: 28px; border-radius: 14px; background: #10b981; position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.25s ease; -webkit-tap-highlight-color: transparent; box-shadow: inset 0 1px 3px rgba(0,0,0,0.15); }
+.notif-toggle-wrap.off .notif-toggle-switch { background: #d1d5db; }
+html:not([data-theme="light"]) .notif-toggle-wrap.off .notif-toggle-switch { background: #4b5563; }
+.notif-toggle-knob { width: 22px; height: 22px; border-radius: 50%; background: #fff; position: absolute; top: 3px; right: 3px; transition: right 0.25s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.notif-toggle-wrap.off .notif-toggle-knob { right: 23px; }
+
+/* Filters */
+.notif-filters { display: flex; gap: 8px; padding: 4px 16px 10px; overflow-x: auto; scrollbar-width: none; }
+.notif-filters::-webkit-scrollbar { display: none; }
+.notif-filter { flex-shrink: 0; padding: 8px 14px; background: var(--nav, #f8fafc); color: var(--mt, #6b7280); border: 1.5px solid rgba(255,61,154,0.15); border-radius: 18px; font-family: 'Tajawal', sans-serif; font-size: 11.5px; font-weight: 800; cursor: pointer; transition: all .2s ease; -webkit-tap-highlight-color: transparent; white-space: nowrap; }
+html:not([data-theme="light"]) .notif-filter { background: #1e2438; border-color: rgba(255,255,255,0.08); color: #9ca3af; }
+.notif-filter:active { transform: scale(0.96); }
+.notif-filter.active { background: linear-gradient(135deg, #FF3D9A, #9B4DFF); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(255,61,154,0.35); }
+
+/* Notifications list */
+.notif-list { padding: 4px 16px calc(100px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 8px; direction: rtl; }
+.notif-loading { text-align: center; padding: 40px 20px; color: #9ca3af; font-family: 'Tajawal', sans-serif; font-size: 13px; }
+.notif-empty { text-align: center; padding: 60px 20px; color: var(--mt, #9ca3af); font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 600; }
+.notif-empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.6; }
+
+.notif-day-group { font-size: 11px; font-weight: 900; color: #9ca3af; margin: 14px 4px 6px; font-family: 'Tajawal', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.notif-item { display: flex; gap: 12px; padding: 14px; background: #fff; border: 1px solid rgba(255,61,154,0.1); border-radius: 16px; cursor: pointer; transition: all .15s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.04); -webkit-tap-highlight-color: transparent; position: relative; }
+.notif-item:active { transform: scale(0.98); }
+.notif-item.unread { background: linear-gradient(135deg, rgba(255,61,154,0.04), rgba(155,77,255,0.04)); border-color: rgba(255,61,154,0.25); }
+html:not([data-theme="light"]) .notif-item { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+html:not([data-theme="light"]) .notif-item.unread { background: linear-gradient(135deg, rgba(255,61,154,0.08), rgba(155,77,255,0.08)); border-color: rgba(255,61,154,0.3); }
+
+.notif-icon-wrap { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; background: linear-gradient(135deg, rgba(255,61,154,0.15), rgba(155,77,255,0.15)); }
+.notif-important .notif-icon-wrap { background: linear-gradient(135deg, rgba(239,68,68,0.18), rgba(245,158,11,0.15)); }
+
+.notif-body { flex: 1; min-width: 0; }
+.notif-title { font-size: 13px; font-weight: 900; color: #1f2937; margin-bottom: 3px; font-family: 'Tajawal', sans-serif; line-height: 1.3; }
+html:not([data-theme="light"]) .notif-title { color: #e8ecf5; }
+.notif-text { font-size: 11.5px; color: #6b7280; font-family: 'Tajawal', sans-serif; line-height: 1.5; margin-bottom: 4px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+html:not([data-theme="light"]) .notif-text { color: #9ca3af; }
+.notif-time { font-size: 10px; color: #9ca3af; font-weight: 600; font-family: 'Tajawal', sans-serif; }
+.notif-badge-important { position: absolute; top: 10px; left: 10px; padding: 2px 8px; background: linear-gradient(135deg, #ef4444, #f59e0b); color: #fff; font-size: 8px; font-weight: 900; border-radius: 6px; font-family: 'Tajawal', sans-serif; }
+.notif-unread-dot { position: absolute; top: 14px; left: 14px; width: 8px; height: 8px; border-radius: 50%; background: #FF3D9A; box-shadow: 0 0 0 3px rgba(255,61,154,0.2); }
+</style>
+
 <style id="chz-haraj-hero-css">
 /* ═══ حراج شيزن — Hero Banner ═══ */
 .chz-haraj-hero {
@@ -7905,7 +7977,48 @@ body.chz-auth-ok {
     </div>
 
     <!-- NOTIFICATIONS -->
-    <div class="screen" id="sc-notifications"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('home')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2" data-i18n="notifications.title" data-i18n-ar="الإشعارات"><span data-i18n="settings.notifications" data-i18n-ar="الإشعارات">الإشعارات</span></div><button style="margin-right:auto;background:none;border:none;color:#D81B60;font-family:inherit;font-size:12px;font-weight:bold;" onclick="APP.clearAllNotifs()">مسح الكل 🗑️</button></div><div style="padding:4px 20px 20px;" id="notif-list"></div></div>
+    <!-- ═══ NOTIFICATIONS v71 ═══ -->
+    <div class="screen" id="sc-notifications">
+      <div class="st"></div>
+      <div class="notif-header">
+        <button class="notif-back" onclick="APP.goTab('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="notif-header-text">
+          <div class="notif-header-title">🔔 الإشعارات</div>
+          <div class="notif-header-sub" id="notif-count">جاري التحميل...</div>
+        </div>
+        <button class="notif-clear" onclick="APP.clearAllNotifs()" title="مسح الكل">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+
+      <!-- External notifications toggle -->
+      <div class="notif-toggle-wrap" id="notif-toggle-wrap">
+        <div class="notif-toggle-icon" id="notif-toggle-icon">🔔</div>
+        <div class="notif-toggle-text">
+          <div class="notif-toggle-title">الإشعارات الخارجية</div>
+          <div class="notif-toggle-sub" id="notif-toggle-sub">ستصلك تنبيهات فورية على الهاتف</div>
+          <div class="notif-toggle-note">✓ الإشعارات المهمة تصل دائماً</div>
+        </div>
+        <div class="notif-toggle-switch" id="notif-toggle-switch" onclick="APP.toggleExternalNotifs()">
+          <div class="notif-toggle-knob"></div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="notif-filters" id="notif-filters">
+        <button class="notif-filter active" data-type="all" onclick="APP.filterNotifs('all',this)">الكل</button>
+        <button class="notif-filter" data-type="order" onclick="APP.filterNotifs('order',this)">🛒 طلبات</button>
+        <button class="notif-filter" data-type="booking" onclick="APP.filterNotifs('booking',this)">✈️ حجوزات</button>
+        <button class="notif-filter" data-type="listing" onclick="APP.filterNotifs('listing',this)">🏪 حراج</button>
+        <button class="notif-filter" data-type="points" onclick="APP.filterNotifs('points',this)">💎 نقاط</button>
+      </div>
+
+      <div class="notif-list" id="notif-list">
+        <div class="notif-loading">جاري التحميل...</div>
+      </div>
+    </div>
 
     <!-- FAVORITES -->
     <div class="screen" id="sc-favorites"><div class="st"></div><div class="sh2"><button class="back" onclick="APP.goTab('profile')"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button><div class="st2" data-i18n="favorites.title" data-i18n-ar="المفضلة">المفضلة</div></div><div class="sec" style="padding-top:8px;"><div class="prods" id="fav-list"></div></div></div>
@@ -10468,6 +10581,7 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 <script src="firebase-config.js"></script>
 <script src="firebase-service.js"></script>
 <script src="notification-sound.js"></script>
+<script src="sound-haptic.js"></script>
 <script src="web-push-client.js"></script>
 <script>
 
@@ -19090,6 +19204,462 @@ document.addEventListener('keydown', function(e) {
   new MutationObserver(updateIcons).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   console.log('[theme v70] auto ✓');
+})();
+</script>
+<script id="chz-notif-v71-js">
+(function(){
+  'use strict';
+  window.APP = window.APP || {};
+  
+  var filterType = 'all';
+  var allNotifs = [];
+  var externalDisabled = false;
+  var prefsLoaded = false;
+  
+  // ── Load prefs ──
+  async function loadPrefs() {
+    if (!window.FB || !FB.currentUser || !FB.db) return;
+    try {
+      var doc = await FB.db.collection('users').doc(FB.currentUser.uid).get();
+      if (doc.exists) {
+        var prefs = doc.data().notif_prefs || {};
+        externalDisabled = prefs.externalDisabled === true;
+      }
+    } catch(e) { console.warn('[prefs]', e.message); }
+    prefsLoaded = true;
+    updateToggleUI();
+  }
+  
+  function updateToggleUI() {
+    var wrap = document.getElementById('notif-toggle-wrap');
+    var icon = document.getElementById('notif-toggle-icon');
+    var sub = document.getElementById('notif-toggle-sub');
+    if (!wrap) return;
+    if (externalDisabled) {
+      wrap.classList.add('off');
+      if (icon) icon.textContent = '🔕';
+      if (sub) sub.textContent = 'لن تصلك إشعارات تلقائية على الهاتف';
+    } else {
+      wrap.classList.remove('off');
+      if (icon) icon.textContent = '🔔';
+      if (sub) sub.textContent = 'ستصلك تنبيهات فورية على الهاتف';
+    }
+  }
+  
+  window.APP.toggleExternalNotifs = async function() {
+    if (!window.FB || !FB.currentUser || !FB.db) {
+      if (window.toast) window.toast('سجل دخول أولاً', 'err');
+      return;
+    }
+    externalDisabled = !externalDisabled;
+    updateToggleUI();
+    try {
+      await FB.db.collection('users').doc(FB.currentUser.uid).set({
+        notif_prefs: { externalDisabled: externalDisabled }
+      }, { merge: true });
+      if (window.toast) window.toast(externalDisabled ? '🔕 تم إيقاف الإشعارات الخارجية' : '🔔 تم تفعيل الإشعارات الخارجية', 'suc');
+    } catch(e) {
+      console.warn('[toggle]', e.message);
+      externalDisabled = !externalDisabled;
+      updateToggleUI();
+      if (window.toast) window.toast('فشل الحفظ', 'err');
+    }
+  };
+  
+  window.APP.filterNotifs = function(type, btn) {
+    filterType = type;
+    document.querySelectorAll('.notif-filter').forEach(function(b){ b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    renderNotifs();
+  };
+  
+  function fmtDate(ts) {
+    if (!ts) return '';
+    var d = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts);
+    if (isNaN(d.getTime())) return '';
+    var now = new Date();
+    var diffDays = Math.floor((now - d) / 86400000);
+    if (diffDays === 0) {
+      return 'اليوم ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+    if (diffDays === 1) {
+      return 'أمس ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+    if (diffDays < 7) {
+      var days = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+      return days[d.getDay()];
+    }
+    return d.getDate() + '/' + (d.getMonth()+1);
+  }
+  
+  function dayGroup(ts) {
+    if (!ts) return 'أقدم';
+    var d = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts);
+    var now = new Date();
+    var diffDays = Math.floor((now - d) / 86400000);
+    if (diffDays === 0) return 'اليوم';
+    if (diffDays === 1) return 'أمس';
+    if (diffDays < 7) return 'هذا الأسبوع';
+    if (diffDays < 30) return 'هذا الشهر';
+    return 'أقدم';
+  }
+  
+  function renderNotifs() {
+    var c = document.getElementById('notif-list');
+    var count = document.getElementById('notif-count');
+    if (!c) return;
+    
+    var filtered = allNotifs;
+    if (filterType !== 'all') {
+      filtered = allNotifs.filter(function(n){ return n.type === filterType; });
+    }
+    
+    if (count) {
+      var unread = allNotifs.filter(function(n){ return n.read !== true; }).length;
+      count.textContent = unread > 0 ? unread + ' غير مقروء' : allNotifs.length + ' إشعار';
+    }
+    
+    if (!filtered.length) {
+      c.innerHTML = '<div class="notif-empty"><div class="notif-empty-icon">🔕</div>لا توجد إشعارات</div>';
+      return;
+    }
+    
+    // Group by day
+    var groups = {};
+    filtered.forEach(function(n) {
+      var g = dayGroup(n.createdAt);
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(n);
+    });
+    
+    var order = ['اليوم', 'أمس', 'هذا الأسبوع', 'هذا الشهر', 'أقدم'];
+    var html = '';
+    order.forEach(function(g) {
+      if (!groups[g]) return;
+      html += '<div class="notif-day-group">' + g + '</div>';
+      groups[g].forEach(function(n) {
+        var unread = n.read !== true;
+        var important = n.important === true;
+        var cls = 'notif-item' + (unread ? ' unread' : '') + (important ? ' notif-important' : '');
+        html += '<div class="' + cls + '" onclick="APP.openNotif(\'' + n.id + '\')">' +
+          (unread ? '<div class="notif-unread-dot"></div>' : '') +
+          (important ? '<div class="notif-badge-important">مهم</div>' : '') +
+          '<div class="notif-icon-wrap">' + (n.icon || '🔔') + '</div>' +
+          '<div class="notif-body">' +
+            '<div class="notif-title">' + escapeHtml(n.title || '') + '</div>' +
+            '<div class="notif-text">' + escapeHtml(n.body || '') + '</div>' +
+            '<div class="notif-time">' + fmtDate(n.createdAt) + '</div>' +
+          '</div>' +
+        '</div>';
+      });
+    });
+    
+    c.innerHTML = html;
+  }
+  
+  function escapeHtml(s) {
+    return String(s||'').replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  
+  window.APP.openNotif = async function(id) {
+    var n = allNotifs.find(function(x){ return x.id === id; });
+    if (!n) return;
+    
+    // Mark as read
+    if (!n.read && window.FB && FB.db) {
+      try {
+        await FB.db.collection('notifications').doc(id).update({ read: true });
+        n.read = true;
+        renderNotifs();
+      } catch(e) {}
+    }
+    
+    // Navigate via deepLink
+    if (n.deepLink) {
+      var parts = n.deepLink.split('/');
+      var target = parts[0];
+      if (target === 'orders') {
+        window.APP.goTab('orders');
+      } else if (target === 'booking') {
+        window.APP.goTab('booking');
+      } else if (target === 'commerce') {
+        window.APP.goTab('commerce');
+      } else if (target === 'points') {
+        window.APP.goTab('points');
+      } else if (target === 'profile') {
+        window.APP.goTab('profile');
+      }
+    }
+  };
+  
+  // ── Load & watch notifications ──
+  function loadNotifs() {
+    if (!window.FB || !FB.currentUser || !FB.db) { setTimeout(loadNotifs, 800); return; }
+    if (window.__notifUnsub) return;
+    
+    window.__notifUnsub = FB.db.collection('notifications')
+      .where('userId', '==', FB.currentUser.uid)
+      .limit(100)
+      .onSnapshot(function(snap) {
+        allNotifs = [];
+        snap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          allNotifs.push(d);
+        });
+        allNotifs.sort(function(a, b) {
+          var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+          var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+          return tb - ta;
+        });
+        renderNotifs();
+      }, function(e) {
+        console.warn('[notifs]', e.message);
+      });
+  }
+  
+  // Hook goTab to load when entering notifications
+  function hookGoTab() {
+    if (!window.APP || !window.APP.goTab) { setTimeout(hookGoTab, 400); return; }
+    if (window.APP._notifHook) return;
+    window.APP._notifHook = true;
+    var orig = window.APP.goTab;
+    window.APP.goTab = function(id, el) {
+      orig.apply(this, arguments);
+      if (id === 'notifications') {
+        setTimeout(function() {
+          loadPrefs();
+          loadNotifs();
+        }, 100);
+      }
+    };
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ loadPrefs(); loadNotifs(); hookGoTab(); });
+  } else {
+    loadPrefs();
+    loadNotifs();
+    hookGoTab();
+  }
+  
+  console.log('[notif v71] ready');
+})();
+</script>
+<script id="chz-feedback-hooks-v72">
+(function(){
+  'use strict';
+  function install(){
+    if (!window.APP || !window.ChizenFeedback) { setTimeout(install, 500); return; }
+    if (window.APP._fbHooksV72) return;
+    window.APP._fbHooksV72 = true;
+    var Sound = window.ChizenFeedback;
+    
+    // ═══ Purchase success ═══
+    var origToast = window.toast;
+    if (origToast) {
+      window.toast = function(msg, type){
+        if (type === 'suc' || type === 'success') Sound.success();
+        else if (type === 'err' || type === 'error') Sound.error();
+        return origToast.apply(this, arguments);
+      };
+    }
+    
+    // ═══ Add to cart ═══
+    var origAddCart = window.APP.addCart;
+    if (origAddCart) {
+      window.APP.addCart = function(){
+        var r = origAddCart.apply(this, arguments);
+        Sound.success();
+        return r;
+      };
+    }
+    
+    // ═══ Toggle theme — subtle ═══
+    var origToggle = window.APP.toggleThemeMode;
+    if (origToggle) {
+      window.APP.toggleThemeMode = function(){
+        Sound.toggle();
+        return origToggle.apply(this, arguments);
+      };
+    }
+    
+    // ═══ Toggle external notifs ═══
+    var origToggleNotif = window.APP.toggleExternalNotifs;
+    if (origToggleNotif) {
+      window.APP.toggleExternalNotifs = function(){
+        Sound.toggle();
+        return origToggleNotif.apply(this, arguments);
+      };
+    }
+    
+    // ═══ Order placed successfully (after saveBooking) ═══
+    var origShowSuccess = window.showSuccess;
+    if (origShowSuccess) {
+      window.showSuccess = function(opts){
+        Sound.purchase();
+        return origShowSuccess.apply(this, arguments);
+      };
+    }
+    
+    // ═══ Points earned ═══
+    var origPoints = window.APP.addPoints || null;
+    if (origPoints) {
+      window.APP.addPoints = function(){
+        Sound.coin();
+        return origPoints.apply(this, arguments);
+      };
+    }
+    
+    // ═══ New notification (onSnapshot triggers updateNotifB) ═══
+    var lastNotifCount = 0;
+    var origUpdateNotifB = window.APP.updateNotifB;
+    if (origUpdateNotifB) {
+      window.APP.updateNotifB = function(){
+        var r = origUpdateNotifB.apply(this, arguments);
+        try {
+          var c = (this.notifications || []).length;
+          if (c > lastNotifCount && lastNotifCount > 0) {
+            // New notification arrived (not initial load)
+            Sound.notify();
+          }
+          lastNotifCount = c;
+        } catch(e) {}
+        return r;
+      };
+    }
+    
+    console.log('[feedback hooks v72] installed');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install);
+  } else {
+    install();
+  }
+})();
+</script>
+<style id="chz-feedback-settings-v72">
+.chz-feedback-section { padding: 4px 20px; margin-bottom: 12px; }
+.chz-feedback-title { font-size: 11px; font-weight: 900; color: #9ca3af; padding: 8px 4px; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Tajawal', sans-serif; }
+.chz-feedback-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--nav, #fff); border: 1px solid rgba(155,77,255,0.1); border-radius: 14px; margin-bottom: 8px; direction: rtl; }
+html:not([data-theme="light"]) .chz-feedback-row { background: #1e2438; border-color: rgba(255,255,255,0.08); }
+.chz-feedback-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,61,154,0.12), rgba(155,77,255,0.12)); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.chz-feedback-text { flex: 1; min-width: 0; }
+.chz-feedback-label { font-size: 13px; font-weight: 800; color: var(--chz-text, #1f2937); margin-bottom: 2px; font-family: 'Tajawal', sans-serif; }
+html:not([data-theme="light"]) .chz-feedback-label { color: #e8ecf5; }
+.chz-feedback-sub { font-size: 10.5px; color: #9ca3af; font-weight: 600; font-family: 'Tajawal', sans-serif; }
+.chz-feedback-switch { width: 48px; height: 28px; border-radius: 14px; background: #d1d5db; position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.25s ease; -webkit-tap-highlight-color: transparent; }
+html:not([data-theme="light"]) .chz-feedback-switch { background: #4b5563; }
+.chz-feedback-switch.on { background: linear-gradient(135deg, #FF3D9A, #9B4DFF); }
+.chz-feedback-knob { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: left 0.25s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.chz-feedback-switch.on .chz-feedback-knob { left: 23px; }
+</style>
+
+<div class="chz-feedback-section" id="chz-feedback-settings">
+  <div class="chz-feedback-title">🔊 الصوت والاهتزاز</div>
+  <div class="chz-feedback-row" onclick="APP.toggleSounds()">
+    <div class="chz-feedback-icon">🔊</div>
+    <div class="chz-feedback-text">
+      <div class="chz-feedback-label">أصوات التطبيق</div>
+      <div class="chz-feedback-sub">نقرات، نجاح، تنبيهات</div>
+    </div>
+    <div class="chz-feedback-switch" id="chz-sounds-switch" onclick="event.stopPropagation();APP.toggleSounds()">
+      <div class="chz-feedback-knob"></div>
+    </div>
+  </div>
+  <div class="chz-feedback-row" onclick="APP.toggleHaptics()">
+    <div class="chz-feedback-icon">📳</div>
+    <div class="chz-feedback-text">
+      <div class="chz-feedback-label">اهتزاز</div>
+      <div class="chz-feedback-sub">ردود فعل لمسية</div>
+    </div>
+    <div class="chz-feedback-switch" id="chz-haptics-switch" onclick="event.stopPropagation();APP.toggleHaptics()">
+      <div class="chz-feedback-knob"></div>
+    </div>
+  </div>
+</div>
+
+<script id="chz-feedback-toggles-v72">
+(function(){
+  'use strict';
+  function updateUI(){
+    if (!window.ChizenFeedback) return;
+    var s = document.getElementById('chz-sounds-switch');
+    var h = document.getElementById('chz-haptics-switch');
+    if (s) s.classList.toggle('on', window.ChizenFeedback.soundsEnabled);
+    if (h) h.classList.toggle('on', window.ChizenFeedback.hapticsEnabled);
+  }
+  
+  window.APP = window.APP || {};
+  window.APP.toggleSounds = function(){
+    if (!window.ChizenFeedback) return;
+    var on = !window.ChizenFeedback.soundsEnabled;
+    window.ChizenFeedback.setSounds(on);
+    updateUI();
+    if (on) window.ChizenFeedback.success();
+    if (window.toast) try { window.toast(on ? '🔊 تم تفعيل الصوت' : '🔇 تم إيقاف الصوت', 'suc'); } catch(e){}
+  };
+  window.APP.toggleHaptics = function(){
+    if (!window.ChizenFeedback) return;
+    var on = !window.ChizenFeedback.hapticsEnabled;
+    window.ChizenFeedback.setHaptics(on);
+    updateUI();
+    if (on) window.ChizenFeedback.vibrate('success');
+    if (window.toast) try { window.toast(on ? '📳 تم تفعيل الاهتزاز' : '📴 تم إيقاف الاهتزاز', 'suc'); } catch(e){}
+  };
+  
+  // Insert settings section into Settings screen
+  function insertIntoSettings(){
+    var sc = document.getElementById('sc-settings');
+    if (!sc) { setTimeout(insertIntoSettings, 600); return; }
+    if (document.getElementById('chz-feedback-settings')) {
+      // Already there — just update UI
+      updateUI();
+      return;
+    }
+    var section = document.createElement('div');
+    section.className = 'chz-feedback-section';
+    section.id = 'chz-feedback-settings';
+    section.innerHTML =
+      '<div class="chz-feedback-title">🔊 الصوت والاهتزاز</div>' +
+      '<div class="chz-feedback-row" onclick="APP.toggleSounds()">' +
+        '<div class="chz-feedback-icon">🔊</div>' +
+        '<div class="chz-feedback-text">' +
+          '<div class="chz-feedback-label">أصوات التطبيق</div>' +
+          '<div class="chz-feedback-sub">نقرات، نجاح، تنبيهات</div>' +
+        '</div>' +
+        '<div class="chz-feedback-switch" id="chz-sounds-switch">' +
+          '<div class="chz-feedback-knob"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="chz-feedback-row" onclick="APP.toggleHaptics()">' +
+        '<div class="chz-feedback-icon">📳</div>' +
+        '<div class="chz-feedback-text">' +
+          '<div class="chz-feedback-label">اهتزاز</div>' +
+          '<div class="chz-feedback-sub">ردود فعل لمسية</div>' +
+        '</div>' +
+        '<div class="chz-feedback-switch" id="chz-haptics-switch">' +
+          '<div class="chz-feedback-knob"></div>' +
+        '</div>' +
+      '</div>';
+    // Insert after appearance section
+    var firstSec = sc.querySelector('.sgt');
+    if (firstSec && firstSec.nextSibling) {
+      firstSec.parentNode.insertBefore(section, firstSec.nextSibling);
+    } else {
+      sc.appendChild(section);
+    }
+    updateUI();
+    console.log('[feedback settings] inserted');
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(insertIntoSettings, 1500); });
+  } else {
+    setTimeout(insertIntoSettings, 1500);
+  }
 })();
 </script>
 </body>
