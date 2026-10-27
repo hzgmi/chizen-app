@@ -1,6 +1,45 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- ═══ Cache Buster v77 ═══ -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script id="chz-cache-bust-v77">
+(function(){
+  'use strict';
+  var VERSION = 'v77';
+  var STORED = 'chizen_html_version';
+  
+  // 1. Check stored version
+  var prevVersion = null;
+  try { prevVersion = localStorage.getItem(STORED); } catch(e) {}
+  
+  // 2. If version changed → unregister all SW + clear caches
+  if (prevVersion && prevVersion !== VERSION) {
+    console.log('[cache-bust] version changed', prevVersion, '→', VERSION);
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r){ r.unregister(); });
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(keys) {
+        keys.forEach(function(k){ caches.delete(k); });
+      });
+    }
+  }
+  
+  // 3. Store current version
+  try { localStorage.setItem(STORED, VERSION); } catch(e) {}
+  
+  // 4. Force single reload if SW controlled page with old cache
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    // Already controlled — fine
+  }
+})();
+</script>
+
 <!-- ═══ AUTH GUARD v60 ═══ -->
 <style id="chz-auth-guard-v61">
   html:not(.chz-auth-ok) body {
