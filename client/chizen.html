@@ -8098,7 +8098,7 @@ body.chz-auth-ok {
           <div class="notif-toggle-sub" id="notif-toggle-sub">ستصلك تنبيهات فورية على الهاتف</div>
           <div class="notif-toggle-note">✓ الإشعارات المهمة تصل دائماً</div>
         </div>
-        <div class="notif-toggle-switch" id="notif-toggle-switch" onclick="APP.toggleExternalNotifs()">
+        <div class="notif-toggle-switch" id="notif-toggle-switch" data-sound="off" onclick="APP.toggleExternalNotifs()">
           <div class="notif-toggle-knob"></div>
         </div>
       </div>
@@ -19667,7 +19667,7 @@ html:not([data-theme="light"]) .chz-feedback-switch { background: #4b5563; }
       <div class="chz-feedback-label">أصوات التطبيق</div>
       <div class="chz-feedback-sub">نقرات، نجاح، تنبيهات</div>
     </div>
-    <div class="chz-feedback-switch" id="chz-sounds-switch" onclick="event.stopPropagation();APP.toggleSounds()">
+    <div class="chz-feedback-switch" id="chz-sounds-switch" data-sound="off" onclick="event.stopPropagation();APP.toggleSounds()">
       <div class="chz-feedback-knob"></div>
     </div>
   </div>
@@ -19677,7 +19677,7 @@ html:not([data-theme="light"]) .chz-feedback-switch { background: #4b5563; }
       <div class="chz-feedback-label">اهتزاز</div>
       <div class="chz-feedback-sub">ردود فعل لمسية</div>
     </div>
-    <div class="chz-feedback-switch" id="chz-haptics-switch" onclick="event.stopPropagation();APP.toggleHaptics()">
+    <div class="chz-feedback-switch" id="chz-haptics-switch" data-sound="off" onclick="event.stopPropagation();APP.toggleHaptics()">
       <div class="chz-feedback-knob"></div>
     </div>
   </div>
@@ -19856,6 +19856,127 @@ html:not([data-theme="light"]) .chz-feedback-switch { background: #4b5563; }
   }
   
   console.log('[notif-refresh UI] ready');
+})();
+</script>
+<script id="chz-v74-toggle-fix">
+(function(){
+  'use strict';
+  function install(){
+    if (!window.APP || !window.ChizenFeedback) { setTimeout(install, 500); return; }
+    if (window.APP._v74Fix) return;
+    window.APP._v74Fix = true;
+    // Block v72 hook from re-wrapping
+    window.APP._fbHooksV72 = true;
+    
+    var isProcessing = false;
+    
+    window.APP.toggleExternalNotifs = async function(){
+      if (!window.FB || !FB.currentUser || !FB.db) {
+        if (window.toast) window.toast('سجل دخول أولاً', 'err');
+        return;
+      }
+      if (isProcessing) { console.log('[v74] debounce'); return; }
+      isProcessing = true;
+      
+      // Read authoritative state from Firestore
+      var currentDisabled = false;
+      try {
+        var doc = await FB.db.collection('users').doc(FB.currentUser.uid).get();
+        if (doc.exists) {
+          var prefs = doc.data().notif_prefs || {};
+          currentDisabled = prefs.externalDisabled === true;
+        }
+      } catch(e) { console.warn('[v74] read:', e.message); }
+      
+      var newDisabled = !currentDisabled;
+      
+      // Update UI immediately
+      var wrap = document.getElementById('notif-toggle-wrap');
+      var icon = document.getElementById('notif-toggle-icon');
+      var sub = document.getElementById('notif-toggle-sub');
+      if (wrap) wrap.classList.toggle('off', newDisabled);
+      if (icon) icon.textContent = newDisabled ? '🔕' : '🔔';
+      if (sub) sub.textContent = newDisabled ? 'لن تصلك إشعارات تلقائية على الهاتف' : 'ستصلك تنبهات فورية على الهاتف';
+      
+      // Play sound ONCE — instant feedback
+      window.ChizenFeedback.toggle();
+      
+      try {
+        await FB.db.collection('users').doc(FB.currentUser.uid).set({
+          notif_prefs: { externalDisabled: newDisabled }
+        }, { merge: true });
+        console.log('[v74] saved:', newDisabled ? 'OFF' : 'ON');
+        
+        // Silent toast (sound already played)
+        var msg = newDisabled ? '🔕 تم إيقاف الإشعارات الخارجية' : '🔔 تم تفعيل الإشعارات الخارجية';
+        silentToast(msg, 'suc');
+        
+      } catch(e) {
+        console.error('[v74] save failed:', e.message);
+        // Revert UI
+        if (wrap) wrap.classList.toggle('off', currentDisabled);
+        if (icon) icon.textContent = currentDisabled ? '🔕' : '🔔';
+        if (sub) sub.textContent = currentDisabled ? 'لن تصلك إشعارات تلقائية على الهاتف' : 'ستصلك تنبهات فورية على الهاتف';
+        
+        window.ChizenFeedback.error();
+        silentToast('فشل الحفظ — تحقق من الاتصال', 'err');
+      } finally {
+        setTimeout(function(){ isProcessing = false; }, 400);
+      }
+    };
+    
+    // Silent toast — bypass sound
+    function silentToast(msg, type){
+      var Sound = window.ChizenFeedback;
+      var origSuc = Sound.success;
+      var origErr = Sound.error;
+      Sound.success = function(){};
+      Sound.error = function(){};
+      if (window.toast) window.toast(msg, type);
+      setTimeout(function(){
+        Sound.success = origSuc;
+        Sound.error = origErr;
+      }, 100);
+    }
+    
+    // Also replace toggleSounds/toggleHaptics to play once
+    var origToggleSounds = window.APP.toggleSounds;
+    if (origToggleSounds) {
+      window.APP.toggleSounds = function(){
+        if (!window.ChizenFeedback) return;
+        var on = !window.ChizenFeedback.soundsEnabled;
+        window.ChizenFeedback.setSounds(on);
+        // Update UI
+        var sw = document.getElementById('chz-sounds-switch');
+        if (sw) sw.classList.toggle('on', on);
+        // Play sound once only if turning on
+        if (on) window.ChizenFeedback.success();
+        silentToast(on ? '🔊 تم تفعيل الصوت' : '🔇 تم إيقاف الصوت', 'suc');
+      };
+    }
+    
+    var origToggleHaptics = window.APP.toggleHaptics;
+    if (origToggleHaptics) {
+      window.APP.toggleHaptics = function(){
+        if (!window.ChizenFeedback) return;
+        var on = !window.ChizenFeedback.hapticsEnabled;
+        window.ChizenFeedback.setHaptics(on);
+        var sw = document.getElementById('chz-haptics-switch');
+        if (sw) sw.classList.toggle('on', on);
+        if (on) window.ChizenFeedback.vibrate('success');
+        silentToast(on ? '📳 تم تفعيل الاهتزاز' : '📴 تم إيقاف الاهتزاز', 'suc');
+      };
+    }
+    
+    console.log('[v74] toggles fixed — single sound + debounce');
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install);
+  } else {
+    install();
+  }
+  setTimeout(install, 1000);
 })();
 </script>
 </body>
