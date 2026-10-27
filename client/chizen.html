@@ -20085,5 +20085,155 @@ html:not([data-theme="light"]) .chz-feedback-switch { background: #4b5563; }
   console.log('[auto-refresh v75] ready');
 })();
 </script>
+<script id="chz-onsnapshot-v76">
+(function(){
+  'use strict';
+  window.APP = window.APP || {};
+  
+  var ordersUnsub = null;
+  var bookingsUnsub = null;
+  var lastOrderHash = '';
+  var lastBookingHash = '';
+  
+  // ═══ Orders real-time ═══
+  function startOrdersListener(){
+    if (!window.FB || !FB.currentUser || !FB.db) { setTimeout(startOrdersListener, 800); return; }
+    if (ordersUnsub) return;
+    
+    ordersUnsub = FB.db.collection('orders')
+      .where('customerId', '==', FB.currentUser.uid)
+      .limit(50)
+      .onSnapshot(function(snap) {
+        if (snap.metadata.hasPendingWrites) return;
+        
+        // Build hash to detect actual changes
+        var hashParts = [];
+        var orders = [];
+        snap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          orders.push(d);
+          hashParts.push(doc.id + ':' + (d.workflowStatus || d.status || '') + ':' + (d.deliveryInfo && d.deliveryInfo.driverPhone ? '1' : '0'));
+        });
+        var newHash = hashParts.sort().join('|');
+        
+        if (newHash === lastOrderHash) return;
+        var isInitial = lastOrderHash === '';
+        lastOrderHash = newHash;
+        
+        // Update APP.orders
+        window.APP.orders = orders;
+        
+        // Re-render if on orders screen
+        var ordersScreen = document.getElementById('sc-orders');
+        if (ordersScreen && ordersScreen.classList.contains('active')) {
+          if (window.APP.renderOrders) {
+            try { window.APP.renderOrders(); } catch(e) {}
+          }
+        }
+        
+        // New order status detected (not initial)
+        if (!isInitial) {
+          var prevStatuses = window.APP._lastOrderStatuses || {};
+          var changed = false;
+          orders.forEach(function(o) {
+            var s = o.workflowStatus || o.status;
+            if (prevStatuses[o.id] && prevStatuses[o.id] !== s) {
+              changed = true;
+              console.log('[orders rt] status changed:', o.id.slice(-8), prevStatuses[o.id], '→', s);
+            }
+          });
+          var newStatuses = {};
+          orders.forEach(function(o){ newStatuses[o.id] = o.workflowStatus || o.status; });
+          window.APP._lastOrderStatuses = newStatuses;
+          
+          if (changed) {
+            // Optional: refresh notifications badge
+            if (window.updateNavBadges) setTimeout(window.updateNavBadges, 500);
+            if (window.updateBadges) setTimeout(window.updateBadges, 500);
+          }
+        } else {
+          var init = {};
+          orders.forEach(function(o){ init[o.id] = o.workflowStatus || o.status; });
+          window.APP._lastOrderStatuses = init;
+        }
+        
+        console.log('[orders rt] ' + orders.length + ' orders (hash changed)');
+      }, function(err) {
+        console.warn('[orders rt]', err.message);
+        ordersUnsub = null;
+        setTimeout(startOrdersListener, 5000);
+      });
+  }
+  
+  // ═══ Bookings real-time ═══
+  function startBookingsListener(){
+    if (!window.FB || !FB.currentUser || !FB.db) { setTimeout(startBookingsListener, 800); return; }
+    if (bookingsUnsub) return;
+    
+    bookingsUnsub = FB.db.collection('bookings')
+      .where('userId', '==', FB.currentUser.uid)
+      .limit(50)
+      .onSnapshot(function(snap) {
+        if (snap.metadata.hasPendingWrites) return;
+        
+        var hashParts = [];
+        var bookings = [];
+        snap.forEach(function(doc) {
+          var d = doc.data();
+          d.id = doc.id;
+          bookings.push(d);
+          hashParts.push(doc.id + ':' + (d.status || '') + ':' + (d.priceQuote && d.priceQuote.status || ''));
+        });
+        var newHash = hashParts.sort().join('|');
+        
+        if (newHash === lastBookingHash) return;
+        var isInitial = lastBookingHash === '';
+        lastBookingHash = newHash;
+        
+        window.APP.bookings = bookings;
+        console.log('[bookings rt] ' + bookings.length + ' bookings (hash changed)');
+        
+        if (!isInitial) {
+          if (window.updateNavBadges) setTimeout(window.updateNavBadges, 500);
+        }
+      }, function(err) {
+        console.warn('[bookings rt]', err.message);
+        bookingsUnsub = null;
+        setTimeout(startBookingsListener, 5000);
+      });
+  }
+  
+  // ═══ Start after user ready ═══
+  function init(){
+    if (!window.FB) { setTimeout(init, 500); return; }
+    if (window.FB.currentUser) {
+      startOrdersListener();
+      startBookingsListener();
+    } else if (window.FB.auth) {
+      window.FB.auth.onAuthStateChanged(function(u){
+        if (u) {
+          startOrdersListener();
+          startBookingsListener();
+        } else {
+          // Logout — cleanup
+          if (ordersUnsub) { try { ordersUnsub(); } catch(e){} ordersUnsub = null; }
+          if (bookingsUnsub) { try { bookingsUnsub(); } catch(e){} bookingsUnsub = null; }
+          lastOrderHash = '';
+          lastBookingHash = '';
+        }
+      });
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 1000); });
+  } else {
+    setTimeout(init, 1000);
+  }
+  
+  console.log('[onsnapshot v76] ready');
+})();
+</script>
 </body>
 </html>
