@@ -200,11 +200,37 @@
 <!-- ═══ END AUTH GUARD ═══ -->
 <script>
 (function(){
-  // اضبط data-theme فوراً قبل تحميل الصفحة
-  var saved = 'dark';
-  try { saved = localStorage.getItem('chizen_theme') || 'dark'; } catch(e){}
-  document.documentElement.setAttribute('data-theme', saved);
-  document.documentElement.classList.add(saved === 'light' ? 'chz-light' : 'chz-dark');
+  // ═══ AUTO THEME v70 — time-based ═══
+  // 06:00–18:00 = light (day) | 18:00–06:00 = dark (night)
+  var mode = 'auto';
+  try { mode = localStorage.getItem('chizen_theme_mode') || 'auto'; } catch(e){}
+  var theme;
+  if (mode === 'auto') {
+    var hh = new Date().getHours();
+    theme = (hh >= 6 && hh < 18) ? 'light' : 'dark';
+  } else {
+    theme = mode;
+  }
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.classList.add(theme === 'light' ? 'chz-light' : 'chz-dark');
+  window.__chzThemeMode = mode;
+  window.__chzThemeApplied = theme;
+  // Periodic check every 60s
+  setInterval(function(){
+    var m = 'auto';
+    try { m = localStorage.getItem('chizen_theme_mode') || 'auto'; } catch(e){}
+    if (m !== 'auto') return;
+    var hr = new Date().getHours();
+    var exp = (hr >= 6 && hr < 18) ? 'light' : 'dark';
+    if (window.__chzThemeApplied === exp) return;
+    document.documentElement.setAttribute('data-theme', exp);
+    document.documentElement.classList.toggle('chz-light', exp === 'light');
+    document.documentElement.classList.toggle('chz-dark', exp === 'dark');
+    window.__chzThemeApplied = exp;
+    if (typeof window.__chzUpdateThemeIcons === 'function') {
+      try { window.__chzUpdateThemeIcons(); } catch(e){}
+    }
+  }, 60000);
 })();
 </script>
 
@@ -18738,65 +18764,7 @@ document.addEventListener('keydown', function(e) {
 
 
 
-<script id="chz-theme-v67">
-(function(){
-  'use strict';
-  
-  // ─── THEME TOGGLE (self-contained) ───
-  window.APP = window.APP || {};
-  
-  function updateIcons(){
-    var theme = document.documentElement.getAttribute('data-theme') || 'dark';
-    var isLight = theme === 'light';
-    document.querySelectorAll('.chz-moon-icon').forEach(function(m){ 
-      m.style.display = isLight ? 'none' : 'block'; 
-    });
-    document.querySelectorAll('.chz-sun-icon').forEach(function(s){ 
-      s.style.display = isLight ? 'block' : 'none'; 
-    });
-  }
-  
-  function applyTheme(theme){
-    document.documentElement.setAttribute('data-theme', theme);
-    if (theme === 'light') {
-      document.documentElement.classList.remove('chz-dark');
-      document.documentElement.classList.add('chz-light');
-    } else {
-      document.documentElement.classList.remove('chz-light');
-      document.documentElement.classList.add('chz-dark');
-    }
-    try { localStorage.setItem('chizen_theme', theme); } catch(e) {}
-    updateIcons();
-  }
-  
-  window.APP.toggleThemeMode = function(){
-    var current = document.documentElement.getAttribute('data-theme') || 'dark';
-    var next = current === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-    console.log('[theme] →', next);
-    
-    // If existing app has a setTheme function, call it
-    if (window.APP.setTheme && typeof window.APP.setTheme === 'function' && window.APP.setTheme !== window.APP.toggleThemeMode) {
-      try { window.APP.setTheme(next); } catch(e) {}
-    }
-  };
-  
-  // Init icons on load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateIcons);
-  } else {
-    updateIcons();
-  }
-  
-  // Watch for external theme changes
-  new MutationObserver(updateIcons).observe(document.documentElement, { 
-    attributes: true, 
-    attributeFilter: ['data-theme'] 
-  });
-  
-  console.log('[theme v67] ready');
-})();
-</script>
+
 
 <script id="chz-orders-v69-js">
 (function(){
@@ -19041,5 +19009,88 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
+<script id="chz-theme-v70">
+(function(){
+  'use strict';
+  window.APP = window.APP || {};
+
+  function updateIcons(){
+    var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    var isLight = theme === 'light';
+    document.querySelectorAll('.chz-moon-icon').forEach(function(m){ m.style.display = isLight ? 'none' : 'block'; });
+    document.querySelectorAll('.chz-sun-icon').forEach(function(s){ s.style.display = isLight ? 'block' : 'none'; });
+  }
+  window.__chzUpdateThemeIcons = updateIcons;
+
+  function apply(theme, mode){
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('chz-light', theme === 'light');
+    document.documentElement.classList.toggle('chz-dark', theme === 'dark');
+    window.__chzThemeApplied = theme;
+    if (mode) {
+      try { localStorage.setItem('chizen_theme_mode', mode); } catch(e){}
+      window.__chzThemeMode = mode;
+    }
+    // Clean up old key
+    try { localStorage.removeItem('chizen_theme'); } catch(e){}
+    updateIcons();
+  }
+
+  window.APP.toggleThemeMode = function(){
+    if (window.__chzLongPressed) { window.__chzLongPressed = false; return; }
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    apply(next, next);
+    if (window.toast) try { window.toast((next === 'light' ? '☀️ فاتح' : '🌙 داكن') + ' (يدوي)', 'suc'); } catch(e){}
+  };
+
+  window.APP.resetThemeAuto = function(){
+    try { localStorage.removeItem('chizen_theme_mode'); } catch(e){}
+    var hr = new Date().getHours();
+    var theme = (hr >= 6 && hr < 18) ? 'light' : 'dark';
+    apply(theme, 'auto');
+    if (window.toast) try { window.toast('✓ تلقائي — ' + (theme === 'light' ? 'نهار ☀️' : 'ليل 🌙'), 'suc'); } catch(e){}
+  };
+
+  function hookLongPress(){
+    var moons = document.querySelectorAll('.chz-moon-icon');
+    if (!moons.length) return;
+    moons.forEach(function(icon){
+      var btn = icon.closest('.chz-icon-box');
+      if (!btn || btn._themeHooked) return;
+      btn._themeHooked = true;
+      var timer = null;
+      function start(){
+        window.__chzLongPressed = false;
+        timer = setTimeout(function(){
+          window.__chzLongPressed = true;
+          window.APP.resetThemeAuto();
+        }, 700);
+      }
+      function end(){ if (timer) { clearTimeout(timer); timer = null; } }
+      btn.addEventListener('touchstart', start, {passive: true});
+      btn.addEventListener('touchend', end);
+      btn.addEventListener('touchcancel', end);
+      btn.addEventListener('mousedown', start);
+      btn.addEventListener('mouseup', end);
+      btn.addEventListener('mouseleave', end);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ updateIcons(); hookLongPress(); });
+  } else {
+    updateIcons();
+    hookLongPress();
+  }
+  setTimeout(hookLongPress, 800);
+  setTimeout(hookLongPress, 2000);
+  setTimeout(hookLongPress, 4000);
+
+  new MutationObserver(updateIcons).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  console.log('[theme v70] auto ✓');
+})();
+</script>
 </body>
 </html>

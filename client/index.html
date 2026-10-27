@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script id="chz-theme-auto-v70">
+(function(){
+  var mode = 'auto';
+  try { mode = localStorage.getItem('chizen_theme_mode') || 'auto'; } catch(e){}
+  var theme;
+  if (mode === 'auto') {
+    var h = new Date().getHours();
+    theme = (h >= 6 && h < 18) ? 'light' : 'dark';
+  } else {
+    theme = mode;
+  }
+  document.documentElement.classList.remove('chz-light', 'chz-dark');
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.classList.add(theme === 'light' ? 'chz-light' : 'chz-dark');
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#02051b">
