@@ -1,11 +1,12 @@
 // CHIZEN Service Worker — v58 Cache-First strategy
-const CACHE_NAME = 'chizen-v72';
+const CACHE_NAME = 'chizen-v73';
 const PRECACHE = [
   '/chizen.html',
   '/firebase-config.js',
   '/firebase-service.js',
   '/notification-sound.js',
   '/sound-haptic.js',
+  '/notif-refresh.js',
   '/web-push-client.js',
   '/chizen-extra.js',
   '/chat-widget.js',
