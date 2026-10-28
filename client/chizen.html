@@ -10705,7 +10705,7 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
       var sc = b.scale || 1;
       var px = (b.posX != null) ? b.posX : 50;
       var py = (b.posY != null) ? b.posY : 50;
-      return '<div class="v10img" style="position:absolute;inset:0;opacity:' + (i===0?'1':'0') + ';background-image:url(' + JSON.stringify(url) + ');background-size:' + (sc*100) + '% auto;background-position:' + px + '% ' + py + '%;background-repeat:no-repeat;background-color:#111;transition:opacity 0.6s ease"></div>';
+      return '<div class="v10img" style="position:absolute;inset:0;opacity:' + (i===0?'1':'0') + ';background-image:url(&quot;' + (url||'').replace(/&/g,'&amp;').replace(/"/g,'%22') + '&quot;);background-size:' + (sc*100) + '% auto;background-position:' + px + '% ' + py + '%;background-repeat:no-repeat;background-color:#111;transition:opacity 0.6s ease"></div>';
     }).join('');
 
     dots.innerHTML = currentBanners.map(function(_, i){
