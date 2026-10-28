@@ -1,5 +1,5 @@
 // CHIZEN Service Worker v77 — Smart caching
-const CACHE_NAME = 'chizen-v298';
+const CACHE_NAME = 'chizen-v299b';
 const PRECACHE = [
   '/chizen.html',
   '/firebase-config.js',

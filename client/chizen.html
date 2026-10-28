@@ -18398,65 +18398,60 @@ document.addEventListener('keydown', function(e) {
   }
 
   async function uploadFiles(files){
+    var WORKER_URL = "https://chizen-uploader.hazimchat.workers.dev";
     var urls = [];
     var errors = [];
+    
+    function compressImg(file) {
+      return new Promise(function(resolve, reject){
+        var img = new Image(), u = URL.createObjectURL(file);
+        img.onload = function(){
+          URL.revokeObjectURL(u);
+          var w = img.width, hh = img.height, md = 1400;
+          if(w > md || hh > md){
+            if(w > hh){ hh = Math.round(hh * md / w); w = md; }
+            else { w = Math.round(w * md / hh); hh = md; }
+          }
+          var c = document.createElement("canvas");
+          c.width = w; c.height = hh;
+          c.getContext("2d").drawImage(img, 0, 0, w, hh);
+          c.toBlob(function(b){ b ? resolve(b) : reject(new Error("compress")); }, "image/jpeg", 0.85);
+        };
+        img.onerror = function(){ URL.revokeObjectURL(u); reject(new Error("load")); };
+        img.src = u;
+      });
+    }
+    
     for (var i = 0; i < files.length; i++) {
       var file = files[i];
-      if (file.size > 5 * 1024 * 1024) {
-        errors.push(file.name + " (حجم كبير)");
-        continue;
-      }
-      var uploaded = false;
+      if (!file.type.startsWith("image/")) { errors.push(file.name + " (ليس صورة)"); continue; }
+      if (file.size > 10 * 1024 * 1024) { errors.push(file.name + " (أكبر من 10MB)"); continue; }
       
-      // Catbox (15s timeout)
       try {
-        console.log("[upload] catbox →", file.name);
-        var fd1 = new FormData();
-        fd1.append("reqtype", "fileupload");
-        fd1.append("fileToUpload", file);
-        var r1 = await fetchWithTimeout("https://catbox.moe/user/api.php", { method: "POST", body: fd1 }, 15000);
-        var txt1 = await r1.text();
-        if (txt1 && txt1.trim().indexOf("https://") === 0) {
-          urls.push(txt1.trim());
-          uploaded = true;
-          console.log("[upload] catbox ✓", txt1.trim());
-        } else {
-          errors.push("catbox رد غير متوقع");
-        }
+        console.log("[V299] uploading →", file.name, "(" + Math.round(file.size/1024) + "KB)");
+        var compressed = await compressImg(file);
+        console.log("[V299] compressed →", Math.round(compressed.size/1024) + "KB");
+        
+        var res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "image/jpeg" },
+          body: compressed
+        });
+        
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        var data = await res.json();
+        if (!data.url) throw new Error("لا رابط عائد");
+        
+        urls.push(data.url);
+        console.log("[V299] ✓ uploaded", data.url);
       } catch(e) {
-        console.warn("[upload] catbox ✗", e.message);
-        if (e.name === "AbortError") errors.push("catbox بطيء (15 ثانية)");
-        else errors.push("catbox: " + e.message);
-      }
-      
-      // tmpfiles (12s timeout) — احتياطي
-      if (!uploaded) {
-        try {
-          console.log("[upload] tmpfiles →", file.name);
-          var fd2 = new FormData();
-          fd2.append("file", file);
-          var r2 = await fetchWithTimeout("https://tmpfiles.org/api/v1/upload", { method: "POST", body: fd2 }, 12000);
-          var j2 = await r2.json();
-          if (j2 && j2.data && j2.data.url) {
-            urls.push(j2.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/"));
-            uploaded = true;
-            console.log("[upload] tmpfiles ✓");
-          } else {
-            errors.push("tmpfiles رد غير متوقع");
-          }
-        } catch(e) {
-          console.warn("[upload] tmpfiles ✗", e.message);
-          if (e.name === "AbortError") errors.push("tmpfiles بطيء (12 ثانية)");
-          else errors.push("tmpfiles: " + e.message);
-        }
-      }
-      
-      if (!uploaded) {
-        console.error("[upload] فشل نهائي:", file.name);
+        console.error("[V299] ✗", file.name, e.message);
+        errors.push(file.name + ": " + e.message);
       }
     }
+    
     if (!urls.length && errors.length) {
-      throw new Error("فشل رفع الصور:\n" + errors.join("\n") + "\n\nتأكد من الإنترنت أو استخدم شبكة أخرى");
+      throw new Error("فشل رفع الصور:\n" + errors.join("\n"));
     }
     return urls;
   }
@@ -18504,7 +18499,6 @@ document.addEventListener('keydown', function(e) {
         images = [manualUrl];
         console.log("[cmSubmit] using manual URL:", manualUrl);
       } else {
-        // Upload via catbox/tmpfiles
         images = await uploadFiles(APP.cmFiles);
         if (timedOut) return;
         if (!images.length) throw new Error("لم تُرفع أي صورة — استخدم حقل رابط الصورة اليدوي");
