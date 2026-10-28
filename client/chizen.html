@@ -10658,26 +10658,37 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 <script id="chz-banner-v10-js">
 (function(){
   var DEFAULT_BANNERS = [
-    'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg',
-    'https://i.ibb.co/dwtG9sPT/dwtG9sPT.jpg',
-    'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg',
-    'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg',
-    'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg'
+    {img:'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg', scale:1, posX:50, posY:50},
+    {img:'https://i.ibb.co/dwtG9sPT/dwtG9sPT.jpg', scale:1, posX:50, posY:50},
+    {img:'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg', scale:1, posX:50, posY:50},
+    {img:'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg', scale:1, posX:50, posY:50},
+    {img:'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg', scale:1, posX:50, posY:50}
   ];
-  var currentImages = DEFAULT_BANNERS.slice();
+  var currentBanners = DEFAULT_BANNERS.slice();
   var idx = 0, timer = null;
   var slideEls = [], dotEls = [];
   var sourceLabel = 'fallback';
 
+  function norm(b){
+    if (typeof b === 'string') return {img:b, scale:1, posX:50, posY:50};
+    if (!b) return null;
+    return {
+      img: b.img || '',
+      scale: (b.scale != null) ? Number(b.scale) : 1,
+      posX: (b.posX != null) ? Number(b.posX) : 50,
+      posY: (b.posY != null) ? Number(b.posY) : 50
+    };
+  }
+
   function go(i){
-    if (currentImages.length === 0) return;
-    idx = ((i % currentImages.length) + currentImages.length) % currentImages.length;
+    if (currentBanners.length === 0) return;
+    idx = ((i % currentBanners.length) + currentBanners.length) % currentBanners.length;
     slideEls.forEach(function(el, j){ el.style.opacity = (j === idx) ? 1 : 0; });
     dotEls.forEach(function(el, j){ el.classList.toggle('active', j === idx); });
   }
   function start(){
     if (timer) clearInterval(timer);
-    if (currentImages.length <= 1) return;
+    if (currentBanners.length <= 1) return;
     timer = setInterval(function(){ go(idx + 1); }, 4500);
   }
   function reset(i){ go(i); start(); }
@@ -10687,19 +10698,25 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
     var dots = document.getElementById('dots');
     if (!slides || !dots) { setTimeout(render, 200); return; }
 
-    currentImages.forEach(function(src){ var im = new Image(); im.src = src; });
-    slides.innerHTML = currentImages.map(function(src, i){
-      return '<img src="' + src + '" class="v10img" style="opacity:' + (i===0?'1':'0') + ';" alt="banner ' + (i+1) + '">';
+    currentBanners.forEach(function(b){ if(b.img){ var im = new Image(); im.src = b.img; } });
+
+    slides.innerHTML = currentBanners.map(function(b, i){
+      var url = b.img || '';
+      var sc = b.scale || 1;
+      var px = (b.posX != null) ? b.posX : 50;
+      var py = (b.posY != null) ? b.posY : 50;
+      return '<div class="v10img" style="position:absolute;inset:0;opacity:' + (i===0?'1':'0') + ';background-image:url(' + JSON.stringify(url) + ');background-size:' + (sc*100) + '% auto;background-position:' + px + '% ' + py + '%;background-repeat:no-repeat;background-color:#111;transition:opacity 0.6s ease"></div>';
     }).join('');
-    dots.innerHTML = currentImages.map(function(_, i){
+
+    dots.innerHTML = currentBanners.map(function(_, i){
       return '<div class="v10dot ' + (i===0?'active':'') + '" data-i="' + i + '"></div>';
     }).join('');
 
-    slideEls = slides.querySelectorAll('img.v10img');
+    slideEls = slides.querySelectorAll('.v10img');
     dotEls = dots.querySelectorAll('.v10dot');
 
-    if (!slides.dataset.v277Events) {
-      slides.dataset.v277Events = '1';
+    if (!slides.dataset.v278Events) {
+      slides.dataset.v278Events = '1';
       dots.addEventListener('click', function(e){
         var t = e.target.closest('.v10dot');
         if (t) reset(parseInt(t.dataset.i, 10));
@@ -10714,7 +10731,7 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 
     go(0);
     start();
-    console.log('[v277] rendered ' + currentImages.length + ' banners (' + sourceLabel + ')');
+    console.log('[v278] rendered ' + currentBanners.length + ' banners (' + sourceLabel + ')');
   }
 
   function loadFromFirestore(){
@@ -10727,20 +10744,23 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
         if (!doc.exists) return;
         var data = doc.data();
         var list = data.list || [];
-        var imgs = list
+        var banners = list
           .filter(function(b){ return b && b.img && b.active !== false; })
           .sort(function(a,b){ return (Number(a.order)||0) - (Number(b.order)||0); })
-          .map(function(b){ return b.img; });
-        if (imgs.length === 0) return;
-        if (JSON.stringify(imgs) === JSON.stringify(currentImages) && sourceLabel === 'firestore') return;
-        currentImages = imgs;
+          .map(norm)
+          .filter(function(b){ return b && b.img; });
+        if (banners.length === 0) return;
+        var sig = JSON.stringify(banners.map(function(b){ return [b.img, b.scale, b.posX, b.posY]; }));
+        var curSig = JSON.stringify(currentBanners.map(function(b){ return [b.img, b.scale, b.posX, b.posY]; }));
+        if (sig === curSig && sourceLabel === 'firestore') return;
+        currentBanners = banners;
         sourceLabel = 'firestore';
         render();
       }, function(err){
-        console.warn('[v277] Firestore error:', err);
+        console.warn('[v278] Firestore error:', err);
       });
     } catch(e){
-      console.warn('[v277] init error:', e);
+      console.warn('[v278] init error:', e);
       setTimeout(loadFromFirestore, 1000);
     }
   }
