@@ -1,0 +1,144 @@
+<script id="v302-v303-guest">
+(function(){
+  "use strict";
+  
+  var PENDING_KEY = "chizen_pending_action";
+  
+  window.__savePending = function(action){
+    try { localStorage.setItem(PENDING_KEY, JSON.stringify(action)); } catch(e){}
+  };
+  window.__popPending = function(){
+    try {
+      var p = localStorage.getItem(PENDING_KEY);
+      localStorage.removeItem(PENDING_KEY);
+      return p ? JSON.parse(p) : null;
+    } catch(e){ return null; }
+  };
+  
+  window.__showLoginModal = function(actionLabel, pendingAction){
+    if (pendingAction) window.__savePending(pendingAction);
+    var existing = document.getElementById("v303-login-modal");
+    if (existing) existing.remove();
+    var overlay = document.createElement("div");
+    overlay.id = "v303-login-modal";
+    overlay.style.cssText = "position:fixed;inset:0;z-index:2147483646;background:rgba(10,8,37,0.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px";
+    var html = "";
+    html += '<div style="background:linear-gradient(180deg,#1e1533,#0a0825);border:1px solid rgba(168,85,247,0.4);border-radius:28px;padding:32px 24px;max-width:400px;width:100%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.7)">';
+    html += '<div style="font-size:64px;margin-bottom:16px">🛍️</div>';
+    html += '<div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:8px;line-height:1.3">سجّل ' + (actionLabel || "للمتابعة") + '</div>';
+    html += '<div style="font-size:13px;color:#a78bfa;margin-bottom:22px">سجّل الآن واحصل على:</div>';
+    html += '<div style="text-align:right;margin-bottom:24px">';
+    html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;color:#fff;font-size:13px;font-weight:600"><span style="font-size:20px">🎁</span> خصم 20% على أول طلب</div>';
+    html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;color:#fff;font-size:13px;font-weight:600"><span style="font-size:20px">⭐</span> احفظ سلتك على أي جهاز</div>';
+    html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;color:#fff;font-size:13px;font-weight:600"><span style="font-size:20px">📦</span> تتبع طلباتك لحظة بلحظة</div>';
+    html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;color:#fff;font-size:13px;font-weight:600"><span style="font-size:20px">💰</span> نقاط ولاء مع كل شراء</div>';
+    html += '</div>';
+    html += '<button id="v303-register-btn" style="width:100%;padding:16px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:16px;font-family:inherit;font-weight:900;font-size:15px;cursor:pointer;margin-bottom:10px">🎁 تسجيل سريع (30 ثانية)</button>';
+    html += '<button id="v303-continue-btn" style="width:100%;padding:14px;background:transparent;color:#a78bfa;border:1px solid rgba(168,85,247,0.3);border-radius:16px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer">متابعة كزائر</button>';
+    html += '</div>';
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+    document.getElementById("v303-register-btn").onclick = function(){
+      window.location.href = "index.html";
+    };
+    document.getElementById("v303-continue-btn").onclick = function(){
+      overlay.style.opacity = "0";
+      setTimeout(function(){ overlay.remove(); }, 200);
+      try { localStorage.removeItem(PENDING_KEY); } catch(e){}
+    };
+  };
+  
+  var BLOCKED = [
+    {m: "addCart", a: "لإضافة المنتج للسلة", t: "addCart"},
+    {m: "togFav", a: "لحفظ المنتج في المفضلة", t: "togFav"},
+    {m: "goCheckout", a: "لإتمام الشراء", t: "checkout"},
+    {m: "cmSubmit", a: "لنشر إعلان في الحراج", t: "haraj"},
+    {m: "sendChatMessage", a: "لبدء محادثة", t: "chat"},
+    {m: "submitReview", a: "لكتابة تقييم", t: "review"},
+    {m: "buyPoints", a: "لشراء نقاط", t: "points"},
+    {m: "purchasePoints", a: "لشراء نقاط", t: "points"},
+    {m: "submitBooking", a: "لإتمام الحجز", t: "booking"},
+    {m: "tvlConfirmBooking", a: "لإتمام الحجز", t: "booking"},
+    {m: "goTab('cart')", a: "لعرض سلتك", t: "tab:cart"},
+    {m: 'goTab("cart")', a: "لعرض سلتك", t: "tab:cart"},
+    {m: "goTab('orders')", a: "لعرض طلباتك", t: "tab:orders"},
+    {m: 'goTab("orders")', a: "لعرض طلباتك", t: "tab:orders"},
+    {m: "goTab('profile')", a: "للوصول لحسابك", t: "tab:profile"},
+    {m: 'goTab("profile")', a: "للوصول لحسابك", t: "tab:profile"},
+    {m: "goTab('points')", a: "لعرض نقاطك", t: "tab:points"},
+    {m: 'goTab("points")', a: "لعرض نقاطك", t: "tab:points"},
+    {m: "goTab('notifications')", a: "لعرض إشعاراتك", t: "tab:notif"},
+    {m: 'goTab("notifications")', a: "لعرض إشعاراتك", t: "tab:notif"}
+  ];
+  
+  document.addEventListener("click", function(e){
+    if (!window.__isGuest()) return;
+    var el = e.target.closest && e.target.closest("[onclick]");
+    if (!el) return;
+    var oc = el.getAttribute("onclick") || "";
+    for (var i = 0; i < BLOCKED.length; i++) {
+      if (oc.indexOf(BLOCKED[i].m) !== -1) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        window.__showLoginModal(BLOCKED[i].a, {type: BLOCKED[i].t, hash: location.hash});
+        return false;
+      }
+    }
+  }, true);
+  
+  function installLateHooks(){
+    if (!window.APP) { setTimeout(installLateHooks, 1000); return; }
+    ["addCart","togFav","goCheckout","cmSubmit"].forEach(function(fn){
+      if (typeof window.APP[fn] === "function" && !window.APP[fn].__v302) {
+        var orig = window.APP[fn];
+        window.APP[fn] = function(){
+          if (window.__isGuest()) {
+            window.__showLoginModal("للمتابعة", {type: fn});
+            return;
+          }
+          return orig.apply(this, arguments);
+        };
+        window.APP[fn].__v302 = true;
+      }
+    });
+    if (typeof window.APP.goTab === "function" && !window.APP.goTab.__v302) {
+      var origGoTab = window.APP.goTab;
+      var BT = {cart: "لعرض سلتك", orders: "لعرض طلباتك", profile: "للوصول لحسابك", points: "لعرض نقاطك", notifications: "لعرض إشعاراتك"};
+      window.APP.goTab = function(id){
+        if (BT[id] && window.__isGuest()) {
+          window.__showLoginModal(BT[id], {type: "tab:"+id});
+          return;
+        }
+        return origGoTab.apply(this, arguments);
+      };
+      window.APP.goTab.__v302 = true;
+    }
+    console.log("[V302] Late hooks installed");
+  }
+  setTimeout(installLateHooks, 5000);
+  setInterval(function(){
+    if (window.APP && window.APP.goTab && !window.APP.goTab.__v302) installLateHooks();
+  }, 3000);
+  
+  function checkPending(){
+    if (!window.FB || !window.FB.auth) { setTimeout(checkPending, 500); return; }
+    window.FB.auth.onAuthStateChanged(function(u){
+      if (u) {
+        var p = window.__popPending();
+        if (p) {
+          console.log("[V302] restoring:", p);
+          setTimeout(function(){
+            try {
+              if (p.hash && location.hash !== p.hash) location.hash = p.hash;
+            } catch(e){}
+          }, 800);
+        }
+      }
+    });
+  }
+  checkPending();
+  
+  console.log("[V302+V303] Guest mode ready");
+})();
+</script>
