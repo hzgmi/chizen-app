@@ -10657,59 +10657,97 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 </script>
 <script id="chz-banner-v10-js">
 (function(){
-  var IMGS = [
+  var DEFAULT_BANNERS = [
     'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg',
     'https://i.ibb.co/dwtG9sPT/dwtG9sPT.jpg',
     'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg',
     'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg',
     'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg'
   ];
-  // preload جميع الصور في الذاكرة
-  IMGS.forEach(function(src){ var im = new Image(); im.src = src; });
-  function init(){
+  var currentImages = DEFAULT_BANNERS.slice();
+  var idx = 0, timer = null;
+  var slideEls = [], dotEls = [];
+  var sourceLabel = 'fallback';
+
+  function go(i){
+    if (currentImages.length === 0) return;
+    idx = ((i % currentImages.length) + currentImages.length) % currentImages.length;
+    slideEls.forEach(function(el, j){ el.style.opacity = (j === idx) ? 1 : 0; });
+    dotEls.forEach(function(el, j){ el.classList.toggle('active', j === idx); });
+  }
+  function start(){
+    if (timer) clearInterval(timer);
+    if (currentImages.length <= 1) return;
+    timer = setInterval(function(){ go(idx + 1); }, 4500);
+  }
+  function reset(i){ go(i); start(); }
+
+  function render(){
     var slides = document.getElementById('slides');
     var dots = document.getElementById('dots');
-    if (!slides || !dots) { setTimeout(init, 200); return; }
-    if (slides.dataset.v10 === '1') return;
-    slides.dataset.v10 = '1';
+    if (!slides || !dots) { setTimeout(render, 200); return; }
 
-    slides.innerHTML = IMGS.map(function(src, i){
+    currentImages.forEach(function(src){ var im = new Image(); im.src = src; });
+    slides.innerHTML = currentImages.map(function(src, i){
       return '<img src="' + src + '" class="v10img" style="opacity:' + (i===0?'1':'0') + ';" alt="banner ' + (i+1) + '">';
     }).join('');
-
-    dots.innerHTML = IMGS.map(function(_, i){
+    dots.innerHTML = currentImages.map(function(_, i){
       return '<div class="v10dot ' + (i===0?'active':'') + '" data-i="' + i + '"></div>';
     }).join('');
 
-    var idx = 0, timer = null;
-    var slideEls = slides.querySelectorAll('img.v10img');
-    var dotEls = dots.querySelectorAll('.v10dot');
+    slideEls = slides.querySelectorAll('img.v10img');
+    dotEls = dots.querySelectorAll('.v10dot');
 
-    function go(i){
-      idx = ((i % IMGS.length) + IMGS.length) % IMGS.length;
-      slideEls.forEach(function(el, j){ el.style.opacity = (j === idx) ? 1 : 0; });
-      dotEls.forEach(function(el, j){ el.classList.toggle('active', j === idx); });
+    if (!slides.dataset.v277Events) {
+      slides.dataset.v277Events = '1';
+      dots.addEventListener('click', function(e){
+        var t = e.target.closest('.v10dot');
+        if (t) reset(parseInt(t.dataset.i, 10));
+      });
+      var sx = 0;
+      slides.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, {passive:true});
+      slides.addEventListener('touchend', function(e){
+        var dx = e.changedTouches[0].clientX - sx;
+        if (Math.abs(dx) > 40) reset(idx + (dx < 0 ? 1 : -1));
+      }, {passive:true});
     }
-    function start(){
-      if (timer) clearInterval(timer);
-      timer = setInterval(function(){ go(idx + 1); }, 4500);
-    }
-    function reset(i){ go(i); start(); }
 
-    dots.addEventListener('click', function(e){
-      var t = e.target.closest('.v10dot');
-      if (t) reset(parseInt(t.dataset.i, 10));
-    });
-
-    var sx = 0;
-    slides.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, {passive:true});
-    slides.addEventListener('touchend', function(e){
-      var dx = e.changedTouches[0].clientX - sx;
-      if (Math.abs(dx) > 40) reset(idx + (dx < 0 ? 1 : -1));
-    }, {passive:true});
-
+    go(0);
     start();
-    console.log('[v10] banner isolated: ' + IMGS.length + ' slides, 4.5s, fade');
+    console.log('[v277] rendered ' + currentImages.length + ' banners (' + sourceLabel + ')');
+  }
+
+  function loadFromFirestore(){
+    if (typeof firebase === 'undefined' || !firebase.firestore) {
+      setTimeout(loadFromFirestore, 300);
+      return;
+    }
+    try {
+      firebase.firestore().collection('config').doc('banners').onSnapshot(function(doc){
+        if (!doc.exists) return;
+        var data = doc.data();
+        var list = data.list || [];
+        var imgs = list
+          .filter(function(b){ return b && b.img && b.active !== false; })
+          .sort(function(a,b){ return (Number(a.order)||0) - (Number(b.order)||0); })
+          .map(function(b){ return b.img; });
+        if (imgs.length === 0) return;
+        if (JSON.stringify(imgs) === JSON.stringify(currentImages) && sourceLabel === 'firestore') return;
+        currentImages = imgs;
+        sourceLabel = 'firestore';
+        render();
+      }, function(err){
+        console.warn('[v277] Firestore error:', err);
+      });
+    } catch(e){
+      console.warn('[v277] init error:', e);
+      setTimeout(loadFromFirestore, 1000);
+    }
+  }
+
+  function init(){
+    render();
+    loadFromFirestore();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
