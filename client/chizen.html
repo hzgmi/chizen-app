@@ -10726,15 +10726,19 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 
 // ================= الأقسام الأساسية المثبتة =================
 window.FIXED_CATS = [
-  { key: 'electronics', name: 'إلكترونيات',       img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop' },
-  { key: 'fashion',     name: 'أزياء',            img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=300&auto=format&fit=crop' },
-  { key: 'clothing',    name: 'ملابس',            img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=300&auto=format&fit=crop' },
-  { key: 'sports',      name: 'أدوات رياضية',     img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop' },
-  { key: 'beauty',      name: 'جمال وعطور',       img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=300&auto=format&fit=crop' },
-  { key: 'kids',        name: 'مستلزمات أطفال',   img: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=300&auto=format&fit=crop' },
-  { key: 'tools',       name: 'أدوات منزلية',     img: 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?q=80&w=300&auto=format&fit=crop' },
-  { key: 'home',        name: 'منزل وأثاث',       img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=300&auto=format&fit=crop' }
+  { key: 'electronics', name: 'إلكترونيات',        img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop' },
+  { key: 'fashion',     name: 'أزياء',             img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=300&auto=format&fit=crop' },
+  { key: 'clothing',    name: 'ملابس',             img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=300&auto=format&fit=crop' },
+  { key: 'shoes_bags',  name: 'أحذية وشنط',        img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=300&auto=format&fit=crop' },
+  { key: 'beauty',      name: 'جمال وعطور',        img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=300&auto=format&fit=crop' },
+  { key: 'kids_sports', name: 'أطفال ورياضية',     img: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=300&auto=format&fit=crop', matches: ['kids', 'sports'] },
+  { key: 'home',        name: 'منزل وأثاث',        img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=300&auto=format&fit=crop', matches: ['home', 'tools'], subcats: [
+    { key: 'home_tools',   name: 'أدوات منزلية',   matches: ['tools'] },
+    { key: 'home_kitchen', name: 'أدوات مطبخية',   matches: ['kitchen'] }
+  ]},
+  { key: 'supermarket', name: 'سوبر ماركت وبقالة', img: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=300&auto=format&fit=crop', matches: ['supermarket', 'groceries', 'food'] }
 ];
+
 // ============================================================
 
 
@@ -20273,6 +20277,53 @@ html:not([data-theme="light"]) .chz-feedback-switch { background: #4b5563; }
   
   console.log('[onsnapshot v76] ready');
 })();
+</script>
+<script>
+
+// ═══ v270: PRODUCTS CATEGORY REMAP ═══
+// يحول أدوات منزلية → منزل وأثاث، أطفال+رياضة → أطفال ورياضية، طعام → سوبر ماركت
+window.__v270Remap = function(){
+  var st = window.APP && window.APP.state;
+  if (!st || !st.products || !Array.isArray(st.products) || !st.products.length) return;
+  var needs = false;
+  for (var i = 0; i < st.products.length; i++) {
+    var p = st.products[i];
+    if (!p || p._v270) continue;
+    var c = p.category;
+    if (c === 'tools' || c === 'kids' || c === 'sports' || c === 'food' || c === 'groceries') { needs = true; break; }
+  }
+  if (!needs) return;
+  st.products = st.products.map(function(p){
+    if (!p) return p;
+    if (p._v270) return p;
+    var c = p.category;
+    var cloned = Object.assign({}, p, {_v270: true, _realCat: c});
+    if (c === 'tools') cloned.category = 'home';
+    else if (c === 'kids') cloned.category = 'kids_sports';
+    else if (c === 'sports') cloned.category = 'kids_sports';
+    else if (c === 'food') cloned.category = 'supermarket';
+    else if (c === 'groceries') cloned.category = 'supermarket';
+    return cloned;
+  });
+  try { if (window.APP && APP.renderHome) APP.renderHome(); } catch(e){}
+  try { if (window.APP && APP.renderCategory) APP.renderCategory(); } catch(e){}
+};
+setInterval(window.__v270Remap, 1200);
+window.__v270Remap();
+
+// helper للأقسام المدموجة (للاستخدام المستقبلي)
+window.__matchCat = function(productCat, selectedCat) {
+  if (!selectedCat) return true;
+  var cats = window.FIXED_CATS || [];
+  for (var i = 0; i < cats.length; i++) {
+    if (cats[i].key === selectedCat) {
+      var c = cats[i];
+      if (c.matches && Array.isArray(c.matches)) return c.matches.indexOf(productCat) !== -1;
+      return productCat === selectedCat;
+    }
+  }
+  return productCat === selectedCat;
+};
 </script>
 </body>
 </html>
