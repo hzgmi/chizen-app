@@ -11285,7 +11285,6 @@ var APP={
   },
 
   renderBanners: function() {
-    return; /* v10: disabled — v10 script handles banner */
     var s = document.getElementById('slides');
     var d = document.getElementById('dots');
     if (!s) return;
@@ -11297,7 +11296,7 @@ var APP={
       { img: 'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg' }
     ];
     var fsBanners = (this.banners || []).filter(function(b){ return b && b.img && b.img.indexOf('http') === 0; });
-    var list = DEFAULT_BANNERS; /* v9: ignore Firestore until fixed from admin */
+    var list = fsBanners.length ? fsBanners : DEFAULT_BANNERS;
     s.style.transform = 'translateX(0%)';
     if (!list.length) { s.innerHTML = ''; if (d) d.innerHTML = ''; return; }
     s.innerHTML = list.map(function(b) {
