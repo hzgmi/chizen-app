@@ -7825,7 +7825,7 @@ body.chz-auth-ok {
     <div class="cm-field">
       <label>أو الصق رابط الصورة مباشرة</label>
       <input id="cm-f-img-url" type="url" placeholder="https://i.ibb.co/...">
-      <div style="font-size:10px;color:#9ca3af;margin-top:4px;">ارفع على <a href="https://imgbb.com" target="_blank" style="color:#10b981;text-decoration:underline;">imgbb.com</a> وضع الرابط المباشر (Direct Link)</div>
+      <div style="font-size:10px;color:#9ca3af;margin-top:4px;">ارفع صورة السند مباشرة — تُحفظ بأمان</div>
     </div>
     <div id="cm-url-preview" style="display:none;margin-bottom:14px;text-align:center;">
       <img id="cm-url-preview-img" style="max-width:100%;max-height:200px;border-radius:12px;" src="">
@@ -11651,14 +11651,49 @@ var APP={
     
     try{
       // 7. رفع السند
-      var receiptUrl=null;
-      try{
-        var formData=new FormData();formData.append("image",receiptFile);
-        var res=await fetch("https://api.imgbb.com/1/upload?key=6d0b2b51c4b8d4f0e3c9f8a2b7d1e5f0",{method:"POST",body:formData});
-        var data=await res.json();
-        if(data.success && data.data && data.data.url){receiptUrl=data.data.url;}
-      }catch(upErr){console.log("Receipt upload:",upErr);}
-      if(!receiptUrl){throw new Error("فشل رفع السند — تحقق من الإنترنت وأعد المحاولة");}
+      // ═══ v297: رفع عبر Cloudflare Worker (ضغط تلقائي) ═══
+      var WORKER_URL = 'https://chizen-uploader.hazimchat.workers.dev';
+      
+      function compressReceipt(file) {
+        return new Promise(function(resolve, reject){
+          var img = new Image(), url = URL.createObjectURL(file);
+          img.onload = function(){
+            URL.revokeObjectURL(url);
+            var w = img.width, h = img.height, maxDim = 1400;
+            if(w > maxDim || h > maxDim){
+              if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+              else { w = Math.round(w * maxDim / h); h = maxDim; }
+            }
+            var canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            canvas.toBlob(function(blob){
+              if(!blob) return reject(new Error('فشل الضغط'));
+              resolve(blob);
+            }, 'image/jpeg', 0.85);
+          };
+          img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('تحميل الصورة فشل')); };
+          img.src = url;
+        });
+      }
+      
+      var receiptUrl = null;
+      try {
+        var compressed = await compressReceipt(receiptFile);
+        console.log('[V297] Original:', Math.round(receiptFile.size/1024) + 'KB → Compressed:', Math.round(compressed.size/1024) + 'KB');
+        
+        var res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'image/jpeg' },
+          body: compressed
+        });
+        if(!res.ok) throw new Error('استجابة ' + res.status);
+        var result = await res.json();
+        if(result.url) receiptUrl = result.url;
+      } catch(upErr) {
+        console.error('[V297] upload error:', upErr);
+      }
+      if(!receiptUrl) { throw new Error('فشل رفع السند — تحقق من الإنترنت'); }
       
       // 8. بناء الطلب
       var bankId=(this.selectedBank&&typeof this.selectedBank==="object")?(this.selectedBank.id||this.selectedBank.name):this.selectedBank;
@@ -12711,17 +12746,29 @@ window.addEventListener('load', function() {
     if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الرفع...'; }
     
     try {
-      var formData = new FormData();
-      formData.append('image', file);
-      var IMGBB_KEY = '0207a2f59e64d6e294ab7974e44d23aa';
-      
-      var imgRes = await fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, {
-        method: 'POST',
-        body: formData
-      });
-      var imgData = await imgRes.json();
-      
-      if (!imgData.success) throw new Error('فشل رفع الصورة');
+      // ═══ v298: Cloudflare Worker + compress ═══
+      function __compressImg(file){
+        return new Promise(function(resolve,reject){
+          var im=new Image(),u=URL.createObjectURL(file);
+          im.onload=function(){
+            URL.revokeObjectURL(u);
+            var w=im.width,hh=im.height,md=1400;
+            if(w>md||hh>md){if(w>hh){hh=Math.round(hh*md/w);w=md;}else{w=Math.round(w*md/hh);hh=md;}}
+            var c=document.createElement('canvas');c.width=w;c.height=hh;
+            c.getContext('2d').drawImage(im,0,0,w,hh);
+            c.toBlob(function(b){b?resolve(b):reject(new Error('compress failed'));},'image/jpeg',0.85);
+          };
+          im.onerror=function(){URL.revokeObjectURL(u);reject(new Error('load failed'));};
+          im.src=u;
+        });
+      }
+      var __WORKER='https://chizen-uploader.hazimchat.workers.dev';
+      var __compressed=await __compressImg(file);
+      console.log('[V298] Original:',Math.round(file.size/1024)+'KB -> Compressed:',Math.round(__compressed.size/1024)+'KB');
+      var __res=await fetch(__WORKER,{method:'POST',headers:{'Content-Type':'image/jpeg'},body:__compressed});
+      if(!__res.ok) throw new Error('فشل رفع '+__res.status);
+      var imgData=await __res.json();
+      if(!imgData.url) throw new Error('لا رابط عائد');
       
       var request = {
         userId: FB.currentUser.uid,
@@ -12729,7 +12776,7 @@ window.addEventListener('load', function() {
         userEmail: FB.currentUser.email || '',
         points: pkg.points,
         price: pkg.price,
-        receiptUrl: imgData.data.url,
+        receiptUrl: imgData.url,
         notes: notesInput ? notesInput.value.trim() : '',
         status: 'pending',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
