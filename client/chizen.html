@@ -10848,9 +10848,18 @@ var APP={
         }
         self.onUserReady(u);
       } else {
-        // ❌ Not authenticated — redirect IMMEDIATELY (no 3s wait)
-        try { console.log('[auth] no user — redirecting to login'); } catch(e){}
-        window.__chzRedirect('no-user');
+        // v300: GUEST MODE — لا redirect
+        try { console.log('[v300] guest mode activated'); } catch(e){}
+        window.__guestActive = true;
+        try { localStorage.setItem('chizen_guest', 'true'); } catch(e){}
+        document.documentElement.classList.add('chz-auth-ok');
+        var splashEl = document.getElementById('chz-splash-v63');
+        if (splashEl) {
+          splashEl.style.opacity = '0';
+          splashEl.style.transition = 'opacity 0.3s ease';
+          setTimeout(function(){ if (splashEl.parentNode) splashEl.parentNode.removeChild(splashEl); }, 350);
+        }
+        if (self.state) self.state.user = null;
       }
     });
   },
@@ -20533,6 +20542,37 @@ window.__matchCat = function(productCat, selectedCat) {
   else setup();
   setInterval(setup,1500);
 })();
+</script>
+<script>
+// ═══ v301: Guest Mode Helpers ═══
+window.__isGuest = function() {
+  if (window.FB && window.FB.currentUser) return false;
+  return window.__guestActive === true || (localStorage.getItem('chizen_guest') === 'true');
+};
+window.__checkGuest = function(action) {
+  if (window.__isGuest()) {
+    if (typeof window.__showLoginModal === 'function') {
+      window.__showLoginModal(action || 'هذه العملية');
+    } else {
+      var r = confirm('سجّل للقيام بهذه العملية.\n\nالذهاب لصفحة التسجيل؟');
+      if (r) window.location.href = 'index.html';
+    }
+    return true;
+  }
+  return false;
+};
+window.__openLogin = function() {
+  window.location.href = 'index.html';
+};
+// عند logout - امسح guest flag
+var _origLogout = window.__chzLogout;
+window.__chzLogout = function() {
+  try { localStorage.removeItem('chizen_guest'); } catch(e){}
+  window.__guestActive = false;
+  if (_origLogout) return _origLogout.apply(this, arguments);
+  if (window.FB && window.FB.auth) window.FB.auth.signOut();
+  window.location.reload();
+};
 </script>
 </body>
 </html>
