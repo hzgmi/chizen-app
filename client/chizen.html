@@ -7746,6 +7746,7 @@ body.chz-auth-ok {
     color: #ec4899 !important;
   }
 </style>
+<!-- v337-suggest-fix -->
 </head>
 <body>
 <div id="app">
@@ -12113,7 +12114,7 @@ var APP={
   
   renderCart:function(){
     var c=document.getElementById('cart-items');if(!c)return;
-    if(!this.cart.length){c.innerHTML='<div class="cempty"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p><span data-i18n="cart.empty" data-i18n-ar="سلتك فارغة">سلتك فارغة</span></p><button class="btn-p" style="margin-top:16px;max-width:200px;" onclick="APP.goTab(\'home\')">تسوق الآن</button></div>';return;}
+    if(!this.cart.length){c.innerHTML='<div class="cempty"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p><span data-i18n="cart.empty" data-i18n-ar="سلتك فارغة">سلتك فارغة</span></p><button class="btn-p" style="margin-top:16px;max-width:200px;" onclick="APP.goTab(\'home\')">تسوق الآن</button></div>'+(window.__v336RenderSuggested?window.__v336RenderSuggested():'');return;}
     var sub=this.cartTotal();
     var disc=0;if(this.appliedCoupon){disc=this.appliedCoupon.type==='percent'?Math.floor(sub*(this.appliedCoupon.value/100)):this.appliedCoupon.value;}
     var shipF=0;if(sub>0&&(!this.shipping.freeAbove||sub<this.shipping.freeAbove))shipF=this.shipping.fee||0;
@@ -12124,8 +12125,8 @@ var APP={
     var html=this.cart.map(function(i){var p=APP.getProduct(i.id);if(!p)return'';
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCart(\''+esc(p.id)+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div><div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',-1)">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',1)">+</button></div></div></div>';
     }).join('');
-    html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
-    c.innerHTML=html + (window.__v336RenderSuggested ? window.__v336RenderSuggested() : '');
+    html+=(window.__v336RenderSuggested?window.__v336RenderSuggested():'');html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
+    c.innerHTML=html;
   },
   
   applyCoupon:async function(){
