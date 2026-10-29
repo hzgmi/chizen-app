@@ -410,6 +410,216 @@ html[data-theme="light"] .theme-toggle {
 }
 </style>
 
+<style id="v308b-formal-buttons">
+/* ═══ v308b: Formal buttons (Stripe/Apple/Linear style) ═══ */
+
+/* ═══════ PRIMARY: تسجيل الدخول ═══════ */
+body .auth-panel .btn-primary {
+  position: relative;
+  width: 100%;
+  padding: 15px 20px;
+  background: #7c3aed;
+  color: #ffffff;
+  border: 1px solid rgba(124, 58, 237, 0.9);
+  border-radius: 10px;
+  font-family: 'Tajawal', -apple-system, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(124, 58, 237, 0.15);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease, border-color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body .auth-panel .btn-primary:hover:not(:disabled) {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+body .auth-panel .btn-primary:active:not(:disabled) {
+  background: #6d28d9;
+  border-color: #6d28d9;
+  transform: scale(0.985);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(124, 58, 237, 0.2);
+}
+
+body .auth-panel .btn-primary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 0 0 3px rgba(124, 58, 237, 0.25);
+}
+
+body .auth-panel .btn-primary:disabled {
+  background: #a78bfa;
+  border-color: #a78bfa;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* ═══════ PHONE: رقم الجوال ═══════ */
+body .auth-panel .btn-phone {
+  position: relative;
+  width: 100%;
+  padding: 14px 20px;
+  background: #ffffff;
+  color: #7c3aed;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: 'Tajawal', -apple-system, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body .auth-panel .btn-phone:hover:not(:disabled) {
+  background: #faf5ff;
+  border-color: #c4b5fd;
+  box-shadow: 0 1px 3px rgba(124, 58, 237, 0.08);
+}
+
+body .auth-panel .btn-phone:active:not(:disabled) {
+  background: #f3e8ff;
+  border-color: #a78bfa;
+  transform: scale(0.985);
+}
+
+body .auth-panel .btn-phone:focus-visible {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+
+/* ═══════ SOCIAL: Google / Facebook ═══════ */
+body .auth-panel .btn-social {
+  position: relative;
+  width: 100%;
+  padding: 13px 20px;
+  background: #ffffff;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: 'Tajawal', -apple-system, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body .auth-panel .btn-social:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+body .auth-panel .btn-social:active:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  transform: scale(0.985);
+}
+
+body .auth-panel .btn-social:focus-visible {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+
+/* ═══════ Dark theme ═══════ */
+html[data-theme="dark"] body .auth-panel .btn-primary {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-primary:hover:not(:disabled) {
+  background: #a78bfa;
+  border-color: #a78bfa;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-primary:active:not(:disabled) {
+  background: #7c3aed;
+  border-color: #7c3aed;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-phone {
+  background: #1e1b3a;
+  border-color: #4c3b7a;
+  color: #c4b5fd;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-phone:hover:not(:disabled) {
+  background: #2a2350;
+  border-color: #7c3aed;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-phone:active:not(:disabled) {
+  background: #1a1730;
+  border-color: #a78bfa;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-social {
+  background: #1e1b3a;
+  border-color: #4c3b7a;
+  color: #e0e7ff;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-social:hover:not(:disabled) {
+  background: #2a2350;
+  border-color: #7c3aed;
+}
+
+html[data-theme="dark"] body .auth-panel .btn-social:active:not(:disabled) {
+  background: #1a1730;
+  border-color: #a78bfa;
+}
+
+/* ═══════ Reduced motion ═══════ */
+@media (prefers-reduced-motion: reduce) {
+  body .auth-panel .btn-primary,
+  body .auth-panel .btn-phone,
+  body .auth-panel .btn-social {
+    transition: background-color 0.1s, border-color 0.1s;
+  }
+  body .auth-panel .btn-primary:active,
+  body .auth-panel .btn-phone:active,
+  body .auth-panel .btn-social:active {
+    transform: none;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="offline-banner" id="offline-banner">لا يوجد اتصال بالإنترنت</div>
