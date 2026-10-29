@@ -7234,6 +7234,40 @@ body.chz-auth-ok {
     color: #7c3aed !important;
   }
 </style>
+
+<style id="v321-guest-profile">
+  .v321-guest-banner {
+    margin: 10px 14px 14px;
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+    border-radius: 16px;
+    padding: 18px 16px;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(124,58,237,0.28);
+  }
+  .v321-guest-banner-title {
+    font-size: 15px; font-weight: 900; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .v321-guest-banner-list {
+    font-size: 11.5px; line-height: 1.85; opacity: 0.95; margin-bottom: 12px;
+  }
+  .v321-guest-banner-list div {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .v321-login-btn {
+    width: 100%; padding: 12px; background: #ffffff; color: #7c3aed;
+    border: none; border-radius: 10px; font-family: inherit; font-weight: 800;
+    font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .v321-login-btn:active { transform: scale(0.97); }
+  
+  body.chz-is-guest #sc-profile .v321-hide { display: none !important; }
+  body.chz-is-guest #sc-profile .profile-hero { display: none !important; }
+  body.chz-is-guest #sc-profile .sit[onclick*="'orders'"] { display: none !important; }
+  body.chz-is-guest #sc-profile .sit[onclick*="'favorites'"] { display: none !important; }
+  body.chz-is-guest #sc-profile .sit[onclick*="'points'"] { display: none !important; }
+  body.chz-is-guest #sc-profile .sit[onclick*="APP.logout"] { display: none !important; }
+</style>
 </head>
 <body>
 <div id="app">
@@ -20761,7 +20795,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
     });
     if (typeof window.APP.goTab === "function" && !window.APP.goTab.__v302) {
       var origGoTab = window.APP.goTab;
-      var BT = {cart: "لعرض سلتك", orders: "لعرض طلباتك", profile: "للوصول لحسابك", points: "لعرض نقاطك", notifications: "لعرض إشعاراتك"};
+      var BT = {cart: "لعرض سلتك", orders: "لعرض طلباتك", points: "لعرض نقاطك", notifications: "لعرض إشعاراتك"};
       window.APP.goTab = function(id){
         if (BT[id] && window.__isGuest()) {
           window.__showLoginModal(BT[id], {type: "tab:"+id});
@@ -20924,6 +20958,60 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       console.log("[v320] light official forced");
     }
   } catch(e){}
+})();
+</script>
+
+<script id="v321-guest-profile-js">
+(function(){
+  function applyGuestProfile(){
+    if (typeof window.__isGuest !== "function" || !window.__isGuest()) return;
+    var sc = document.getElementById("sc-profile");
+    if (!sc) return;
+    
+    if (!sc.querySelector(".v321-guest-banner")) {
+      var banner = document.createElement("div");
+      banner.className = "v321-guest-banner";
+      banner.innerHTML = '<div class="v321-guest-banner-title">🎉 سجّل للحصول على:</div>' +
+        '<div class="v321-guest-banner-list">' +
+          '<div>🎁 خصم 20% على أول طلب</div>' +
+          '<div>⭐ احفظ سلتك على أي جهاز</div>' +
+          '<div>📦 تتبع طلباتك لحظة بلحظة</div>' +
+          '<div>💰 نقاط ولاء مع كل شراء</div>' +
+        '</div>' +
+        '<button class="v321-login-btn">تسجيل الدخول الآن</button>';
+      var btn = banner.querySelector(".v321-login-btn");
+      if (btn) btn.onclick = function(){ window.location.href = "index.html"; };
+      var header = sc.querySelector(".sh2");
+      if (header && header.nextSibling) {
+        sc.insertBefore(banner, header.nextSibling);
+      } else {
+        sc.insertBefore(banner, sc.firstChild);
+      }
+      console.log("[v321] banner added");
+    }
+    
+    var sgs = sc.querySelectorAll(".sgt");
+    sgs.forEach(function(sg){
+      if (sg.textContent.indexOf("نشاطي") !== -1) sg.classList.add("v321-hide");
+    });
+  }
+  
+  function hookGoTab(){
+    if (!window.APP || !window.APP.goTab) { setTimeout(hookGoTab, 500); return; }
+    if (window.APP.goTab.__v321) return;
+    var orig = window.APP.goTab;
+    window.APP.goTab = function(id){
+      var r = orig.apply(this, arguments);
+      if (id === "profile") setTimeout(applyGuestProfile, 250);
+      return r;
+    };
+    window.APP.goTab.__v321 = true;
+    console.log("[v321] goTab hooked");
+  }
+  
+  setTimeout(hookGoTab, 1500);
+  setTimeout(applyGuestProfile, 1000);
+  setTimeout(applyGuestProfile, 3000);
 })();
 </script>
 </body>
