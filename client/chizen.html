@@ -7096,6 +7096,53 @@ body.chz-auth-ok {
     filter: drop-shadow(0 4px 20px rgba(168,85,247,0.25));
   }
 </style>
+
+<style id="v313-guest-header-css">
+  .chz-profile-group[data-v313-guest="1"] {
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.15));
+    border: 1.5px solid rgba(124,58,237,0.4);
+    border-radius: 12px;
+    padding: 8px 12px;
+    transition: all 0.15s ease;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .chz-profile-group[data-v313-guest="1"]:active {
+    transform: scale(0.97);
+    background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(236,72,153,0.25));
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-avatar {
+    background: linear-gradient(135deg, #7c3aed, #ec4899) !important;
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-txt {
+    text-align: right !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-welcome {
+    color: rgba(196,181,253,0.9) !important;
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+  }
+  html[data-theme="light"] .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
+    color: #7c3aed !important;
+  }
+  html[data-theme="light"] .chz-profile-group[data-v313-guest="1"] .chz-prof-welcome {
+    color: #ec4899 !important;
+  }
+</style>
 </head>
 <body>
 <div id="app">
@@ -20662,5 +20709,35 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
+
+<script id="v313-guest-header-js">
+(function(){
+  function setupGuestHeader(){
+    if (typeof window.__isGuest !== "function" || !window.__isGuest()) return;
+    var profile = document.querySelector(".chz-profile-group");
+    if (!profile) { setTimeout(setupGuestHeader, 500); return; }
+    if (profile.getAttribute("data-v313-guest") === "1") return;
+    
+    var nameEl = profile.querySelector(".chz-prof-name");
+    var welcomeEl = profile.querySelector(".chz-prof-welcome");
+    if (nameEl) nameEl.textContent = "تسجيل الدخول";
+    if (welcomeEl) welcomeEl.textContent = "تسوّق الآن";
+    profile.setAttribute("data-v313-guest", "1");
+    profile.setAttribute("onclick", "window.__openLogin()");
+    console.log("[v313b] guest header ready");
+  }
+  
+  // انتظر تحميل __isGuest (v301) + الهيدر
+  setTimeout(setupGuestHeader, 2000);
+  setTimeout(setupGuestHeader, 4000);
+  setInterval(setupGuestHeader, 3000);
+  
+  // إعادة الإعداد عند تسجيل الخروج
+  window.addEventListener("beforeunload", function(){
+    var profile = document.querySelector(".chz-profile-group");
+    if (profile) profile.removeAttribute("data-v313-guest");
+  });
+})();
+</script>
 </body>
 </html>
