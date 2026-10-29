@@ -7858,6 +7858,174 @@ body.chz-auth-ok {
     color: #ffffff !important;
   }
 </style>
+
+<style id="v340-search-css">
+  #v340-search-overlay {
+    position: fixed; inset: 0; z-index: 2147483000;
+    background: #faf7ff;
+    display: none; flex-direction: column;
+    font-family: Tajawal, system-ui, sans-serif;
+  }
+  html[data-theme="dark"] #v340-search-overlay { background: #0a0825; }
+  #v340-search-overlay.open { display: flex; }
+  
+  /* Header */
+  .v340-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 12px 8px;
+    background: #faf7ff;
+    border-bottom: 1px solid #e5e1f5;
+    position: sticky; top: 0; z-index: 10;
+  }
+  html[data-theme="dark"] .v340-header { background: #0a0825; border-color: #2a2350; }
+  
+  .v340-back, .v340-clear-input {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: #f0ebff; border: none;
+    color: #7c3aed; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: inherit;
+  }
+  html[data-theme="dark"] .v340-back,
+  html[data-theme="dark"] .v340-clear-input { background: #1a1535; color: #a78bfa; }
+  
+  .v340-input-wrap {
+    flex: 1; position: relative;
+  }
+  .v340-input-wrap input {
+    width: 100%; padding: 10px 40px 10px 16px;
+    background: #ffffff; border: 1.5px solid #e5e1f5;
+    border-radius: 12px; font-family: inherit; font-size: 14px;
+    color: #1a1a2e; box-sizing: border-box; outline: none;
+    transition: border-color 0.15s;
+  }
+  .v340-input-wrap input:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+  html[data-theme="dark"] .v340-input-wrap input { background: #1a1535; border-color: #4c3b7a; color: #fff; }
+  html[data-theme="dark"] .v340-input-wrap input::placeholder { color: #6b5a8a; }
+  
+  .v340-input-icon {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    color: #7c3aed; font-size: 16px; pointer-events: none;
+  }
+  html[data-theme="dark"] .v340-input-icon { color: #a78bfa; }
+  
+  /* Body */
+  .v340-body {
+    flex: 1; overflow-y: auto; padding: 12px 0 80px;
+  }
+  
+  .v340-section { padding: 0 16px; margin-bottom: 20px; }
+  .v340-section-title {
+    font-size: 13px; font-weight: 800; color: #1a1a2e;
+    margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+  }
+  html[data-theme="dark"] .v340-section-title { color: #ffffff; }
+  
+  .v340-clear-all {
+    font-size: 11px; color: #ef4444; background: transparent;
+    border: none; font-family: inherit; cursor: pointer; font-weight: 700;
+    padding: 2px 6px;
+  }
+  
+  /* Chips */
+  .v340-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .v340-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; background: #ffffff;
+    border: 1px solid #e5e1f5; border-radius: 20px;
+    font-size: 12px; font-weight: 600; color: #1a1a2e;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .v340-chip:active { transform: scale(0.96); background: #f0ebff; border-color: #a78bfa; }
+  html[data-theme="dark"] .v340-chip { background: #1a1535; border-color: #4c3b7a; color: #e0e7ff; }
+  html[data-theme="dark"] .v340-chip:active { background: #2a2350; }
+  
+  .v340-chip .v340-chip-x {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #ef4444; color: #fff; font-size: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; margin-right: 2px;
+  }
+  
+  /* Filters */
+  .v340-filters {
+    display: flex; gap: 6px; padding: 0 16px 12px;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .v340-filters::-webkit-scrollbar { display: none; }
+  .v340-filter {
+    flex-shrink: 0; padding: 7px 14px;
+    background: #ffffff; border: 1px solid #e5e1f5;
+    border-radius: 18px; font-size: 11px; font-weight: 700;
+    color: #6b7280; cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .v340-filter.active {
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    color: #fff; border-color: transparent;
+  }
+  html[data-theme="dark"] .v340-filter { background: #1a1535; border-color: #4c3b7a; color: #a78bfa; }
+  
+  /* Results */
+  .v340-results-count {
+    font-size: 12px; color: #6b7280; padding: 0 16px 10px;
+    font-weight: 600;
+  }
+  html[data-theme="dark"] .v340-results-count { color: #a78bfa; }
+  
+  .v340-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    padding: 0 16px;
+  }
+  .v340-prod {
+    background: #ffffff; border-radius: 12px;
+    overflow: hidden; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: transform 0.15s;
+  }
+  .v340-prod:active { transform: scale(0.97); }
+  html[data-theme="dark"] .v340-prod { background: #1a1535; }
+  .v340-prod-img {
+    width: 100%; aspect-ratio: 1; object-fit: cover;
+    background: #f4f6fa; display: block;
+  }
+  .v340-prod-info { padding: 8px 10px; }
+  .v340-prod-name {
+    font-size: 12px; font-weight: 700; color: #1a1a2e;
+    line-height: 1.3; margin-bottom: 4px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; min-height: 32px;
+  }
+  html[data-theme="dark"] .v340-prod-name { color: #fff; }
+  .v340-prod-price {
+    font-size: 14px; font-weight: 900; color: #ec4899;
+  }
+  
+  .v340-empty {
+    text-align: center; padding: 60px 20px; color: #6b7280;
+  }
+  html[data-theme="dark"] .v340-empty { color: #a78bfa; }
+  .v340-empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .v340-empty-text { font-size: 14px; font-weight: 700; }
+  .v340-empty-sub { font-size: 12px; margin-top: 6px; opacity: 0.7; }
+  
+  /* Product suggestions */
+  .v340-prod-scroll {
+    display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 6px;
+    scrollbar-width: none;
+  }
+  .v340-prod-scroll::-webkit-scrollbar { display: none; }
+  .v340-prod-mini {
+    flex-shrink: 0; width: 130px; background: #ffffff;
+    border-radius: 12px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  html[data-theme="dark"] .v340-prod-mini { background: #1a1535; }
+  .v340-prod-mini .v340-prod-img { aspect-ratio: 1; }
+</style>
 </head>
 <body>
 <div id="app">
@@ -21877,6 +22045,289 @@ window.__showLoginModal = function(actionLabel, pendingAction){
     addDismiss();
     hideIfDismissed();
   }, 2500);
+})();
+</script>
+
+<script id="v340-search">
+(function(){
+  var RECENT_KEY = "v340_recent_searches";
+  var MAX_RECENT = 8;
+  var currentFilter = "all";
+  var currentQuery = "";
+  
+  function getRecent(){
+    try { var s = localStorage.getItem(RECENT_KEY); return s ? JSON.parse(s) : []; } catch(e){ return []; }
+  }
+  function saveRecent(list){
+    try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, MAX_RECENT))); } catch(e){}
+  }
+  function addRecent(q){
+    q = (q||"").trim();
+    if (!q || q.length < 2) return;
+    var list = getRecent().filter(function(x){ return x.toLowerCase() !== q.toLowerCase(); });
+    list.unshift(q);
+    saveRecent(list);
+  }
+  function esc(s){ return String(s||"").replace(/[&<>"\"\x27]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\x27":"&#39;"}[c]; }); }
+  
+  function getSuggestions(){
+    return ["عطر", "آيفون", "لابتوب", "سامسونج", "شانيل", "Nike", "أريكة", "ساعة", "كاميرا", "سجادة"];
+  }
+  
+  function getCategories(){
+    var cats = {};
+    if (window.APP && window.APP.products) {
+      window.APP.products.forEach(function(p){
+        if (p.category) cats[p.category] = (cats[p.category]||0)+1;
+      });
+    }
+    return cats;
+  }
+  
+  var CAT_LABELS = {
+    electronics: "📱 إلكترونيات", fashion: "👗 أزياء", clothing: "👕 ملابس",
+    shoes_bags: "👟 أحذية", beauty: "💄 جمال", kids_sports: "⚽ أطفال",
+    home: "🛋️ منزل", supermarket: "🛒 سوبرماركت"
+  };
+  
+  function buildOverlay(){
+    if (document.getElementById("v340-search-overlay")) return;
+    var ov = document.createElement("div");
+    ov.id = "v340-search-overlay";
+    ov.innerHTML =
+      '<div class="v340-header">' +
+        '<button class="v340-back" id="v340-back">←</button>' +
+        '<div class="v340-input-wrap">' +
+          '<input type="text" id="v340-input" placeholder="ابحث عن منتج، ماركة..." autocomplete="off">' +
+          '<span class="v340-input-icon">🔍</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="v340-body" id="v340-body"></div>';
+    document.body.appendChild(ov);
+    
+    document.getElementById("v340-back").onclick = close;
+    var input = document.getElementById("v340-input");
+    var debounce;
+    input.oninput = function(){
+      clearTimeout(debounce);
+      var v = this.value;
+      debounce = setTimeout(function(){
+        currentQuery = v;
+        render();
+      }, 200);
+    };
+    input.onkeydown = function(e){
+      if (e.key === "Enter"){
+        addRecent(this.value);
+        currentQuery = this.value;
+        render();
+      }
+    };
+  }
+  
+  function open(){
+    buildOverlay();
+    currentQuery = "";
+    currentFilter = "all";
+    var ov = document.getElementById("v340-search-overlay");
+    ov.classList.add("open");
+    var input = document.getElementById("v340-input");
+    input.value = "";
+    setTimeout(function(){ input.focus(); }, 100);
+    render();
+  }
+  
+  function close(){
+    var ov = document.getElementById("v340-search-overlay");
+    if (ov) ov.classList.remove("open");
+  }
+  
+  function render(){
+    var body = document.getElementById("v340-body");
+    if (!body) return;
+    
+    if (!currentQuery || currentQuery.trim().length === 0) {
+      body.innerHTML = renderIdle();
+      bindIdle();
+    } else {
+      body.innerHTML = renderResults();
+      bindResults();
+    }
+  }
+  
+  function renderIdle(){
+    var recent = getRecent();
+    var sugg = getSuggestions();
+    var html = "";
+    
+    if (recent.length > 0) {
+      html += '<div class="v340-section">';
+      html += '<div class="v340-section-title"><span>🕐 بحث سابق</span><button class="v340-clear-all" id="v340-clear-all">مسح الكل</button></div>';
+      html += '<div class="v340-chips">';
+      recent.forEach(function(q, i){
+        html += '<div class="v340-chip" data-search="' + esc(q) + '"><span>' + esc(q) + '</span><span class="v340-chip-x" data-remove="' + i + '">✕</span></div>';
+      });
+      html += '</div></div>';
+    }
+    
+    html += '<div class="v340-section">';
+    html += '<div class="v340-section-title"><span>✨ قد تعجبك</span></div>';
+    html += '<div class="v340-chips">';
+    sugg.forEach(function(q){
+      html += '<div class="v340-chip" data-search="' + esc(q) + '">' + esc(q) + '</div>';
+    });
+    html += '</div></div>';
+    
+    var prods = (window.APP && window.APP.products) ? window.APP.products.filter(function(p){ return p.active !== false; }) : [];
+    var shuffled = prods.slice().sort(function(){ return Math.random() - 0.5; }).slice(0, 8);
+    if (shuffled.length > 0) {
+      html += '<div class="v340-section" style="padding-left:0;padding-right:0">';
+      html += '<div class="v340-section-title" style="padding:0 16px"><span>💡 منتجات رائجة</span></div>';
+      html += '<div class="v340-prod-scroll">';
+      shuffled.forEach(function(p){
+        html += '<div class="v340-prod-mini" data-prod="' + esc(p.id) + '">' +
+          '<img class="v340-prod-img" src="' + esc(p.img) + '" onerror="this.style.opacity=0.3">' +
+          '<div class="v340-prod-info"><div class="v340-prod-name">' + esc(p.name) + '</div><div class="v340-prod-price">' + (Number(p.price)||0).toFixed(0) + ' ر.س</div></div></div>';
+      });
+      html += '</div></div>';
+    }
+    
+    return html;
+  }
+  
+  function bindIdle(){
+    document.querySelectorAll('[data-search]').forEach(function(el){
+      el.onclick = function(e){
+        if (e.target.hasAttribute("data-remove")) return;
+        var q = this.getAttribute("data-search");
+        var input = document.getElementById("v340-input");
+        input.value = q;
+        currentQuery = q;
+        addRecent(q);
+        render();
+      };
+    });
+    document.querySelectorAll('[data-remove]').forEach(function(el){
+      el.onclick = function(e){
+        e.stopPropagation();
+        var idx = parseInt(this.getAttribute("data-remove"), 10);
+        var list = getRecent();
+        list.splice(idx, 1);
+        saveRecent(list);
+        render();
+      };
+    });
+    var clearAll = document.getElementById("v340-clear-all");
+    if (clearAll) clearAll.onclick = function(){
+      saveRecent([]);
+      render();
+    };
+    document.querySelectorAll('[data-prod]').forEach(function(el){
+      el.onclick = function(){
+        var id = this.getAttribute("data-prod");
+        close();
+        setTimeout(function(){
+          if (window.APP && window.APP.openProduct) window.APP.openProduct(id);
+        }, 200);
+      };
+    });
+  }
+  
+  function searchProducts(q, category){
+    if (!window.APP || !window.APP.products) return [];
+    var query = q.trim().toLowerCase();
+    return window.APP.products.filter(function(p){
+      if (p.active === false) return false;
+      if (category && category !== "all" && p.category !== category) return false;
+      if (!query) return true;
+      var name = (p.name||"").toLowerCase();
+      var brand = (p.brand||"").toLowerCase();
+      var desc = (p.desc||"").toLowerCase();
+      return name.indexOf(query) !== -1 || brand.indexOf(query) !== -1 || desc.indexOf(query) !== -1;
+    });
+  }
+  
+  function renderResults(){
+    var results = searchProducts(currentQuery, currentFilter);
+    var cats = getCategories();
+    var catKeys = Object.keys(cats);
+    
+    var html = "";
+    
+    // Filters
+    html += '<div class="v340-filters">';
+    html += '<button class="v340-filter ' + (currentFilter==="all"?"active":"") + '" data-filter="all">الكل (' + (window.APP.products ? window.APP.products.length : 0) + ')</button>';
+    catKeys.forEach(function(k){
+      var label = CAT_LABELS[k] || k;
+      var active = currentFilter === k;
+      html += '<button class="v340-filter ' + (active?"active":"") + '" data-filter="' + k + '">' + label + ' (' + cats[k] + ')</button>';
+    });
+    html += '</div>';
+    
+    // Count
+    html += '<div class="v340-results-count">' + results.length + ' نتيجة</div>';
+    
+    // Grid
+    if (results.length === 0) {
+      html += '<div class="v340-empty"><div class="v340-empty-icon">🔍</div><div class="v340-empty-text">لا توجد نتائج</div><div class="v340-empty-sub">جرب كلمة أخرى أو غيّر الفلتر</div></div>';
+    } else {
+      html += '<div class="v340-grid">';
+      results.slice(0, 30).forEach(function(p){
+        html += '<div class="v340-prod" data-prod="' + esc(p.id) + '">' +
+          '<img class="v340-prod-img" src="' + esc(p.img) + '" onerror="this.style.opacity=0.3">' +
+          '<div class="v340-prod-info"><div class="v340-prod-name">' + esc(p.name) + '</div><div class="v340-prod-price">' + (Number(p.price)||0).toFixed(0) + ' ر.س</div></div></div>';
+      });
+      html += '</div>';
+    }
+    
+    return html;
+  }
+  
+  function bindResults(){
+    document.querySelectorAll('[data-filter]').forEach(function(el){
+      el.onclick = function(){
+        currentFilter = this.getAttribute("data-filter");
+        render();
+      };
+    });
+    document.querySelectorAll('.v340-prod[data-prod]').forEach(function(el){
+      el.onclick = function(){
+        var id = this.getAttribute("data-prod");
+        addRecent(currentQuery);
+        close();
+        setTimeout(function(){
+          if (window.APP && window.APP.openProduct) window.APP.openProduct(id);
+        }, 200);
+      };
+    });
+  }
+  
+  // ═══ Hook: click on search bar opens overlay ═══
+  function hookSearchInput(){
+    var inp = document.getElementById("search-in");
+    if (!inp) return false;
+    if (inp.__v340Hooked) return true;
+    inp.__v340Hooked = true;
+    
+    // منع التركيز الأصلي + فتح اللوحة
+    inp.addEventListener("focus", function(e){ e.preventDefault(); this.blur(); open(); }, true);
+    inp.addEventListener("click", function(e){ e.preventDefault(); this.blur(); open(); }, true);
+    // منع لوحة المفاتيح من الظهور في الأصل
+    inp.setAttribute("readonly", "readonly");
+    inp.style.cursor = "pointer";
+    
+    console.log("[v340] search input hooked");
+    return true;
+  }
+  
+  // حاول فوراً + كل 500ms حتى يظهر
+  var tries = 0;
+  var interval = setInterval(function(){
+    tries++;
+    if (hookSearchInput() || tries > 40) clearInterval(interval);
+  }, 500);
+  
+  console.log("[v340] search overlay ready");
 })();
 </script>
 </body>
