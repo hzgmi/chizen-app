@@ -21314,5 +21314,66 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   console.log("[v331] fixes applied");
 })();
 </script>
+
+<script id="v332-force-home">
+(function(){
+  function ensureHome(){
+    try {
+      // 1. لا نتدخل إذا كان هناك pending action (يفتحه المستخدم)
+      var pending = null;
+      try { pending = localStorage.getItem("chizen_pending_action"); } catch(e){}
+      if (pending) return;
+      
+      // 2. هل الرئيسية active؟
+      var home = document.getElementById("sc-home");
+      if (!home) return;
+      
+      var wasWrong = !home.classList.contains("active");
+      var badHash = location.hash && location.hash !== "#home" && location.hash !== "";
+      
+      if (wasWrong || badHash) {
+        // 3. مسح hash غير مرغوب
+        if (badHash) {
+          try { history.replaceState(null, "", location.pathname + location.search); } catch(e){}
+        }
+        
+        // 4. إزالة active من كل الشاشات + وضعها على الرئيسية
+        document.querySelectorAll(".screen").forEach(function(s){
+          s.classList.remove("active");
+        });
+        home.classList.add("active");
+        
+        // 5. تحديث APP.currentSc
+        if (window.APP) {
+          window.APP.currentSc = "home";
+        }
+        
+        // 6. تحديث الـ nav
+        document.querySelectorAll(".nav-item").forEach(function(n){
+          n.classList.remove("active");
+        });
+        var homeNav = document.querySelector(".nav-item[onclick*=\'home\']");
+        if (homeNav) homeNav.classList.add("active");
+        
+        console.log("[v332] forced home (wrong=" + wasWrong + ", badHash=" + badHash + ")");
+      }
+    } catch(e) {
+      console.warn("[v332] error:", e);
+    }
+  }
+  
+  // تحقق عدة مرات (بعد تحميل APP، وبعد Firebase، وبعد v302)
+  setTimeout(ensureHome, 800);
+  setTimeout(ensureHome, 2000);
+  setTimeout(ensureHome, 4000);
+  
+  // عند تغيير auth (تسجيل دخول/خروج)
+  if (window.FB && window.FB.auth) {
+    window.FB.auth.onAuthStateChanged(function(){
+      setTimeout(ensureHome, 500);
+    });
+  }
+})();
+</script>
 </body>
 </html>
