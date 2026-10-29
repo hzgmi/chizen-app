@@ -7143,6 +7143,56 @@ body.chz-auth-ok {
     color: #ec4899 !important;
   }
 </style>
+
+<style id="v314-prominent-login">
+  .chz-profile-group[data-v313-guest="1"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #1a1a2e !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 11px 18px !important;
+    min-width: 130px !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18) !important;
+    cursor: pointer !important;
+    gap: 0 !important;
+  }
+  .chz-profile-group[data-v313-guest="1"]:active {
+    transform: scale(0.96) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.22) !important;
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-avatar {
+    display: none !important;
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-txt {
+    text-align: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+  }
+  .chz-profile-group[data-v313-guest="1"] .chz-prof-welcome {
+    display: none !important;
+  }
+  html[data-theme="dark"] .chz-profile-group[data-v313-guest="1"] {
+    background: #ffffff !important;
+    color: #1a1a2e !important;
+    box-shadow: 0 4px 14px rgba(255,255,255,0.18) !important;
+  }
+  html[data-theme="dark"] .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
+    color: #1a1a2e !important;
+  }
+</style>
 </head>
 <body>
 <div id="app">
@@ -20737,6 +20787,20 @@ window.__showLoginModal = function(actionLabel, pendingAction){
     var profile = document.querySelector(".chz-profile-group");
     if (profile) profile.removeAttribute("data-v313-guest");
   });
+})();
+</script>
+
+<script id="v314-text-js">
+(function(){
+  function update(){
+    var profile = document.querySelector(".chz-profile-group[data-v313-guest=\"1\"]");
+    if (!profile) return false;
+    var nameEl = profile.querySelector(".chz-prof-name");
+    if (nameEl && nameEl.textContent !== "تسجيل الآن") nameEl.textContent = "تسجيل الآن";
+    return true;
+  }
+  setTimeout(update, 2500);
+  setInterval(update, 4000);
 })();
 </script>
 </body>
