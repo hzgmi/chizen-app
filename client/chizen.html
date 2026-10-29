@@ -7386,6 +7386,88 @@ body.chz-auth-ok {
     100% { transform: translateX(100%); }
   }
 </style>
+
+<style id="v329-product-fix">
+  /* Skeleton بالشعار الفضي */
+  .v328-skeleton-img::before {
+    content: "CHIZEN";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Bodoni Moda", "Tajawal", Georgia, serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    background: linear-gradient(135deg, #b8b8c8 0%, #ffffff 25%, #e0e0ee 42%, #ffffff 55%, #9a9aae 75%, #ffffff 100%);
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: v329SilverShine 3s ease-in-out infinite;
+    opacity: 0.55;
+    z-index: 1;
+  }
+  html[data-theme="dark"] .v328-skeleton-img::before {
+    background: linear-gradient(135deg, #6a6a80 0%, #d0d0e0 25%, #9090a8 42%, #e0e0f0 55%, #7a7a92 75%, #c0c0d0 100%);
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @keyframes v329SilverShine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  /* إزالة الفراغ الأبيض - ملء الشاشة */
+  #app, #screens, .screen {
+    min-height: 100vh !important;
+    background: #faf7ff !important;
+  }
+  html[data-theme="dark"] #app,
+  html[data-theme="dark"] #screens,
+  html[data-theme="dark"] .screen {
+    background: #0a0825 !important;
+  }
+  
+  /* حواف مدورة جميلة لصور المنتجات */
+  .prod-i {
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 16px 16px 0 0 !important;
+    overflow: hidden !important;
+    background: #f4f6fa !important;
+  }
+  .prod-i img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+  
+  /* الشريط البنفسجي - شفاف وأنيق بدل الصلب */
+  .prod-b {
+    background: rgba(255, 255, 255, 0.92) !important;
+    color: #7c3aed !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(124, 58, 237, 0.2) !important;
+    padding: 4px 10px !important;
+    font-size: 9.5px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  }
+  
+  /* skeleton أكبر لملء الشاشة */
+  .v328-skeleton-card {
+    min-height: 260px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+  }
+  .v328-skeleton-img {
+    border-radius: 16px 16px 0 0 !important;
+  }
+</style>
 </head>
 <body>
 <div id="app">
