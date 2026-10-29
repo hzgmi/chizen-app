@@ -7345,6 +7345,47 @@ body.chz-auth-ok {
 <div id="v326-loader">
   <div class="v326-text">CHIZEN</div>
 </div>
+
+<style id="v328-skeleton-css">
+  .v328-skeleton-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    padding-bottom: 8px;
+  }
+  html[data-theme="dark"] .v328-skeleton-card { background: #1a1535; }
+  .v328-skeleton-img {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #e5e7eb;
+    position: relative;
+  }
+  html[data-theme="dark"] .v328-skeleton-img { background: #2a2350; }
+  .v328-skeleton-text {
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    margin: 8px 10px;
+    position: relative;
+  }
+  html[data-theme="dark"] .v328-skeleton-text { background: #2a2350; }
+  .v328-skeleton-text.short { width: 50%; }
+  .v328-skeleton-img::after, .v328-skeleton-text::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: v328shimmer 1.5s infinite;
+  }
+  html[data-theme="dark"] .v328-skeleton-img::after,
+  html[data-theme="dark"] .v328-skeleton-text::after {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  }
+  @keyframes v328shimmer {
+    100% { transform: translateX(100%); }
+  }
+</style>
 </head>
 <body>
 <div id="app">
@@ -21051,6 +21092,69 @@ window.__showLoginModal = function(actionLabel, pendingAction){
     setTimeout(checkAndFix, 1500);
     setTimeout(checkAndFix, 3000);
   })();
+</script>
+
+<script id="v328-skeleton-js">
+(function(){
+  function getSkeletonHTML(count){
+    var html = "";
+    for(var i=0; i<count; i++){
+      html += '<div class="v328-skeleton-card">' +
+        '<div class="v328-skeleton-img"></div>' +
+        '<div class="v328-skeleton-text"></div>' +
+        '<div class="v328-skeleton-text short"></div>' +
+      '</div>';
+    }
+    return html;
+  }
+  
+  function injectSkeletons(){
+    // نبحث عن جميع حاويات المنتجات الفارغة
+    var grids = document.querySelectorAll(".prods, #home-prods, #cat-prods");
+    grids.forEach(function(g){
+      if (g.children.length === 0 && !g.dataset.v328Done) {
+        g.innerHTML = getSkeletonHTML(6);
+        g.dataset.v328Done = "1";
+      }
+    });
+  }
+  
+  // حقن الهياكل فوراً عند فتح الصفحة
+  setTimeout(injectSkeletons, 100);
+  setTimeout(injectSkeletons, 500);
+  
+  // دالة لتنظيف الهياكل عندما تصل البيانات
+  window.__v328ClearSkeletons = function(){
+    document.querySelectorAll(".v328-skeleton-card").forEach(function(el){
+      el.remove();
+    });
+  };
+  
+  // مراقبة الوصول للبيانات لمسح الهياكل تلقائياً
+  var tries = 0;
+  var check = setInterval(function(){
+    tries++;
+    if (window.APP && window.APP.products && window.APP.products.length > 0) {
+      clearInterval(check);
+      setTimeout(window.__v328ClearSkeletons, 300);
+    } else if (tries > 40) {
+      clearInterval(check);
+    }
+  }, 250);
+  
+  // مراقبة فتح الأقسام الجديدة
+  if (window.APP && window.APP.openCatPage) {
+    var origOpen = window.APP.openCatPage;
+    window.APP.openCatPage = function(){
+      var r = origOpen.apply(this, arguments);
+      var catGrid = document.getElementById("cat-prods");
+      if (catGrid && catGrid.children.length === 0) {
+        catGrid.innerHTML = getSkeletonHTML(4);
+      }
+      return r;
+    };
+  }
+})();
 </script>
 </body>
 </html>
