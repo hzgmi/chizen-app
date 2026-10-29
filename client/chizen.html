@@ -7148,6 +7148,92 @@ body.chz-auth-ok {
     color: #1a1a2e !important;
   }
 </style>
+
+<style id="v319-premium-name">
+  /* Only for logged-in users (guest state = chz-is-guest on body) */
+  body:not(.chz-is-guest) .chz-profile-group {
+    background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(236,72,153,0.10)) !important;
+    border: 1px solid rgba(168,85,247,0.3) !important;
+    border-radius: 12px !important;
+    padding: 7px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease, background 0.15s ease !important;
+  }
+  body:not(.chz-is-guest) .chz-profile-group:active {
+    transform: scale(0.97) !important;
+    background: linear-gradient(135deg, rgba(168,85,247,0.25), rgba(236,72,153,0.18)) !important;
+  }
+  
+  /* Avatar */
+  body:not(.chz-is-guest) .chz-profile-group .chz-prof-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 3px 10px rgba(124,58,237,0.35) !important;
+    border: 2px solid rgba(255,255,255,0.2) !important;
+  }
+  body:not(.chz-is-guest) .chz-profile-group .chz-prof-avatar svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: #ffffff !important;
+  }
+  
+  /* Text container */
+  body:not(.chz-is-guest) .chz-profile-group .chz-prof-txt {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1px !important;
+    min-width: 0 !important;
+    text-align: right !important;
+  }
+  
+  /* Name */
+  body:not(.chz-is-guest) .chz-profile-group .chz-prof-name {
+    font-family: Tajawal, sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    line-height: 1.2 !important;
+    max-width: 100px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Welcome */
+  body:not(.chz-is-guest) .chz-profile-group .chz-prof-welcome {
+    font-family: Tajawal, sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: rgba(196,181,253,0.95) !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Light theme overrides */
+  html[data-theme="light"] body:not(.chz-is-guest) .chz-profile-group {
+    background: linear-gradient(135deg, rgba(168,85,247,0.10), rgba(236,72,153,0.08)) !important;
+    border-color: rgba(168,85,247,0.25) !important;
+  }
+  html[data-theme="light"] body:not(.chz-is-guest) .chz-profile-group .chz-prof-name {
+    color: #1a1a2e !important;
+  }
+  html[data-theme="light"] body:not(.chz-is-guest) .chz-profile-group .chz-prof-welcome {
+    color: #7c3aed !important;
+  }
+</style>
 </head>
 <body>
 <div id="app">
