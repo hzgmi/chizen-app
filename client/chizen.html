@@ -133,7 +133,7 @@
   // ═══ AUTO THEME v70 — time-based ═══
   // 06:00–18:00 = light (day) | 18:00–06:00 = dark (night)
   var mode = 'auto';
-  try { mode = localStorage.getItem('chizen_theme_mode') || 'auto'; } catch(e){}
+  try { mode = localStorage.getItem('chizen_theme_mode') || 'light'; } catch(e){}
   var theme;
   if (mode === 'auto') {
     var hh = new Date().getHours();
@@ -148,7 +148,7 @@
   // Periodic check every 60s
   setInterval(function(){
     var m = 'auto';
-    try { m = localStorage.getItem('chizen_theme_mode') || 'auto'; } catch(e){}
+    try { m = localStorage.getItem('chizen_theme_mode') || 'light'; } catch(e){}
     if (m !== 'auto') return;
     var hr = new Date().getHours();
     var exp = (hr >= 6 && hr < 18) ? 'light' : 'dark';
@@ -20910,6 +20910,20 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   if (window.FB && window.FB.auth) {
     window.FB.auth.onAuthStateChanged(function(){ setTimeout(apply, 300); });
   }
+})();
+</script>
+
+<script id="v320-light-official">
+(function(){
+  try {
+    var stored = localStorage.getItem("chizen_theme_mode");
+    if (!stored || stored === "auto") {
+      document.documentElement.setAttribute("data-theme", "light");
+      document.documentElement.classList.remove("chz-dark");
+      document.documentElement.classList.add("chz-light");
+      console.log("[v320] light official forced");
+    }
+  } catch(e){}
 })();
 </script>
 </body>
