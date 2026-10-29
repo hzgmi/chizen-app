@@ -20818,14 +20818,14 @@ window.__checkGuest = function(action) {
       window.__showLoginModal(action || 'هذه العملية');
     } else {
       var r = confirm('سجّل للقيام بهذه العملية.\n\nالذهاب لصفحة التسجيل؟');
-      if (r) window.location.href = 'index.html';
+      if (r) window.location.href = 'index.html?login=1';
     }
     return true;
   }
   return false;
 };
 window.__openLogin = function() {
-  window.location.href = 'index.html';
+  window.location.href = 'index.html?login=1';
 };
 // عند logout - امسح guest flag
 var _origLogout = window.__chzLogout;
@@ -20891,7 +20891,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   document.body.appendChild(overlay);
   
   document.getElementById("v303-register-btn").onclick = function(){
-    window.location.href = "index.html";
+    window.location.href = "index.html?login=1";
   };
   document.getElementById("v303-continue-btn").onclick = function(){
     overlay.style.opacity = "0";
@@ -21014,7 +21014,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       var profile = document.querySelector(".chz-profile-group");
       if (profile && profile.getAttribute("data-v315-click") !== "1") {
         profile.setAttribute("data-v315-click", "1");
-        profile.onclick = function(e){ e.stopPropagation(); e.preventDefault(); window.location.href = "index.html"; };
+        profile.onclick = function(e){ e.stopPropagation(); e.preventDefault(); window.location.href = "index.html?login=1"; };
       }
     } else {
       document.body.classList.remove("chz-is-guest");
@@ -21070,7 +21070,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
         profile.setAttribute("data-v318-click", "1");
         profile.onclick = function(e){
           e.preventDefault(); e.stopPropagation();
-          window.location.href = "index.html";
+          window.location.href = "index.html?login=1";
         };
       }
     } else {
@@ -21146,7 +21146,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
         '</div>' +
         '<button class="v321-login-btn">تسجيل الدخول الآن</button>';
       var btn = banner.querySelector(".v321-login-btn");
-      if (btn) btn.onclick = function(){ window.location.href = "index.html"; };
+      if (btn) btn.onclick = function(){ window.location.href = "index.html?login=1"; };
       var header = sc.querySelector(".sh2");
       if (header && header.nextSibling) {
         sc.insertBefore(banner, header.nextSibling);

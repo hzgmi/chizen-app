@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script id="v333-first-launch">
+  (function(){
+    try {
+      var params = new URLSearchParams(location.search);
+      // إذا طلب المستخدم الدخول صراحة → ابق في صفحة الدخول
+      if (params.get("login") === "1") return;
+      // وإلا → الرئيسية (guest mode تلقائياً من v300)
+      window.location.replace("chizen.html");
+    } catch(e){}
+  })();
+</script>
+
 <script id="chz-theme-auto-v70">
 (function(){
   var mode = 'auto';
