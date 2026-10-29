@@ -7468,6 +7468,54 @@ body.chz-auth-ok {
     border-radius: 16px 16px 0 0 !important;
   }
 </style>
+
+<style id="v331-fix">
+  /* CHIZEN span in skeleton (بدل ::before) */
+  .v329-chizen-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Bodoni Moda", "Tajawal", Georgia, serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    background: linear-gradient(135deg,
+      #b8b8c8 0%, #ffffff 25%, #e0e0ee 42%,
+      #ffffff 55%, #9a9aae 75%, #ffffff 100%);
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: v329SilverShine 3s ease-in-out infinite;
+    opacity: 0.75;
+    z-index: 3;
+    pointer-events: none;
+  }
+  html[data-theme="dark"] .v329-chizen-text {
+    background: linear-gradient(135deg,
+      #6a6a80 0%, #d0d0e0 25%, #9090a8 42%,
+      #e0e0f0 55%, #7a7a92 75%, #c0c0d0 100%);
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  /* إخفاء CHIZEN من ::before القديم */
+  .v328-skeleton-img::before { content: none !important; }
+  
+  /* تأكد shimmer تحت CHIZEN */
+  .v328-skeleton-img::after {
+    z-index: 1 !important;
+  }
+  
+  /* Dark theme animations */
+  @keyframes v329SilverShine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+</style>
 </head>
 <body>
 <div id="app">
@@ -21157,24 +21205,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
-<script id="v327-safety">
-  (function(){
-    // Safety net: force light if something switches to dark without explicit user choice
-    var checkAndFix = function(){
-      try {
-        var mode = localStorage.getItem("chizen_theme_mode");
-        var current = document.documentElement.getAttribute("data-theme");
-        if (current === "dark" && mode !== "dark") {
-          document.documentElement.setAttribute("data-theme", "light");
-          console.log("[v327] safety net: forced light (mode=" + mode + ")");
-        }
-      } catch(e){}
-    };
-    setTimeout(checkAndFix, 800);
-    setTimeout(checkAndFix, 1500);
-    setTimeout(checkAndFix, 3000);
-  })();
-</script>
+<!-- v327 safety net DISABLED v331 -->
 
 <script id="v328-skeleton-js">
 (function(){
@@ -21236,6 +21267,51 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       return r;
     };
   }
+})();
+</script>
+
+<script id="v331-js">
+(function(){
+  // ═══ Fix 1: CHIZEN في skeleton ═══
+  if (typeof window.__v328SkeletonHTML === "function") {
+    var orig = window.__v328SkeletonHTML;
+    window.__v328SkeletonHTML = function(count){
+      var html = "";
+      for(var i=0; i<count; i++){
+        html += '<div class="v328-skeleton-card">' +
+          '<div class="v328-skeleton-img"><span class="v329-chizen-text">CHIZEN</span></div>' +
+          '<div class="v328-skeleton-text"></div>' +
+          '<div class="v328-skeleton-text short"></div>' +
+        '</div>';
+      }
+      return html;
+    };
+  }
+  
+  // ═══ Fix 2: توحيد toggle (header + settings) ═══
+  function unifiedToggle(){
+    var current = document.documentElement.getAttribute("data-theme");
+    var next = (current === "dark") ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    document.documentElement.classList.toggle("chz-dark", next === "dark");
+    document.documentElement.classList.toggle("chz-light", next === "light");
+    try { localStorage.setItem("chizen_theme_mode", next); } catch(e){}
+    window.__userClickedTheme = true;
+    console.log("[v331] theme toggled →", next);
+  }
+  window.toggleThemeMode = unifiedToggle;
+  if (window.APP) {
+    window.APP.toggleThemeMode = unifiedToggle;
+  } else {
+    var waitAPP = setInterval(function(){
+      if (window.APP) {
+        window.APP.toggleThemeMode = unifiedToggle;
+        clearInterval(waitAPP);
+        console.log("[v331] APP.toggleThemeMode unified");
+      }
+    }, 200);
+  }
+  console.log("[v331] fixes applied");
 })();
 </script>
 </body>
