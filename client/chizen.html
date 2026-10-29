@@ -7100,7 +7100,9 @@ body.chz-auth-ok {
 
 
 
-<style id="v316-clean-guest">
+
+
+<style id="v317-guest-css">
   body.chz-is-guest .chz-profile-group {
     background: #1a1a2e !important;
     border: none !important;
@@ -7116,34 +7118,27 @@ body.chz-auth-ok {
   }
   body.chz-is-guest .chz-profile-group:active { transform: scale(0.96) !important; }
   body.chz-is-guest .chz-profile-group .chz-prof-avatar { display: none !important; }
-  
-  /* إخفاء النصوص الأصلية نهائياً */
-  body.chz-is-guest .chz-profile-group .chz-prof-name,
-  body.chz-is-guest .chz-profile-group .chz-prof-welcome {
-    display: none !important;
-  }
-  
-  /* عرض النص الجديد داخل الحاوية */
   body.chz-is-guest .chz-profile-group .chz-prof-txt {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
+    text-align: center !important;
   }
-  body.chz-is-guest .chz-profile-group .chz-prof-txt::after {
-    content: "تسجيل الآن";
-    font-family: "Tajawal", sans-serif;
-    font-size: 14px;
-    font-weight: 900;
-    color: #ffffff;
-    line-height: 1.2;
-    display: block;
+  body.chz-is-guest .chz-profile-group .v317-login-text {
+    color: #ffffff !important;
+    font-family: Tajawal, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    display: block !important;
   }
   html[data-theme="dark"] body.chz-is-guest .chz-profile-group {
     background: #ffffff !important;
     box-shadow: 0 4px 14px rgba(255,255,255,0.2) !important;
   }
-  html[data-theme="dark"] body.chz-is-guest .chz-profile-group .chz-prof-txt::after {
+  html[data-theme="dark"] body.chz-is-guest .chz-profile-group .v317-login-text {
     color: #1a1a2e !important;
   }
 </style>
@@ -20743,6 +20738,72 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   }
   setTimeout(apply, 1500);
   setTimeout(apply, 3500);
+})();
+</script>
+
+<script id="v317-guest-js">
+(function(){
+  var REPLACED = false;
+  
+  function apply(){
+    if (typeof window.__isGuest !== "function") return;
+    if (!window.__isGuest()) return;
+    
+    if (!document.body.classList.contains("chz-is-guest")) {
+      document.body.classList.add("chz-is-guest");
+    }
+    
+    var profile = document.querySelector(".chz-profile-group");
+    if (!profile) return;
+    
+    var txt = profile.querySelector(".chz-prof-txt");
+    if (!txt) return;
+    
+    // استبدال المحتوى بالكامل (يمحو مرحباً + أهلاً بك)
+    if (!REPLACED || !txt.querySelector(".v317-login-text")) {
+      txt.innerHTML = '<div class="v317-login-text">تسجيل الآن</div>';
+      REPLACED = true;
+      console.log("[v317] text replaced");
+    }
+    
+    // ربط النقر
+    if (profile.getAttribute("data-v317-click") !== "1") {
+      profile.setAttribute("data-v317-click", "1");
+      profile.onclick = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = "index.html";
+      };
+    }
+  }
+  
+  // مراقبة DOM لإعادة التطبيق إذا غيّره JS آخر
+  var observer = new MutationObserver(function(){
+    if (window.__isGuest && window.__isGuest()) {
+      var txt = document.querySelector(".chz-profile-group .chz-prof-txt");
+      if (txt && !txt.querySelector(".v317-login-text")) {
+        apply();
+      }
+    }
+  });
+  
+  function startObserver(){
+    var profile = document.querySelector(".chz-profile-group");
+    if (profile) {
+      observer.observe(profile, {childList: true, subtree: true, characterData: true});
+    } else {
+      setTimeout(startObserver, 500);
+    }
+  }
+  
+  setTimeout(apply, 500);
+  setTimeout(apply, 1500);
+  setTimeout(apply, 3000);
+  setTimeout(startObserver, 2000);
+  
+  if (window.FB && window.FB.auth) {
+    window.FB.auth.onAuthStateChanged(function(){ setTimeout(apply, 200); });
+  }
 })();
 </script>
 </body>
