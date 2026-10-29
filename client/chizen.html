@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script id="v327-migrate">
+  (function(){
+    try {
+      var m = localStorage.getItem("chizen_theme_mode");
+      if (!m || m === "auto") {
+        localStorage.setItem("chizen_theme_mode", "light");
+        console.log("[v327] migrated auto→light");
+      }
+    } catch(e){}
+  })();
+</script>
+
 <script id="v324-theme-instant">
   (function(){
     try {
@@ -15998,7 +16010,7 @@ document.addEventListener('keydown', function(e) {
     tagline: 'تسوق شامل_لحياة أجمل',
     logoUrl: '',
     welcomeMessage: '',
-    defaultTheme: 'dark',
+    defaultTheme: "light",
     pushEnabled: true,
     waOrders: false,
     notifyNewOrder: true,
@@ -19605,89 +19617,7 @@ document.addEventListener('keydown', function(e) {
 })();
 </script>
 
-<script id="chz-theme-v70">
-(function(){
-  'use strict';
-  window.APP = window.APP || {};
-
-  function updateIcons(){
-    var theme = document.documentElement.getAttribute('data-theme') || 'dark';
-    var isLight = theme === 'light';
-    document.querySelectorAll('.chz-moon-icon').forEach(function(m){ m.style.display = isLight ? 'none' : 'block'; });
-    document.querySelectorAll('.chz-sun-icon').forEach(function(s){ s.style.display = isLight ? 'block' : 'none'; });
-  }
-  window.__chzUpdateThemeIcons = updateIcons;
-
-  function apply(theme, mode){
-    document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.classList.toggle('chz-light', theme === 'light');
-    document.documentElement.classList.toggle('chz-dark', theme === 'dark');
-    window.__chzThemeApplied = theme;
-    if (mode) {
-      try { localStorage.setItem('chizen_theme_mode', mode); } catch(e){}
-      window.__chzThemeMode = mode;
-    }
-    // Clean up old key
-    try { localStorage.removeItem('chizen_theme'); } catch(e){}
-    updateIcons();
-  }
-
-  window.APP.toggleThemeMode = function(){
-    if (window.__chzLongPressed) { window.__chzLongPressed = false; return; }
-    var current = document.documentElement.getAttribute('data-theme') || 'dark';
-    var next = current === 'dark' ? 'light' : 'dark';
-    apply(next, next);
-    if (window.toast) try { window.toast((next === 'light' ? '☀️ فاتح' : '🌙 داكن') + ' (يدوي)', 'suc'); } catch(e){}
-  };
-
-  window.APP.resetThemeAuto = function(){
-    try { localStorage.removeItem('chizen_theme_mode'); } catch(e){}
-    var hr = new Date().getHours();
-    var theme = (hr >= 6 && hr < 18) ? 'light' : 'dark';
-    apply(theme, 'auto');
-    if (window.toast) try { window.toast('✓ تلقائي — ' + (theme === 'light' ? 'نهار ☀️' : 'ليل 🌙'), 'suc'); } catch(e){}
-  };
-
-  function hookLongPress(){
-    var moons = document.querySelectorAll('.chz-moon-icon');
-    if (!moons.length) return;
-    moons.forEach(function(icon){
-      var btn = icon.closest('.chz-icon-box');
-      if (!btn || btn._themeHooked) return;
-      btn._themeHooked = true;
-      var timer = null;
-      function start(){
-        window.__chzLongPressed = false;
-        timer = setTimeout(function(){
-          window.__chzLongPressed = true;
-          window.APP.resetThemeAuto();
-        }, 700);
-      }
-      function end(){ if (timer) { clearTimeout(timer); timer = null; } }
-      btn.addEventListener('touchstart', start, {passive: true});
-      btn.addEventListener('touchend', end);
-      btn.addEventListener('touchcancel', end);
-      btn.addEventListener('mousedown', start);
-      btn.addEventListener('mouseup', end);
-      btn.addEventListener('mouseleave', end);
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ updateIcons(); hookLongPress(); });
-  } else {
-    updateIcons();
-    hookLongPress();
-  }
-  setTimeout(hookLongPress, 800);
-  setTimeout(hookLongPress, 2000);
-  setTimeout(hookLongPress, 4000);
-
-  new MutationObserver(updateIcons).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-  console.log('[theme v70] auto ✓');
-})();
-</script>
+<!-- v70 auto-theme DISABLED v327 -->
 <script id="chz-notif-v71-js">
 (function(){
   'use strict';
@@ -21102,6 +21032,25 @@ window.__showLoginModal = function(actionLabel, pendingAction){
     }
   }, 100);
 })();
+</script>
+
+<script id="v327-safety">
+  (function(){
+    // Safety net: force light if something switches to dark without explicit user choice
+    var checkAndFix = function(){
+      try {
+        var mode = localStorage.getItem("chizen_theme_mode");
+        var current = document.documentElement.getAttribute("data-theme");
+        if (current === "dark" && mode !== "dark") {
+          document.documentElement.setAttribute("data-theme", "light");
+          console.log("[v327] safety net: forced light (mode=" + mode + ")");
+        }
+      } catch(e){}
+    };
+    setTimeout(checkAndFix, 800);
+    setTimeout(checkAndFix, 1500);
+    setTimeout(checkAndFix, 3000);
+  })();
 </script>
 </body>
 </html>
