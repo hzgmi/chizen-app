@@ -7098,7 +7098,9 @@ body.chz-auth-ok {
 </style>
 
 
-<style id="v315-clean-guest">
+
+
+<style id="v316-clean-guest">
   body.chz-is-guest .chz-profile-group {
     background: #1a1a2e !important;
     border: none !important;
@@ -7111,28 +7113,37 @@ body.chz-auth-ok {
     align-items: center !important;
     justify-content: center !important;
     flex-direction: row !important;
-    gap: 0 !important;
   }
   body.chz-is-guest .chz-profile-group:active { transform: scale(0.96) !important; }
   body.chz-is-guest .chz-profile-group .chz-prof-avatar { display: none !important; }
+  
+  /* إخفاء النصوص الأصلية نهائياً */
+  body.chz-is-guest .chz-profile-group .chz-prof-name,
+  body.chz-is-guest .chz-profile-group .chz-prof-welcome {
+    display: none !important;
+  }
+  
+  /* عرض النص الجديد داخل الحاوية */
   body.chz-is-guest .chz-profile-group .chz-prof-txt {
-    text-align: center !important; width: 100% !important;
-    display: flex !important; flex-direction: column !important; align-items: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
   }
-  body.chz-is-guest .chz-profile-group .chz-prof-name {
-    font-size: 0 !important; line-height: 1.2 !important; color: transparent !important;
-  }
-  body.chz-is-guest .chz-profile-group .chz-prof-name::after {
+  body.chz-is-guest .chz-profile-group .chz-prof-txt::after {
     content: "تسجيل الآن";
-    font-size: 14px; font-weight: 900; color: #ffffff;
-    line-height: 1.2; display: inline-block;
+    font-family: "Tajawal", sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.2;
+    display: block;
   }
-  body.chz-is-guest .chz-profile-group .chz-prof-welcome { display: none !important; }
   html[data-theme="dark"] body.chz-is-guest .chz-profile-group {
     background: #ffffff !important;
     box-shadow: 0 4px 14px rgba(255,255,255,0.2) !important;
   }
-  html[data-theme="dark"] body.chz-is-guest .chz-profile-group .chz-prof-name::after {
+  html[data-theme="dark"] body.chz-is-guest .chz-profile-group .chz-prof-txt::after {
     color: #1a1a2e !important;
   }
 </style>
