@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script id="v324-theme-instant">
+  (function(){
+    try {
+      var mode = localStorage.getItem("chizen_theme_mode");
+      // إذا لم يختر المستخدم شيئاً، أو اختار auto → light (الرسمي)
+      var theme = (!mode || mode === "auto") ? "light" : mode;
+      document.documentElement.setAttribute("data-theme", theme);
+      if (theme === "light") {
+        document.documentElement.classList.add("chz-light");
+        document.documentElement.classList.remove("chz-dark");
+      } else {
+        document.documentElement.classList.add("chz-dark");
+        document.documentElement.classList.remove("chz-light");
+      }
+    } catch(e){}
+  })();
+</script>
+
 <!-- ═══ Cache Buster v77 ═══ -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
