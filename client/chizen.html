@@ -7102,43 +7102,49 @@ body.chz-auth-ok {
 
 
 
-<style id="v317-guest-css">
+
+
+<style id="v318-guest-css">
   body.chz-is-guest .chz-profile-group {
     background: #1a1a2e !important;
     border: none !important;
-    border-radius: 12px !important;
-    padding: 11px 18px !important;
-    min-width: 130px !important;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.2) !important;
+    border-radius: 10px !important;
+    padding: 8px 14px !important;
+    min-width: 100px !important;
+    max-width: 130px !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.18) !important;
     cursor: pointer !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     flex-direction: row !important;
+    gap: 0 !important;
   }
   body.chz-is-guest .chz-profile-group:active { transform: scale(0.96) !important; }
-  body.chz-is-guest .chz-profile-group .chz-prof-avatar { display: none !important; }
+  body.chz-is-guest .chz-profile-group .chz-prof-avatar { display: none !important; width: 0 !important; height: 0 !important; overflow: hidden !important; }
   body.chz-is-guest .chz-profile-group .chz-prof-txt {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
     text-align: center !important;
+    flex-direction: column !important;
+    gap: 0 !important;
   }
-  body.chz-is-guest .chz-profile-group .v317-login-text {
+  body.chz-is-guest .chz-profile-group .v318-login-text {
     color: #ffffff !important;
     font-family: Tajawal, sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 900 !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
     line-height: 1.2 !important;
     text-align: center !important;
     display: block !important;
   }
   html[data-theme="dark"] body.chz-is-guest .chz-profile-group {
     background: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(255,255,255,0.2) !important;
+    box-shadow: 0 3px 10px rgba(255,255,255,0.2) !important;
   }
-  html[data-theme="dark"] body.chz-is-guest .chz-profile-group .v317-login-text {
+  html[data-theme="dark"] body.chz-is-guest .chz-profile-group .v318-login-text {
     color: #1a1a2e !important;
   }
 </style>
@@ -20741,59 +20747,73 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
-<script id="v317-guest-js">
+
+
+<script id="v318-guest-js">
 (function(){
-  var REPLACED = false;
+  var originalHTML = null;
+  
+  function getProfileTxt(){
+    return document.querySelector(".chz-profile-group .chz-prof-txt");
+  }
   
   function apply(){
     if (typeof window.__isGuest !== "function") return;
-    if (!window.__isGuest()) return;
-    
-    if (!document.body.classList.contains("chz-is-guest")) {
-      document.body.classList.add("chz-is-guest");
-    }
-    
-    var profile = document.querySelector(".chz-profile-group");
-    if (!profile) return;
-    
-    var txt = profile.querySelector(".chz-prof-txt");
+    var isGuest = window.__isGuest();
+    var body = document.body;
+    var txt = getProfileTxt();
     if (!txt) return;
     
-    // استبدال المحتوى بالكامل (يمحو مرحباً + أهلاً بك)
-    if (!REPLACED || !txt.querySelector(".v317-login-text")) {
-      txt.innerHTML = '<div class="v317-login-text">تسجيل الآن</div>';
-      REPLACED = true;
-      console.log("[v317] text replaced");
-    }
-    
-    // ربط النقر
-    if (profile.getAttribute("data-v317-click") !== "1") {
-      profile.setAttribute("data-v317-click", "1");
-      profile.onclick = function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.href = "index.html";
-      };
+    if (isGuest) {
+      // === GUEST MODE ===
+      if (!body.classList.contains("chz-is-guest")) {
+        body.classList.add("chz-is-guest");
+      }
+      // حفظ الأصل قبل الاستبدال
+      if (originalHTML === null && !txt.querySelector(".v318-login-text")) {
+        originalHTML = txt.innerHTML;
+        console.log("[v318] original captured");
+      }
+      // استبدال
+      if (!txt.querySelector(".v318-login-text")) {
+        txt.innerHTML = '<div class="v318-login-text">تسجيل الآن</div>';
+      }
+      // ربط النقر
+      var profile = document.querySelector(".chz-profile-group");
+      if (profile && profile.getAttribute("data-v318-click") !== "1") {
+        profile.setAttribute("data-v318-click", "1");
+        profile.onclick = function(e){
+          e.preventDefault(); e.stopPropagation();
+          window.location.href = "index.html";
+        };
+      }
+    } else {
+      // === LOGGED IN ===
+      if (body.classList.contains("chz-is-guest")) {
+        body.classList.remove("chz-is-guest");
+        console.log("[v318] guest class removed");
+      }
+      // استعادة المحتوى الأصلي
+      if (txt.querySelector(".v318-login-text") && originalHTML !== null) {
+        txt.innerHTML = originalHTML;
+        console.log("[v318] original restored");
+      }
+      // إعادة onclick الأصلي
+      var profile2 = document.querySelector(".chz-profile-group");
+      if (profile2 && profile2.getAttribute("data-v318-click") === "1") {
+        profile2.removeAttribute("data-v318-click");
+        profile2.setAttribute("onclick", "APP.goTab('profile')");
+      }
     }
   }
   
-  // مراقبة DOM لإعادة التطبيق إذا غيّره JS آخر
-  var observer = new MutationObserver(function(){
-    if (window.__isGuest && window.__isGuest()) {
-      var txt = document.querySelector(".chz-profile-group .chz-prof-txt");
-      if (txt && !txt.querySelector(".v317-login-text")) {
-        apply();
-      }
-    }
-  });
-  
+  // مراقبة DOM
+  var observer = new MutationObserver(function(){ apply(); });
   function startObserver(){
     var profile = document.querySelector(".chz-profile-group");
     if (profile) {
       observer.observe(profile, {childList: true, subtree: true, characterData: true});
-    } else {
-      setTimeout(startObserver, 500);
-    }
+    } else { setTimeout(startObserver, 500); }
   }
   
   setTimeout(apply, 500);
@@ -20802,7 +20822,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   setTimeout(startObserver, 2000);
   
   if (window.FB && window.FB.auth) {
-    window.FB.auth.onAuthStateChanged(function(){ setTimeout(apply, 200); });
+    window.FB.auth.onAuthStateChanged(function(){ setTimeout(apply, 300); });
   }
 })();
 </script>
