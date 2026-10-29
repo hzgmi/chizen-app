@@ -4,7 +4,7 @@
 <script id="chz-theme-auto-v70">
 (function(){
   var mode = 'auto';
-  try { mode = localStorage.getItem('chizen_theme_mode') || 'auto'; } catch(e){}
+  try { mode = localStorage.getItem('chizen_theme_mode') || 'light'; } catch(e){}
   var theme;
   if (mode === 'auto') {
     var h = new Date().getHours();
@@ -207,6 +207,209 @@
   <span class="v306-icon">🎭</span>
   <span>تصفح كزائر</span>
 </a>
+<style id="v307-light-theme">
+/* ═══ v307: CHIZEN Light Theme (login page) ═══ */
+html[data-theme="light"] {
+  --bg: #f8f5ff;
+  --bg-mid: #ffffff;
+  --bg-deep: #f0ecff;
+  --white: #1a1a2e;
+  --muted: #6b7280;
+  --muted-2: #9ca3af;
+  --border: rgba(141, 36, 255, 0.15);
+  --card-bg: #ffffff;
+  --glass: rgba(255, 255, 255, 0.95);
+  --shadow-lg: 0 24px 60px -12px rgba(141, 36, 255, 0.15);
+}
+
+html[data-theme="light"] body {
+  background: linear-gradient(135deg, #f8f5ff 0%, #ffffff 45%, #faf5ff 100%);
+  color: #1a1a2e;
+}
+
+html[data-theme="light"] .ambient {
+  background: 
+    radial-gradient(ellipse at 8% 30%, rgba(168, 20, 255, 0.08), transparent 40%),
+    radial-gradient(ellipse at 95% 48%, rgba(255, 39, 201, 0.08), transparent 42%),
+    radial-gradient(ellipse at 50% 100%, rgba(141, 36, 255, 0.05), transparent 45%);
+}
+
+html[data-theme="light"] .orb-1 { background: rgba(255, 39, 201, 0.15); }
+html[data-theme="light"] .orb-2 { background: rgba(141, 36, 255, 0.12); }
+html[data-theme="light"] .orb-3 { background: rgba(0, 223, 255, 0.08); }
+
+/* Brand name — يُحفظ كما هو (تدرج مضيء يعمل على الأبيض) */
+html[data-theme="light"] .brand-name {
+  filter: drop-shadow(0 2px 8px rgba(141, 36, 255, 0.25));
+}
+
+/* Auth panel — كارت أبيض ناعم */
+html[data-theme="light"] .auth-panel {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
+  box-shadow: 
+    0 20px 50px -15px rgba(141, 36, 255, 0.18),
+    0 0 0 1px rgba(168, 85, 247, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+html[data-theme="light"] .auth-panel::before {
+  opacity: 0.85;
+  background: linear-gradient(145deg, 
+    #ff9a4e 0%, #ff356f 15%, #ff20c6 30%, 
+    #a72bff 50%, #4269ff 70%, #00cfff 85%, #ff2cde 100%);
+}
+
+/* النصوص */
+html[data-theme="light"] .welcome {
+  color: #1a1a2e;
+  font-weight: 900;
+}
+
+html[data-theme="light"] .subtitle,
+html[data-theme="light"] .auth-panel p {
+  color: #6b7280;
+}
+
+/* حقول الإدخال */
+html[data-theme="light"] .input {
+  background: #f9f7ff;
+  border: 1.5px solid #e5e1f5;
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+html[data-theme="light"] .input::placeholder {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+html[data-theme="light"] .input:focus {
+  background: #ffffff;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.12);
+}
+
+html[data-theme="light"] .input-icon {
+  stroke: #a855f7;
+  opacity: 0.7;
+}
+
+html[data-theme="light"] .input-eye {
+  color: #6b7280;
+}
+
+html[data-theme="light"] .input-eye:active {
+  background: rgba(168, 85, 247, 0.08);
+}
+
+/* زر "تسجيل الدخول" — يُحفظ التدرج كما هو */
+html[data-theme="light"] .btn-primary {
+  box-shadow: 
+    0 8px 24px -6px rgba(255, 39, 201, 0.4),
+    0 4px 12px -4px rgba(141, 36, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* الأزرار الثانوية */
+html[data-theme="light"] .btn-social {
+  background: #f9f7ff;
+  border: 1.5px solid #e5e1f5;
+  color: #1a1a2e;
+}
+
+html[data-theme="light"] .btn-social:hover:not(:disabled) {
+  background: #ffffff;
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.08);
+}
+
+html[data-theme="light"] .btn-phone {
+  background: #f9f7ff;
+  border: 1.5px solid #e5e1f5;
+  color: #1a1a2e;
+}
+
+html[data-theme="light"] .btn-phone:hover {
+  background: #ffffff;
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+/* الفاصل "أو" */
+html[data-theme="light"] .divider span {
+  background: #ffffff;
+  color: #9ca3af;
+}
+
+html[data-theme="light"] .divider::before {
+  background: #e5e1f5;
+}
+
+/* النصوص السفلية */
+html[data-theme="light"] .bottom-text {
+  color: #6b7280;
+}
+
+html[data-theme="light"] .bottom-text a {
+  color: #a855f7;
+  font-weight: 900;
+}
+
+html[data-theme="light"] .bottom-text a:hover {
+  color: #ec4899;
+}
+
+/* رابط نسيت كلمة المرور */
+html[data-theme="light"] .forgot-link,
+html[data-theme="light"] .remember-label {
+  color: #6b7280;
+}
+
+html[data-theme="light"] .forgot-link:hover {
+  color: #a855f7;
+}
+
+/* زر "متابعة كزائر" العائم */
+html[data-theme="light"] .v306-guest-chip {
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.35);
+}
+
+/* رسالة الخطأ */
+html[data-theme="light"] .error-msg {
+  background: rgba(255, 77, 109, 0.08);
+  color: #dc2626;
+  border-color: rgba(255, 77, 109, 0.3);
+}
+
+/* شاشات أخرى (phone/OTP/signup/forgot) */
+html[data-theme="light"] .screen {
+  background: linear-gradient(135deg, #f8f5ff 0%, #ffffff 50%, #faf5ff 100%);
+}
+
+html[data-theme="light"] .screen .welcome {
+  color: #1a1a2e;
+}
+
+/* شريط قوة كلمة المرور */
+html[data-theme="light"] .pw-bar {
+  background: #e5e1f5;
+}
+
+html[data-theme="light"] .pw-label {
+  color: #9ca3af;
+}
+
+/* Theme toggle button (إن وُجد) */
+html[data-theme="light"] .theme-toggle {
+  background: #f9f7ff;
+  color: #1a1a2e;
+  border: 1.5px solid #e5e1f5;
+}
+</style>
+
 </head>
 <body>
 <div class="offline-banner" id="offline-banner">لا يوجد اتصال بالإنترنت</div>
