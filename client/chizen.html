@@ -7097,99 +7097,42 @@ body.chz-auth-ok {
   }
 </style>
 
-<style id="v313-guest-header-css">
-  .chz-profile-group[data-v313-guest="1"] {
-    cursor: pointer;
-    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.15));
-    border: 1.5px solid rgba(124,58,237,0.4);
-    border-radius: 12px;
-    padding: 8px 12px;
-    transition: all 0.15s ease;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 8px !important;
-  }
-  .chz-profile-group[data-v313-guest="1"]:active {
-    transform: scale(0.97);
-    background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(236,72,153,0.25));
-  }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-avatar {
-    background: linear-gradient(135deg, #7c3aed, #ec4899) !important;
-    width: 32px !important;
-    height: 32px !important;
-  }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-txt {
-    text-align: right !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 1px !important;
-  }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
-    color: #ffffff !important;
-    font-weight: 800 !important;
-    font-size: 12px !important;
-    line-height: 1.1 !important;
-  }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-welcome {
-    color: rgba(196,181,253,0.9) !important;
-    font-size: 10px !important;
-    line-height: 1.1 !important;
-  }
-  html[data-theme="light"] .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
-    color: #7c3aed !important;
-  }
-  html[data-theme="light"] .chz-profile-group[data-v313-guest="1"] .chz-prof-welcome {
-    color: #ec4899 !important;
-  }
-</style>
 
-<style id="v314-prominent-login">
-  .chz-profile-group[data-v313-guest="1"] {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
+<style id="v315-clean-guest">
+  body.chz-is-guest .chz-profile-group {
     background: #1a1a2e !important;
-    color: #ffffff !important;
     border: none !important;
     border-radius: 12px !important;
     padding: 11px 18px !important;
     min-width: 130px !important;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.18) !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2) !important;
     cursor: pointer !important;
-    gap: 0 !important;
-  }
-  .chz-profile-group[data-v313-guest="1"]:active {
-    transform: scale(0.96) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.22) !important;
-  }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-avatar {
-    display: none !important;
-  }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-txt {
-    text-align: center !important;
-    align-items: center !important;
-    width: 100% !important;
     display: flex !important;
-    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: row !important;
     gap: 0 !important;
   }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
-    color: #ffffff !important;
-    font-size: 14px !important;
-    font-weight: 900 !important;
-    line-height: 1.2 !important;
+  body.chz-is-guest .chz-profile-group:active { transform: scale(0.96) !important; }
+  body.chz-is-guest .chz-profile-group .chz-prof-avatar { display: none !important; }
+  body.chz-is-guest .chz-profile-group .chz-prof-txt {
+    text-align: center !important; width: 100% !important;
+    display: flex !important; flex-direction: column !important; align-items: center !important;
   }
-  .chz-profile-group[data-v313-guest="1"] .chz-prof-welcome {
-    display: none !important;
+  body.chz-is-guest .chz-profile-group .chz-prof-name {
+    font-size: 0 !important; line-height: 1.2 !important; color: transparent !important;
   }
-  html[data-theme="dark"] .chz-profile-group[data-v313-guest="1"] {
+  body.chz-is-guest .chz-profile-group .chz-prof-name::after {
+    content: "تسجيل الآن";
+    font-size: 14px; font-weight: 900; color: #ffffff;
+    line-height: 1.2; display: inline-block;
+  }
+  body.chz-is-guest .chz-profile-group .chz-prof-welcome { display: none !important; }
+  html[data-theme="dark"] body.chz-is-guest .chz-profile-group {
     background: #ffffff !important;
-    color: #1a1a2e !important;
-    box-shadow: 0 4px 14px rgba(255,255,255,0.18) !important;
+    box-shadow: 0 4px 14px rgba(255,255,255,0.2) !important;
   }
-  html[data-theme="dark"] .chz-profile-group[data-v313-guest="1"] .chz-prof-name {
+  html[data-theme="dark"] body.chz-is-guest .chz-profile-group .chz-prof-name::after {
     color: #1a1a2e !important;
   }
 </style>
@@ -20760,47 +20703,35 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 </script>
 
 
-<script id="v313-guest-header-js">
-(function(){
-  function setupGuestHeader(){
-    if (typeof window.__isGuest !== "function" || !window.__isGuest()) return;
-    var profile = document.querySelector(".chz-profile-group");
-    if (!profile) { setTimeout(setupGuestHeader, 500); return; }
-    if (profile.getAttribute("data-v313-guest") === "1") return;
-    
-    var nameEl = profile.querySelector(".chz-prof-name");
-    var welcomeEl = profile.querySelector(".chz-prof-welcome");
-    if (nameEl) nameEl.textContent = "تسجيل الدخول";
-    if (welcomeEl) welcomeEl.textContent = "تسوّق الآن";
-    profile.setAttribute("data-v313-guest", "1");
-    profile.setAttribute("onclick", "window.__openLogin()");
-    console.log("[v313b] guest header ready");
-  }
-  
-  // انتظر تحميل __isGuest (v301) + الهيدر
-  setTimeout(setupGuestHeader, 2000);
-  setTimeout(setupGuestHeader, 4000);
-  setInterval(setupGuestHeader, 3000);
-  
-  // إعادة الإعداد عند تسجيل الخروج
-  window.addEventListener("beforeunload", function(){
-    var profile = document.querySelector(".chz-profile-group");
-    if (profile) profile.removeAttribute("data-v313-guest");
-  });
-})();
-</script>
 
-<script id="v314-text-js">
+<script id="v315-guest-class">
 (function(){
-  function update(){
-    var profile = document.querySelector(".chz-profile-group[data-v313-guest=\"1\"]");
-    if (!profile) return false;
-    var nameEl = profile.querySelector(".chz-prof-name");
-    if (nameEl && nameEl.textContent !== "تسجيل الآن") nameEl.textContent = "تسجيل الآن";
-    return true;
+  function apply(){
+    var isGuest = (typeof window.__isGuest === "function") ? window.__isGuest() : false;
+    if (isGuest) {
+      if (!document.body.classList.contains("chz-is-guest")) {
+        document.body.classList.add("chz-is-guest");
+        console.log("[v315] guest mode active");
+      }
+      var profile = document.querySelector(".chz-profile-group");
+      if (profile && profile.getAttribute("data-v315-click") !== "1") {
+        profile.setAttribute("data-v315-click", "1");
+        profile.onclick = function(e){ e.stopPropagation(); e.preventDefault(); window.location.href = "index.html"; };
+      }
+    } else {
+      document.body.classList.remove("chz-is-guest");
+    }
   }
-  setTimeout(update, 2500);
-  setInterval(update, 4000);
+  if (typeof window.__isGuest !== "function") {
+    var waitTimer = setInterval(function(){
+      if (typeof window.__isGuest === "function") { clearInterval(waitTimer); apply(); }
+    }, 200);
+  } else { apply(); }
+  if (window.FB && window.FB.auth) {
+    window.FB.auth.onAuthStateChanged(function(){ setTimeout(apply, 100); });
+  }
+  setTimeout(apply, 1500);
+  setTimeout(apply, 3500);
 })();
 </script>
 </body>
