@@ -7275,6 +7275,64 @@ body.chz-auth-ok {
     color: #1a1a2e !important;
   }
 </style>
+
+<style id="v326-silver-css">
+  #v326-loader {
+    position: fixed; inset: 0; z-index: 2147483647;
+    background: #faf7ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease;
+  }
+  html[data-theme="dark"] #v326-loader {
+    background: #0a0825;
+  }
+  .v326-text {
+    font-family: "Bodoni Moda", "Tajawal", Georgia, serif;
+    font-weight: 900;
+    font-size: 52px;
+    letter-spacing: 0.12em;
+    background: linear-gradient(135deg,
+      #b8b8c8 0%,
+      #ffffff 25%,
+      #e0e0ee 42%,
+      #ffffff 55%,
+      #9a9aae 75%,
+      #ffffff 100%);
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: v326shine 3s ease-in-out infinite;
+    opacity: 0.85;
+    text-align: center;
+    line-height: 1;
+    filter: drop-shadow(0 2px 8px rgba(160, 160, 180, 0.15));
+  }
+  html[data-theme="dark"] .v326-text {
+    background: linear-gradient(135deg,
+      #6a6a80 0%,
+      #d0d0e0 25%,
+      #9090a8 42%,
+      #e0e0f0 55%,
+      #7a7a92 75%,
+      #c0c0d0 100%);
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 12px rgba(168, 85, 247, 0.15));
+  }
+  @keyframes v326shine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+</style>
+<div id="v326-loader">
+  <div class="v326-text">CHIZEN</div>
+</div>
 </head>
 <body>
 <div id="app">
@@ -21019,6 +21077,30 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   setTimeout(hookGoTab, 1500);
   setTimeout(applyGuestProfile, 1000);
   setTimeout(applyGuestProfile, 3000);
+})();
+</script>
+
+<script id="v326-silver-js">
+(function(){
+  function hideLoader(){
+    var loader = document.getElementById("v326-loader");
+    if (!loader) return;
+    loader.style.opacity = "0";
+    setTimeout(function(){ if(loader.parentNode) loader.remove(); }, 450);
+    console.log("[v326] loader removed");
+  }
+  
+  var tries = 0;
+  var check = setInterval(function(){
+    tries++;
+    if (window.APP && window.APP.state) {
+      clearInterval(check);
+      setTimeout(hideLoader, 250); // 250ms لضمان استقرار أولي
+    } else if (tries > 30) {
+      clearInterval(check);
+      hideLoader(); // إخفاء قسري بعد 3s
+    }
+  }, 100);
 })();
 </script>
 </body>
