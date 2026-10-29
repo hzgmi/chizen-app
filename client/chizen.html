@@ -1,6 +1,44 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html data-theme="light" lang="ar" dir="rtl" style="background:#faf7ff !important;color-scheme:light">
 <head>
+<!-- v335-critical-light: LIGHT theme is the app default, always -->
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#faf7ff">
+<style id="v335-critical-light">
+  /* Force light theme from byte 0 */
+  html, body {
+    background-color: #faf7ff !important;
+    color-scheme: light !important;
+  }
+  /* Only override when user explicitly chose dark */
+  html[data-theme="dark"], html.chz-dark {
+    background-color: #0a0825 !important;
+    color-scheme: dark !important;
+  }
+</style>
+<script id="v335-theme-lock">
+  (function(){
+    try {
+      var stored = localStorage.getItem("chizen_theme_mode");
+      var html = document.documentElement;
+      // LIGHT is always the default. Dark only if user explicitly chose it.
+      if (stored === "dark") {
+        html.setAttribute("data-theme", "dark");
+        html.classList.add("chz-dark");
+        html.classList.remove("chz-light");
+        html.style.background = "#0a0825";
+      } else {
+        html.setAttribute("data-theme", "light");
+        html.classList.add("chz-light");
+        html.classList.remove("chz-dark");
+        html.style.background = "#faf7ff";
+      }
+    } catch(e) {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  })();
+</script>
+
 <script id="v327-migrate">
   (function(){
     try {
