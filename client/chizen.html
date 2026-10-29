@@ -7554,6 +7554,198 @@ body.chz-auth-ok {
     50% { background-position: 100% 50%; }
   }
 </style>
+
+<style id="v336-cart-css">
+  /* Cart items - Shein style */
+  #sc-cart .ci {
+    display: flex !important;
+    gap: 12px !important;
+    padding: 14px !important;
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+    align-items: flex-start !important;
+  }
+  html[data-theme="dark"] #sc-cart .ci { background: #1a1535 !important; }
+  
+  #sc-cart .ci-i {
+    position: relative !important;
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    background: #f4f6fa !important;
+  }
+  #sc-cart .ci-i img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 12px !important;
+  }
+  
+  #sc-cart .cr {
+    position: absolute !important;
+    top: 4px !important;
+    right: 4px !important;
+    width: 22px !important;
+    height: 22px !important;
+    background: rgba(0,0,0,0.65) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+  }
+  #sc-cart .cr svg {
+    width: 12px !important;
+    height: 12px !important;
+    stroke: #ffffff !important;
+    stroke-width: 2.5 !important;
+    fill: none !important;
+  }
+  
+  #sc-cart .ci-inf {
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  #sc-cart .ci-n {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #1a1a2e !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  html[data-theme="dark"] #sc-cart .ci-n { color: #ffffff !important; }
+  
+  #sc-cart .ci-p {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    color: #ec4899 !important;
+    margin: 0 !important;
+  }
+  
+  #sc-cart .qty {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: #f4f6fa !important;
+    border-radius: 20px !important;
+    padding: 4px 6px !important;
+    width: fit-content !important;
+  }
+  html[data-theme="dark"] #sc-cart .qty { background: #2a2350 !important; }
+  #sc-cart .qb {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #7c3aed !important;
+    font-weight: 900 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+  html[data-theme="dark"] #sc-cart .qb { background: #1e1533 !important; border-color: #4c3b7a !important; color: #a78bfa !important; }
+  #sc-cart .qn {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #1a1a2e !important;
+    min-width: 20px !important;
+    text-align: center !important;
+  }
+  html[data-theme="dark"] #sc-cart .qn { color: #ffffff !important; }
+  
+  /* Total box - lighter look */
+  #sc-cart .tb {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    margin-top: 8px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  }
+  html[data-theme="dark"] #sc-cart .tb { background: #1a1535 !important; }
+  #sc-cart .tr { display: flex !important; justify-content: space-between !important; padding: 6px 0 !important; font-size: 13px !important; }
+  #sc-cart .tf { display: flex !important; justify-content: space-between !important; padding: 12px 0 0 !important; font-size: 17px !important; font-weight: 900 !important; border-top: 1px solid #e5e7eb !important; margin-top: 8px !important; color: #1a1a2e !important; }
+  html[data-theme="dark"] #sc-cart .tf { color: #ffffff !important; border-color: #4c3b7a !important; }
+  
+  /* Suggested products section */
+  .v336-suggested {
+    margin-top: 20px !important;
+    padding-top: 16px !important;
+    border-top: 1px solid #e5e7eb !important;
+  }
+  html[data-theme="dark"] .v336-suggested { border-color: #4c3b7a !important; }
+  .v336-suggested-title {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    color: #1a1a2e !important;
+    margin-bottom: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+  html[data-theme="dark"] .v336-suggested-title { color: #ffffff !important; }
+  .v336-suggested-scroll {
+    display: flex !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    padding-bottom: 6px !important;
+    scrollbar-width: none !important;
+  }
+  .v336-suggested-scroll::-webkit-scrollbar { display: none !important; }
+  .v336-suggested-card {
+    flex-shrink: 0 !important;
+    width: 130px !important;
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  }
+  html[data-theme="dark"] .v336-suggested-card { background: #1a1535 !important; }
+  .v336-suggested-card:active { transform: scale(0.97) !important; }
+  .v336-suggested-img {
+    width: 100% !important;
+    aspect-ratio: 1 !important;
+    object-fit: cover !important;
+    background: #f4f6fa !important;
+  }
+  .v336-suggested-info {
+    padding: 8px 10px !important;
+  }
+  .v336-suggested-name {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #1a1a2e !important;
+    line-height: 1.3 !important;
+    margin-bottom: 4px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    min-height: 28px !important;
+  }
+  html[data-theme="dark"] .v336-suggested-name { color: #ffffff !important; }
+  .v336-suggested-price {
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: #ec4899 !important;
+  }
+</style>
 </head>
 <body>
 <div id="app">
@@ -11933,7 +12125,7 @@ var APP={
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCart(\''+esc(p.id)+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div><div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',-1)">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',1)">+</button></div></div></div>';
     }).join('');
     html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
-    c.innerHTML=html;
+    c.innerHTML=html + (window.__v336RenderSuggested ? window.__v336RenderSuggested() : '');
   },
   
   applyCoupon:async function(){
@@ -21459,6 +21651,61 @@ window.__showLoginModal = function(actionLabel, pendingAction){
     console.log("[v334] installed");
   }
   hook();
+})();
+</script>
+
+<script id="v336-cart-js">
+(function(){
+  window.__v336RenderSuggested = function(){
+    if (!window.APP || !window.APP.products || window.APP.products.length < 2) return "";
+    var cartIds = {};
+    if (window.APP.cart) window.APP.cart.forEach(function(c){ cartIds[c.id] = true; });
+    
+    var byCategory = {};
+    window.APP.products.forEach(function(p){
+      if (!p.active || cartIds[p.id]) return;
+      if (!byCategory[p.category]) byCategory[p.category] = [];
+      byCategory[p.category].push(p);
+    });
+    
+    var cats = Object.keys(byCategory);
+    if (cats.length === 0) return "";
+    
+    // shuffle cats + pick 1 random from each, max 8
+    for (var i = cats.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = cats[i]; cats[i] = cats[j]; cats[j] = tmp;
+    }
+    
+    var picked = [];
+    for (var k = 0; k < cats.length && picked.length < 8; k++) {
+      var arr = byCategory[cats[k]];
+      var pick = arr[Math.floor(Math.random() * arr.length)];
+      picked.push(pick);
+    }
+    
+    if (picked.length === 0) return "";
+    
+    var esc = function(s){ return String(s||"").replace(/[&<>"'"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+    
+    var html = '<div class="v336-suggested">' +
+      '<div class="v336-suggested-title">💡 منتجات قد تعجبك</div>' +
+      '<div class="v336-suggested-scroll">';
+    
+    picked.forEach(function(p){
+      html += '<div class="v336-suggested-card" onclick="APP.openProduct && APP.openProduct(\'' + esc(p.id) + '\')">' +
+        '<img class="v336-suggested-img" src="' + esc(p.img) + '" onerror="this.style.opacity=0.3">' +
+        '<div class="v336-suggested-info">' +
+          '<div class="v336-suggested-name">' + esc(p.name) + '</div>' +
+          '<div class="v336-suggested-price">' + (Number(p.price)||0).toFixed(0) + ' ر.س</div>' +
+        '</div>' +
+      '</div>';
+    });
+    
+    html += '</div></div>';
+    return html;
+  };
+  console.log("[v336] suggested products ready");
 })();
 </script>
 </body>
