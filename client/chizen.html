@@ -42,75 +42,14 @@
 
 <!-- ═══ AUTH GUARD v60 ═══ -->
 <style id="chz-auth-guard-v61">
-  html:not(.chz-auth-ok) body {
-    visibility: hidden !important;
-    overflow: hidden !important;
-  }
-  html:not(.chz-auth-ok) body > * {
-    display: none !important;
-  }
-  html:not(.chz-auth-ok) #chz-splash-v63 {
-    display: flex !important;
-    visibility: visible !important;
-  }
+  
   @keyframes chzSplashPulse {
     0%, 100% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.08); opacity: 0.85; }
   }
 </style>
 
-<div id="chz-splash-v63" style="position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;font-family:Tajawal,sans-serif;overflow:hidden;">
-  <style>
-    /* v309-minimal-splash */
-    #chz-splash-v63 { background: #faf7ff; }
-    html[data-theme="dark"] #chz-splash-v63, html.chz-dark #chz-splash-v63 { background: #0a0825; }
 
-    #chz-splash-v63 .chz-sp-logo-wrap {
-      width: 110px; height: 110px;
-      display: flex; align-items: center; justify-content: center;
-      animation: chzSpBreath 2s ease-in-out infinite;
-    }
-    #chz-splash-v63 .chz-sp-logo {
-      width: 100%; height: 100%; object-fit: contain;
-      filter: drop-shadow(0 4px 20px rgba(124, 58, 237, 0.22));
-    }
-    html[data-theme="dark"] #chz-splash-v63 .chz-sp-logo, html.chz-dark #chz-splash-v63 .chz-sp-logo {
-      filter: drop-shadow(0 4px 20px rgba(168, 85, 247, 0.35));
-    }
-    #chz-splash-v63 .chz-sp-fallback {
-      display: none; font-family: "Bodoni Moda", serif;
-      font-size: 80px; font-weight: 900;
-      background: linear-gradient(135deg, #ec4899, #7c3aed);
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    #chz-splash-v63 .chz-sp-spinner {
-      width: 28px; height: 28px;
-      border: 2.5px solid rgba(124, 58, 237, 0.2);
-      border-top-color: #7c3aed;
-      border-radius: 50%;
-      animation: chzSpSpin 0.8s linear infinite;
-    }
-    html[data-theme="dark"] #chz-splash-v63 .chz-sp-spinner, html.chz-dark #chz-splash-v63 .chz-sp-spinner {
-      border-color: rgba(168, 85, 247, 0.2);
-      border-top-color: #a78bfa;
-    }
-    @keyframes chzSpBreath {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.9; }
-    }
-    @keyframes chzSpSpin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
-
-  <div class="chz-sp-logo-wrap">
-    <div class="v311-splash-text">CHIZEN</div>
-    <div class="chz-sp-fallback">C</div>
-  </div>
-
-  <div class="chz-sp-spinner"></div>
-</div>
 
 <script>
 (function(){
@@ -7063,18 +7002,11 @@ body.chz-auth-ok {
 </style>
 
 <style id="v310-css">
-  #chz-splash-v63 #v310-splash-logo {
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
-  }
+  
 </style>
 
 <style id="v311-splash-css">
-  #chz-splash-v63 .chz-sp-logo-wrap {
-    width: auto !important;
-    height: auto !important;
-    max-width: none !important;
-  }
+  
   .v311-splash-text {
     font-family: "Bodoni Moda", "Tajawal", serif;
     font-weight: 900;
@@ -7267,6 +7199,63 @@ body.chz-auth-ok {
   body.chz-is-guest #sc-profile .sit[onclick*="'favorites'"] { display: none !important; }
   body.chz-is-guest #sc-profile .sit[onclick*="'points'"] { display: none !important; }
   body.chz-is-guest #sc-profile .sit[onclick*="APP.logout"] { display: none !important; }
+</style>
+
+<script id="v322-instant-auth">
+  // v322: content visible immediately, no splash
+  document.documentElement.classList.add("chz-auth-ok");
+</script>
+
+<script id="v323-guest-instant">
+  (function(){
+    try {
+      if (localStorage.getItem("chizen_guest") === "true") {
+        document.documentElement.classList.add("chz-guest-instant");
+      }
+    } catch(e){}
+  })();
+</script>
+
+<style id="v323-anti-flicker">
+  /* v323: guest state visible from 0ms - no flicker */
+  html.chz-guest-instant .chz-prof-txt .chz-prof-name {
+    display: none !important;
+  }
+  html.chz-guest-instant .chz-prof-txt .chz-prof-welcome {
+    display: none !important;
+  }
+  html.chz-guest-instant .chz-prof-txt::after {
+    content: "تسجيل الآن";
+    font-family: Tajawal, sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    text-align: center;
+    display: block;
+  }
+  html.chz-guest-instant .chz-profile-group {
+    background: #1a1a2e !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 8px 14px !important;
+    min-width: 100px !important;
+    max-width: 130px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+  }
+  html.chz-guest-instant .chz-profile-group .chz-prof-avatar {
+    display: none !important;
+  }
+  html[data-theme="dark"].chz-guest-instant .chz-profile-group,
+  html[data-theme="dark"] html.chz-guest-instant .chz-profile-group {
+    background: #ffffff !important;
+  }
+  html[data-theme="dark"] html.chz-guest-instant .chz-prof-txt::after {
+    color: #1a1a2e !important;
+  }
 </style>
 </head>
 <body>
