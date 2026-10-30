@@ -114,7 +114,7 @@
     overlay.className = 'v2-overlay';
     overlay.innerHTML =
       '<div class="v2-header">' +
-        '<div class="v2-avatar"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="padding:4px;"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/><path d="M15 9C14.2 8.3 13.1 8 12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C13.1 16 14.2 15.7 15 15"/><path d="M17 4L18 7L21 8L18 9L17 12L16 9L13 8L16 7L17 4Z" fill="currentColor"/></svg></div>' +
+        '<div class="v2-avatar">🤖</div>' +
         '<div class="v2-header-info">' +
           '<div class="v2-name">' + esc(t().title) + '</div>' +
           '<div class="v2-status" id="v2-status">' + esc(t().status) + '</div>' +
@@ -179,7 +179,7 @@
     // Welcome + suggestions
     var html = '';
     html += '<div class="v2-welcome">';
-    html +=   '<div class="v2-welcome-avatar"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="padding:4px;"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/><path d="M15 9C14.2 8.3 13.1 8 12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C13.1 16 14.2 15.7 15 15"/><path d="M17 4L18 7L21 8L18 9L17 12L16 9L13 8L16 7L17 4Z" fill="currentColor"/></svg></div>';
+    html +=   '<div class="v2-welcome-avatar">🤖</div>';
     html +=   '<div class="v2-welcome-title">' + esc(t().welcomeTitle) + '</div>';
     html +=   '<div class="v2-welcome-sub">' + esc(t().welcomeSub) + '</div>';
     html += '</div>';
@@ -258,7 +258,7 @@
     typingEl = document.createElement('div');
     typingEl.className = 'v2-msg-row bot';
     typingEl.innerHTML =
-      '<div class="v2-msg-avatar"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="padding:4px;"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/><path d="M15 9C14.2 8.3 13.1 8 12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C13.1 16 14.2 15.7 15 15"/><path d="M17 4L18 7L21 8L18 9L17 12L16 9L13 8L16 7L17 4Z" fill="currentColor"/></svg></div>' +
+      '<div class="v2-msg-avatar">🤖</div>' +
       '<div class="v2-bubble"><div class="v2-typing"><span></span><span></span><span></span></div></div>';
     state.messages.appendChild(typingEl);
     scrollBottom();
