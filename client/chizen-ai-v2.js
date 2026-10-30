@@ -8,7 +8,7 @@
   'use strict';
 
   // ═══ Config ═══
-  var OPENROUTER_KEY = "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";
+  var OPENROUTER_KEY = ""; // removed for security
 
   // 4 fallback models — first that works is used
   var MODELS = [
@@ -272,7 +272,7 @@
   }
 
   // ═══ AI call with 4-model fallback ═══
-  async function callAI(userMessage) {
+  async function callAI(userMessage, context) {
     var models = MODELS.slice();
     // Try current model first if we have one
     if (state.currentModel) {
@@ -283,20 +283,22 @@
       var model = models[i];
       try {
         console.log('[v2-ai] trying:', model);
-        var res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        var res = await fetch('https://chizen-ai.hazimchat.workers.dev', {
           method: 'POST',
           headers: {
-            'Authorization': 'Bearer ' + OPENROUTER_KEY,
+// Authorization handled by Cloudflare Worker
             'Content-Type': 'application/json',
             'HTTP-Referer': 'https://hzgmi.github.io/chizen-app/',
             'X-Title': 'CHIZEN AI v2'
           },
           body: JSON.stringify({
             model: model,
-            messages: [
-              { role: 'system', content: SYSTEM_PROMPT },
-              { role: 'user', content: userMessage }
-            ]
+            messages: (function(){
+              var arr = [{ role: 'system', content: SYSTEM_PROMPT }];
+              if (context) arr.push({ role: 'system', content: '[نتائج البحث من المتجر]\n' + context });
+              arr.push({ role: 'user', content: userMessage });
+              return arr;
+            })()
           })
         });
 
@@ -335,7 +337,11 @@
 
     state.isTyping = true;
     try {
-      var reply = await callAI(text);
+      var context = "";
+      if (typeof window.__chizenSmartSearch === "function") {
+        try { context = window.__chizenSmartSearch(text) || ""; } catch(e){ console.warn("[v343]", e); }
+      }
+      var reply = await callAI(text, context);
       hideTyping();
       addBubble('bot', reply);
     } catch (e) {
