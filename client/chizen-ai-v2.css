@@ -468,3 +468,18 @@ html[data-theme="dark"] .v2-footer-badge {
   background: rgba(168,85,247,0.15);
   color: #a78bfa;
 }
+
+/* ══════ CHIZEN AI NEW THEME (V3) ══════ */
+.v2-fab {
+  background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
+  box-shadow: 0 8px 32px rgba(37,99,235,0.4), 0 0 20px rgba(14,165,233,0.3) !important;
+  border: 2px solid rgba(255,255,255,0.2) !important;
+}
+.v2-fab::before { display: none !important; } /* إخفاء شارة AI القديمة */
+.v2-fab svg { width: 36px !important; height: 36px !important; color: white; }
+.v2-fab:active { transform: scale(0.9) !important; }
+
+.v2-msg-bot { background: #f8fafc !important; color: #0f172a !important; border-radius: 20px 20px 20px 4px !important; box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important; }
+.v2-msg-user { background: linear-gradient(135deg, #2563eb, #0ea5e9) !important; color: white !important; border-radius: 20px 20px 4px 20px !important; box-shadow: 0 4px 12px rgba(37,99,235,0.2) !important; }
+.v2-avatar, .v2-msg-avatar { color: #2563eb !important; background: white !important; border: 1px solid #e2e8f0 !important; }
+.v2-header { border-bottom: 1px solid #e2e8f0 !important; background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px) !important; }
