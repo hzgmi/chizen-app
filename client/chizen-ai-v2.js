@@ -273,56 +273,70 @@
 
   // ═══ AI call with 4-model fallback ═══
   async function callAI(userMessage, context) {
-    var models = MODELS.slice();
-    // Try current model first if we have one
-    if (state.currentModel) {
-      models = [state.currentModel].concat(models.filter(function (m) { return m !== state.currentModel; }));
-    }
-
-    for (var i = 0; i < models.length; i++) {
-      var model = models[i];
       try {
-        console.log('[v2-ai] trying:', model);
-        var res = await fetch('https://chizen-ai.hazimchat.workers.dev', {
-          method: 'POST',
-          headers: {
-// Authorization handled by Cloudflare Worker
-            'Content-Type': 'application/json',
-            'HTTP-Referer': 'https://hzgmi.github.io/chizen-app/',
-            'X-Title': 'CHIZEN AI v2'
-          },
+        var res = await fetch("https://chizen-ai.hazimchat.workers.dev", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            model: model,
             messages: (function(){
-              var arr = [{ role: 'system', content: SYSTEM_PROMPT }];
-              if (context) arr.push({ role: 'system', content: '[نتائج البحث من المتجر]\n' + context });
-              arr.push({ role: 'user', content: userMessage });
+              var arr = [{ role: "system", content: SYSTEM_PROMPT }];
+              if (context) arr.push({ role: "system", content: "[نتائج البحث من المتجر]\n" + context });
+              arr.push({ role: "user", content: userMessage });
               return arr;
             })()
           })
         });
 
-        if (!res.ok) {
-          console.warn('[v2-ai] ' + model + ' failed: HTTP ' + res.status);
-          continue;
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        // إنشاء فقاعة الرسالة
+        var msgsContainer = document.querySelector(".v2-messages") || document.getElementById("v2-messages");
+        var botMsgDiv = document.createElement("div");
+        botMsgDiv.className = "v2-msg v2-msg-bot";
+        var textDiv = document.createElement("div");
+        textDiv.className = "v2-msg-text";
+        botMsgDiv.appendChild(textDiv);
+        if (msgsContainer) {
+            msgsContainer.appendChild(botMsgDiv);
+            msgsContainer.scrollTop = msgsContainer.scrollHeight;
         }
 
-        var data = await res.json();
-        if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-          state.currentModel = model;
-          console.log('[v2-ai] ✓ success with:', model);
-          return data.choices[0].message.content;
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let fullText = "";
+        let buffer = "";
+        
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop(); // احتفظ بالجزء غير المكتمل
+          
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              const dataStr = line.slice(6);
+              try {
+                const parsed = JSON.parse(dataStr);
+                if (parsed.candidates && parsed.candidates[0] && parsed.candidates[0].content && parsed.candidates[0].content.parts) {
+                  const text = parsed.candidates[0].content.parts[0].text;
+                  if (text) {
+                    fullText += text;
+                    textDiv.innerHTML = fullText.replace(/\n/g, "<br>");
+                    if (msgsContainer) msgsContainer.scrollTop = msgsContainer.scrollHeight;
+                  }
+                }
+              } catch(e) {}
+            }
+          }
         }
-        console.warn('[v2-ai] ' + model + ': no choices');
+        return fullText;
       } catch (e) {
-        console.warn('[v2-ai] ' + model + ' error:', e.message);
+        console.error("AI Error:", e);
+        return null;
       }
     }
-
-    return state.lang === 'ar'
-      ? 'عذراً، لا أستطيع الاتصال بخادم الذكاء الاصطناعي الآن. حاول مرة أخرى بعد قليل.'
-      : 'Sorry, AI service is unreachable. Please try again later.';
-  }
 
   // ═══ Send ═══
   async function sendMessage() {
