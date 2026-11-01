@@ -8040,637 +8040,7 @@ body.chz-auth-ok {
 
 
 
-<style id="chz-booking-unified-2025">
-/* ═══════════════════════════════════════════════════════════
-   CHIZEN BOOKING — Unified Corporate Theme (Navy + Gold)
-   One source of truth for outer screen + full-screen forms
-   ═══════════════════════════════════════════════════════════ */
 
-/* ───── OUTER BOOKING SCREEN ───── */
-#sc-booking {
-  background: linear-gradient(180deg, #060914 0%, #0a1024 100%) !important;
-  min-height: 100vh;
-  padding-bottom: 40px;
-}
-
-/* HERO */
-#sc-booking .tvl-hero {
-  background: linear-gradient(135deg, #0d1b3e 0%, #1a2b5e 50%, #0d1b3e 100%) !important;
-  border-radius: 0 0 24px 24px !important;
-  padding: 32px 24px 28px !important;
-  margin: 0 0 8px !important;
-  position: relative !important;
-  border: none !important;
-  border-bottom: 2px solid #c9a961 !important;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5) !important;
-  overflow: hidden !important;
-}
-#sc-booking .tvl-hero-badge {
-  background: rgba(201,169,97,0.12) !important;
-  border: 1px solid rgba(201,169,97,0.4) !important;
-  color: #c9a961 !important;
-  font-size: 10px !important;
-  font-weight: 900 !important;
-  letter-spacing: 3px !important;
-  padding: 6px 14px !important;
-  border-radius: 3px !important;
-  margin-bottom: 12px !important;
-  display: inline-block !important;
-}
-#sc-booking .tvl-hero-title {
-  font-size: 24px !important;
-  font-weight: 900 !important;
-  color: #ffffff !important;
-  margin: 6px 0 8px !important;
-  line-height: 1.3 !important;
-}
-#sc-booking .tvl-hero-sub {
-  font-size: 12.5px !important;
-  color: rgba(255,255,255,0.65) !important;
-  font-weight: 500 !important;
-}
-#sc-booking .tvl-back {
-  background: rgba(201,169,97,0.1) !important;
-  border: 1px solid rgba(201,169,97,0.35) !important;
-  border-radius: 50% !important;
-  width: 40px !important;
-  height: 40px !important;
-  color: #c9a961 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-}
-
-/* TRUST BAR */
-#sc-booking .chz-bk-trust-bar {
-  display: flex !important;
-  justify-content: center !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  padding: 16px 20px 0 !important;
-  margin-bottom: 4px !important;
-}
-#sc-booking .chz-bk-trust-item {
-  font-size: 10px !important;
-  font-weight: 800 !important;
-  letter-spacing: 1.5px !important;
-  color: rgba(201,169,97,0.85) !important;
-  padding: 5px 10px !important;
-  background: rgba(201,169,97,0.05) !important;
-  border: 1px solid rgba(201,169,97,0.2) !important;
-  border-radius: 3px !important;
-  text-transform: uppercase !important;
-}
-
-/* SECTION TITLES */
-#sc-booking .tvl-sect {
-  color: #c9a961 !important;
-  font-size: 11px !important;
-  font-weight: 900 !important;
-  letter-spacing: 4px !important;
-  text-transform: uppercase !important;
-  padding: 0 22px !important;
-  margin: 28px 0 16px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  background: none !important;
-}
-#sc-booking .tvl-sect::before {
-  content: '' !important;
-  width: 24px !important;
-  height: 1.5px !important;
-  background: #c9a961 !important;
-  display: inline-block !important;
-  flex-shrink: 0 !important;
-}
-#sc-booking .tvl-sect::after {
-  content: '' !important;
-  flex: 1 !important;
-  height: 1px !important;
-  background: linear-gradient(90deg, rgba(201,169,97,0.3), transparent) !important;
-}
-
-/* SERVICE TILES — Horizontal */
-#sc-booking .tvl-services {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-  padding: 0 16px !important;
-}
-#sc-booking .tvl-svc {
-  background: rgba(255,255,255,0.025) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 12px !important;
-  padding: 18px 20px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 16px !important;
-  text-align: right !important;
-  position: relative !important;
-  overflow: hidden !important;
-  cursor: pointer !important;
-  transition: all 0.22s !important;
-  box-shadow: none !important;
-  min-height: auto !important;
-}
-#sc-booking .tvl-svc::before {
-  content: '' !important;
-  position: absolute !important;
-  right: 0 !important;
-  top: 0 !important;
-  bottom: 0 !important;
-  width: 3px !important;
-  background: #c9a961 !important;
-  opacity: 0 !important;
-  transition: opacity 0.22s !important;
-}
-#sc-booking .tvl-svc::after {
-  content: '‹' !important;
-  position: absolute !important;
-  left: 22px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  color: rgba(201,169,97,0.35) !important;
-  font-size: 24px !important;
-  font-weight: 900 !important;
-  pointer-events: none !important;
-}
-#sc-booking .tvl-svc:active,
-#sc-booking .tvl-svc.active {
-  background: linear-gradient(90deg, rgba(201,169,97,0.08) 0%, rgba(26,43,94,0.3) 100%) !important;
-  border-color: rgba(201,169,97,0.4) !important;
-  box-shadow: 0 4px 20px rgba(201,169,97,0.12) !important;
-}
-#sc-booking .tvl-svc:active::before,
-#sc-booking .tvl-svc.active::before {
-  opacity: 1 !important;
-}
-#sc-booking .tvl-svc-i {
-  font-size: 26px !important;
-  width: 54px !important;
-  height: 54px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(201,169,97,0.08) !important;
-  border: 1px solid rgba(201,169,97,0.25) !important;
-  border-radius: 10px !important;
-  flex-shrink: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1 !important;
-}
-#sc-booking .tvl-svc-n {
-  font-size: 15.5px !important;
-  font-weight: 900 !important;
-  color: #ffffff !important;
-  margin-bottom: 3px !important;
-  line-height: 1.3 !important;
-}
-#sc-booking .tvl-svc-d {
-  font-size: 11px !important;
-  color: rgba(255,255,255,0.45) !important;
-  font-weight: 500 !important;
-}
-#sc-booking .tvl-svc > div:not(.tvl-svc-i) {
-  flex: 1 !important;
-  min-width: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  padding-left: 28px !important;
-}
-
-/* DELIVERY CARD */
-#sc-booking .tvl-dlv-card {
-  margin: 12px 16px 0 !important;
-  background: rgba(255,255,255,0.025) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 12px !important;
-  padding: 18px 20px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 16px !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-#sc-booking .tvl-dlv-card::before {
-  content: '' !important;
-  position: absolute !important;
-  right: 0 !important;
-  top: 0 !important;
-  bottom: 0 !important;
-  width: 3px !important;
-  background: #c9a961 !important;
-}
-#sc-booking .tvl-dlv-card:active,
-#sc-booking .tvl-dlv-card.active {
-  background: linear-gradient(90deg, rgba(201,169,97,0.08) 0%, rgba(26,43,94,0.3) 100%) !important;
-  border-color: rgba(201,169,97,0.4) !important;
-}
-#sc-booking .tvl-dlv-i {
-  font-size: 26px !important;
-  width: 54px !important;
-  height: 54px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(201,169,97,0.08) !important;
-  border: 1px solid rgba(201,169,97,0.25) !important;
-  border-radius: 10px !important;
-  flex-shrink: 0 !important;
-}
-#sc-booking .tvl-dlv-txt { flex: 1 !important; text-align: right !important; min-width: 0 !important; }
-#sc-booking .tvl-dlv-t { font-size: 15px !important; font-weight: 900 !important; color: #ffffff !important; margin-bottom: 3px !important; }
-#sc-booking .tvl-dlv-d { font-size: 11px !important; color: rgba(255,255,255,0.45) !important; }
-#sc-booking .tvl-dlv-arrow { color: rgba(201,169,97,0.4) !important; font-size: 22px !important; font-weight: 900 !important; flex-shrink: 0 !important; }
-
-/* MY BOOKINGS */
-#sc-booking .tvl-my-bookings { padding: 0 16px !important; }
-#sc-booking .tvl-empty {
-  background: rgba(255,255,255,0.02) !important;
-  border: 1px dashed rgba(201,169,97,0.2) !important;
-  border-radius: 12px !important;
-  padding: 26px 20px !important;
-  text-align: center !important;
-  color: rgba(255,255,255,0.4) !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-}
-
-#sc-booking #chz-v30-badge { display: none !important; }
-
-/* ───── FULL-SCREEN FORM ───── */
-#sc-booking .tvl-form.active {
-  display: flex !important;
-  flex-direction: column !important;
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 9999 !important;
-  background: linear-gradient(180deg, #060914 0%, #0a1024 100%) !important;
-  overflow-y: auto !important;
-  padding: 0 0 110px 0 !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-  animation: tvlFade 0.25s ease !important;
-}
-@keyframes tvlFade { from { opacity: 0; } to { opacity: 1; } }
-}
-
-/* FORM HEADER — sticky */
-#sc-booking .tvl-form.active .tvl-form-head {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 10 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 14px !important;
-  padding: 20px !important;
-  margin: 0 0 20px !important;
-  background: linear-gradient(135deg, #0d1b3e 0%, #1a2b5e 100%) !important;
-  border-bottom: 2px solid #c9a961 !important;
-  border-radius: 0 !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
-}
-#sc-booking .tvl-form.active .tvl-form-i {
-  font-size: 26px !important;
-  width: 52px !important;
-  height: 52px !important;
-  background: rgba(201,169,97,0.1) !important;
-  border: 1px solid rgba(201,169,97,0.4) !important;
-  border-radius: 10px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-shrink: 0 !important;
-}
-#sc-booking .tvl-form.active .tvl-form-t {
-  font-size: 15px !important;
-  font-weight: 900 !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  background: none !important;
-  margin-bottom: 3px !important;
-}
-#sc-booking .tvl-form.active .tvl-form-s {
-  font-size: 11px !important;
-  color: rgba(201,169,97,0.85) !important;
-  font-weight: 500 !important;
-}
-
-/* BACK BUTTON */
-#sc-booking .tvl-form-back {
-  background: rgba(201,169,97,0.1) !important;
-  border: 1px solid rgba(201,169,97,0.4) !important;
-  color: #c9a961 !important;
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  font-size: 18px !important;
-  font-weight: 900 !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-shrink: 0 !important;
-  padding: 0 !important;
-}
-
-/* FORM CONTENT PADDING */
-#sc-booking .tvl-form.active > *:not(.tvl-form-head) {
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-}
-
-/* STEPS */
-#sc-booking .tvl-form.active .tvl-stepbar {
-  margin: 22px 0 14px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-}
-#sc-booking .tvl-form.active .tvl-stepbar:first-of-type {
-  margin-top: 0 !important;
-}
-#sc-booking .tvl-form.active .tvl-num {
-  width: 28px !important;
-  height: 28px !important;
-  background: linear-gradient(135deg, #1a2b5e, #0d1b3e) !important;
-  border: 1.5px solid #c9a961 !important;
-  color: #c9a961 !important;
-  border-radius: 50% !important;
-  font-weight: 900 !important;
-  font-size: 12px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-shrink: 0 !important;
-}
-#sc-booking .tvl-form.active .tvl-stepbar > span:last-child {
-  font-size: 11.5px !important;
-  font-weight: 900 !important;
-  color: #c9a961 !important;
-  letter-spacing: 1.5px !important;
-  text-transform: uppercase !important;
-}
-
-/* CHIPS */
-#sc-booking .tvl-form.active .tvl-chips {
-  margin-bottom: 16px !important;
-  display: flex !important;
-  gap: 8px !important;
-  flex-wrap: wrap !important;
-}
-#sc-booking .tvl-form.active .tvl-chip {
-  background: rgba(255,255,255,0.03) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: rgba(255,255,255,0.65) !important;
-  border-radius: 8px !important;
-  padding: 11px 16px !important;
-  font-size: 12.5px !important;
-  font-weight: 700 !important;
-  font-family: 'Tajawal', sans-serif !important;
-  cursor: pointer !important;
-  flex: 1 !important;
-  min-width: 100px !important;
-}
-#sc-booking .tvl-form.active .tvl-chip.active {
-  background: rgba(201,169,97,0.15) !important;
-  border-color: #c9a961 !important;
-  color: #c9a961 !important;
-  font-weight: 900 !important;
-}
-
-/* ROWS */
-#sc-booking .tvl-form.active .tvl-row2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-#sc-booking .tvl-form.active .tvl-row3 { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 8px !important; }
-
-/* FIELDS */
-#sc-booking .tvl-form.active .tvl-f { margin-bottom: 14px !important; padding: 0 !important; }
-#sc-booking .tvl-form.active .tvl-f label {
-  display: block !important;
-  font-size: 11px !important;
-  color: rgba(201,169,97,0.9) !important;
-  font-weight: 800 !important;
-  margin-bottom: 7px !important;
-  letter-spacing: 1px !important;
-  text-transform: uppercase !important;
-}
-#sc-booking .tvl-form.active .tvl-f input,
-#sc-booking .tvl-form.active .tvl-f select,
-#sc-booking .tvl-form.active .tvl-f textarea {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  padding: 14px 16px !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  background: rgba(255,255,255,0.03) !important;
-  color: #ffffff !important;
-  font-family: 'Tajawal', sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  outline: none !important;
-}
-#sc-booking .tvl-form.active .tvl-f input::placeholder,
-#sc-booking .tvl-form.active .tvl-f textarea::placeholder {
-  color: rgba(255,255,255,0.3) !important;
-}
-#sc-booking .tvl-form.active .tvl-f input:focus,
-#sc-booking .tvl-form.active .tvl-f select:focus,
-#sc-booking .tvl-form.active .tvl-f textarea:focus {
-  border-color: #c9a961 !important;
-  background: rgba(201,169,97,0.05) !important;
-  box-shadow: 0 0 0 3px rgba(201,169,97,0.15) !important;
-}
-
-/* CHECKBOX */
-#sc-booking .tvl-form.active .tvl-chk {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 14px 16px !important;
-  background: rgba(201,169,97,0.05) !important;
-  border: 1px solid rgba(201,169,97,0.2) !important;
-  border-radius: 10px !important;
-  cursor: pointer !important;
-  margin-bottom: 12px !important;
-}
-#sc-booking .tvl-form.active .tvl-chk input[type="checkbox"] {
-  width: 22px !important;
-  height: 22px !important;
-  accent-color: #c9a961 !important;
-  margin: 0 !important;
-}
-#sc-booking .tvl-form.active .tvl-chk span { font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important; }
-
-/* HIDE PRICE PREVIEW until ready */
-#sc-booking .tvl-form .price-preview,
-#sc-booking .tvl-form [class*="price-preview"] {
-  display: none !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  opacity: 0 !important;
-  overflow: hidden !important;
-}
-#sc-booking .tvl-form.tvl-price-ready .price-preview,
-#sc-booking .tvl-form.tvl-price-ready [class*="price-preview"] {
-  display: block !important;
-  height: auto !important;
-  opacity: 1 !important;
-  margin: 16px 20px !important;
-  padding: 16px 18px !important;
-  background: linear-gradient(135deg, rgba(201,169,97,0.15), rgba(201,169,97,0.05)) !important;
-  border: 1px solid rgba(201,169,97,0.45) !important;
-  border-radius: 12px !important;
-  text-align: center !important;
-  font-size: 14px !important;
-  font-weight: 800 !important;
-  color: #c9a961 !important;
-  box-shadow: 0 4px 16px rgba(201,169,97,0.2) !important;
-}
-
-/* SUBMIT — clean fixed bottom */
-#sc-booking .tvl-form.active .tvl-submit {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  min-height: 68px !important;
-  padding: 18px 24px !important;
-  margin: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 15px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.3px !important;
-  line-height: 1.3 !important;
-  box-sizing: border-box !important;
-  z-index: 10000 !important;
-  border-radius: 0 !important;
-  border: none !important;
-  cursor: pointer !important;
-  font-family: 'Tajawal', sans-serif !important;
-  text-transform: none !important;
-  text-align: center !important;
-  overflow: hidden !important;
-}
-#sc-booking .tvl-form.active .tvl-submit::before,
-#sc-booking .tvl-form.active .tvl-submit::after {
-  display: none !important;
-  content: none !important;
-}
-#sc-booking .tvl-form.active .tvl-submit.locked {
-  background: linear-gradient(180deg, rgba(60,60,80,0.85), rgba(30,30,50,0.95)) !important;
-  color: rgba(201,169,97,0.75) !important;
-  cursor: not-allowed !important;
-  box-shadow: 0 -6px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08) !important;
-}
-#sc-booking .tvl-form.active .tvl-submit.ready,
-#sc-booking .tvl-form.active .tvl-submit:not(.locked) {
-  background: linear-gradient(135deg, #c9a961 0%, #a88844 100%) !important;
-  color: #0a1024 !important;
-  box-shadow: 0 -6px 20px rgba(201,169,97,0.35), inset 0 1px 0 rgba(255,255,255,0.35) !important;
-}
-
-/* ═══════════ LIGHT MODE ═══════════ */
-html[data-theme="light"] #sc-booking {
-  background: linear-gradient(180deg, #f5f7fa, #e8ecf5) !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active {
-  background: linear-gradient(180deg, #ffffff, #f8f9fc) !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-form-head {
-  background: linear-gradient(135deg, #1a2b5e, #0d1b3e) !important;
-  border-bottom-color: #c9a961 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-form-t {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-stepbar > span:last-child {
-  color: #7c3aed !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-num {
-  background: #1a2b5e !important;
-  color: #c9a961 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f label {
-  color: #4a5568 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f input,
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f select,
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f textarea {
-  background: #ffffff !important;
-  color: #1a1a2e !important;
-  border-color: #d0d5dd !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f input::placeholder {
-  color: #9ca3af !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f input:focus,
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f select:focus,
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f textarea:focus {
-  border-color: #7c3aed !important;
-  box-shadow: 0 0 0 3px rgba(124,58,237,0.15) !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chip {
-  background: #ffffff !important;
-  color: #4a5568 !important;
-  border-color: #e2e8f0 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chip.active {
-  background: linear-gradient(135deg, #1a2b5e, #0d1b3e) !important;
-  color: #c9a961 !important;
-  border-color: #c9a961 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chk {
-  background: rgba(201,169,97,0.1) !important;
-  border-color: rgba(201,169,97,0.4) !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chk span {
-  color: #1a1a2e !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit.locked {
-  background: linear-gradient(180deg, #e5e7eb, #d1d5db) !important;
-  color: #6b7280 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit.ready,
-html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
-  background: linear-gradient(135deg, #c9a961, #a88844) !important;
-  color: #0a1024 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-svc {
-  background: #ffffff !important;
-  border-color: #e5e7eb !important;
-}
-html[data-theme="light"] #sc-booking .tvl-svc.active {
-  background: linear-gradient(90deg, rgba(201,169,97,0.12), rgba(26,43,94,0.06)) !important;
-  border-color: #c9a961 !important;
-}
-html[data-theme="light"] #sc-booking .tvl-svc-n { color: #1a1a2e !important; }
-html[data-theme="light"] #sc-booking .tvl-svc-d { color: #6b7280 !important; }
-html[data-theme="light"] #sc-booking .tvl-dlv-card { background: #ffffff !important; border-color: #e5e7eb !important; }
-html[data-theme="light"] #sc-booking .tvl-dlv-t { color: #1a1a2e !important; }
-html[data-theme="light"] #sc-booking .tvl-dlv-d { color: #6b7280 !important; }
-html[data-theme="light"] #sc-booking .tvl-sect { color: #7c3aed !important; }
-
-/* RESPONSIVE */
-@media (max-width: 359px) {
-  #sc-booking .tvl-hero-title { font-size: 20px !important; }
-  #sc-booking .tvl-form.active .tvl-row2,
-  #sc-booking .tvl-form.active .tvl-row3 {
-    grid-template-columns: 1fr !important;
-  }
-}
-</style>
 
 <script id="chz-booking-unified-js">
 (function() {
@@ -8724,28 +8094,81 @@ html[data-theme="light"] #sc-booking .tvl-sect { color: #7c3aed !important; }
 })();
 </script>
 
-<style id="tvl-layout-critical-fix">
+
+
+<style id="tvl-ultimate-2025">
 /* ═══════════════════════════════════════════════════════
-   CRITICAL LAYOUT FIX — Sticky Submit + Strict Price Hide
+   ULTIMATE FIX — Display Price ONLY when ready
+   Button: fixed bottom, always visible
    ═══════════════════════════════════════════════════════ */
 
-/* إعادة form.active كـ flex column مع overflow صحيح */
+/* ─── 1. السعر: مخفي تماماً إلا عند الجاهزية ─── */
+#sc-booking .tvl-form .price-preview,
+#sc-booking .tvl-form [class*="price-preview"],
+#sc-booking .tvl-form #tvl-pp-flight,
+#sc-booking .tvl-form #tvl-pp-bus,
+#sc-booking .tvl-form #tvl-pp-hajj,
+#sc-booking .tvl-form #tvl-pp-delivery {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  float: none !important;
+  position: static !important;
+  width: 0 !important;
+  transform: none !important;
+}
+
+/* ─── 2. السعر: يظهر فقط عند data-ready="1" ─── */
+#sc-booking .tvl-form .price-preview[data-ready="1"],
+#sc-booking .tvl-form [class*="price-preview"][data-ready="1"],
+#sc-booking .tvl-form.tvl-price-ready .price-preview {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  opacity: 1 !important;
+  float: none !important;
+  position: static !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 20px 0 24px 0 !important;
+  padding: 18px 20px !important;
+  background: linear-gradient(135deg, rgba(201,169,97,0.15), rgba(201,169,97,0.05)) !important;
+  border: 1px solid rgba(201,169,97,0.5) !important;
+  border-radius: 12px !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #c9a961 !important;
+  box-shadow: 0 4px 16px rgba(201,169,97,0.2) !important;
+  overflow: visible !important;
+  transform: none !important;
+}
+
+/* ─── 3. النموذج: لا transform، مساحة كافية للزر ─── */
 #sc-booking .tvl-form.active {
-  display: flex !important;
-  flex-direction: column !important;
+  display: block !important;
   position: fixed !important;
   inset: 0 !important;
   z-index: 9999 !important;
   background: linear-gradient(180deg, #060914 0%, #0a1024 100%) !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  padding: 0 !important;
+  padding: 0 0 110px 0 !important;
   margin: 0 !important;
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  animation: tvlFade 0.25s ease !important;
   transform: none !important;
+  animation: tvlFade 0.25s ease !important;
 }
 
 @keyframes tvlFade {
@@ -8753,34 +8176,55 @@ html[data-theme="light"] #sc-booking .tvl-sect { color: #7c3aed !important; }
   to { opacity: 1; }
 }
 
-/* الزر: sticky في الأسفل (لا fixed، لا يطفو) */
+/* ─── 4. الزر: مثبت في الأسفل دائماً ─── */
 #sc-booking .tvl-form.active .tvl-submit {
-  position: sticky !important;
+  position: fixed !important;
   bottom: 0 !important;
-  left: auto !important;
-  right: auto !important;
+  left: 0 !important;
+  right: 0 !important;
   top: auto !important;
   width: 100% !important;
+  height: 68px !important;
   min-height: 68px !important;
-  padding: 18px 24px !important;
-  margin: 20px 0 0 0 !important;
+  max-height: 68px !important;
+  margin: 0 !important;
+  padding: 0 20px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   font-size: 15px !important;
   font-weight: 900 !important;
-  letter-spacing: 0.3px !important;
-  line-height: 1.3 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1 !important;
   box-sizing: border-box !important;
-  z-index: 10 !important;
-  border-radius: 0 !important;
+  z-index: 100000 !important;
   border: none !important;
+  border-radius: 0 !important;
   cursor: pointer !important;
   font-family: 'Tajawal', sans-serif !important;
   text-align: center !important;
-  overflow: visible !important;
   transform: none !important;
-  margin-top: auto !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* حالة مقفلة */
+#sc-booking .tvl-form.active .tvl-submit.locked {
+  background: linear-gradient(180deg, rgba(80,80,100,0.95), rgba(40,40,60,0.98)) !important;
+  color: rgba(201,169,97,0.7) !important;
+  cursor: not-allowed !important;
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.5) !important;
+  pointer-events: none !important;
+}
+
+/* حالة جاهزة - ذهبي بارز */
+#sc-booking .tvl-form.active .tvl-submit.ready,
+#sc-booking .tvl-form.active .tvl-submit:not(.locked) {
+  background: linear-gradient(135deg, #c9a961 0%, #a88844 100%) !important;
+  color: #0a1024 !important;
+  box-shadow: 0 -6px 20px rgba(201,169,97,0.4) !important;
+  pointer-events: auto !important;
 }
 
 #sc-booking .tvl-form.active .tvl-submit::before,
@@ -8789,79 +8233,175 @@ html[data-theme="light"] #sc-booking .tvl-sect { color: #7c3aed !important; }
   content: none !important;
 }
 
-#sc-booking .tvl-form.active .tvl-submit.locked {
-  background: linear-gradient(180deg, rgba(60,60,80,0.85), rgba(30,30,50,0.95)) !important;
-  color: rgba(201,169,97,0.75) !important;
-  cursor: not-allowed !important;
-  box-shadow: 0 -6px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08) !important;
-}
-#sc-booking .tvl-form.active .tvl-submit.ready,
-#sc-booking .tvl-form.active .tvl-submit:not(.locked) {
-  background: linear-gradient(135deg, #c9a961 0%, #a88844 100%) !important;
-  color: #0a1024 !important;
-  box-shadow: 0 -6px 20px rgba(201,169,97,0.35), inset 0 1px 0 rgba(255,255,255,0.35) !important;
-}
-
-/* السعر: مخفي تماماً إلا إذا كان جاهز */
-#sc-booking .tvl-form .price-preview,
-#sc-booking .tvl-form [class*="price-preview"] {
-  display: none !important;
-  height: 0 !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  opacity: 0 !important;
+/* ─── 5. الترويسة والخطوات ─── */
+#sc-booking .tvl-form.active .tvl-form-head {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 18px 20px !important;
+  background: linear-gradient(135deg, #0d1b3e 0%, #1a2b5e 100%) !important;
+  border-bottom: 2px solid #c9a961 !important;
+  margin: 0 0 16px 0 !important;
+  transform: none !important;
 }
 
-#sc-booking .tvl-form.tvl-price-ready .price-preview,
-#sc-booking .tvl-form.tvl-price-ready [class*="price-preview"] {
-  display: block !important;
-  height: auto !important;
-  opacity: 1 !important;
-  margin: 16px 20px 24px 20px !important;
-  padding: 16px 18px !important;
-  background: linear-gradient(135deg, rgba(201,169,97,0.15), rgba(201,169,97,0.05)) !important;
-  border: 1px solid rgba(201,169,97,0.45) !important;
-  border-radius: 12px !important;
-  text-align: center !important;
-  font-size: 14px !important;
+/* ─── 6. الحقول ─── */
+#sc-booking .tvl-form.active .tvl-f {
+  padding: 0 20px !important;
+  margin-bottom: 14px !important;
+}
+#sc-booking .tvl-form.active .tvl-f label {
+  font-size: 11px !important;
+  color: rgba(201,169,97,0.9) !important;
   font-weight: 800 !important;
+  margin-bottom: 7px !important;
+  letter-spacing: 1px !important;
+  display: block !important;
+}
+#sc-booking .tvl-form.active .tvl-f input,
+#sc-booking .tvl-form.active .tvl-f select,
+#sc-booking .tvl-form.active .tvl-f textarea {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 14px 16px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  background: rgba(255,255,255,0.03) !important;
+  color: #ffffff !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  outline: none !important;
+}
+#sc-booking .tvl-form.active .tvl-f input:focus,
+#sc-booking .tvl-form.active .tvl-f select:focus,
+#sc-booking .tvl-form.active .tvl-f textarea:focus {
+  border-color: #c9a961 !important;
+  box-shadow: 0 0 0 3px rgba(201,169,97,0.15) !important;
+}
+
+/* ─── 7. Row2/Row3 ─── */
+#sc-booking .tvl-form.active .tvl-row2,
+#sc-booking .tvl-form.active .tvl-row3 {
+  padding: 0 20px !important;
+}
+#sc-booking .tvl-form.active .tvl-row2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+#sc-booking .tvl-form.active .tvl-row3 { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 8px !important; }
+
+/* ─── 8. Chips ─── */
+#sc-booking .tvl-form.active .tvl-chips {
+  padding: 0 20px !important;
+  display: flex !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  margin-bottom: 16px !important;
+}
+#sc-booking .tvl-form.active .tvl-chip {
+  background: rgba(255,255,255,0.03) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: rgba(255,255,255,0.65) !important;
+  border-radius: 8px !important;
+  padding: 11px 16px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  font-family: 'Tajawal', sans-serif !important;
+  cursor: pointer !important;
+  flex: 1 !important;
+  min-width: 100px !important;
+}
+#sc-booking .tvl-form.active .tvl-chip.active {
+  background: rgba(201,169,97,0.15) !important;
+  border-color: #c9a961 !important;
   color: #c9a961 !important;
-  box-shadow: 0 4px 16px rgba(201,169,97,0.2) !important;
-  overflow: visible !important;
+  font-weight: 900 !important;
 }
 
-/* المحتوى: مساحة للزر والـ sticky */
-#sc-booking .tvl-form.active > *:not(.tvl-form-head):not(.tvl-submit) {
-  padding-left: 20px !important;
-  padding-right: 20px !important;
+/* ─── 9. Checkbox ─── */
+#sc-booking .tvl-form.active .tvl-chk {
+  margin: 0 20px 12px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  background: rgba(201,169,97,0.05) !important;
+  border: 1px solid rgba(201,169,97,0.2) !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+}
+#sc-booking .tvl-form.active .tvl-chk input { width: 22px !important; height: 22px !important; accent-color: #c9a961 !important; margin: 0 !important; }
+#sc-booking .tvl-form.active .tvl-chk span { font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important; }
+
+/* ─── 10. المودال: زر الإغلاق ─── */
+#sc-booking .tvl-form-back {
+  background: rgba(201,169,97,0.1) !important;
+  border: 1px solid rgba(201,169,97,0.4) !important;
+  color: #c9a961 !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+  margin-left: auto !important;
 }
 
-/* إخفاء السعر إذا كان فيه "جاري" أو "تحميل" */
-#sc-booking .tvl-form [class*="price-preview"]:not(:has(*)) {
-  display: none !important;
-}
-
-/* الوضع الفاتح */
+/* ─── 11. الوضع الفاتح ─── */
 html[data-theme="light"] #sc-booking .tvl-form.active {
   background: linear-gradient(180deg, #ffffff 0%, #f8f9fc 100%) !important;
 }
-
-html[data-theme="light"] #sc-booking .tvl-form.tvl-price-ready .price-preview {
-  background: linear-gradient(135deg, rgba(201,169,97,0.2), rgba(201,169,97,0.08)) !important;
-  border-color: rgba(168,136,68,0.5) !important;
-  color: #7a5f2e !important;
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-form-head {
+  background: linear-gradient(135deg, #1a2b5e, #0d1b3e) !important;
+  border-bottom-color: #c9a961 !important;
 }
-
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f label { color: #4a5568 !important; }
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f input,
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f select,
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-f textarea {
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  border-color: #d0d5dd !important;
+}
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chip {
+  background: #ffffff !important;
+  color: #4a5568 !important;
+  border-color: #e2e8f0 !important;
+}
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chip.active {
+  background: linear-gradient(135deg, #1a2b5e, #0d1b3e) !important;
+  color: #c9a961 !important;
+  border-color: #c9a961 !important;
+}
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chk {
+  background: rgba(201,169,97,0.1) !important;
+  border-color: rgba(201,169,97,0.4) !important;
+}
+html[data-theme="light"] #sc-booking .tvl-form.active .tvl-chk span { color: #1a1a2e !important; }
 html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit.locked {
   background: linear-gradient(180deg, #e5e7eb, #d1d5db) !important;
   color: #6b7280 !important;
 }
-
 html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit.ready,
 html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
   background: linear-gradient(135deg, #c9a961, #a88844) !important;
   color: #0a1024 !important;
+}
+
+/* ─── 12. Responsive ─── */
+@media (max-width: 359px) {
+  #sc-booking .tvl-form.active .tvl-row2,
+  #sc-booking .tvl-form.active .tvl-row3 {
+    grid-template-columns: 1fr !important;
+  }
 }
 </style>
 </head>
@@ -23205,6 +22745,72 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
+
+
+<script id="tvl-ultimate-js">
+(function() {
+  'use strict';
+  
+  function addBackButtons() {
+    document.querySelectorAll('.tvl-form-head').forEach(function(head) {
+      if (head.querySelector('.tvl-form-back')) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tvl-form-back';
+      btn.setAttribute('aria-label', 'إغلاق');
+      btn.textContent = '✕';
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('.tvl-form').forEach(function(f){ f.classList.remove('active'); });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      head.appendChild(btn);
+    });
+  }
+  
+  function updatePriceState() {
+    document.querySelectorAll('.tvl-form').forEach(function(form) {
+      var submit = form.querySelector('.tvl-submit');
+      if (!submit) return;
+      
+      var preview = form.querySelector('.price-preview, [class*="price-preview"]');
+      if (!preview) return;
+      
+      var txt = (preview.textContent || '').trim();
+      var isLocked = submit.classList.contains('locked');
+      
+      // السعر جاهز إذا: النص موجود، ليس "جاري"، ويحتوي "ر.س" أو رقم
+      var hasRealPrice = txt && 
+                          txt.indexOf('جاري') === -1 && 
+                          txt.indexOf('تحميل') === -1 && 
+                          (txt.indexOf('ر.س') !== -1 || txt.indexOf('ريال') !== -1);
+      
+      // السعر يظهر فقط إذا كان جاهزاً (وليس مجرد "جاري...")
+      if (hasRealPrice) {
+        preview.setAttribute('data-ready', '1');
+        form.classList.add('tvl-price-ready');
+      } else {
+        preview.setAttribute('data-ready', '0');
+        form.classList.remove('tvl-price-ready');
+      }
+    });
+  }
+  
+  function init() {
+    addBackButtons();
+    updatePriceState();
+    setInterval(updatePriceState, 500);
+    document.addEventListener('input', updatePriceState, true);
+    document.addEventListener('change', updatePriceState, true);
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 
 </body>
 </html>

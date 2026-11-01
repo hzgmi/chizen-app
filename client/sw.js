@@ -1,5 +1,5 @@
 // CHIZEN Service Worker v350 — Force Update
-const CACHE_NAME = 'chizen-v351';
+const CACHE_NAME = 'chizen-v352';
 
 // تفعيل فوري (لا انتظار)
 self.addEventListener('install', function(event) {
