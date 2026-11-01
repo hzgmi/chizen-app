@@ -8705,8 +8705,15 @@ html[data-theme="light"] #sc-booking .tvl-sect { color: #7c3aed !important; }
       if (preview) {
         var txt = (preview.textContent || '').trim();
         hasPrice = txt && txt.indexOf('جاري') === -1 && txt.indexOf('تحميل') === -1;
+        // Sync: if data-ready=1, we're ready
+        if (preview.getAttribute('data-ready') === '1') hasPrice = true;
       }
-      form.classList.toggle('tvl-price-ready', isReady && hasPrice);
+      var shouldShow = isReady && hasPrice;
+      form.classList.toggle('tvl-price-ready', shouldShow);
+      if (preview) {
+        preview.setAttribute('data-ready', shouldShow ? '1' : '0');
+      }
+      form.setAttribute('data-not-ready', shouldShow ? '0' : '1');
     });
   }
   
@@ -23066,6 +23073,53 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
+
+
+<script id="chz-sw-bust-2025">
+(function(){
+  'use strict';
+  if (!('serviceWorker' in navigator)) return;
+  
+  // 1. تسجيل SW جديد
+  navigator.serviceWorker.register('/chizen-app/client/sw.js', { scope: '/chizen-app/' })
+    .catch(function(e){ 
+      // محاولة مسار آخر
+      navigator.serviceWorker.register('sw.js').catch(function(){});
+    });
+  
+  // 2. إرسال SKIP_WAITING لكل SW منتظر
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    regs.forEach(function(reg){
+      if (reg.waiting) {
+        reg.waiting.postMessage({type: 'SKIP_WAITING'});
+      }
+      if (reg.active) {
+        reg.active.postMessage({type: 'SKIP_WAITING'});
+      }
+      reg.update().catch(function(){});
+    });
+  });
+  
+  // 3. إعادة تحميل عند تغيير SW
+  var refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if (refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+  
+  // 4. فحص كل 30 ثانية
+  setInterval(function(){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(reg){
+        if (reg.waiting) {
+          reg.waiting.postMessage({type: 'SKIP_WAITING'});
+        }
+      });
+    });
+  }, 30000);
+})();
+</script>
 
 </body>
 </html>
