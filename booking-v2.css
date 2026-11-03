@@ -1051,3 +1051,49 @@ body:has(#sc-booking.active) #chizen-ai-btn,
 body:has(#sc-booking.active) .chizen-ai-fab {
   display: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   14) SUBMIT BUTTON — static (flow) — يظهر عند التمرير، لا يتعارض مع الشريط
+   ═══════════════════════════════════════════════════════════════ */
+#sc-booking .tvl-form.active .tvl-submit {
+  position: static !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  width: calc(100% - 44px) !important;
+  height: 56px !important;
+  margin: 24px 22px 100px !important;
+  padding: 0 20px !important;
+  border-radius: 16px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: auto !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.5px !important;
+  border: none !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  overflow: visible !important;
+  box-shadow: 0 8px 24px rgba(197,160,89,0.4) !important;
+}
+#sc-booking .tvl-form.active .tvl-submit.locked {
+  background: linear-gradient(135deg, #2A2E38 0%, #1A1D24 100%) !important;
+  color: rgba(197,160,89,0.55) !important;
+  cursor: not-allowed !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+#sc-booking .tvl-form.active .tvl-submit:not(.locked),
+#sc-booking .tvl-form.active .tvl-submit.ready {
+  background: linear-gradient(135deg, #F2E3C6 0%, #C5A059 50%, #9A7B4F 100%) !important;
+  color: #07090F !important;
+  box-shadow: 0 8px 28px rgba(197,160,89,0.5), inset 0 1px 0 rgba(255,255,255,0.3) !important;
+}
+#sc-booking .tvl-form.active .tvl-submit::after,
+#sc-booking .tvl-form.active .tvl-submit::before {
+  display: none !important;
+}
