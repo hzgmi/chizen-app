@@ -1041,3 +1041,120 @@ html[data-theme="light"] #sc-commerce .chz-haraj-subtitle {
   color: rgba(255,255,255,0.9) !important;
   text-shadow: 0 2px 8px rgba(0,0,0,0.7) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   15) CARDS — تطابق تام مع بطاقات السوق (.prod)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* الحاوية (شبكة مثل السوق) */
+#sc-commerce .cm-grid,
+#sc-commerce #cm-list {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  padding: 0 16px !important;
+}
+
+/* البطاقة الأساسية */
+#sc-commerce .cm-card {
+  background: var(--card-dark) !important;
+  border: 1px solid rgba(197,160,89,0.2) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+  position: relative !important;
+}
+html[data-theme="light"] #sc-commerce .cm-card {
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+}
+
+#sc-commerce .cm-card:active { transform: scale(0.97) !important; }
+
+/* منطقة الصورة (150px مثل السوق) */
+#sc-commerce .cm-card-img {
+  width: 100% !important;
+  height: 150px !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #F9F9F9 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+html[data-theme="light"] #sc-commerce .cm-card-img {
+  background: #F9F9F9 !important;
+}
+
+/* محتوى البطاقة (المعلومات) */
+#sc-commerce .cm-card-body {
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  flex: 1 !important;
+}
+
+/* عنوان البطاقة */
+#sc-commerce .cm-card-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  min-height: 36px !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+html:not([data-theme="light"]) #sc-commerce .cm-card-title { color: #FFFFFF !important; }
+html[data-theme="light"] #sc-commerce .cm-card-title { color: #2D3748 !important; }
+
+/* السعر */
+#sc-commerce .cm-card-price {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: var(--gold) !important;
+  margin: 0 !important;
+}
+
+/* المدينة */
+#sc-commerce .cm-card-city {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+html:not([data-theme="light"]) #sc-commerce .cm-card-city { color: rgba(255,255,255,0.5) !important; }
+html[data-theme="light"] #sc-commerce .cm-card-city { color: #7A8596 !important; }
+
+/* الشارة (badge) */
+#sc-commerce .cm-card-badge {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  background: rgba(197,160,89,0.95) !important;
+  color: #07090F !important;
+  z-index: 2 !important;
+}
+
+/* إزالة أي Padding من img */
+#sc-commerce .cm-card-img {
+  border-radius: 0 !important;
+}
+
+/* ضمان أن البطاقة لا تكون طويلة جداً */
+#sc-commerce .cm-card {
+  aspect-ratio: auto !important;
+  height: auto !important;
+  min-height: auto !important;
+}
