@@ -5914,7 +5914,7 @@ html[data-theme="light"] #sc-checkout .sh2 .st2 {
 }
 </style>
 
-<style id="chz-booking-form-fix">
+<style id="chz-booking-form-fix" media="not all">
 /* ═══════════════════════════════════════════════════════════════
    إصلاح نموذج الحجز (طيران، باصات، حج، فنادق) — الوضعين
    ═══════════════════════════════════════════════════════════════ */
@@ -6740,7 +6740,7 @@ html:not([data-theme="light"]) .notif-text { color: #9ca3af; }
 .notif-unread-dot { position: absolute; top: 14px; left: 14px; width: 8px; height: 8px; border-radius: 50%; background: #FF3D9A; box-shadow: 0 0 0 3px rgba(255,61,154,0.2); }
 </style>
 
-<style id="chz-haraj-hero-css">
+<style id="chz-haraj-hero-css" media="not all">
 /* ═══ حراج شيزن — Hero Banner ═══ */
 .chz-haraj-hero {
   position: relative;
@@ -8407,6 +8407,13 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
   <link rel="stylesheet" href="booking-v2.css?v=5">
   <link rel="stylesheet" href="haraj-v2.css?v=7">
 
+
+<style id="chz-hide-ai-final">
+  .ai-fab, #ai-btn, .chat-fab, [class*="ai-button"], 
+  #chizen-ai-btn, .chizen-ai-fab {
+    display: none !important;
+  }
+</style>
 </head>
 <body>
 <div id="app">
@@ -9845,7 +9852,7 @@ html:not([data-theme="light"]) .det-thumb.active {
 
 
 
-<style id="chz-travel-v29-final">
+<style id="chz-travel-v29-final" media="not all">
 /* ═══ PRICE hidden unless data-ready=1 — bulletproof ═══ */
 #sc-booking .price-preview:not([data-ready="1"]) {
   display: none !important;
@@ -10038,7 +10045,7 @@ html:not([data-theme="light"]) .tvl-cs-cancel {
 }
 </style>
 
-<style id="chz-travel-v31-css">
+<style id="chz-travel-v31-css" media="not all">
 /* Back button - subtle circular with correct RTL arrow */
 .tvl-back {
   width: 40px !important;
@@ -10441,7 +10448,7 @@ html:not([data-theme="light"]) .cm-confirm-btn-cancel { background: rgba(255,255
 .cm-confirm-btn-primary { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 6px 18px rgba(16,185,129,0.35); }
 </style>
 
-<style id="chz-commerce-v52">
+<style id="chz-commerce-v52" media="not all">
 /* Header */
 .cm-top { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: linear-gradient(135deg, #10b981 0%, #059669 60%, #FFB800 100%); border-radius: 0 0 20px 20px; box-shadow: 0 6px 20px rgba(16,185,129,0.25); position: sticky; top: 0; z-index: 50; direction: rtl; }
 .cm-top-form { background: linear-gradient(135deg, #9B4DFF 0%, #FF3D9A 100%); }
