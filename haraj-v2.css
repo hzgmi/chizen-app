@@ -927,3 +927,117 @@ html[data-theme="light"] #sc-commerce .cm-card-img {
   color: #07090F !important;
   border-radius: 6px !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   14) HERO FINAL FIX — مطابقة ارتفاع الحجز (320px) + إصلاح الوضع الفاتح
+   ═══════════════════════════════════════════════════════════════ */
+
+/* تثبيت ارتفاع الـ Hero مثل الحجز */
+#sc-commerce .chz-haraj-hero {
+  height: 320px !important;
+  min-height: 320px !important;
+  max-height: 320px !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  margin: 16px 16px 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  border: 1.5px solid rgba(197,160,89,0.35) !important;
+}
+
+/* خلفية الصورة مع تدرج داكن من الأسفل (مثل الحجز) */
+#sc-commerce .chz-haraj-hero::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    linear-gradient(to bottom,
+      rgba(7, 9, 15, 0.3) 0%,
+      rgba(7, 9, 15, 0.15) 30%,
+      rgba(7, 9, 15, 0.75) 70%,
+      rgba(7, 9, 15, 0.95) 100%),
+    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-position: center 40% !important;
+  z-index: 1 !important;
+}
+
+/* إخفاء أيقونة الهاتف العائمة */
+#sc-commerce .chz-haraj-hero::after {
+  display: none !important;
+}
+
+/* المحتوى فوق الصورة */
+#sc-commerce .chz-haraj-badge,
+#sc-commerce .chz-haraj-title,
+#sc-commerce .chz-haraj-subtitle,
+#sc-commerce .chz-haraj-features,
+#sc-commerce .chz-haraj-actions {
+  position: relative !important;
+  z-index: 2 !important;
+  padding: 0 22px !important;
+}
+
+#sc-commerce .chz-haraj-badge {
+  margin-bottom: 10px !important;
+  background: rgba(197,160,89,0.9) !important;
+  color: #07090F !important;
+  border: none !important;
+  font-weight: 900 !important;
+}
+
+#sc-commerce .chz-haraj-title {
+  font-size: 30px !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.7) !important;
+  margin-bottom: 6px !important;
+}
+
+#sc-commerce .chz-haraj-subtitle {
+  font-size: 13px !important;
+  color: rgba(255,255,255,0.85) !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+  margin-bottom: 16px !important;
+}
+
+#sc-commerce .chz-haraj-features {
+  background: rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(197,160,89,0.3) !important;
+  margin: 0 22px 14px !important;
+  padding: 12px !important;
+  border-radius: 14px !important;
+}
+
+#sc-commerce .chz-haraj-actions {
+  margin: 0 22px 20px !important;
+}
+
+/* ═══ الوضع الفاتح — صورة داكنة واضحة (مثل الحجز) ═══ */
+html[data-theme="light"] #sc-commerce .chz-haraj-hero {
+  background: #0D1B3E !important;
+}
+
+html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
+  background-image:
+    linear-gradient(to bottom,
+      rgba(7, 9, 15, 0.3) 0%,
+      rgba(7, 9, 15, 0.15) 30%,
+      rgba(7, 9, 15, 0.75) 70%,
+      rgba(7, 9, 15, 0.95) 100%),
+    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
+}
+
+html[data-theme="light"] #sc-commerce .chz-haraj-title {
+  color: #FFFFFF !important;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.8) !important;
+}
+
+html[data-theme="light"] #sc-commerce .chz-haraj-subtitle {
+  color: rgba(255,255,255,0.9) !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7) !important;
+}
