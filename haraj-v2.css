@@ -1493,3 +1493,90 @@ html[data-theme="light"] #sc-commerce #cm-f-img-url {
   border: 1.5px solid #E5E7EB !important;
   color: #121A26 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   22) FINAL FIX — نموذج الحراج (Modal) + إخفاء AI
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. تطبيق الأنماط على النموذج المنبثق (#cm-modal) */
+#cm-modal .cm-field {
+  margin-bottom: 14px !important;
+}
+#cm-modal .cm-field label {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+  color: #C5A059 !important; /* ذهبي */
+}
+
+/* الحقول داخل النموذج */
+#cm-modal .cm-field input,
+#cm-modal .cm-field select,
+#cm-modal .cm-field textarea {
+  width: 100% !important;
+  height: 48px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: 'Tajawal', sans-serif !important;
+  box-sizing: border-box !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+#cm-modal .cm-field textarea {
+  height: auto !important;
+  min-height: 80px !important;
+  padding: 12px 14px !important;
+}
+
+/* التركيز */
+#cm-modal .cm-field input:focus,
+#cm-modal .cm-field select:focus,
+#cm-modal .cm-field textarea:focus {
+  outline: none !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
+}
+
+/* حقل رابط الصورة داخل النموذج */
+#cm-modal #cm-f-img-url {
+  height: 44px !important;
+  border-radius: 12px !important;
+  padding: 0 14px !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+}
+
+/* أزرار النموذج (نشر / إلغاء) */
+#cm-modal .cm-form button[onclick*="cmSubmit"],
+#cm-modal .cm-form button[onclick*="close"] {
+  background: linear-gradient(135deg,#F2E3C6 0%,#C5A059 50%,#9A7B4F 100%) !important;
+  color: #07090F !important;
+  font-weight: 900 !important;
+  border-radius: 14px !important;
+  padding: 14px 20px !important;
+  border: none !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+}
+#cm-modal .cm-form button[onclick*="close"] {
+  background: transparent !important;
+  color: rgba(255,255,255,0.7) !important;
+  border: 1.5px solid rgba(255,255,255,0.15) !important;
+}
+
+/* 2. إخفاء أيقونة AI نهائياً (بدون تحديد سياق) */
+.ai-fab, #ai-btn, .chat-fab, [class*="ai-button"], #chizen-ai-btn, .chizen-ai-fab {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
