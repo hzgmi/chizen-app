@@ -1165,3 +1165,256 @@ html[data-theme="light"] #sc-booking .chz-date-group select option {
   background: #FFFFFF !important;
   color: #121A26 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   16) WHEEL PICKER MODAL — iOS Style Bottom Sheet
+   ═══════════════════════════════════════════════════════════════ */
+
+/* زر العرض (بدل input) */
+#sc-booking .chz-date-display {
+  width: 100% !important;
+  height: 48px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  text-align: right !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+  position: relative !important;
+}
+#sc-booking .chz-date-display::after {
+  content: '📅';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  opacity: 0.7;
+}
+html:not([data-theme="light"]) #sc-booking .chz-date-display {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+}
+html[data-theme="light"] #sc-booking .chz-date-display {
+  background: #FFFFFF !important;
+  border: 1.5px solid #E5E7EB !important;
+  color: #121A26 !important;
+}
+#sc-booking .chz-date-display:active {
+  border-color: #C5A059 !important;
+  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
+}
+
+/* Modal Container */
+.chz-wheel-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999999;
+  display: none;
+  direction: rtl;
+  font-family: 'Tajawal', sans-serif;
+}
+.chz-wheel-modal.open {
+  display: block;
+}
+
+/* Backdrop */
+.chz-wheel-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: chzWheelFadeIn 0.2s ease;
+}
+
+/* Sheet */
+.chz-wheel-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 24px 24px 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+  animation: chzWheelSlideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  max-height: 75vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.chz-wheel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #E5E7EB;
+  flex-shrink: 0;
+}
+.chz-wheel-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #121A26;
+  text-align: center;
+  flex: 1;
+}
+.chz-wheel-cancel,
+.chz-wheel-confirm {
+  background: none;
+  border: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.chz-wheel-cancel {
+  color: #7A8596;
+}
+.chz-wheel-confirm {
+  color: #C5A059;
+  font-weight: 900;
+}
+.chz-wheel-confirm:active {
+  background: rgba(197,160,89,0.1);
+}
+
+/* Body — 3 عجلات */
+.chz-wheel-body {
+  position: relative;
+  display: flex;
+  height: 220px;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
+/* إطار التحديد (المنطقة المظللة في المنتصف) */
+.chz-wheel-indicator {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 50%;
+  height: 44px;
+  margin-top: -22px;
+  background: rgba(197,160,89,0.08);
+  border-top: 1.5px solid rgba(197,160,89,0.3);
+  border-bottom: 1.5px solid rgba(197,160,89,0.3);
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* العمود الواحد */
+.chz-wheel-col {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+.chz-wheel-col[data-wheel="d"] { flex: 0.8; }
+.chz-wheel-col[data-wheel="m"] { flex: 1.2; }
+.chz-wheel-col[data-wheel="y"] { flex: 1; }
+
+/* قائمة العجلة */
+.chz-wheel-list {
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.chz-wheel-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* عنصر واحد */
+.chz-wheel-item {
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: #7A8596;
+  scroll-snap-align: center;
+  user-select: none;
+  cursor: pointer;
+  transition: color 0.15s, font-size 0.15s;
+}
+
+/* العنصر النشط (في المنتصف) */
+.chz-wheel-item.active {
+  color: #121A26;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+/* Animations */
+@keyframes chzWheelFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes chzWheelSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .chz-wheel-sheet {
+    background: #1A2B5E;
+  }
+  html:not([data-theme="light"]) .chz-wheel-header {
+    border-bottom-color: rgba(255,255,255,0.12);
+  }
+  html:not([data-theme="light"]) .chz-wheel-title {
+    color: #FFFFFF;
+  }
+  html:not([data-theme="light"]) .chz-wheel-cancel {
+    color: rgba(255,255,255,0.6);
+  }
+  html:not([data-theme="light"]) .chz-wheel-item {
+    color: rgba(255,255,255,0.5);
+  }
+  html:not([data-theme="light"]) .chz-wheel-item.active {
+    color: #F2E3C6;
+  }
+}
+html:not([data-theme="light"]) .chz-wheel-sheet {
+  background: #1A2B5E !important;
+}
+html:not([data-theme="light"]) .chz-wheel-header {
+  border-bottom-color: rgba(255,255,255,0.12) !important;
+}
+html:not([data-theme="light"]) .chz-wheel-title {
+  color: #FFFFFF !important;
+}
+html:not([data-theme="light"]) .chz-wheel-cancel {
+  color: rgba(255,255,255,0.6) !important;
+}
+html:not([data-theme="light"]) .chz-wheel-item {
+  color: rgba(255,255,255,0.5) !important;
+}
+html:not([data-theme="light"]) .chz-wheel-item.active {
+  color: #F2E3C6 !important;
+}
+html[data-theme="light"] .chz-wheel-sheet {
+  background: #FFFFFF !important;
+}
+html[data-theme="light"] .chz-wheel-title {
+  color: #121A26 !important;
+}
+html[data-theme="light"] .chz-wheel-item {
+  color: #7A8596 !important;
+}
+html[data-theme="light"] .chz-wheel-item.active {
+  color: #121A26 !important;
+}
