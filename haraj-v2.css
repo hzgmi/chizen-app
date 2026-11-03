@@ -697,3 +697,60 @@ html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
       rgba(255, 255, 255, 0.65) 100%),
     url('https://images.unsplash.com/photo-1590845947676-9c6cc4e0c9a6?w=900&q=80&auto=format&fit=crop') !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   11) HERO IMAGE — سيارة فاخرة + هواتف (تصميم مدمج)
+   ═══════════════════════════════════════════════════════════════ */
+
+#sc-commerce .chz-haraj-hero::before {
+  background-image:
+    linear-gradient(135deg,
+      rgba(7, 9, 15, 0.45) 0%,
+      rgba(26, 43, 94, 0.55) 50%,
+      rgba(7, 9, 15, 0.75) 100%),
+    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-position: center 40% !important;
+  background-blend-mode: multiply, normal !important;
+}
+
+/* أيقونة هواتف صغيرة في زاوية الصورة */
+#sc-commerce .chz-haraj-hero {
+  position: relative !important;
+}
+#sc-commerce .chz-haraj-hero::after {
+  content: '📱' !important;
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  font-size: 28px !important;
+  z-index: 5 !important;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 8px rgba(197,160,89,0.4)) !important;
+  animation: chzPhoneFloat 3s ease-in-out infinite !important;
+}
+
+@keyframes chzPhoneFloat {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-5px) rotate(5deg); }
+}
+
+/* تحسين قراءة النص فوق الصورة */
+#sc-commerce .chz-haraj-title {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 0 24px rgba(197,160,89,0.3) !important;
+}
+#sc-commerce .chz-haraj-subtitle {
+  text-shadow: 0 1px 6px rgba(0,0,0,0.6) !important;
+}
+
+/* الوضع الفاتح */
+html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
+  background-image:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 254, 249, 0.5) 50%,
+      rgba(255, 255, 255, 0.7) 100%),
+    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
+}
+html[data-theme="light"] #sc-commerce .chz-haraj-title {
+  text-shadow: 0 1px 4px rgba(255,255,255,0.6) !important;
+}
