@@ -845,3 +845,85 @@ html[data-theme="light"] #sc-commerce .chz-haraj-title {
   margin: 0 22px 24px !important;
   padding: 0 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   13) FIXES — الوضع الفاتح + بطاقات العرض
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1) إصلاح الـ Hero في الوضع الفاتح */
+html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
+  background-image:
+    linear-gradient(180deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.6) 50%,
+      rgba(0, 0, 0, 0.85) 100%),
+    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
+}
+
+html[data-theme="light"] #sc-commerce .chz-haraj-title {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8) !important;
+}
+
+html[data-theme="light"] #sc-commerce .chz-haraj-subtitle {
+  color: rgba(255,255,255,0.9) !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8) !important;
+}
+
+html[data-theme="light"] #sc-commerce .chz-haraj-badge {
+  background: rgba(197,160,89,0.9) !important;
+  color: #07090F !important;
+  border: none !important;
+}
+
+/* 2) إصلاح بطاقات العرض (الشبكة) */
+#sc-commerce .cm-grid,
+#sc-commerce #cm-list {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+#sc-commerce .cm-card {
+  aspect-ratio: auto !important;
+  height: auto !important;
+}
+
+#sc-commerce .cm-card-img {
+  aspect-ratio: 4 / 3 !important; /* نسبة أفضل للعرض */
+  background: #1A2B5E !important; /* خلفية داكنة للصور الفارغة */
+}
+
+html[data-theme="light"] #sc-commerce .cm-card-img {
+  background: #F6F7F9 !important;
+}
+
+#sc-commerce .cm-card-body {
+  padding: 8px 10px !important;
+  min-height: 60px !important;
+}
+
+#sc-commerce .cm-card-title {
+  font-size: 12px !important;
+  min-height: 32px !important;
+  margin-bottom: 4px !important;
+}
+
+#sc-commerce .cm-card-price {
+  font-size: 14px !important;
+}
+
+#sc-commerce .cm-card-city {
+  font-size: 10px !important;
+  padding-top: 4px !important;
+}
+
+/* 3) إخفاء شارة الهاتف الصغيرة (cm-card-badge) إذا كانت مزعجة */
+#sc-commerce .cm-card-badge {
+  font-size: 8px !important;
+  padding: 3px 6px !important;
+  top: 6px !important;
+  right: 6px !important;
+  background: rgba(197,160,89,0.95) !important;
+  color: #07090F !important;
+  border-radius: 6px !important;
+}
