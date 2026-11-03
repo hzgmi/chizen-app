@@ -1097,3 +1097,13 @@ body:has(#sc-booking.active) .chizen-ai-fab {
 #sc-booking .tvl-form.active .tvl-submit::before {
   display: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FINAL FIX: الزر المقفل يبقى قابلاً للنقر (لإظهار Validation)
+   ═══════════════════════════════════════════════════════════════ */
+#sc-booking .tvl-form.active .tvl-submit.locked,
+#sc-booking .tvl-form.active .tvl-submit.ready,
+#sc-booking .tvl-form.active .tvl-submit {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
