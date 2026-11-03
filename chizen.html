@@ -13314,7 +13314,7 @@ var APP={
       if(!ok)return;
       try{if(window.FB&&FB.ready)await FB.logout();}catch(e){}
       localStorage.removeItem('chizen_state');
-      window.location.replace('chizen.html');
+      window.location.replace('index.html?login=1');
     });
   },
   
@@ -21817,7 +21817,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   document.body.appendChild(overlay);
   
   document.getElementById("v303-register-btn").onclick = function(){
-    window.location.href = "chizen.html";
+    window.location.href = "index.html?login=1";
   };
   document.getElementById("v303-continue-btn").onclick = function(){
     overlay.style.opacity = "0";
@@ -21940,7 +21940,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       var profile = document.querySelector(".chz-profile-group");
       if (profile && profile.getAttribute("data-v315-click") !== "1") {
         profile.setAttribute("data-v315-click", "1");
-        profile.onclick = function(e){ e.stopPropagation(); e.preventDefault(); window.location.href = "chizen.html"; };
+        profile.onclick = function(e){ e.stopPropagation(); e.preventDefault(); window.location.href = "index.html?login=1"; };
       }
     } else {
       document.body.classList.remove("chz-is-guest");
@@ -21996,7 +21996,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
         profile.setAttribute("data-v318-click", "1");
         profile.onclick = function(e){
           e.preventDefault(); e.stopPropagation();
-          window.location.href = "chizen.html";
+          window.location.href = "index.html?login=1";
         };
       }
     } else {
@@ -22072,7 +22072,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
         '</div>' +
         '<button class="v321-login-btn">تسجيل الدخول الآن</button>';
       var btn = banner.querySelector(".v321-login-btn");
-      if (btn) btn.onclick = function(){ window.location.href = "chizen.html"; };
+      if (btn) btn.onclick = function(){ window.location.href = "index.html?login=1"; };
       var header = sc.querySelector(".sh2");
       if (header && header.nextSibling) {
         sc.insertBefore(banner, header.nextSibling);
