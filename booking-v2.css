@@ -932,3 +932,40 @@ html[data-theme="light"] #sc-booking .tvl-form .price-preview .pp-row b {
 #sc-booking .tvl-form {
   padding-bottom: 100px !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   10) HIDE PRICE CARDS — إخفاء نهائي لبطاقة السعر التقريبي
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Hide price card only — do NOT touch tvl-chips */
+
+/* 1. price-preview (5 عناصر ثابتة داخل النماذج) */
+#sc-booking .price-preview,
+#sc-booking [id^="tvl-pp-"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 2. price-estimate-* (JS يبنيها داخل tvl-chips) — position بدل display
+      لتفادي كسر أزرار الخدمة */
+#sc-booking [id^="price-estimate-"] {
+  position: absolute !important;
+  left: -99999px !important;
+  top: -99999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 3. زر تأكيد السعر (إن ظهر) */
+#sc-booking .tvl-confirm {
+  display: none !important;
+}
