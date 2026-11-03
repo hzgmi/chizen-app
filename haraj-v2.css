@@ -487,71 +487,43 @@ html[data-theme="light"] #sc-commerce .cm-card {
 #sc-commerce .cm-card-img {
   width: 100% !important;
   height: 150px !important;
-  object-fit: cover !important;
-  display: block !important;
   background: #F4F6FA !important;
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
 html:not([data-theme="light"]) #sc-commerce .cm-card-img {
   background: #1E2438 !important;
 }
 
-#sc-commerce .cm-card-body {
-  padding: 12px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  flex: 1 !important;
+/* ⚠️ الصورة الحقيقية داخل الـ div */
+#sc-commerce .cm-card-img img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
 }
 
-#sc-commerce .cm-card-title {
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  line-height: 1.4 !important;
-  margin: 0 !important;
-  min-height: 36px !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card-title { color: #FFFFFF !important; }
-html[data-theme="light"] #sc-commerce .cm-card-title { color: #2D3748 !important; }
-
-#sc-commerce .cm-card-price {
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  color: var(--chz-gold) !important;
-  margin: 0 !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card-price {
-  color: var(--chz-gold-light) !important;
-}
-
-#sc-commerce .cm-card-city {
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  margin: 0 !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card-city { color: rgba(255,255,255,0.5) !important; }
-html[data-theme="light"] #sc-commerce .cm-card-city { color: #A0AEC0 !important; }
-
+/* Badge فوق الصورة داخل .cm-card-img */
+#sc-commerce .cm-card-img .cm-card-badge,
 #sc-commerce .cm-card-badge {
   position: absolute !important;
   top: 8px !important;
   right: 8px !important;
-  padding: 3px 8px !important;
-  border-radius: 6px !important;
-  font-size: 9px !important;
-  font-weight: 900 !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
   background: rgba(197,160,89,0.95) !important;
-  color: var(--chz-obsidian) !important;
+  color: #07090F !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
   z-index: 2 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
 }
-
 /* Empty state */
 #sc-commerce .cm-loading,
 #sc-commerce .cm-skeleton {
@@ -1022,4 +994,25 @@ html body [class*="ai-button"] {
   position: absolute !important;
   left: -99999px !important;
   top: -99999px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   §13. PLACEHOLDER — مكان فارغ أنيق للصور الفاشلة
+   ═══════════════════════════════════════════════════════════════ */
+#sc-commerce .cm-card-img::before {
+  content: '🛍️' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 42px !important;
+  opacity: 0.35 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+/* الصورة الحقيقية فوق الـ placeholder */
+#sc-commerce .cm-card-img img {
+  position: relative !important;
+  z-index: 1 !important;
 }
