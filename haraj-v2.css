@@ -1235,3 +1235,90 @@ html:not([data-theme="light"]) #sc-commerce .cm-card-img {
 html:not([data-theme="light"]) #sc-commerce .cm-card::before {
   background: rgba(0, 0, 0, 0.6) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   19) UNIFY ALL CARDS — توحيد شكل البطاقات (الكل مثل الصف الثاني)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. إزالة أي خلفية موروثة من الصورة */
+#sc-commerce .cm-card {
+  background: #FFFFFF !important; /* خلفية بيضاء ثابتة */
+  border: 1px solid #E5E7EB !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+  height: auto !important;
+  position: relative !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card {
+  background: #1e2438 !important; /* خلفية داكنة ثابتة */
+  border-color: rgba(255,255,255,0.08) !important;
+}
+
+/* 2. الصورة: ارتفاع ثابت + خلفية رمادية فاتحة داخلية */
+#sc-commerce .cm-card-img {
+  width: 100% !important;
+  height: 150px !important;
+  object-fit: cover !important;
+  background: #F4F6FA !important; /* خلفية فاتحة للصورة */
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card-img {
+  background: #2A2E38 !important;
+}
+
+/* 3. محتوى البطاقة: خلفية شفافة + نص أسود */
+#sc-commerce .cm-card-body {
+  padding: 12px !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  flex: 1 !important;
+}
+
+/* 4. العنوان: أسود في الفاتح، أبيض في الداكن */
+#sc-commerce .cm-card-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: #2D3748 !important;
+  margin: 0 !important;
+  min-height: 36px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card-title {
+  color: #FFFFFF !important;
+}
+
+/* 5. السعر: أسود في الفاتح، ذهبي في الداكن */
+#sc-commerce .cm-card-price {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: #2D3748 !important;
+  margin: 0 !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card-price {
+  color: #F2E3C6 !important;
+}
+
+/* 6. المدينة: رمادي */
+#sc-commerce .cm-card-city {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #A0AEC0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
