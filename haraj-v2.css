@@ -1158,3 +1158,80 @@ html[data-theme="light"] #sc-commerce .cm-card-city { color: #7A8596 !important;
   height: auto !important;
   min-height: auto !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   17) CARD SHAPE — تثبيت الأبعاد وإضافة زر القلب (مطابق للسوق)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. الشبكة: عمودان متساويان */
+#sc-commerce .cm-grid,
+#sc-commerce #cm-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 15px !important;
+  padding: 0 16px !important;
+}
+
+/* 2. البطاقة: تثبيت الأبعاد (مثل السوق) */
+#sc-commerce .cm-card {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 260px !important; /* طول ثابت تقريباً */
+  display: flex !important;
+  flex-direction: column !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card {
+  background: #1e2438 !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+
+/* 3. الصورة: ارتفاع ثابت 150px */
+#sc-commerce .cm-card-img {
+  width: 100% !important;
+  height: 150px !important;
+  object-fit: cover !important;
+  background: #F4F6FA !important;
+  display: block !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card-img {
+  background: #2A2E38 !important;
+}
+
+/* 4. محتوى البطاقة */
+#sc-commerce .cm-card-body {
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  flex: 1 !important;
+}
+
+/* 5. إضافة زر القلب (Heart) — يظهر في الزاوية العلوية */
+#sc-commerce .cm-card::before {
+  content: '🤍' !important;
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  width: 30px !important;
+  height: 30px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  z-index: 5 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  cursor: pointer !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card::before {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
