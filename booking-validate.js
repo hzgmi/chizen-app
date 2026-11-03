@@ -227,3 +227,137 @@
   setInterval(setup, 3000);
 
 })();
+
+/* ═══════════════════════════════════════════════════════════════
+   5) SMART UNLOCK — يُفعّل الزر تلقائياً دون الاعتماد على tvlCalc
+   ═══════════════════════════════════════════════════════════════ */
+
+(function(){
+  'use strict';
+
+  var WATCHED = {
+    flight:   ['fly-from', 'fly-to', 'fly-date', 'fly-name', 'fly-dob', 'fly-passport', 'fly-phone'],
+    bus:      ['bus-to', 'bus-date', 'bus-name', 'bus-phone'],
+    hajj:     ['hajj-date', 'hajj-name', 'hajj-passport', 'hajj-phone'],
+    hotel:    ['hotel-city', 'hotel-in', 'hotel-out', 'hotel-client-name', 'hotel-phone'],
+    delivery: ['dlv-from', 'dlv-to', 'dlv-date', 'dlv-name', 'dlv-phone']
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function val(id) { var el = $(id); return el ? (el.value || '').trim() : ''; }
+
+  // نفس أدوات التحقق
+  function isArabicName3(name) {
+    if (!name) return false;
+    var parts = name.trim().split(/\s+/);
+    return parts.length >= 3 && parts.every(function(p){ return p.length >= 2; });
+  }
+  function isPassport(p) { return p && p.replace(/\s/g, '').length >= 6; }
+  function isPhone(p) { var c = (p || '').replace(/\D/g, ''); return c.length >= 9 && c.length <= 15; }
+  function isFutureDate(d) {
+    if (!d) return false;
+    var today = new Date(); today.setHours(0,0,0,0);
+    return new Date(d) > today;
+  }
+  function isAdult(dob) {
+    if (!dob) return false;
+    var birth = new Date(dob), today = new Date();
+    var age = today.getFullYear() - birth.getFullYear();
+    var m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age >= 18 && age <= 100;
+  }
+
+  // فحص صامت — بدون Toast
+  function isValid(type) {
+    if (type === 'flight') {
+      var from = val('fly-from'), to = val('fly-to');
+      if (!from || !to || from === to) return false;
+      var d = val('fly-date'); if (d && !isFutureDate(d)) return false;
+      if (!isArabicName3(val('fly-name'))) return false;
+      if (!isAdult(val('fly-dob'))) return false;
+      if (!isPassport(val('fly-passport'))) return false;
+      if (!isPhone(val('fly-phone'))) return false;
+      return true;
+    }
+    if (type === 'bus') {
+      if (!val('bus-to')) return false;
+      var d = val('bus-date'); if (!d || !isFutureDate(d)) return false;
+      if (!isArabicName3(val('bus-name'))) return false;
+      if (!isPhone(val('bus-phone'))) return false;
+      return true;
+    }
+    if (type === 'hajj') {
+      var d = val('hajj-date'); if (!d || !isFutureDate(d)) return false;
+      if (!isArabicName3(val('hajj-name'))) return false;
+      if (!isPassport(val('hajj-passport'))) return false;
+      if (!isPhone(val('hajj-phone'))) return false;
+      return true;
+    }
+    if (type === 'hotel') {
+      if (!val('hotel-city')) return false;
+      var ci = val('hotel-in'), co = val('hotel-out');
+      if (!ci || !co || !isFutureDate(ci)) return false;
+      if (new Date(co) <= new Date(ci)) return false;
+      if (!isArabicName3(val('hotel-client-name'))) return false;
+      if (!isPhone(val('hotel-phone'))) return false;
+      return true;
+    }
+    if (type === 'delivery') {
+      var f = val('dlv-from'), t = val('dlv-to');
+      if (!f || !t || f === t) return false;
+      if (!val('dlv-date')) return false;
+      if (!isArabicName3(val('dlv-name'))) return false;
+      if (!isPhone(val('dlv-phone'))) return false;
+      return true;
+    }
+    return false;
+  }
+
+  function updateButton(type) {
+    var form = document.getElementById('form-' + type);
+    if (!form) return;
+    var submit = form.querySelector('.tvl-submit');
+    if (!submit) return;
+
+    if (isValid(type)) {
+      submit.classList.remove('locked');
+      submit.classList.add('ready');
+    } else {
+      submit.classList.remove('ready');
+      submit.classList.add('locked');
+    }
+  }
+
+  // ربط المراقبة لكل نموذج
+  function attachWatchers() {
+    Object.keys(WATCHED).forEach(function(type){
+      WATCHED[type].forEach(function(fieldId){
+        var el = document.getElementById(fieldId);
+        if (!el || el.__watched) return;
+        el.__watched = true;
+        el.addEventListener('input', function(){ updateButton(type); });
+        el.addEventListener('change', function(){ updateButton(type); });
+      });
+      // فحص أولي
+      updateButton(type);
+    });
+  }
+
+  // إعادة ربط عند فتح نموذج جديد
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.closest && e.target.closest('.tvl-svc, .tvl-dlv-card, .tvl-chip')) {
+      setTimeout(attachWatchers, 100);
+    }
+  });
+
+  // تشغيل أولي + كل 2 ثانية احتياطياً
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachWatchers);
+  } else {
+    attachWatchers();
+  }
+  setInterval(attachWatchers, 2000);
+
+  console.log('[BOOKING-VALIDATE] ✅ Smart Unlock جاهز');
+})();
