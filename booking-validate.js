@@ -422,3 +422,82 @@ setTimeout(function(){
   
   document.body.appendChild(box);
 }, 3000);
+
+/* ═══════════════════════════════════════════════════════════════
+   6) SUCCESS MODAL — إشعار نجاح ذهبي ديناميكي
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  // نبني الـ Modal مرة واحدة عند الحاجة
+  function buildSuccessModal() {
+    if (document.getElementById('chz-success-overlay')) return;
+
+    var overlay = document.createElement('div');
+    overlay.id = 'chz-success-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(7,9,15,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:99999999;padding:24px;direction:rtl;font-family:Tajawal,sans-serif';
+
+    overlay.innerHTML = ''
+      + '<div style="background:linear-gradient(135deg,#131E42 0%,#0A1024 100%);border:2px solid #C5A059;border-radius:24px;padding:32px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(197,160,89,0.4),0 0 0 1px rgba(197,160,89,0.2);animation:chzSuccessIn 0.4s cubic-bezier(0.34,1.56,0.64,1)">'
+      +   '<div style="width:80px;height:80px;margin:0 auto 20px;background:linear-gradient(135deg,#F2E3C6 0%,#C5A059 50%,#9A7B4F 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 8px 24px rgba(197,160,89,0.5)">✅</div>'
+      +   '<h2 id="chz-success-title" style="color:#F2E3C6;font-size:22px;font-weight:900;margin:0 0 12px">تم بنجاح</h2>'
+      +   '<p id="chz-success-msg" style="color:rgba(255,255,255,0.75);font-size:14px;line-height:1.6;margin:0 0 24px;font-weight:600"></p>'
+      +   '<button id="chz-success-btn" onclick="window.__chzCloseSuccess()" style="width:100%;padding:14px;background:linear-gradient(135deg,#F2E3C6 0%,#C5A059 50%,#9A7B4F 100%);border:none;border-radius:14px;color:#07090F;font-family:Tajawal,sans-serif;font-size:16px;font-weight:900;cursor:pointer;letter-spacing:0.5px;box-shadow:0 4px 14px rgba(197,160,89,0.4)">حسناً</button>'
+      + '</div>'
+      + '<style>@keyframes chzSuccessIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}</style>';
+
+    document.body.appendChild(overlay);
+
+    window.__chzCloseSuccess = function(){
+      overlay.style.display = 'none';
+      if (typeof window.__chzSuccessCallback === 'function') {
+        var cb = window.__chzSuccessCallback;
+        window.__chzSuccessCallback = null;
+        try { cb(); } catch(e) {}
+      }
+    };
+  }
+
+  // إعادة تعريف showSuccess
+  window.showSuccess = function(opts) {
+    opts = opts || {};
+    buildSuccessModal();
+    var overlay = document.getElementById('chz-success-overlay');
+    var title = document.getElementById('chz-success-title');
+    var msg = document.getElementById('chz-success-msg');
+    var btn = document.getElementById('chz-success-btn');
+
+    if (title) title.textContent = opts.title || 'تم بنجاح';
+    if (msg) msg.textContent = opts.message || '';
+    if (btn) btn.textContent = opts.btn || 'حسناً';
+
+    overlay.style.display = 'flex';
+    window.__chzSuccessCallback = opts.onClose || null;
+  };
+
+  // إعادة تعريف showError أيضاً
+  window.showError = function(opts) {
+    opts = opts || {};
+    buildSuccessModal();
+    var overlay = document.getElementById('chz-success-overlay');
+    var title = document.getElementById('chz-success-title');
+    var msg = document.getElementById('chz-success-msg');
+    var btn = document.getElementById('chz-success-btn');
+
+    // تغيير الأيقونة إلى ❌ + لون أحمر
+    var icon = overlay.querySelector('div div');
+    if (icon) {
+      icon.textContent = '❌';
+      icon.style.background = 'linear-gradient(135deg,#F87171 0%,#EF4444 50%,#DC2626 100%)';
+      icon.style.boxShadow = '0 8px 24px rgba(239,68,68,0.5)';
+    }
+    if (title) title.textContent = opts.title || 'حدث خطأ';
+    if (msg) msg.textContent = opts.message || '';
+    if (btn) btn.textContent = opts.btn || 'حسناً';
+
+    overlay.style.display = 'flex';
+    window.__chzSuccessCallback = opts.onClose || null;
+  };
+
+  console.log('[SUCCESS-MODAL] v1.0 loaded');
+})();
