@@ -22813,5 +22813,21 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
+
+<script id="CHIZEN-DIAGNOSTIC">
+// تشخيص مؤقت — سيُزال بعد الاختبار
+setTimeout(function(){
+  var info = 'APP: ' + (typeof APP) + 
+    '\nAPP.tvlSwitch: ' + (typeof (window.APP && window.APP.tvlSwitch)) + 
+    '\ntvlSubmit: ' + (typeof (window.APP && window.APP.tvlSubmit)) +
+    '\ntvlCalc: ' + (typeof (window.APP && window.APP.tvlCalc));
+  var d = document.createElement('div');
+  d.id = 'chizen-diag-box';
+  d.style.cssText = 'position:fixed;top:80px;left:10px;right:10px;background:#000;color:#0f0;padding:10px;z-index:999999;font-size:11px;font-family:monospace;border:2px solid #0f0;border-radius:8px;white-space:pre;direction:ltr';
+  d.textContent = info;
+  d.onclick = function(){ d.remove(); };
+  document.body.appendChild(d);
+}, 2000);
+</script>
 </body>
 </html>
