@@ -8051,7 +8051,7 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
 }
 </style>
   <link rel="stylesheet" href="booking-v2.css?v=99">
-  <link rel="stylesheet" href="haraj-v2.css?v=22">
+  <link rel="stylesheet" href="haraj-v2.css?v=23">
 
 
 
@@ -18389,12 +18389,14 @@ document.addEventListener('keydown', function(e) {
     grid.innerHTML = list.map(function(l){
       var images = l.images || (l.image ? [l.image] : []);
       var img = images[0] || "";
-      return '<div class="cm-card" onclick="APP.cmOpen(\'' + l.id + '\')">' +
-        '<div class="cm-card-img">' + (img ? '<img src="' + esc(img) + '" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
-        '<div class="cm-card-badge">' + (l.type === "car" ? "🚗" : "📱") + '</div></div>' +
-        '<div class="cm-card-body"><div class="cm-card-title">' + esc(l.title || "") + '</div>' +
-        '<div class="cm-card-price">' + (l.price||0).toLocaleString("ar-EG") + ' <small>ر.س</small></div>' +
-        '<div class="cm-card-city">📍 ' + esc(l.city || "") + '</div></div></div>';
+      return '<div class="prod" onclick="APP.cmOpen(\'' + l.id + '\')">' +
+        '<div class="prod-b">' + (l.type === "car" ? "🚗" : "📱") + '</div>' +
+        '<div class="prod-i">' + (img ? '<img src="' + esc(img) + '" loading="lazy" onerror="this.parentNode.style.background=\'#1E2438\';this.parentNode.innerHTML=\'<span style=\\\'font-size:42px;opacity:0.35;\\\\\\\'">🛍️</span>\'">' : '<span style="font-size:42px;opacity:0.35;">🛍️</span>') + '</div>' +
+        '<div class="prod-inf">' +
+        '<div class="prod-n">' + esc(l.title || "") + '</div>' +
+        '<div class="pr"><span class="price">' + (l.price||0).toLocaleString("ar-EG") + '</span><span class="price-c">ر.س</span></div>' +
+        '<div class="cm-city-line">📍 ' + esc(l.city || "") + '</div>' +
+        '</div></div>';
     }).join("");
   };
 

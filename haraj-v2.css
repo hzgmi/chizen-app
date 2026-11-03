@@ -1016,3 +1016,132 @@ html body [class*="ai-button"] {
   position: relative !important;
   z-index: 1 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   §14. CARD UNIFY — بطاقة الحراج تستخدم بنية السوق (.prod)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* تنسيق المدينة أسفل السعر */
+#sc-commerce .cm-city-line {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  color: #A0AEC0 !important;
+  margin-top: 6px !important;
+  padding-top: 6px !important;
+  border-top: 1px solid rgba(197,160,89,0.1) !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-city-line {
+  color: rgba(255,255,255,0.5) !important;
+  border-top-color: rgba(197,160,89,0.2) !important;
+}
+
+/* ضمان أن .prod داخل #sc-commerce يستخدم الهوية الذهبية */
+#sc-commerce .prod {
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+  cursor: pointer !important;
+  position: relative !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .prod {
+  background: linear-gradient(135deg, #131E42 0%, #0A1024 100%) !important;
+  border-color: rgba(197,160,89,0.2) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+}
+
+#sc-commerce .prod-i {
+  height: 140px !important;
+  background: #F4F6FA !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .prod-i {
+  background: #1E2438 !important;
+}
+
+#sc-commerce .prod-i img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+#sc-commerce .prod-inf {
+  padding: 12px !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  flex: 1 !important;
+}
+
+#sc-commerce .prod-n {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: #2D3748 !important;
+  margin: 0 !important;
+  min-height: 36px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .prod-n {
+  color: #FFFFFF !important;
+}
+
+#sc-commerce .prod .pr {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 6px !important;
+}
+
+#sc-commerce .prod .price {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: #C5A059 !important;
+  -webkit-text-fill-color: #C5A059 !important;
+  background: none !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .prod .price {
+  color: #F2E3C6 !important;
+  -webkit-text-fill-color: #F2E3C6 !important;
+}
+
+#sc-commerce .prod .price-c {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: #A0AEC0 !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .prod .price-c {
+  color: rgba(255,255,255,0.5) !important;
+}
+
+/* Badge العلوي */
+#sc-commerce .prod-b {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  padding: 4px 10px !important;
+  background: rgba(197,160,89,0.95) !important;
+  color: #07090F !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  border-radius: 8px !important;
+  z-index: 2 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+}
