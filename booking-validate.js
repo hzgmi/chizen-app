@@ -11,11 +11,23 @@
   function val(id) { var el = $(id); return el ? (el.value || '').trim() : ''; }
 
   function showToast(msg, type) {
-    if (window.toast) {
-      window.toast(msg, type || 'err');
-    } else {
-      alert(msg);
+    type = type || 'err';
+    // 1) APP.toast (دالة مضمونة في chizen.html)
+    if (window.APP && typeof window.APP.toast === 'function') {
+      try { window.APP.toast(msg); return; } catch(e) {}
     }
+    // 2) window.toast إن كانت دالة
+    if (typeof window.toast === 'function') {
+      try { window.toast(msg, type); return; } catch(e) {}
+    }
+    // 3) fallback مخصص — مضمون 100%
+    var bg = (type === 'suc') ? '#10b981' : '#EF4444';
+    var bd = (type === 'suc') ? '#34d399' : '#F87171';
+    var div = document.createElement('div');
+    div.textContent = msg;
+    div.style.cssText = 'position:fixed;top:20%;left:50%;transform:translateX(-50%);background:' + bg + ';color:#fff;padding:14px 22px;border-radius:12px;border:2px solid ' + bd + ';font-family:Tajawal,sans-serif;font-weight:800;font-size:14px;z-index:99999999;box-shadow:0 10px 40px rgba(0,0,0,0.5);max-width:85%;text-align:center;direction:rtl;line-height:1.5';
+    document.body.appendChild(div);
+    setTimeout(function(){ div.remove(); }, 3500);
   }
 
   function highlight(id) {
@@ -363,40 +375,4 @@
 
   console.log('[BOOKING-VALIDATE] ✅ Smart Unlock جاهز');
 
-  // ═══ DEBUG BOX ═══
-  setTimeout(function(){
-    var box = document.createElement('div');
-    box.id = 'chz-validate-debug';
-    box.style.cssText = 'position:fixed;top:80px;left:8px;right:8px;background:#000;color:#0f0;padding:8px;z-index:9999999;font-size:10px;font-family:monospace;border:2px solid #0f0;border-radius:6px;white-space:pre-wrap;direction:ltr;max-height:50vh;overflow:auto;cursor:pointer';
-    box.onclick = function(){ box.remove(); };
-
-    function updateDebug() {
-      var info = 'VALIDATE LOADED: yes\n';
-      info += 'APP.tvlSubmit: ' + (window.APP && typeof window.APP.tvlSubmit) + '\n';
-      info += 'toast: ' + (typeof window.toast) + '\n';
-      info += 'FB: ' + (typeof window.FB) + '\n';
-      var form = document.querySelector('.tvl-form.active');
-      if (form) {
-        var type = form.id.replace('form-', '');
-        var submit = form.querySelector('.tvl-submit');
-        info += 'active form: ' + type + '\n';
-        info += 'submit class: ' + (submit ? submit.className : 'NONE') + '\n';
-        // افحص كل حقل
-        var fields = ['fly-from','fly-to','fly-date','fly-name','fly-dob','fly-passport','fly-phone'];
-        if (type === 'flight') {
-          fields.forEach(function(f){
-            var el = document.getElementById(f);
-            info += f + ': ' + (el ? '"' + (el.value||'').substring(0,20) + '"' : 'NOT FOUND') + '\n';
-          });
-        }
-      } else {
-        info += 'no active form\n';
-      }
-      box.textContent = info;
-    }
-    updateDebug();
-    setInterval(updateDebug, 1500);
-    document.body.appendChild(box);
-  }, 3000);
-
-})();
+  })();
