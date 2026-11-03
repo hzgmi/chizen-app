@@ -362,4 +362,41 @@
   setInterval(attachWatchers, 2000);
 
   console.log('[BOOKING-VALIDATE] ✅ Smart Unlock جاهز');
+
+  // ═══ DEBUG BOX ═══
+  setTimeout(function(){
+    var box = document.createElement('div');
+    box.id = 'chz-validate-debug';
+    box.style.cssText = 'position:fixed;top:80px;left:8px;right:8px;background:#000;color:#0f0;padding:8px;z-index:9999999;font-size:10px;font-family:monospace;border:2px solid #0f0;border-radius:6px;white-space:pre-wrap;direction:ltr;max-height:50vh;overflow:auto;cursor:pointer';
+    box.onclick = function(){ box.remove(); };
+
+    function updateDebug() {
+      var info = 'VALIDATE LOADED: yes\n';
+      info += 'APP.tvlSubmit: ' + (window.APP && typeof window.APP.tvlSubmit) + '\n';
+      info += 'toast: ' + (typeof window.toast) + '\n';
+      info += 'FB: ' + (typeof window.FB) + '\n';
+      var form = document.querySelector('.tvl-form.active');
+      if (form) {
+        var type = form.id.replace('form-', '');
+        var submit = form.querySelector('.tvl-submit');
+        info += 'active form: ' + type + '\n';
+        info += 'submit class: ' + (submit ? submit.className : 'NONE') + '\n';
+        // افحص كل حقل
+        var fields = ['fly-from','fly-to','fly-date','fly-name','fly-dob','fly-passport','fly-phone'];
+        if (type === 'flight') {
+          fields.forEach(function(f){
+            var el = document.getElementById(f);
+            info += f + ': ' + (el ? '"' + (el.value||'').substring(0,20) + '"' : 'NOT FOUND') + '\n';
+          });
+        }
+      } else {
+        info += 'no active form\n';
+      }
+      box.textContent = info;
+    }
+    updateDebug();
+    setInterval(updateDebug, 1500);
+    document.body.appendChild(box);
+  }, 3000);
+
 })();
