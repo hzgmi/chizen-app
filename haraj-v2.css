@@ -754,3 +754,94 @@ html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
 html[data-theme="light"] #sc-commerce .chz-haraj-title {
   text-shadow: 0 1px 4px rgba(255,255,255,0.6) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   12) HERO MERGE — دمج الصورة مع النص (مثل صفحة الحجز)
+   ═══════════════════════════════════════════════════════════════ */
+
+#sc-commerce .chz-haraj-hero {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 380px !important; /* ارتفاع كافٍ للصورة والنص */
+  padding: 0 !important;
+  border-radius: 22px !important;
+  margin: 16px 16px 18px !important;
+  border: 1.5px solid rgba(197,160,89,0.35) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important; /* دفع المحتوى للأسفل */
+}
+
+/* صورة خلفية كاملة مع تظليل داكن من الأسفل */
+#sc-commerce .chz-haraj-hero::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    linear-gradient(to bottom,
+      rgba(7, 9, 15, 0.1) 0%,
+      rgba(7, 9, 15, 0.4) 40%,
+      rgba(7, 9, 15, 0.85) 80%,
+      rgba(7, 9, 15, 0.95) 100%),
+    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  z-index: 1 !important;
+}
+
+/* إخفاء أيقونة الهاتف إذا لم تكن مرغوبة */
+#sc-commerce .chz-haraj-hero::after {
+  display: none !important;
+}
+
+/* المحتوى النصي والأزرار فوق الصورة */
+#sc-commerce .chz-haraj-badge,
+#sc-commerce .chz-haraj-title,
+#sc-commerce .chz-haraj-subtitle,
+#sc-commerce .chz-haraj-features,
+#sc-commerce .chz-haraj-actions {
+  position: relative !important;
+  z-index: 2 !important;
+  padding: 0 22px !important;
+}
+
+/* تنسيق النصوص لتناسب الخلفية الداكنة */
+#sc-commerce .chz-haraj-badge {
+  align-self: flex-start !important; /* محاذاة الشارة لليسار */
+  margin-bottom: 12px !important;
+  background: rgba(197,160,89,0.25) !important;
+  color: var(--gold-light) !important;
+  border: 1px solid rgba(197,160,89,0.4) !important;
+}
+
+#sc-commerce .chz-haraj-title {
+  font-size: 32px !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 4px 18px rgba(0,0,0,0.7) !important;
+  margin-bottom: 8px !important;
+}
+
+#sc-commerce .chz-haraj-subtitle {
+  font-size: 14px !important;
+  color: rgba(255,255,255,0.85) !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7) !important;
+  margin-bottom: 20px !important;
+}
+
+#sc-commerce .chz-haraj-features {
+  background: rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(197,160,89,0.2) !important;
+  margin: 0 22px 20px !important;
+  padding: 14px !important;
+}
+
+#sc-commerce .chz-haraj-feat-text {
+  color: var(--gold-light) !important;
+}
+
+#sc-commerce .chz-haraj-actions {
+  margin: 0 22px 24px !important;
+  padding: 0 !important;
+}
