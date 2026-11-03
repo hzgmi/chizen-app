@@ -1,102 +1,179 @@
 /* ═══════════════════════════════════════════════════════════════
-   CHIZEN — haraj-v2.css (Marketplace Redesign)
-   هوية سوق مفتوح فاخر — نفس جودة الحجز
-   النطاق: #sc-commerce فقط
+   CHIZEN — haraj-v2.css (v3.0 — Clean Rebuild)
+   تصميم حراج شيزن — هوية ذهبية + تجاوب كامل + 4 شاشات
+   التاريخ: 2026-11-03
    ═══════════════════════════════════════════════════════════════ */
 
-/* ─── المتغيرات ─── */
-#sc-commerce {
-  --obsidian:    #07090F;
-  --navy:        #101724;
-  --navy-mid:    #1A2B5E;
-  --gold:        #C5A059;
-  --gold-dark:   #9A7B4F;
-  --gold-light:  #F2E3C6;
-  --bg-page:     #F6F7F9;
-  --text-main:   #121A26;
-  --text-muted:  #7A8596;
-  --gold-metallic: linear-gradient(135deg, #9A7B4F 0%, #C5A059 50%, #F2E3C6 100%);
-  --gold-deep:     linear-gradient(135deg, #F2E3C6 0%, #C5A059 50%, #9A7B4F 100%);
-  --navy-gradient: linear-gradient(135deg, #0D1B3E 0%, #1A2B5E 100%);
-  --card-dark:     linear-gradient(135deg, #131E42 0%, #0A1024 100%);
+/* ═══════════════════════════════════════════════════════════════
+   §1. VARIABLES & BASE — المتغيرات الأساسية
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --chz-gold:        #C5A059;
+  --chz-gold-light:  #F2E3C6;
+  --chz-gold-dark:   #9A7B4F;
+  --chz-gold-metallic: linear-gradient(135deg, #9A7B4F 0%, #C5A059 50%, #F2E3C6 100%);
+  --chz-gold-deep:     linear-gradient(135deg, #F2E3C6 0%, #C5A059 50%, #9A7B4F 100%);
+  --chz-navy-gradient: linear-gradient(135deg, #0D1B3E 0%, #1A2B5E 100%);
+  --chz-obsidian:    #07090F;
+  --chz-card-dark:   linear-gradient(135deg, #131E42 0%, #0A1024 100%);
+  --chz-border-gold: rgba(197,160,89,0.2);
+  --chz-border-gold-strong: rgba(197,160,89,0.4);
 }
 
-html:not([data-theme="light"]) #sc-commerce {
-  background: var(--obsidian) !important;
-  color: #FFFFFF;
-  padding: 0 0 90px 0 !important;
+/* تطبيق المتغيرات على الشاشات الأربع */
+#sc-commerce,
+#sc-commerce-new,
+#sc-commerce-mine,
+#sc-commerce-detail {
+  --chz-gold:        #C5A059;
+  --chz-gold-light:  #F2E3C6;
+  --chz-gold-dark:   #9A7B4F;
+  --chz-gold-metallic: linear-gradient(135deg, #9A7B4F 0%, #C5A059 50%, #F2E3C6 100%);
+  --chz-gold-deep:     linear-gradient(135deg, #F2E3C6 0%, #C5A059 50%, #9A7B4F 100%);
+  --chz-navy-gradient: linear-gradient(135deg, #0D1B3E 0%, #1A2B5E 100%);
+  --chz-obsidian:    #07090F;
+  --chz-card-dark:   linear-gradient(135deg, #131E42 0%, #0A1024 100%);
 }
-html[data-theme="light"] #sc-commerce {
-  background: var(--bg-page) !important;
-  color: var(--text-main);
-  padding: 0 0 90px 0 !important;
+
+/* خلفية الشاشة (داكن/فاتح) */
+html:not([data-theme="light"]) #sc-commerce,
+html:not([data-theme="light"]) #sc-commerce-new,
+html:not([data-theme="light"]) #sc-commerce-mine,
+html:not([data-theme="light"]) #sc-commerce-detail {
+  background: var(--chz-obsidian) !important;
+  color: #FFFFFF;
+  padding-bottom: 90px !important;
+}
+
+html[data-theme="light"] #sc-commerce,
+html[data-theme="light"] #sc-commerce-new,
+html[data-theme="light"] #sc-commerce-mine,
+html[data-theme="light"] #sc-commerce-detail {
+  background: #F6F7F9 !important;
+  color: #121A26;
+  padding-bottom: 90px !important;
+}
+
+/* منع أي شيء من تجاوز الشاشة */
+#sc-commerce,
+#sc-commerce-new,
+#sc-commerce-mine,
+#sc-commerce-detail {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+}
+
+#sc-commerce *,
+#sc-commerce-new *,
+#sc-commerce-mine *,
+#sc-commerce-detail * {
+  box-sizing: border-box !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   1) TOP BAR — شريط علوي أنيق
+   §2. TOP BAR — الشريط العلوي
    ═══════════════════════════════════════════════════════════════ */
-#sc-commerce .cm-top {
+#sc-commerce .cm-top,
+#sc-commerce-new .cm-top,
+#sc-commerce-mine .cm-top,
+#sc-commerce-detail .cm-top {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
   padding: 14px 16px !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 0 0 24px 24px !important;
+  margin: 0 0 16px !important;
   position: sticky !important;
   top: 0 !important;
   z-index: 10 !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
 }
-html:not([data-theme="light"]) #sc-commerce .cm-top {
+
+html:not([data-theme="light"]) #sc-commerce .cm-top,
+html:not([data-theme="light"]) #sc-commerce-new .cm-top,
+html:not([data-theme="light"]) #sc-commerce-mine .cm-top,
+html:not([data-theme="light"]) #sc-commerce-detail .cm-top {
   background: rgba(10, 16, 36, 0.85) !important;
-  border-bottom: 1px solid rgba(197,160,89,0.15) !important;
-}
-html[data-theme="light"] #sc-commerce .cm-top {
-  background: rgba(255,255,255,0.9) !important;
-  border-bottom: 1px solid rgba(197,160,89,0.15) !important;
+  border-bottom: 1px solid var(--chz-border-gold) !important;
 }
 
-#sc-commerce .cm-back {
+html[data-theme="light"] #sc-commerce .cm-top,
+html[data-theme="light"] #sc-commerce-new .cm-top,
+html[data-theme="light"] #sc-commerce-mine .cm-top,
+html[data-theme="light"] #sc-commerce-detail .cm-top {
+  background: rgba(255,255,255,0.95) !important;
+  border-bottom: 1px solid var(--chz-border-gold) !important;
+}
+
+/* زر الرجوع */
+#sc-commerce .cm-back,
+#sc-commerce-new .cm-back,
+#sc-commerce-mine .cm-back,
+#sc-commerce-detail .cm-back {
   width: 40px !important;
   height: 40px !important;
   border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border: 1px solid rgba(197,160,89,0.3) !important;
+  border: 1px solid var(--chz-border-gold-strong) !important;
   background: rgba(197,160,89,0.1) !important;
-  color: var(--gold) !important;
+  color: var(--chz-gold) !important;
   cursor: pointer !important;
   flex-shrink: 0 !important;
-  transition: transform 0.15s, background 0.15s !important;
 }
-#sc-commerce .cm-back:active { transform: scale(0.92) !important; }
-#sc-commerce .cm-back svg { width: 18px !important; height: 18px !important; }
 
-#sc-commerce .cm-title-wrap { flex: 1 !important; min-width: 0 !important; }
-#sc-commerce .cm-title {
+#sc-commerce .cm-back svg,
+#sc-commerce-new .cm-back svg,
+#sc-commerce-mine .cm-back svg,
+#sc-commerce-detail .cm-back svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* الحاوية النصية */
+#sc-commerce .cm-title-wrap,
+#sc-commerce-new .cm-title-wrap,
+#sc-commerce-mine .cm-title-wrap,
+#sc-commerce-detail .cm-title-wrap {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+#sc-commerce .cm-title,
+#sc-commerce-new .cm-title,
+#sc-commerce-mine .cm-title,
+#sc-commerce-detail .cm-title {
   font-size: 17px !important;
   font-weight: 900 !important;
   line-height: 1.2 !important;
 }
-html:not([data-theme="light"]) #sc-commerce .cm-title { color: #FFFFFF !important; }
-html[data-theme="light"] #sc-commerce .cm-title { color: var(--text-main) !important; }
-#sc-commerce .cm-subtitle {
+
+html:not([data-theme="light"]) .cm-title { color: #FFFFFF !important; }
+html[data-theme="light"] .cm-title { color: var(--chz-obsidian) !important; }
+
+#sc-commerce .cm-subtitle,
+#sc-commerce-new .cm-subtitle,
+#sc-commerce-mine .cm-subtitle,
+#sc-commerce-detail .cm-subtitle {
   font-size: 11px !important;
   font-weight: 600 !important;
   margin-top: 2px !important;
   color: rgba(255,255,255,0.55) !important;
 }
-html[data-theme="light"] #sc-commerce .cm-subtitle { color: var(--text-muted) !important; }
 
+html[data-theme="light"] .cm-subtitle { color: #7A8596 !important; }
+
+/* أزرار علوية */
 #sc-commerce .cm-my-btn {
   width: 38px !important;
   height: 38px !important;
   border-radius: 12px !important;
   background: rgba(197,160,89,0.12) !important;
-  border: 1px solid rgba(197,160,89,0.3) !important;
-  color: var(--gold) !important;
+  border: 1px solid var(--chz-border-gold) !important;
+  color: var(--chz-gold) !important;
   font-size: 17px !important;
   cursor: pointer !important;
   flex-shrink: 0 !important;
@@ -105,8 +182,8 @@ html[data-theme="light"] #sc-commerce .cm-subtitle { color: var(--text-muted) !i
 #sc-commerce .cm-new-btn {
   padding: 9px 14px !important;
   border-radius: 12px !important;
-  background: var(--gold-deep) !important;
-  color: #07090F !important;
+  background: var(--chz-gold-deep) !important;
+  color: var(--chz-obsidian) !important;
   font-family: 'Tajawal', sans-serif !important;
   font-weight: 900 !important;
   font-size: 12.5px !important;
@@ -118,80 +195,102 @@ html[data-theme="light"] #sc-commerce .cm-subtitle { color: var(--text-muted) !i
   box-shadow: 0 4px 12px rgba(197,160,89,0.4) !important;
   flex-shrink: 0 !important;
 }
+
 #sc-commerce .cm-new-btn svg {
   width: 14px !important;
   height: 14px !important;
-  stroke: #07090F !important;
+  stroke: var(--chz-obsidian) !important;
   stroke-width: 3 !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   2) HERO — بانر ترحيبي مزدوج
+   §3. HERO — البانر الترحيبي
    ═══════════════════════════════════════════════════════════════ */
 #sc-commerce .chz-haraj-hero {
   position: relative !important;
-  padding: 24px 22px !important;
+  height: 320px !important;
+  min-height: 320px !important;
+  max-height: 320px !important;
+  padding: 0 !important;
   border-radius: 22px !important;
   margin: 16px 16px 18px !important;
   overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  border: 1.5px solid var(--chz-border-gold-strong) !important;
 }
-html:not([data-theme="light"]) #sc-commerce .chz-haraj-hero {
-  background: linear-gradient(135deg, #1A2B5E 0%, #0D1B3E 100%) !important;
-  border: 1.5px solid rgba(197,160,89,0.3) !important;
-  box-shadow: 0 10px 32px rgba(197,160,89,0.18) !important;
+
+#sc-commerce .chz-haraj-hero::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    linear-gradient(to bottom,
+      rgba(7, 9, 15, 0.3) 0%,
+      rgba(7, 9, 15, 0.15) 30%,
+      rgba(7, 9, 15, 0.75) 70%,
+      rgba(7, 9, 15, 0.95) 100%),
+    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-position: center 40% !important;
+  z-index: 1 !important;
 }
-html[data-theme="light"] #sc-commerce .chz-haraj-hero {
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFFEF9 100%) !important;
-  border: 1.5px solid rgba(197,160,89,0.3) !important;
-  box-shadow: 0 8px 28px rgba(197,160,89,0.15) !important;
+
+#sc-commerce .chz-haraj-hero > * {
+  position: relative !important;
+  z-index: 2 !important;
 }
+
 #sc-commerce .chz-haraj-glow { display: none !important; }
 
+/* شارة */
 #sc-commerce .chz-haraj-badge {
   display: inline-block !important;
+  align-self: flex-start !important;
+  margin: 0 22px 10px !important;
   padding: 5px 14px !important;
-  background: rgba(197,160,89,0.18) !important;
-  border: 1px solid rgba(197,160,89,0.45) !important;
+  background: rgba(197,160,89,0.9) !important;
+  color: var(--chz-obsidian) !important;
+  border: none !important;
   border-radius: 20px !important;
-  color: var(--gold-light) !important;
   font-size: 10.5px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.5px !important;
-  margin-bottom: 14px !important;
-}
-html[data-theme="light"] #sc-commerce .chz-haraj-badge { color: var(--gold-dark) !important; }
-
-#sc-commerce .chz-haraj-title {
-  font-size: 28px !important;
   font-weight: 900 !important;
-  line-height: 1.15 !important;
-  margin-bottom: 8px !important;
+  letter-spacing: 0.5px !important;
 }
-html:not([data-theme="light"]) #sc-commerce .chz-haraj-title { color: #FFFFFF !important; }
-html[data-theme="light"] #sc-commerce .chz-haraj-title { color: var(--text-main) !important; }
+
+/* عنوان Hero */
+#sc-commerce .chz-haraj-title {
+  font-size: 30px !important;
+  font-weight: 900 !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.7) !important;
+  margin: 0 22px 6px !important;
+  line-height: 1.15 !important;
+}
 
 #sc-commerce .chz-haraj-subtitle {
   font-size: 13px !important;
-  font-weight: 600 !important;
-  line-height: 1.6 !important;
-  margin-bottom: 18px !important;
+  color: rgba(255,255,255,0.85) !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+  margin: 0 22px 16px !important;
+  line-height: 1.5 !important;
 }
-html:not([data-theme="light"]) #sc-commerce .chz-haraj-subtitle { color: rgba(255,255,255,0.72) !important; }
-html[data-theme="light"] #sc-commerce .chz-haraj-subtitle { color: var(--text-muted) !important; }
 
+/* الميزات */
 #sc-commerce .chz-haraj-features {
   display: flex !important;
   justify-content: space-around !important;
   align-items: center !important;
-  padding: 12px 0 !important;
-  background: rgba(197,160,89,0.08) !important;
+  margin: 0 22px 14px !important;
+  padding: 12px !important;
+  background: rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid var(--chz-border-gold-strong) !important;
   border-radius: 14px !important;
-  margin-bottom: 16px !important;
 }
-html[data-theme="light"] #sc-commerce .chz-haraj-features {
-  background: #F8F9FA !important;
-  border: 1px solid rgba(197,160,89,0.15) !important;
-}
+
 #sc-commerce .chz-haraj-feat {
   display: flex !important;
   flex-direction: column !important;
@@ -199,23 +298,28 @@ html[data-theme="light"] #sc-commerce .chz-haraj-features {
   gap: 3px !important;
   flex: 1 !important;
 }
+
 #sc-commerce .chz-haraj-feat-icon { font-size: 18px !important; }
 #sc-commerce .chz-haraj-feat-text {
   font-size: 10px !important;
   font-weight: 800 !important;
-  color: var(--gold) !important;
+  color: var(--chz-gold-light) !important;
+  text-align: center !important;
 }
 #sc-commerce .chz-haraj-feat-sep {
   width: 1px !important;
   height: 26px !important;
-  background: rgba(197,160,89,0.25) !important;
+  background: var(--chz-border-gold-strong) !important;
 }
 
+/* أزرار Hero */
 #sc-commerce .chz-haraj-actions {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 10px !important;
+  margin: 0 22px 20px !important;
 }
+
 #sc-commerce .chz-haraj-btn-buy,
 #sc-commerce .chz-haraj-btn-sell {
   padding: 13px 8px !important;
@@ -231,23 +335,27 @@ html[data-theme="light"] #sc-commerce .chz-haraj-features {
   gap: 5px !important;
   transition: transform 0.15s !important;
 }
+
 #sc-commerce .chz-haraj-btn-buy {
-  background: var(--gold-deep) !important;
-  color: #07090F !important;
+  background: var(--chz-gold-deep) !important;
+  color: var(--chz-obsidian) !important;
   box-shadow: 0 4px 14px rgba(197,160,89,0.4) !important;
 }
+
 #sc-commerce .chz-haraj-btn-sell {
-  background: rgba(197,160,89,0.12) !important;
-  color: var(--gold) !important;
-  border: 1.5px solid rgba(197,160,89,0.4) !important;
+  background: rgba(197,160,89,0.15) !important;
+  color: var(--chz-gold-light) !important;
+  border: 1.5px solid var(--chz-border-gold-strong) !important;
 }
+
 #sc-commerce .chz-haraj-btn-buy:active,
 #sc-commerce .chz-haraj-btn-sell:active { transform: scale(0.96) !important; }
+
 #sc-commerce .chz-haraj-btn-buy svg,
 #sc-commerce .chz-haraj-btn-sell svg { width: 15px !important; height: 15px !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   3) FILTERS + SEARCH
+   §4. FILTERS + SEARCH — الفلاتر والبحث
    ═══════════════════════════════════════════════════════════════ */
 #sc-commerce .cm-filters {
   display: flex !important;
@@ -256,7 +364,9 @@ html[data-theme="light"] #sc-commerce .chz-haraj-features {
   margin-bottom: 14px !important;
   overflow-x: auto !important;
   scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
 }
+
 #sc-commerce .cm-filters::-webkit-scrollbar { display: none !important; }
 
 #sc-commerce .cm-filter {
@@ -271,28 +381,34 @@ html[data-theme="light"] #sc-commerce .chz-haraj-features {
   transition: all 0.2s !important;
   flex-shrink: 0 !important;
 }
+
 html:not([data-theme="light"]) #sc-commerce .cm-filter {
   background: rgba(255,255,255,0.05) !important;
   border-color: rgba(255,255,255,0.1) !important;
   color: rgba(255,255,255,0.7) !important;
 }
+
 html[data-theme="light"] #sc-commerce .cm-filter {
   background: #FFFFFF !important;
   border-color: #E5E7EB !important;
-  color: var(--text-main) !important;
+  color: var(--chz-obsidian) !important;
 }
+
 #sc-commerce .cm-filter.active {
-  background: var(--gold-deep) !important;
+  background: var(--chz-gold-deep) !important;
   border-color: transparent !important;
-  color: #07090F !important;
+  color: var(--chz-obsidian) !important;
   box-shadow: 0 4px 14px rgba(197,160,89,0.4) !important;
 }
 
+/* البحث */
 #sc-commerce .cm-search {
   position: relative !important;
   margin: 0 16px 18px !important;
 }
-#sc-commerce .cm-search input {
+
+#sc-commerce .cm-search input,
+#sc-commerce #cm-search-input {
   width: 100% !important;
   height: 48px !important;
   padding: 0 16px 0 44px !important;
@@ -302,795 +418,84 @@ html[data-theme="light"] #sc-commerce .cm-filter {
   font-weight: 600 !important;
   box-sizing: border-box !important;
 }
-html:not([data-theme="light"]) #sc-commerce .cm-search input {
+
+html:not([data-theme="light"]) #sc-commerce #cm-search-input {
   background: rgba(255,255,255,0.05) !important;
   border: 1.5px solid rgba(255,255,255,0.1) !important;
   color: #FFFFFF !important;
 }
-html[data-theme="light"] #sc-commerce .cm-search input {
+
+html[data-theme="light"] #sc-commerce #cm-search-input {
   background: #FFFFFF !important;
   border: 1.5px solid #E5E7EB !important;
-  color: var(--text-main) !important;
+  color: var(--chz-obsidian) !important;
 }
-#sc-commerce .cm-search input:focus {
+
+#sc-commerce #cm-search-input:focus {
   outline: none !important;
-  border-color: var(--gold) !important;
+  border-color: var(--chz-gold) !important;
   box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
 }
-#sc-commerce .cm-search input::placeholder {
-  color: rgba(255,255,255,0.35) !important;
-}
-html[data-theme="light"] #sc-commerce .cm-search input::placeholder { color: #B0B7C3 !important; }
 
 #sc-commerce .cm-search-icon {
   position: absolute !important;
-  left: 14px !important;
+  right: 14px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
   width: 18px !important;
   height: 18px !important;
-  stroke: var(--gold) !important;
+  stroke: var(--chz-gold) !important;
   pointer-events: none !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   4) CARDS GRID — شبكة 2x2
+   §5. CARDS GRID — شبكة البطاقات
    ═══════════════════════════════════════════════════════════════ */
 #sc-commerce .cm-grid,
 #sc-commerce #cm-list {
   display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+  grid-template-columns: repeat(2, 1fr) !important;
   gap: 12px !important;
   padding: 0 16px !important;
   margin-bottom: 20px !important;
 }
 
 #sc-commerce .cm-card {
-  border-radius: 18px !important;
-  overflow: hidden !important;
-  position: relative !important;
   display: flex !important;
   flex-direction: column !important;
-  transition: transform 0.2s, box-shadow 0.2s !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
   cursor: pointer !important;
+  position: relative !important;
+  transition: transform 0.15s !important;
 }
+
 html:not([data-theme="light"]) #sc-commerce .cm-card {
-  background: var(--card-dark) !important;
-  border: 1px solid rgba(197,160,89,0.18) !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.35) !important;
+  background: var(--chz-card-dark) !important;
+  border: 1px solid var(--chz-border-gold) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
 }
-html[data-theme="light"] #sc-commerce .cm-card {
-  background: #FFFFFF !important;
-  border: 1px solid rgba(197,160,89,0.18) !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
-}
-#sc-commerce .cm-card:active { transform: scale(0.97) !important; }
-
-#sc-commerce .cm-card-img {
-  width: 100% !important;
-  aspect-ratio: 1 / 1 !important;
-  object-fit: cover !important;
-  display: block !important;
-  background: #0A1024 !important;
-}
-
-#sc-commerce .cm-card-badge {
-  position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
-  padding: 4px 10px !important;
-  border-radius: 8px !important;
-  font-size: 10px !important;
-  font-weight: 900 !important;
-  background: var(--gold-deep) !important;
-  color: #07090F !important;
-  z-index: 2 !important;
-  box-shadow: 0 2px 8px rgba(197,160,89,0.4) !important;
-}
-
-#sc-commerce .cm-card-body {
-  padding: 10px 12px 12px !important;
-  flex: 1 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 4px !important;
-}
-#sc-commerce .cm-card-title {
-  font-size: 13px !important;
-  font-weight: 800 !important;
-  line-height: 1.3 !important;
-  overflow: hidden !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  min-height: 34px !important;
-}
-html:not([data-theme="light"]) #sc-commerce .cm-card-title { color: #FFFFFF !important; }
-html[data-theme="light"] #sc-commerce .cm-card-title { color: var(--text-main) !important; }
-
-#sc-commerce .cm-card-price {
-  font-size: 15px !important;
-  font-weight: 900 !important;
-  color: var(--gold) !important;
-}
-#sc-commerce .cm-card-city {
-  font-size: 10.5px !important;
-  font-weight: 600 !important;
-  margin-top: auto !important;
-  padding-top: 6px !important;
-  border-top: 1px solid rgba(197,160,89,0.1) !important;
-}
-html:not([data-theme="light"]) #sc-commerce .cm-card-city { color: rgba(255,255,255,0.55) !important; }
-html[data-theme="light"] #sc-commerce .cm-card-city { color: var(--text-muted) !important; }
-
-/* ═══════════════════════════════════════════════════════════════
-   5) CONFIRM MODAL
-   ═══════════════════════════════════════════════════════════════ */
-#sc-commerce .cm-confirm-card {
-  background: var(--card-dark) !important;
-  border: 1.5px solid var(--gold) !important;
-  border-radius: 22px !important;
-  padding: 26px 22px !important;
-  box-shadow: 0 20px 60px rgba(197,160,89,0.35) !important;
-}
-#sc-commerce .cm-confirm-title {
-  color: var(--gold-light) !important;
-  font-size: 18px !important;
-  font-weight: 900 !important;
-  margin-bottom: 8px !important;
-}
-#sc-commerce .cm-confirm-msg {
-  color: rgba(255,255,255,0.7) !important;
-  font-size: 13.5px !important;
-  line-height: 1.6 !important;
-  margin-bottom: 20px !important;
-}
-#sc-commerce .cm-confirm-btn {
-  padding: 12px 20px !important;
-  border-radius: 12px !important;
-  font-family: 'Tajawal', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 14px !important;
-  cursor: pointer !important;
-  border: none !important;
-}
-#sc-commerce .cm-confirm-btn:not(.cm-confirm-btn-cancel) {
-  background: var(--gold-deep) !important;
-  color: #07090F !important;
-}
-#sc-commerce .cm-confirm-btn-cancel {
-  background: transparent !important;
-  color: rgba(255,255,255,0.6) !important;
-  border: 1.5px solid rgba(255,255,255,0.15) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   6) FLOATING ACTION BUTTON — زر عائم للبيع
-   ═══════════════════════════════════════════════════════════════ */
-#sc-commerce .cm-fab {
-  position: fixed !important;
-  bottom: 90px !important;
-  left: 20px !important;
-  width: 60px !important;
-  height: 60px !important;
-  border-radius: 50% !important;
-  background: var(--gold-deep) !important;
-  color: #07090F !important;
-  border: none !important;
-  font-size: 28px !important;
-  font-weight: 900 !important;
-  cursor: pointer !important;
-  box-shadow: 0 10px 30px rgba(197,160,89,0.5) !important;
-  z-index: 9998 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: transform 0.2s !important;
-}
-#sc-commerce .cm-fab:active { transform: scale(0.9) !important; }
-
-/* ═══════════════════════════════════════════════════════════════
-   7) HERO BACKGROUND IMAGE — صورة فاخرة شفافة
-   ═══════════════════════════════════════════════════════════════ */
-
-/* خلفية الصورة الأساسية للـ Hero */
-#sc-commerce .chz-haraj-hero {
-  background-image:
-    linear-gradient(135deg, rgba(13, 27, 62, 0.85) 0%, rgba(7, 9, 15, 0.92) 100%),
-    url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80&auto=format&fit=crop') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-/* الطبقة الذهبية الشفافة فوق الصورة */
-#sc-commerce .chz-haraj-hero::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: linear-gradient(180deg,
-    rgba(197, 160, 89, 0.08) 0%,
-    rgba(7, 9, 15, 0.15) 60%,
-    rgba(7, 9, 15, 0.5) 100%) !important;
-  pointer-events: none !important;
-  z-index: 1 !important;
-}
-
-/* رفع النصوص فوق الصورة */
-#sc-commerce .chz-haraj-hero > * {
-  position: relative !important;
-  z-index: 2 !important;
-}
-
-/* وضع فاتح — صورة أخف */
-html[data-theme="light"] #sc-commerce .chz-haraj-hero {
-  background-image:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 254, 249, 0.95) 100%),
-    url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80&auto=format&fit=crop') !important;
-}
-
-html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
-  background: linear-gradient(180deg,
-    rgba(197, 160, 89, 0.06) 0%,
-    rgba(255, 255, 255, 0.15) 60%,
-    rgba(255, 255, 255, 0.5) 100%) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   8) HERO SPLIT — تصميم مطابق للحجز (صورة + محتوى)
-   ═══════════════════════════════════════════════════════════════ */
-
-/* إعادة بناء الـ Hero كبطاقة مقسمة */
-#sc-commerce .chz-haraj-hero {
-  padding: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  overflow: visible !important;
-}
-
-/* الحاوية الرئيسية الجديدة (الصورة + المحتوى) */
-#sc-commerce .chz-haraj-hero::after {
-  content: '' !important;
-  display: block !important;
-  /* إخفاء العنصر الوهمي */
-  display: none !important;
-}
-
-/* نقوم بتغليف كل شيء داخل حاوية جديدة */
-#sc-commerce .chz-haraj-hero > * {
-  position: static !important;
-  z-index: auto !important;
-}
-
-/* --- القسم العلوي: الصورة --- */
-#sc-commerce .chz-haraj-hero {
-  border-radius: 22px !important;
-  overflow: hidden !important;
-  margin: 16px 16px 18px !important;
-  border: 1.5px solid rgba(197,160,89,0.35) !important;
-  box-shadow: 0 10px 32px rgba(197,160,89,0.18) !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .chz-haraj-hero {
-  background: #0D1B3E !important;
-}
-html[data-theme="light"] #sc-commerce .chz-haraj-hero {
-  background: #FFFEF9 !important;
-}
-
-/* صورة الخلفية الواضحة */
-#sc-commerce .chz-haraj-hero::before {
-  content: '' !important;
-  display: block !important;
-  width: 100% !important;
-  height: 220px !important; /* ارتفاع الصورة */
-  background-image: url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=80&auto=format&fit=crop') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-/* المحتوى السفلي (يظهر فوق الصورة) */
-#sc-commerce .chz-haraj-badge,
-#sc-commerce .chz-haraj-title,
-#sc-commerce .chz-haraj-subtitle,
-#sc-commerce .chz-haraj-features,
-#sc-commerce .chz-haraj-actions {
-  position: relative !important;
-  z-index: 2 !important;
-  padding-left: 22px !important;
-  padding-right: 22px !important;
-}
-
-/* إصلاح الشارات والنصوص لتناسب الوضع الجديد */
-#sc-commerce .chz-haraj-badge {
-  margin-top: -20px !important; /* رفع الشارة فوق الصورة قليلاً */
-  margin-bottom: 10px !important;
-  background: var(--gold-deep) !important;
-  color: #07090F !important;
-  border: none !important;
-  font-weight: 900 !important;
-}
-
-#sc-commerce .chz-haraj-title {
-  margin-top: 0 !important;
-  margin-bottom: 6px !important;
-  font-size: 26px !important;
-}
-html:not([data-theme="light"]) #sc-commerce .chz-haraj-title { color: #FFFFFF !important; }
-html[data-theme="light"] #sc-commerce .chz-haraj-title { color: #121A26 !important; }
-
-#sc-commerce .chz-haraj-subtitle {
-  margin-bottom: 20px !important;
-}
-html:not([data-theme="light"]) #sc-commerce .chz-haraj-subtitle { color: rgba(255,255,255,0.7) !important; }
-html[data-theme="light"] #sc-commerce .chz-haraj-subtitle { color: #7A8596 !important; }
-
-#sc-commerce .chz-haraj-features {
-  margin: 0 22px 20px !important; /* هوامش جانبية */
-  padding: 14px 0 !important;
-  width: auto !important;
-}
-html:not([data-theme="light"]) #sc-commerce .chz-haraj-features {
-  background: rgba(255,255,255,0.05) !important;
-  border-radius: 14px !important;
-}
-html[data-theme="light"] #sc-commerce .chz-haraj-features {
-  background: #F8F9FA !important;
-  border-radius: 14px !important;
-}
-
-#sc-commerce .chz-haraj-actions {
-  margin: 0 22px 22px !important;
-  padding: 0 !important;
-}
-
-/* إخفاء التأثير القديم (الطبقة الشفافة) */
-#sc-commerce .chz-haraj-hero > style {
-  display: none !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   9) HERO IMAGE UPDATE — سوق مفتوح + تظليل ذهبي خفيف
-   ═══════════════════════════════════════════════════════════════ */
-
-/* استبدال صورة الـ Hero بصورة سوق مفتوح */
-#sc-commerce .chz-haraj-hero::before {
-  background-image:
-    linear-gradient(180deg,
-      rgba(7, 9, 15, 0.15) 0%,
-      rgba(7, 9, 15, 0.35) 50%,
-      rgba(7, 9, 15, 0.55) 100%),
-    url('https://images.unsplash.com/photo-1590845947676-9c6cc4e0c9a6?w=900&q=80&auto=format&fit=crop') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  position: relative !important;
-}
-
-/* تظليل ذهبي خفيف (Golden Overlay) */
-#sc-commerce .chz-haraj-hero::before {
-  background-blend-mode: multiply, normal !important;
-}
-
-/* تحسين ظهور النصوص فوق الصورة */
-#sc-commerce .chz-haraj-title {
-  text-shadow: 0 2px 12px rgba(0,0,0,0.5) !important;
-}
-html[data-theme="light"] #sc-commerce .chz-haraj-title {
-  text-shadow: 0 1px 4px rgba(255,255,255,0.5) !important;
-}
-
-#sc-commerce .chz-haraj-subtitle {
-  text-shadow: 0 1px 6px rgba(0,0,0,0.4) !important;
-}
-
-/* الوضع الفاتح — صورة أخف */
-html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
-  background-image:
-    linear-gradient(180deg,
-      rgba(255, 255, 255, 0.25) 0%,
-      rgba(255, 255, 255, 0.4) 50%,
-      rgba(255, 255, 255, 0.65) 100%),
-    url('https://images.unsplash.com/photo-1590845947676-9c6cc4e0c9a6?w=900&q=80&auto=format&fit=crop') !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   11) HERO IMAGE — سيارة فاخرة + هواتف (تصميم مدمج)
-   ═══════════════════════════════════════════════════════════════ */
-
-#sc-commerce .chz-haraj-hero::before {
-  background-image:
-    linear-gradient(135deg,
-      rgba(7, 9, 15, 0.45) 0%,
-      rgba(26, 43, 94, 0.55) 50%,
-      rgba(7, 9, 15, 0.75) 100%),
-    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
-  background-size: cover !important;
-  background-position: center 40% !important;
-  background-blend-mode: multiply, normal !important;
-}
-
-/* أيقونة هواتف صغيرة في زاوية الصورة */
-#sc-commerce .chz-haraj-hero {
-  position: relative !important;
-}
-#sc-commerce .chz-haraj-hero::after {
-  content: '📱' !important;
-  position: absolute !important;
-  top: 14px !important;
-  left: 14px !important;
-  font-size: 28px !important;
-  z-index: 5 !important;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 8px rgba(197,160,89,0.4)) !important;
-  animation: chzPhoneFloat 3s ease-in-out infinite !important;
-}
-
-@keyframes chzPhoneFloat {
-  0%, 100% { transform: translateY(0) rotate(-5deg); }
-  50% { transform: translateY(-5px) rotate(5deg); }
-}
-
-/* تحسين قراءة النص فوق الصورة */
-#sc-commerce .chz-haraj-title {
-  text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 0 24px rgba(197,160,89,0.3) !important;
-}
-#sc-commerce .chz-haraj-subtitle {
-  text-shadow: 0 1px 6px rgba(0,0,0,0.6) !important;
-}
-
-/* الوضع الفاتح */
-html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
-  background-image:
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.35) 0%,
-      rgba(255, 254, 249, 0.5) 50%,
-      rgba(255, 255, 255, 0.7) 100%),
-    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
-}
-html[data-theme="light"] #sc-commerce .chz-haraj-title {
-  text-shadow: 0 1px 4px rgba(255,255,255,0.6) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   12) HERO MERGE — دمج الصورة مع النص (مثل صفحة الحجز)
-   ═══════════════════════════════════════════════════════════════ */
-
-#sc-commerce .chz-haraj-hero {
-  position: relative !important;
-  overflow: hidden !important;
-  min-height: 380px !important; /* ارتفاع كافٍ للصورة والنص */
-  padding: 0 !important;
-  border-radius: 22px !important;
-  margin: 16px 16px 18px !important;
-  border: 1.5px solid rgba(197,160,89,0.35) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-end !important; /* دفع المحتوى للأسفل */
-}
-
-/* صورة خلفية كاملة مع تظليل داكن من الأسفل */
-#sc-commerce .chz-haraj-hero::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background-image:
-    linear-gradient(to bottom,
-      rgba(7, 9, 15, 0.1) 0%,
-      rgba(7, 9, 15, 0.4) 40%,
-      rgba(7, 9, 15, 0.85) 80%,
-      rgba(7, 9, 15, 0.95) 100%),
-    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
-  background-size: cover !important;
-  background-position: center !important;
-  z-index: 1 !important;
-}
-
-/* إخفاء أيقونة الهاتف إذا لم تكن مرغوبة */
-#sc-commerce .chz-haraj-hero::after {
-  display: none !important;
-}
-
-/* المحتوى النصي والأزرار فوق الصورة */
-#sc-commerce .chz-haraj-badge,
-#sc-commerce .chz-haraj-title,
-#sc-commerce .chz-haraj-subtitle,
-#sc-commerce .chz-haraj-features,
-#sc-commerce .chz-haraj-actions {
-  position: relative !important;
-  z-index: 2 !important;
-  padding: 0 22px !important;
-}
-
-/* تنسيق النصوص لتناسب الخلفية الداكنة */
-#sc-commerce .chz-haraj-badge {
-  align-self: flex-start !important; /* محاذاة الشارة لليسار */
-  margin-bottom: 12px !important;
-  background: rgba(197,160,89,0.25) !important;
-  color: var(--gold-light) !important;
-  border: 1px solid rgba(197,160,89,0.4) !important;
-}
-
-#sc-commerce .chz-haraj-title {
-  font-size: 32px !important;
-  color: #FFFFFF !important;
-  text-shadow: 0 4px 18px rgba(0,0,0,0.7) !important;
-  margin-bottom: 8px !important;
-}
-
-#sc-commerce .chz-haraj-subtitle {
-  font-size: 14px !important;
-  color: rgba(255,255,255,0.85) !important;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.7) !important;
-  margin-bottom: 20px !important;
-}
-
-#sc-commerce .chz-haraj-features {
-  background: rgba(0,0,0,0.4) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(197,160,89,0.2) !important;
-  margin: 0 22px 20px !important;
-  padding: 14px !important;
-}
-
-#sc-commerce .chz-haraj-feat-text {
-  color: var(--gold-light) !important;
-}
-
-#sc-commerce .chz-haraj-actions {
-  margin: 0 22px 24px !important;
-  padding: 0 !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   13) FIXES — الوضع الفاتح + بطاقات العرض
-   ═══════════════════════════════════════════════════════════════ */
-
-/* 1) إصلاح الـ Hero في الوضع الفاتح */
-html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
-  background-image:
-    linear-gradient(180deg,
-      rgba(0, 0, 0, 0.4) 0%,
-      rgba(0, 0, 0, 0.6) 50%,
-      rgba(0, 0, 0, 0.85) 100%),
-    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
-}
-
-html[data-theme="light"] #sc-commerce .chz-haraj-title {
-  color: #FFFFFF !important;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.8) !important;
-}
-
-html[data-theme="light"] #sc-commerce .chz-haraj-subtitle {
-  color: rgba(255,255,255,0.9) !important;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.8) !important;
-}
-
-html[data-theme="light"] #sc-commerce .chz-haraj-badge {
-  background: rgba(197,160,89,0.9) !important;
-  color: #07090F !important;
-  border: none !important;
-}
-
-/* 2) إصلاح بطاقات العرض (الشبكة) */
-#sc-commerce .cm-grid,
-#sc-commerce #cm-list {
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-}
-
-#sc-commerce .cm-card {
-  aspect-ratio: auto !important;
-  height: auto !important;
-}
-
-#sc-commerce .cm-card-img {
-  aspect-ratio: 4 / 3 !important; /* نسبة أفضل للعرض */
-  background: #1A2B5E !important; /* خلفية داكنة للصور الفارغة */
-}
-
-html[data-theme="light"] #sc-commerce .cm-card-img {
-  background: #F6F7F9 !important;
-}
-
-#sc-commerce .cm-card-body {
-  padding: 8px 10px !important;
-  min-height: 60px !important;
-}
-
-#sc-commerce .cm-card-title {
-  font-size: 12px !important;
-  min-height: 32px !important;
-  margin-bottom: 4px !important;
-}
-
-#sc-commerce .cm-card-price {
-  font-size: 14px !important;
-}
-
-#sc-commerce .cm-card-city {
-  font-size: 10px !important;
-  padding-top: 4px !important;
-}
-
-/* 3) إخفاء شارة الهاتف الصغيرة (cm-card-badge) إذا كانت مزعجة */
-#sc-commerce .cm-card-badge {
-  font-size: 8px !important;
-  padding: 3px 6px !important;
-  top: 6px !important;
-  right: 6px !important;
-  background: rgba(197,160,89,0.95) !important;
-  color: #07090F !important;
-  border-radius: 6px !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   14) HERO FINAL FIX — مطابقة ارتفاع الحجز (320px) + إصلاح الوضع الفاتح
-   ═══════════════════════════════════════════════════════════════ */
-
-/* تثبيت ارتفاع الـ Hero مثل الحجز */
-#sc-commerce .chz-haraj-hero {
-  height: 320px !important;
-  min-height: 320px !important;
-  max-height: 320px !important;
-  padding: 0 !important;
-  position: relative !important;
-  overflow: hidden !important;
-  border-radius: 22px !important;
-  margin: 16px 16px 18px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-end !important;
-  border: 1.5px solid rgba(197,160,89,0.35) !important;
-}
-
-/* خلفية الصورة مع تدرج داكن من الأسفل (مثل الحجز) */
-#sc-commerce .chz-haraj-hero::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background-image:
-    linear-gradient(to bottom,
-      rgba(7, 9, 15, 0.3) 0%,
-      rgba(7, 9, 15, 0.15) 30%,
-      rgba(7, 9, 15, 0.75) 70%,
-      rgba(7, 9, 15, 0.95) 100%),
-    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
-  background-size: cover !important;
-  background-position: center 40% !important;
-  z-index: 1 !important;
-}
-
-/* إخفاء أيقونة الهاتف العائمة */
-#sc-commerce .chz-haraj-hero::after {
-  display: none !important;
-}
-
-/* المحتوى فوق الصورة */
-#sc-commerce .chz-haraj-badge,
-#sc-commerce .chz-haraj-title,
-#sc-commerce .chz-haraj-subtitle,
-#sc-commerce .chz-haraj-features,
-#sc-commerce .chz-haraj-actions {
-  position: relative !important;
-  z-index: 2 !important;
-  padding: 0 22px !important;
-}
-
-#sc-commerce .chz-haraj-badge {
-  margin-bottom: 10px !important;
-  background: rgba(197,160,89,0.9) !important;
-  color: #07090F !important;
-  border: none !important;
-  font-weight: 900 !important;
-}
-
-#sc-commerce .chz-haraj-title {
-  font-size: 30px !important;
-  color: #FFFFFF !important;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.7) !important;
-  margin-bottom: 6px !important;
-}
-
-#sc-commerce .chz-haraj-subtitle {
-  font-size: 13px !important;
-  color: rgba(255,255,255,0.85) !important;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
-  margin-bottom: 16px !important;
-}
-
-#sc-commerce .chz-haraj-features {
-  background: rgba(0,0,0,0.4) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(197,160,89,0.3) !important;
-  margin: 0 22px 14px !important;
-  padding: 12px !important;
-  border-radius: 14px !important;
-}
-
-#sc-commerce .chz-haraj-actions {
-  margin: 0 22px 20px !important;
-}
-
-/* ═══ الوضع الفاتح — صورة داكنة واضحة (مثل الحجز) ═══ */
-html[data-theme="light"] #sc-commerce .chz-haraj-hero {
-  background: #0D1B3E !important;
-}
-
-html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
-  background-image:
-    linear-gradient(to bottom,
-      rgba(7, 9, 15, 0.3) 0%,
-      rgba(7, 9, 15, 0.15) 30%,
-      rgba(7, 9, 15, 0.75) 70%,
-      rgba(7, 9, 15, 0.95) 100%),
-    url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format&fit=crop') !important;
-}
-
-html[data-theme="light"] #sc-commerce .chz-haraj-title {
-  color: #FFFFFF !important;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.8) !important;
-}
 
-html[data-theme="light"] #sc-commerce .chz-haraj-subtitle {
-  color: rgba(255,255,255,0.9) !important;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.7) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   15) CARDS — تطابق تام مع بطاقات السوق (.prod)
-   ═══════════════════════════════════════════════════════════════ */
-
-/* الحاوية (شبكة مثل السوق) */
-#sc-commerce .cm-grid,
-#sc-commerce #cm-list {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 12px !important;
-  padding: 0 16px !important;
-}
-
-/* البطاقة الأساسية */
-#sc-commerce .cm-card {
-  background: var(--card-dark) !important;
-  border: 1px solid rgba(197,160,89,0.2) !important;
-  border-radius: 18px !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-  transition: transform 0.2s, box-shadow 0.2s !important;
-  position: relative !important;
-}
 html[data-theme="light"] #sc-commerce .cm-card {
   background: #FFFFFF !important;
   border: 1px solid #E5E7EB !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
 }
 
 #sc-commerce .cm-card:active { transform: scale(0.97) !important; }
 
-/* منطقة الصورة (150px مثل السوق) */
 #sc-commerce .cm-card-img {
   width: 100% !important;
   height: 150px !important;
   object-fit: cover !important;
   display: block !important;
-  background: #F9F9F9 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-html[data-theme="light"] #sc-commerce .cm-card-img {
-  background: #F9F9F9 !important;
+  background: #F4F6FA !important;
 }
 
-/* محتوى البطاقة (المعلومات) */
+html:not([data-theme="light"]) #sc-commerce .cm-card-img {
+  background: #1E2438 !important;
+}
+
 #sc-commerce .cm-card-body {
   padding: 12px !important;
   display: flex !important;
@@ -1099,41 +504,41 @@ html[data-theme="light"] #sc-commerce .cm-card-img {
   flex: 1 !important;
 }
 
-/* عنوان البطاقة */
 #sc-commerce .cm-card-title {
   font-size: 13px !important;
   font-weight: 700 !important;
   line-height: 1.4 !important;
   margin: 0 !important;
   min-height: 36px !important;
-  overflow: hidden !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
 }
+
 html:not([data-theme="light"]) #sc-commerce .cm-card-title { color: #FFFFFF !important; }
 html[data-theme="light"] #sc-commerce .cm-card-title { color: #2D3748 !important; }
 
-/* السعر */
 #sc-commerce .cm-card-price {
   font-size: 14px !important;
   font-weight: 900 !important;
-  color: var(--gold) !important;
+  color: var(--chz-gold) !important;
   margin: 0 !important;
 }
 
-/* المدينة */
+html:not([data-theme="light"]) #sc-commerce .cm-card-price {
+  color: var(--chz-gold-light) !important;
+}
+
 #sc-commerce .cm-card-city {
-  font-size: 10.5px !important;
-  font-weight: 600 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
   margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
 }
-html:not([data-theme="light"]) #sc-commerce .cm-card-city { color: rgba(255,255,255,0.5) !important; }
-html[data-theme="light"] #sc-commerce .cm-card-city { color: #7A8596 !important; }
 
-/* الشارة (badge) */
+html:not([data-theme="light"]) #sc-commerce .cm-card-city { color: rgba(255,255,255,0.5) !important; }
+html[data-theme="light"] #sc-commerce .cm-card-city { color: #A0AEC0 !important; }
+
 #sc-commerce .cm-card-badge {
   position: absolute !important;
   top: 8px !important;
@@ -1143,254 +548,99 @@ html[data-theme="light"] #sc-commerce .cm-card-city { color: #7A8596 !important;
   font-size: 9px !important;
   font-weight: 900 !important;
   background: rgba(197,160,89,0.95) !important;
-  color: #07090F !important;
+  color: var(--chz-obsidian) !important;
   z-index: 2 !important;
 }
 
-/* إزالة أي Padding من img */
-#sc-commerce .cm-card-img {
-  border-radius: 0 !important;
-}
-
-/* ضمان أن البطاقة لا تكون طويلة جداً */
-#sc-commerce .cm-card {
-  aspect-ratio: auto !important;
-  height: auto !important;
-  min-height: auto !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   17) CARD SHAPE — تثبيت الأبعاد وإضافة زر القلب (مطابق للسوق)
-   ═══════════════════════════════════════════════════════════════ */
-
-/* 1. الشبكة: عمودان متساويان */
-#sc-commerce .cm-grid,
-#sc-commerce #cm-list {
-  display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 15px !important;
-  padding: 0 16px !important;
-}
-
-/* 2. البطاقة: تثبيت الأبعاد (مثل السوق) */
-#sc-commerce .cm-card {
-  width: 100% !important;
-  height: auto !important;
-  min-height: 260px !important; /* طول ثابت تقريباً */
-  display: flex !important;
-  flex-direction: column !important;
-  background: #FFFFFF !important;
-  border: 1px solid #E5E7EB !important;
-  border-radius: 16px !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card {
-  background: #1e2438 !important;
-  border-color: rgba(255,255,255,0.08) !important;
-}
-
-/* 3. الصورة: ارتفاع ثابت 150px */
-#sc-commerce .cm-card-img {
-  width: 100% !important;
-  height: 150px !important;
-  object-fit: cover !important;
-  background: #F4F6FA !important;
-  display: block !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card-img {
-  background: #2A2E38 !important;
-}
-
-/* 4. محتوى البطاقة */
-#sc-commerce .cm-card-body {
-  padding: 12px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 8px !important;
-  flex: 1 !important;
-}
-
-/* 5. إضافة زر القلب (Heart) — يظهر في الزاوية العلوية */
-#sc-commerce .cm-card::before {
-  content: '🤍' !important;
-  position: absolute !important;
-  top: 10px !important;
-  left: 10px !important;
-  width: 30px !important;
-  height: 30px !important;
-  background: rgba(255, 255, 255, 0.9) !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 16px !important;
-  z-index: 5 !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-  cursor: pointer !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card::before {
-  background: rgba(0, 0, 0, 0.6) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   19) UNIFY ALL CARDS — توحيد شكل البطاقات (الكل مثل الصف الثاني)
-   ═══════════════════════════════════════════════════════════════ */
-
-/* 1. إزالة أي خلفية موروثة من الصورة */
-#sc-commerce .cm-card {
-  background: #FFFFFF !important; /* خلفية بيضاء ثابتة */
-  border: 1px solid #E5E7EB !important;
-  border-radius: 18px !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
-  height: auto !important;
-  position: relative !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card {
-  background: #1e2438 !important; /* خلفية داكنة ثابتة */
-  border-color: rgba(255,255,255,0.08) !important;
-}
-
-/* 2. الصورة: ارتفاع ثابت + خلفية رمادية فاتحة داخلية */
-#sc-commerce .cm-card-img {
-  width: 100% !important;
-  height: 150px !important;
-  object-fit: cover !important;
-  background: #F4F6FA !important; /* خلفية فاتحة للصورة */
-  display: block !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card-img {
-  background: #2A2E38 !important;
-}
-
-/* 3. محتوى البطاقة: خلفية شفافة + نص أسود */
-#sc-commerce .cm-card-body {
-  padding: 12px !important;
-  background: transparent !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  flex: 1 !important;
-}
-
-/* 4. العنوان: أسود في الفاتح، أبيض في الداكن */
-#sc-commerce .cm-card-title {
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  line-height: 1.4 !important;
-  color: #2D3748 !important;
-  margin: 0 !important;
-  min-height: 36px !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card-title {
-  color: #FFFFFF !important;
-}
-
-/* 5. السعر: أسود في الفاتح، ذهبي في الداكن */
-#sc-commerce .cm-card-price {
+/* Empty state */
+#sc-commerce .cm-loading,
+#sc-commerce .cm-skeleton {
+  padding: 40px 20px !important;
+  text-align: center !important;
   font-size: 14px !important;
-  font-weight: 900 !important;
-  color: #2D3748 !important;
-  margin: 0 !important;
+  color: rgba(255,255,255,0.5) !important;
 }
 
-html:not([data-theme="light"]) #sc-commerce .cm-card-price {
-  color: #F2E3C6 !important;
-}
-
-/* 6. المدينة: رمادي */
-#sc-commerce .cm-card-city {
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  color: #A0AEC0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
+html[data-theme="light"] #sc-commerce .cm-loading,
+html[data-theme="light"] #sc-commerce .cm-skeleton {
+  color: #7A8596 !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   20) FIX IMAGE SIZE — إظهار الصور كاملة (بدون تكبير)
+   §6. FORM (sc-commerce-new) — نموذج نشر الإعلان
    ═══════════════════════════════════════════════════════════════ */
-
-/* 1. الصورة: عرض كامل وارتفاع 150px، مع احتواء الصورة (contain) */
-#sc-commerce .cm-card-img {
-  width: 100% !important;
-  height: 150px !important;
-  object-fit: contain !important; /* يظهر الصورة كاملة */
-  background: #F4F6FA !important; /* خلفية رمادية فاتحة */
-  display: block !important;
-  padding: 5px !important;
-  box-sizing: border-box !important;
-}
-
-html:not([data-theme="light"]) #sc-commerce .cm-card-img {
-  background: #2A2E38 !important;
-}
-
-/* 2. إزالة أي تحجيم من قبل (reset) */
-#sc-commerce .cm-card {
-  overflow: hidden !important;
-}
-
-/* 3. ضمان أن الصورة لا تتجاوز الحاوية */
-#sc-commerce .cm-card-img img {
+#sc-commerce-new .cm-form {
+  padding: 20px 20px 100px !important;
   max-width: 100% !important;
-  max-height: 100% !important;
-  object-fit: contain !important;
 }
 
-/* 4. في حال كانت الصورة هي عنصر <img> مباشرة */
-#sc-commerce .cm-card > img {
-  width: 100% !important;
-  height: 150px !important;
-  object-fit: contain !important;
-  background: #F4F6FA !important;
-  padding: 5px !important;
+#sc-commerce-new .cm-form-label {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+  color: var(--chz-gold) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   21) UNIFY FIELDS — توحيد حقول الحراج مع حقول الحجز
-   ═══════════════════════════════════════════════════════════════ */
+/* اختيار النوع */
+#sc-commerce-new .cm-type-select {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  margin-bottom: 20px !important;
+}
 
-/* الحاوية (cm-field) */
-#sc-commerce .cm-field {
-  padding: 0 !important;
+#sc-commerce-new .cm-type-btn {
+  padding: 14px 10px !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  border-radius: 14px !important;
+  color: #FFFFFF !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.2s !important;
+}
+
+html[data-theme="light"] #sc-commerce-new .cm-type-btn {
+  background: #FFFFFF !important;
+  border-color: #E5E7EB !important;
+  color: var(--chz-obsidian) !important;
+}
+
+#sc-commerce-new .cm-type-btn.active {
+  background: var(--chz-gold-deep) !important;
+  border-color: transparent !important;
+  color: var(--chz-obsidian) !important;
+  box-shadow: 0 4px 14px rgba(197,160,89,0.4) !important;
+}
+
+#sc-commerce-new .cm-type-icon { font-size: 28px !important; }
+#sc-commerce-new .cm-type-name { font-size: 13px !important; font-weight: 900 !important; }
+
+/* الحقول */
+#sc-commerce-new .cm-field {
   margin-bottom: 14px !important;
 }
 
-/* التسمية (label) */
-#sc-commerce .cm-field label {
+#sc-commerce-new .cm-field label {
   display: block !important;
   font-size: 12px !important;
   font-weight: 700 !important;
   margin-bottom: 6px !important;
-}
-html:not([data-theme="light"]) #sc-commerce .cm-field label {
   color: rgba(197,160,89,0.9) !important;
 }
-html[data-theme="light"] #sc-commerce .cm-field label {
+
+html[data-theme="light"] #sc-commerce-new .cm-field label {
   color: #7A8596 !important;
 }
 
-/* الحقول (input, select, textarea) */
-#sc-commerce .cm-field input,
-#sc-commerce .cm-field select,
-#sc-commerce .cm-field textarea {
+#sc-commerce-new .cm-field input,
+#sc-commerce-new .cm-field select,
+#sc-commerce-new .cm-field textarea {
   width: 100% !important;
   height: 48px !important;
   padding: 0 14px !important;
@@ -1402,258 +652,119 @@ html[data-theme="light"] #sc-commerce .cm-field label {
   transition: border-color 0.2s, box-shadow 0.2s !important;
 }
 
-#sc-commerce .cm-field textarea {
+#sc-commerce-new .cm-field textarea {
   height: auto !important;
   min-height: 80px !important;
   padding: 12px 14px !important;
   resize: vertical !important;
 }
 
-/* الوضع الداكن */
-html:not([data-theme="light"]) #sc-commerce .cm-field input,
-html:not([data-theme="light"]) #sc-commerce .cm-field select,
-html:not([data-theme="light"]) #sc-commerce .cm-field textarea {
+html:not([data-theme="light"]) #sc-commerce-new .cm-field input,
+html:not([data-theme="light"]) #sc-commerce-new .cm-field select,
+html:not([data-theme="light"]) #sc-commerce-new .cm-field textarea {
   background: rgba(255,255,255,0.05) !important;
   border: 1.5px solid rgba(255,255,255,0.12) !important;
   color: #FFFFFF !important;
 }
 
-/* الوضع الفاتح */
-html[data-theme="light"] #sc-commerce .cm-field input,
-html[data-theme="light"] #sc-commerce .cm-field select,
-html[data-theme="light"] #sc-commerce .cm-field textarea {
+html[data-theme="light"] #sc-commerce-new .cm-field input,
+html[data-theme="light"] #sc-commerce-new .cm-field select,
+html[data-theme="light"] #sc-commerce-new .cm-field textarea {
   background: #FFFFFF !important;
   border: 1.5px solid #E5E7EB !important;
-  color: #121A26 !important;
+  color: var(--chz-obsidian) !important;
 }
 
-/* حالة التركيز (Focus) */
-#sc-commerce .cm-field input:focus,
-#sc-commerce .cm-field select:focus,
-#sc-commerce .cm-field textarea:focus {
-  outline: none !important;
-  border-color: #C5A059 !important;
-  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
-}
-
-/* Placeholder */
-html:not([data-theme="light"]) #sc-commerce .cm-field input::placeholder,
-html:not([data-theme="light"]) #sc-commerce .cm-field textarea::placeholder {
-  color: rgba(255,255,255,0.35) !important;
-}
-html[data-theme="light"] #sc-commerce .cm-field input::placeholder,
-html[data-theme="light"] #sc-commerce .cm-field textarea::placeholder {
-  color: #B0B7C3 !important;
-}
-
-/* حقل البحث (cm-search-input) */
-#sc-commerce #cm-search-input {
-  height: 48px !important;
-  border-radius: 12px !important;
-  padding: 0 44px 0 16px !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  font-family: 'Tajawal', sans-serif !important;
-  box-sizing: border-box !important;
-  transition: border-color 0.2s, box-shadow 0.2s !important;
-}
-html:not([data-theme="light"]) #sc-commerce #cm-search-input {
-  background: rgba(255,255,255,0.05) !important;
-  border: 1.5px solid rgba(255,255,255,0.12) !important;
-  color: #FFFFFF !important;
-}
-html[data-theme="light"] #sc-commerce #cm-search-input {
-  background: #FFFFFF !important;
-  border: 1.5px solid #E5E7EB !important;
-  color: #121A26 !important;
-}
-#sc-commerce #cm-search-input:focus {
-  outline: none !important;
-  border-color: #C5A059 !important;
-  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
-}
-
-/* حقل رفع الصور (cm-f-img-url) */
-#sc-commerce #cm-f-img-url {
-  height: 44px !important;
-  border-radius: 12px !important;
-  padding: 0 14px !important;
-  font-size: 13px !important;
-  font-family: 'Tajawal', sans-serif !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-}
-html:not([data-theme="light"]) #sc-commerce #cm-f-img-url {
-  background: rgba(255,255,255,0.05) !important;
-  border: 1.5px solid rgba(255,255,255,0.12) !important;
-  color: #FFFFFF !important;
-}
-html[data-theme="light"] #sc-commerce #cm-f-img-url {
-  background: #FFFFFF !important;
-  border: 1.5px solid #E5E7EB !important;
-  color: #121A26 !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   22) FINAL FIX — نموذج الحراج (Modal) + إخفاء AI
-   ═══════════════════════════════════════════════════════════════ */
-
-/* 1. تطبيق الأنماط على النموذج المنبثق (#cm-modal) */
-#cm-modal .cm-field {
-  margin-bottom: 14px !important;
-}
-#cm-modal .cm-field label {
-  display: block !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  margin-bottom: 6px !important;
-  color: #C5A059 !important; /* ذهبي */
-}
-
-/* الحقول داخل النموذج */
-#cm-modal .cm-field input,
-#cm-modal .cm-field select,
-#cm-modal .cm-field textarea {
-  width: 100% !important;
-  height: 48px !important;
-  padding: 0 14px !important;
-  border-radius: 12px !important;
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  font-family: 'Tajawal', sans-serif !important;
-  box-sizing: border-box !important;
-  background: rgba(255,255,255,0.05) !important;
-  border: 1.5px solid rgba(255,255,255,0.12) !important;
-  color: #FFFFFF !important;
-  transition: border-color 0.2s, box-shadow 0.2s !important;
-}
-#cm-modal .cm-field textarea {
-  height: auto !important;
-  min-height: 80px !important;
-  padding: 12px 14px !important;
-}
-
-/* التركيز */
-#cm-modal .cm-field input:focus,
-#cm-modal .cm-field select:focus,
-#cm-modal .cm-field textarea:focus {
-  outline: none !important;
-  border-color: #C5A059 !important;
-  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
-}
-
-/* حقل رابط الصورة داخل النموذج */
-#cm-modal #cm-f-img-url {
-  height: 44px !important;
-  border-radius: 12px !important;
-  padding: 0 14px !important;
-  background: rgba(255,255,255,0.05) !important;
-  border: 1.5px solid rgba(255,255,255,0.12) !important;
-  color: #FFFFFF !important;
-}
-
-/* أزرار النموذج (نشر / إلغاء) */
-#cm-modal .cm-form button[onclick*="cmSubmit"],
-#cm-modal .cm-form button[onclick*="close"] {
-  background: linear-gradient(135deg,#F2E3C6 0%,#C5A059 50%,#9A7B4F 100%) !important;
-  color: #07090F !important;
-  font-weight: 900 !important;
-  border-radius: 14px !important;
-  padding: 14px 20px !important;
-  border: none !important;
-  cursor: pointer !important;
-  width: 100% !important;
-  margin-top: 10px !important;
-}
-#cm-modal .cm-form button[onclick*="close"] {
-  background: transparent !important;
-  color: rgba(255,255,255,0.7) !important;
-  border: 1.5px solid rgba(255,255,255,0.15) !important;
-}
-
-/* 2. إخفاء أيقونة AI نهائياً (بدون تحديد سياق) */
-.ai-fab, #ai-btn, .chat-fab, [class*="ai-button"], #chizen-ai-btn, .chizen-ai-fab {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  pointer-events: none !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   23) UNIFY ALL HARAJ SCREENS — توحيد كل الشاشات الأربع
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ─── أ) الحقول (input, select, textarea) في كل الشاشات ─── */
-#sc-commerce .cm-field,
-#sc-commerce-new .cm-field,
-#sc-commerce-detail .cm-field,
-#sc-commerce-mine .cm-field {
-  margin-bottom: 14px !important;
-  padding: 0 !important;
-}
-
-#sc-commerce .cm-field label,
-#sc-commerce-new .cm-field label,
-#sc-commerce-detail .cm-field label,
-#sc-commerce-mine .cm-field label {
-  display: block !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  margin-bottom: 6px !important;
-  color: #C5A059 !important;
-}
-
-#sc-commerce .cm-field input,
-#sc-commerce .cm-field select,
-#sc-commerce .cm-field textarea,
-#sc-commerce-new .cm-field input,
-#sc-commerce-new .cm-field select,
-#sc-commerce-new .cm-field textarea,
-#sc-commerce-detail .cm-field input,
-#sc-commerce-detail .cm-field select,
-#sc-commerce-detail .cm-field textarea {
-  width: 100% !important;
-  height: 48px !important;
-  padding: 0 14px !important;
-  border-radius: 12px !important;
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  font-family: 'Tajawal', sans-serif !important;
-  box-sizing: border-box !important;
-  background: rgba(255,255,255,0.05) !important;
-  border: 1.5px solid rgba(255,255,255,0.12) !important;
-  color: #FFFFFF !important;
-  transition: border-color 0.2s, box-shadow 0.2s !important;
-}
-
-#sc-commerce .cm-field textarea,
-#sc-commerce-new .cm-field textarea {
-  height: auto !important;
-  min-height: 80px !important;
-  padding: 12px 14px !important;
-}
-
-#sc-commerce .cm-field input:focus,
-#sc-commerce .cm-field select:focus,
-#sc-commerce .cm-field textarea:focus,
 #sc-commerce-new .cm-field input:focus,
 #sc-commerce-new .cm-field select:focus,
 #sc-commerce-new .cm-field textarea:focus {
   outline: none !important;
-  border-color: #C5A059 !important;
+  border-color: var(--chz-gold) !important;
   box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
 }
 
-/* ─── ب) زر النشر (cm-submit) ─── */
-#sc-commerce-new .cm-submit,
-#sc-commerce .cm-submit {
+/* صفوف مزدوجة */
+#sc-commerce-new .cm-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  margin-bottom: 14px !important;
+}
+
+#sc-commerce-new .cm-row .cm-field { margin-bottom: 0 !important; }
+
+/* رابط الصورة */
+#sc-commerce-new #cm-f-img-url {
+  height: 44px !important;
+  width: 100% !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  font-size: 13px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  box-sizing: border-box !important;
+  margin-top: 10px !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce-new #cm-f-img-url {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+}
+
+html[data-theme="light"] #sc-commerce-new #cm-f-img-url {
+  background: #FFFFFF !important;
+  border: 1.5px solid #E5E7EB !important;
+  color: var(--chz-obsidian) !important;
+}
+
+/* رفع الصور */
+#sc-commerce-new .cm-upload {
+  background: rgba(255,255,255,0.05) !important;
+  border: 2px dashed var(--chz-border-gold-strong) !important;
+  border-radius: 16px !important;
+  padding: 24px 16px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  margin-bottom: 16px !important;
+  transition: border-color 0.2s !important;
+}
+
+html[data-theme="light"] #sc-commerce-new .cm-upload {
+  background: #FFFFFF !important;
+}
+
+#sc-commerce-new .cm-upload:active {
+  border-color: var(--chz-gold) !important;
+}
+
+#sc-commerce-new .cm-upload-icon {
+  font-size: 32px !important;
+  margin-bottom: 8px !important;
+}
+
+#sc-commerce-new .cm-upload-text {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: var(--chz-gold) !important;
+}
+
+#sc-commerce-new .cm-upload-hint {
+  font-size: 11px !important;
+  color: rgba(255,255,255,0.5) !important;
+  margin-top: 4px !important;
+}
+
+html[data-theme="light"] #sc-commerce-new .cm-upload-hint {
+  color: #7A8596 !important;
+}
+
+/* زر النشر */
+#sc-commerce-new .cm-submit {
   width: 100% !important;
   height: 56px !important;
   border-radius: 14px !important;
-  background: linear-gradient(135deg,#F2E3C6 0%,#C5A059 50%,#9A7B4F 100%) !important;
-  color: #07090F !important;
+  background: var(--chz-gold-deep) !important;
+  color: var(--chz-obsidian) !important;
   font-family: 'Tajawal', sans-serif !important;
   font-size: 16px !important;
   font-weight: 900 !important;
@@ -1661,304 +772,228 @@ html[data-theme="light"] #sc-commerce #cm-f-img-url {
   cursor: pointer !important;
   box-shadow: 0 6px 20px rgba(197,160,89,0.4) !important;
   margin-top: 20px !important;
-  transition: transform 0.15s !important;
 }
-#sc-commerce-new .cm-submit:active,
-#sc-commerce .cm-submit:active {
+
+#sc-commerce-new .cm-submit:active {
   transform: scale(0.97) !important;
 }
 
-/* ─── ج) شريط العنوان العلوي في نموذج النشر ─── */
-#sc-commerce-new .cm-top-form {
-  background: linear-gradient(135deg, #0D1B3E 0%, #1A2B5E 100%) !important;
-  border-radius: 0 0 24px 24px !important;
-  padding: 16px 20px !important;
-}
-#sc-commerce-new .cm-top-form .cm-title {
-  color: #F2E3C6 !important;
-  font-size: 18px !important;
-  font-weight: 900 !important;
-}
-#sc-commerce-new .cm-top-form .cm-subtitle {
-  color: rgba(255,255,255,0.6) !important;
-  font-size: 12px !important;
-}
-#sc-commerce-new .cm-top-form .cm-back {
-  background: rgba(197,160,89,0.15) !important;
-  border: 1px solid rgba(197,160,89,0.4) !important;
-  color: #C5A059 !important;
-}
-
-/* ─── د) أزرار اختيار النوع (cm-type-btn) ─── */
-#sc-commerce-new .cm-type-btn {
-  background: rgba(255,255,255,0.05) !important;
-  border: 1.5px solid rgba(255,255,255,0.12) !important;
-  border-radius: 14px !important;
-  padding: 14px !important;
-  color: #FFFFFF !important;
-  font-family: 'Tajawal', sans-serif !important;
-  font-weight: 800 !important;
-  cursor: pointer !important;
-  transition: all 0.2s !important;
-}
-#sc-commerce-new .cm-type-btn.active {
-  background: linear-gradient(135deg,#F2E3C6 0%,#C5A059 50%,#9A7B4F 100%) !important;
-  border-color: transparent !important;
-  color: #07090F !important;
-  box-shadow: 0 4px 14px rgba(197,160,89,0.4) !important;
-}
-
-/* ─── هـ) زر رفع الصور (cm-upload) ─── */
-#sc-commerce-new .cm-upload {
-  background: rgba(255,255,255,0.05) !important;
-  border: 2px dashed rgba(197,160,89,0.4) !important;
-  border-radius: 16px !important;
-  padding: 20px !important;
-  text-align: center !important;
-  cursor: pointer !important;
-  transition: border-color 0.2s !important;
-}
-#sc-commerce-new .cm-upload:active {
-  border-color: #C5A059 !important;
-}
-#sc-commerce-new .cm-upload-icon {
-  font-size: 32px !important;
-  margin-bottom: 8px !important;
-}
-#sc-commerce-new .cm-upload-text {
-  font-size: 14px !important;
-  font-weight: 800 !important;
-  color: #C5A059 !important;
-}
-#sc-commerce-new .cm-upload-hint {
-  font-size: 11px !important;
-  color: rgba(255,255,255,0.5) !important;
-  margin-top: 4px !important;
-}
-
-/* ─── و) إخفاء AI FAB نهائياً ─── */
-#chizen-ai-btn,
-.ai-fab,
-#ai-btn,
-.chat-fab,
-[class*="ai-fab"],
-[class*="ai-button"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  pointer-events: none !important;
-  position: absolute !important;
-  left: -9999px !important;
+/* ═══════════════════════════════════════════════════════════════
+   §7. MINE + DETAIL — إعلاناتي + التفاصيل
+   ═══════════════════════════════════════════════════════════════ */
+#sc-commerce-mine .cm-mine-list,
+#sc-commerce-detail #cm-detail {
+  padding: 0 16px 20px !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   24) RESPONSIVE — تجاوب كامل لكل الشاشات
+   §8. MODAL — نافذة التأكيد
+   ═══════════════════════════════════════════════════════════════ */
+#cm-modal .cm-modal-card {
+  background: var(--chz-card-dark) !important;
+  border: 1.5px solid var(--chz-gold) !important;
+  border-radius: 22px !important;
+  padding: 26px 22px !important;
+  box-shadow: 0 20px 60px rgba(197,160,89,0.35) !important;
+  text-align: center !important;
+}
+
+#cm-modal .cm-modal-emoji {
+  font-size: 40px !important;
+  margin-bottom: 12px !important;
+}
+
+#cm-modal .cm-modal-title {
+  color: var(--chz-gold-light) !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  margin-bottom: 8px !important;
+}
+
+#cm-modal .cm-modal-msg {
+  color: rgba(255,255,255,0.7) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  margin-bottom: 20px !important;
+}
+
+#cm-modal .cm-modal-btn {
+  width: 100% !important;
+  padding: 14px !important;
+  border-radius: 12px !important;
+  background: var(--chz-gold-deep) !important;
+  color: var(--chz-obsidian) !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   §9. HIDE AI FAB — إخفاء أيقونة AI
+   ═══════════════════════════════════════════════════════════════ */
+.chat-fab, .ai-fab, #ai-btn,
+[class*="ai-button"], #chizen-ai-btn, .chizen-ai-fab {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   §10. RESPONSIVE — التجاوب مع كل الشاشات
    ═══════════════════════════════════════════════════════════════ */
 
-/* ─── ضمانات عامة لكل الشاشات ─── */
-#sc-commerce,
-#sc-commerce-new,
-#sc-commerce-mine,
-#sc-commerce-detail {
-  overflow-x: hidden !important;
-  max-width: 100vw !important;
-  box-sizing: border-box !important;
-}
-
-#sc-commerce *,
-#sc-commerce-new *,
-#sc-commerce-mine *,
-#sc-commerce-detail * {
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-/* ─── الهواتف الصغيرة (≤360px) ─── */
+/* ─── هواتف صغيرة (≤360px) ─── */
 @media (max-width: 360px) {
-  /* Hero أصغر */
   #sc-commerce .chz-haraj-hero {
     height: 240px !important;
     min-height: 240px !important;
+    max-height: 240px !important;
     margin: 12px 12px 14px !important;
   }
-  #sc-commerce .chz-haraj-title {
-    font-size: 22px !important;
-  }
-  #sc-commerce .chz-haraj-subtitle {
-    font-size: 11px !important;
-  }
-  #sc-commerce .chz-haraj-badge {
-    font-size: 9.5px !important;
-    padding: 4px 10px !important;
-  }
-  #sc-commerce .chz-haraj-feat-text {
-    font-size: 9px !important;
-  }
+  #sc-commerce .chz-haraj-title { font-size: 22px !important; }
+  #sc-commerce .chz-haraj-subtitle { font-size: 11px !important; }
+  #sc-commerce .chz-haraj-feat-text { font-size: 9px !important; }
   #sc-commerce .chz-haraj-btn-buy,
   #sc-commerce .chz-haraj-btn-sell {
     font-size: 11.5px !important;
     padding: 11px 6px !important;
   }
-
-  /* الشبكة: عمود واحد */
   #sc-commerce .cm-grid,
   #sc-commerce #cm-list {
     grid-template-columns: 1fr !important;
-    gap: 10px !important;
     padding: 0 12px !important;
+    gap: 10px !important;
   }
-
-  /* البطاقات */
-  #sc-commerce .cm-card-img {
-    height: 180px !important;
+  #sc-commerce .cm-card-img { height: 180px !important; }
+  #sc-commerce .cm-card-title { font-size: 12px !important; }
+  #sc-commerce-new .cm-row {
+    grid-template-columns: 1fr !important;
   }
-  #sc-commerce .cm-card-title {
-    font-size: 12px !important;
+  #sc-commerce-new .cm-type-select {
+    grid-template-columns: 1fr 1fr !important;
   }
-
-  /* الحقول */
-  #sc-commerce-new .cm-field input,
-  #sc-commerce-new .cm-field select,
-  #sc-commerce-new .cm-field textarea,
-  #sc-commerce-new .cm-submit {
-    font-size: 14px !important;
-  }
-
-  /* الأزرار العلوية */
-  #sc-commerce .cm-new-btn,
-  #sc-commerce .cm-my-btn {
-    padding: 7px 10px !important;
-    font-size: 11px !important;
-  }
-  #sc-commerce .cm-back {
-    width: 34px !important;
-    height: 34px !important;
-  }
-
-  /* الفلاتر */
-  #sc-commerce .cm-filter {
-    font-size: 11px !important;
-    padding: 7px 12px !important;
-  }
-
-  /* البحث */
-  #sc-commerce #cm-search-input {
-    height: 42px !important;
-    font-size: 13px !important;
-  }
+  #sc-commerce .cm-new-btn { padding: 7px 10px !important; font-size: 11px !important; }
+  #sc-commerce .cm-back { width: 34px !important; height: 34px !important; }
+  #sc-commerce .cm-filter { font-size: 11px !important; padding: 7px 12px !important; }
+  #sc-commerce #cm-search-input { height: 42px !important; font-size: 13px !important; }
 }
 
-/* ─── الهواتف المتوسطة (361px - 480px) ─── */
+/* ─── هواتف متوسطة (361-480px) ─── */
 @media (min-width: 361px) and (max-width: 480px) {
   #sc-commerce .chz-haraj-hero {
     height: 300px !important;
     min-height: 300px !important;
+    max-height: 300px !important;
   }
-  #sc-commerce .chz-haraj-title {
-    font-size: 26px !important;
-  }
+  #sc-commerce .chz-haraj-title { font-size: 26px !important; }
   #sc-commerce .cm-grid,
   #sc-commerce #cm-list {
     grid-template-columns: 1fr 1fr !important;
-    gap: 12px !important;
     padding: 0 16px !important;
   }
-  #sc-commerce .cm-card-img {
-    height: 140px !important;
-  }
+  #sc-commerce .cm-card-img { height: 140px !important; }
 }
 
-/* ─── الهواتف الكبيرة (481px - 768px) ─── */
+/* ─── هواتف كبيرة (481-768px) ─── */
 @media (min-width: 481px) and (max-width: 768px) {
   #sc-commerce .chz-haraj-hero {
     height: 320px !important;
     min-height: 320px !important;
+    max-height: 320px !important;
   }
-  #sc-commerce .chz-haraj-title {
-    font-size: 30px !important;
-  }
+  #sc-commerce .chz-haraj-title { font-size: 30px !important; }
   #sc-commerce .cm-grid,
   #sc-commerce #cm-list {
     grid-template-columns: 1fr 1fr !important;
-    gap: 14px !important;
     padding: 0 18px !important;
-  }
-  #sc-commerce .cm-card-img {
-    height: 150px !important;
   }
 }
 
-/* ─── التابلت (≥769px) ─── */
-@media (min-width: 769px) {
+/* ─── تابلت (769-1024px) ─── */
+@media (min-width: 769px) and (max-width: 1024px) {
   #sc-commerce .chz-haraj-hero {
-    height: 380px !important;
-    min-height: 380px !important;
+    height: 360px !important;
+    min-height: 360px !important;
+    max-height: 360px !important;
     margin: 20px auto !important;
-    max-width: 700px !important;
+    max-width: 720px !important;
   }
-  #sc-commerce .chz-haraj-title {
-    font-size: 38px !important;
-  }
-  #sc-commerce .chz-haraj-subtitle {
-    font-size: 15px !important;
-  }
-
+  #sc-commerce .chz-haraj-title { font-size: 36px !important; }
   #sc-commerce .cm-grid,
   #sc-commerce #cm-list {
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 16px !important;
     padding: 0 24px !important;
-    max-width: 900px !important;
+    max-width: 960px !important;
     margin: 0 auto !important;
   }
-  #sc-commerce .cm-card-img {
-    height: 180px !important;
-  }
-
-  /* الحقول أكبر */
-  #sc-commerce-new .cm-field input,
-  #sc-commerce-new .cm-field select,
-  #sc-commerce-new .cm-field textarea {
-    height: 52px !important;
-    font-size: 16px !important;
-  }
-  #sc-commerce-new .cm-submit {
-    height: 60px !important;
-    font-size: 17px !important;
-  }
+  #sc-commerce .cm-card-img { height: 170px !important; }
 }
 
-/* ─── شاشات كبيرة جداً (≥1024px) ─── */
-@media (min-width: 1024px) {
+/* ─── شاشات كبيرة (≥1025px) ─── */
+@media (min-width: 1025px) {
+  #sc-commerce .chz-haraj-hero {
+    height: 400px !important;
+    min-height: 400px !important;
+    max-height: 400px !important;
+    margin: 24px auto !important;
+    max-width: 800px !important;
+  }
+  #sc-commerce .chz-haraj-title { font-size: 40px !important; }
   #sc-commerce .cm-grid,
   #sc-commerce #cm-list {
     grid-template-columns: repeat(4, 1fr) !important;
+    gap: 18px !important;
     max-width: 1200px !important;
+    margin: 0 auto !important;
   }
+  #sc-commerce .cm-card-img { height: 190px !important; }
 }
 
-/* ─── ضمانات إضافية (منع القطع) ─── */
+/* ═══════════════════════════════════════════════════════════════
+   §11. UNIVERSAL FIXES — ضمانات أخيرة
+   ═══════════════════════════════════════════════════════════════ */
+
+/* لا شيء يخرج عن الشاشة */
+#sc-commerce img,
+#sc-commerce-new img,
+#sc-commerce-mine img,
+#sc-commerce-detail img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* النصوص لا تُقطع */
 #sc-commerce .cm-card-title,
 #sc-commerce .cm-card-price,
 #sc-commerce .cm-card-city {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
 }
 
-#sc-commerce-new .cm-field input,
-#sc-commerce-new .cm-field select,
-#sc-commerce-new .cm-field textarea {
-  box-sizing: border-box !important;
-  max-width: 100% !important;
+/* الأزرار دائماً قابلة للنقر */
+#sc-commerce button,
+#sc-commerce-new button,
+#sc-commerce-mine button,
+#sc-commerce-detail button {
+  pointer-events: auto !important;
 }
 
-/* ─── إذا كان هناك أي جدول أو عنصر عريض ─── */
-#sc-commerce table,
-#sc-commerce-new table {
-  width: 100% !important;
-  overflow-x: auto !important;
-  display: block !important;
+/* إخفاء عناصر JS الإضافية (cm-car-extra, cm-phone-extra) بشكل صحيح */
+#sc-commerce-new #cm-car-extra,
+#sc-commerce-new #cm-car-extra2,
+#sc-commerce-new #cm-phone-extra {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  margin-bottom: 14px !important;
+}
+
+#sc-commerce-new #cm-car-extra[style*="display:none"],
+#sc-commerce-new #cm-car-extra2[style*="display:none"],
+#sc-commerce-new #cm-phone-extra[style*="display:none"] {
+  display: none !important;
 }

@@ -513,3 +513,15 @@ setTimeout(function(){
 
   console.log('[SUCCESS-MODAL] v1.0 loaded');
 })();
+
+/* ═══ AI KILLER — إزالة أيقونة AI نهائياً ═══ */
+(function(){
+  function killAI() {
+    var sels = ['.chat-fab', '.ai-fab', '#ai-btn', '#chizen-ai-btn', '.chizen-ai-fab'];
+    sels.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){ el.remove(); });
+    });
+  }
+  killAI();
+  setInterval(killAI, 800);
+})();
