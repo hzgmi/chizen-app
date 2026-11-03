@@ -969,3 +969,28 @@ html[data-theme="light"] #sc-booking .tvl-form .price-preview .pp-row b {
 #sc-booking .tvl-confirm {
   display: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   11) POINTER-EVENTS FIX — ضمان أن كل الأزرار قابلة للنقر
+   ═══════════════════════════════════════════════════════════════ */
+
+/* فرض auto على كل العناصر التفاعلية في الحجز */
+#sc-booking .tvl-svc,
+#sc-booking .tvl-dlv-card,
+#sc-booking .tvl-chip,
+#sc-booking .tvl-submit,
+#sc-booking .tvl-back,
+#sc-booking .tvl-f input,
+#sc-booking .tvl-f select,
+#sc-booking .tvl-f textarea,
+#sc-booking .tvl-chk,
+#sc-booking .tvl-chk input,
+#sc-booking .tvl-chips button {
+  pointer-events: auto !important;
+}
+
+/* منع أي عنصر شفاف من اعتراض النقر */
+#sc-booking .tvl-form.active,
+#sc-booking .tvl-form.active * {
+  pointer-events: auto;
+}
