@@ -1145,3 +1145,163 @@ html:not([data-theme="light"]) #sc-commerce .prod .price-c {
   z-index: 2 !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   §15. GRID FIX — جعل بطاقات الحراج شبكة 2x2 مثل السوق
+   ═══════════════════════════════════════════════════════════════ */
+
+/* الحاوية الرئيسية التي يضع فيها JS البطاقات */
+#sc-commerce #cm-listings,
+#sc-commerce .cm-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
+  padding: 0 16px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* منع أي عنصر داخل الشبكة من تجاوز الحدود */
+#sc-commerce #cm-listings > *,
+#sc-commerce .cm-grid > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* البطاقة نفسها (prod أو cm-card) */
+#sc-commerce #cm-listings .prod,
+#sc-commerce #cm-listings .cm-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+/* تأكيد ارتفاع الصورة (140px) */
+#sc-commerce #cm-listings .prod-i,
+#sc-commerce #cm-listings .cm-card-img {
+  height: 140px !important;
+  width: 100% !important;
+}
+
+/* منع أي CSS قديم من فرض عرض كامل */
+#sc-commerce .cm-card {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   §16. FINAL GRID + PREVIEW — إصلاح شبكة البطاقات + معاينة الصور
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── أ) شبكة البطاقات — الاسم الفعلي: cm-listings ─── */
+#sc-commerce #cm-listings {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
+  padding: 0 16px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#sc-commerce #cm-listings > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#sc-commerce #cm-listings .prod,
+#sc-commerce #cm-listings .cm-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+/* رفع الارتفاع لصورة السوق (prod-i) */
+#sc-commerce #cm-listings .prod-i {
+  height: 140px !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Empty state عبر الحاوية */
+#sc-commerce #cm-listings .cm-empty,
+#sc-commerce .cm-empty {
+  grid-column: 1 / -1 !important;
+  padding: 60px 20px !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  color: rgba(255,255,255,0.5) !important;
+}
+
+html[data-theme="light"] #sc-commerce .cm-empty {
+  color: #7A8596 !important;
+}
+
+#sc-commerce .cm-empty-icon {
+  font-size: 48px !important;
+  margin-bottom: 12px !important;
+  display: block !important;
+}
+
+/* ─── ب) معاينة الصور في نموذج النشر — شبكة صغيرة ─── */
+#sc-commerce-new .cm-previews,
+#sc-commerce #cm-previews {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+
+#sc-commerce-new .cm-preview,
+#sc-commerce .cm-preview {
+  position: relative !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #F4F6FA !important;
+  border: 1.5px solid rgba(197,160,89,0.3) !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce-new .cm-preview,
+html:not([data-theme="light"]) #sc-commerce .cm-preview {
+  background: #1E2438 !important;
+  border-color: rgba(197,160,89,0.25) !important;
+}
+
+#sc-commerce-new .cm-preview img,
+#sc-commerce .cm-preview img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+#sc-commerce-new .cm-preview-rm,
+#sc-commerce .cm-preview-rm {
+  position: absolute !important;
+  top: 4px !important;
+  left: 4px !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  background: rgba(239, 68, 68, 0.95) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  z-index: 2 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+}
