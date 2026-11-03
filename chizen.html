@@ -8404,7 +8404,7 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
   }
 }
 </style>
-  <link rel="stylesheet" href="booking-v2.css?v=3">
+  <link rel="stylesheet" href="booking-v2.css?v=4">
 
 </head>
 <body>
@@ -8697,8 +8697,8 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
         <div class="tvl-f"><label>إلى</label><input id="fly-to" type="text" placeholder="صنعاء / القاهرة..." oninput="APP.tvlCalc('flight')"></div>
       </div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>تاريخ المغادرة</label><input id="fly-date" type="date"></div>
-        <div class="tvl-f"><label>تاريخ العودة</label><input id="fly-return" type="date"></div>
+        <div class="tvl-f"><label>تاريخ المغادرة</label><div class="chz-date-group" data-target="fly-date"></div><input id="fly-date" type="hidden"></div>
+        <div class="tvl-f"><label>تاريخ العودة</label><div class="chz-date-group" data-target="fly-return"></div><input id="fly-return" type="hidden"></div>
       </div>
 
       <div class="tvl-stepbar"><span class="tvl-num">3</span><span>المسافرون والدرجة</span></div>
@@ -8714,7 +8714,7 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
       <div class="tvl-f"><label>الاسم الكامل</label><input id="fly-name" type="text" placeholder="كما في الجواز"></div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>الجنسية</label><input id="fly-nation" type="text" value="يمني"></div>
-        <div class="tvl-f"><label>تاريخ الميلاد</label><input id="fly-dob" type="date"></div>
+        <div class="tvl-f"><label>تاريخ الميلاد</label><div class="chz-date-group" data-target="fly-dob"></div><input id="fly-dob" type="hidden"></div>
       </div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>رقم الجواز</label><input id="fly-passport" type="text"></div>
@@ -8749,7 +8749,7 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
         <div class="tvl-f"><label>إلى</label><select id="bus-to" onchange="APP.tvlCalc('bus')"><option value="صنعاء">صنعاء</option><option value="تعز">تعز</option><option value="إب">إب</option><option value="المكلا">المكلا</option><option value="سيئون">سيئون</option><option value="الحديدة">الحديدة</option></select></div>
       </div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>تاريخ السفر</label><input id="bus-date" type="date"></div>
+        <div class="tvl-f"><label>تاريخ السفر</label><div class="chz-date-group" data-target="bus-date"></div><input id="bus-date" type="hidden"></div>
         <div class="tvl-f"><label>الوقت</label><input id="bus-time" type="time"></div>
       </div>
 
@@ -8797,7 +8797,7 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
 
       <div class="tvl-row2">
         <div class="tvl-f"><label>مدينة المغادرة</label><input id="hajj-city" type="text" value="عدن"></div>
-        <div class="tvl-f"><label>تاريخ السفر</label><input id="hajj-date" type="date"></div>
+        <div class="tvl-f"><label>تاريخ السفر</label><div class="chz-date-group" data-target="hajj-date"></div><input id="hajj-date" type="hidden"></div>
       </div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>بالغون</label><input id="hajj-pax" type="number" min="1" value="1" oninput="APP.tvlCalc('hajj')"></div>
@@ -8844,8 +8844,8 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
 
       <div class="tvl-stepbar"><span class="tvl-num">2</span><span>التواريخ</span></div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>الدخول</label><input id="hotel-in" type="date" onchange="APP.tvlCalc('hotel')"></div>
-        <div class="tvl-f"><label>الخروج</label><input id="hotel-out" type="date" onchange="APP.tvlCalc('hotel')"></div>
+        <div class="tvl-f"><label>الدخول</label><div class="chz-date-group" data-target="hotel-in"></div><input id="hotel-in" type="hidden"></div>
+        <div class="tvl-f"><label>الخروج</label><div class="chz-date-group" data-target="hotel-out"></div><input id="hotel-out" type="hidden"></div>
       </div>
 
       <div class="tvl-stepbar"><span class="tvl-num">3</span><span>الغرف والضيوف</span></div>
@@ -8901,7 +8901,7 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
 
       <div class="tvl-stepbar"><span class="tvl-num">3</span><span>التاريخ والوقت</span></div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>التاريخ</label><input id="dlv-date" type="date"></div>
+        <div class="tvl-f"><label>التاريخ</label><div class="chz-date-group" data-target="dlv-date"></div><input id="dlv-date" type="hidden"></div>
         <div class="tvl-f"><label>الوقت</label><input id="dlv-time" type="time"></div>
       </div>
       <div class="tvl-row2">
@@ -22817,5 +22817,6 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 
 
 <script src="booking-validate.js?v=4"></script>
+<script src="booking-date-picker.js?v=1"></script>
 </body>
 </html>

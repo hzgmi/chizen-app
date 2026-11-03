@@ -1107,3 +1107,61 @@ body:has(#sc-booking.active) .chizen-ai-fab {
   pointer-events: auto !important;
   cursor: pointer !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   15) DATE PICKER — 3 قوائم منسدلة (سنة/شهر/يوم)
+   ═══════════════════════════════════════════════════════════════ */
+#sc-booking .chz-date-group {
+  display: grid !important;
+  grid-template-columns: 1.3fr 1fr 1fr !important;
+  gap: 6px !important;
+  width: 100% !important;
+}
+#sc-booking .chz-date-group select {
+  width: 100% !important;
+  height: 48px !important;
+  padding: 0 8px !important;
+  border-radius: 10px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C5A059' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: left 6px center !important;
+  background-size: 12px !important;
+  padding-left: 22px !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+html:not([data-theme="light"]) #sc-booking .chz-date-group select {
+  background-color: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+}
+html[data-theme="light"] #sc-booking .chz-date-group select {
+  background-color: #FFFFFF !important;
+  border: 1.5px solid #E5E7EB !important;
+  color: #121A26 !important;
+}
+
+#sc-booking .chz-date-group select:focus {
+  outline: none !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
+}
+#sc-booking .chz-date-group select option {
+  background: #1A2B5E !important;
+  color: #FFFFFF !important;
+  font-family: 'Tajawal', sans-serif !important;
+  padding: 8px !important;
+}
+html[data-theme="light"] #sc-booking .chz-date-group select option {
+  background: #FFFFFF !important;
+  color: #121A26 !important;
+}
