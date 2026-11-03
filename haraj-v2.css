@@ -653,3 +653,47 @@ html[data-theme="light"] #sc-commerce .chz-haraj-features {
 #sc-commerce .chz-haraj-hero > style {
   display: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   9) HERO IMAGE UPDATE — سوق مفتوح + تظليل ذهبي خفيف
+   ═══════════════════════════════════════════════════════════════ */
+
+/* استبدال صورة الـ Hero بصورة سوق مفتوح */
+#sc-commerce .chz-haraj-hero::before {
+  background-image:
+    linear-gradient(180deg,
+      rgba(7, 9, 15, 0.15) 0%,
+      rgba(7, 9, 15, 0.35) 50%,
+      rgba(7, 9, 15, 0.55) 100%),
+    url('https://images.unsplash.com/photo-1590845947676-9c6cc4e0c9a6?w=900&q=80&auto=format&fit=crop') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  position: relative !important;
+}
+
+/* تظليل ذهبي خفيف (Golden Overlay) */
+#sc-commerce .chz-haraj-hero::before {
+  background-blend-mode: multiply, normal !important;
+}
+
+/* تحسين ظهور النصوص فوق الصورة */
+#sc-commerce .chz-haraj-title {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5) !important;
+}
+html[data-theme="light"] #sc-commerce .chz-haraj-title {
+  text-shadow: 0 1px 4px rgba(255,255,255,0.5) !important;
+}
+
+#sc-commerce .chz-haraj-subtitle {
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4) !important;
+}
+
+/* الوضع الفاتح — صورة أخف */
+html[data-theme="light"] #sc-commerce .chz-haraj-hero::before {
+  background-image:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0.65) 100%),
+    url('https://images.unsplash.com/photo-1590845947676-9c6cc4e0c9a6?w=900&q=80&auto=format&fit=crop') !important;
+}
