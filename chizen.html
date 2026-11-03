@@ -125,7 +125,7 @@
   window.__chzRedirect = function(why){
     try { console.log('[auth-guard] redirect:', why); } catch(e){}
     try { sessionStorage.setItem('chz_return', 'home'); } catch(e){}
-    window.location.replace('index.html');
+    window.location.replace('chizen.html');
   };
   setTimeout(function(){
     if (!document.documentElement.classList.contains('chz-auth-ok')) {
@@ -13303,7 +13303,7 @@ var APP={
       self.showConfirm('تأكيد أخير','هل أنت متأكد؟',async function(ok2){
         if(!ok2)return;
         try{if(window.FB&&FB.ready&&FB.currentUser){try{await FB.db.collection('users').doc(FB.currentUser.uid).delete();}catch(e){}try{await FB.currentUser.delete();}catch(e){}}var keys=['chizen_state','chizen_cart','chizen_orders','chizen_favorites','chizen_points_tx'];keys.forEach(function(k){localStorage.removeItem(k);});}catch(e){}
-        window.location.replace('index.html');
+        window.location.replace('chizen.html');
       });
     });
   },
@@ -13314,7 +13314,7 @@ var APP={
       if(!ok)return;
       try{if(window.FB&&FB.ready)await FB.logout();}catch(e){}
       localStorage.removeItem('chizen_state');
-      window.location.replace('index.html');
+      window.location.replace('chizen.html');
     });
   },
   
@@ -14828,13 +14828,13 @@ window.setFontSize = function(size) {
         if (ok) {
           localStorage.removeItem('chizen_app_pin');
           if (window.APP && APP.logout) APP.logout();
-          else location.href = 'index.html';
+          else location.href = 'chizen.html';
         }
       });
     } else if (confirm('هل تريد تسجيل الخروج؟')) {
       localStorage.removeItem('chizen_app_pin');
       if (window.APP && APP.logout) APP.logout();
-      else location.href = 'index.html';
+      else location.href = 'chizen.html';
     }
   };
   
@@ -21744,14 +21744,14 @@ window.__checkGuest = function(action) {
       window.__showLoginModal(action || 'هذه العملية');
     } else {
       var r = confirm('سجّل للقيام بهذه العملية.\n\nالذهاب لصفحة التسجيل؟');
-      if (r) window.location.href = 'index.html?login=1';
+      if (r) window.location.href = 'chizen.html';
     }
     return true;
   }
   return false;
 };
 window.__openLogin = function() {
-  window.location.href = 'index.html?login=1';
+  window.location.href = 'chizen.html';
 };
 // عند logout - امسح guest flag
 var _origLogout = window.__chzLogout;
@@ -21817,7 +21817,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   document.body.appendChild(overlay);
   
   document.getElementById("v303-register-btn").onclick = function(){
-    window.location.href = "index.html?login=1";
+    window.location.href = "chizen.html";
   };
   document.getElementById("v303-continue-btn").onclick = function(){
     overlay.style.opacity = "0";
@@ -21940,7 +21940,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       var profile = document.querySelector(".chz-profile-group");
       if (profile && profile.getAttribute("data-v315-click") !== "1") {
         profile.setAttribute("data-v315-click", "1");
-        profile.onclick = function(e){ e.stopPropagation(); e.preventDefault(); window.location.href = "index.html?login=1"; };
+        profile.onclick = function(e){ e.stopPropagation(); e.preventDefault(); window.location.href = "chizen.html"; };
       }
     } else {
       document.body.classList.remove("chz-is-guest");
@@ -21996,7 +21996,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
         profile.setAttribute("data-v318-click", "1");
         profile.onclick = function(e){
           e.preventDefault(); e.stopPropagation();
-          window.location.href = "index.html?login=1";
+          window.location.href = "chizen.html";
         };
       }
     } else {
@@ -22072,7 +22072,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
         '</div>' +
         '<button class="v321-login-btn">تسجيل الدخول الآن</button>';
       var btn = banner.querySelector(".v321-login-btn");
-      if (btn) btn.onclick = function(){ window.location.href = "index.html?login=1"; };
+      if (btn) btn.onclick = function(){ window.location.href = "chizen.html"; };
       var header = sc.querySelector(".sh2");
       if (header && header.nextSibling) {
         sc.insertBefore(banner, header.nextSibling);
