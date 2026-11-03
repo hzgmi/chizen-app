@@ -8405,6 +8405,35 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
 }
 </style>
   <link rel="stylesheet" href="booking-v2.css">
+<script id="CHIZEN-ERROR-CATCHER">
+window.__chizenErrors = [];
+window.addEventListener('error', function(e) {
+  window.__chizenErrors.push({
+    msg: e.message || 'unknown',
+    src: (e.filename || '').split('/').pop(),
+    line: e.lineno,
+    col: e.colno
+  });
+});
+setTimeout(function(){
+  var box = document.createElement('div');
+  box.id = 'chizen-err-box';
+  box.style.cssText = 'position:fixed;top:60px;left:6px;right:6px;background:#1a0000;color:#0f0;padding:10px;z-index:9999999;font-size:11px;font-family:monospace;border:2px solid #ff0000;border-radius:8px;white-space:pre-wrap;direction:ltr;max-height:60vh;overflow:auto';
+  var txt = 'ERRORS CAPTURED: ' + window.__chizenErrors.length + '\n\n';
+  if (window.__chizenErrors.length === 0) {
+    txt += 'APP.tvlSwitch: ' + (typeof (window.APP && window.APP.tvlSwitch)) + '\n';
+    txt += 'APP.tvlCalc: ' + (typeof (window.APP && window.APP.tvlCalc)) + '\n';
+    txt += '\n(no JS errors — unknown cause)';
+  } else {
+    window.__chizenErrors.forEach(function(err, i) {
+      txt += '#' + (i+1) + ' [' + err.src + ':' + err.line + ':' + err.col + ']\n' + err.msg + '\n\n';
+    });
+  }
+  box.textContent = txt;
+  box.onclick = function(){ box.remove(); };
+  document.body.appendChild(box);
+}, 2500);
+</script>
 </head>
 <body>
 <div id="app">
@@ -22814,20 +22843,6 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 </script>
 
 
-<script id="CHIZEN-DIAGNOSTIC">
-// تشخيص مؤقت — سيُزال بعد الاختبار
-setTimeout(function(){
-  var info = 'APP: ' + (typeof APP) + 
-    '\nAPP.tvlSwitch: ' + (typeof (window.APP && window.APP.tvlSwitch)) + 
-    '\ntvlSubmit: ' + (typeof (window.APP && window.APP.tvlSubmit)) +
-    '\ntvlCalc: ' + (typeof (window.APP && window.APP.tvlCalc));
-  var d = document.createElement('div');
-  d.id = 'chizen-diag-box';
-  d.style.cssText = 'position:fixed;top:80px;left:10px;right:10px;background:#000;color:#0f0;padding:10px;z-index:999999;font-size:11px;font-family:monospace;border:2px solid #0f0;border-radius:8px;white-space:pre;direction:ltr';
-  d.textContent = info;
-  d.onclick = function(){ d.remove(); };
-  document.body.appendChild(d);
-}, 2000);
-</script>
+
 </body>
 </html>
