@@ -1362,3 +1362,134 @@ html:not([data-theme="light"]) #sc-commerce .cm-card-img {
   background: #F4F6FA !important;
   padding: 5px !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   21) UNIFY FIELDS — توحيد حقول الحراج مع حقول الحجز
+   ═══════════════════════════════════════════════════════════════ */
+
+/* الحاوية (cm-field) */
+#sc-commerce .cm-field {
+  padding: 0 !important;
+  margin-bottom: 14px !important;
+}
+
+/* التسمية (label) */
+#sc-commerce .cm-field label {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+}
+html:not([data-theme="light"]) #sc-commerce .cm-field label {
+  color: rgba(197,160,89,0.9) !important;
+}
+html[data-theme="light"] #sc-commerce .cm-field label {
+  color: #7A8596 !important;
+}
+
+/* الحقول (input, select, textarea) */
+#sc-commerce .cm-field input,
+#sc-commerce .cm-field select,
+#sc-commerce .cm-field textarea {
+  width: 100% !important;
+  height: 48px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: 'Tajawal', sans-serif !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+#sc-commerce .cm-field textarea {
+  height: auto !important;
+  min-height: 80px !important;
+  padding: 12px 14px !important;
+  resize: vertical !important;
+}
+
+/* الوضع الداكن */
+html:not([data-theme="light"]) #sc-commerce .cm-field input,
+html:not([data-theme="light"]) #sc-commerce .cm-field select,
+html:not([data-theme="light"]) #sc-commerce .cm-field textarea {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+}
+
+/* الوضع الفاتح */
+html[data-theme="light"] #sc-commerce .cm-field input,
+html[data-theme="light"] #sc-commerce .cm-field select,
+html[data-theme="light"] #sc-commerce .cm-field textarea {
+  background: #FFFFFF !important;
+  border: 1.5px solid #E5E7EB !important;
+  color: #121A26 !important;
+}
+
+/* حالة التركيز (Focus) */
+#sc-commerce .cm-field input:focus,
+#sc-commerce .cm-field select:focus,
+#sc-commerce .cm-field textarea:focus {
+  outline: none !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
+}
+
+/* Placeholder */
+html:not([data-theme="light"]) #sc-commerce .cm-field input::placeholder,
+html:not([data-theme="light"]) #sc-commerce .cm-field textarea::placeholder {
+  color: rgba(255,255,255,0.35) !important;
+}
+html[data-theme="light"] #sc-commerce .cm-field input::placeholder,
+html[data-theme="light"] #sc-commerce .cm-field textarea::placeholder {
+  color: #B0B7C3 !important;
+}
+
+/* حقل البحث (cm-search-input) */
+#sc-commerce #cm-search-input {
+  height: 48px !important;
+  border-radius: 12px !important;
+  padding: 0 44px 0 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  font-family: 'Tajawal', sans-serif !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+html:not([data-theme="light"]) #sc-commerce #cm-search-input {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+}
+html[data-theme="light"] #sc-commerce #cm-search-input {
+  background: #FFFFFF !important;
+  border: 1.5px solid #E5E7EB !important;
+  color: #121A26 !important;
+}
+#sc-commerce #cm-search-input:focus {
+  outline: none !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 0 0 3px rgba(197,160,89,0.15) !important;
+}
+
+/* حقل رفع الصور (cm-f-img-url) */
+#sc-commerce #cm-f-img-url {
+  height: 44px !important;
+  border-radius: 12px !important;
+  padding: 0 14px !important;
+  font-size: 13px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+html:not([data-theme="light"]) #sc-commerce #cm-f-img-url {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+}
+html[data-theme="light"] #sc-commerce #cm-f-img-url {
+  background: #FFFFFF !important;
+  border: 1.5px solid #E5E7EB !important;
+  color: #121A26 !important;
+}
