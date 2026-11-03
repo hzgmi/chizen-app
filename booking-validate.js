@@ -221,7 +221,19 @@
         return; // فشل التحقق — أظهرنا الإشعار
       }
 
-      // 2) إذا نجح، نفذ الدالة الأصلية
+      // 2) فحص الزائر — استخدام النظام المعتمد (Premium Modal)
+      if (window.__checkGuest) {
+        if (window.__checkGuest('لإتمام حجزك')) {
+          return; // عرض Modal الزائر الرسمي
+        }
+      } else if (window.__isGuest && window.__isGuest()) {
+        if (window.__showLoginModal) {
+          window.__showLoginModal('لإتمام حجزك');
+        }
+        return;
+      }
+
+      // 3) الدالة الأصلية
       return originalSubmit.call(this, type, btn);
     };
 
