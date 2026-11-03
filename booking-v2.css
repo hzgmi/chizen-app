@@ -994,3 +994,14 @@ html[data-theme="light"] #sc-booking .tvl-form .price-preview .pp-row b {
 #sc-booking .tvl-form.active * {
   pointer-events: auto;
 }
+
+/* ═══ DIAGNOSTIC — سيُزال بعد التشخيص ═══ */
+#sc-booking .tvl-svc {
+  outline: 2px dashed #FF0000 !important;
+}
+#sc-booking .tvl-svc.active {
+  outline: 2px solid #00FF00 !important;
+}
+#sc-booking .tvl-submit {
+  outline: 2px solid #00AAFF !important;
+}
