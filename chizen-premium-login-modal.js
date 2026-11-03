@@ -112,3 +112,49 @@
     installPremiumModal();
   }
 })();
+
+/* ═══════════════════════════════════════════════════════════════
+   AUTH ENFORCE — ضمان إزالة وضع الزائر بعد تسجيل الدخول
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  function enforceAuth() {
+    if (!window.FB || !window.FB.auth) {
+      setTimeout(enforceAuth, 500);
+      return;
+    }
+
+    window.FB.auth.onAuthStateChanged(function(user) {
+      if (user) {
+        // مسجل دخول → تنظيف شامل ومتكرر
+        function cleanup() {
+          try { localStorage.removeItem('chizen_guest'); } catch(e) {}
+          window.__guestActive = false;
+          document.body.classList.remove('chz-is-guest');
+          document.documentElement.classList.remove('chz-guest-instant');
+        }
+        cleanup();
+        setTimeout(cleanup, 100);
+        setTimeout(cleanup, 500);
+        setTimeout(cleanup, 1000);
+        setTimeout(cleanup, 2000);
+        setTimeout(cleanup, 3500);
+        setTimeout(cleanup, 5000);
+        console.log('[AUTH-ENFORCE] ✅ تم تنظيف وضع الزائر');
+      } else {
+        // زائر → تفعيل وضع الزائر
+        window.__guestActive = true;
+        try { localStorage.setItem('chizen_guest', 'true'); } catch(e) {}
+        document.body.classList.add('chz-is-guest');
+        console.log('[AUTH-ENFORCE] وضع الزائر مفعّل');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enforceAuth);
+  } else {
+    enforceAuth();
+  }
+})();
