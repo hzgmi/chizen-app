@@ -320,7 +320,9 @@
     var submit = form.querySelector('.tvl-submit');
     if (!submit) return;
 
-    if (isValid(type)) {
+    var valid = isValid(type);
+    console.log('[UNLOCK] type=' + type + ' valid=' + valid);
+    if (valid) {
       submit.classList.remove('locked');
       submit.classList.add('ready');
     } else {
