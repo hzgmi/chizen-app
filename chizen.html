@@ -17961,7 +17961,7 @@ document.addEventListener('keydown', function(e) {
 (function(){
   'use strict';
   function ready(){
-    if (!window.APP || !window.FB) { setTimeout(ready, 300); return; }
+    if (!window.APP) { setTimeout(ready, 300); return; }
     if (window.APP.__tvlFinal) return;
     window.APP.__tvlFinal = true;
 
