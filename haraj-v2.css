@@ -1322,3 +1322,43 @@ html:not([data-theme="light"]) #sc-commerce .cm-card-price {
   padding: 0 !important;
   border: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   20) FIX IMAGE SIZE — إظهار الصور كاملة (بدون تكبير)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. الصورة: عرض كامل وارتفاع 150px، مع احتواء الصورة (contain) */
+#sc-commerce .cm-card-img {
+  width: 100% !important;
+  height: 150px !important;
+  object-fit: contain !important; /* يظهر الصورة كاملة */
+  background: #F4F6FA !important; /* خلفية رمادية فاتحة */
+  display: block !important;
+  padding: 5px !important;
+  box-sizing: border-box !important;
+}
+
+html:not([data-theme="light"]) #sc-commerce .cm-card-img {
+  background: #2A2E38 !important;
+}
+
+/* 2. إزالة أي تحجيم من قبل (reset) */
+#sc-commerce .cm-card {
+  overflow: hidden !important;
+}
+
+/* 3. ضمان أن الصورة لا تتجاوز الحاوية */
+#sc-commerce .cm-card-img img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+}
+
+/* 4. في حال كانت الصورة هي عنصر <img> مباشرة */
+#sc-commerce .cm-card > img {
+  width: 100% !important;
+  height: 150px !important;
+  object-fit: contain !important;
+  background: #F4F6FA !important;
+  padding: 5px !important;
+}
