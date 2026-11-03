@@ -982,18 +982,44 @@ html[data-theme="light"] #sc-commerce-new .cm-upload-hint {
   pointer-events: auto !important;
 }
 
-/* إخفاء عناصر JS الإضافية (cm-car-extra, cm-phone-extra) بشكل صحيح */
-#sc-commerce-new #cm-car-extra,
-#sc-commerce-new #cm-car-extra2,
-#sc-commerce-new #cm-phone-extra {
-  display: grid !important;
+/* إصلاح حقول JS الديناميكية (cm-car-extra, cm-phone-extra)
+   نستخدم .cm-row القاعدة العامة بدلاً من فرض display !important
+   لأن JS يتحكم في display (none/grid) حسب النوع المختار */
+#sc-commerce-new .cm-row {
   grid-template-columns: 1fr 1fr !important;
   gap: 10px !important;
   margin-bottom: 14px !important;
 }
 
-#sc-commerce-new #cm-car-extra[style*="display:none"],
-#sc-commerce-new #cm-car-extra2[style*="display:none"],
-#sc-commerce-new #cm-phone-extra[style*="display:none"] {
+/* عندما تُظهرها JS، تكون grid */
+#sc-commerce-new .cm-row[style*="display: grid"],
+#sc-commerce-new .cm-row[style*="display:grid"] {
+  display: grid !important;
+}
+
+/* عندما تخفيها JS، تبقى مخفية */
+#sc-commerce-new .cm-row[style*="display: none"],
+#sc-commerce-new .cm-row[style*="display:none"] {
   display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   §12. AI FAB — حذف نهائي قاهر (كلاس + ID + أي [class*="ai-"]) 
+   ═══════════════════════════════════════════════════════════════ */
+html body .chat-fab,
+html body .ai-fab,
+html body #ai-btn,
+html body #chizen-ai-btn,
+html body .chizen-ai-fab,
+html body [class*="ai-fab"],
+html body [class*="ai-button"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -99999px !important;
+  top: -99999px !important;
 }
