@@ -1711,3 +1711,30 @@ html.chz-guest-instant .chz-prof-txt:has(.v318-login-text)::after {
   content: none !important;
   display: none !important;
 }
+
+/* ═══ v325: شارة تسجيل الآن — تدرج ذهبي × بنفسجي (هوية شيزن) ═══ */
+body.chz-is-guest .chz-profile-group,
+html[data-theme="dark"] body.chz-is-guest .chz-profile-group,
+html[data-theme="light"] body.chz-is-guest .chz-profile-group {
+  background: linear-gradient(135deg, #F2C94C 0%, #D4A017 45%, #7B2FBE 100%) !important;
+  box-shadow: 0 4px 14px rgba(123, 47, 190, 0.35), 0 2px 6px rgba(212, 160, 23, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+body.chz-is-guest .chz-profile-group .v318-login-text,
+html[data-theme="dark"] body.chz-is-guest .chz-profile-group .v318-login-text,
+html[data-theme="light"] body.chz-is-guest .chz-profile-group .v318-login-text {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35) !important;
+}
+/* حالة تسجيل الدخول — نفس التدرج */
+body:not(.chz-is-guest) .chz-profile-group {
+  background: linear-gradient(135deg, #F2C94C 0%, #D4A017 45%, #7B2FBE 100%) !important;
+  box-shadow: 0 4px 14px rgba(123, 47, 190, 0.35), 0 2px 6px rgba(212, 160, 23, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+body:not(.chz-is-guest) .chz-profile-group .chz-prof-name,
+body:not(.chz-is-guest) .chz-profile-group .chz-prof-txt,
+body:not(.chz-is-guest) .chz-profile-group .v319-name {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35) !important;
+}
