@@ -1738,3 +1738,50 @@ body:not(.chz-is-guest) .chz-profile-group .v319-name {
   color: #ffffff !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35) !important;
 }
+
+/* ═══ v326: إصلاح أزرار إعلاناتي (تعديل/محجوز/تم البيع/حذف) ═══ */
+#sc-commerce-mine .cm-mine-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr 1fr !important;
+  gap: 6px !important;
+  padding: 0 12px 12px !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+#sc-commerce-mine .cm-mine-action {
+  padding: 8px 4px !important;
+  border: 1.5px solid rgba(0,0,0,0.08) !important;
+  border-radius: 10px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  background: transparent !important;
+  color: inherit !important;
+  line-height: 1.2 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  box-shadow: none !important;
+}
+#sc-commerce-mine .cm-mine-action svg {
+  width: 16px !important;
+  height: 16px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+}
+#sc-commerce-mine .cm-mine-edit { background: rgba(59,130,246,0.12) !important; color: #2563eb !important; border-color: rgba(59,130,246,0.25) !important; }
+#sc-commerce-mine .cm-mine-reserve { background: rgba(245,158,11,0.12) !important; color: #d97706 !important; border-color: rgba(245,158,11,0.25) !important; }
+#sc-commerce-mine .cm-mine-sold { background: rgba(16,185,129,0.12) !important; color: #059669 !important; border-color: rgba(16,185,129,0.25) !important; }
+#sc-commerce-mine .cm-mine-delete { background: rgba(239,68,68,0.12) !important; color: #dc2626 !important; border-color: rgba(239,68,68,0.25) !important; }
+#sc-commerce-mine .cm-mine-action.active-state { opacity: 0.55 !important; }
+html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-action { border-color: rgba(255,255,255,0.1) !important; }
+html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-edit { background: rgba(59,130,246,0.2) !important; color: #60a5fa !important; }
+html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-reserve { background: rgba(245,158,11,0.2) !important; color: #fbbf24 !important; }
+html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-sold { background: rgba(16,185,129,0.2) !important; color: #34d399 !important; }
+html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-delete { background: rgba(239,68,68,0.2) !important; color: #f87171 !important; }
