@@ -1903,3 +1903,20 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { backgr
   content: none !important;
   display: none !important;
 }
+
+/* ═══ v330: منع تغطية أزرار السلة بشريط التنقل السفلي ═══ */
+#sc-cart {
+  padding-bottom: 120px !important;
+}
+#sc-cart .tb {
+  margin-bottom: 100px !important;
+}
+#sc-cart .btn-p {
+  margin-bottom: 20px !important;
+}
+/* في صفحات أخرى قد تعاني من نفس المشكلة */
+#sc-checkout,
+#sc-orders,
+#sc-fav {
+  padding-bottom: 120px !important;
+}
