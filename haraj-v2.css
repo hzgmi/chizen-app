@@ -1680,3 +1680,28 @@ body.chz-is-guest .chz-profile-group .v318-login-text {
     font-size: 11px !important;
   }
 }
+
+/* ═══ v322: توحيد ألوان شارة تسجيل الآن (كل الأوضاع) ═══ */
+body.chz-is-guest .chz-profile-group,
+html[data-theme="dark"] body.chz-is-guest .chz-profile-group,
+html[data-theme="light"] body.chz-is-guest .chz-profile-group {
+  background: linear-gradient(135deg, #F2C94C, #D4A017) !important;
+  box-shadow: 0 3px 12px rgba(212, 160, 23, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+body.chz-is-guest .chz-profile-group .v318-login-text,
+html[data-theme="dark"] body.chz-is-guest .chz-profile-group .v318-login-text,
+html[data-theme="light"] body.chz-is-guest .chz-profile-group .v318-login-text {
+  color: #1a1a2e !important;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.3) !important;
+}
+/* حالة تسجيل الدخول — الاسم */
+body:not(.chz-is-guest) .chz-profile-group {
+  background: linear-gradient(135deg, #F2C94C, #D4A017) !important;
+  box-shadow: 0 3px 12px rgba(212, 160, 23, 0.45) !important;
+}
+body:not(.chz-is-guest) .chz-profile-group .chz-prof-name,
+body:not(.chz-is-guest) .chz-profile-group .chz-prof-txt,
+body:not(.chz-is-guest) .chz-profile-group .v319-name {
+  color: #1a1a2e !important;
+}
