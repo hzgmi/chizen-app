@@ -1837,3 +1837,31 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-card {
 .cm-confirm-modal .cm-confirm-btn-primary { background: linear-gradient(135deg, #F2C94C, #D4A017) !important; color: #1a1a2e !important; }
 .cm-confirm-modal .cm-confirm-btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626) !important; color: #fff !important; }
 html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { background: rgba(255,255,255,0.1) !important; color: #fff !important; }
+
+/* ═══ v328: إصلاح إيموجي الكيس 🛍️ في البطاقات الفارغة ═══ */
+#sc-commerce #cm-listings .prod-i > span,
+#sc-commerce-mine .cm-mine-img > span,
+#sc-commerce #cm-listings .cm-card-img > span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  font-size: 42px !important;
+  opacity: 0.35 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  font-style: normal !important;
+}
+/* منع أي سهم أو عنصر إضافي بجانب الإيموجي */
+#sc-commerce #cm-listings .prod-i > span::before,
+#sc-commerce #cm-listings .prod-i > span::after,
+#sc-commerce-mine .cm-mine-img > span::before,
+#sc-commerce-mine .cm-mine-img > span::after {
+  content: none !important;
+  display: none !important;
+}
