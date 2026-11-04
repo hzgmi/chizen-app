@@ -1594,3 +1594,16 @@ html:not([data-theme="light"]) #sc-commerce #cm-listings .prod .price {
   color: #F2E3C6 !important;
   -webkit-text-fill-color: #F2E3C6 !important;
 }
+
+/* ═══ FIX: توسيط أيقونة البطاقة ومنع الأسهم الغريبة ═══ */
+#sc-commerce #cm-listings .prod-i > span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  direction: ltr !important;
+  font-size: 42px !important;
+}
