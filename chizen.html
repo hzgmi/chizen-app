@@ -10723,7 +10723,6 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 (function(){
   var DEFAULT_BANNERS = [
     {img:'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg', scale:1, posX:50, posY:50},
-    {img:'https://i.ibb.co/dwtG9sPT/dwtG9sPT.jpg', scale:1, posX:50, posY:50},
     {img:'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg', scale:1, posX:50, posY:50},
     {img:'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg', scale:1, posX:50, posY:50},
     {img:'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg', scale:1, posX:50, posY:50}
@@ -10769,7 +10768,16 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
       var sc = b.scale || 1;
       var px = (b.posX != null) ? b.posX : 50;
       var py = (b.posY != null) ? b.posY : 50;
-      return '<div class="v10img" style="position:absolute;inset:0;opacity:' + (i===0?'1':'0') + ';background-image:url(&quot;' + (url||'').replace(/&/g,'&amp;').replace(/"/g,'%22') + '&quot;);background-size:' + (sc*100) + '% auto;background-position:' + px + '% ' + py + '%;background-repeat:no-repeat;background-color:#111;transition:opacity 0.6s ease"></div>';
+      // preload with error handling
+      if (url) {
+        var testImg = new Image();
+        testImg.onerror = function() {
+          var el = slides.querySelector('.v10img[data-i="' + i + '"]');
+          if (el) el.style.background = 'linear-gradient(135deg, #F2C94C, #7B2FBE)';
+        };
+        testImg.src = url;
+      }
+      return '<div class="v10img" data-i="' + i + '" style="position:absolute;inset:0;opacity:' + (i===0?'1':'0') + ';background-image:url(&quot;' + (url||'').replace(/&/g,'&amp;').replace(/"/g,'%22') + '&quot;);background-size:' + (sc*100) + '% auto;background-position:' + px + '% ' + py + '%;background-repeat:no-repeat;background-color:#111;transition:opacity 0.6s ease"></div>';
     }).join('');
 
     dots.innerHTML = currentBanners.map(function(_, i){
@@ -11421,7 +11429,7 @@ var APP={
     if (!s) return;
     var DEFAULT_BANNERS = [
       { img: 'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg' },
-      { img: 'https://i.ibb.co/dwtG9sPT/dwtG9sPT.jpg' },
+      { img: 'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg' },
       { img: 'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg' },
       { img: 'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg' },
       { img: 'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg' }
