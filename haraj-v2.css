@@ -1607,3 +1607,51 @@ html:not([data-theme="light"]) #sc-commerce #cm-listings .prod .price {
   direction: ltr !important;
   font-size: 42px !important;
 }
+
+/* ═══ FIX: بطاقات إعلاناتي — إصلاح تعارض الصور ═══ */
+#sc-commerce-mine .cm-mine-card {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  background: #fff !important;
+  border: 1px solid rgba(16,185,129,0.12) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.05) !important;
+}
+html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-card {
+  background: #1e2438 !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+#sc-commerce-mine .cm-mine-head {
+  display: flex !important;
+  gap: 12px !important;
+  padding: 12px !important;
+}
+#sc-commerce-mine .cm-mine-img {
+  width: 90px !important;
+  height: 90px !important;
+  min-width: 90px !important;
+  min-height: 90px !important;
+  max-width: 90px !important;
+  max-height: 90px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #f4f6fa !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+#sc-commerce-mine .cm-mine-img img {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+#sc-commerce-mine .cm-mine-info {
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
