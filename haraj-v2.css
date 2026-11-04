@@ -1705,3 +1705,9 @@ body:not(.chz-is-guest) .chz-profile-group .chz-prof-txt,
 body:not(.chz-is-guest) .chz-profile-group .v319-name {
   color: #1a1a2e !important;
 }
+
+/* ═══ v324: إخفاء تكرار "تسجيل الآن" (CSS ::after vs JS) ═══ */
+html.chz-guest-instant .chz-prof-txt:has(.v318-login-text)::after {
+  content: none !important;
+  display: none !important;
+}
