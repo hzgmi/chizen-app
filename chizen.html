@@ -21616,36 +21616,4 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 <script src="booking-validate.js?v=9"></script>
 <script src="chizen-premium-login-modal.js?v=2"></script>
 <script src="booking-date-picker.js?v=2"></script>
-<script>
-// ═══ DEBUG TEMP ═══
-window.__chzDebug = function(){
-  var lines = [];
-  lines.push('APP: ' + (typeof APP));
-  lines.push('cmMine: ' + (APP && APP.cmMine ? APP.cmMine.length + ' items' : 'MISSING'));
-  if (APP && APP.cmMine && APP.cmMine.length) {
-    lines.push('First ID: ' + APP.cmMine[0].id);
-    lines.push('First status: ' + APP.cmMine[0].status);
-  }
-  lines.push('cmDeleteListing: ' + (APP && typeof APP.cmDeleteListing));
-  lines.push('cmMarkStatus: ' + (APP && typeof APP.cmMarkStatus));
-  lines.push('cmConfirm: ' + (APP && typeof APP.cmConfirm));
-  lines.push('FB.db: ' + (window.FB && FB.db ? 'OK' : 'MISSING'));
-  lines.push('FB.currentUser: ' + (window.FB && FB.currentUser ? FB.currentUser.uid : 'NULL'));
-  var modal = document.getElementById('cm-confirm-modal');
-  lines.push('Modal exists: ' + (modal ? 'YES, display=' + modal.style.display : 'NO'));
-  alert(lines.join('\n'));
-};
-setTimeout(function(){
-  var list = document.getElementById('cm-mine-list');
-  if (list) {
-    var btn = document.createElement('button');
-    btn.textContent = '🔍 تشخيص';
-    btn.style.cssText = 'position:fixed;bottom:80px;left:10px;z-index:99999999;background:#ff0066;color:#fff;padding:10px 14px;border-radius:20px;border:none;font-size:12px;font-weight:900;box-shadow:0 4px 15px rgba(255,0,102,0.5);';
-    btn.onclick = window.__chzDebug;
-    document.body.appendChild(btn);
-  }
-}, 2000);
-
-</script>
-</body>
 </html>
