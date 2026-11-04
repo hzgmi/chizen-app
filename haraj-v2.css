@@ -1785,3 +1785,55 @@ html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-edit { background: rgb
 html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-reserve { background: rgba(245,158,11,0.2) !important; color: #fbbf24 !important; }
 html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-sold { background: rgba(16,185,129,0.2) !important; color: #34d399 !important; }
 html:not([data-theme="light"]) #sc-commerce-mine .cm-mine-delete { background: rgba(239,68,68,0.2) !important; color: #f87171 !important; }
+
+/* ═══ v327: إصلاح نافذة التأكيد — فوق كل شيء ═══ */
+.cm-confirm-modal,
+#sc-commerce-mine .cm-confirm-modal,
+html:not([data-theme="light"]) .cm-confirm-modal {
+  display: flex !important;
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 2147483647 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background: rgba(0,0,0,0.7) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+.cm-confirm-modal .cm-confirm-card {
+  background: #fff !important;
+  color: #1a1a2e !important;
+  border-radius: 20px !important;
+  padding: 24px !important;
+  max-width: 380px !important;
+  width: 100% !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4) !important;
+  position: relative !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  gap: 12px !important;
+}
+html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-card {
+  background: #1e2438 !important;
+  color: #fff !important;
+}
+.cm-confirm-modal .cm-confirm-icon { font-size: 40px !important; }
+.cm-confirm-modal .cm-confirm-title { font-size: 18px !important; font-weight: 900 !important; margin: 0 !important; }
+.cm-confirm-modal .cm-confirm-msg { font-size: 14px !important; opacity: 0.85 !important; margin: 0 !important; line-height: 1.6 !important; }
+.cm-confirm-modal .cm-confirm-btns { display: flex !important; gap: 10px !important; width: 100% !important; margin-top: 8px !important; }
+.cm-confirm-modal .cm-confirm-btn { flex: 1 !important; padding: 12px !important; border: none !important; border-radius: 12px !important; font-family: 'Tajawal', sans-serif !important; font-size: 14px !important; font-weight: 800 !important; cursor: pointer !important; }
+.cm-confirm-modal .cm-confirm-btn-cancel { background: rgba(0,0,0,0.08) !important; color: #333 !important; }
+.cm-confirm-modal .cm-confirm-btn-primary { background: linear-gradient(135deg, #F2C94C, #D4A017) !important; color: #1a1a2e !important; }
+.cm-confirm-modal .cm-confirm-btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626) !important; color: #fff !important; }
+html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { background: rgba(255,255,255,0.1) !important; color: #fff !important; }

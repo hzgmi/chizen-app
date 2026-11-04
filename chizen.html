@@ -8038,7 +8038,7 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
 }
 </style>
   <link rel="stylesheet" href="booking-v2.css?v=99">
-  <link rel="stylesheet" href="haraj-v2.css?v=35">
+  <link rel="stylesheet" href="haraj-v2.css?v=36">
 
 
 
@@ -21620,34 +21620,20 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 // ═══ DEBUG TEMP ═══
 window.__chzDebug = function(){
   var lines = [];
-  // افتح نافذة تأكيد تجريبية
-  APP.cmConfirm('?', 'اختبار', 'اختبار النافذة', false, function(){});
-  setTimeout(function(){
-    var m = document.getElementById('cm-confirm-modal');
-    if (!m) { alert('❌ النافذة غير موجودة'); return; }
-    var cs = getComputedStyle(m);
-    var rect = m.getBoundingClientRect();
-    lines.push('=== computedStyle ===');
-    lines.push('display: ' + cs.display);
-    lines.push('visibility: ' + cs.visibility);
-    lines.push('opacity: ' + cs.opacity);
-    lines.push('z-index: ' + cs.zIndex);
-    lines.push('position: ' + cs.position);
-    lines.push('pointer-events: ' + cs.pointerEvents);
-    lines.push('=== boundingRect ===');
-    lines.push('top: ' + Math.round(rect.top));
-    lines.push('left: ' + Math.round(rect.left));
-    lines.push('width: ' + Math.round(rect.width));
-    lines.push('height: ' + Math.round(rect.height));
-    lines.push('=== viewport ===');
-    lines.push('innerWidth: ' + window.innerWidth);
-    lines.push('innerHeight: ' + window.innerHeight);
-    lines.push('=== parent ===');
-    lines.push('parent: ' + (m.parentElement ? m.parentElement.tagName + '.' + m.parentElement.className : 'NONE'));
-    alert(lines.join('
-'));
-    m.remove();
-  }, 300);
+  lines.push('APP: ' + (typeof APP));
+  lines.push('cmMine: ' + (APP && APP.cmMine ? APP.cmMine.length + ' items' : 'MISSING'));
+  if (APP && APP.cmMine && APP.cmMine.length) {
+    lines.push('First ID: ' + APP.cmMine[0].id);
+    lines.push('First status: ' + APP.cmMine[0].status);
+  }
+  lines.push('cmDeleteListing: ' + (APP && typeof APP.cmDeleteListing));
+  lines.push('cmMarkStatus: ' + (APP && typeof APP.cmMarkStatus));
+  lines.push('cmConfirm: ' + (APP && typeof APP.cmConfirm));
+  lines.push('FB.db: ' + (window.FB && FB.db ? 'OK' : 'MISSING'));
+  lines.push('FB.currentUser: ' + (window.FB && FB.currentUser ? FB.currentUser.uid : 'NULL'));
+  var modal = document.getElementById('cm-confirm-modal');
+  lines.push('Modal exists: ' + (modal ? 'YES, display=' + modal.style.display : 'NO'));
+  alert(lines.join('\n'));
 };
 setTimeout(function(){
   var list = document.getElementById('cm-mine-list');
