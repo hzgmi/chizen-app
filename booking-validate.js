@@ -389,51 +389,6 @@
 
   })();
 
-// ═══ FINAL DEBUG — يعرض حالة النظام في مربع أحمر ═══
-setTimeout(function(){
-  var box = document.createElement('div');
-  box.id = 'chz-final-debug';
-  box.style.cssText = 'position:fixed;top:10px;left:5px;right:5px;background:#000;color:#0f0;padding:10px;z-index:99999999;font-size:10px;font-family:monospace;border:3px solid #ff0000;border-radius:6px;white-space:pre-wrap;direction:ltr;max-height:65vh;overflow:auto;cursor:pointer';
-  box.onclick = function(){ box.remove(); };
-  
-  function build() {
-    var lines = [];
-    lines.push('=== SYSTEM STATUS ===');
-    lines.push('window.toast: ' + typeof window.toast);
-    lines.push('APP.toast: ' + (window.APP && typeof window.APP.toast));
-    lines.push('APP.tvlSubmit: ' + (window.APP && typeof window.APP.tvlSubmit));
-    lines.push('APP.__validationReady: ' + (window.APP && window.APP.__validationReady));
-    lines.push('');
-    var form = document.querySelector('.tvl-form.active');
-    if (form) {
-      var type = form.id.replace('form-', '');
-      var submit = form.querySelector('.tvl-submit');
-      lines.push('=== ACTIVE FORM: ' + type + ' ===');
-      lines.push('submit exists: ' + (submit ? 'YES' : 'NO'));
-      lines.push('submit class: ' + (submit ? submit.className : 'N/A'));
-      lines.push('submit pointer-events: ' + (submit ? getComputedStyle(submit).pointerEvents : 'N/A'));
-      lines.push('submit z-index: ' + (submit ? getComputedStyle(submit).zIndex : 'N/A'));
-      lines.push('submit position: ' + (submit ? getComputedStyle(submit).position : 'N/A'));
-    }
-    box.textContent = lines.join('\n');
-  }
-  
-  build();
-  setInterval(build, 1000);
-  
-  // اختبار Toast
-  setTimeout(function(){
-    try {
-      if (typeof window.APP.toast === 'function') {
-        window.APP.toast('TEST — APP.toast works');
-      } else {
-        alert('APP.toast NOT a function');
-      }
-    } catch(e) { alert('APP.toast error: ' + e.message); }
-  }, 2500);
-  
-  document.body.appendChild(box);
-}, 3000);
 
 /* ═══════════════════════════════════════════════════════════════
    6) SUCCESS MODAL — إشعار نجاح ذهبي ديناميكي
