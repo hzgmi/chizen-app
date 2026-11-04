@@ -1503,3 +1503,94 @@ html[data-theme="light"] #sc-commerce-detail .cm-detail-seller-name {
 #sc-commerce-detail .cm-wa-btn:active {
   transform: scale(0.97) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   §19. UNIFY WITH MARKET — شكل السوق، ألوان ذهبية
+   ═══════════════════════════════════════════════════════════════ */
+
+/* البطاقة — نفس شكل السوق */
+#sc-commerce #cm-listings .prod {
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  cursor: pointer !important;
+  position: relative !important;
+}
+#sc-commerce #cm-listings .prod:active { transform: scale(.97) !important; }
+
+/* الصورة — نفس ارتفاع السوق */
+#sc-commerce #cm-listings .prod-i {
+  height: 150px !important;
+  background: #F9F9F9 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px !important;
+  overflow: hidden !important;
+}
+#sc-commerce #cm-listings .prod-i img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* المعلومات */
+#sc-commerce #cm-listings .prod-inf {
+  padding: 12px !important;
+  background: #FFFFFF !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+#sc-commerce #cm-listings .prod-n {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #2D3748 !important;
+  line-height: 1.4 !important;
+  margin-bottom: 8px !important;
+  min-height: 36px !important;
+}
+
+/* الشارة — ذهبية */
+#sc-commerce #cm-listings .prod-b {
+  background: #C5A059 !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  border-radius: 6px !important;
+  padding: 3px 8px !important;
+  top: 10px !important;
+  right: 10px !important;
+  font-size: 9px !important;
+  z-index: 2 !important;
+}
+
+/* السعر — ذهبي */
+#sc-commerce #cm-listings .prod .price {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: #C5A059 !important;
+  -webkit-text-fill-color: #C5A059 !important;
+}
+#sc-commerce #cm-listings .prod .price-c {
+  font-size: 10px !important;
+  color: #A0AEC0 !important;
+}
+
+/* الوضع الليلي */
+html:not([data-theme="light"]) #sc-commerce #cm-listings .prod {
+  background: linear-gradient(135deg, #131E42 0%, #0A1024 100%) !important;
+  border-color: rgba(197,160,89,0.2) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+}
+html:not([data-theme="light"]) #sc-commerce #cm-listings .prod-inf { background: transparent !important; }
+html:not([data-theme="light"]) #sc-commerce #cm-listings .prod-n { color: #FFFFFF !important; }
+html:not([data-theme="light"]) #sc-commerce #cm-listings .prod-i { background: #1E2438 !important; }
+html:not([data-theme="light"]) #sc-commerce #cm-listings .prod .price {
+  color: #F2E3C6 !important;
+  -webkit-text-fill-color: #F2E3C6 !important;
+}
