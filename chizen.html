@@ -8199,15 +8199,66 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
   <div id="dots" style="display:flex; justify-content:center; gap:6px; margin-top:10px;"></div>
 </div>
 
-<div class="tvl-portal tvl-strip" style="background: linear-gradient(120deg, #C5A059 0%, #D81B60 80%) !important; border: 1px solid rgba(255,255,255,0.2) !important; box-shadow: 0 8px 20px rgba(197,160,89,0.3) !important; border-radius: 18px !important; display: flex; align-items: center; padding: 12px; margin: 12px 16px; cursor: pointer;">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+<div class="tvl-portal tvl-strip" onclick="APP.goTab('booking');setTimeout(function(){if(APP.tvlSwitch)APP.tvlSwitch('flight');},80);" style="background: linear-gradient(135deg, #D4AF37 0%, #D81B60 100%) !important;" style="background: linear-gradient(105deg, #D81B60 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">
+  <div class="tvl-strip-glow"></div>
+  <div class="tvl-strip-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+    </svg>
   </div>
-  <div class="tvl-strip-body" style="flex: 1; margin-right: 12px;">
+  <div class="tvl-strip-body">
+    <div class="tvl-strip-title">ابدأ رحلتك مع شيزن</div>
+    <div class="tvl-strip-sub">طيران · فنادق · باصات · حج وعمرة</div>
   </div>
+  <div class="tvl-strip-cta">
     <span>ابدأ</span>
-    <svg viewBox="0 0 24 24" fill="none" stroke="#D81B60" stroke-width="3" style="width:12px;height:12px;"><polyline points="15 18 9 12 15 6"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
   </div>
 </div>
+
+<!-- ═══ CHIZEN COMMERCE BAR ═══ -->
+<div class="chz-commerce-bar" onclick="APP.goTab('commerce')">
+  <div class="chz-cb-icon-wrap" style="background: linear-gradient(135deg, #D4AF37 0%, #6A1B9A 100%) !important;" style="background: linear-gradient(105deg, #6A1B9A 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">
+    <div class="chz-cb-icon" style="background: linear-gradient(135deg, #D4AF37 0%, #6A1B9A 100%) !important;" style="background: linear-gradient(105deg, #6A1B9A 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">🛍️</div>
+    <div class="chz-cb-badge" style="background: linear-gradient(135deg, #D4AF37 0%, #6A1B9A 100%) !important;" style="background: linear-gradient(105deg, #6A1B9A 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">جديد</div>
+  </div>
+  <div class="chz-cb-body" style="background: linear-gradient(135deg, #D4AF37 0%, #6A1B9A 100%) !important;" style="background: linear-gradient(105deg, #6A1B9A 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">
+    <div class="chz-cb-title" style="background: linear-gradient(135deg, #D4AF37 0%, #6A1B9A 100%) !important;" style="background: linear-gradient(105deg, #6A1B9A 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">سوق شيزن للبيع والشراء</div>
+    <div class="chz-cb-sub" style="background: linear-gradient(135deg, #D4AF37 0%, #6A1B9A 100%) !important;" style="background: linear-gradient(105deg, #6A1B9A 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">اعرض ما لا تحتاجه • اشتري ما تحتاجه</div>
+  </div>
+  <div class="chz-cb-cta" style="background: linear-gradient(135deg, #D4AF37 0%, #6A1B9A 100%) !important;" style="background: linear-gradient(105deg, #6A1B9A 0%, #C5A059 150%) !important; border: 1px solid rgba(197,160,89,0.5) !important; box-shadow: 0 4px 15px rgba(197,160,89,0.2) !important;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </div>
+</div>
+
+<div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
+
+<div class="sec" id="brands-sec">
+  <div class="brands" id="brands-list"></div>
+</div>
+
+<div class="sec" id="flash-sec">
+  <div class="sh">
+    <div class="stl">⚡ عروض خاطفة</div>
+    <a class="flash-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a>
+  </div>
+  <div id="flash-c" class="flash-row"></div>
+</div>
+
+<div class="sec">
+  <div class="sh" style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px;">
+    <div class="stl" style="font-weight:900; font-size:20px; color:#1f2937;" data-i18n="home.best_sellers" data-i18n-ar="🛍️ السوق">🛍️ السوق</div>
+    <a onclick="APP.filterCat('all')" style="color:#D81B60; font-size:13px; font-weight:bold; cursor:pointer;" data-i18n="home.view_all" data-i18n-ar="عرض الكل">عرض الكل</a>
+  </div>
+  <div id="prods" class="prods" style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; padding:0 15px;"></div>
+</div>
+
+
+
+      
+    </div>
 
     
     <!-- CATEGORY FULL SCREEN -->
