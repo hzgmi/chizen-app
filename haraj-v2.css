@@ -1865,3 +1865,41 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { backgr
   content: none !important;
   display: none !important;
 }
+
+/* ═══ v329: التصميم النهائي للبطاقة (إعادة البناء) ═══ */
+#sc-commerce #cm-listings .prod-i,
+#sc-commerce-mine .cm-mine-img {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+#sc-commerce #cm-listings .prod-i > img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+#sc-commerce #cm-listings .prod-i > .prod-i-fallback {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 42px !important;
+  opacity: 0.4 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  font-style: normal !important;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+}
+/* منع أي عناصر زائفة */
+#sc-commerce #cm-listings .prod-i > .prod-i-fallback::before,
+#sc-commerce #cm-listings .prod-i > .prod-i-fallback::after {
+  content: none !important;
+  display: none !important;
+}
