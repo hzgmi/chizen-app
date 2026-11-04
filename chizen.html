@@ -11423,32 +11423,6 @@ var APP={
     setTimeout(function(){APP.renderProducts(list);},100);
   },
 
-  renderBanners: function() {
-    var s = document.getElementById('slides');
-    var d = document.getElementById('dots');
-    if (!s) return;
-    var DEFAULT_BANNERS = [
-      { img: 'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg' },
-      { img: 'https://i.ibb.co/r2dStkrG/r2dStkrG.jpg' },
-      { img: 'https://i.ibb.co/KxtbBN9n/KxtbBN9n.jpg' },
-      { img: 'https://i.ibb.co/CsYJVFds/CsYJVFds.jpg' },
-      { img: 'https://i.ibb.co/ycX9LV2V/ycX9LV2V.jpg' }
-    ];
-    var fsBanners = (this.banners || []).filter(function(b){ return b && b.img && b.img.indexOf('http') === 0; });
-    var list = fsBanners.length ? fsBanners : DEFAULT_BANNERS;
-    s.style.transform = 'translateX(0%)';
-    if (!list.length) { s.innerHTML = ''; if (d) d.innerHTML = ''; return; }
-    s.innerHTML = list.map(function(b) {
-      var img = b.img
-        ? '<img src="' + esc(b.img) + '" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" alt="banner">'
-        : '<div style="width:100%;height:100%;background:linear-gradient(135deg,#6A1B9A,#D81B60);"></div>';
-      return '<div class="slide" style="min-width:100%;flex:0 0 100%;position:relative;overflow:hidden;padding:0;">' + img + '</div>';
-    }).join('');
-    if (d) d.innerHTML = list.map(function(_, i) {
-      return '<div class="dot' + (i === 0 ? ' active' : '') + '" onclick="APP.goSlide(' + i + ')"></div>';
-    }).join('');
-    if (this.startSlideAutoplay) this.startSlideAutoplay();
-  },
   
   goSlide:function(i){
     var s=document.getElementById('slides');if(!s)return;
