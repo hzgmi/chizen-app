@@ -1906,10 +1906,10 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { backgr
 
 /* ═══ v330: منع تغطية أزرار السلة بشريط التنقل السفلي ═══ */
 #sc-cart {
-  padding-bottom: 120px !important;
+  padding-bottom: 80px !important;
 }
 #sc-cart .tb {
-  margin-bottom: 100px !important;
+  margin-bottom: 40px !important;
 }
 #sc-cart .btn-p {
   margin-bottom: 20px !important;
@@ -1919,4 +1919,33 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { backgr
 #sc-orders,
 #sc-fav {
   padding-bottom: 120px !important;
+}
+
+/* ═══ v331: مساحة سفلية لصفحة تفاصيل المنتج (أضف للسلة / اشتري الآن) ═══ */
+#sc-detail {
+  padding-bottom: 100px !important;
+}
+#sc-detail .prod-actions,
+#sc-detail .detail-actions,
+#sc-detail .buy-buttons {
+  margin-bottom: 20px !important;
+}
+
+/* ═══ v332: مساحة سفلية آمنة لكل الشاشات (تمنع تغطية الأزرار) ═══ */
+.screen {
+  padding-bottom: 100px !important;
+  box-sizing: border-box !important;
+}
+/* استثناءات: شاشات لا تحتاج مساحة (مثل النوافذ المنبثقة) */
+.screen.no-pad-bottom,
+.cm-modal,
+#cm-modal {
+  padding-bottom: 0 !important;
+}
+/* تحسين المساحة في السلة (تقليل من 80 إلى 80 مع ضمان عدم التغطية) */
+#sc-cart {
+  padding-bottom: 80px !important;
+}
+#sc-cart .tb {
+  margin-bottom: 20px !important;
 }
