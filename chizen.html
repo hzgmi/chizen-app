@@ -16577,8 +16577,7 @@ document.addEventListener('keydown', function(e) {
     
     FB.db.collection('bookings')
       .where('userId', '==', FB.currentUser.uid)
-      .orderBy('createdAt', 'desc')
-      .limit(20)
+      .limit(50)
       .get()
       .then(function(snap) {
         if (snap.empty) {
@@ -16596,6 +16595,12 @@ document.addEventListener('keydown', function(e) {
           var d = doc.data();
           d.id = doc.id;
           bookings.push(d);
+        });
+        // ترتيب محلي: الأحدث أولاً (بدلاً من orderBy غير المتاح)
+        bookings.sort(function(a, b) {
+          var ta = a.createdAt ? (a.createdAt.seconds || (a.createdAt.toMillis ? a.createdAt.toMillis()/1000 : 0)) : 0;
+          var tb = b.createdAt ? (b.createdAt.seconds || (b.createdAt.toMillis ? b.createdAt.toMillis()/1000 : 0)) : 0;
+          return tb - ta;
         });
         
         container.innerHTML = bookings.map(function(b) {
