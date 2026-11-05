@@ -11585,7 +11585,7 @@ var APP={
     var total=Math.max(0,sub-disc+shipF);
     var cp='';
     if(this.appliedCoupon)cp='<div class="tr" style="color:var(--gn);"><span>خصم ('+esc(this.appliedCoupon.code)+')</span><span>-' +disc+' ر.س <span style="cursor:pointer;color:var(--rd);" onclick="APP.rmCoupon()">✕</span></span></div>';
-    else cp='<div class="f" style="display:flex;gap:8px;margin-bottom:10px;"><input type="text" id="coupon-in" class="fi" placeholder="كود الخصم..." style="flex:1;"><button class="btn-p" style="width:auto;padding:0 20px;" onclick="APP.applyCoupon()"><span data-i18n="points.apply" data-i18n-ar="تطبيق">تطبيق</span></button></div>';
+    else cp='<div class="f" style="display:flex;gap:6px;margin-bottom:10px;align-items:stretch;"><input type="text" id="coupon-in" class="fi" placeholder="كود الخصم..." style="flex:1;min-width:0;"><button class="btn-p" style="width:auto;padding:0 14px;font-size:12px;white-space:nowrap;" onclick="APP.applyCoupon()">تطبيق</button><button class="btn-p" style="width:auto;padding:0 10px;font-size:11px;background:linear-gradient(135deg,#F2C94C,#D4A017);color:#1a1a2e;white-space:nowrap;" onclick="APP.redeemPoints()">🎁 نقاطي</button></div><div id="coupon-msg" style="display:none;font-size:11px;color:#ef4444;margin:-6px 4px 8px;font-weight:700;"></div>';
     var html=this.cart.map(function(i){var p=APP.getProduct(i.id);if(!p)return'';
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCart(\''+esc(p.id)+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div><div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',-1)">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',1)">+</button></div></div></div>';
     }).join('');
@@ -11593,11 +11593,77 @@ var APP={
     c.innerHTML=html;
   },
   
+  redeemPoints: function(){
+    if (!window.FB || !FB.currentUser || !FB.db) {
+      this.showCouponMsg('سجل الدخول أولاً', '#ef4444');
+      return;
+    }
+    var pts = parseInt(this.state.loyaltyPoints || 0, 10);
+    if (pts < 100) {
+      this.showCouponMsg('تحتاج 100 نقطة (لديك ' + pts + ')', '#ef4444');
+      return;
+    }
+    var value = Math.floor(pts / 100);
+    if (value < 1) { this.showCouponMsg('النقاط غير كافية', '#ef4444'); return; }
+
+    var code = 'PTS-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
+    // 1) ضع الكود فوراً (بدون انتظار)
+    var inp = document.getElementById('coupon-in');
+    if (inp) inp.value = code;
+    this.showCouponMsg('✅ كود جاهز (' + value + ' ر.س) — اضغط تطبيق', '#10b981');
+
+    // 2) احفظ في الخلفية
+    var self = this;
+    var newPts = pts - (value * 100);
+    self.state.loyaltyPoints = newPts;
+    try {
+      FB.db.collection('coupons').doc(code).set({
+        code: code, type: 'fixed', value: value, used: false,
+        ownerUid: FB.currentUser.uid, createdAt: new Date(), source: 'loyalty_points'
+      }).catch(function(e){ console.warn('save coupon bg', e); });
+      if (FB.updateUserPoints) FB.updateUserPoints(newPts).catch(function(){});
+    } catch(e) { console.warn(e); }
+  },
+
+
+  showCouponMsg: function(msg, color){
+    var el = document.getElementById('coupon-msg');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.color = color || '#ef4444';
+    el.style.display = 'block';
+    setTimeout(function(){ el.style.display = 'none'; }, 5000);
+  },
+
   applyCoupon:async function(){
     var code=(document.getElementById('coupon-in').value||'').trim().toUpperCase();
     if(!code)return;
     var self=this;
     var cp=null;
+
+    // 0) الكود المولد من النقاط — أولوية قصوى
+    if(window.FB && FB.db){
+      try {
+        var gDoc = await FB.db.collection('coupons').doc(code).get();
+        if(gDoc.exists){
+          var gData = gDoc.data();
+          if(gData.used === true){
+            self.showCouponMsg('هذا الكود مستخدم أو فارغ', '#ef4444');
+            return;
+          }
+          if(gData.ownerUid && FB.currentUser && gData.ownerUid !== FB.currentUser.uid){
+            self.showCouponMsg('هذا الكود ليس لك', '#ef4444');
+            return;
+          }
+          // علّم الكود كمستخدم
+          await FB.db.collection('coupons').doc(code).update({ used: true, usedAt: firebase.firestore.FieldValue.serverTimestamp(), usedBy: FB.currentUser ? FB.currentUser.uid : '' });
+          cp = { code: gData.code, type: gData.type || 'fixed', value: Number(gData.value) || 0, active: true };
+        }
+      } catch(e) {
+        console.warn('[applyCoupon] loyalty check', e);
+      }
+    }
+
     // 1) from loaded coupons
     if(this.coupons){this.coupons.forEach(function(c){if((c.code||'').toUpperCase()===code&&c.active!==false)cp=c;});}
     // 2) from Firestore config/coupons
