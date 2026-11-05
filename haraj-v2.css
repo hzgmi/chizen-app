@@ -2049,3 +2049,50 @@ html:not([data-theme="light"]) #sc-cart .cempty svg {
   align-items: center !important;
   justify-content: center !important;
 }
+
+/* ═══ v339: تحويل بطاقة "سجّل للحصول على" إلى ذهبية فاخرة ═══ */
+.v321-guest-banner {
+  background: linear-gradient(135deg, #F2C94C 0%, #D4A017 60%, #B8860B 100%) !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  margin: 12px 16px 16px !important;
+  box-shadow: 0 6px 24px rgba(212, 160, 23, 0.45) !important;
+  color: #1a1a2e !important;
+}
+.v321-guest-banner-title {
+  color: #1a1a2e !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  margin-bottom: 12px !important;
+  text-align: right !important;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.4) !important;
+}
+.v321-guest-banner-list {
+  color: #1a1a2e !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 2 !important;
+  text-align: right !important;
+  margin-bottom: 16px !important;
+}
+.v321-guest-banner-list > div {
+  color: #1a1a2e !important;
+}
+.v321-login-btn {
+  background: #1a1a2e !important;
+  color: #F2C94C !important;
+  border: none !important;
+  border-radius: 14px !important;
+  padding: 12px 20px !important;
+  font-family: 'Tajawal', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  width: 100% !important;
+  cursor: pointer !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2) !important;
+  transition: transform .15s ease !important;
+}
+.v321-login-btn:active {
+  transform: scale(0.96) !important;
+}
