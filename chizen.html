@@ -16458,25 +16458,16 @@ document.addEventListener('keydown', function(e) {
     if (quoteStatus === 'pending_quote') {
       statusBadge = '<span style="background:rgba(245,158,11,0.15);color:#f59e0b;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">🕐 بانتظار السعر</span>';
     } else if (quoteStatus === 'quoted') {
-      statusBadge = '<span style="background:rgba(59,130,246,0.15);color:#3b82f6;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;animation:pulse 1.5s infinite;">💰 عرض جديد</span>';
-      actions = 
-        '<div style="margin-top:12px;padding:14px;background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(168,85,247,0.08));border:1.5px solid rgba(59,130,246,0.4);border-radius:12px;">' +
-          '<div style="font-size:11px;color:var(--mt);margin-bottom:4px;">💰 عرض السعر النهائي</div>' +
-          '<div style="font-size:22px;font-weight:900;color:#3b82f6;margin-bottom:6px;">' + window.formatPrice(quote.amount || 0) + '</div>' +
-          (quote.note ? '<div style="font-size:12px;color:var(--cr);margin-bottom:10px;">📝 ' + quote.note + '</div>' : '') +
-          (quote.expiresAt ? '<div style="font-size:10px;color:var(--mt);margin-bottom:10px;">⏱️ ينتهي في: ' + new Date(quote.expiresAt.toMillis ? quote.expiresAt.toMillis() : quote.expiresAt).toLocaleString('ar') + '</div>' : '') +
-          '<div style="display:flex;gap:8px;">' +
-            '<button onclick="window.__acceptQuote(\'' + b.id + '\')" style="flex:1;padding:12px;background:linear-gradient(135deg,#10b981,#059669);border:none;color:#fff;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">✅ قبول السعر</button>' +
-            '<button onclick="window.__rejectQuote(\'' + b.id + '\')" style="padding:12px 18px;background:rgba(239,68,68,0.15);border:1.5px solid #ef4444;color:#ef4444;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">❌</button>' +
-          '</div>' +
-        '</div>';
+      statusBadge = '<span style="background:rgba(59,130,246,0.15);color:#3b82f6;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;animation:pulse 1.5s infinite;">💰 بانتظار تأكيدك</span>';
+      actions = '<div style="margin-top:10px;text-align:center;font-size:11px;color:#3b82f6;font-weight:800;">اضغط لعرض السعر وتأكيده ←</div>';
     } else if (quoteStatus === 'accepted') {
       statusBadge = '<span style="background:rgba(16,185,129,0.15);color:#10b981;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">✅ مؤكد</span>';
     } else if (quoteStatus === 'rejected') {
       statusBadge = '<span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">❌ مرفوض</span>';
     }
     
-    return '<div style="background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px;">' +
+    var cardClick = (quoteStatus === 'quoted') ? 'onclick="window.__openQuoteModal(\'' + b.id + '\')" style="cursor:pointer;"' : '';
+    return '<div ' + cardClick + ' style="background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px;">' +
       '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">' +
         '<div style="display:flex;align-items:center;gap:10px;">' +
           '<div style="width:44px;height:44px;border-radius:12px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;">' + typeInfo.icon + '</div>' +
@@ -16494,6 +16485,61 @@ document.addEventListener('keydown', function(e) {
   }
 
   // ═══ 6) قبول/رفض العرض ═══
+  window.__openQuoteModal = function(bookingId) {
+    var b = null;
+    if (window.APP && APP.cmMine) {
+      b = APP.cmMine.find(function(x){ return x.id === bookingId; });
+    }
+    if (!b) {
+      // ابحث في قائمة الحجوزات
+      if (window.APP && APP.bookings) {
+        b = APP.bookings.find(function(x){ return x.id === bookingId; });
+      }
+    }
+    if (!b) {
+      var snap = document.querySelector('[data-booking-id="' + bookingId + '"]');
+      if (!snap) { toast && toast('حجز غير موجود', 'err'); return; }
+    }
+    var quote = (b && b.priceQuote) || {};
+    var amount = quote.amount || 0;
+    var note = quote.note || '';
+    var html =
+      '<div id="chz-quote-modal" style="position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove();">' +
+        '<div style="background:var(--cd,#fff);border-radius:20px;padding:24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);direction:rtl;border:2px solid rgba(59,130,246,0.4);">' +
+          '<div style="font-size:22px;font-weight:900;color:#3b82f6;margin-bottom:8px;text-align:center;">💰 عرض السعر</div>' +
+          '<div style="font-size:32px;font-weight:900;color:#1a1a2e;text-align:center;margin-bottom:8px;">' + (window.formatPrice ? window.formatPrice(amount) : amount + ' ر.س') + '</div>' +
+          (note ? '<div style="font-size:13px;color:#4b5563;text-align:center;margin-bottom:16px;">📝 ' + note + '</div>' : '') +
+          '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
+            '<button onclick="window.__acceptQuoteFromModal(\'' + bookingId + '\')" style="flex:1;padding:14px;background:linear-gradient(135deg,#10b981,#059669);border:none;color:#fff;border-radius:12px;font-weight:900;font-size:14px;cursor:pointer;">✅ قبول السعر</button>' +
+            '<button onclick="window.__rejectQuoteFromModal(\'' + bookingId + '\')" style="flex:1;padding:14px;background:rgba(239,68,68,0.15);border:1.5px solid #ef4444;color:#ef4444;border-radius:12px;font-weight:900;font-size:14px;cursor:pointer;">❌ رفض</button>' +
+          '</div>' +
+          '<button onclick="window.__bookingSupport(\'' + bookingId + '\')" style="width:100%;padding:12px;background:rgba(37,211,102,0.15);border:1.5px solid #25D366;color:#25D366;border-radius:12px;font-weight:900;font-size:13px;cursor:pointer;margin-bottom:8px;">💬 دعم الحجز واتساب</button>' +
+          '<button onclick="document.getElementById(\'chz-quote-modal\').remove()" style="width:100%;padding:10px;background:transparent;border:none;color:#9ca3af;font-size:12px;cursor:pointer;">إغلاق</button>' +
+        '</div>' +
+      '</div>';
+    var old = document.getElementById('chz-quote-modal');
+    if (old) old.remove();
+    document.body.insertAdjacentHTML('beforeend', html);
+  };
+
+  window.__acceptQuoteFromModal = async function(bookingId) {
+    var m = document.getElementById('chz-quote-modal');
+    if (m) m.remove();
+    await window.__acceptQuote(bookingId);
+  };
+
+  window.__rejectQuoteFromModal = async function(bookingId) {
+    var m = document.getElementById('chz-quote-modal');
+    if (m) m.remove();
+    if (window.__rejectQuote) await window.__rejectQuote(bookingId);
+  };
+
+  window.__bookingSupport = function(bookingId) {
+    var phone = '967772311040';
+    var text = encodeURIComponent('مرحباً، أستفسر عن حجزي رقم: ' + bookingId.substring(0, 8) + ' في CHIZEN');
+    window.open('https://wa.me/' + phone + '?text=' + text, '_blank');
+  };
+
   window.__acceptQuote = async function(bookingId) {
     if (!confirm('هل تقبل السعر المعروض؟')) return;
     try {
