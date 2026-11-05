@@ -16457,7 +16457,7 @@ document.addEventListener('keydown', function(e) {
     
     if (quoteStatus === 'pending_quote') {
       statusBadge = '<span style="background:rgba(245,158,11,0.15);color:#f59e0b;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">🕐 بانتظار السعر</span>';
-    } else if (quoteStatus === 'quoted') {
+    } else if (quoteStatus === 'quoted' || quoteStatus === 'price_quoted' || b.status === 'price_quoted') {
       statusBadge = '<span style="background:rgba(59,130,246,0.15);color:#3b82f6;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;animation:pulse 1.5s infinite;">💰 بانتظار تأكيدك</span>';
       actions = '<div style="margin-top:10px;text-align:center;font-size:11px;color:#3b82f6;font-weight:800;">اضغط لعرض السعر وتأكيده ←</div>';
     } else if (quoteStatus === 'accepted') {
