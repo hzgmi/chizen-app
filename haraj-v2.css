@@ -1955,3 +1955,57 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { backgr
 #sc-cart .btn-p[onclick*="goCheckout"] {
   margin-bottom: 90px !important;
 }
+
+/* ═══ v335: خلفية نظيفة لحاوية السلة الفارغة (وضع فاتح وداكن) ═══ */
+#sc-cart .cempty {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  border-radius: 18px !important;
+  margin: 16px !important;
+  padding: 40px 20px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05) !important;
+}
+html:not([data-theme="light"]) #sc-cart .cempty {
+  background: #1e2438 !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+}
+#sc-cart .cempty svg {
+  width: 70px !important;
+  height: 70px !important;
+  stroke: #9ca3af !important;
+  margin-bottom: 12px !important;
+}
+html:not([data-theme="light"]) #sc-cart .cempty svg {
+  stroke: #6b7280 !important;
+}
+#sc-cart .cempty p {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  margin: 8px 0 16px !important;
+}
+
+/* ═══ v336: شريط عنوان السلة — تصميم فاخر ═══ */
+#sc-cart .sh2,
+#sc-cart .sh1 {
+  background: linear-gradient(135deg, #7B2FBE 0%, #D4A017 100%) !important;
+  border-radius: 16px !important;
+  margin: 12px 16px !important;
+  padding: 16px 20px !important;
+  box-shadow: 0 4px 16px rgba(123, 47, 190, 0.3) !important;
+  border: none !important;
+}
+#sc-cart .sh2 .st2,
+#sc-cart .sh1 .st1 {
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+}
+#sc-cart .sh2 svg,
+#sc-cart .sh1 svg {
+  stroke: #ffffff !important;
+  width: 24px !important;
+  height: 24px !important;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)) !important;
+}
