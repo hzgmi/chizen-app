@@ -1949,3 +1949,11 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { backgr
 #sc-cart .tb {
   margin-bottom: 20px !important;
 }
+
+/* ═══ v333: ضمان ظهور زر إتمام الشراء كاملاً فوق شريط التنقل ═══ */
+#sc-cart .btn-p:last-of-type,
+#sc-cart button.btn-p {
+  margin-bottom: 90px !important;
+  display: block !important;
+  width: 100% !important;
+}
