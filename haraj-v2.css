@@ -1950,10 +1950,8 @@ html:not([data-theme="light"]) .cm-confirm-modal .cm-confirm-btn-cancel { backgr
   margin-bottom: 20px !important;
 }
 
-/* ═══ v333: ضمان ظهور زر إتمام الشراء كاملاً فوق شريط التنقل ═══ */
-#sc-cart .btn-p:last-of-type,
-#sc-cart button.btn-p {
+
+/* ═══ v334: مساحة لزر إتمام الشراء فقط (لا يؤثر على كود الخصم) ═══ */
+#sc-cart .btn-p[onclick*="goCheckout"] {
   margin-bottom: 90px !important;
-  display: block !important;
-  width: 100% !important;
 }
