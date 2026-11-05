@@ -11324,7 +11324,7 @@ var APP={
     var total=Math.max(0,sub-disc+shipF);
     var cp='';
     if(this.appliedCoupon)cp='<div class="tr" style="color:var(--gn);"><span>خصم ('+esc(this.appliedCoupon.code)+')</span><span>-' +disc+' ر.س <span style="cursor:pointer;color:var(--rd);" onclick="APP.rmCoupon()">✕</span></span></div>';
-    else cp='<div class="f" style="display:flex;gap:6px;margin-bottom:10px;align-items:stretch;"><input type="text" id="coupon-in" class="fi" placeholder="كود الخصم..." style="flex:1;min-width:0;font-size:11px;padding:8px 6px;"><button class="btn-p" style="flex:1;min-width:0;padding:0 6px;font-size:11px;height:38px;display:flex;align-items:center;justify-content:center;" onclick="APP.applyCoupon()">تطبيق</button><button class="btn-p" style="flex:1;min-width:0;padding:0 6px;font-size:11px;height:38px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#F2C94C,#D4A017);color:#1a1a2e;" onclick="APP.redeemPoints()">🎁 نقاطي</button></div><div id="coupon-msg" style="display:none;font-size:11px;color:#ef4444;margin:-6px 4px 8px;font-weight:700;"></div>';
+    else cp='<div class="f" style="display:flex;gap:6px;margin-bottom:10px;align-items:stretch;"><div style="flex:1;min-width:0;position:relative;display:flex;align-items:center;background:rgba(0,0,0,0.03);border-radius:10px;border:1px solid rgba(0,0,0,0.08);"><input type="text" id="coupon-in" class="fi" placeholder="كود الخصم..." style="flex:1;min-width:0;font-size:11px;padding:8px 6px;background:transparent;border:none;outline:none;"><button type="button" onclick="APP.copyCouponCode()" style="background:transparent;border:none;padding:0 8px;font-size:14px;cursor:pointer;color:#7B2FBE;" title="نسخ">📋</button></div><button class="btn-p" style="flex:1;min-width:0;padding:0 6px;font-size:11px;height:38px;display:flex;align-items:center;justify-content:center;" onclick="APP.applyCoupon()">تطبيق</button><button class="btn-p" style="flex:1;min-width:0;padding:0 6px;font-size:11px;height:38px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#F2C94C,#D4A017);color:#1a1a2e;" onclick="APP.redeemPoints()">🎁 نقاطي</button></div><div id="coupon-msg" style="display:none;font-size:11px;color:#ef4444;margin:-6px 4px 8px;font-weight:700;"></div>';
     var html=this.cart.map(function(i){var p=APP.getProduct(i.id);if(!p)return'';
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCart(\''+esc(p.id)+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div><div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',-1)">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',1)">+</button></div></div></div>';
     }).join('');
@@ -11364,6 +11364,37 @@ var APP={
     } catch(e) { console.warn(e); }
   },
 
+
+  copyCouponCode: function(){
+    var inp = document.getElementById('coupon-in');
+    if (!inp || !inp.value.trim()) {
+      this.showCouponMsg('لا يوجد كود لنسخه', '#ef4444');
+      return;
+    }
+    var code = inp.value.trim();
+    var self = this;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(function(){
+        self.showCouponMsg('📋 تم نسخ الكود: ' + code, '#10b981');
+      }).catch(function(){
+        self._fallbackCopy(code);
+      });
+    } else {
+      self._fallbackCopy(code);
+    }
+  },
+
+  _fallbackCopy: function(code){
+    var tmp = document.createElement('textarea');
+    tmp.value = code;
+    tmp.style.position = 'fixed';
+    tmp.style.opacity = '0';
+    document.body.appendChild(tmp);
+    tmp.select();
+    try { document.execCommand('copy'); this.showCouponMsg('📋 تم نسخ الكود', '#10b981'); }
+    catch(e) { this.showCouponMsg('تعذر النسخ', '#ef4444'); }
+    document.body.removeChild(tmp);
+  },
 
   showCouponMsg: function(msg, color){
     var el = document.getElementById('coupon-msg');
