@@ -2118,3 +2118,13 @@ html:not([data-theme="light"]) #sc-cart .cempty svg {
 .v321-login-btn:active {
   transform: scale(0.96) !important;
 }
+
+/* ═══ v341: مساحة سفلية للصفحة الرئيسية (بعد حذف الإشعار) ═══ */
+#sc-home {
+  padding-bottom: 60px !important;
+}
+
+/* ═══ v341: مساحة سفلية للصفحة الرئيسية (بعد حذف الإشعار) ═══ */
+#sc-home {
+  padding-bottom: 60px !important;
+}
