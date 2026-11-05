@@ -17183,8 +17183,7 @@ document.addEventListener('keydown', function(e) {
       }
       FB.db.collection('bookings')
         .where('userId', '==', FB.currentUser.uid)
-        .orderBy('createdAt', 'desc')
-        .limit(5)
+        .limit(20)
         .get()
         .then(function(snap) {
           if (snap.empty) {
