@@ -1,0 +1,363 @@
+/* ═══════════════════════════════════════════════════════════════
+   CHIZEN — My Bookings v1.0 (Clean Rebuild)
+   قسم "حجوزاتي" — 7 مراحل — هوية ذهبية
+   التاريخ: 2026-11-07
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ═══ §1. الحاوية ═══ */
+#tvl-my-bookings {
+  padding: 8px 12px 24px;
+  direction: rtl;
+}
+.mb-loading, .mb-error, .mb-guest {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 13px;
+  color: var(--mt, #9ca3af);
+}
+.mb-error { color: #ef4444; }
+
+.mb-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+.mb-empty-icon { font-size: 52px; margin-bottom: 12px; }
+.mb-empty-title {
+  font-weight: 800;
+  color: var(--cr, #1a1a2e);
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+.mb-empty-sub { font-size: 12px; color: var(--mt, #9ca3af); }
+
+/* ═══ §2. البطاقة ═══ */
+.mb-card {
+  background: var(--cd, #fff);
+  border: 1.5px solid rgba(197, 160, 89, 0.25);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+html:not([data-theme="light"]) .mb-card {
+  background: #131E42;
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+.mb-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.mb-card-type {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--cr, #1a1a2e);
+}
+html:not([data-theme="light"]) .mb-card-type { color: #F2E3C6; }
+.mb-card-status {
+  font-size: 10px;
+  font-weight: 700;
+  color: #C5A059;
+  background: rgba(197, 160, 89, 0.12);
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+/* ═══ §3. الشريط الزمني (7 مراحل) ═══ */
+.mb-timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 14px 0 12px;
+  padding: 8px 0;
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mb-timeline::-webkit-scrollbar { display: none; }
+
+.mb-tl-step {
+  flex: 0 0 auto;
+  min-width: 52px;
+  text-align: center;
+  position: relative;
+  padding: 0 2px;
+}
+.mb-tl-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  right: -6px;
+  width: 12px;
+  height: 2px;
+  background: rgba(107, 114, 128, 0.3);
+}
+.mb-tl-step.done:not(:last-child)::after { background: #10b981; }
+
+.mb-tl-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  margin: 0 auto 4px;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(107, 114, 128, 0.3);
+  transition: all 0.2s;
+}
+html:not([data-theme="light"]) .mb-tl-dot {
+  background: #2a3454;
+  border-color: #131E42;
+}
+.mb-tl-step.done .mb-tl-dot {
+  background: #10b981;
+  box-shadow: 0 0 0 1px #10b981, 0 0 8px rgba(16, 185, 129, 0.3);
+}
+.mb-tl-step.current .mb-tl-dot {
+  background: #C5A059;
+  box-shadow: 0 0 0 2px #C5A059, 0 0 12px rgba(197, 160, 89, 0.5);
+  animation: mb-pulse 1.8s ease-in-out infinite;
+}
+@keyframes mb-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.15); }
+}
+
+.mb-tl-label {
+  font-size: 9px;
+  color: #9ca3af;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.mb-tl-step.done .mb-tl-label { color: #10b981; }
+.mb-tl-step.current .mb-tl-label { color: #C5A059; font-weight: 900; }
+
+/* ═══ §4. بيانات الرحلة ═══ */
+.mb-trip {
+  font-size: 12px;
+  color: var(--mt, #6b7280);
+  line-height: 1.8;
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+}
+html:not([data-theme="light"]) .mb-trip {
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+}
+.mb-trip-row { margin: 2px 0; }
+
+/* ═══ §5. السعر ═══ */
+.mb-price {
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.12), rgba(154, 123, 79, 0.06));
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mb-price-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9A7B4F;
+}
+.mb-price-val {
+  font-size: 18px;
+  font-weight: 900;
+  color: #C5A059;
+}
+
+/* ═══ §6. الإجراءات ═══ */
+.mb-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mb-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.mb-btn:active { transform: scale(0.98); }
+.mb-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.mb-btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+}
+.mb-btn-proof {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+}
+.mb-btn-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+}
+.mb-btn-danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1.5px solid #ef4444;
+}
+.mb-btn-secondary {
+  background: rgba(197, 160, 89, 0.15);
+  color: #C5A059;
+  border: 1.5px solid rgba(197, 160, 89, 0.5);
+}
+
+.mb-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--mt, #6b7280);
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+}
+html:not([data-theme="light"]) .mb-note {
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+}
+
+/* ═══ §7. Modal السعر ═══ */
+.mb-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  direction: rtl;
+}
+.mb-modal-box {
+  background: var(--cd, #fff);
+  border-radius: 20px;
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(197, 160, 89, 0.4);
+}
+html:not([data-theme="light"]) .mb-modal-box {
+  background: #131E42;
+  color: #F2E3C6;
+}
+.mb-modal-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #C5A059;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.mb-modal-amount {
+  font-size: 34px;
+  font-weight: 900;
+  color: #1a1a2e;
+  text-align: center;
+  margin-bottom: 12px;
+}
+html:not([data-theme="light"]) .mb-modal-amount { color: #F2E3C6; }
+.mb-modal-note {
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 8px;
+}
+.mb-modal-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.mb-modal-row .mb-btn { flex: 1; }
+.mb-modal-close {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ═══ §8. استجابة ═══ */
+@media (max-width: 360px) {
+  .mb-tl-step { min-width: 44px; }
+  .mb-tl-label { font-size: 8px; }
+  .mb-tl-dot { width: 16px; height: 16px; }
+  .mb-price-val { font-size: 16px; }
+}
+@media (min-width: 768px) {
+  #tvl-my-bookings { padding: 16px 24px; }
+  .mb-card { padding: 18px; }
+  .mb-tl-step { min-width: 64px; }
+  .mb-tl-label { font-size: 10px; }
+}
+
+/* ═══ §9. Modal رفع السند (جديد) ═══ */
+.mb-proof-preview {
+  border: 2px dashed rgba(197, 160, 89, 0.4);
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  margin: 12px 0;
+  background: rgba(197, 160, 89, 0.04);
+  transition: all 0.2s;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mb-proof-preview:hover {
+  background: rgba(197, 160, 89, 0.1);
+  border-color: rgba(197, 160, 89, 0.7);
+}
+.mb-proof-icon { font-size: 40px; }
+.mb-proof-text {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 700;
+  margin-top: 8px;
+}
+.mb-proof-size {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* ═══ §10. زر واتساب (جديد) ═══ */
+.mb-btn-whatsapp {
+  background: rgba(37, 211, 102, 0.12);
+  color: #25D366;
+  border: 1.5px solid #25D366;
+}
+.mb-btn-whatsapp:active { background: rgba(37, 211, 102, 0.2); }
+
+/* ═══ §11. معاينة التذكرة (جديد) ═══ */
+.mb-ticket-preview {
+  margin: 12px 0;
+  text-align: center;
+}
+.mb-ticket-preview iframe,
+.mb-ticket-preview img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
