@@ -237,6 +237,7 @@
             '<div class="mb-proof-icon">📸</div>' +
             '<div class="mb-proof-text">اضغط لاختيار صورة السند</div>' +
           '</div>' +
+          '<div id="mb-proof-status" style="font-size:11px;color:#6b7280;margin:8px 0;text-align:center;min-height:16px"></div>' +
           '<input type="file" id="mb-proof-input" accept="image/*" style="display:none">' +
           '<div class="mb-modal-row">' +
             '<button class="mb-btn mb-btn-primary" id="mb-proof-send" disabled>✅ رفع السند</button>' +
@@ -263,21 +264,29 @@
       };
       sendBtn.onclick = async function () {
         if (!selectedFile) return;
+        var statusEl = document.getElementById('mb-proof-status');
+        function setStatus(s) { if (statusEl) statusEl.textContent = s; }
         sendBtn.disabled = true;
         sendBtn.textContent = '⏳ جاري الرفع...';
         try {
+          setStatus('1. جاري ضغط الصورة...');
           var compressed = await MyBookings.compress(selectedFile);
+          setStatus('2. الصورة جاهزة (' + Math.round(compressed.size/1024) + 'KB) — جاري الرفع...');
           var res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: compressed });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
+          setStatus('3. استجابة Worker: HTTP ' + res.status);
+          if (!res.ok) throw new Error('Worker أعاد HTTP ' + res.status);
           var data = await res.json();
-          if (!data.url) throw new Error('لا رابط عائد');
+          setStatus('4. الرابط: ' + (data.url ? data.url.substring(0, 50) + '...' : 'فارغ!'));
+          if (!data.url) throw new Error('لا رابط عائد من الرفع');
           await FB.db.collection('bookings').doc(id).update({
             paymentProof: data.url,
             paymentProofUploadedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
+          setStatus('5. ✅ تم الحفظ في Firestore!');
           if (window.toast) toast('✅ تم رفع السند — بانتظار تأكيد الإدارة', 'suc');
-          document.getElementById('mb-proof-modal').remove();
+          setTimeout(function() { document.getElementById('mb-proof-modal').remove(); }, 1500);
         } catch (err) {
+          setStatus('❌ خطأ: ' + err.message);
           if (window.toast) toast('❌ ' + err.message, 'err');
           sendBtn.disabled = false;
           sendBtn.textContent = '✅ رفع السند';
