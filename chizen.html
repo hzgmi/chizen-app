@@ -16462,6 +16462,13 @@ document.addEventListener('keydown', function(e) {
       actions = '<div style="margin-top:10px;text-align:center;font-size:11px;color:#3b82f6;font-weight:800;">اضغط لعرض السعر وتأكيده ←</div>';
     } else if (quoteStatus === 'accepted') {
       statusBadge = '<span style="background:rgba(16,185,129,0.15);color:#10b981;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">✅ مؤكد</span>';
+      if (b.ticketUrl) {
+        actions = '<div style="margin-top:10px;"><button onclick="event.stopPropagation();window.open(\'' + b.ticketUrl + '\',\'_blank\')" style="width:100%;padding:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">🎫 عرض التذكرة</button></div>';
+      } else if (b.paymentProof) {
+        actions = '<div style="margin-top:10px;background:rgba(16,185,129,0.08);padding:10px;border-radius:10px;text-align:center;font-size:11px;color:#10b981;font-weight:800;">📎 تم رفع سند الإيداع — بانتظار التذكرة</div>';
+      } else {
+        actions = '<div style="margin-top:10px;"><button onclick="event.stopPropagation();window.__uploadPaymentProof(\'' + b.id + '\')" style="width:100%;padding:12px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">📤 رفع سند الإيداع</button><div style="margin-top:6px;font-size:10px;color:#f59e0b;text-align:center;">سيتم إرسال التذكرة بعد التحويل مباشرة</div></div>';
+      }
     } else if (quoteStatus === 'rejected') {
       statusBadge = '<span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">❌ مرفوض</span>';
     }
@@ -16485,6 +16492,59 @@ document.addEventListener('keydown', function(e) {
   }
 
   // ═══ 6) قبول/رفض العرض ═══
+  window.__uploadPaymentProof = function(bookingId) {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async function(e){
+      var file = e.target.files[0];
+      if(!file) return;
+      try {
+        if(window.toast) toast('⏳ جاري رفع سند الإيداع...', 'suc');
+        // ضغط الصورة
+        var compressed = await new Promise(function(resolve, reject){
+          var img = new Image(), u = URL.createObjectURL(file);
+          img.onload = function(){
+            URL.revokeObjectURL(u);
+            var w = img.width, hh = img.height, md = 1400;
+            if(w > md || hh > md){
+              if(w > hh){ hh = Math.round(hh * md / w); w = md; }
+              else { w = Math.round(w * md / hh); hh = md; }
+            }
+            var c = document.createElement('canvas');
+            c.width = w; c.height = hh;
+            c.getContext('2d').drawImage(img, 0, 0, w, hh);
+            c.toBlob(function(b){ b ? resolve(b) : reject(new Error('compress')); }, 'image/jpeg', 0.85);
+          };
+          img.onerror = function(){ URL.revokeObjectURL(u); reject(new Error('load')); };
+          img.src = u;
+        });
+        // رفع إلى Worker
+        var res = await fetch("https://chizen-uploader.hazimchat.workers.dev", {
+          method: "POST",
+          headers: { "Content-Type": "image/jpeg" },
+          body: compressed
+        });
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        var data = await res.json();
+        if(!data.url) throw new Error('لا رابط عائد');
+        // حفظ في Firestore
+        await FB.db.collection('bookings').doc(bookingId).update({
+          paymentProof: data.url,
+          paymentProofUploadedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        if(window.toast) toast('✅ تم رفع سند الإيداع — بانتظار التذكرة', 'suc');
+        // إعادة تحميل
+        if(window.APP && APP.tvlLoadBookings) APP.tvlLoadBookings();
+        setTimeout(function(){ location.reload(); }, 1500);
+      } catch(err){
+        console.error('[uploadProof]', err);
+        if(window.toast) toast('❌ ' + err.message, 'err');
+      }
+    };
+    input.click();
+  };
+
   window.__openQuoteModal = function(bookingId) {
     var b = null;
     if (window.APP && APP.cmMine) {
