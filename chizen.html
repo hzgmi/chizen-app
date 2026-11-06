@@ -16466,7 +16466,7 @@ document.addEventListener('keydown', function(e) {
       statusBadge = '<span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">❌ مرفوض</span>';
     }
     
-    var cardClick = (quoteStatus === 'quoted') ? 'onclick="window.__openQuoteModal(\'' + b.id + '\')" style="cursor:pointer;"' : '';
+    var cardClick = (quoteStatus === 'quoted' || quoteStatus === 'price_quoted' || b.status === 'price_quoted') ? 'onclick="window.__openQuoteModal(\'' + b.id + '\')" style="cursor:pointer;"' : '';
     return '<div ' + cardClick + ' style="background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px;">' +
       '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">' +
         '<div style="display:flex;align-items:center;gap:10px;">' +
@@ -16659,10 +16659,34 @@ document.addEventListener('keydown', function(e) {
       'shab-airport': 14, 'airport-shab': 14
     };
 
+    // ═══ قراءة الأسعار من Firestore (ديناميكي) ═══
+    window.__prices = window.__prices || { flights: {}, buses: {}, hotels: {} };
+    (function loadPricesFromFirestore(){
+      if (!window.FB || !FB.db) { setTimeout(loadPricesFromFirestore, 1500); return; }
+      FB.db.collection('config').doc('prices').get().then(function(doc){
+        if (doc.exists) {
+          var d = doc.data();
+          if (d.flights) window.__prices.flights = d.flights;
+          if (d.buses) window.__prices.buses = d.buses;
+          if (d.hotels) window.__prices.hotels = d.hotels;
+          console.log('[prices] loaded from Firestore:', Object.keys(window.__prices.flights).length, 'flights');
+          // إعادة حساب أي نموذج مفتوح
+          if (window.APP && APP.tvlCalc) {
+            var activeForm = document.querySelector('.tvl-form.active');
+            if (activeForm) {
+              var type = activeForm.id.replace('form-', '');
+              try { APP.tvlCalc(type); } catch(e){}
+            }
+          }
+        }
+      }).catch(function(e){ console.warn('[prices]', e.message); });
+    })();
+
     function calcFlight(d) {
       if (!d.from || !d.to) return 0;
       var key = d.from + '-' + d.to;
-      var base = FLIGHTS[key] || 55000;
+      var prices = window.__prices && window.__prices.flights ? window.__prices.flights : {};
+      var base = prices[key] || FLIGHTS[key] || 55000;
       var cls = d.class || 'economy';
       var mult = cls === 'business' ? 2.6 : cls === 'first' ? 4 : cls === 'premium' ? 1.35 : 1;
       var pax = Math.max(1, parseInt(d.passengers) || 1);
@@ -16671,7 +16695,8 @@ document.addEventListener('keydown', function(e) {
     function calcBus(d) {
       if (!d.to) return 0;
       var key = 'عدن-' + d.to;
-      var base = BUSES[key] || 9500;
+      var prices = window.__prices && window.__prices.buses ? window.__prices.buses : {};
+      var base = prices[key] || BUSES[key] || 9500;
       var cls = d.class || 'economy';
       var mult = cls === 'vip' ? 1.8 : cls === 'comfort' ? 1.3 : 1;
       var pax = Math.max(1, parseInt(d.passengers) || 1);
