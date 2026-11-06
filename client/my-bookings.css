@@ -307,3 +307,57 @@ html:not([data-theme="light"]) .mb-modal-amount { color: #F2E3C6; }
   .mb-tl-step { min-width: 64px; }
   .mb-tl-label { font-size: 10px; }
 }
+
+/* ═══ §9. Modal رفع السند (جديد) ═══ */
+.mb-proof-preview {
+  border: 2px dashed rgba(197, 160, 89, 0.4);
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  margin: 12px 0;
+  background: rgba(197, 160, 89, 0.04);
+  transition: all 0.2s;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mb-proof-preview:hover {
+  background: rgba(197, 160, 89, 0.1);
+  border-color: rgba(197, 160, 89, 0.7);
+}
+.mb-proof-icon { font-size: 40px; }
+.mb-proof-text {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 700;
+  margin-top: 8px;
+}
+.mb-proof-size {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* ═══ §10. زر واتساب (جديد) ═══ */
+.mb-btn-whatsapp {
+  background: rgba(37, 211, 102, 0.12);
+  color: #25D366;
+  border: 1.5px solid #25D366;
+}
+.mb-btn-whatsapp:active { background: rgba(37, 211, 102, 0.2); }
+
+/* ═══ §11. معاينة التذكرة (جديد) ═══ */
+.mb-ticket-preview {
+  margin: 12px 0;
+  text-align: center;
+}
+.mb-ticket-preview iframe,
+.mb-ticket-preview img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}

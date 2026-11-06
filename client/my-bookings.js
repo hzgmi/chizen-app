@@ -143,34 +143,19 @@
              '</div>';
     },
 
-    /* ═══ §7. الإجراء حسب المرحلة (تحكم كامل من الأدمن) ═══ */
+    /* ═══ §7. الإجراء حسب المرحلة (تحكم كامل من الأدمن) + واتساب ═══ */
     htmlAction: function (b, stage) {
       var id = b.id;
-      if (stage === 1) {
-        return '<div class="mb-note">⏳ بانتظار عرض السعر من الإدارة</div>';
-      }
-      if (stage === 2) {
-        return '<button class="mb-btn mb-btn-primary" onclick="MyBookings.openQuote(\'' + id + '\')">💰 عرض السعر وتأكيده</button>';
-      }
-      if (stage === 3) {
-        return '<button class="mb-btn mb-btn-proof" onclick="MyBookings.uploadProof(\'' + id + '\')">📤 رفع سند الإيداع</button>' +
-               '<div class="mb-note">حوّل المبلغ ثم ارفع صورة السند</div>';
-      }
-      if (stage === 4) {
-        return '<div class="mb-note">📎 سندك مرفوع — بانتظار تأكيد الإدارة</div>' +
-               '<button class="mb-btn mb-btn-secondary" onclick="MyBookings.uploadProof(\'' + id + '\')">🔄 تغيير السند</button>';
-      }
-      if (stage === 5) {
-        return '<div class="mb-note">✅ تم تأكيد دفعك — بانتظار التذكرة من الإدارة</div>';
-      }
-      if (stage === 6 && b.ticketUrl) {
-        return '<button class="mb-btn mb-btn-success" onclick="window.open(\'' + this.esc(b.ticketUrl) + '\',\'_blank\')">🎫 عرض التذكرة</button>' +
-               '<div class="mb-note">🏁 سيُكمل الحجز قريباً</div>';
-      }
-      if (stage === 7) {
-        return '<div class="mb-note">🏁 تم إكمال الحجز — شكراً لثقتك</div>';
-      }
-      return '';
+      var main = '';
+      if (stage === 1) main = '<div class="mb-note">⏳ بانتظار عرض السعر من الإدارة</div>';
+      else if (stage === 2) main = '<button class="mb-btn mb-btn-primary" onclick="MyBookings.openQuote(\'' + id + '\')">💰 عرض السعر وتأكيده</button>';
+      else if (stage === 3) main = '<button class="mb-btn mb-btn-proof" onclick="MyBookings.uploadProof(\'' + id + '\')">📤 رفع سند الإيداع</button><div class="mb-note">حوّل المبلغ ثم ارفع صورة السند</div>';
+      else if (stage === 4) main = '<div class="mb-note">📎 سندك مرفوع — بانتظار تأكيد الإدارة</div><button class="mb-btn mb-btn-secondary" onclick="MyBookings.uploadProof(\'' + id + '\')">🔄 تغيير السند</button>';
+      else if (stage === 5) main = '<div class="mb-note">✅ تم تأكيد دفعك — بانتظار التذكرة من الإدارة</div>';
+      else if (stage === 6 && b.ticketUrl) main = '<button class="mb-btn mb-btn-success" onclick="MyBookings.viewTicket(\'' + id + '\')">🎫 عرض التذكرة</button><div class="mb-note">🏁 سيُكمل الحجز قريباً</div>';
+      else if (stage === 7) main = '<div class="mb-note">🏁 تم إكمال الحجز — شكراً لثقتك</div>';
+      var support = stage < 7 ? '<button class="mb-btn mb-btn-whatsapp" onclick="MyBookings.support(\'' + id + '\')">💬 دعم الحجز واتساب</button>' : '';
+      return main + support;
     },
 
     /* ═══ §8. Modal السعر ═══ */
@@ -243,35 +228,61 @@
       } catch (e) { alert('فشل: ' + e.message); }
     },
 
-    /* ═══ §11. رفع الإيصال ═══ */
+    /* ═══ §11. رفع الإيصال — modal مخصص مع معاينة ═══ */
     uploadProof: function (id) {
-      var input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.onchange = async function (e) {
+      var html = '<div class="mb-modal" id="mb-proof-modal" onclick="if(event.target===this)this.remove()">' +
+        '<div class="mb-modal-box">' +
+          '<div class="mb-modal-title">📤 رفع سند الإيداع</div>' +
+          '<div class="mb-proof-preview" id="mb-proof-preview">' +
+            '<div class="mb-proof-icon">📸</div>' +
+            '<div class="mb-proof-text">اضغط لاختيار صورة السند</div>' +
+          '</div>' +
+          '<input type="file" id="mb-proof-input" accept="image/*" style="display:none">' +
+          '<div class="mb-modal-row">' +
+            '<button class="mb-btn mb-btn-primary" id="mb-proof-send" disabled>✅ رفع السند</button>' +
+            '<button class="mb-btn mb-btn-secondary" onclick="document.getElementById(\'mb-proof-modal\').remove()">إلغاء</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+      var old = document.getElementById('mb-proof-modal');
+      if (old) old.remove();
+      document.body.insertAdjacentHTML('beforeend', html);
+      var preview = document.getElementById('mb-proof-preview');
+      var input = document.getElementById('mb-proof-input');
+      var sendBtn = document.getElementById('mb-proof-send');
+      var selectedFile = null;
+      preview.onclick = function () { input.click(); };
+      input.onchange = function (e) {
         var file = e.target.files[0];
         if (!file) return;
+        selectedFile = file;
+        var url = URL.createObjectURL(file);
+        preview.innerHTML = '<img src="' + url + '" style="max-width:100%;max-height:280px;border-radius:12px">' +
+          '<div class="mb-proof-size">' + (file.size / 1024).toFixed(0) + ' KB</div>';
+        sendBtn.disabled = false;
+      };
+      sendBtn.onclick = async function () {
+        if (!selectedFile) return;
+        sendBtn.disabled = true;
+        sendBtn.textContent = '⏳ جاري الرفع...';
         try {
-          if (window.toast) toast('⏳ جاري رفع السند...', 'suc');
-          var compressed = await MyBookings.compress(file);
-          var res = await fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'image/jpeg' },
-            body: compressed
-          });
+          var compressed = await MyBookings.compress(selectedFile);
+          var res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: compressed });
           if (!res.ok) throw new Error('HTTP ' + res.status);
           var data = await res.json();
-          if (!data.url) throw new Error('لا رابط عائد من الرفع');
+          if (!data.url) throw new Error('لا رابط عائد');
           await FB.db.collection('bookings').doc(id).update({
             paymentProof: data.url,
             paymentProofUploadedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           if (window.toast) toast('✅ تم رفع السند — بانتظار تأكيد الإدارة', 'suc');
+          document.getElementById('mb-proof-modal').remove();
         } catch (err) {
           if (window.toast) toast('❌ ' + err.message, 'err');
+          sendBtn.disabled = false;
+          sendBtn.textContent = '✅ رفع السند';
         }
       };
-      input.click();
     },
 
     /* ═══ §12. ضغط الصورة ═══ */
@@ -293,6 +304,51 @@
         img.onerror = function () { URL.revokeObjectURL(u); reject(new Error('load')); };
         img.src = u;
       });
+    },
+
+    /* ═══ §12b. دعم واتساب ═══ */
+    support: function (id) {
+      var phone = '967772311040';
+      var text = encodeURIComponent('مرحباً، أستفسر عن حجزي رقم: ' + id.substring(0, 8) + ' في CHIZEN');
+      window.open('https://wa.me/' + phone + '?text=' + text, '_blank');
+    },
+
+    /* ═══ §12c. عرض التذكرة (معاينة داخل التطبيق) ═══ */
+    viewTicket: function (id) {
+      var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
+      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة', 'err'); return; }
+      var url = b.ticketUrl;
+      var isPdf = /\.pdf(\?|$)/i.test(url);
+      var preview;
+      if (isPdf) {
+        preview = '<iframe src="' + this.esc(url) + '" style="width:100%;height:60vh;border:none;border-radius:12px;background:#f3f4f6"></iframe>' +
+                  '<div class="mb-note" style="margin-top:8px">📄 ملف PDF — يمكنك تنزيله أو إرساله</div>';
+      } else {
+        preview = '<img src="' + this.esc(url) + '" style="max-width:100%;max-height:60vh;border-radius:12px;object-fit:contain">';
+      }
+      var html = '<div class="mb-modal" id="mb-ticket-modal" onclick="if(event.target===this)this.remove()">' +
+        '<div class="mb-modal-box" style="max-width:520px">' +
+          '<div class="mb-modal-title">🎫 تذكرتك</div>' +
+          '<div class="mb-ticket-preview">' + preview + '</div>' +
+          '<div class="mb-modal-row">' +
+            '<a href="' + this.esc(url) + '" download target="_blank" class="mb-btn mb-btn-success" style="text-decoration:none;text-align:center;display:block">📥 تنزيل PDF</a>' +
+            '<button class="mb-btn mb-btn-whatsapp" onclick="MyBookings.sendTicketWhatsApp(\'' + id + '\')">💬 إرسال واتساب</button>' +
+          '</div>' +
+          '<button class="mb-modal-close" onclick="document.getElementById(\'mb-ticket-modal\').remove()">إغلاق</button>' +
+        '</div>' +
+      '</div>';
+      var old = document.getElementById('mb-ticket-modal');
+      if (old) old.remove();
+      document.body.insertAdjacentHTML('beforeend', html);
+    },
+
+    /* ═══ §12d. إرسال التذكرة عبر واتساب ═══ */
+    sendTicketWhatsApp: function (id) {
+      var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
+      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة', 'err'); return; }
+      var phone = '967772311040';
+      var text = encodeURIComponent('مرحباً، تذكرتي لحجز رقم ' + id.substring(0, 8) + ':\n' + b.ticketUrl);
+      window.open('https://wa.me/' + phone + '?text=' + text, '_blank');
     },
 
     /* ═══ §13. مساعدات ═══ */
