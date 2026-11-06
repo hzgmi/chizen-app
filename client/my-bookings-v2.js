@@ -161,7 +161,7 @@
     /* ═══ §8. Modal السعر ═══ */
     openQuote: function (id) {
       var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
-      if (!b) { if (window.toast) toast('حجز غير موجود'); return; }
+      if (!b) { MyBookings.toast('حجز غير موجود'); return; }
       var q = b.priceQuote || {};
       var amount = q.amount || b.finalPrice || 0;
       var note = q.note || '';
@@ -194,7 +194,7 @@
             from: 'customer', text: '✅ قبلت السعر', at: new Date().toISOString()
           })
         });
-        if (window.toast) toast('✅ تم قبول السعر — ارفع سند الإيداع');
+        MyBookings.toast('✅ تم قبول السعر — ارفع سند الإيداع');
         var m = document.getElementById('mb-quote-modal'); if (m) m.remove();
         try {
           await FB.db.collection('push_queue').add({
@@ -223,7 +223,7 @@
             from: 'customer', text: '❌ رفضت السعر: ' + reason, at: new Date().toISOString()
           })
         });
-        if (window.toast) toast('تم رفض السعر — سيُلغى الحجز');
+        MyBookings.toast('تم رفض السعر — سيُلغى الحجز');
         var m = document.getElementById('mb-quote-modal'); if (m) m.remove();
       } catch (e) { alert('فشل: ' + e.message); }
     },
@@ -283,11 +283,11 @@
             paymentProofUploadedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           setStatus('5. ✅ تم الحفظ في Firestore!');
-          if (window.toast) toast('✅ تم رفع السند — بانتظار تأكيد الإدارة');
+          MyBookings.toast('✅ تم رفع السند — بانتظار تأكيد الإدارة');
           setTimeout(function() { document.getElementById('mb-proof-modal').remove(); }, 1500);
         } catch (err) {
           setStatus('❌ خطأ: ' + err.message);
-          if (window.toast) toast('❌ ' + err.message);
+          MyBookings.toast('❌ ' + err.message);
           sendBtn.disabled = false;
           sendBtn.textContent = '✅ رفع السند';
         }
@@ -325,7 +325,7 @@
     /* ═══ §12c. عرض التذكرة (معاينة داخل التطبيق) ═══ */
     viewTicket: function (id) {
       var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
-      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة'); return; }
+      if (!b || !b.ticketUrl) { MyBookings.toast('لا توجد تذكرة'); return; }
       var url = b.ticketUrl;
       var isPdf = /\.pdf(\?|$)/i.test(url);
       var preview;
@@ -354,7 +354,7 @@
     /* ═══ §12d. إرسال التذكرة عبر واتساب ═══ */
     sendTicketWhatsApp: function (id) {
       var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
-      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة'); return; }
+      if (!b || !b.ticketUrl) { MyBookings.toast('لا توجد تذكرة'); return; }
       var phone = '967772311040';
       var text = encodeURIComponent('مرحباً، تذكرتي لحجز رقم ' + id.substring(0, 8) + ':\n' + b.ticketUrl);
       window.open('https://wa.me/' + phone + '?text=' + text, '_blank');
@@ -365,6 +365,24 @@
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
       });
+    },
+
+    /* ═══ §14. نظام إشعارات مستقل (يمنع تعارض الدوال القديمة) ═══ */
+    toast: function (msg) {
+      var t = document.getElementById('mb-custom-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'mb-custom-toast';
+        t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;z-index:9999999;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:opacity 0.3s;text-align:center;width:max-content;max-width:90%;direction:rtl;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      if (window.mbToastTimer) clearTimeout(window.mbToastTimer);
+      window.mbToastTimer = setTimeout(function() { 
+        t.style.opacity = '0'; 
+        setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 300);
+      }, 3500);
     },
 
     renderGuest: function () {
