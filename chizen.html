@@ -11970,8 +11970,8 @@ else APP.init();
 <script src="client/chat-widget.js"></script>
 <script src="client/chizen-ai-v2.js"></script>
 <script src="client/chizen-ai-v2-smartsearch.js"></script>
-<script src="client/chizen-extra.js"></script>
 <script src="client/my-bookings.js?v=1"></script>
+<script src="client/chizen-extra.js"></script>
 
 
 
@@ -16394,6 +16394,7 @@ document.addEventListener('keydown', function(e) {
     console.log('[BOOKING-V2] saveBooking patched');
   }
 
+  // ═══ 5) شاشة تتبع الحجوزات في "طلباتي" ═══
 
   // ═══ تشغيل ═══
   setTimeout(function() {
@@ -16848,7 +16849,7 @@ document.addEventListener('keydown', function(e) {
             title: '✅ تم استلام طلبك',
             message: 'طلبك قيد المراجعة. سنرسل إشعاراً عند تأكيد السعر النهائي.',
             btn: 'حسناً',
-            onClose: function(){ if (window.APP.tvlRenderBookings) window.APP.tvlRenderBookings(); }
+            onClose: function(){ if (window.MyBookings && window.MyBookings.refresh) window.MyBookings && window.MyBookings.refresh(); }
           });
         } else {
           alert('تم استلام طلبك بنجاح');
@@ -16867,7 +16868,7 @@ document.addEventListener('keydown', function(e) {
         if (pp) { pp.setAttribute('data-ready', '0'); pp.innerHTML = ''; }
         btn.classList.remove('ready');
         btn.classList.add('locked');
-        if (window.APP.tvlRenderBookings) window.APP.tvlRenderBookings();
+        if (window.MyBookings && window.MyBookings.refresh) window.MyBookings && window.MyBookings.refresh();
       } catch(e) {
         console.error('[TVL SUBMIT]', e);
         if (window.toast) window.toast('فشل الإرسال: ' + (e.message || ''), 'err');
@@ -16878,71 +16879,13 @@ document.addEventListener('keydown', function(e) {
     };
 
     // ═══ 7) Render my bookings ═══
-    window.APP.tvlRenderBookings = function() {
-      var c = document.getElementById('tvl-my-bookings');
-      if (!c) return;
-      if (!window.FB || !window.FB.currentUser || !window.FB.db) {
-        c.innerHTML = '<div class="tvl-empty">سجل الدخول لعرض حجوزاتك</div>';
-        return;
-      }
-      FB.db.collection('bookings')
-        .where('userId', '==', FB.currentUser.uid)
-        .limit(20)
-        .get()
-        .then(function(snap) {
-          if (snap.empty) {
-            c.innerHTML = '<div class="tvl-empty">لا توجد حجوزات — ابدأ رحلة جديدة</div>';
-            return;
-          }
-          var icons = { flight: '✈️', bus: '🚌', hotel: '🏨', hajj: '🕋', delivery: '🚗' };
-          var labels = { flight: 'طيران', bus: 'باص', hotel: 'فندق', hajj: 'حج/عمرة', delivery: 'توصيل' };
-          var statusLabels = {
-            pending: '⏳ قيد المراجعة', pending_quote: '🟡 بانتظار السعر',
-            quoted: '🟠 السعر جاهز', accepted: '🟣 بانتظار الدفع',
-            confirmed: '🟢 مؤكد', rejected: '🔴 مرفوض',
-            cancelled: '⚫ ملغي', completed: '✅ مكتمل'
-          };
-          var html = '';
-          snap.forEach(function(doc) {
-            var b = doc.data();
-            var pq = b.priceQuote || {};
-            var sk = pq.status || b.status || 'pending';
-            var price = b.finalPrice > 0 ? b.finalPrice : (b.estimatedPrice || 0);
-            var isEst = b.finalPrice > 0 ? '' : ' (تقديري)';
-            var d = b.data || {};
-            var detail = '';
-            if (b.type === 'flight') detail = (d.from || '—') + ' → ' + (d.to || '—');
-            else if (b.type === 'bus') detail = (d.from || 'عدن') + ' → ' + (d.to || '—');
-            else if (b.type === 'hotel') detail = d.city || '—';
-            else if (b.type === 'hajj') detail = (d.type === 'hajj' ? 'حج' : 'عمرة') + ' — ' + (d.fromCity || 'عدن');
-            else if (b.type === 'delivery') detail = (d.from || '—') + ' → ' + (d.to || '—');
-            var date = d.date || d.checkin || '';
-            html += '<div class="tvl-bk-card">' +
-              '<div class="tvl-bk-icon">' + (icons[b.type] || '📋') + '</div>' +
-              '<div class="tvl-bk-info">' +
-                '<div class="tvl-bk-title">' + (labels[b.type] || 'حجز') + ' — ' + detail + '</div>' +
-                '<div class="tvl-bk-meta">' +
-                  (date ? '<span>📅 ' + date + '</span>' : '') +
-                  (price > 0 ? '<span>💰 ' + price.toLocaleString('ar-EG') + ' ر.س' + isEst + '</span>' : '') +
-                '</div>' +
-              '</div>' +
-              '<div class="tvl-bk-status ' + sk + '">' + (statusLabels[sk] || sk) + '</div>' +
-            '</div>';
-          });
-          c.innerHTML = html;
-        })
-        .catch(function(e) {
-          console.warn('[tvlRenderBookings]', e.message);
-          c.innerHTML = '<div class="tvl-empty">تعذر تحميل الحجوزات</div>';
-        });
-    };
 
     // Auto-render bookings when screen opens
     var origNav = window.APP.navigate;
     window.APP.navigate = function(screen) {
       if (origNav) origNav.call(this, screen);
-      if (screen === 'booking' && window.APP.tvlRenderBookings) {
-        setTimeout(function(){ window.APP.tvlRenderBookings(); }, 300);
+      if (screen === 'booking' && window.MyBookings && window.MyBookings.refresh) {
+        setTimeout(function(){ window.MyBookings && window.MyBookings.refresh(); }, 300);
       }
     };
 
