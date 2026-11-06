@@ -16449,45 +16449,91 @@ document.addEventListener('keydown', function(e) {
       hotel: { icon: '🏨', name: 'فندق' },
       hajj: { icon: '🕋', name: 'حج وعمرة' }
     }[b.type] || { icon: '📋', name: 'حجز' };
-    
+
     var quote = b.priceQuote || {};
     var quoteStatus = quote.status || 'pending_quote';
-    
-    var statusBadge, actions = '';
-    
-    if (quoteStatus === 'pending_quote') {
-      statusBadge = '<span style="background:rgba(245,158,11,0.15);color:#f59e0b;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">🕐 بانتظار السعر</span>';
-    } else if (quoteStatus === 'quoted' || quoteStatus === 'price_quoted' || b.status === 'price_quoted') {
-      statusBadge = '<span style="background:rgba(59,130,246,0.15);color:#3b82f6;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;animation:pulse 1.5s infinite;">💰 بانتظار تأكيدك</span>';
-      actions = '<div style="margin-top:10px;text-align:center;font-size:11px;color:#3b82f6;font-weight:800;">اضغط لعرض السعر وتأكيده ←</div>';
-    } else if (quoteStatus === 'accepted') {
-      statusBadge = '<span style="background:rgba(16,185,129,0.15);color:#10b981;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">✅ مؤكد</span>';
-      if (b.ticketUrl) {
-        actions = '<div style="margin-top:10px;"><button onclick="event.stopPropagation();window.open(\'' + b.ticketUrl + '\',\'_blank\')" style="width:100%;padding:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">🎫 عرض التذكرة</button></div>';
-      } else if (b.paymentProof) {
-        actions = '<div style="margin-top:10px;background:rgba(16,185,129,0.08);padding:10px;border-radius:10px;text-align:center;font-size:11px;color:#10b981;font-weight:800;">📎 تم رفع سند الإيداع — بانتظار التذكرة</div>';
-      } else {
-        actions = '<div style="margin-top:10px;"><button onclick="event.stopPropagation();window.__uploadPaymentProof(\'' + b.id + '\')" style="width:100%;padding:12px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">📤 رفع سند الإيداع</button><div style="margin-top:6px;font-size:10px;color:#f59e0b;text-align:center;">سيتم إرسال التذكرة بعد التحويل مباشرة</div></div>';
-      }
-    } else if (quoteStatus === 'rejected') {
-      statusBadge = '<span style="background:rgba(239,68,68,0.15);color:#ef4444;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;">❌ مرفوض</span>';
+    var status = b.status || 'pending';
+    var d = b.data || {};
+
+    // تحديد المرحلة الحالية
+    var stage = 1;
+    if (quoteStatus === 'quoted' || status === 'price_quoted') stage = 2;
+    else if (quoteStatus === 'accepted' || status === 'price_approved') stage = 3;
+    else if (b.paymentProof) stage = 4;
+    else if (status === 'confirmed') stage = 5;
+    else if (b.ticketUrl) stage = 6;
+    else if (status === 'completed') stage = 6;
+
+    // تعريف المراحل الست
+    var stages = [
+      { n: 1, t: 'تم الطلب' },
+      { n: 2, t: 'عرض السعر' },
+      { n: 3, t: 'بانتظار موافقتك' },
+      { n: 4, t: 'رفع سند الإيداع' },
+      { n: 5, t: 'تأكيد الحجز' },
+      { n: 6, t: 'التذكرة جاهزة' }
+    ];
+
+    // بناء شريط المراحل
+    var timelineHtml = '<div style="margin:12px 0;display:flex;flex-direction:column;gap:6px;">';
+    stages.forEach(function(s){
+      var isDone = s.n < stage;
+      var isCurrent = s.n === stage;
+      var icon = isDone ? '✅' : (isCurrent ? '⏳' : '⬜');
+      var color = isDone ? '#10b981' : (isCurrent ? '#f59e0b' : '#6b7280');
+      var bg = isDone ? 'rgba(16,185,129,0.1)' : (isCurrent ? 'rgba(245,158,11,0.15)' : 'rgba(107,114,128,0.08)');
+      var fw = isCurrent ? '900' : '700';
+      timelineHtml += '<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:' + bg + ';border-radius:8px;font-size:11px;font-weight: ' + fw + ';color:' + color + ';">';
+      timelineHtml += '<span>' + icon + '</span><span>' + s.n + '. ' + s.t + '</span>';
+      timelineHtml += '</div>';
+    });
+    timelineHtml += '</div>';
+
+    // بيانات الرحلة
+    var tripRows = [];
+    if (d.from || d.to) tripRows.push('📍 ' + esc(d.from || '?') + ' → ' + esc(d.to || '?'));
+    if (d.date) tripRows.push('📅 ' + esc(d.date));
+    if (d.passengers) tripRows.push('👥 بالغ: ' + d.passengers + (d.children ? ' | أطفال: ' + d.children : ''));
+    if (d.class) tripRows.push('💺 ' + esc(d.class));
+    if (d.airline) tripRows.push('✈️ ' + esc(d.airline));
+    var tripHtml = tripRows.length ? '<div style="font-size:11px;color:var(--mt);line-height:1.8;margin:8px 0;text-align:right;">' + tripRows.join('<br>') + '</div>' : '';
+
+    // السعر
+    var priceHtml = '';
+    if (b.estimatedPrice > 0) {
+      priceHtml = '<div style="background:rgba(59,130,246,0.1);border-radius:8px;padding:8px;margin:8px 0;text-align:center;font-size:12px;color:#3b82f6;font-weight:800;">💰 السعر: ' + window.formatPrice(b.estimatedPrice) + '</div>';
     }
-    
-    var cardClick = (quoteStatus === 'quoted' || quoteStatus === 'price_quoted' || b.status === 'price_quoted') ? 'onclick="window.__openQuoteModal(\'' + b.id + '\')" style="cursor:pointer;"' : '';
-    return '<div ' + cardClick + ' style="background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px;">' +
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">' +
+
+    // الزر حسب المرحلة
+    var actionHtml = '';
+    if (stage === 2) {
+      actionHtml = '<button onclick="event.stopPropagation();window.__openQuoteModal(\'' + b.id + '\')" style="width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">💰 عرض السعر وتأكيده</button>';
+    } else if (stage === 3 && !b.paymentProof) {
+      actionHtml = '<button onclick="event.stopPropagation();window.__uploadPaymentProof(\'' + b.id + '\')" style="width:100%;padding:12px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">📤 رفع سند الإيداع</button><div style="margin-top:6px;font-size:10px;color:#f59e0b;text-align:center;">سيتم إرسال التذكرة بعد التحويل مباشرة</div>';
+    } else if (stage === 4) {
+      actionHtml = '<div style="padding:10px;background:rgba(16,185,129,0.1);border-radius:10px;text-align:center;font-size:11px;color:#10b981;font-weight:800;">📎 تم رفع سند الإيداع — بانتظار التذكرة</div>';
+    } else if (stage >= 6 && b.ticketUrl) {
+      actionHtml = '<button onclick="event.stopPropagation();window.open(\'' + b.ticketUrl + '\',\'_blank\')" style="width:100%;padding:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;">🎫 عرض التذكرة</button>';
+    }
+
+    // دعم واتساب
+    var supportHtml = '<button onclick="event.stopPropagation();window.open(\'https://wa.me/967772311040?text=' + encodeURIComponent('استفسار عن حجز #' + b.id.substring(0,8)) + '\',\'_blank\')" style="width:100%;margin-top:6px;padding:10px;background:rgba(37,211,102,0.15);border:1px solid #25D366;color:#25D366;border-radius:10px;font-weight:900;font-size:11px;cursor:pointer;">💬 دعم الحجز واتساب</button>';
+
+    return '<div style="background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px;direction:rtl;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">' +
         '<div style="display:flex;align-items:center;gap:10px;">' +
-          '<div style="width:44px;height:44px;border-radius:12px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;">' + typeInfo.icon + '</div>' +
+          '<div style="width:40px;height:40px;border-radius:10px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;">' + typeInfo.icon + '</div>' +
           '<div>' +
             '<div style="font-weight:900;color:var(--cr);font-size:13px;">' + typeInfo.name + '</div>' +
-            '<div style="font-size:11px;color:var(--mt);margin-top:2px;">#' + b.id.substring(0, 10) + '</div>' +
+            '<div style="font-size:10px;color:var(--mt);margin-top:2px;">#' + b.id.substring(0, 10) + '</div>' +
           '</div>' +
         '</div>' +
-        statusBadge +
       '</div>' +
-      (b.estimatedPrice > 0 && quoteStatus === 'pending_quote' ? 
-        '<div style="background:rgba(168,85,247,0.08);border-radius:8px;padding:8px;font-size:12px;color:var(--mt);text-align:center;">💰 السعر التقريبي: <b style="color:var(--cr);">' + window.formatPrice(b.estimatedPrice) + '</b></div>' : '') +
-      actions +
+      tripHtml +
+      timelineHtml +
+      priceHtml +
+      actionHtml +
+      supportHtml +
     '</div>';
   }
 
