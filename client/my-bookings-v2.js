@@ -161,7 +161,7 @@
     /* ═══ §8. Modal السعر ═══ */
     openQuote: function (id) {
       var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
-      if (!b) { if (window.toast) toast('حجز غير موجود', 'err'); return; }
+      if (!b) { if (window.toast) toast('حجز غير موجود'); return; }
       var q = b.priceQuote || {};
       var amount = q.amount || b.finalPrice || 0;
       var note = q.note || '';
@@ -194,7 +194,7 @@
             from: 'customer', text: '✅ قبلت السعر', at: new Date().toISOString()
           })
         });
-        if (window.toast) toast('✅ تم قبول السعر — ارفع سند الإيداع', 'suc');
+        if (window.toast) toast('✅ تم قبول السعر — ارفع سند الإيداع');
         var m = document.getElementById('mb-quote-modal'); if (m) m.remove();
         try {
           await FB.db.collection('push_queue').add({
@@ -223,7 +223,7 @@
             from: 'customer', text: '❌ رفضت السعر: ' + reason, at: new Date().toISOString()
           })
         });
-        if (window.toast) toast('تم رفض السعر — سيُلغى الحجز', 'suc');
+        if (window.toast) toast('تم رفض السعر — سيُلغى الحجز');
         var m = document.getElementById('mb-quote-modal'); if (m) m.remove();
       } catch (e) { alert('فشل: ' + e.message); }
     },
@@ -283,11 +283,11 @@
             paymentProofUploadedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           setStatus('5. ✅ تم الحفظ في Firestore!');
-          if (window.toast) toast('✅ تم رفع السند — بانتظار تأكيد الإدارة', 'suc');
+          if (window.toast) toast('✅ تم رفع السند — بانتظار تأكيد الإدارة');
           setTimeout(function() { document.getElementById('mb-proof-modal').remove(); }, 1500);
         } catch (err) {
           setStatus('❌ خطأ: ' + err.message);
-          if (window.toast) toast('❌ ' + err.message, 'err');
+          if (window.toast) toast('❌ ' + err.message);
           sendBtn.disabled = false;
           sendBtn.textContent = '✅ رفع السند';
         }
@@ -325,7 +325,7 @@
     /* ═══ §12c. عرض التذكرة (معاينة داخل التطبيق) ═══ */
     viewTicket: function (id) {
       var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
-      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة', 'err'); return; }
+      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة'); return; }
       var url = b.ticketUrl;
       var isPdf = /\.pdf(\?|$)/i.test(url);
       var preview;
@@ -354,7 +354,7 @@
     /* ═══ §12d. إرسال التذكرة عبر واتساب ═══ */
     sendTicketWhatsApp: function (id) {
       var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
-      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة', 'err'); return; }
+      if (!b || !b.ticketUrl) { if (window.toast) toast('لا توجد تذكرة'); return; }
       var phone = '967772311040';
       var text = encodeURIComponent('مرحباً، تذكرتي لحجز رقم ' + id.substring(0, 8) + ':\n' + b.ticketUrl);
       window.open('https://wa.me/' + phone + '?text=' + text, '_blank');
