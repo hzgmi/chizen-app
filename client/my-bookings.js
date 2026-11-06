@@ -1,0 +1,327 @@
+/* ═══════════════════════════════════════════════════════════════
+   CHIZEN — My Bookings v1.0 (Clean Rebuild)
+   قسم "حجوزاتي" — 7 مراحل — تحكم كامل من الأدمن
+   التاريخ: 2026-11-07
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var WORKER_URL = 'https://chizen-uploader.hazimchat.workers.dev';
+
+  var MyBookings = {
+    state: { bookings: [], loading: true, error: null },
+    _unsub: null,
+    _booted: false,
+
+    /* ═══ §1. التهيئة ═══ */
+    init: function () {
+      if (this._booted) return;
+      this._booted = true;
+      var self = this;
+      if (!window.FB || !FB.db) { setTimeout(function () { self._booted = false; self.init(); }, 500); return; }
+      if (!FB.currentUser) { this.renderGuest(); return; }
+      this.attachListener();
+    },
+
+    /* ═══ §2. المستمع الحي ═══ */
+    attachListener: function () {
+      var self = this;
+      if (this._unsub) { try { this._unsub(); } catch (e) {} }
+      this._unsub = FB.db.collection('bookings')
+        .where('userId', '==', FB.currentUser.uid)
+        .limit(50)
+        .onSnapshot(function (snap) {
+          var arr = [];
+          snap.forEach(function (doc) {
+            var d = doc.data(); d.id = doc.id; arr.push(d);
+          });
+          arr.sort(function (a, b) {
+            var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+            var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+            return tb - ta;
+          });
+          self.state.bookings = arr;
+          self.state.loading = false;
+          self.state.error = null;
+          self.render();
+        }, function (err) {
+          self.state.loading = false;
+          self.state.error = err.message;
+          self.render();
+        });
+    },
+
+    /* ═══ §3. تحديد المرحلة (من الأعلى للأسفل — أدمن يتحكم) ═══ */
+    getStage: function (b) {
+      var st = b.status || 'pending';
+      var qs = (b.priceQuote && b.priceQuote.status) || '';
+      if (st === 'completed') return 7;
+      if (b.ticketUrl) return 6;
+      if (b.paymentVerified || st === 'confirmed') return 5;
+      if (b.paymentProof) return 4;
+      if (qs === 'accepted' || st === 'price_approved') return 3;
+      if (qs === 'quoted' || st === 'price_quoted') return 2;
+      return 1;
+    },
+
+    /* ═══ §4. المراحل السبع ═══ */
+    STAGES: [
+      { n: 1, label: 'تم الطلب',     icon: '📋' },
+      { n: 2, label: 'عرض السعر',     icon: '💰' },
+      { n: 3, label: 'بانتظار الدفع',  icon: '💳' },
+      { n: 4, label: 'سند مرفوع',     icon: '📎' },
+      { n: 5, label: 'الدفع مؤكد',    icon: '✅' },
+      { n: 6, label: 'التذكرة جاهزة',  icon: '🎫' },
+      { n: 7, label: 'مكتمل',         icon: '🏁' }
+    ],
+
+    /* ═══ §5. التصيير ═══ */
+    render: function () {
+      var root = document.getElementById('tvl-my-bookings');
+      if (!root) return;
+      if (this.state.loading) { root.innerHTML = '<div class="mb-loading">⏳ جاري التحميل...</div>'; return; }
+      if (this.state.error)   { root.innerHTML = '<div class="mb-error">❌ ' + this.esc(this.state.error) + '</div>'; return; }
+      if (!this.state.bookings.length) {
+        root.innerHTML = '<div class="mb-empty"><div class="mb-empty-icon">✈️</div><div class="mb-empty-title">لا حجوزات بعد</div><div class="mb-empty-sub">احجز رحلتك الأولى الآن</div></div>';
+        return;
+      }
+      var self = this;
+      root.innerHTML = this.state.bookings.map(function (b) { return self.htmlCard(b); }).join('');
+    },
+
+    /* ═══ §6. البطاقة ═══ */
+    htmlCard: function (b) {
+      var stage = this.getStage(b);
+      var self = this;
+      var typeMap = {
+        flight: { icon: '✈️', name: 'طيران' },
+        bus:    { icon: '🚌', name: 'باص' },
+        hotel:  { icon: '🏨', name: 'فندق' },
+        hajj:   { icon: '🕋', name: 'حج وعمرة' }
+      };
+      var ti = typeMap[b.type] || { icon: '📋', name: 'حجز' };
+
+      /* الشريط الزمني */
+      var tl = '';
+      this.STAGES.forEach(function (s) {
+        var cls = s.n < stage ? 'done' : (s.n === stage ? 'current' : 'pending');
+        tl += '<div class="mb-tl-step ' + cls + '">' +
+                '<div class="mb-tl-dot"></div>' +
+                '<div class="mb-tl-label">' + s.icon + ' ' + s.label + '</div>' +
+              '</div>';
+      });
+
+      /* بيانات الرحلة */
+      var d = b.data || {};
+      var trip = '';
+      if (d.from || d.to) trip += '<div class="mb-trip-row">📍 ' + this.esc(d.from || '?') + ' → ' + this.esc(d.to || '?') + '</div>';
+      if (d.date)         trip += '<div class="mb-trip-row">📅 ' + this.esc(d.date) + '</div>';
+      if (d.passengers)   trip += '<div class="mb-trip-row">👥 ' + this.esc(String(d.passengers)) + ' مسافر</div>';
+      if (d.class)        trip += '<div class="mb-trip-row">💺 ' + this.esc(d.class) + '</div>';
+      if (d.airline)      trip += '<div class="mb-trip-row">✈️ ' + this.esc(d.airline) + '</div>';
+
+      /* السعر */
+      var amount = (b.priceQuote && b.priceQuote.amount) || Number(b.finalPrice) || Number(b.estimatedPrice) || 0;
+      var priceLbl = (b.priceQuote && b.priceQuote.amount) ? 'السعر النهائي' : (Number(b.finalPrice) ? 'السعر النهائي' : 'السعر التقديري');
+      var priceHtml = '';
+      if (amount > 0) {
+        priceHtml = '<div class="mb-price"><div class="mb-price-lbl">' + priceLbl + '</div><div class="mb-price-val">' + (window.formatPrice ? window.formatPrice(amount) : amount + ' ر.ي') + '</div></div>';
+      }
+
+      /* الإجراء (أدمن يتحكم) */
+      var action = this.htmlAction(b, stage);
+
+      return '<div class="mb-card" data-booking-id="' + b.id + '">' +
+               '<div class="mb-card-head">' +
+                 '<div class="mb-card-type">' + ti.icon + ' ' + ti.name + '</div>' +
+                 '<div class="mb-card-status">' + stage + '/7</div>' +
+               '</div>' +
+               '<div class="mb-timeline">' + tl + '</div>' +
+               (trip ? '<div class="mb-trip">' + trip + '</div>' : '') +
+               priceHtml +
+               '<div class="mb-actions">' + action + '</div>' +
+             '</div>';
+    },
+
+    /* ═══ §7. الإجراء حسب المرحلة (تحكم كامل من الأدمن) ═══ */
+    htmlAction: function (b, stage) {
+      var id = b.id;
+      if (stage === 1) {
+        return '<div class="mb-note">⏳ بانتظار عرض السعر من الإدارة</div>';
+      }
+      if (stage === 2) {
+        return '<button class="mb-btn mb-btn-primary" onclick="MyBookings.openQuote(\'' + id + '\')">💰 عرض السعر وتأكيده</button>';
+      }
+      if (stage === 3) {
+        return '<button class="mb-btn mb-btn-proof" onclick="MyBookings.uploadProof(\'' + id + '\')">📤 رفع سند الإيداع</button>' +
+               '<div class="mb-note">حوّل المبلغ ثم ارفع صورة السند</div>';
+      }
+      if (stage === 4) {
+        return '<div class="mb-note">📎 سندك مرفوع — بانتظار تأكيد الإدارة</div>' +
+               '<button class="mb-btn mb-btn-secondary" onclick="MyBookings.uploadProof(\'' + id + '\')">🔄 تغيير السند</button>';
+      }
+      if (stage === 5) {
+        return '<div class="mb-note">✅ تم تأكيد دفعك — بانتظار التذكرة من الإدارة</div>';
+      }
+      if (stage === 6 && b.ticketUrl) {
+        return '<button class="mb-btn mb-btn-success" onclick="window.open(\'' + this.esc(b.ticketUrl) + '\',\'_blank\')">🎫 عرض التذكرة</button>' +
+               '<div class="mb-note">🏁 سيُكمل الحجز قريباً</div>';
+      }
+      if (stage === 7) {
+        return '<div class="mb-note">🏁 تم إكمال الحجز — شكراً لثقتك</div>';
+      }
+      return '';
+    },
+
+    /* ═══ §8. Modal السعر ═══ */
+    openQuote: function (id) {
+      var b = this.state.bookings.filter(function (x) { return x.id === id; })[0];
+      if (!b) { if (window.toast) toast('حجز غير موجود', 'err'); return; }
+      var q = b.priceQuote || {};
+      var amount = q.amount || b.finalPrice || 0;
+      var note = q.note || '';
+      var html = '<div class="mb-modal" id="mb-quote-modal" onclick="if(event.target===this)this.remove()">' +
+                   '<div class="mb-modal-box">' +
+                     '<div class="mb-modal-title">💰 عرض السعر النهائي</div>' +
+                     '<div class="mb-modal-amount">' + (window.formatPrice ? window.formatPrice(amount) : amount + ' ر.ي') + '</div>' +
+                     (note ? '<div class="mb-modal-note">📝 ' + this.esc(note) + '</div>' : '') +
+                     '<div class="mb-modal-row">' +
+                       '<button class="mb-btn mb-btn-success" onclick="MyBookings.acceptQuote(\'' + id + '\')">✅ قبول السعر</button>' +
+                       '<button class="mb-btn mb-btn-danger" onclick="MyBookings.rejectQuote(\'' + id + '\')">❌ رفض</button>' +
+                     '</div>' +
+                     '<button class="mb-modal-close" onclick="document.getElementById(\'mb-quote-modal\').remove()">إغلاق</button>' +
+                   '</div>' +
+                 '</div>';
+      var old = document.getElementById('mb-quote-modal');
+      if (old) old.remove();
+      document.body.insertAdjacentHTML('beforeend', html);
+    },
+
+    /* ═══ §9. قبول السعر → price_approved ═══ */
+    acceptQuote: async function (id) {
+      if (!confirm('هل تقبل هذا السعر؟')) return;
+      try {
+        await FB.db.collection('bookings').doc(id).update({
+          'priceQuote.status': 'accepted',
+          'priceQuote.acceptedAt': new Date(),
+          'status': 'price_approved',
+          'chat': firebase.firestore.FieldValue.arrayUnion({
+            from: 'customer', text: '✅ قبلت السعر', at: new Date().toISOString()
+          })
+        });
+        if (window.toast) toast('✅ تم قبول السعر — ارفع سند الإيداع', 'suc');
+        var m = document.getElementById('mb-quote-modal'); if (m) m.remove();
+        try {
+          await FB.db.collection('push_queue').add({
+            title: '✅ العميل قبل السعر',
+            body: 'حجز #' + id.substring(0, 8) + ' — بانتظار الإيصال',
+            type: 'booking', status: 'pending',
+            data: { bookingId: id },
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        } catch (e) {}
+      } catch (e) { alert('فشل: ' + e.message); }
+    },
+
+    /* ═══ §10. رفض السعر ═══ */
+    rejectQuote: async function (id) {
+      var reason = prompt('سبب رفض السعر؟');
+      if (!reason) return;
+      try {
+        await FB.db.collection('bookings').doc(id).update({
+          'priceQuote.status': 'rejected',
+          'priceQuote.rejectedAt': new Date(),
+          'priceQuote.rejectReason': reason,
+          'status': 'cancelled',
+          'cancelledAt': new Date(),
+          'chat': firebase.firestore.FieldValue.arrayUnion({
+            from: 'customer', text: '❌ رفضت السعر: ' + reason, at: new Date().toISOString()
+          })
+        });
+        if (window.toast) toast('تم رفض السعر — سيُلغى الحجز', 'suc');
+        var m = document.getElementById('mb-quote-modal'); if (m) m.remove();
+      } catch (e) { alert('فشل: ' + e.message); }
+    },
+
+    /* ═══ §11. رفع الإيصال ═══ */
+    uploadProof: function (id) {
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = async function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        try {
+          if (window.toast) toast('⏳ جاري رفع السند...', 'suc');
+          var compressed = await MyBookings.compress(file);
+          var res = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'image/jpeg' },
+            body: compressed
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          var data = await res.json();
+          if (!data.url) throw new Error('لا رابط عائد من الرفع');
+          await FB.db.collection('bookings').doc(id).update({
+            paymentProof: data.url,
+            paymentProofUploadedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          if (window.toast) toast('✅ تم رفع السند — بانتظار تأكيد الإدارة', 'suc');
+        } catch (err) {
+          if (window.toast) toast('❌ ' + err.message, 'err');
+        }
+      };
+      input.click();
+    },
+
+    /* ═══ §12. ضغط الصورة ═══ */
+    compress: function (file) {
+      return new Promise(function (resolve, reject) {
+        var img = new Image(), u = URL.createObjectURL(file);
+        img.onload = function () {
+          URL.revokeObjectURL(u);
+          var w = img.width, h = img.height, md = 1400;
+          if (w > md || h > md) {
+            if (w > h) { h = Math.round(h * md / w); w = md; }
+            else { w = Math.round(w * md / h); h = md; }
+          }
+          var c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          c.getContext('2d').drawImage(img, 0, 0, w, h);
+          c.toBlob(function (blob) { blob ? resolve(blob) : reject(new Error('compress')); }, 'image/jpeg', 0.85);
+        };
+        img.onerror = function () { URL.revokeObjectURL(u); reject(new Error('load')); };
+        img.src = u;
+      });
+    },
+
+    /* ═══ §13. مساعدات ═══ */
+    esc: function (s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    },
+
+    renderGuest: function () {
+      var root = document.getElementById('tvl-my-bookings');
+      if (root) root.innerHTML = '<div class="mb-guest">سجّل دخول لعرض حجوزاتك</div>';
+    },
+
+    refresh: function () {
+      if (FB.currentUser) this.attachListener();
+      else this.renderGuest();
+    }
+  };
+
+  window.MyBookings = MyBookings;
+
+  /* ═══ تشغيل تلقائي ═══ */
+  function boot() {
+    if (!window.FB || !FB.db) { setTimeout(boot, 500); return; }
+    MyBookings.init();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+
+  console.log('[MyBookings v1.0] loaded — admin-controlled');
+})();
