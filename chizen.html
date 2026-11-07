@@ -8174,6 +8174,59 @@ html:not([data-theme="light"]) .tvl-form select option {
   margin: 0 !important;
 }
 </style>
+
+<!-- CHIZEN Final Layout CSS -->
+<style id="chz-final-layout">
+/* هوامش للصفحة */
+#sc-booking {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  box-sizing: border-box !important;
+}
+/* توحيد المسافات */
+#sc-booking .chz-step-card {
+  margin-bottom: 20px !important;
+}
+/* إصلاح شبكة المسافرين الثلاثية */
+#sc-booking .chz-step-body > div[style*="1fr 1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+/* إصلاح شبكة الحقلين */
+#sc-booking .chz-step-body > div[style*="1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
+  align-items: start !important;
+}
+/* إصلاح شبكة المسار */
+#sc-booking .chz-step-body > div[style*="1fr auto 1fr"] {
+  display: grid !important;
+  grid-template-columns: 1fr 44px 1fr !important;
+  gap: 8px !important;
+  align-items: end !important;
+}
+/* الحقول المخصصة */
+.chz-custom-select {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 12px 14px !important;
+  border: 1.5px solid rgba(197,160,89,0.3) !important;
+  border-radius: 12px !important;
+  background: #1A2340 !important;
+  color: #F2E3C6 !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  min-height: 48px !important;
+  cursor: pointer !important;
+}
+.chz-select-arrow { color: #C5A059; font-size: 10px; }
+</style>
 </head>
 <body>
 <div id="app">
@@ -21541,101 +21594,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
-<!-- قناص القوائم المخصصة v2 (يستبدل select بـ div) -->
-<script>
-(function(){
-  'use strict';
 
-  function openModal(sel) {
-    var modal = document.createElement('div');
-    modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.7);display:flex;align-items:flex-end;justify-content:center;padding:20px;direction:rtl;backdrop-filter:blur(4px);';
-    
-    var box = document.createElement('div');
-    box.style.cssText = 'background:#1A2340;width:100%;max-width:400px;border-radius:24px;overflow:hidden;box-shadow:0 -10px 40px rgba(0,0,0,0.5);border:1px solid rgba(197,160,89,0.3);animation:slideUp 0.3s ease;';
-    
-    var title = document.createElement('div');
-    title.style.cssText = 'padding:16px;text-align:center;font-weight:900;color:#C5A059;border-bottom:1px solid rgba(197,160,89,0.2);font-size:16px;';
-    title.textContent = 'اختر';
-    box.appendChild(title);
-    
-    var list = document.createElement('div');
-    list.style.cssText = 'max-height:50vh;overflow-y:auto;padding:8px;';
-    
-    var realSelect = sel._realSelect;
-    Array.from(realSelect.options).forEach(function(opt) {
-      if (opt.value === '') return;
-      var item = document.createElement('div');
-      item.style.cssText = 'padding:14px 16px;border-radius:12px;margin-bottom:4px;cursor:pointer;font-weight:700;font-size:14px;color:#F2E3C6;transition:background 0.15s;display:flex;justify-content:space-between;align-items:center;';
-      if (opt.selected) { item.style.background = 'rgba(197,160,89,0.15)'; item.style.color = '#C5A059'; }
-      item.innerHTML = '<span>' + opt.textContent + '</span>' + (opt.selected ? '<span style="color:#C5A059;">✓</span>' : '');
-      
-      item.onclick = function(e) {
-        e.stopPropagation();
-        realSelect.value = opt.value;
-        realSelect.dispatchEvent(new Event('change', { bubbles: true }));
-        realSelect.dispatchEvent(new Event('input', { bubbles: true }));
-        sel.textContent = opt.textContent; // تحديث النص الظاهر
-        sel.style.color = opt.selected ? '#C5A059' : '#F2E3C6';
-        modal.remove();
-      };
-      list.appendChild(item);
-    });
-    
-    box.appendChild(list);
-    var cancelBtn = document.createElement('button');
-    cancelBtn.textContent = 'إلغاء';
-    cancelBtn.style.cssText = 'width:100%;padding:16px;background:transparent;border:none;border-top:1px solid rgba(255,255,255,0.05);color:#9ca3af;font-weight:800;font-size:14px;cursor:pointer;';
-    cancelBtn.onclick = function() { modal.remove(); };
-    box.appendChild(cancelBtn);
-    
-    modal.appendChild(box);
-    modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
-    document.body.appendChild(modal);
-  }
-
-  // استبدال كل select في الصفحة
-  function hijackSelects() {
-    document.querySelectorAll('select').forEach(function(sel) {
-      if (sel._hijacked) return;
-      sel._hijacked = true;
-      
-      // إنشاء بديل div
-      var fakeDiv = document.createElement('div');
-      fakeDiv.className = (sel.className || '') + ' chz-fake-select';
-      fakeDiv.style.cssText = 'padding:12px 36px 12px 14px;border:1.5px solid rgba(197,160,89,0.3);border-radius:12px;font-family:inherit;font-weight:700;color:#F2E3C6;cursor:pointer;background:#1A2340;position:relative;display:block;';
-      
-      var selectedOpt = sel.options[sel.selectedIndex];
-      fakeDiv.textContent = selectedOpt ? selectedOpt.textContent : 'اختر';
-      
-      // إضافة سهم
-      var arrow = document.createElement('span');
-      arrow.innerHTML = '▼';
-      arrow.style.cssText = 'position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#C5A059;font-size:10px;';
-      fakeDiv.appendChild(arrow);
-      
-      fakeDiv._realSelect = sel;
-      
-      // إخفاء الـ select الأصلي (وليس حذفه، ليبقى يعمل مع الكود)
-      sel.style.cssText = 'display:none !important; visibility:hidden !important; position:absolute !important; width:0 !important; height:0 !important; opacity:0 !important; pointer-events:none !important;';
-      sel.parentNode.insertBefore(fakeDiv, sel.nextSibling);
-      
-      // فتح النافذة عند الضغط
-      fakeDiv.onclick = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        openModal(fakeDiv);
-      };
-    });
-  }
-
-  // التشغيل المتكرر (لأن الحقول قد تُضاف ديناميكياً)
-  setInterval(hijackSelects, 1000);
-  document.addEventListener('DOMContentLoaded', hijackSelects);
-  setTimeout(hijackSelects, 500);
-  
-  console.log('[Custom Select v2] hijacked all selects');
-})();
-</script>
 
 <script>
 // خريطة خيارات القوائم (بديلة لـ select المحذوفة)
@@ -21709,141 +21668,123 @@ window.APP.openChzSelect = function(targetId, el) {
 };
 </script>
 
-<!-- CHIZEN Booking Autocomplete + Date Picker Fix -->
+
+
+<!-- CHIZEN Booking Fixes v3 (Search Modal + iOS Wheel Picker) -->
 <script>
 (function(){
   'use strict';
 
-  // ─── 1) إصلاح البحث (Autocomplete) عند النقر على "من" و "إلى" ───
-  function attachAutocomplete() {
-    var cities = [
-      { name: 'عدن', code: 'ADE' }, { name: 'صنعاء', code: 'SAH' },
-      { name: 'تعز', code: 'TAI' }, { name: 'المكلا', code: 'RIY' },
-      { name: 'سيئون', code: 'GXF' }, { name: 'الحديدة', code: 'HOD' },
-      { name: 'سقطرى', code: 'SCT' }, { name: 'القاهرة', code: 'CAI' },
-      { name: 'جدة', code: 'JED' }, { name: 'الرياض', code: 'RUH' },
-      { name: 'دبي', code: 'DXB' }, { name: 'الشارقة', code: 'SHJ' },
-      { name: 'أبو ظبي', code: 'AUH' }, { name: 'اسطنبول', code: 'IST' },
-      { name: 'عمان', code: 'AMM' }, { name: 'الدوحة', code: 'DOH' },
-      { name: 'الكويت', code: 'KWI' }, { name: 'مسقط', code: 'MCT' }
-    ];
-
-    ['fly-from', 'fly-to'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (!el || el._acReady) return;
-      el._acReady = true;
-      
-      var wrap = document.createElement('div');
-      wrap.style.cssText = 'position:relative;width:100%;';
-      el.parentNode.insertBefore(wrap, el);
-      wrap.appendChild(el);
-      
-      var dd = document.createElement('div');
-      dd.style.cssText = 'position:absolute;top:100%;right:0;left:0;z-index:999;background:#1A2340;border:1px solid rgba(197,160,89,0.4);border-radius:12px;margin-top:4px;max-height:200px;overflow-y:auto;display:none;box-shadow:0 10px 30px rgba(0,0,0,0.5);';
-      wrap.appendChild(dd);
-      
-      function render(q) {
-        q = (q || '').trim().toLowerCase();
-        if (!q) { dd.style.display = 'none'; return; }
-        var found = cities.filter(function(c){ return c.name.toLowerCase().indexOf(q) !== -1; });
-        if (!found.length) { dd.style.display = 'none'; return; }
-        var html = '';
-        found.forEach(function(c) {
-          html += '<div data-name="'+c.name+'" style="padding:12px 16px;color:#F2E3C6;font-weight:700;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);">' + c.name + ' <span style="color:#C5A059;font-size:10px;">'+c.code+'</span></div>';
-        });
-        dd.innerHTML = html;
-        dd.style.display = 'block';
-        dd.querySelectorAll('div[data-name]').forEach(function(item) {
-          item.onclick = function() {
-            el.value = item.getAttribute('data-name');
-            dd.style.display = 'none';
-            if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
-          };
-        });
-      }
-      
-      el.addEventListener('input', function(){ render(el.value); });
-      el.addEventListener('focus', function(){ if(el.value) render(el.value); });
-      el.addEventListener('blur', function(){ setTimeout(function(){ dd.style.display = 'none'; }, 200); });
-    });
+  // ─── 1) دالة فتح نافذة أنيقة ───
+  function openModal(titleText, contentHTML) {
+    var modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;';
+    var box = document.createElement('div');
+    box.style.cssText = 'background:#1A2340;border:1px solid rgba(197,160,89,0.4);border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 10px 40px rgba(0,0,0,0.5);';
+    var title = document.createElement('div');
+    title.textContent = titleText;
+    title.style.cssText = 'color:#C5A059;font-weight:900;font-size:16px;text-align:center;margin-bottom:16px;';
+    box.appendChild(title);
+    var contentWrap = document.createElement('div');
+    contentWrap.innerHTML = contentHTML;
+    box.appendChild(contentWrap);
+    modal.appendChild(box);
+    modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+    document.body.appendChild(modal);
+    return { modal: modal, box: box, content: contentWrap };
   }
 
-  // ─── 2) إصلاح التقويم (Wheel Picker) عند النقر على التواريخ ───
-  function attachDatePicker() {
-    ['fly-date', 'fly-return', 'fly-dob'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (!el || el._dpReady) return;
-      el._dpReady = true;
-      
-      el.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // نستخدم تقويم بسيط (لا يعتمد على الملف القديم)
-        var today = new Date();
-        var currentYear = today.getFullYear();
-        
-        var modal = document.createElement('div');
-        modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;';
-        var box = document.createElement('div');
-        box.style.cssText = 'background:#1A2340;border:1px solid rgba(197,160,89,0.4);border-radius:20px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,0.5);direction:rtl;';
-        
-        var title = document.createElement('div');
-        title.textContent = id === 'fly-dob' ? 'تاريخ الميلاد' : 'اختر التاريخ';
-        title.style.cssText = 'color:#C5A059;font-weight:900;font-size:16px;text-align:center;margin-bottom:16px;';
-        box.appendChild(title);
-        
-        var inputDate = document.createElement('input');
-        inputDate.type = 'date';
-        inputDate.value = el.value || (currentYear + '-01-01');
-        if (id === 'fly-dob') { inputDate.max = (currentYear - 2) + '-12-31'; inputDate.min = '1930-01-01'; }
-        else { inputDate.min = currentYear + '-01-01'; }
-        inputDate.style.cssText = 'width:100%;padding:14px;border-radius:12px;border:1.5px solid rgba(197,160,89,0.3);background:#0f172a;color:#F2E3C6;font-size:16px;font-family:inherit;margin-bottom:16px;box-sizing:border-box;';
-        box.appendChild(inputDate);
-        
-        var btnRow = document.createElement('div');
-        btnRow.style.cssText = 'display:flex;gap:10px;';
-        
-        var okBtn = document.createElement('button');
-        okBtn.textContent = 'تأكيد';
-        okBtn.style.cssText = 'flex:1;padding:12px;border-radius:12px;background:#C5A059;color:#1A2340;border:none;font-weight:900;font-size:14px;cursor:pointer;';
-        okBtn.onclick = function() {
-          if (inputDate.value) {
-            var parts = inputDate.value.split('-');
-            var formatted = parts[0] + '-' + parts[1] + '-' + parts[2];
-            el.value = formatted;
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-            if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
-          }
-          modal.remove();
+  // ─── 2) إصلاح البحث (Autocomplete عبر Modal) ───
+  var cities = ['عدن', 'صنعاء', 'تعز', 'المكلا', 'سيئون', 'الحديدة', 'سقطرى', 'القاهرة', 'جدة', 'الرياض', 'دبي', 'الشارقة', 'أبو ظبي', 'اسطنبول', 'عمان', 'الدوحة', 'الكويت', 'مسقط'];
+  
+  function attachSearch(id, label) {
+    var el = document.getElementById(id);
+    if (!el || el._searchReady) return;
+    el._searchReady = true;
+    
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      var html = '';
+      cities.forEach(function(c) {
+        html += '<div data-city="'+c+'" style="padding:12px 16px;color:#F2E3C6;font-weight:700;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);">' + c + '</div>';
+      });
+      var m = openModal(label, html);
+      m.content.querySelectorAll('div[data-city]').forEach(function(item) {
+        item.onclick = function() {
+          el.value = item.getAttribute('data-city');
+          m.modal.remove();
+          if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
         };
-        
-        var cancelBtn = document.createElement('button');
-        cancelBtn.textContent = 'إلغاء';
-        cancelBtn.style.cssText = 'flex:1;padding:12px;border-radius:12px;background:transparent;color:#9ca3af;border:1px solid rgba(255,255,255,0.1);font-weight:800;font-size:14px;cursor:pointer;';
-        cancelBtn.onclick = function() { modal.remove(); };
-        
-        btnRow.appendChild(okBtn);
-        btnRow.appendChild(cancelBtn);
-        box.appendChild(btnRow);
-        modal.appendChild(box);
-        modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
-        document.body.appendChild(modal);
       });
     });
   }
 
-  // تشغيل متكرر لالتقاط الحقول (لأنها تُضاف ديناميكياً)
-  function run() {
-    attachAutocomplete();
-    attachDatePicker();
+  // ─── 3) إصلاح التقويم (Wheel Picker بسيط) ───
+  function attachDatePicker(id, label, isDob) {
+    var el = document.getElementById(id);
+    if (!el || el._dpReady) return;
+    el._dpReady = true;
+    
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      var currentYear = new Date().getFullYear();
+      var minYear = isDob ? 1930 : currentYear;
+      var maxYear = isDob ? currentYear - 2 : currentYear + 2;
+      
+      var html = '<div style="display:flex; gap:10px; justify-content:center;">';
+      html += '<select id="chz-dp-day" style="padding:10px; border-radius:8px; background:#0f172a; color:#fff; border:1px solid #C5A059; font-size:16px; width:80px;"></select>';
+      html += '<select id="chz-dp-month" style="padding:10px; border-radius:8px; background:#0f172a; color:#fff; border:1px solid #C5A059; font-size:16px; width:100px;"></select>';
+      html += '<select id="chz-dp-year" style="padding:10px; border-radius:8px; background:#0f172a; color:#fff; border:1px solid #C5A059; font-size:16px; width:100px;"></select>';
+      html += '</div>';
+      html += '<button id="chz-dp-confirm" style="width:100%; margin-top:16px; padding:12px; background:#C5A059; color:#1A2340; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">تأكيد</button>';
+      
+      var m = openModal(label, html);
+      
+      var daySel = m.content.querySelector('#chz-dp-day');
+      var monSel = m.content.querySelector('#chz-dp-month');
+      var yrSel = m.content.querySelector('#chz-dp-year');
+      
+      for (var i=1; i<=31; i++) daySel.innerHTML += '<option value="'+i+'">'+i+'</option>';
+      var months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+      months.forEach(function(m, i){ monSel.innerHTML += '<option value="'+(i+1)+'">'+m+'</option>'; });
+      for (var y=minYear; y<=maxYear; y++) yrSel.innerHTML += '<option value="'+y+'">'+y+'</option>';
+      
+      // القيم الافتراضية
+      if (el.value) {
+        var parts = el.value.split('-');
+        if (parts.length === 3) {
+          yrSel.value = parts[0];
+          monSel.value = parseInt(parts[1]);
+          daySel.value = parseInt(parts[2]);
+        }
+      } else {
+        if (isDob) yrSel.value = maxYear;
+        else yrSel.value = currentYear;
+      }
+      
+      m.content.querySelector('#chz-dp-confirm').onclick = function() {
+        var d = daySel.value.padStart(2, '0');
+        var mo = monSel.value.padStart(2, '0');
+        var y = yrSel.value;
+        el.value = y + '-' + mo + '-' + d;
+        m.modal.remove();
+        if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
+      };
+    });
   }
-  
+
+  function run() {
+    attachSearch('fly-from', 'مدينة المغادرة');
+    attachSearch('fly-to', 'مدينة الوصول');
+    attachDatePicker('fly-date', 'تاريخ المغادرة', false);
+    attachDatePicker('fly-return', 'تاريخ العودة', false);
+    attachDatePicker('fly-dob', 'تاريخ الميلاد', true);
+  }
+
   setInterval(run, 1000);
   document.addEventListener('DOMContentLoaded', run);
   setTimeout(run, 500);
-  
-  console.log('[Booking Fix] autocomplete & date picker ready');
+  console.log('[Booking Final Fix] ready');
 })();
 </script>
 </body>
