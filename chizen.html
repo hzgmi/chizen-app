@@ -8206,6 +8206,48 @@ html:not([data-theme="light"]) .tvl-form select option {
 .chz-select-arrow { color: #C5A059; font-size: 10px; }
 </style>
 <link rel="stylesheet" href="client/booking-pro.css?v=1">
+
+<!-- CHIZEN Passengers Layout Fix -->
+<style id="chz-passengers-fix">
+/* إجبار شبكة عدد المسافرين على 3 أعمدة */
+#sc-booking #form-flight .chz-step-body > div[style*="1fr 1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+/* إجبار كل حقل على أن يكون متساوي العرض */
+#sc-booking #form-flight .chz-step-body > div[style*="1fr 1fr 1fr"] > .tvl-f {
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+/* إخفاء قوائم البالغين والأطفال والرضع الأصلية (لأننا سنفتح نافذة أنيقة) */
+#sc-booking #form-flight #fly-pax,
+#sc-booking #form-flight #fly-children,
+#sc-booking #form-flight #fly-infants {
+  display: none !important;
+}
+/* تنسيق النافذة البديلة (Bottom Sheet) */
+.chz-pax-display {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 12px 14px !important;
+  border: 1.5px solid rgba(197,160,89,0.3) !important;
+  border-radius: 12px !important;
+  background: #1A2340 !important;
+  color: #F2E3C6 !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  min-height: 48px !important;
+  cursor: pointer !important;
+}
+.chz-pax-arrow { color: #C5A059; font-size: 10px; }
+</style>
 </head>
 <body>
 <div id="app">
@@ -21652,6 +21694,122 @@ window.APP.openChzSelect = function(targetId, el) {
 
 <script src="client/booking-pro-search.js?v=1"></script>
 <script src="client/booking-ios-picker.js?v=1"></script>
+
+<!-- CHIZEN Passengers Custom Select (Bottom Sheet) -->
+<script>
+(function(){
+  'use strict';
+
+  var PAX_OPTIONS = {
+    'fly-pax': [
+      { val: '1', label: '1 بالغ' },
+      { val: '2', label: '2 بالغين' },
+      { val: '3', label: '3 بالغين' },
+      { val: '4', label: '4 بالغين' },
+      { val: '5', label: '5 بالغين' },
+      { val: '6', label: '6 بالغين' }
+    ],
+    'fly-children': [
+      { val: '0', label: 'بدون أطفال' },
+      { val: '1', label: '1 طفل' },
+      { val: '2', label: '2 أطفال' },
+      { val: '3', label: '3 أطفال' },
+      { val: '4', label: '4 أطفال' }
+    ],
+    'fly-infants': [
+      { val: '0', label: 'بدون رضّع' },
+      { val: '1', label: '1 رضيع' },
+      { val: '2', label: '2 رضّع' },
+      { val: '3', label: '3 رضّع' }
+    ]
+  };
+
+  function openPaxModal(targetId, currentVal) {
+    var options = PAX_OPTIONS[targetId] || [];
+    if (!options.length) return;
+
+    var modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.7);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);';
+
+    var sheet = document.createElement('div');
+    sheet.style.cssText = 'background:#1A2340;width:100%;max-width:500px;border-radius:24px 24px 0 0;padding:20px;border-top:1px solid rgba(197,160,89,0.3);direction:rtl;animation:chzSlideUp 0.3s ease;';
+
+    var title = document.createElement('div');
+    title.textContent = 'عدد المسافرين';
+    title.style.cssText = 'text-align:center;color:#C5A059;font-weight:900;font-size:16px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.1);';
+    sheet.appendChild(title);
+
+    var list = document.createElement('div');
+    options.forEach(function(opt) {
+      var item = document.createElement('div');
+      var isActive = opt.val === currentVal;
+      item.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:12px;margin-bottom:4px;cursor:pointer;font-weight:700;font-size:15px;' + (isActive ? 'background:rgba(197,160,89,0.15);color:#C5A059;' : 'color:#F2E3C6;');
+      item.innerHTML = '<span>' + opt.label + '</span>' + (isActive ? '<span style="color:#C5A059;">✓</span>' : '');
+      item.onclick = function() {
+        var hidden = document.getElementById(targetId);
+        if (hidden) {
+          hidden.value = opt.val;
+          hidden.dispatchEvent(new Event('change', { bubbles: true }));
+          hidden.dispatchEvent(new Event('input', { bubbles: true }));
+          if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
+          if (window.APP && APP.renderPassengers) APP.renderPassengers();
+        }
+        var display = document.querySelector('.chz-pax-display[data-target="' + targetId + '"]');
+        if (display) {
+          display.querySelector('.chz-pax-label').textContent = opt.label;
+        }
+        modal.remove();
+      };
+      list.appendChild(item);
+    });
+    sheet.appendChild(list);
+
+    var cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'إلغاء';
+    cancelBtn.style.cssText = 'width:100%;padding:16px;margin-top:10px;background:transparent;border:none;border-top:1px solid rgba(255,255,255,0.05);color:#9ca3af;font-weight:800;font-size:14px;cursor:pointer;';
+    cancelBtn.onclick = function() { modal.remove(); };
+    sheet.appendChild(cancelBtn);
+
+    modal.appendChild(sheet);
+    modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+    document.body.appendChild(modal);
+  }
+
+  function attachPax() {
+    Object.keys(PAX_OPTIONS).forEach(function(id) {
+      var sel = document.getElementById(id);
+      if (!sel || sel._paxReady) return;
+      sel._paxReady = true;
+
+      var currentVal = sel.value;
+      var currentLabel = (PAX_OPTIONS[id].find(function(o) { return o.val === currentVal; }) || {}).label || PAX_OPTIONS[id][0].label;
+
+      var display = document.createElement('div');
+      display.className = 'chz-pax-display';
+      display.setAttribute('data-target', id);
+      display.innerHTML = '<span class="chz-pax-label">' + currentLabel + '</span><span class="chz-pax-arrow">▼</span>';
+      sel.parentNode.insertBefore(display, sel.nextSibling);
+
+      display.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openPaxModal(id, sel.value);
+      };
+
+      // مراقبة تغييرات القيمة
+      sel.addEventListener('change', function() {
+        var found = PAX_OPTIONS[id].find(function(o) { return o.val === sel.value; });
+        if (found) display.querySelector('.chz-pax-label').textContent = found.label;
+      });
+    });
+  }
+
+  setInterval(attachPax, 1000);
+  document.addEventListener('DOMContentLoaded', attachPax);
+  setTimeout(attachPax, 500);
+  console.log('[Passengers Custom Select] ready');
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
