@@ -21184,19 +21184,22 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   setTimeout(function() {
     if (window.APP && APP.renderPassengers) APP.renderPassengers();
   }, 1500);
+
+  // استدعاء تلقائي عند تحميل الصفحة
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (window.APP && APP.renderPassengers) APP.renderPassengers();
+    }, 2000);
+  });
 </body>
 </html
     renderPassengers: function() {
       var paxInput = document.getElementById('fly-pax');
       var childrenInput = document.getElementById('fly-children');
       var infantsInput = document.getElementById('fly-infants');
-      // نستخدم حقل الجواز الرئيسي كمرجع (لأنه في قسم بيانات المسافر)
-      var mainPassportField = document.getElementById('fly-passport');
-      if (!paxInput || !mainPassportField) return;
+      var container = document.getElementById('fly-passengers-list');
       
-      // إزالة أي حاوية قديمة
-      var oldContainer = document.getElementById('fly-passengers-list');
-      if (oldContainer) oldContainer.remove();
+      if (!paxInput || !container) return;
       
       var adults = parseInt(paxInput.value) || 1;
       var children = parseInt(childrenInput ? childrenInput.value : 0) || 0;
@@ -21204,18 +21207,16 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       
       var extraAdults = adults - 1;
       
-      if (extraAdults <= 0 && children <= 0 && infants <= 0) return;
+      if (extraAdults <= 0 && children <= 0 && infants <= 0) {
+        container.innerHTML = '';
+        return;
+      }
       
-      // إنشاء الحاوية
-      var container = document.createElement('div');
-      container.id = 'fly-passengers-list';
-      container.style.cssText = 'margin-top:15px; padding:15px; background:rgba(197,160,89,0.08); border-radius:12px; border:1px dashed rgba(197,160,89,0.4);';
-      
-      var html = '<div style="font-size:13px; font-weight:900; color:#C5A059; margin-bottom:12px;">👥 بيانات المسافرين الإضافيين</div>';
+      var html = '<div style="font-size:13px; font-weight:900; color:#C5A059; margin:16px 0 12px 0;">👥 بيانات المسافرين الإضافيين</div>';
       
       // البالغون
       for (var i = 2; i <= adults; i++) {
-        html += '<div style="margin-bottom:12px; padding:12px; background:rgba(0,0,0,0.03); border-radius:10px; border:1px solid rgba(0,0,0,0.05);">' +
+        html += '<div style="margin-bottom:12px; padding:12px; background:rgba(197,160,89,0.05); border:1px solid rgba(197,160,89,0.2); border-radius:12px;">' +
                   '<div style="font-size:12px; font-weight:800; color:#3b82f6; margin-bottom:8px;">👨 بالغ ' + i + '</div>' +
                   '<input id="fly-pax-name-' + i + '" type="text" placeholder="الاسم الكامل" style="width:100%; padding:12px; margin-bottom:8px; border:1px solid rgba(0,0,0,0.1); border-radius:10px; font-family:inherit; font-size:14px; box-sizing:border-box;">' +
                   '<input id="fly-pax-passport-' + i + '" type="text" placeholder="رقم الجواز" style="width:100%; padding:12px; border:1px solid rgba(0,0,0,0.1); border-radius:10px; font-family:inherit; font-size:14px; box-sizing:border-box;">' +
@@ -21224,7 +21225,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       
       // الأطفال
       for (var j = 1; j <= children; j++) {
-        html += '<div style="margin-bottom:12px; padding:12px; background:rgba(0,0,0,0.03); border-radius:10px; border:1px solid rgba(0,0,0,0.05);">' +
+        html += '<div style="margin-bottom:12px; padding:12px; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.2); border-radius:12px;">' +
                   '<div style="font-size:12px; font-weight:800; color:#10b981; margin-bottom:8px;">🧒 طفل ' + j + '</div>' +
                   '<input id="fly-child-name-' + j + '" type="text" placeholder="اسم الطفل" style="width:100%; padding:12px; margin-bottom:8px; border:1px solid rgba(0,0,0,0.1); border-radius:10px; font-family:inherit; font-size:14px; box-sizing:border-box;">' +
                   '<input id="fly-child-passport-' + j + '" type="text" placeholder="رقم الجواز" style="width:100%; padding:12px; border:1px solid rgba(0,0,0,0.1); border-radius:10px; font-family:inherit; font-size:14px; box-sizing:border-box;">' +
@@ -21233,7 +21234,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       
       // الرضع
       for (var k = 1; k <= infants; k++) {
-        html += '<div style="margin-bottom:12px; padding:12px; background:rgba(0,0,0,0.03); border-radius:10px; border:1px solid rgba(0,0,0,0.05);">' +
+        html += '<div style="margin-bottom:12px; padding:12px; background:rgba(245,158,11,0.05); border:1px solid rgba(245,158,11,0.2); border-radius:12px;">' +
                   '<div style="font-size:12px; font-weight:800; color:#f59e0b; margin-bottom:8px;">👶 رضيع ' + k + '</div>' +
                   '<input id="fly-infant-name-' + k + '" type="text" placeholder="اسم الرضيع" style="width:100%; padding:12px; margin-bottom:8px; border:1px solid rgba(0,0,0,0.1); border-radius:10px; font-family:inherit; font-size:14px; box-sizing:border-box;">' +
                   '<input id="fly-infant-passport-' + k + '" type="text" placeholder="رقم الجواز" style="width:100%; padding:12px; border:1px solid rgba(0,0,0,0.1); border-radius:10px; font-family:inherit; font-size:14px; box-sizing:border-box;">' +
@@ -21246,10 +21247,5 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       }
       
       container.innerHTML = html;
-      
-      // الإدراج: نضع الحاوية بعد آخر حقل في قسم بيانات المسافر
-      // نبحث عن الحقل الرئيسي fly-passport ونضع بعد حاويته (parent)
-      var target = mainPassportField.closest('.tvl-f') || mainPassportField.parentNode;
-      target.parentNode.insertBefore(container, target.nextSibling);
     },
 >
