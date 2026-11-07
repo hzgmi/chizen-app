@@ -21100,24 +21100,29 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       var paxInput = document.getElementById('fly-pax');
       var childrenInput = document.getElementById('fly-children');
       var infantsInput = document.getElementById('fly-infants');
-      var container = document.getElementById('fly-passengers-list');
-      if (!container) return;
+      var mainNameField = document.getElementById('fly-name');
+      if (!paxInput || !mainNameField) return;
       
-      var adults = parseInt(paxInput ? paxInput.value : 1) || 1;
+      // إزالة أي حاوية قديمة
+      var oldContainer = document.getElementById('fly-passengers-list');
+      if (oldContainer) oldContainer.remove();
+      
+      var adults = parseInt(paxInput.value) || 1;
       var children = parseInt(childrenInput ? childrenInput.value : 0) || 0;
       var infants = parseInt(infantsInput ? infantsInput.value : 0) || 0;
       
       var extraAdults = adults - 1;
       
-      if (extraAdults <= 0 && children <= 0 && infants <= 0) {
-        container.style.display = 'none';
-        container.innerHTML = '';
-        return;
-      }
+      if (extraAdults <= 0 && children <= 0 && infants <= 0) return;
       
-      container.style.display = 'block';
+      // إنشاء حاوية جديدة وإدراجها بعد حقل الاسم الرئيسي
+      var container = document.createElement('div');
+      container.id = 'fly-passengers-list';
+      container.style.cssText = 'margin-top:10px; padding:12px; background:rgba(197,160,89,0.05); border-radius:12px; border:1px dashed rgba(197,160,89,0.3);';
+      
       var html = '<div style="font-size:12px; font-weight:800; color:#C5A059; margin-bottom:10px;">👥 بيانات المسافرين الإضافيين</div>';
       
+      // البالغون
       for (var i = 2; i <= adults; i++) {
         html += '<div style="margin-bottom:10px; padding:10px; background:rgba(0,0,0,0.02); border-radius:8px;">' +
                   '<div style="font-size:11px; font-weight:700; color:#6b7280; margin-bottom:6px;">👨 بالغ ' + i + '</div>' +
@@ -21126,6 +21131,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
                 '</div>';
       }
       
+      // الأطفال
       for (var j = 1; j <= children; j++) {
         html += '<div style="margin-bottom:10px; padding:10px; background:rgba(0,0,0,0.02); border-radius:8px;">' +
                   '<div style="font-size:11px; font-weight:700; color:#6b7280; margin-bottom:6px;">🧒 طفل ' + j + '</div>' +
@@ -21134,6 +21140,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
                 '</div>';
       }
       
+      // الرضع
       for (var k = 1; k <= infants; k++) {
         html += '<div style="margin-bottom:10px; padding:10px; background:rgba(0,0,0,0.02); border-radius:8px;">' +
                   '<div style="font-size:11px; font-weight:700; color:#6b7280; margin-bottom:6px;">👶 رضيع ' + k + '</div>' +
@@ -21142,10 +21149,14 @@ window.__showLoginModal = function(actionLabel, pendingAction){
                 '</div>';
       }
       
+      // التنبيه
       if (children > 0 || infants > 0) {
         html += '<div style="margin-top:10px; padding:10px; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:8px; font-size:11px; color:#d97706; font-weight:700; text-align:center;">⚠️ تنبيه: الأطفال والرضع يحتاجون إلى جواز سفر خاص بهم للسفر الدولي.</div>';
       }
       
       container.innerHTML = html;
+      
+      // إدراج الحاوية بعد حقل الاسم مباشرة (وليس داخل حاوية قديمة)
+      mainNameField.parentNode.insertBefore(container, mainNameField.nextSibling);
     },
 >
