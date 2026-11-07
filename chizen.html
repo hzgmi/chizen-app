@@ -7898,6 +7898,74 @@ html[data-theme="light"] .chz-ac-sub {
   border-radius: 3px !important;
 }
 </style>
+
+<!-- CHIZEN Custom Select Style -->
+<style id="chz-custom-select-style">
+/* تنسيق القوائم المنسدلة (Select) بهوية CHIZEN */
+.chz-step-body select,
+.tvl-form select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-color: var(--cd, #ffffff) !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C5A059' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: left 12px center !important;
+  background-size: 16px !important;
+  padding: 12px 14px 12px 36px !important;
+  border: 1.5px solid rgba(197, 160, 89, 0.3) !important;
+  border-radius: 12px !important;
+  font-family: inherit !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+
+/* عند التمرير */
+.chz-step-body select:hover,
+.tvl-form select:hover {
+  border-color: rgba(197, 160, 89, 0.6) !important;
+  background-color: rgba(197, 160, 89, 0.03) !important;
+}
+
+/* عند التركيز */
+.chz-step-body select:focus,
+.tvl-form select:focus {
+  outline: none !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15) !important;
+}
+
+/* الوضع الليلي (Dark Mode) */
+html:not([data-theme="light"]) .chz-step-body select,
+html:not([data-theme="light"]) .tvl-form select {
+  background-color: #1A2340 !important;
+  color: #F2E3C6 !important;
+  border-color: rgba(197, 160, 89, 0.4) !important;
+}
+
+html:not([data-theme="light"]) .chz-step-body select:hover,
+html:not([data-theme="light"]) .tvl-form select:hover {
+  background-color: #1f2a4d !important;
+}
+
+/* تنسيق الخيارات داخل القائمة (Option) - خاصة للوضع الليلي */
+.chz-step-body select option,
+.tvl-form select option {
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+  padding: 10px !important;
+}
+
+html:not([data-theme="light"]) .chz-step-body select option,
+html:not([data-theme="light"]) .tvl-form select option {
+  background-color: #1A2340 !important;
+  color: #F2E3C6 !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
