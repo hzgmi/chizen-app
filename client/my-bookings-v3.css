@@ -361,3 +361,56 @@ html:not([data-theme="light"]) .mb-modal-amount { color: #F2E3C6; }
   margin: 0 auto;
   max-width: 100%;
 }
+
+/* ═══ §12. Autocomplete (Smart Search) ═══ */
+.chz-ac-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  z-index: 999;
+  background: #fff;
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+html:not([data-theme="light"]) .chz-ac-dropdown {
+  background: #131E42;
+  border-color: rgba(197, 160, 89, 0.5);
+}
+.chz-ac-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: background 0.15s;
+}
+.chz-ac-item:last-child { border-bottom: none; }
+.chz-ac-item:hover, .chz-ac-item.active {
+  background: rgba(197, 160, 89, 0.1);
+}
+.chz-ac-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1f2937;
+}
+html:not([data-theme="light"]) .chz-ac-name { color: #F2E3C6; }
+.chz-ac-code {
+  font-size: 11px;
+  color: #C5A059;
+  font-weight: 700;
+  margin-right: 6px;
+}
+.chz-ac-sub {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+.chz-ac-empty {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 12px;
+  padding: 16px;
+}
