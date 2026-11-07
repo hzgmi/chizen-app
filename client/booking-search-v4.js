@@ -1,11 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════
-   CHIZEN — Smart Search (Autocomplete) v5
-   يدعم: الطيران، الباصات، الفنادق
+   CHIZEN — Smart Search (Autocomplete) v5 — Robust
    ═══════════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  // ─── 1. قائمة الطيران (مطارات محلية ودولية) ───
   var FLIGHT_CITIES = [
     { name: 'عدن', airport: 'مطار عدن الدولي', code: 'ADE' },
     { name: 'صنعاء', airport: 'مطار صنعاء الدولي', code: 'SAH' },
@@ -35,9 +33,7 @@
     { name: 'المدينة المنورة', airport: 'المدينة', code: 'MED' }
   ];
 
-  // ─── 2. قائمة الباصات (مدن ومحطات) ───
   var BUS_CITIES = [
-    // ─── محطات داخلية ───
     { name: 'عدن', terminal: 'محطة عدن' },
     { name: 'صنعاء', terminal: 'محطة صنعاء' },
     { name: 'تعز', terminal: 'محطة تعز' },
@@ -46,7 +42,6 @@
     { name: 'سيئون', terminal: 'محطة سيئون' },
     { name: 'الحديدة', terminal: 'محطة الحديدة' },
     { name: 'مأرب', terminal: 'محطة مأرب' },
-    // ─── وجهات دولية (نقل بري) ───
     { name: 'السعودية', terminal: 'نقل بري دولي (منفذ الوديعة)' },
     { name: 'عمان', terminal: 'نقل بري دولي' },
     { name: 'الإمارات', terminal: 'نقل بري دولي' },
@@ -54,7 +49,6 @@
     { name: 'مصر', terminal: 'نقل بري دولي' }
   ];
 
-  // ─── 3. قائمة الفنادق (مدن) ───
   var HOTEL_CITIES = [
     { name: 'مكة', desc: 'فنادق مكة' },
     { name: 'المدينة', desc: 'فنادق المدينة' },
@@ -67,113 +61,103 @@
     { name: 'تعز', desc: 'فنادق تعز' }
   ];
 
-  window.ChizenSearch = {
-    init: function(inputId, list) {
-      var input = document.getElementById(inputId);
-      if (!input || input.dataset.acReady) return;
-      input.dataset.acReady = '1';
+  function attachSearch(inputId, list, label) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    if (input.dataset.chzAc === '1') return;
+    input.dataset.chzAc = '1';
 
-      // إنشاء الحاوية
-      var wrap = document.createElement('div');
-      wrap.style.position = 'relative';
-      input.parentNode.insertBefore(wrap, input);
-      wrap.appendChild(input);
+    var wrap = document.createElement('div');
+    wrap.style.position = 'relative';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
 
-      var dropdown = document.createElement('div');
-      dropdown.className = 'chz-ac-dropdown';
-      dropdown.style.display = 'none';
-      wrap.appendChild(dropdown);
+    var dd = document.createElement('div');
+    dd.className = 'chz-ac-dropdown';
+    dd.style.display = 'none';
+    wrap.appendChild(dd);
 
-      var activeIndex = -1;
-      var filtered = [];
+    var filtered = [];
+    var activeIdx = -1;
 
-      function renderList(query) {
-        var q = query.trim().toLowerCase();
-        if (q.length < 1) { dropdown.style.display = 'none'; return; }
-
-        filtered = list.filter(function(c) {
-          return c.name.toLowerCase().includes(q);
-        });
-
-        if (!filtered.length) {
-          dropdown.innerHTML = '<div class="chz-ac-item chz-ac-empty">لا توجد نتائج</div>';
-          dropdown.style.display = 'block';
-          return;
-        }
-
-        var html = '';
-        filtered.forEach(function(c, i) {
-          var sub = c.airport || c.terminal || c.desc || '';
-          var code = c.code ? ' <span class="chz-ac-code">' + c.code + '</span>' : '';
-          html += '<div class="chz-ac-item" data-idx="' + i + '">' +
-                    '<div class="chz-ac-name">' + c.name + code + '</div>' +
-                    (sub ? '<div class="chz-ac-sub">' + sub + '</div>' : '') +
-                  '</div>';
-        });
-        dropdown.innerHTML = html;
-        dropdown.style.display = 'block';
-        activeIndex = -1;
-
-        dropdown.querySelectorAll('.chz-ac-item').forEach(function(item) {
-          item.addEventListener('mousedown', function(e) {
-            e.preventDefault();
-            var idx = parseInt(item.getAttribute('data-idx'));
-            if (filtered[idx]) {
-              input.value = filtered[idx].name;
-              if (filtered[idx].code) input.setAttribute('data-code', filtered[idx].code);
-              dropdown.style.display = 'none';
-              input.dispatchEvent(new Event('input', { bubbles: true }));
-              input.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-          });
-        });
+    function render(q) {
+      q = (q || '').trim().toLowerCase();
+      if (q.length < 1) { dd.style.display = 'none'; return; }
+      filtered = list.filter(function(c) { return c.name.toLowerCase().indexOf(q) !== -1; });
+      if (!filtered.length) {
+        dd.innerHTML = '<div class="chz-ac-item chz-ac-empty">لا توجد نتائج</div>';
+        dd.style.display = 'block';
+        return;
       }
-
-      input.addEventListener('input', function() { renderList(input.value); });
-      input.addEventListener('focus', function() { if (input.value.trim()) renderList(input.value); });
-
-      input.addEventListener('keydown', function(e) {
-        if (dropdown.style.display === 'none') return;
-        var items = dropdown.querySelectorAll('.chz-ac-item:not(.chz-ac-empty)');
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          activeIndex = (activeIndex + 1) % items.length;
-          items[activeIndex].classList.add('active');
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          activeIndex = (activeIndex - 1 + items.length) % items.length;
-          items[activeIndex].classList.add('active');
-        } else if (e.key === 'Enter' && activeIndex >= 0) {
-          e.preventDefault();
-          items[activeIndex].dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-        } else if (e.key === 'Escape') {
-          dropdown.style.display = 'none';
-        }
+      var html = '';
+      filtered.forEach(function(c, i) {
+        var sub = c.airport || c.terminal || c.desc || '';
+        var code = c.code ? ' <span class="chz-ac-code">' + c.code + '</span>' : '';
+        html += '<div class="chz-ac-item" data-idx="' + i + '"><div class="chz-ac-name">' + c.name + code + '</div>' + (sub ? '<div class="chz-ac-sub">' + sub + '</div>' : '') + '</div>';
       });
-
-      document.addEventListener('mousedown', function(e) {
-        if (!wrap.contains(e.target)) dropdown.style.display = 'none';
+      dd.innerHTML = html;
+      dd.style.display = 'block';
+      activeIdx = -1;
+      dd.querySelectorAll('.chz-ac-item').forEach(function(it) {
+        it.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          var idx = parseInt(it.getAttribute('data-idx'));
+          if (filtered[idx]) {
+            input.value = filtered[idx].name;
+            if (filtered[idx].code) input.setAttribute('data-code', filtered[idx].code);
+            dd.style.display = 'none';
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
       });
-    },
-
-    initAll: function() {
-      var self = this;
-      // الطيران
-      self.init('fly-from', FLIGHT_CITIES);
-      self.init('fly-to', FLIGHT_CITIES);
-      // الباصات
-      self.init('bus-to', BUS_CITIES);
-      // الفنادق
-      self.init('hotel-city', HOTEL_CITIES);
     }
-  };
 
-  function boot() {
-    if (!window.APP) { setTimeout(boot, 300); return; }
-    if (window.APP.__searchInited) return;
-    window.APP.__searchInited = true;
-    window.ChizenSearch.initAll();
+    input.addEventListener('input', function() { render(input.value); });
+    input.addEventListener('focus', function() { if (input.value.trim()) render(input.value); });
+    input.addEventListener('click', function() { if (input.value.trim()) render(input.value); });
+    input.addEventListener('keydown', function(e) {
+      if (dd.style.display === 'none') return;
+      var items = dd.querySelectorAll('.chz-ac-item:not(.chz-ac-empty)');
+      if (e.key === 'ArrowDown') { e.preventDefault(); activeIdx = (activeIdx + 1) % items.length; items[activeIdx].classList.add('active'); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); activeIdx = (activeIdx - 1 + items.length) % items.length; items[activeIdx].classList.add('active'); }
+      else if (e.key === 'Enter' && activeIdx >= 0) { e.preventDefault(); items[activeIdx].dispatchEvent(new MouseEvent('mousedown', { bubbles: true })); }
+      else if (e.key === 'Escape') { dd.style.display = 'none'; }
+    });
+    document.addEventListener('mousedown', function(e) { if (!wrap.contains(e.target)) dd.style.display = 'none'; });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
+
+  // تشغيل ذكي: نحاول الآن، ثم كل 500ms حتى تنجح (لمدة 10 ثوانٍ)
+  var attempts = 0;
+  function tryInit() {
+    attempts++;
+    var flyFrom = document.getElementById('fly-from');
+    var busTo = document.getElementById('bus-to');
+    if (flyFrom && busTo) {
+      attachSearch('fly-from', FLIGHT_CITIES, 'from');
+      attachSearch('fly-to', FLIGHT_CITIES, 'to');
+      attachSearch('bus-to', BUS_CITIES, 'bus');
+      attachSearch('hotel-city', HOTEL_CITIES, 'hotel');
+      console.log('[ChizenSearch] initialized after', attempts, 'attempts');
+      return;
+    }
+    if (attempts < 20) {
+      setTimeout(tryInit, 500);
+    } else {
+      console.warn('[ChizenSearch] fields not found after 20 attempts');
+    }
+  }
+  tryInit();
+
+  // إعادة المحاولة عند تغيير التبويب
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('[data-tab], .tvl-svc, [onclick*="tvlSwitch"]')) {
+      setTimeout(function() {
+        attachSearch('fly-from', FLIGHT_CITIES, 'from');
+        attachSearch('fly-to', FLIGHT_CITIES, 'to');
+        attachSearch('bus-to', BUS_CITIES, 'bus');
+        attachSearch('hotel-city', HOTEL_CITIES, 'hotel');
+      }, 300);
+    }
+  });
 })();
