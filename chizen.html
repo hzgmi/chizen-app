@@ -21316,6 +21316,119 @@ window.__showLoginModal = function(actionLabel, pendingAction){
       if (window.APP && APP.renderPassengers) APP.renderPassengers();
     }, 2000);
   });
+
+  // إصلاح فتح Wheel Picker عند الضغط على حقل التاريخ
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'fly-date') {
+      e.preventDefault();
+      if (window.ChizenDatePicker && window.ChizenDatePicker.open) {
+        window.ChizenDatePicker.open('fly-date');
+      } else if (window.openChzWheelPicker) {
+        window.openChzWheelPicker('fly-date');
+      }
+    }
+    if (e.target && e.target.id === 'fly-return') {
+      e.preventDefault();
+      if (window.ChizenDatePicker && window.ChizenDatePicker.open) {
+        window.ChizenDatePicker.open('fly-return');
+      }
+    }
+    if (e.target && e.target.id === 'fly-dob') {
+      e.preventDefault();
+      if (window.ChizenDatePicker && window.ChizenDatePicker.open) {
+        window.ChizenDatePicker.open('fly-dob');
+      }
+    }
+  });
+
+<script>
+(function(){
+  'use strict';
+
+  function openCustomSelect(selectEl) {
+    if (!selectEl || selectEl.disabled) return;
+    
+    // إنشاء النافذة
+    var modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;justify-content:center;padding:20px;direction:rtl;backdrop-filter:blur(4px);';
+    
+    var box = document.createElement('div');
+    box.style.cssText = 'background:var(--cd,#fff);width:100%;max-width:400px;border-radius:24px;overflow:hidden;box-shadow:0 -10px 40px rgba(0,0,0,0.3);animation:slideUp 0.3s ease;';
+    
+    if (document.documentElement.getAttribute('data-theme') !== 'light') {
+      box.style.background = '#1A2340';
+      box.style.color = '#F2E3C6';
+    }
+    
+    var title = document.createElement('div');
+    title.style.cssText = 'padding:16px;text-align:center;font-weight:900;color:#C5A059;border-bottom:1px solid rgba(197,160,89,0.2);font-size:16px;';
+    title.textContent = 'اختر';
+    box.appendChild(title);
+    
+    var list = document.createElement('div');
+    list.style.cssText = 'max-height:50vh;overflow-y:auto;padding:8px;';
+    
+    Array.from(selectEl.options).forEach(function(opt) {
+      if (opt.value === '') return; // تخطي خيار "اختر"
+      var item = document.createElement('div');
+      item.style.cssText = 'padding:14px 16px;border-radius:12px;margin-bottom:4px;cursor:pointer;font-weight:700;font-size:14px;transition:background 0.15s;display:flex;justify-content:space-between;align-items:center;';
+      
+      if (opt.selected) {
+        item.style.background = 'rgba(197,160,89,0.15)';
+        item.style.color = '#C5A059';
+      }
+      
+      item.innerHTML = '<span>' + opt.textContent + '</span>' + (opt.selected ? '<span style="color:#C5A059;">✓</span>' : '');
+      
+      item.onclick = function() {
+        selectEl.value = opt.value;
+        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+        selectEl.dispatchEvent(new Event('input', { bubbles: true }));
+        modal.remove();
+      };
+      list.appendChild(item);
+    });
+    
+    box.appendChild(list);
+    
+    var cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'إلغاء';
+    cancelBtn.style.cssText = 'width:100%;padding:16px;background:transparent;border:none;border-top:1px solid rgba(0,0,0,0.05);color:#6b7280;font-weight:800;font-size:14px;cursor:pointer;';
+    if (document.documentElement.getAttribute('data-theme') !== 'light') {
+      cancelBtn.style.color = '#9ca3af';
+      cancelBtn.style.borderTopColor = 'rgba(255,255,255,0.1)';
+    }
+    cancelBtn.onclick = function() { modal.remove(); };
+    box.appendChild(cancelBtn);
+    
+    modal.appendChild(box);
+    modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+    document.body.appendChild(modal);
+  }
+
+  // اعتراض أي نقرة على أي select في التطبيق
+  document.addEventListener('click', function(e) {
+    var el = e.target;
+    if (el.tagName === 'SELECT' || (el.closest && el.closest('select'))) {
+      e.preventDefault();
+      var sel = el.tagName === 'SELECT' ? el : el.closest('select');
+      openCustomSelect(sel);
+    }
+  }, true);
+
+  // اعتراض اللمس (للهواتف)
+  document.addEventListener('touchstart', function(e) {
+    var el = e.target;
+    if (el.tagName === 'SELECT' || (el.closest && el.closest('select'))) {
+      e.preventDefault();
+      var sel = el.tagName === 'SELECT' ? el : el.closest('select');
+      openCustomSelect(sel);
+    }
+  }, { passive: false, capture: true });
+
+  console.log('[Custom Select] initialized');
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
