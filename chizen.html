@@ -8416,29 +8416,14 @@ html:not([data-theme="light"]) .tvl-form select option {
           <span class="chz-select-label">الخطوط اليمنية</span>
           <span class="chz-select-arrow">▼</span>
         </div>
-        <select id="fly-airline" style="display:none;" onchange="APP.tvlCalc('flight')">
-          <option value="الخطوط اليمنية">الخطوط اليمنية</option>
-          <option value="طيران اليمنية">طيران اليمنية</option>
-          <option value="الخطوط السعودية">الخطوط السعودية</option>
-          <option value="الخطوط المصرية">الخطوط المصرية</option>
-          <option value="طيران الإمارات">طيران الإمارات</option>
-          <option value="الخطوط التركية">الخطوط التركية</option>
-          <option value="الملكية الأردنية">الملكية الأردنية</option>
-          <option value="الخطوط القطرية">الخطوط القطرية</option>
-          <option value="الاتحاد للطيران">الاتحاد للطيران</option>
-        </select>
+        <input type="hidden" id="fly-airline" value="الخطوط اليمنية">
       </div>
       <div class="tvl-f"><label>الدرجة</label>
         <div class="chz-custom-select" data-target="fly-class" onclick="APP.openChzSelect('fly-class', this)">
           <span class="chz-select-label">اقتصادية</span>
           <span class="chz-select-arrow">▼</span>
         </div>
-        <select id="fly-class" style="display:none;" onchange="APP.tvlCalc('flight')">
-          <option value="economy">اقتصادية</option>
-          <option value="premium">مميزة</option>
-          <option value="business">رجال الأعمال</option>
-          <option value="first">الأولى</option>
-        </select>
+        <input type="hidden" id="fly-class" value="economy">
       </div>
     </div>
   </div>
@@ -8453,39 +8438,21 @@ html:not([data-theme="light"]) .tvl-form select option {
           <span class="chz-select-label">1 بالغ</span>
           <span class="chz-select-arrow">▼</span>
         </div>
-        <select id="fly-pax" style="display:none;" onchange="APP.tvlCalc('flight'); APP.renderPassengers()">
-          <option value="1">1 بالغ</option>
-          <option value="2">2 بالغين</option>
-          <option value="3">3 بالغين</option>
-          <option value="4">4 بالغين</option>
-          <option value="5">5 بالغين</option>
-          <option value="6">6 بالغين</option>
-        </select>
+        <input type="hidden" id="fly-pax" value="1">
       </div>
       <div class="tvl-f"><label>الأطفال</label>
         <div class="chz-custom-select" data-target="fly-children" onclick="APP.openChzSelect('fly-children', this)">
           <span class="chz-select-label">بدون أطفال</span>
           <span class="chz-select-arrow">▼</span>
         </div>
-        <select id="fly-children" style="display:none;" onchange="APP.renderPassengers()">
-          <option value="0">بدون أطفال</option>
-          <option value="1">1 طفل</option>
-          <option value="2">2 أطفال</option>
-          <option value="3">3 أطفال</option>
-          <option value="4">4 أطفال</option>
-        </select>
+        <input type="hidden" id="fly-children" value="0">
       </div>
       <div class="tvl-f"><label>الرضع</label>
         <div class="chz-custom-select" data-target="fly-infants" onclick="APP.openChzSelect('fly-infants', this)">
           <span class="chz-select-label">بدون رضّع</span>
           <span class="chz-select-arrow">▼</span>
         </div>
-        <select id="fly-infants" style="display:none;" onchange="APP.renderPassengers()">
-          <option value="0">بدون رضّع</option>
-          <option value="1">1 رضيع</option>
-          <option value="2">2 رضّع</option>
-          <option value="3">3 رضّع</option>
-        </select>
+        <input type="hidden" id="fly-infants" value="0">
       </div>
     </div>
   </div>
@@ -8502,12 +8469,7 @@ html:not([data-theme="light"]) .tvl-form select option {
           <span class="chz-select-label">يمني</span>
           <span class="chz-select-arrow">▼</span>
         </div>
-        <select id="fly-nation" style="display:none;">
-          <option value="يمني">يمني</option>
-          <option value="سعودي">سعودي</option>
-          <option value="مصري">مصري</option>
-          <option value="أخرى">أخرى</option>
-        </select>
+        <input type="hidden" id="fly-nation" value="يمني">
       </div>
     </div>
     <div class="tvl-f" style="margin-bottom:12px;"><label>تاريخ الميلاد</label><input id="fly-dob" type="text" placeholder="اختر التاريخ" readonly style="cursor:pointer;"></div>
@@ -8533,37 +8495,14 @@ html:not([data-theme="light"]) .tvl-form select option {
               <span class="chz-select-label">— اختر —</span>
               <span class="chz-select-arrow">▼</span>
             </div>
-            <select id="dlv-from-flight" style="display:none;" onchange="APP.tvlCalc('flight')">
-              <option value="">— اختر —</option>
-              <option value="crater">كريتر</option>
-              <option value="mansoura">المنصورة</option>
-              <option value="khormaksar">خور مكسر</option>
-              <option value="sheikh-othman">الشيخ عثمان</option>
-              <option value="dar-saad">دار سعد</option>
-              <option value="boraiga">البريقة</option>
-              <option value="mualla">المعلا</option>
-              <option value="tawahi">التواهي</option>
-              <option value="shab">الشعب</option>
-            </select>
+            <input type="hidden" id="dlv-from-flight" value="">
           </div>
           <div class="tvl-f"><label>إلى</label>
             <div class="chz-custom-select" data-target="dlv-to-flight" onclick="APP.openChzSelect('dlv-to-flight', this)">
               <span class="chz-select-label">— اختر —</span>
               <span class="chz-select-arrow">▼</span>
             </div>
-            <select id="dlv-to-flight" style="display:none;" onchange="APP.tvlCalc('flight')">
-              <option value="">— اختر —</option>
-              <option value="airport">✈️ مطار عدن</option>
-              <option value="crater">كريتر</option>
-              <option value="mansoura">المنصورة</option>
-              <option value="khormaksar">خور مكسر</option>
-              <option value="sheikh-othman">الشيخ عثمان</option>
-              <option value="dar-saad">دار سعد</option>
-              <option value="boraiga">البريقة</option>
-              <option value="mualla">المعلا</option>
-              <option value="tawahi">التواهي</option>
-              <option value="shab">الشعب</option>
-            </select>
+            <input type="hidden" id="dlv-to-flight" value="">
           </div>
         </div>
         <div class="tvl-f"><label>نوع السيارة</label>
@@ -8571,10 +8510,7 @@ html:not([data-theme="light"]) .tvl-form select option {
             <span class="chz-select-label">🚗 اقتصادي</span>
             <span class="chz-select-arrow">▼</span>
           </div>
-          <select id="dlv-car-flight" style="display:none;" onchange="APP.tvlCalc('flight')">
-            <option value="economy">🚗 اقتصادي</option>
-            <option value="family">🚐 عائلي</option>
-          </select>
+          <input type="hidden" id="dlv-car-flight" value="economy">
         </div>
       </div>
     </div>
@@ -8594,7 +8530,7 @@ html:not([data-theme="light"]) .tvl-form select option {
       <div class="tvl-stepbar"><span class="tvl-num">1</span><span>المسار</span></div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>من</label><input type="text" value="عدن" disabled></div>
-        <div class="tvl-f"><label>إلى</label><select id="bus-to" onchange="APP.tvlCalc('bus')"><option value="صنعاء">صنعاء</option><option value="تعز">تعز</option><option value="إب">إب</option><option value="المكلا">المكلا</option><option value="سيئون">سيئون</option><option value="الحديدة">الحديدة</option></select></div>
+        <div class="tvl-f"><label>إلى</label><input type="hidden" id="bus-to" value="صنعاء"></div>
       </div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>تاريخ السفر</label><div class="chz-date-group" data-target="bus-date"></div><input id="bus-date" type="hidden"></div>
@@ -8604,11 +8540,11 @@ html:not([data-theme="light"]) .tvl-form select option {
       <div class="tvl-stepbar"><span class="tvl-num">2</span><span>التفاصيل</span></div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>عدد المسافرين</label><input id="bus-pax" type="number" min="1" value="1" oninput="APP.tvlCalc('bus')"></div>
-        <div class="tvl-f"><label>فئة الباص</label><select id="bus-class" onchange="APP.tvlCalc('bus')"><option value="economy">اقتصادي</option><option value="comfort">مريح</option><option value="vip">VIP</option></select></div>
+        <div class="tvl-f"><label>فئة الباص</label><input type="hidden" id="bus-class" value="economy"></div>
       </div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>حقائب</label><input id="bus-luggage" type="number" min="0" value="1"></div>
-        <div class="tvl-f"><label>نوع الرحلة</label><select id="bus-trip"><option value="oneway">ذهاب فقط</option><option value="round">ذهاب وعودة</option></select></div>
+        <div class="tvl-f"><label>نوع الرحلة</label><input type="hidden" id="bus-trip" value="oneway"></div>
       </div>
       <div class="tvl-f"><label>احتياجات خاصة</label><textarea id="bus-special" rows="2"></textarea></div>
 
@@ -8621,10 +8557,10 @@ html:not([data-theme="light"]) .tvl-form select option {
     <label class="tvl-chk"><input type="checkbox" id="dlv-chk-bus" onchange="(function(cb){var f=document.getElementById('dlv-fields-bus');if(cb.checked)f.classList.add('on');else f.classList.remove('on');APP.tvlCalc('bus');})(this)"><span>أحتاج توصيل</span></label>
     <div class="tvl-dlv-fields" id="dlv-fields-bus">
       <div class="tvl-row2">
-        <div class="tvl-f"><label>من</label><select id="dlv-from-bus" onchange="APP.tvlCalc('bus')"><option value="">— اختر —</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
-        <div class="tvl-f"><label>إلى</label><select id="dlv-to-bus" onchange="APP.tvlCalc('bus')"><option value="">— اختر —</option><option value="airport">✈️ مطار عدن</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
+        <div class="tvl-f"><label>من</label><input type="hidden" id="dlv-from-bus" value=""></div>
+        <div class="tvl-f"><label>إلى</label><input type="hidden" id="dlv-to-bus" value=""></div>
       </div>
-      <div class="tvl-f"><label>نوع السيارة</label><select id="dlv-car-bus" onchange="APP.tvlCalc('bus')"><option value="economy">🚗 اقتصادي</option><option value="family">🚐 عائلي</option></select></div>
+      <div class="tvl-f"><label>نوع السيارة</label><input type="hidden" id="dlv-car-bus" value="economy"></div>
     </div>
 
       <div class="price-preview" id="tvl-pp-bus" data-ready="0"></div>
@@ -8652,8 +8588,8 @@ html:not([data-theme="light"]) .tvl-form select option {
         <div class="tvl-f"><label>أطفال</label><input id="hajj-children" type="number" min="0" value="0"></div>
       </div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>الباقة</label><select id="hajj-package" onchange="APP.tvlCalc('hajj')"><option value="eco">اقتصادية</option><option value="comfort">مريحة</option><option value="premium">مميزة</option></select></div>
-        <div class="tvl-f"><label>الغرفة</label><select id="hajj-room"><option value="quad">رباعية</option><option value="triple">ثلاثية</option><option value="double">مزدوجة</option><option value="single">فردية</option></select></div>
+        <div class="tvl-f"><label>الباقة</label><input type="hidden" id="hajj-package" value="eco"></div>
+        <div class="tvl-f"><label>الغرفة</label><input type="hidden" id="hajj-room" value="quad"></div>
       </div>
 
       <div class="tvl-stepbar"><span class="tvl-num">2</span><span>بيانات المسافر</span></div>
@@ -8669,10 +8605,10 @@ html:not([data-theme="light"]) .tvl-form select option {
     <label class="tvl-chk"><input type="checkbox" id="dlv-chk-hajj" onchange="(function(cb){var f=document.getElementById('dlv-fields-hajj');if(cb.checked)f.classList.add('on');else f.classList.remove('on');APP.tvlCalc('hajj');})(this)"><span>أحتاج توصيل</span></label>
     <div class="tvl-dlv-fields" id="dlv-fields-hajj">
       <div class="tvl-row2">
-        <div class="tvl-f"><label>من</label><select id="dlv-from-hajj" onchange="APP.tvlCalc('hajj')"><option value="">— اختر —</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
-        <div class="tvl-f"><label>إلى</label><select id="dlv-to-hajj" onchange="APP.tvlCalc('hajj')"><option value="">— اختر —</option><option value="airport">✈️ مطار عدن</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
+        <div class="tvl-f"><label>من</label><input type="hidden" id="dlv-from-hajj" value=""></div>
+        <div class="tvl-f"><label>إلى</label><input type="hidden" id="dlv-to-hajj" value=""></div>
       </div>
-      <div class="tvl-f"><label>نوع السيارة</label><select id="dlv-car-hajj" onchange="APP.tvlCalc('hajj')"><option value="economy">🚗 اقتصادي</option><option value="family">🚐 عائلي</option></select></div>
+      <div class="tvl-f"><label>نوع السيارة</label><input type="hidden" id="dlv-car-hajj" value="economy"></div>
     </div>
 
       <div class="price-preview" id="tvl-pp-hajj" data-ready="0"></div>
@@ -8703,8 +8639,8 @@ html:not([data-theme="light"]) .tvl-form select option {
         <div class="tvl-f"><label>أطفال</label><input id="hotel-children" type="number" min="0" value="0"></div>
       </div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>نوع الغرفة</label><select id="hotel-room-type"><option value="single">فردية</option><option value="double">مزدوجة</option><option value="family">عائلية</option><option value="suite">سويت</option></select></div>
-        <div class="tvl-f"><label>التصنيف</label><select id="hotel-class"><option value="any">أي مستوى</option><option value="3">3 نجوم</option><option value="4">4 نجوم</option><option value="5">5 نجوم</option></select></div>
+        <div class="tvl-f"><label>نوع الغرفة</label><input type="hidden" id="hotel-room-type" value="single"></div>
+        <div class="tvl-f"><label>التصنيف</label><input type="hidden" id="hotel-class" value="any"></div>
       </div>
 
       <div class="tvl-stepbar"><span class="tvl-num">4</span><span>بيانات الحجز</span></div>
@@ -8719,10 +8655,10 @@ html:not([data-theme="light"]) .tvl-form select option {
     <label class="tvl-chk"><input type="checkbox" id="dlv-chk-hotel" onchange="(function(cb){var f=document.getElementById('dlv-fields-hotel');if(cb.checked)f.classList.add('on');else f.classList.remove('on');APP.tvlCalc('hotel');})(this)"><span>أحتاج توصيل</span></label>
     <div class="tvl-dlv-fields" id="dlv-fields-hotel">
       <div class="tvl-row2">
-        <div class="tvl-f"><label>من</label><select id="dlv-from-hotel" onchange="APP.tvlCalc('hotel')"><option value="">— اختر —</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
-        <div class="tvl-f"><label>إلى</label><select id="dlv-to-hotel" onchange="APP.tvlCalc('hotel')"><option value="">— اختر —</option><option value="airport">✈️ مطار عدن</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
+        <div class="tvl-f"><label>من</label><input type="hidden" id="dlv-from-hotel" value=""></div>
+        <div class="tvl-f"><label>إلى</label><input type="hidden" id="dlv-to-hotel" value=""></div>
       </div>
-      <div class="tvl-f"><label>نوع السيارة</label><select id="dlv-car-hotel" onchange="APP.tvlCalc('hotel')"><option value="economy">🚗 اقتصادي</option><option value="family">🚐 عائلي</option></select></div>
+      <div class="tvl-f"><label>نوع السيارة</label><input type="hidden" id="dlv-car-hotel" value="economy"></div>
     </div>
 
       <div class="price-preview" id="tvl-pp-hotel" data-ready="0"></div>
@@ -8743,8 +8679,8 @@ html:not([data-theme="light"]) .tvl-form select option {
 
       <div class="tvl-stepbar"><span class="tvl-num">2</span><span>المواقع</span></div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>من</label><select id="dlv-from" onchange="APP.tvlCalc('delivery')"><option value="">— اختر —</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
-        <div class="tvl-f"><label>إلى</label><select id="dlv-to" onchange="APP.tvlCalc('delivery')"><option value="">— اختر —</option><option value="airport">✈️ مطار عدن</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
+        <div class="tvl-f"><label>من</label><input type="hidden" id="dlv-from" value=""></div>
+        <div class="tvl-f"><label>إلى</label><input type="hidden" id="dlv-to" value=""></div>
       </div>
 
       <div class="tvl-stepbar"><span class="tvl-num">3</span><span>التاريخ والوقت</span></div>
@@ -8753,7 +8689,7 @@ html:not([data-theme="light"]) .tvl-form select option {
         <div class="tvl-f"><label>الوقت</label><input id="dlv-time" type="time"></div>
       </div>
       <div class="tvl-row2">
-        <div class="tvl-f"><label>نوع السيارة</label><select id="dlv-car" onchange="APP.tvlCalc('delivery')"><option value="economy">🚗 اقتصادي</option><option value="family">🚐 عائلي</option><option value="large">🚚 كبير</option></select></div>
+        <div class="tvl-f"><label>نوع السيارة</label><input type="hidden" id="dlv-car" value="economy"></div>
         <div class="tvl-f"><label>المسافرون</label><input id="dlv-pax" type="number" min="1" value="1"></div>
       </div>
 
@@ -8890,8 +8826,8 @@ html:not([data-theme="light"]) .tvl-form select option {
       <div class="cm-field"><label>العداد (كم)</label><input id="cm-f-km" type="number" placeholder="50000" min="0"></div>
     </div>
     <div class="cm-row" id="cm-phone-extra" style="display:none">
-      <div class="cm-field"><label>السعة</label><select id="cm-f-storage"><option value="64">64 جيجا</option><option value="128" selected>128 جيجا</option><option value="256">256 جيجا</option><option value="512">512 جيجا</option><option value="1024">1 تيرا</option></select></div>
-      <div class="cm-field"><label>الحالة</label><select id="cm-f-condition"><option value="new">جديد</option><option value="like-new">كالجديد</option><option value="used" selected>مستعمل</option></select></div>
+      <div class="cm-field"><label>السعة</label><input type="hidden" id="cm-f-storage" value="64"></div>
+      <div class="cm-field"><label>الحالة</label><input type="hidden" id="cm-f-condition" value="new"></div>
     </div>
 
     <div class="cm-field"><label>الوصف *</label><textarea id="cm-f-desc" rows="4" placeholder="اكتب وصفاً دقيقاً: الحالة، المميزات، أي عيوب..."></textarea></div>
@@ -21646,6 +21582,78 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   
   console.log('[Custom Select v2] hijacked all selects');
 })();
+</script>
+
+<script>
+// خريطة خيارات القوائم (بديلة لـ select المحذوفة)
+window.CHZ_OPTIONS = {
+  'fly-airline': ['الخطوط اليمنية','طيران اليمنية','الخطوط السعودية','الخطوط المصرية','طيران الإمارات','الخطوط التركية','الملكية الأردنية','الخطوط القطرية','الاتحاد للطيران'],
+  'fly-class': ['اقتصادية','مميزة','رجال الأعمال','الأولى'],
+  'fly-pax': ['1 بالغ','2 بالغين','3 بالغين','4 بالغين','5 بالغين','6 بالغين'],
+  'fly-children': ['بدون أطفال','1 طفل','2 أطفال','3 أطفال','4 أطفال'],
+  'fly-infants': ['بدون رضّع','1 رضيع','2 رضّع','3 رضّع'],
+  'fly-nation': ['يمني','سعودي','مصري','أخرى'],
+  'dlv-from-flight': ['— اختر —','كريتر','المنصورة','خور مكسر','الشيخ عثمان','دار سعد','البريقة','المعلا','التواهي','الشعب'],
+  'dlv-to-flight': ['— اختر —','✈️ مطار عدن','كريتر','المنصورة','خور مكسر','الشيخ عثمان','دار سعد','البريقة','المعلا','التواهي','الشعب'],
+  'dlv-car-flight': ['🚗 اقتصادي','🚐 عائلي'],
+  'fly-dob': [],
+  'fly-date': [],
+  'fly-return': []
+};
+
+// تحديث دالة openChzSelect لتعمل مع الخريطة
+window.APP = window.APP || {};
+window.APP.openChzSelect = function(targetId, el) {
+  var options = window.CHZ_OPTIONS[targetId] || [];
+  if (!options.length) { 
+    // إذا لم تكن القائمة في الخريطة، اقرأها من حقل مخفي (احتياطي)
+    var realSelect = document.getElementById(targetId);
+    if (realSelect && realSelect.options) {
+      options = Array.from(realSelect.options).map(function(o){return o.textContent;});
+    }
+  }
+  
+  var modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.7);display:flex;align-items:flex-end;justify-content:center;padding:20px;direction:rtl;backdrop-filter:blur(4px);';
+  
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#1A2340;width:100%;max-width:400px;border-radius:24px;overflow:hidden;box-shadow:0 -10px 40px rgba(0,0,0,0.5);border:1px solid rgba(197,160,89,0.3);animation:slideUp 0.3s ease;';
+  
+  var title = document.createElement('div');
+  title.style.cssText = 'padding:16px;text-align:center;font-weight:900;color:#C5A059;border-bottom:1px solid rgba(197,160,89,0.2);font-size:16px;';
+  title.textContent = 'اختر';
+  box.appendChild(title);
+  
+  var list = document.createElement('div');
+  list.style.cssText = 'max-height:50vh;overflow-y:auto;padding:8px;';
+  
+  options.forEach(function(optText, idx) {
+    if (!optText || optText === '— اختر —') return;
+    var item = document.createElement('div');
+    item.style.cssText = 'padding:14px 16px;border-radius:12px;margin-bottom:4px;cursor:pointer;font-weight:700;font-size:14px;color:#F2E3C6;transition:background 0.15s;display:flex;justify-content:space-between;align-items:center;';
+    item.innerHTML = '<span>' + optText + '</span>';
+    item.onclick = function(e) {
+      e.stopPropagation();
+      var hidden = document.getElementById(targetId);
+      if (hidden) { hidden.value = optText; hidden.dispatchEvent(new Event('change', { bubbles: true })); }
+      var labelEl = el.querySelector('.chz-select-label');
+      if (labelEl) labelEl.textContent = optText;
+      modal.remove();
+    };
+    list.appendChild(item);
+  });
+  
+  box.appendChild(list);
+  var cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'إلغاء';
+  cancelBtn.style.cssText = 'width:100%;padding:16px;background:transparent;border:none;border-top:1px solid rgba(255,255,255,0.05);color:#9ca3af;font-weight:800;font-size:14px;cursor:pointer;';
+  cancelBtn.onclick = function() { modal.remove(); };
+  box.appendChild(cancelBtn);
+  
+  modal.appendChild(box);
+  modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+  document.body.appendChild(modal);
+};
 </script>
 </body>
 </html
