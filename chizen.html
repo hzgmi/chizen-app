@@ -8266,11 +8266,15 @@ html:not([data-theme="light"]) .tvl-form select option {
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
             <div class="tvl-f">
               <label>تاريخ المغادرة</label>
-              <input id="fly-date" type="text" placeholder="اختر التاريخ" oninput="APP.tvlCalc('flight')" readonly>
+              <div class="chz-date-group" data-target="fly-date" style="position:relative;">
+                <input id="fly-date" type="text" placeholder="اختر التاريخ" oninput="APP.tvlCalc('flight')" readonly style="cursor:pointer;">
+              </div>
             </div>
             <div class="tvl-f">
               <label>تاريخ العودة</label>
-              <input id="fly-return" type="text" placeholder="اختر التاريخ" oninput="APP.tvlCalc('flight')" readonly>
+              <div class="chz-date-group" data-target="fly-return" style="position:relative;">
+                <input id="fly-return" type="text" placeholder="اختر التاريخ" oninput="APP.tvlCalc('flight')" readonly style="cursor:pointer;">
+              </div>
             </div>
           </div>
 
@@ -8373,7 +8377,9 @@ html:not([data-theme="light"]) .tvl-form select option {
           </div>
           <div class="tvl-f">
             <label>تاريخ الميلاد</label>
-            <input id="fly-dob" type="text" placeholder="اختر التاريخ" readonly>
+            <div class="chz-date-group" data-target="fly-dob" style="position:relative;">
+              <input id="fly-dob" type="text" placeholder="اختر التاريخ" readonly style="cursor:pointer;">
+            </div>
           </div>
           <!-- الحاوية الديناميكية للمسافرين الإضافيين -->
           <div id="fly-passengers-list"></div>

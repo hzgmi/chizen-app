@@ -7,9 +7,10 @@
 
   var MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 
+  var currentYear = new Date().getFullYear();
   var RANGES = {
-    'fly-dob': { min: 1930, max: 2010, label: 'تاريخ الميلاد' },
-    default:  { min: 2024, max: 2030, label: 'التاريخ' }
+    'fly-dob': { min: 1930, max: currentYear - 2, label: 'تاريخ الميلاد' },
+    'default': { min: currentYear, max: currentYear + 5, label: 'التاريخ' }
   };
 
   // ═══ 1) صوت "طق" ═══
