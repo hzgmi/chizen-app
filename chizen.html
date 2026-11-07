@@ -8166,88 +8166,178 @@ html[data-theme="light"] .chz-ac-sub {
   <div class="tvl-forms">
 
     <!-- ═══ FLIGHT ═══ -->
-    <div class="tvl-form" id="form-flight">
-      <div class="tvl-form-head"><div class="tvl-form-i">✈️</div><div><div class="tvl-form-t">حجز رحلة طيران</div><div class="tvl-form-s">سنعرض سعراً تقديرياً فور اكتمال البيانات</div></div></div>
+    <div class="tvl-form" id="form-flight" style="padding:0; background:transparent;">
 
-      <div class="tvl-stepbar"><span class="tvl-num">1</span><span>نوع الرحلة</span></div>
-      <div class="tvl-chips">
-        <button type="button" class="tvl-chip active" data-val="oneway" onclick="APP.tvlChip(this,'fly-trip','flight')">ذهاب فقط</button>
-        <button type="button" class="tvl-chip" data-val="round" onclick="APP.tvlChip(this,'fly-trip','flight')">ذهاب وعودة</button>
-        <button type="button" class="tvl-chip" data-val="multi" onclick="APP.tvlChip(this,'fly-trip','flight')">متعددة</button>
-      </div>
-      <input type="hidden" id="fly-trip" value="oneway">
-
-      <div class="tvl-stepbar"><span class="tvl-num">2</span><span>المسار</span></div>
-      <div class="tvl-row2">
-        <div class="tvl-f"><label>من</label><input id="fly-from" type="text" value="عدن" oninput="APP.tvlCalc('flight')"></div>
-        <div class="tvl-f"><label>إلى</label><input id="fly-to" type="text" placeholder="صنعاء / القاهرة..." oninput="APP.tvlCalc('flight')"></div>
-      </div>
-      <div class="tvl-row2">
-        <div class="tvl-f"><label>تاريخ المغادرة</label><div class="chz-date-group" data-target="fly-date"></div><input id="fly-date" type="hidden"></div>
-        <div class="tvl-f"><label>تاريخ العودة</label><div class="chz-date-group" data-target="fly-return"></div><input id="fly-return" type="hidden"></div>
-      </div>
-
-      <div class="tvl-stepbar"><span class="tvl-num">3</span><span>المسافرون والدرجة</span></div>
-      <div class="tvl-row3">
-        <div class="tvl-f"><label>بالغون</label>
-          <select id="fly-pax" onchange="APP.tvlCalc('flight'); APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit;">
-            <option value="1">1 بالغ</option>
-            <option value="2">2 بالغين</option>
-            <option value="3">3 بالغين</option>
-            <option value="4">4 بالغين</option>
-            <option value="5">5 بالغين</option>
-          </select>
+      <!-- ═══ بطاقة 1: المسار ═══ -->
+      <div class="chz-step-card">
+        <div class="chz-step-header">
+          <span class="chz-step-num">1</span>
+          <span class="chz-step-title">تفاصيل المسار</span>
         </div>
-        <div class="tvl-f"><label>أطفال</label>
-          <select id="fly-children" onchange="APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit;">
-            <option value="0">بدون أطفال</option>
-            <option value="1">1 طفل</option>
-            <option value="2">2 أطفال</option>
-            <option value="3">3 أطفال</option>
-          </select>
+        <div class="chz-step-body">
+          <!-- نوع الرحلة -->
+          <div class="tvl-chips" style="margin-bottom:16px;">
+            <button type="button" class="tvl-chip active" data-val="oneway" onclick="APP.tvlChip(this,'fly-trip','flight')">ذهاب فقط</button>
+            <button type="button" class="tvl-chip" data-val="roundtrip" onclick="APP.tvlChip(this,'fly-trip','flight')">ذهاب وعودة</button>
+            <button type="button" class="tvl-chip" data-val="multi" onclick="APP.tvlChip(this,'fly-trip','flight')">متعددة</button>
+          </div>
+
+          <!-- من / إلى -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="tvl-f">
+              <label>من</label>
+              <input id="fly-from" type="text" value="عدن" placeholder="المدينة أو المطار" oninput="APP.tvlCalc('flight')">
+            </div>
+            <div class="tvl-f">
+              <label>إلى</label>
+              <input id="fly-to" type="text" placeholder="المدينة أو المطار" oninput="APP.tvlCalc('flight')">
+            </div>
+          </div>
+
+          <!-- التواريخ -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="tvl-f">
+              <label>تاريخ المغادرة</label>
+              <input id="fly-date" type="text" placeholder="اختر التاريخ" oninput="APP.tvlCalc('flight')" readonly>
+            </div>
+            <div class="tvl-f">
+              <label>تاريخ العودة</label>
+              <input id="fly-return" type="text" placeholder="اختر التاريخ" oninput="APP.tvlCalc('flight')" readonly>
+            </div>
+          </div>
+
+          <!-- شركة الطيران والدرجة -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="tvl-f">
+              <label>شركة الطيران</label>
+              <select id="fly-airline" onchange="APP.tvlCalc('flight')" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                <option value="الخطوط اليمنية">الخطوط اليمنية</option>
+                <option value="طيران اليمنية">طيران اليمنية</option>
+                <option value="الخطوط السعودية">الخطوط السعودية</option>
+                <option value="الخطوط المصرية">الخطوط المصرية</option>
+                <option value="طيران الإمارات">طيران الإمارات</option>
+                <option value="الخطوط التركية">الخطوط التركية</option>
+                <option value="الملكية الأردنية">الملكية الأردنية</option>
+                <option value="الخطوط القطرية">الخطوط القطرية</option>
+                <option value="الاتحاد للطيران">الاتحاد للطيران</option>
+              </select>
+            </div>
+            <div class="tvl-f">
+              <label>الدرجة</label>
+              <select id="fly-class" onchange="APP.tvlCalc('flight')" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                <option value="economy">اقتصادية</option>
+                <option value="premium">مميزة</option>
+                <option value="business">رجال الأعمال</option>
+                <option value="first">الأولى</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="tvl-f"><label>رضّع</label>
-          <select id="fly-infants" onchange="APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit;">
-            <option value="0">بدون رضّع</option>
-            <option value="1">1 رضيع</option>
-            <option value="2">2 رضّع</option>
-          </select>
+      </div>
+
+      <!-- ═══ بطاقة 2: المسافرون ═══ -->
+      <div class="chz-step-card">
+        <div class="chz-step-header">
+          <span class="chz-step-num">2</span>
+          <span class="chz-step-title">عدد المسافرين</span>
+        </div>
+        <div class="chz-step-body">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+            <div class="tvl-f">
+              <label>البالغون</label>
+              <select id="fly-pax" onchange="APP.tvlCalc('flight'); APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                <option value="1">1 بالغ</option>
+                <option value="2">2 بالغين</option>
+                <option value="3">3 بالغين</option>
+                <option value="4">4 بالغين</option>
+                <option value="5">5 بالغين</option>
+                <option value="6">6 بالغين</option>
+              </select>
+            </div>
+            <div class="tvl-f">
+              <label>الأطفال</label>
+              <select id="fly-children" onchange="APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                <option value="0">بدون أطفال</option>
+                <option value="1">1 طفل</option>
+                <option value="2">2 أطفال</option>
+                <option value="3">3 أطفال</option>
+                <option value="4">4 أطفال</option>
+              </select>
+            </div>
+            <div class="tvl-f">
+              <label>الرضع</label>
+              <select id="fly-infants" onchange="APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                <option value="0">بدون رضّع</option>
+                <option value="1">1 رضيع</option>
+                <option value="2">2 رضّع</option>
+                <option value="3">3 رضّع</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="tvl-f"><label>شركة الطيران</label><select id="fly-airline"><option value="yemenia">الخطوط اليمنية</option><option value="qutaibi">طيران عدن</option><option value="other">أخرى</option></select></div>
-      <div class="tvl-f"><label>الدرجة</label><select id="fly-class" onchange="APP.tvlCalc('flight')"><option value="economy">اقتصادية</option><option value="premium">مميزة</option><option value="business">رجال الأعمال</option><option value="first">الأولى</option></select></div>
 
-      <div class="tvl-stepbar"><span class="tvl-num">4</span><span>بيانات المسافر</span></div>
-      <div class="tvl-f"><label>الاسم الكامل (للمسافر الرئيسي)</label><input id="fly-name" type="text" placeholder="كما في الجواز"></div>
-      <div id="fly-passengers-list" style="display:none; margin-top:10px; padding:12px; background:rgba(197,160,89,0.05); border-radius:12px; border:1px dashed rgba(197,160,89,0.3);">
-        <div style="font-size:12px; font-weight:800; color:#C5A059; margin-bottom:10px;">👥 بيانات المسافرين الإضافيين</div>
-        <!-- سيتم توليد الحقول هنا ديناميكياً -->
+      <!-- ═══ بطاقة 3: بيانات المسافرين ═══ -->
+      <div class="chz-step-card">
+        <div class="chz-step-header">
+          <span class="chz-step-num">3</span>
+          <span class="chz-step-title">بيانات المسافر الرئيسي</span>
+        </div>
+        <div class="chz-step-body">
+          <div class="tvl-f" style="margin-bottom:12px;">
+            <label>الاسم الكامل (كما في الجواز)</label>
+            <input id="fly-name" type="text" placeholder="الاسم الثلاثي">
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="tvl-f">
+              <label>رقم الجواز</label>
+              <input id="fly-passport" type="text" placeholder="رقم الجواز">
+            </div>
+            <div class="tvl-f">
+              <label>الجنسية</label>
+              <select id="fly-nation" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                <option value="يمني">يمني</option>
+                <option value="سعودي">سعودي</option>
+                <option value="مصري">مصري</option>
+                <option value="أخرى">أخرى</option>
+              </select>
+            </div>
+          </div>
+          <div class="tvl-f">
+            <label>تاريخ الميلاد</label>
+            <input id="fly-dob" type="text" placeholder="اختر التاريخ" readonly>
+          </div>
+          <!-- الحاوية الديناميكية للمسافرين الإضافيين -->
+          <div id="fly-passengers-list"></div>
+        </div>
       </div>
-      <div class="tvl-row2">
-        <div class="tvl-f"><label>الجنسية</label><input id="fly-nation" type="text" value="يمني"></div>
-        <div class="tvl-f"><label>تاريخ الميلاد</label><div class="chz-date-group" data-target="fly-dob"></div><input id="fly-dob" type="hidden"></div>
-      </div>
-      <div class="tvl-row2">
-        <div class="tvl-f"><label>رقم الجواز</label><input id="fly-passport" type="text"></div>
-        <div class="tvl-f"><label>الجوال</label><input id="fly-phone" type="tel" placeholder="7xx xxx xxx"></div>
-      </div>
-      <div class="tvl-f"><label>البريد (اختياري)</label><input id="fly-email" type="email"></div>
 
-      
-    <div class="tvl-stepbar"><span class="tvl-num">5</span><span>توصيل داخل عدن <small>(اختياري)</small></span></div>
-    <label class="tvl-chk"><input type="checkbox" id="dlv-chk-flight" onchange="(function(cb){var f=document.getElementById('dlv-fields-flight');if(cb.checked)f.classList.add('on');else f.classList.remove('on');APP.tvlCalc('flight');})(this)"><span>أحتاج توصيل</span></label>
-    <div class="tvl-dlv-fields" id="dlv-fields-flight">
-      <div class="tvl-row2">
-        <div class="tvl-f"><label>من</label><select id="dlv-from-flight" onchange="APP.tvlCalc('flight')"><option value="">— اختر —</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
-        <div class="tvl-f"><label>إلى</label><select id="dlv-to-flight" onchange="APP.tvlCalc('flight')"><option value="">— اختر —</option><option value="airport">✈️ مطار عدن</option><option value="crater">كريتر</option><option value="mansoura">المنصورة</option><option value="khormaksar">خور مكسر</option><option value="sheikh-othman">الشيخ عثمان</option><option value="dar-saad">دار سعد</option><option value="boraiga">البريقة</option><option value="mualla">المعلا</option><option value="tawahi">التواهي</option><option value="shab">الشعب</option></select></div>
+      <!-- ═══ بطاقة 4: بيانات التواصل ═══ -->
+      <div class="chz-step-card">
+        <div class="chz-step-header">
+          <span class="chz-step-num">4</span>
+          <span class="chz-step-title">بيانات التواصل</span>
+        </div>
+        <div class="chz-step-body">
+          <div class="tvl-f" style="margin-bottom:12px;">
+            <label>رقم الجوال</label>
+            <input id="fly-phone" type="tel" placeholder="7XX XXX XXXX">
+          </div>
+          <div class="tvl-f" style="margin-bottom:12px;">
+            <label>البريد الإلكتروني (اختياري)</label>
+            <input id="fly-email" type="email" placeholder="example@mail.com">
+          </div>
+          <div class="tvl-f">
+            <label>ملاحظات إضافية (اختياري)</label>
+            <textarea id="fly-notes" rows="2" placeholder="أي طلبات خاصة..."></textarea>
+          </div>
+        </div>
       </div>
-      <div class="tvl-f"><label>نوع السيارة</label><select id="dlv-car-flight" onchange="APP.tvlCalc('flight')"><option value="economy">🚗 اقتصادي</option><option value="family">🚐 عائلي</option></select></div>
-    </div>
 
-      <div class="tvl-f"><label>ملاحظات</label><textarea id="fly-notes" rows="2"></textarea></div>
-
+      <!-- السعر التقديري وزر الإرسال -->
       <div class="price-preview" id="tvl-pp-flight" data-ready="0"></div>
-      <button class="tvl-submit locked" onclick="APP.tvlSubmit('flight', this)">إرسال طلب الحجز</button>
+      <button class="tvl-submit locked" onclick="APP.tvlSubmit('flight', this)" style="margin-top:16px; width:100%;">إرسال طلب الحجز</button>
+    </div>
     </div>
 
     <!-- ═══ BUS ═══ -->
