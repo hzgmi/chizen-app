@@ -92,7 +92,6 @@
     /* ═══ §6. البطاقة ═══ */
     htmlCard: function (b) {
       var stage = this.getStage(b);
-      var self = this;
       var typeMap = {
         flight: { icon: '✈️', name: 'طيران' },
         bus:    { icon: '🚌', name: 'باص' },
@@ -101,7 +100,7 @@
       };
       var ti = typeMap[b.type] || { icon: '📋', name: 'حجز' };
 
-      /* الشريط الزمني */
+      // الشريط الزمني
       var tl = '';
       this.STAGES.forEach(function (s) {
         var cls = s.n < stage ? 'done' : (s.n === stage ? 'current' : 'pending');
@@ -111,16 +110,29 @@
               '</div>';
       });
 
-      /* بيانات الرحلة */
+      // بيانات الرحلة (تفاصيل السفر)
       var d = b.data || {};
       var trip = '';
       if (d.from || d.to) trip += '<div class="mb-trip-row">📍 ' + this.esc(d.from || '?') + ' → ' + this.esc(d.to || '?') + '</div>';
-      if (d.date)         trip += '<div class="mb-trip-row">📅 ' + this.esc(d.date) + '</div>';
+      if (d.date || d.checkin) trip += '<div class="mb-trip-row">📅 ' + this.esc(d.date || d.checkin) + '</div>';
       if (d.passengers)   trip += '<div class="mb-trip-row">👥 ' + this.esc(String(d.passengers)) + ' مسافر</div>';
       if (d.class)        trip += '<div class="mb-trip-row">💺 ' + this.esc(d.class) + '</div>';
       if (d.airline)      trip += '<div class="mb-trip-row">✈️ ' + this.esc(d.airline) + '</div>';
+      if (d.hotel)        trip += '<div class="mb-trip-row">🏨 ' + this.esc(d.hotel) + '</div>';
 
-      /* السعر */
+      // نظام التذكيرات الذكي
+      var reminderHtml = '';
+      if (window.MyReminders) {
+        var rem = window.MyReminders.generateMessage(b);
+        if (rem) {
+          var style = window.MyReminders.getBadgeClass(rem.type);
+          reminderHtml = '<div style="margin:10px 0;padding:10px;border-radius:10px;font-size:12px;font-weight:700;text-align:right;line-height:1.5;' + style + '">' +
+                         rem.text +
+                         '</div>';
+        }
+      }
+
+      // السعر
       var amount = (b.priceQuote && b.priceQuote.amount) || Number(b.finalPrice) || Number(b.estimatedPrice) || 0;
       var priceLbl = (b.priceQuote && b.priceQuote.amount) ? 'السعر النهائي' : (Number(b.finalPrice) ? 'السعر النهائي' : 'السعر التقديري');
       var priceHtml = '';
@@ -128,7 +140,7 @@
         priceHtml = '<div class="mb-price"><div class="mb-price-lbl">' + priceLbl + '</div><div class="mb-price-val">' + (window.formatPrice ? window.formatPrice(amount) : amount + ' ر.ي') + '</div></div>';
       }
 
-      /* الإجراء (أدمن يتحكم) */
+      // الإجراء
       var action = this.htmlAction(b, stage);
 
       return '<div class="mb-card" data-booking-id="' + b.id + '">' +
@@ -138,6 +150,7 @@
                '</div>' +
                '<div class="mb-timeline">' + tl + '</div>' +
                (trip ? '<div class="mb-trip">' + trip + '</div>' : '') +
+               reminderHtml +
                priceHtml +
                '<div class="mb-actions">' + action + '</div>' +
              '</div>';
