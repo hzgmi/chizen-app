@@ -1,24 +1,52 @@
 /* ═══════════════════════════════════════════════════════════════
-   CHIZEN — Smart Search (Autocomplete)
+   CHIZEN — Smart Search (Autocomplete) v4
    ═══════════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  // قاعدة بيانات المدن والمطارات
+  // قاعدة بيانات شاملة: الوجهات من وإلى عدن + المدن المحلية
   var CITIES = [
+    // ─── اليمن (محلي) ───
     { id: 'aden', name: 'عدن', airport: 'مطار عدن الدولي', code: 'ADE' },
     { id: 'sanaa', name: 'صنعاء', airport: 'مطار صنعاء الدولي', code: 'SAH' },
     { id: 'taiz', name: 'تعز', airport: 'مطار تعز', code: 'TAI' },
     { id: 'mukalla', name: 'المكلا', airport: 'مطار الريان', code: 'RIY' },
     { id: 'seiyun', name: 'سيئون', airport: 'مطار سيئون', code: 'GXF' },
+    { id: 'hodeidah', name: 'الحديدة', airport: 'مطار الحديدة', code: 'HOD' },
+    { id: 'ibb', name: 'إب', airport: 'إب', code: 'IBB' },
+    { id: 'marib', name: 'مأرب', airport: 'مأرب', code: 'MYB' },
+    { id: 'socotra', name: 'سقطرى', airport: 'مطار سقطرى', code: 'SCT' },
+
+    // ─── دولي (من عدن) ───
     { id: 'cairo', name: 'القاهرة', airport: 'مطار القاهرة الدولي', code: 'CAI' },
     { id: 'jeddah', name: 'جدة', airport: 'مطار الملك عبدالعزيز', code: 'JED' },
     { id: 'riyadh', name: 'الرياض', airport: 'مطار الملك خالد', code: 'RUH' },
     { id: 'dubai', name: 'دبي', airport: 'مطار دبي الدولي', code: 'DXB' },
+    { id: 'sharjah', name: 'الشارقة', airport: 'مطار الشارقة', code: 'SHJ' },
+    { id: 'abu-dhabi', name: 'أبو ظبي', airport: 'مطار أبو ظبي', code: 'AUH' },
     { id: 'istanbul', name: 'اسطنبول', airport: 'مطار اسطنبول', code: 'IST' },
     { id: 'amman', name: 'عمان', airport: 'مطار الملكة علياء', code: 'AMM' },
+    { id: 'doha', name: 'الدوحة', airport: 'مطار حمد الدولي', code: 'DOH' },
+    { id: 'kuwait', name: 'الكويت', airport: 'مطار الكويت الدولي', code: 'KWI' },
+    { id: 'muscat', name: 'مسقط', airport: 'مطار مسقط الدولي', code: 'MCT' },
+    { id: 'bahrain', name: 'البحرين', airport: 'مطار البحرين الدولي', code: 'BAH' },
+    { id: 'khartoum', name: 'الخرطوم', airport: 'مطار الخرطوم', code: 'KRT' },
+    { id: 'addis', name: 'أديس أبابا', airport: 'مطار أديس أبابا', code: 'ADD' },
+    { id: 'nairobi', name: 'نيروبي', airport: 'مطار نيروبي', code: 'NBO' },
+    { id: 'london', name: 'لندن', airport: 'مطار لندن', code: 'LON' },
+    { id: 'paris', name: 'باريس', airport: 'مطار باريس', code: 'PAR' },
+    { id: 'frankfurt', name: 'فرانكفورت', airport: 'مطار فرانكفورت', code: 'FRA' },
+    { id: 'new-york', name: 'نيويورك', airport: 'مطار نيويورك', code: 'NYC' },
+    { id: 'mumbai', name: 'مومباي', airport: 'مطار مومباي', code: 'BOM' },
+    { id: 'delhi', name: 'دلهي', airport: 'مطار دلهي', code: 'DEL' },
+    { id: 'karachi', name: 'كراتشي', airport: 'مطار كراتشي', code: 'KHI' },
+    { id: 'kuala-lumpur', name: 'كوالالمبور', airport: 'مطار كوالالمبور', code: 'KUL' },
+    { id: 'jakarta', name: 'جاكرتا', airport: 'مطار جاكرتا', code: 'CGK' },
+
+    // ─── مدن العمرة والحج ───
     { id: 'makkah', name: 'مكة المكرمة', airport: 'مكة', code: 'MAK' },
-    { id: 'madinah', name: 'المدينة المنورة', airport: 'المدينة', code: 'MED' }
+    { id: 'madinah', name: 'المدينة المنورة', airport: 'المدينة', code: 'MED' },
+    { id: 'jeddah-hajj', name: 'جدة (حج/عمرة)', airport: 'مطار جدة', code: 'JED' }
   ];
 
   window.ChizenSearch = {
@@ -27,7 +55,6 @@
       if (!input || input.dataset.acReady) return;
       input.dataset.acReady = '1';
 
-      // إنشاء الحاوية المنسدلة
       var wrap = document.createElement('div');
       wrap.style.position = 'relative';
       input.parentNode.insertBefore(wrap, input);
@@ -66,16 +93,14 @@
         dropdown.style.display = 'block';
         activeIndex = -1;
 
-        // ربط النقر
         dropdown.querySelectorAll('.chz-ac-item').forEach(function(item) {
           item.addEventListener('mousedown', function(e) {
-            e.preventDefault(); // منع فقدان التركيز
+            e.preventDefault();
             var idx = parseInt(item.getAttribute('data-idx'));
             if (filtered[idx]) {
               input.value = filtered[idx].name;
               input.setAttribute('data-code', filtered[idx].code);
               dropdown.style.display = 'none';
-              // إطلاق حدث الإدخال لتحديث السعر
               input.dispatchEvent(new Event('input', { bubbles: true }));
               input.dispatchEvent(new Event('change', { bubbles: true }));
             }
@@ -105,7 +130,6 @@
         }
       });
 
-      // إخفاء عند النقر خارجاً
       document.addEventListener('mousedown', function(e) {
         if (!wrap.contains(e.target)) dropdown.style.display = 'none';
       });
@@ -113,17 +137,13 @@
 
     initAll: function() {
       var self = this;
-      // مطارات الطيران
       self.init('fly-from', 'from');
       self.init('fly-to', 'to');
-      // محطات الباص (قد تحتاج قائمة منفصلة، لكن نستخدم نفس القائمة)
       self.init('bus-to', 'to');
-      // فنادق (مدن)
       self.init('hotel-city', 'city');
     }
   };
 
-  // تشغيل تلقائي
   function boot() {
     if (!window.APP) { setTimeout(boot, 300); return; }
     if (window.APP.__searchInited) return;
