@@ -8209,42 +8209,7 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 
 
-<!-- CHIZEN Passengers Final Fix -->
-<style id="chz-passengers-final">
-/* إخفاء القوائم الأصلية */
-#sc-booking #form-flight #fly-pax,
-#sc-booking #form-flight #fly-children,
-#sc-booking #form-flight #fly-infants {
-  display: none !important;
-}
-/* النافذة البديلة */
-.chz-pax-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  padding: 12px 14px !important;
-  border: 1.5px solid rgba(197,160,89,0.3) !important;
-  border-radius: 12px !important;
-  background: #1A2340 !important;
-  color: #F2E3C6 !important;
-  font-weight: 700 !important;
-  font-size: 14px !important;
-  min-height: 48px !important;
-  cursor: pointer !important;
-  position: relative !important;
-}
-.chz-pax-btn .arrow { color: #C5A059; font-size: 10px; }
-/* إجبار الشبكة على 3 أعمدة */
-#sc-booking #form-flight .chz-step-body > div[style*="1fr 1fr 1fr"] {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 8px !important;
-  align-items: start !important;
-  width: 100% !important;
-}
-</style>
+
 
 <!-- CHIZEN Page Margins & Borders -->
 <style id="chz-page-margins">
@@ -8313,6 +8278,87 @@ html:not([data-theme="light"]) .tvl-form select option {
     padding-left: max(24px, calc((100% - 720px) / 2)) !important;
     padding-right: max(24px, calc((100% - 720px) / 2)) !important;
   }
+}
+</style>
+
+<!-- CHIZEN Premium Layout v2 -->
+<style id="chz-premium-layout-v2">
+/* هوامش الصفحة */
+#sc-booking {
+  padding-left: max(16px, env(safe-area-inset-left)) !important;
+  padding-right: max(16px, env(safe-area-inset-right)) !important;
+  padding-top: 8px !important;
+  padding-bottom: 100px !important;
+  box-sizing: border-box !important;
+}
+
+/* البطاقات */
+#sc-booking .chz-step-card {
+  margin-bottom: 16px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+  overflow: hidden !important;
+}
+
+#sc-booking .chz-step-header {
+  padding: 14px 16px !important;
+  border-radius: 18px 18px 0 0 !important;
+}
+
+#sc-booking .chz-step-body {
+  padding: 16px !important;
+}
+
+/* الشبكة الثلاثية للمسافرين (3 أعمدة) */
+#sc-booking #form-flight .chz-step-body > div[style*="1fr 1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+/* إخفاء القوائم الأصلية */
+#sc-booking #form-flight #fly-pax,
+#sc-booking #form-flight #fly-children,
+#sc-booking #form-flight #fly-infants {
+  display: none !important;
+}
+
+/* النافذة البديلة */
+.chz-pax-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 12px 14px !important;
+  border: 1.5px solid rgba(197,160,89,0.3) !important;
+  border-radius: 12px !important;
+  background: #1A2340 !important;
+  color: #F2E3C6 !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  min-height: 48px !important;
+  cursor: pointer !important;
+  position: relative !important;
+}
+.chz-pax-btn .arrow { color: #C5A059; font-size: 10px; }
+
+/* السعر التقديري */
+#sc-booking .price-preview {
+  margin: 0 0 12px 0 !important;
+  padding: 14px 16px !important;
+  border-radius: 14px !important;
+}
+
+/* زر الإرسال */
+#sc-booking .tvl-submit {
+  margin: 8px 0 0 0 !important;
+  padding: 16px !important;
+  border-radius: 14px !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
 }
 </style>
 </head>
@@ -21764,7 +21810,9 @@ window.APP.openChzSelect = function(targetId, el) {
 
 
 
-<!-- CHIZEN Passengers Clean Script -->
+
+
+<!-- CHIZEN Passengers Clean v2 (No duplicates) -->
 <script>
 (function(){
   'use strict';
@@ -21834,6 +21882,7 @@ window.APP.openChzSelect = function(targetId, el) {
     Object.keys(OPTS).forEach(function(id) {
       var sel = document.getElementById(id);
       if (!sel) return;
+      // ✅ منع التكرار: إذا كان هناك زر مربوط بنفس الـ id، لا نضيف آخر
       if (document.querySelector('.chz-pax-btn[data-for="' + id + '"]')) return;
       
       var currentVal = sel.value;
@@ -21861,7 +21910,7 @@ window.APP.openChzSelect = function(targetId, el) {
   setInterval(attach, 1000);
   document.addEventListener('DOMContentLoaded', attach);
   setTimeout(attach, 500);
-  console.log('[Passengers Clean] ready');
+  console.log('[Passengers Clean v2] ready — no duplicates');
 })();
 </script>
 </body>
