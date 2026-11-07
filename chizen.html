@@ -8189,7 +8189,7 @@ html[data-theme="light"] .chz-ac-sub {
 
       <div class="tvl-stepbar"><span class="tvl-num">3</span><span>المسافرون والدرجة</span></div>
       <div class="tvl-row3">
-        <div class="tvl-f"><label>بالغون</label><input id="fly-pax" type="number" min="1" value="1" oninput="APP.tvlCalc('flight')"></div>
+        <div class="tvl-f"><label>بالغون</label><input id="fly-pax" type="number" min="1" value="1" oninput="APP.tvlCalc('flight'); APP.renderPassengers()"></div>
         <div class="tvl-f"><label>أطفال</label><input id="fly-children" type="number" min="0" value="0"></div>
         <div class="tvl-f"><label>رضّع</label><input id="fly-infants" type="number" min="0" value="0"></div>
       </div>
@@ -8197,7 +8197,11 @@ html[data-theme="light"] .chz-ac-sub {
       <div class="tvl-f"><label>الدرجة</label><select id="fly-class" onchange="APP.tvlCalc('flight')"><option value="economy">اقتصادية</option><option value="premium">مميزة</option><option value="business">رجال الأعمال</option><option value="first">الأولى</option></select></div>
 
       <div class="tvl-stepbar"><span class="tvl-num">4</span><span>بيانات المسافر</span></div>
-      <div class="tvl-f"><label>الاسم الكامل</label><input id="fly-name" type="text" placeholder="كما في الجواز"></div>
+      <div class="tvl-f"><label>الاسم الكامل (للمسافر الرئيسي)</label><input id="fly-name" type="text" placeholder="كما في الجواز"></div>
+      <div id="fly-passengers-list" style="display:none; margin-top:10px; padding:12px; background:rgba(197,160,89,0.05); border-radius:12px; border:1px dashed rgba(197,160,89,0.3);">
+        <div style="font-size:12px; font-weight:800; color:#C5A059; margin-bottom:10px;">👥 بيانات المسافرين الإضافيين</div>
+        <!-- سيتم توليد الحقول هنا ديناميكياً -->
+      </div>
       <div class="tvl-row2">
         <div class="tvl-f"><label>الجنسية</label><input id="fly-nation" type="text" value="يمني"></div>
         <div class="tvl-f"><label>تاريخ الميلاد</label><div class="chz-date-group" data-target="fly-dob"></div><input id="fly-dob" type="hidden"></div>
