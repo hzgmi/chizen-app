@@ -21053,5 +21053,20 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 <script src="chizen-premium-login-modal.js?v=2"></script>
 <script src="booking-date-picker.js?v=2"></script>
 <script src="client/booking-search-v4.js?v=4"></script>
+
+  // تشغيل تلقائي لحقول المسافرين
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (window.APP && APP.renderPassengers) APP.renderPassengers();
+    }, 1000);
+  });
+  // أيضاً عند فتح تبويب الحجز
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('[onclick*="tvlSwitch"], .tvl-svc, [data-tab="flight"]')) {
+      setTimeout(function() {
+        if (window.APP && APP.renderPassengers) APP.renderPassengers();
+      }, 500);
+    }
+  });
 </body>
 </html>
