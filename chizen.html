@@ -7796,6 +7796,108 @@ html[data-theme="light"] #sc-booking .tvl-form.active .tvl-submit:not(.locked) {
   border: 1px solid rgba(197,160,89,0.5) !important;
 }
 </style>
+
+<!-- CHIZEN Autocomplete Premium Style -->
+<style id="chz-autocomplete-premium-css">
+.chz-ac-dropdown {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  right: 0 !important;
+  left: 0 !important;
+  z-index: 99999 !important;
+  background: #1A2340 !important; /* لون داكن يناسب الوضع الليلي */
+  border: 1px solid rgba(197, 160, 89, 0.4) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5) !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  padding: 6px !important;
+  animation: chzAcFadeIn 0.2s ease !important;
+}
+/* دعم الوضع النهاري */
+html[data-theme="light"] .chz-ac-dropdown {
+  background: #ffffff !important;
+  border-color: rgba(197, 160, 89, 0.3) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
+}
+
+@keyframes chzAcFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.chz-ac-item {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  margin-bottom: 2px !important;
+}
+.chz-ac-item:hover, .chz-ac-item.active {
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.25), rgba(197, 160, 89, 0.1)) !important;
+}
+html[data-theme="light"] .chz-ac-item:hover, 
+html[data-theme="light"] .chz-ac-item.active {
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.15), rgba(197, 160, 89, 0.05)) !important;
+}
+
+.chz-ac-name {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #F2E3C6 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: inherit !important;
+}
+html[data-theme="light"] .chz-ac-name {
+  color: #1f2937 !important;
+}
+
+.chz-ac-code {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  color: #C5A059 !important;
+  background: rgba(197, 160, 89, 0.25) !important;
+  padding: 2px 8px !important;
+  border-radius: 8px !important;
+  letter-spacing: 0.5px !important;
+}
+html[data-theme="light"] .chz-ac-code {
+  background: rgba(197, 160, 89, 0.15) !important;
+}
+
+.chz-ac-sub {
+  font-size: 11px !important;
+  color: #9ca3af !important;
+  margin-top: 3px !important;
+  font-weight: 600 !important;
+}
+html[data-theme="light"] .chz-ac-sub {
+  color: #6b7280 !important;
+}
+
+.chz-ac-empty {
+  text-align: center !important;
+  color: #9ca3af !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 20px !important;
+  cursor: default !important;
+}
+.chz-ac-empty:hover {
+  background: transparent !important;
+}
+
+.chz-ac-dropdown::-webkit-scrollbar { width: 6px !important; }
+.chz-ac-dropdown::-webkit-scrollbar-track { background: transparent !important; }
+.chz-ac-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(197, 160, 89, 0.4) !important;
+  border-radius: 3px !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
