@@ -8245,6 +8245,76 @@ html:not([data-theme="light"]) .tvl-form select option {
   width: 100% !important;
 }
 </style>
+
+<!-- CHIZEN Page Margins & Borders -->
+<style id="chz-page-margins">
+/* هوامش الصفحة الرئيسية (تجنب الالتصاق بالشاشة) */
+#sc-booking {
+  padding-left: max(16px, env(safe-area-inset-left)) !important;
+  padding-right: max(16px, env(safe-area-inset-right)) !important;
+  padding-top: 8px !important;
+  padding-bottom: 80px !important;
+  box-sizing: border-box !important;
+}
+
+/* هوامش داخل البطاقات */
+#sc-booking .chz-step-card {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 16px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+  overflow: hidden !important;
+}
+
+/* تحسين رأس البطاقة */
+#sc-booking .chz-step-header {
+  padding: 14px 16px !important;
+  border-radius: 18px 18px 0 0 !important;
+}
+
+#sc-booking .chz-step-body {
+  padding: 16px !important;
+}
+
+/* تحسين الشريط العلوي (السعر التقديري) */
+#sc-booking .price-preview {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 14px 16px !important;
+  border-radius: 14px !important;
+}
+
+/* زر الإرسال */
+#sc-booking .tvl-submit {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 16px !important;
+  border-radius: 14px !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  margin-top: 8px !important;
+}
+
+/* للشاشات الصغيرة جداً */
+@media (max-width: 360px) {
+  #sc-booking {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  #sc-booking .chz-step-body {
+    padding: 12px !important;
+  }
+}
+
+/* للشاشات الكبيرة (تابلت) */
+@media (min-width: 768px) {
+  #sc-booking {
+    padding-left: max(24px, calc((100% - 720px) / 2)) !important;
+    padding-right: max(24px, calc((100% - 720px) / 2)) !important;
+  }
+}
+</style>
 </head>
 <body>
 <div id="app">
