@@ -8331,6 +8331,57 @@ html[data-theme="light"] .chz-ac-sub {
             <label>ملاحظات إضافية (اختياري)</label>
             <textarea id="fly-notes" rows="2" placeholder="أي طلبات خاصة..."></textarea>
           </div>
+
+          <!-- ═══ قسم التوصيل ═══ -->
+          <div style="margin-top:16px; padding-top:16px; border-top:1px dashed rgba(0,0,0,0.1);">
+            <label class="tvl-chk" style="display:flex; align-items:center; gap:8px; cursor:pointer; margin-bottom:12px;">
+              <input type="checkbox" id="dlv-chk-flight" onchange="(function(cb){var f=document.getElementById('dlv-fields-flight');if(f){if(cb.checked)f.classList.add('on');else f.classList.remove('on');}APP.tvlCalc('flight');})(this)">
+              <span style="font-weight:800; font-size:13px;">🚗 أحتاج خدمة توصيل من/إلى المطار</span>
+            </label>
+
+            <div id="dlv-fields-flight" class="tvl-dlv-fields" style="display:none; padding:12px; background:rgba(197,160,89,0.05); border-radius:12px; border:1px solid rgba(197,160,89,0.2);">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                <div class="tvl-f">
+                  <label>من</label>
+                  <select id="dlv-from-flight" onchange="APP.tvlCalc('flight')" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                    <option value="">— اختر —</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                  </select>
+                </div>
+                <div class="tvl-f">
+                  <label>إلى</label>
+                  <select id="dlv-to-flight" onchange="APP.tvlCalc('flight')" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                    <option value="">— اختر —</option>
+                    <option value="airport">✈️ مطار عدن</option>
+                    <option value="crater">كريتر</option>
+                    <option value="mansoura">المنصورة</option>
+                    <option value="khormaksar">خور مكسر</option>
+                    <option value="sheikh-othman">الشيخ عثمان</option>
+                    <option value="dar-saad">دار سعد</option>
+                    <option value="boraiga">البريقة</option>
+                    <option value="mualla">المعلا</option>
+                    <option value="tawahi">التواهي</option>
+                    <option value="shab">الشعب</option>
+                  </select>
+                </div>
+              </div>
+              <div class="tvl-f">
+                <label>نوع السيارة</label>
+                <select id="dlv-car-flight" onchange="APP.tvlCalc('flight')" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.1); font-family:inherit; background:var(--cd,#fff);">
+                  <option value="economy">🚗 اقتصادي</option>
+                  <option value="family">🚐 عائلي</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
