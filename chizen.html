@@ -16685,203 +16685,124 @@ document.addEventListener('keydown', function(e) {
         if (window.toast) window.toast('سجل الدخول أولاً', 'err');
         return;
       }
+
+      // 1. جمع البيانات
       var data = {};
+      var typeLabel = {flight:'طيران', bus:'باص', hajj:'حج/عمرة', hotel:'فندق', delivery:'توصيل'}[type] || 'حجز';
+      var priceVal = 0;
+
       if (type === 'flight') {
         if (!(document.getElementById('fly-to')||{}).value) { window.toast('أدخل الوجهة', 'err'); return; }
         if (!(document.getElementById('fly-name')||{}).value) { window.toast('أدخل الاسم', 'err'); return; }
         if (!(document.getElementById('fly-phone')||{}).value) { window.toast('أدخل الجوال', 'err'); return; }
         data = {
-          from: (document.getElementById('fly-from')||{}).value,
-          to: (document.getElementById('fly-to')||{}).value,
-          date: (document.getElementById('fly-date')||{}).value,
-          returnDate: (document.getElementById('fly-return')||{}).value,
-          passengers: (document.getElementById('fly-pax')||{}).value,
-          children: (document.getElementById('fly-children')||{}).value,
-          infants: (document.getElementById('fly-infants')||{}).value,
-          airline: (document.getElementById('fly-airline')||{}).value,
-          class: (document.getElementById('fly-class')||{}).value,
-          name: (document.getElementById('fly-name')||{}).value,
-          nationality: (document.getElementById('fly-nation')||{}).value,
-          dob: (document.getElementById('fly-dob')||{}).value,
-          passport: (document.getElementById('fly-passport')||{}).value,
-          phone: (document.getElementById('fly-phone')||{}).value,
-          email: (document.getElementById('fly-email')||{}).value,
-          notes: (document.getElementById('fly-notes')||{}).value
+          from: document.getElementById('fly-from').value,
+          to: document.getElementById('fly-to').value,
+          date: document.getElementById('fly-date').value,
+          returnDate: document.getElementById('fly-return') ? document.getElementById('fly-return').value : '',
+          passengers: document.getElementById('fly-pax').value,
+          class: document.getElementById('fly-class').value,
+          name: document.getElementById('fly-name').value,
+          phone: document.getElementById('fly-phone').value
         };
+        priceVal = window.estimateBookingPrice ? window.estimateBookingPrice('flight', data) : 0;
       } else if (type === 'bus') {
-        if (!(document.getElementById('bus-name')||{}).value) { window.toast('أدخل الاسم', 'err'); return; }
-        if (!(document.getElementById('bus-phone')||{}).value) { window.toast('أدخل الجوال', 'err'); return; }
         data = {
-          from: 'عدن', to: (document.getElementById('bus-to')||{}).value,
-          date: (document.getElementById('bus-date')||{}).value,
-          time: (document.getElementById('bus-time')||{}).value,
-          passengers: (document.getElementById('bus-pax')||{}).value,
-          class: (document.getElementById('bus-class')||{}).value,
-          luggage: (document.getElementById('bus-luggage')||{}).value,
-          tripType: (document.getElementById('bus-trip')||{}).value,
-          special: (document.getElementById('bus-special')||{}).value,
-          name: (document.getElementById('bus-name')||{}).value,
-          phone: (document.getElementById('bus-phone')||{}).value
+          to: document.getElementById('bus-to').value,
+          date: document.getElementById('bus-date').value,
+          passengers: document.getElementById('bus-pax').value,
+          name: document.getElementById('bus-name').value,
+          phone: document.getElementById('bus-phone').value
         };
+        priceVal = window.estimateBookingPrice ? window.estimateBookingPrice('bus', data) : 0;
       } else if (type === 'hotel') {
-        if (!(document.getElementById('hotel-client-name')||{}).value) { window.toast('أدخل الاسم', 'err'); return; }
-        if (!(document.getElementById('hotel-phone')||{}).value) { window.toast('أدخل الجوال', 'err'); return; }
         data = {
-          country: (document.getElementById('hotel-country')||{}).value,
-          city: (document.getElementById('hotel-city')||{}).value,
-          hotelName: (document.getElementById('hotel-name')||{}).value,
-          checkin: (document.getElementById('hotel-in')||{}).value,
-          checkout: (document.getElementById('hotel-out')||{}).value,
-          rooms: (document.getElementById('hotel-rooms')||{}).value,
-          guests: (document.getElementById('hotel-guests')||{}).value,
-          children: (document.getElementById('hotel-children')||{}).value,
-          roomType: (document.getElementById('hotel-room-type')||{}).value,
-          hotelClass: (document.getElementById('hotel-class')||{}).value,
-          name: (document.getElementById('hotel-client-name')||{}).value,
-          phone: (document.getElementById('hotel-phone')||{}).value,
-          email: (document.getElementById('hotel-email')||{}).value
+          city: document.getElementById('hotel-city').value,
+          name: document.getElementById('hotel-name').value,
+          checkin: document.getElementById('hotel-in').value,
+          checkout: document.getElementById('hotel-out').value,
+          guests: document.getElementById('hotel-guests').value,
+          phone: document.getElementById('hotel-phone').value
         };
+        priceVal = window.estimateBookingPrice ? window.estimateBookingPrice('hotel', data) : 0;
       } else if (type === 'hajj') {
-        if (!(document.getElementById('hajj-name')||{}).value) { window.toast('أدخل الاسم', 'err'); return; }
-        if (!(document.getElementById('hajj-phone')||{}).value) { window.toast('أدخل الجوال', 'err'); return; }
         data = {
-          type: (document.getElementById('hajj-type')||{}).value,
-          fromCity: (document.getElementById('hajj-city')||{}).value,
-          date: (document.getElementById('hajj-date')||{}).value,
-          passengers: (document.getElementById('hajj-pax')||{}).value,
-          children: (document.getElementById('hajj-children')||{}).value,
-          package: (document.getElementById('hajj-package')||{}).value,
-          room: (document.getElementById('hajj-room')||{}).value,
-          name: (document.getElementById('hajj-name')||{}).value,
-          passport: (document.getElementById('hajj-passport')||{}).value,
-          phone: (document.getElementById('hajj-phone')||{}).value,
-          email: (document.getElementById('hajj-email')||{}).value
+          type: document.getElementById('hajj-type').value,
+          date: document.getElementById('hajj-date').value,
+          passengers: document.getElementById('hajj-pax').value,
+          name: document.getElementById('hajj-name').value,
+          phone: document.getElementById('hajj-phone').value
         };
-      } else if (type === 'delivery') {
-        if (!(document.getElementById('dlv-name')||{}).value) { window.toast('أدخل الاسم', 'err'); return; }
-        if (!(document.getElementById('dlv-phone')||{}).value) { window.toast('أدخل الجوال', 'err'); return; }
-        data = {
-          serviceType: (document.getElementById('dlv-type')||{}).value,
-          from: (document.getElementById('dlv-from')||{}).value,
-          to: (document.getElementById('dlv-to')||{}).value,
-          date: (document.getElementById('dlv-date')||{}).value,
-          time: (document.getElementById('dlv-time')||{}).value,
-          carType: (document.getElementById('dlv-car')||{}).value,
-          passengers: (document.getElementById('dlv-pax')||{}).value,
-          name: (document.getElementById('dlv-name')||{}).value,
-          phone: (document.getElementById('dlv-phone')||{}).value,
-          notes: (document.getElementById('dlv-notes')||{}).value
-        };
+        priceVal = window.estimateBookingPrice ? window.estimateBookingPrice('hajj', data) : 0;
       }
 
-      // Linked delivery
-      if (type !== 'delivery') {
-        var chk = document.getElementById('dlv-chk-' + type);
-        if (chk && chk.checked) {
-          data.needDelivery = true;
-          data.deliveryFrom = (document.getElementById('dlv-from-' + type)||{}).value;
-          data.deliveryTo = (document.getElementById('dlv-to-' + type)||{}).value;
-          data.deliveryCar = (document.getElementById('dlv-car-' + type)||{}).value;
-        }
-      }
+      // 2. بناء المودال
+      var ppId = 'tvl-pp-' + type;
+      var ppHTML = document.getElementById(ppId) ? document.getElementById(ppId).innerHTML : '';
+      
+      var html = '<div id="tvl-review-modal" style="position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;">' +
+        '<div style="background:var(--cd,#fff);border-radius:20px;padding:24px;max-width:450px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:2px solid rgba(197,160,89,0.4);">' +
+          '<div style="font-size:20px;font-weight:900;color:#C5A059;text-align:center;margin-bottom:16px;">📋 مراجعة الحجز</div>' +
+          '<div style="font-size:13px;color:#4b5563;line-height:2;background:rgba(0,0,0,0.03);padding:12px;border-radius:12px;margin-bottom:16px;">' +
+            '<div><b>النوع:</b> ' + typeLabel + '</div>' +
+            (data.from ? '<div><b>من:</b> ' + data.from + '</div>' : '') +
+            (data.to ? '<div><b>إلى:</b> ' + data.to + '</div>' : '') +
+            (data.city ? '<div><b>المدينة:</b> ' + data.city + '</div>' : '') +
+            (data.date ? '<div><b>التاريخ:</b> ' + data.date + '</div>' : '') +
+            (data.checkin ? '<div><b>الوصول:</b> ' + data.checkin + '</div>' : '') +
+            (data.passengers ? '<div><b>المسافرون:</b> ' + data.passengers + '</div>' : '') +
+            (data.guests ? '<div><b>الضيوف:</b> ' + data.guests + '</div>' : '') +
+            (data.name ? '<div><b>الاسم:</b> ' + data.name + '</div>' : '') +
+            (data.phone ? '<div><b>الجوال:</b> ' + data.phone + '</div>' : '') +
+          '</div>' +
+          '<div style="margin-bottom:16px;">' + ppHTML + '</div>' +
+          '<div style="display:flex;gap:10px;">' +
+            '<button onclick="document.getElementById(\'tvl-review-modal\').remove()" style="flex:1;padding:12px;background:#f3f4f6;color:#4b5563;border:none;border-radius:12px;font-weight:900;font-size:14px;cursor:pointer;">✏️ تعديل</button>' +
+            '<button onclick="APP.tvlConfirmSend(\'' + type + '\', this)" style="flex:1;padding:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:12px;font-weight:900;font-size:14px;cursor:pointer;">✅ تأكيد وإرسال</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+      
+      var old = document.getElementById('tvl-review-modal');
+      if (old) old.remove();
+      document.body.insertAdjacentHTML('beforeend', html);
+    };
 
-      // Compute price
-      var tripPrice = 0;
-      if (type === 'flight') tripPrice = calcFlight(data);
-      else if (type === 'bus') tripPrice = calcBus(data);
-      else if (type === 'hotel') tripPrice = calcHotel(data);
-      else if (type === 'hajj') tripPrice = calcHajj(data);
-      var deliveryPrice = 0;
-      if (type === 'delivery') deliveryPrice = calcDelivery(data);
-      else if (data.needDelivery) deliveryPrice = calcDelivery(data);
-      var total = tripPrice + deliveryPrice;
-
-      btn.disabled = true;
-      var orig = btn.textContent;
-      btn.textContent = '⏳ جاري الإرسال...';
+    // دالة الإرسال الفعلي (بعد التأكيد من المودال)
+    window.APP.tvlConfirmSend = async function(type, btn) {
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الإرسال...'; }
       try {
+        // جمع البيانات مرة أخرى
+        var data = {};
+        if (type === 'flight') {
+          data = { from: document.getElementById('fly-from').value, to: document.getElementById('fly-to').value, date: document.getElementById('fly-date').value, passengers: document.getElementById('fly-pax').value, class: document.getElementById('fly-class').value, name: document.getElementById('fly-name').value, phone: document.getElementById('fly-phone').value };
+        } else if (type === 'bus') {
+          data = { to: document.getElementById('bus-to').value, date: document.getElementById('bus-date').value, passengers: document.getElementById('bus-pax').value, name: document.getElementById('bus-name').value, phone: document.getElementById('bus-phone').value };
+        } else if (type === 'hotel') {
+          data = { city: document.getElementById('hotel-city').value, name: document.getElementById('hotel-name').value, checkin: document.getElementById('hotel-in').value, checkout: document.getElementById('hotel-out').value, guests: document.getElementById('hotel-guests').value, phone: document.getElementById('hotel-phone').value };
+        } else if (type === 'hajj') {
+          data = { type: document.getElementById('hajj-type').value, date: document.getElementById('hajj-date').value, passengers: document.getElementById('hajj-pax').value, name: document.getElementById('hajj-name').value, phone: document.getElementById('hajj-phone').value };
+        }
+
+        var priceVal = window.estimateBookingPrice ? window.estimateBookingPrice(type, data) : 0;
         var booking = {
-          type: type,
           userId: FB.currentUser.uid,
-          userEmail: FB.currentUser.email || '',
-          userName: data.name || (FB.currentUser.displayName || 'مستخدم'),
-          userPhone: data.phone || '',
+          type: type,
           data: data,
+          estimatedPrice: priceVal,
           status: 'pending',
-          estimatedPrice: total,
-          currency: 'SAR',
-          priceQuote: {
-            status: 'pending_quote',
-            amount: 0,
-            note: '',
-            quotedAt: null,
-            quotedBy: '',
-            acceptedAt: null,
-            rejectedAt: null,
-            rejectReason: ''
-          },
-          createdAt: (window.firebase && firebase.firestore && firebase.firestore.FieldValue)
-            ? firebase.firestore.FieldValue.serverTimestamp()
-            : new Date()
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
-        var ref = await FB.db.collection('bookings').add(booking);
 
-        // Notification to user
-        if (window.pushUserNotification) {
-          try {
-            await window.pushUserNotification(
-              '✈️ تم استلام طلبك',
-              'سيتم مراجعة السعر وإعلامك قريباً',
-              'booking',
-              { bookingId: ref.id, type: type }
-            );
-          } catch(e) {}
-        }
-        // Notification to admin queue
-        try {
-          await FB.db.collection('push_queue').add({
-            title: '🔔 حجز جديد',
-            body: 'حجز ' + type + ' من ' + booking.userName + ' — ' + total + ' ر.س (تقديري)',
-            type: 'booking',
-            status: 'pending',
-            data: { bookingId: ref.id, type: type, role: 'bookings_mgr' },
-            createdAt: (window.firebase && firebase.firestore && firebase.firestore.FieldValue)
-              ? firebase.firestore.FieldValue.serverTimestamp()
-              : new Date()
-          });
-        } catch(e) {}
-
-        if (window.showSuccess) {
-          window.showSuccess({
-            title: '✅ تم استلام طلبك',
-            message: 'طلبك قيد المراجعة. سنرسل إشعاراً عند تأكيد السعر النهائي.',
-            btn: 'حسناً',
-            onClose: function(){ if (window.MyBookings && window.MyBookings.refresh) window.MyBookings && window.MyBookings.refresh(); }
-          });
-        } else {
-          alert('تم استلام طلبك بنجاح');
-        }
-
-        // Reset form fields
-        ['fly-to','fly-date','fly-return','fly-name','fly-passport','fly-phone','fly-email','fly-notes',
-         'bus-date','bus-time','bus-name','bus-phone','bus-special',
-         'hotel-city','hotel-name','hotel-in','hotel-out','hotel-client-name','hotel-phone','hotel-email',
-         'hajj-date','hajj-name','hajj-passport','hajj-phone','hajj-email',
-         'dlv-from','dlv-to','dlv-date','dlv-time','dlv-name','dlv-phone','dlv-notes'].forEach(function(id){
-          var el = document.getElementById(id);
-          if (el) el.value = '';
-        });
-        var pp = document.getElementById('tvl-pp-' + type);
-        if (pp) { pp.setAttribute('data-ready', '0'); pp.innerHTML = ''; }
-        btn.classList.remove('ready');
-        btn.classList.add('locked');
-        if (window.MyBookings && window.MyBookings.refresh) window.MyBookings && window.MyBookings.refresh();
+        await FB.db.collection('bookings').add(booking);
+        
+        document.getElementById('tvl-review-modal').remove();
+        if (window.showSuccess) window.showSuccess({ title: '✅ تم استلام طلبك', message: 'طلبك قيد المراجعة. سنرسل إشعاراً عند تأكيد السعر النهائي.' });
+        if (window.renderMyBookings) window.renderMyBookings();
       } catch(e) {
-        console.error('[TVL SUBMIT]', e);
-        if (window.toast) window.toast('فشل الإرسال: ' + (e.message || ''), 'err');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = orig;
+        console.error('[tvlConfirmSend]', e);
+        if (window.toast) window.toast('❌ ' + e.message, 'err');
+        if (btn) { btn.disabled = false; btn.textContent = '✅ تأكيد وإرسال'; }
       }
     };
 
