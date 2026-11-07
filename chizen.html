@@ -16237,55 +16237,60 @@ document.addEventListener('keydown', function(e) {
   // ═══ 3) إضافة عنصر السعر التقريبي في كل نموذج ═══
   function injectPriceEstimate() {
     var configs = [
-      { type: 'flight', formId: 'form-flight', fields: ['fly-airline', 'fly-from', 'fly-to', 'fly-date', 'fly-pax', 'fly-class'] },
-      { type: 'bus', formId: 'form-bus', fields: ['bus-to', 'bus-date', 'bus-time', 'bus-pax'] },
-      { type: 'hajj', formId: 'form-hajj', fields: ['hajj-type', 'hajj-date', 'hajj-pax'] },
-      { type: 'hotel', formId: 'form-hotel', fields: ['hotel-city', 'hotel-name', 'hotel-in', 'hotel-out', 'hotel-rooms', 'hotel-guests'] }
+      { type: 'flight', formId: 'form-flight', ppId: 'tvl-pp-flight', fields: ['fly-airline', 'fly-from', 'fly-to', 'fly-date', 'fly-pax', 'fly-class'] },
+      { type: 'bus', formId: 'form-bus', ppId: 'tvl-pp-bus', fields: ['bus-to', 'bus-date', 'bus-time', 'bus-pax'] },
+      { type: 'hajj', formId: 'form-hajj', ppId: 'tvl-pp-hajj', fields: ['hajj-type', 'hajj-date', 'hajj-pax'] },
+      { type: 'hotel', formId: 'form-hotel', ppId: 'tvl-pp-hotel', fields: ['hotel-city', 'hotel-name', 'hotel-in', 'hotel-out', 'hotel-rooms', 'hotel-guests'] }
     ];
-    
+
     configs.forEach(function(cfg) {
       var form = document.getElementById(cfg.formId);
       if (!form) return;
-      
-      // هل العنصر موجود؟
-      var existing = document.getElementById('price-estimate-' + cfg.type);
-      if (existing) return;
-      
-      // اعثر على زر الإرسال
-      var submitBtn = form.querySelector('button:last-of-type');
-      if (!submitBtn) return;
-      
-      // أنشئ عنصر السعر
-      var priceDiv = document.createElement('div');
-      priceDiv.id = 'price-estimate-' + cfg.type;
-      priceDiv.style.cssText = 'margin:14px 0;padding:14px;background:linear-gradient(135deg,rgba(168,85,247,0.12),rgba(236,72,153,0.08));' +
-        'border:1.5px solid rgba(168,85,247,0.4);border-radius:12px;text-align:center;';
-      priceDiv.innerHTML = 
-        '<div style="font-size:11px;color:var(--mt);margin-bottom:6px;">💰 السعر التقريبي</div>' +
-        '<div id="price-value-' + cfg.type + '" style="font-size:24px;font-weight:900;background:linear-gradient(135deg,#ec4899,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">— ر.س</div>' +
-        '<div style="font-size:10px;color:var(--mt);margin-top:6px;">⚠️ تقديري — السعر النهائي بعد المراجعة</div>';
-      
-      // ضعه قبل زر الإرسال
-      submitBtn.parentNode.insertBefore(priceDiv, submitBtn);
-      
-      // استمع للتغييرات
+      var pp = document.getElementById(cfg.ppId);
+      if (!pp) {
+        // إذا لم توجد الحاوية، أنشئها قبل زر الإرسال
+        var submitBtn = form.querySelector('button.tvl-submit');
+        if (!submitBtn) return;
+        pp = document.createElement('div');
+        pp.id = cfg.ppId;
+        pp.className = 'price-preview';
+        pp.setAttribute('data-ready', '0');
+        submitBtn.parentNode.insertBefore(pp, submitBtn);
+      }
+
+      // دالة تحديث السعر
       function updatePrice() {
         var data = {};
+        var allFilled = true;
         cfg.fields.forEach(function(fid) {
           var el = document.getElementById(fid);
           if (!el) return;
+          var val = el.value;
+          if (!val || val === '') allFilled = false;
           var key = fid.replace('fly-', '').replace('bus-', '').replace('hajj-', '').replace('hotel-', '');
-          if (key === 'client-name' || key === 'name') key = 'name';
-          data[key] = el.value;
+          data[key] = val;
         });
-        var price = window.estimateBookingPrice(cfg.type, data);
-        var priceEl = document.getElementById('price-value-' + cfg.type);
-        if (priceEl) {
-          priceEl.textContent = price > 0 ? window.formatPrice(price) : '— ' + (window.getCurrencySymbol ? window.getCurrencySymbol() : 'ر.س');
+
+        if (!allFilled) {
+          pp.setAttribute('data-ready', '0');
+          pp.innerHTML = '';
+          return;
+        }
+
+        var price = window.estimateBookingPrice ? window.estimateBookingPrice(cfg.type, data) : 0;
+        if (price > 0) {
+          pp.setAttribute('data-ready', '1');
+          pp.innerHTML =
+            '<div style="font-size:11px;color:var(--mt);margin-bottom:6px;">💰 السعر التقديري</div>' +
+            '<div style="font-size:22px;font-weight:900;color:#10b981;">' + (window.formatPrice ? window.formatPrice(price) : price + ' ر.س') + '</div>' +
+            '<div style="font-size:10px;color:var(--mt);margin-top:6px;">⚠️ تقديري — السعر النهائي بعد المراجعة</div>';
+        } else {
+          pp.setAttribute('data-ready', '0');
+          pp.innerHTML = '';
         }
       }
-      
-      // أحداث
+
+      // ربط الأحداث
       cfg.fields.forEach(function(fid) {
         var el = document.getElementById(fid);
         if (el) {
@@ -16293,9 +16298,9 @@ document.addEventListener('keydown', function(e) {
           el.addEventListener('change', updatePrice);
         }
       });
-      
-      // تحديث أولي
-      setTimeout(updatePrice, 300);
+
+      // تشغيل أولي
+      setTimeout(updatePrice, 500);
     });
   }
 
