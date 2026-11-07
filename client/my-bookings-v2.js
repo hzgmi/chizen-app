@@ -389,6 +389,35 @@
       }, 3500);
     },
 
+
+    /* ═══ §15. دالة إشعارات آمنة (تتجاوز أي كود قديم مكسور) ═══ */
+    safeToast: function(msg) {
+      try {
+        if (typeof window.toast === 'function') {
+          window.toast(msg);
+        } else if (typeof toast === 'function') {
+          toast(msg);
+        }
+      } catch (e) {
+        console.warn('Toast error bypassed:', e);
+      }
+      // إشعار بديل مضمون
+      var t = document.getElementById('mb-safe-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'mb-safe-toast';
+        t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;z-index:9999999;box-shadow:0 4px 12px rgba(0,0,0,0.3);text-align:center;width:max-content;max-width:90%;direction:rtl;transition:opacity 0.3s;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      if (window.mbSafeToastTimer) clearTimeout(window.mbSafeToastTimer);
+      window.mbSafeToastTimer = setTimeout(function() { 
+        t.style.opacity = '0'; 
+        setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 300);
+      }, 3500);
+    },
+
     /* ═══ §13. مساعدات ═══ */
     esc: function (s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
