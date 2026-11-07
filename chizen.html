@@ -8361,6 +8361,23 @@ html:not([data-theme="light"]) .tvl-form select option {
   font-weight: 900 !important;
 }
 </style>
+
+<!-- CHIZEN Passengers Final v3 -->
+<style id="chz-pax-final-v3">
+/* إخفاء القوائم الأصلية (سيتم فتحها بنافذة أنيقة) */
+#sc-booking #form-flight #fly-pax,
+#sc-booking #form-flight #fly-children,
+#sc-booking #form-flight #fly-infants {
+  display: none !important;
+}
+/* الشبكة الثلاثية */
+#sc-booking #form-flight .chz-step-body > div[style*="1fr 1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -21812,7 +21829,9 @@ window.APP.openChzSelect = function(targetId, el) {
 
 
 
-<!-- CHIZEN Passengers Clean v2 (No duplicates) -->
+
+
+<!-- CHIZEN Pax Hijack v3 (Clean) -->
 <script>
 (function(){
   'use strict';
@@ -21858,8 +21877,9 @@ window.APP.openChzSelect = function(targetId, el) {
           sel.value = opt.v;
           sel.dispatchEvent(new Event('change', { bubbles: true }));
         }
-        var btn = document.querySelector('.chz-pax-btn[data-for="' + targetId + '"] .label');
-        if (btn) btn.textContent = opt.l;
+        // تحديث النص في الحقل الوهمي
+        var fake = document.getElementById('fake-' + targetId);
+        if (fake) fake.textContent = opt.l;
         modal.remove();
         if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
         if (window.APP && APP.renderPassengers) APP.renderPassengers();
@@ -21882,19 +21902,30 @@ window.APP.openChzSelect = function(targetId, el) {
     Object.keys(OPTS).forEach(function(id) {
       var sel = document.getElementById(id);
       if (!sel) return;
-      // ✅ منع التكرار: إذا كان هناك زر مربوط بنفس الـ id، لا نضيف آخر
-      if (document.querySelector('.chz-pax-btn[data-for="' + id + '"]')) return;
+      
+      // التحقق من وجود حقل وهمي سابق (لمنع التكرار)
+      if (document.getElementById('fake-' + id)) return;
       
       var currentVal = sel.value;
       var opt = OPTS[id].find(function(o) { return o.v === currentVal; }) || OPTS[id][0];
       
-      var btn = document.createElement('div');
-      btn.className = 'chz-pax-btn';
-      btn.setAttribute('data-for', id);
-      btn.innerHTML = '<span class="label">' + opt.l + '</span><span class="arrow">▼</span>';
-      sel.parentNode.insertBefore(btn, sel.nextSibling);
+      // إنشاء حقل وهمي (input مخفي يظهر كزر)
+      var fake = document.createElement('div');
+      fake.id = 'fake-' + id;
+      fake.className = 'chz-fake-input';
+      fake.textContent = opt.l;
+      fake.style.cssText = 'display:flex;align-items:center;justify-content:space-between;width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid rgba(197,160,89,0.3);border-radius:12px;background:#1A2340;color:#F2E3C6;font-weight:700;font-size:14px;min-height:48px;cursor:pointer;position:relative;';
       
-      btn.onclick = function(e) {
+      // إضافة سهم
+      var arrow = document.createElement('span');
+      arrow.innerHTML = '▼';
+      arrow.style.cssText = 'color:#C5A059;font-size:10px;';
+      fake.appendChild(arrow);
+      
+      // إدراج بعد الـ select
+      sel.parentNode.insertBefore(fake, sel.nextSibling);
+      
+      fake.onclick = function(e) {
         e.preventDefault();
         e.stopPropagation();
         openSheet(id, sel.value);
@@ -21902,7 +21933,7 @@ window.APP.openChzSelect = function(targetId, el) {
       
       sel.addEventListener('change', function() {
         var found = OPTS[id].find(function(o) { return o.v === sel.value; });
-        if (found) btn.querySelector('.label').textContent = found.l;
+        if (found) fake.childNodes[0].textContent = found.l;
       });
     });
   }
@@ -21910,7 +21941,7 @@ window.APP.openChzSelect = function(targetId, el) {
   setInterval(attach, 1000);
   document.addEventListener('DOMContentLoaded', attach);
   setTimeout(attach, 500);
-  console.log('[Passengers Clean v2] ready — no duplicates');
+  console.log('[Pax Hijack v3] ready — clean');
 })();
 </script>
 </body>
