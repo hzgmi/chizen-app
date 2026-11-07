@@ -9,7 +9,7 @@
   var WORKER_URL = 'https://chizen-uploader.hazimchat.workers.dev';
 
   var MyBookings = {
-    state: { bookings: [], loading: true, error: null },
+    state: { bookings: [], loading: true, error: null, showCompleted: false },
     _unsub: null,
     _booted: false,
 
@@ -81,12 +81,53 @@
       if (!root) return;
       if (this.state.loading) { root.innerHTML = '<div class="mb-loading">⏳ جاري التحميل...</div>'; return; }
       if (this.state.error)   { root.innerHTML = '<div class="mb-error">❌ ' + this.esc(this.state.error) + '</div>'; return; }
-      if (!this.state.bookings.length) {
+      
+      var self = this;
+      var active = [];
+      var completed = [];
+
+      this.state.bookings.forEach(function(b) {
+        var st = b.status || 'pending';
+        if (st === 'completed' || st === 'cancelled') {
+          completed.push(b);
+        } else {
+          active.push(b);
+        }
+      });
+
+      if (!active.length && !completed.length) {
         root.innerHTML = '<div class="mb-empty"><div class="mb-empty-icon">✈️</div><div class="mb-empty-title">لا حجوزات بعد</div><div class="mb-empty-sub">احجز رحلتك الأولى الآن</div></div>';
         return;
       }
-      var self = this;
-      root.innerHTML = this.state.bookings.map(function (b) { return self.htmlCard(b); }).join('');
+
+      var html = '';
+
+      // عرض الحجوزات النشطة
+      if (active.length) {
+        html += active.map(function(b) { return self.htmlCard(b); }).join('');
+      } else {
+        html += '<div style="text-align:center;padding:20px;color:#6b7280;font-size:13px;font-weight:700;">لا توجد حجوزات نشطة حالياً.</div>';
+      }
+
+      // زر الحجوزات المكتملة
+      if (completed.length) {
+        var btnText = this.state.showCompleted ? '⬆️ إخفاء الحجوزات المكتملة' : '📁 عرض الحجوزات المكتملة (' + completed.length + ')';
+        html += '<div style="text-align:center;margin:16px 0;">' +
+                  '<button onclick="MyBookings.toggleCompleted()" style="padding:8px 16px;background:rgba(107,114,128,0.1);border:1px solid rgba(107,114,128,0.3);border-radius:12px;color:#6b7280;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;">' + btnText + '</button>' +
+                '</div>';
+                
+        // عرض الحجوزات المكتملة إذا تم تفعيل الزر
+        if (this.state.showCompleted) {
+          html += '<div style="opacity:0.85;">' + completed.map(function(b) { return self.htmlCard(b); }).join('') + '</div>';
+        }
+      }
+
+      root.innerHTML = html;
+    },
+
+    toggleCompleted: function() {
+      this.state.showCompleted = !this.state.showCompleted;
+      this.render();
     },
 
     /* ═══ §6. البطاقة ═══ */
