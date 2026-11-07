@@ -8189,9 +8189,30 @@ html[data-theme="light"] .chz-ac-sub {
 
       <div class="tvl-stepbar"><span class="tvl-num">3</span><span>المسافرون والدرجة</span></div>
       <div class="tvl-row3">
-        <div class="tvl-f"><label>بالغون</label><input id="fly-pax" type="number" min="1" value="1" oninput="APP.tvlCalc('flight'); APP.renderPassengers()"></div>
-        <div class="tvl-f"><label>أطفال</label><input id="fly-children" type="number" min="0" value="0"></div>
-        <div class="tvl-f"><label>رضّع</label><input id="fly-infants" type="number" min="0" value="0"></div>
+        <div class="tvl-f"><label>بالغون</label>
+          <select id="fly-pax" onchange="APP.tvlCalc('flight'); APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit;">
+            <option value="1">1 بالغ</option>
+            <option value="2">2 بالغين</option>
+            <option value="3">3 بالغين</option>
+            <option value="4">4 بالغين</option>
+            <option value="5">5 بالغين</option>
+          </select>
+        </div>
+        <div class="tvl-f"><label>أطفال</label>
+          <select id="fly-children" onchange="APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit;">
+            <option value="0">بدون أطفال</option>
+            <option value="1">1 طفل</option>
+            <option value="2">2 أطفال</option>
+            <option value="3">3 أطفال</option>
+          </select>
+        </div>
+        <div class="tvl-f"><label>رضّع</label>
+          <select id="fly-infants" onchange="APP.renderPassengers()" style="width:100%; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); font-family:inherit;">
+            <option value="0">بدون رضّع</option>
+            <option value="1">1 رضيع</option>
+            <option value="2">2 رضّع</option>
+          </select>
+        </div>
       </div>
       <div class="tvl-f"><label>شركة الطيران</label><select id="fly-airline"><option value="yemenia">الخطوط اليمنية</option><option value="qutaibi">طيران عدن</option><option value="other">أخرى</option></select></div>
       <div class="tvl-f"><label>الدرجة</label><select id="fly-class" onchange="APP.tvlCalc('flight')"><option value="economy">اقتصادية</option><option value="premium">مميزة</option><option value="business">رجال الأعمال</option><option value="first">الأولى</option></select></div>
