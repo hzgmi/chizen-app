@@ -8121,6 +8121,59 @@ html:not([data-theme="light"]) .tvl-form select option {
 .chz-select-label { flex: 1; text-align: right; }
 .chz-select-arrow { color: #C5A059; font-size: 10px; margin-right: 8px; }
 </style>
+
+<!-- CHIZEN Layout Balance & Fixes -->
+<style id="chz-layout-balance">
+/* توازن الحقول */
+#sc-booking .chz-step-body input[type="text"],
+#sc-booking .chz-step-body input[type="tel"],
+#sc-booking .chz-step-body input[type="email"],
+#sc-booking .chz-step-body textarea,
+#sc-booking .chz-step-body .chz-custom-select {
+  width: 100% !important;
+  min-height: 48px !important;
+  box-sizing: border-box !important;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  font-family: inherit !important;
+  border: 1.5px solid rgba(197,160,89,0.3) !important;
+  background: #1A2340 !important;
+  color: #F2E3C6 !important;
+  margin: 0 !important;
+}
+/* توحيد المسافات بين الصفوف */
+#sc-booking .chz-step-body > div {
+  margin-bottom: 16px !important;
+}
+/* إصلاح شبكة المسافرين */
+#sc-booking .chz-step-body > div[style*="1fr 1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+/* إصلاح شبكة المسار */
+#sc-booking .chz-step-body > div[style*="1fr auto 1fr"] {
+  display: grid !important;
+  grid-template-columns: 1fr 44px 1fr !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+/* إصلاح شبكة الحقلين */
+#sc-booking .chz-step-body > div[style*="1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  align-items: start !important;
+}
+/* إزالة أي تداخل */
+#sc-booking .chz-step-body .tvl-f {
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -21654,6 +21707,144 @@ window.APP.openChzSelect = function(targetId, el) {
   modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
   document.body.appendChild(modal);
 };
+</script>
+
+<!-- CHIZEN Booking Autocomplete + Date Picker Fix -->
+<script>
+(function(){
+  'use strict';
+
+  // ─── 1) إصلاح البحث (Autocomplete) عند النقر على "من" و "إلى" ───
+  function attachAutocomplete() {
+    var cities = [
+      { name: 'عدن', code: 'ADE' }, { name: 'صنعاء', code: 'SAH' },
+      { name: 'تعز', code: 'TAI' }, { name: 'المكلا', code: 'RIY' },
+      { name: 'سيئون', code: 'GXF' }, { name: 'الحديدة', code: 'HOD' },
+      { name: 'سقطرى', code: 'SCT' }, { name: 'القاهرة', code: 'CAI' },
+      { name: 'جدة', code: 'JED' }, { name: 'الرياض', code: 'RUH' },
+      { name: 'دبي', code: 'DXB' }, { name: 'الشارقة', code: 'SHJ' },
+      { name: 'أبو ظبي', code: 'AUH' }, { name: 'اسطنبول', code: 'IST' },
+      { name: 'عمان', code: 'AMM' }, { name: 'الدوحة', code: 'DOH' },
+      { name: 'الكويت', code: 'KWI' }, { name: 'مسقط', code: 'MCT' }
+    ];
+
+    ['fly-from', 'fly-to'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el || el._acReady) return;
+      el._acReady = true;
+      
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'position:relative;width:100%;';
+      el.parentNode.insertBefore(wrap, el);
+      wrap.appendChild(el);
+      
+      var dd = document.createElement('div');
+      dd.style.cssText = 'position:absolute;top:100%;right:0;left:0;z-index:999;background:#1A2340;border:1px solid rgba(197,160,89,0.4);border-radius:12px;margin-top:4px;max-height:200px;overflow-y:auto;display:none;box-shadow:0 10px 30px rgba(0,0,0,0.5);';
+      wrap.appendChild(dd);
+      
+      function render(q) {
+        q = (q || '').trim().toLowerCase();
+        if (!q) { dd.style.display = 'none'; return; }
+        var found = cities.filter(function(c){ return c.name.toLowerCase().indexOf(q) !== -1; });
+        if (!found.length) { dd.style.display = 'none'; return; }
+        var html = '';
+        found.forEach(function(c) {
+          html += '<div data-name="'+c.name+'" style="padding:12px 16px;color:#F2E3C6;font-weight:700;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);">' + c.name + ' <span style="color:#C5A059;font-size:10px;">'+c.code+'</span></div>';
+        });
+        dd.innerHTML = html;
+        dd.style.display = 'block';
+        dd.querySelectorAll('div[data-name]').forEach(function(item) {
+          item.onclick = function() {
+            el.value = item.getAttribute('data-name');
+            dd.style.display = 'none';
+            if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
+          };
+        });
+      }
+      
+      el.addEventListener('input', function(){ render(el.value); });
+      el.addEventListener('focus', function(){ if(el.value) render(el.value); });
+      el.addEventListener('blur', function(){ setTimeout(function(){ dd.style.display = 'none'; }, 200); });
+    });
+  }
+
+  // ─── 2) إصلاح التقويم (Wheel Picker) عند النقر على التواريخ ───
+  function attachDatePicker() {
+    ['fly-date', 'fly-return', 'fly-dob'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el || el._dpReady) return;
+      el._dpReady = true;
+      
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // نستخدم تقويم بسيط (لا يعتمد على الملف القديم)
+        var today = new Date();
+        var currentYear = today.getFullYear();
+        
+        var modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;';
+        var box = document.createElement('div');
+        box.style.cssText = 'background:#1A2340;border:1px solid rgba(197,160,89,0.4);border-radius:20px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,0.5);direction:rtl;';
+        
+        var title = document.createElement('div');
+        title.textContent = id === 'fly-dob' ? 'تاريخ الميلاد' : 'اختر التاريخ';
+        title.style.cssText = 'color:#C5A059;font-weight:900;font-size:16px;text-align:center;margin-bottom:16px;';
+        box.appendChild(title);
+        
+        var inputDate = document.createElement('input');
+        inputDate.type = 'date';
+        inputDate.value = el.value || (currentYear + '-01-01');
+        if (id === 'fly-dob') { inputDate.max = (currentYear - 2) + '-12-31'; inputDate.min = '1930-01-01'; }
+        else { inputDate.min = currentYear + '-01-01'; }
+        inputDate.style.cssText = 'width:100%;padding:14px;border-radius:12px;border:1.5px solid rgba(197,160,89,0.3);background:#0f172a;color:#F2E3C6;font-size:16px;font-family:inherit;margin-bottom:16px;box-sizing:border-box;';
+        box.appendChild(inputDate);
+        
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:10px;';
+        
+        var okBtn = document.createElement('button');
+        okBtn.textContent = 'تأكيد';
+        okBtn.style.cssText = 'flex:1;padding:12px;border-radius:12px;background:#C5A059;color:#1A2340;border:none;font-weight:900;font-size:14px;cursor:pointer;';
+        okBtn.onclick = function() {
+          if (inputDate.value) {
+            var parts = inputDate.value.split('-');
+            var formatted = parts[0] + '-' + parts[1] + '-' + parts[2];
+            el.value = formatted;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
+          }
+          modal.remove();
+        };
+        
+        var cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'إلغاء';
+        cancelBtn.style.cssText = 'flex:1;padding:12px;border-radius:12px;background:transparent;color:#9ca3af;border:1px solid rgba(255,255,255,0.1);font-weight:800;font-size:14px;cursor:pointer;';
+        cancelBtn.onclick = function() { modal.remove(); };
+        
+        btnRow.appendChild(okBtn);
+        btnRow.appendChild(cancelBtn);
+        box.appendChild(btnRow);
+        modal.appendChild(box);
+        modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+        document.body.appendChild(modal);
+      });
+    });
+  }
+
+  // تشغيل متكرر لالتقاط الحقول (لأنها تُضاف ديناميكياً)
+  function run() {
+    attachAutocomplete();
+    attachDatePicker();
+  }
+  
+  setInterval(run, 1000);
+  document.addEventListener('DOMContentLoaded', run);
+  setTimeout(run, 500);
+  
+  console.log('[Booking Fix] autocomplete & date picker ready');
+})();
 </script>
 </body>
 </html
