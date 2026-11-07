@@ -1,0 +1,44 @@
+/* ═══ CHIZEN Pro Booking CSS ═══ */
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* هوامش الصفحة */
+#sc-booking {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* المسافرون (3 أعمدة) */
+#sc-booking .chz-step-body > div[style*="1fr 1fr 1fr"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+}
+
+/* الإدخالات */
+#sc-booking .chz-step-body input[type="text"],
+#sc-booking .chz-step-body input[type="tel"],
+#sc-booking .chz-step-body input[type="email"] {
+  width: 100% !important;
+  min-height: 48px !important;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
+  border: 1.5px solid rgba(197,160,89,0.3) !important;
+  background: #1A2340 !important;
+  color: #F2E3C6 !important;
+  font-size: 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* التواريخ (Wheel Picker) */
+.chz-date-group {
+  width: 100% !important;
+}
+.chz-date-group input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+}

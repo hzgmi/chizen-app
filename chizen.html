@@ -8098,29 +8098,7 @@ html:not([data-theme="light"]) .tvl-form select option {
 }
 </style>
 
-<!-- CHIZEN Custom Select CSS -->
-<style>
-.chz-custom-select {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  padding: 12px 36px 12px 14px !important;
-  border: 1.5px solid rgba(197,160,89,0.3) !important;
-  border-radius: 12px !important;
-  background: #1A2340 !important;
-  color: #F2E3C6 !important;
-  font-weight: 700 !important;
-  font-size: 14px !important;
-  font-family: inherit !important;
-  cursor: pointer !important;
-  min-height: 48px !important;
-  position: relative !important;
-}
-.chz-select-label { flex: 1; text-align: right; }
-.chz-select-arrow { color: #C5A059; font-size: 10px; margin-right: 8px; }
-</style>
+
 
 <!-- CHIZEN Layout Balance & Fixes -->
 <style id="chz-layout-balance">
@@ -8227,6 +8205,7 @@ html:not([data-theme="light"]) .tvl-form select option {
 }
 .chz-select-arrow { color: #C5A059; font-size: 10px; }
 </style>
+<link rel="stylesheet" href="client/booking-pro.css?v=1">
 </head>
 <body>
 <div id="app">
@@ -21670,123 +21649,8 @@ window.APP.openChzSelect = function(targetId, el) {
 
 
 
-<!-- CHIZEN Booking Fixes v3 (Search Modal + iOS Wheel Picker) -->
-<script>
-(function(){
-  'use strict';
 
-  // ─── 1) دالة فتح نافذة أنيقة ───
-  function openModal(titleText, contentHTML) {
-    var modal = document.createElement('div');
-    modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;';
-    var box = document.createElement('div');
-    box.style.cssText = 'background:#1A2340;border:1px solid rgba(197,160,89,0.4);border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 10px 40px rgba(0,0,0,0.5);';
-    var title = document.createElement('div');
-    title.textContent = titleText;
-    title.style.cssText = 'color:#C5A059;font-weight:900;font-size:16px;text-align:center;margin-bottom:16px;';
-    box.appendChild(title);
-    var contentWrap = document.createElement('div');
-    contentWrap.innerHTML = contentHTML;
-    box.appendChild(contentWrap);
-    modal.appendChild(box);
-    modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
-    document.body.appendChild(modal);
-    return { modal: modal, box: box, content: contentWrap };
-  }
-
-  // ─── 2) إصلاح البحث (Autocomplete عبر Modal) ───
-  var cities = ['عدن', 'صنعاء', 'تعز', 'المكلا', 'سيئون', 'الحديدة', 'سقطرى', 'القاهرة', 'جدة', 'الرياض', 'دبي', 'الشارقة', 'أبو ظبي', 'اسطنبول', 'عمان', 'الدوحة', 'الكويت', 'مسقط'];
-  
-  function attachSearch(id, label) {
-    var el = document.getElementById(id);
-    if (!el || el._searchReady) return;
-    el._searchReady = true;
-    
-    el.addEventListener('click', function(e) {
-      e.preventDefault();
-      var html = '';
-      cities.forEach(function(c) {
-        html += '<div data-city="'+c+'" style="padding:12px 16px;color:#F2E3C6;font-weight:700;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);">' + c + '</div>';
-      });
-      var m = openModal(label, html);
-      m.content.querySelectorAll('div[data-city]').forEach(function(item) {
-        item.onclick = function() {
-          el.value = item.getAttribute('data-city');
-          m.modal.remove();
-          if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
-        };
-      });
-    });
-  }
-
-  // ─── 3) إصلاح التقويم (Wheel Picker بسيط) ───
-  function attachDatePicker(id, label, isDob) {
-    var el = document.getElementById(id);
-    if (!el || el._dpReady) return;
-    el._dpReady = true;
-    
-    el.addEventListener('click', function(e) {
-      e.preventDefault();
-      var currentYear = new Date().getFullYear();
-      var minYear = isDob ? 1930 : currentYear;
-      var maxYear = isDob ? currentYear - 2 : currentYear + 2;
-      
-      var html = '<div style="display:flex; gap:10px; justify-content:center;">';
-      html += '<select id="chz-dp-day" style="padding:10px; border-radius:8px; background:#0f172a; color:#fff; border:1px solid #C5A059; font-size:16px; width:80px;"></select>';
-      html += '<select id="chz-dp-month" style="padding:10px; border-radius:8px; background:#0f172a; color:#fff; border:1px solid #C5A059; font-size:16px; width:100px;"></select>';
-      html += '<select id="chz-dp-year" style="padding:10px; border-radius:8px; background:#0f172a; color:#fff; border:1px solid #C5A059; font-size:16px; width:100px;"></select>';
-      html += '</div>';
-      html += '<button id="chz-dp-confirm" style="width:100%; margin-top:16px; padding:12px; background:#C5A059; color:#1A2340; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">تأكيد</button>';
-      
-      var m = openModal(label, html);
-      
-      var daySel = m.content.querySelector('#chz-dp-day');
-      var monSel = m.content.querySelector('#chz-dp-month');
-      var yrSel = m.content.querySelector('#chz-dp-year');
-      
-      for (var i=1; i<=31; i++) daySel.innerHTML += '<option value="'+i+'">'+i+'</option>';
-      var months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-      months.forEach(function(m, i){ monSel.innerHTML += '<option value="'+(i+1)+'">'+m+'</option>'; });
-      for (var y=minYear; y<=maxYear; y++) yrSel.innerHTML += '<option value="'+y+'">'+y+'</option>';
-      
-      // القيم الافتراضية
-      if (el.value) {
-        var parts = el.value.split('-');
-        if (parts.length === 3) {
-          yrSel.value = parts[0];
-          monSel.value = parseInt(parts[1]);
-          daySel.value = parseInt(parts[2]);
-        }
-      } else {
-        if (isDob) yrSel.value = maxYear;
-        else yrSel.value = currentYear;
-      }
-      
-      m.content.querySelector('#chz-dp-confirm').onclick = function() {
-        var d = daySel.value.padStart(2, '0');
-        var mo = monSel.value.padStart(2, '0');
-        var y = yrSel.value;
-        el.value = y + '-' + mo + '-' + d;
-        m.modal.remove();
-        if (window.APP && APP.tvlCalc) APP.tvlCalc('flight');
-      };
-    });
-  }
-
-  function run() {
-    attachSearch('fly-from', 'مدينة المغادرة');
-    attachSearch('fly-to', 'مدينة الوصول');
-    attachDatePicker('fly-date', 'تاريخ المغادرة', false);
-    attachDatePicker('fly-return', 'تاريخ العودة', false);
-    attachDatePicker('fly-dob', 'تاريخ الميلاد', true);
-  }
-
-  setInterval(run, 1000);
-  document.addEventListener('DOMContentLoaded', run);
-  setTimeout(run, 500);
-  console.log('[Booking Final Fix] ready');
-})();
-</script>
+<script src="client/booking-pro-search.js?v=1"></script>
 </body>
 </html
     renderPassengers: function() {
