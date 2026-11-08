@@ -11313,30 +11313,71 @@ var APP={
   },
 
   renderProducts:function(list){
-    var c=document.getElementById('prods');if(!c)return;
-    
-    // إظهار Skeleton أثناء التحميل (إذا لم تكن القائمة ممررة)
-    if(!list && (!this.products || this.products.length === 0)) {
-        c.innerHTML = Array(4).fill('<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-price"></div></div>').join('');
-        return;
+    var c = document.getElementById('prod-list');
+    if (!c) return;
+    var arr = list || this.products || [];
+    if (!arr.length) {
+      c.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af;"><div style="font-size:48px;margin-bottom:12px;">📦</div><b>لا توجد منتجات</b></div>';
+      return;
     }
     
-    if(!list){
-      // v59: stable order (newest first, then by name)
-      list = this.products.slice().sort(function(a, b){
-        var ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
-        var tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
-        if (ta !== tb) return tb - ta;
-        return String(a.name || '').localeCompare(String(b.name || ''), 'ar');
-      });
-    }
-    if(!list.length){
-        c.innerHTML='<div class="empty-state"><div class="empty-icon">🛍️</div><div class="empty-title">لا توجد منتجات حالياً</div><div class="empty-sub">تفقدنا قريباً، نعمل على إضافة منتجات رائعة لك!</div></div>';
-        return;
-    }
-    c.innerHTML=list.map(function(p){
-      var fav=APP.favorites.indexOf(p.id)>-1;
-      return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-b">'+esc(p.badge||'')+'</div><div class="prod-f'+(fav?' active':'')+'" onclick="event.stopPropagation();APP.togFav(\''+esc(p.id)+'\',this)"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><div class="prod-i"><img src="'+esc(p.img||'')+'" loading="lazy"><div class="color-swatches" id="color-swatches-container" style="display:none;"></div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-c">ر.س</span>'+(p.old?'<span class="price-o">'+esc(p.old)+'</span>':'')+'</div></div></div>';
+    c.innerHTML = arr.map(function(p){
+      var img = p.img || (p.images && p.images[0]) || '';
+      var brand = p.brand || '';
+      var price = Number(p.price) || 0;
+      var oldPrice = Number(p.oldPrice) || 0;
+      var stock = Number(p.stock) || 0;
+      var sizes = Array.isArray(p.sizes) ? p.sizes.slice(0, 3) : [];
+      var colors = Array.isArray(p.colors) ? p.colors.slice(0, 4) : [];
+      var isFlash = p.flashSale && p.flashSale.enabled;
+      var flashPrice = isFlash ? Number(p.flashSale.price) || 0 : 0;
+      
+      // شارات
+      var badges = '';
+      if (isFlash) badges += '<div style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;z-index:2;">⚡ عرض</div>';
+      if (stock <= 0) badges += '<div style="position:absolute;top:6px;left:6px;background:#6b7280;color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;z-index:2;">نفد</div>';
+      
+      // السعر
+      var priceHtml = '';
+      if (isFlash && flashPrice > 0) {
+        priceHtml = '<span style="color:#f59e0b;font-weight:900;font-size:15px;">' + flashPrice.toLocaleString() + '</span> <span style="font-size:10px;color:#9ca3af;">ر.ي</span>' +
+                    '<span style="font-size:11px;color:#6b7280;text-decoration:line-through;margin-right:6px;">' + price.toLocaleString() + '</span>';
+      } else if (oldPrice > price) {
+        priceHtml = '<span style="color:#ec4899;font-weight:900;font-size:15px;">' + price.toLocaleString() + '</span> <span style="font-size:10px;color:#9ca3af;">ر.ي</span>' +
+                    '<span style="font-size:11px;color:#6b7280;text-decoration:line-through;margin-right:6px;">' + oldPrice.toLocaleString() + '</span>';
+      } else {
+        priceHtml = '<span style="color:#ec4899;font-weight:900;font-size:15px;">' + price.toLocaleString() + '</span> <span style="font-size:10px;color:#9ca3af;">ر.ي</span>';
+      }
+      
+      // دوائر الألوان
+      var colorsHtml = '';
+      if (colors.length) {
+        colorsHtml = '<div style="display:flex;gap:3px;margin-top:4px;">' +
+          colors.map(function(cl){ return '<div style="width:12px;height:12px;border-radius:50%;background:' + (cl.hex || '#ccc') + ';border:1px solid rgba(0,0,0,0.15);"></div>'; }).join('') +
+        '</div>';
+      }
+      
+      // المقاسات
+      var sizesHtml = '';
+      if (sizes.length) {
+        sizesHtml = '<div style="display:flex;gap:3px;margin-top:4px;flex-wrap:wrap;">' +
+          sizes.map(function(s){ return '<span style="font-size:9px;font-weight:900;color:#C5A059;background:rgba(197,160,89,0.15);border:1px solid rgba(197,160,89,0.4);padding:1px 5px;border-radius:4px;">' + s + '</span>'; }).join('') +
+        '</div>';
+      }
+      
+      return '<div onclick="APP.openProduct(\'' + esc(p.id) + '\')" style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);cursor:pointer;position:relative;transition:transform 0.15s;" onmousedown="this.style.transform=\'scale(0.97)\'" onmouseup="this.style.transform=\'scale(1)\'">' +
+        badges +
+        '<div style="position:relative;padding-top:100%;background:#f4f6fa;">' +
+          (img ? '<img src="' + esc(img) + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy">' : '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;opacity:0.3;">📦</div>') +
+        '</div>' +
+        '<div style="padding:10px;">' +
+          (brand ? '<div style="font-size:10px;color:#a855f7;font-weight:900;margin-bottom:2px;">' + esc(brand) + '</div>' : '') +
+          '<div style="font-size:12px;color:#1a1a2e;font-weight:800;margin-bottom:6px;line-height:1.4;height:34px;overflow:hidden;">' + esc(p.name || '') + '</div>' +
+          '<div>' + priceHtml + '</div>' +
+          colorsHtml +
+          sizesHtml +
+        '</div>' +
+      '</div>';
     }).join('');
   },
   
