@@ -11595,9 +11595,36 @@ var APP={
         '<div style="font-size:15px; font-weight:900; color:#C5A059; margin-top:2px;">' + priceUSD.toFixed(2) + '</div>' +
       '</div>';
     
-    // الوصف + المميزات
+    // الوصف
     var desc = p.description || p.desc || '';
     document.getElementById('det-desc').textContent = desc;
+    
+    // صندوق المميزات (جديد)
+    var featEl = document.getElementById('det-features');
+    if (!featEl) {
+      featEl = document.createElement('div');
+      featEl.id = 'det-features';
+      document.getElementById('det-desc').parentNode.insertBefore(featEl, document.getElementById('det-desc'));
+    }
+    if (desc) {
+      var lines = desc.split('\n').filter(function(l) { return l.trim(); }).slice(0, 4);
+      if (lines.length) {
+        featEl.innerHTML = '<div style="background:linear-gradient(135deg, rgba(197,160,89,0.1), rgba(154,123,79,0.05)); border:1px solid rgba(197,160,89,0.3); border-radius:16px; padding:16px; margin-bottom:12px;">' +
+          '<div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">' +
+            '<span style="font-size:20px;">✨</span>' +
+            '<span style="font-size:14px; font-weight:900; color:#C5A059;">المميزات</span>' +
+          '</div>' +
+          lines.map(function(l) { 
+            return '<div style="display:flex; align-items:flex-start; gap:8px; padding:6px 0; border-bottom:1px dashed rgba(197,160,89,0.15);">' +
+              '<span style="color:#C5A059; font-weight:900; font-size:12px; margin-top:2px;">•</span>' +
+              '<span style="font-size:13px; color:#6b7280; font-weight:600; line-height:1.5;">' + l.trim() + '</span>' +
+            '</div>'; 
+          }).join('') +
+        '</div>';
+      } else {
+        featEl.innerHTML = '';
+      }
+    }
     
     // إضافة قسم المقاسات والألوان (إذا لم يكن موجوداً)
     var specsEl = document.getElementById('det-specs');
@@ -11608,23 +11635,31 @@ var APP={
       document.getElementById('det-desc').parentNode.insertBefore(specsEl, document.getElementById('det-desc').nextSibling);
     }
     
+    // إعادة تعيين المقاس والألوان المختارة
+    APP.selectedSize = null;
+    APP.selectedColor = null;
+    
     var specsHtml = '';
     
-    // المقاسات
+    // المقاسات (قابلة للاختيار)
     if (p.sizes && p.sizes.length) {
-      specsHtml += '<div style="margin-bottom:12px;">' +
-        '<div style="font-size:12px; font-weight:900; color:#C5A059; margin-bottom:8px;">📏 المقاسات:</div>' +
-        '<div style="display:flex; flex-wrap:wrap; gap:6px;">' +
-        p.sizes.map(function(s) { return '<span style="padding:6px 14px; background:rgba(197,160,89,0.15); border:1.5px solid #C5A059; border-radius:8px; color:#C5A059; font-weight:800; font-size:12px;">' + s + '</span>'; }).join('') +
+      specsHtml += '<div style="margin-bottom:16px;">' +
+        '<div style="font-size:13px; font-weight:900; color:#C5A059; margin-bottom:10px;">📏 اختر المقاس:</div>' +
+        '<div style="display:flex; flex-wrap:wrap; gap:8px;" id="size-options">' +
+        p.sizes.map(function(s) { 
+          return '<button onclick="APP.selectSize(this, \'' + s + '\')" class="chz-size-btn" data-size="' + s + '" style="padding:10px 18px; background:#fff; border:2px solid #e5e7eb; border-radius:10px; color:#4b5563; font-weight:900; font-size:14px; cursor:pointer; font-family:inherit; transition:all 0.15s;">' + s + '</button>'; 
+        }).join('') +
         '</div></div>';
     }
     
-    // الألوان
+    // الألوان (قابلة للاختيار)
     if (p.colors && p.colors.length) {
-      specsHtml += '<div style="margin-bottom:12px;">' +
-        '<div style="font-size:12px; font-weight:900; color:#C5A059; margin-bottom:8px;">🎨 الألوان:</div>' +
-        '<div style="display:flex; flex-wrap:wrap; gap:8px;">' +
-        p.colors.map(function(c) { return '<div style="display:flex; align-items:center; gap:6px; padding:6px 12px; background:rgba(0,0,0,0.05); border-radius:8px;"><div style="width:18px; height:18px; border-radius:50%; background:' + (c.hex || '#ccc') + '; border:1px solid #fff;"></div><span style="font-size:12px; color:#4b5563; font-weight:700;">' + c.name + '</span></div>'; }).join('') +
+      specsHtml += '<div style="margin-bottom:16px;">' +
+        '<div style="font-size:13px; font-weight:900; color:#C5A059; margin-bottom:10px;">🎨 اختر اللون:</div>' +
+        '<div style="display:flex; flex-wrap:wrap; gap:8px;" id="color-options">' +
+        p.colors.map(function(c) { 
+          return '<button onclick="APP.selectColor(this, \'' + c.name + '\')" class="chz-color-btn" data-color="' + c.name + '" style="display:flex; align-items:center; gap:8px; padding:8px 14px; background:#fff; border:2px solid #e5e7eb; border-radius:10px; cursor:pointer; font-family:inherit; transition:all 0.15s;"><div style="width:20px; height:20px; border-radius:50%; background:' + (c.hex || '#ccc') + '; border:1px solid rgba(0,0,0,0.1);"></div><span style="font-size:13px; color:#4b5563; font-weight:800;">' + c.name + '</span></button>'; 
+        }).join('') +
         '</div></div>';
     }
     
@@ -11638,8 +11673,34 @@ var APP={
   
 chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElementById('det-qty').textContent=this.currentQty;},
   
-  addDetCart:function(){if(!this.currentProd)return;this.addCart(this.currentProd.id,this.currentQty);this.toast('✓ تمت الإضافة');this.goTab('home');},
-  buyNow:function(){if(!this.currentProd)return;this.addCart(this.currentProd.id,this.currentQty);this.goTab('cart');},
+  addDetCart:function(){
+    if(!this.currentProd)return;
+    if(!this.validateSelection())return;
+    var cartItem = { id: this.currentProd.id, qty: this.currentQty };
+    if (APP.selectedSize) cartItem.size = APP.selectedSize;
+    if (APP.selectedColor) cartItem.color = APP.selectedColor;
+    this.addCartFull(cartItem);
+    this.toast('✓ تمت الإضافة' + (APP.selectedSize ? ' (مقاس ' + APP.selectedSize + ')' : ''));
+    this.goTab('home');
+  },
+  
+  addCartFull:function(item){
+    var ex = null;
+    this.cart.forEach(function(i){ if(String(i.id)===String(item.id) && i.size===item.size && i.color===item.color) ex = i; });
+    if(ex) ex.qty += item.qty;
+    else this.cart.push(item);
+    this.saveCart();
+    this.updateCartB();
+  },
+  buyNow:function(){
+    if(!this.currentProd)return;
+    if(!this.validateSelection())return;
+    var cartItem = { id: this.currentProd.id, qty: this.currentQty };
+    if (APP.selectedSize) cartItem.size = APP.selectedSize;
+    if (APP.selectedColor) cartItem.color = APP.selectedColor;
+    this.addCartFull(cartItem);
+    this.goTab('cart');
+  },
   
   addCart:function(id,qty){
     var ex=null;this.cart.forEach(function(i){if(String(i.id)===String(id))ex=i;});
