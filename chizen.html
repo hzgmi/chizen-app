@@ -18267,21 +18267,42 @@ document.addEventListener('keydown', function(e) {
       }
     }, 4000);
     if (!window.FB || !FB.db) { setTimeout(APP.cmLoad, 800); return; }
-    FB.db.collection("listings").where("status", "==", "active").limit(100).get()
-      .then(function(snap){
-        done = true;
-        APP.cmAll = [];
-        snap.forEach(function(d){ APP.cmAll.push(Object.assign({ id: d.id }, d.data())); });
-        APP.cmAll.sort(function(a,b){ var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0; var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0; return tb - ta; });
-        var cars = APP.cmAll.filter(function(l){ return l.type === "car"; }).length;
-        var phones = APP.cmAll.filter(function(l){ return l.type === "phone"; }).length;
-        if (count) count.textContent = cars + " سيارة · " + phones + " هاتف";
-        APP.cmRender();
-      }).catch(function(e){
-        done = true;
-        console.warn("[cm]", e.message);
-        grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">⚠️</div>تعذر التحميل<br><small>' + (e.message || "") + '</small></div>';
+    
+    // جلب الإعلانات والمنتجات معاً
+    var p1 = FB.db.collection("listings").where("status", "==", "active").limit(100).get();
+    var p2 = FB.db.collection("products").get();
+    
+    Promise.all([p1, p2]).then(function(results){
+      done = true;
+      APP.cmAll = [];
+      
+      // إعلانات الحراج
+      results[0].forEach(function(d){
+        var data = d.data();
+        data._sourceType = 'listing';
+        APP.cmAll.push(Object.assign({ id: d.id }, data));
       });
+      
+      // منتجات الأقسام
+      results[1].forEach(function(d){
+        var data = d.data();
+        data._sourceType = 'product';
+        data.type = 'product'; // تمييز المنتجات
+        APP.cmAll.push(Object.assign({ id: d.id }, data));
+      });
+      
+      APP.cmAll.sort(function(a,b){ var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0; var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0; return tb - ta; });
+      
+      var products = APP.cmAll.filter(function(l){ return l._sourceType === 'product'; }).length;
+      var listings = APP.cmAll.filter(function(l){ return l._sourceType === 'listing'; }).length;
+      if (count) count.textContent = products + " منتج · " + listings + " إعلان";
+      
+      APP.cmRender();
+    }).catch(function(e){
+      done = true;
+      console.warn("[cm]", e.message);
+      grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">⚠️</div>تعذر التحميل<br><small>' + (e.message || "") + '</small></div>';
+    });
   };
 
   APP.cmRender = function(){
@@ -18291,13 +18312,54 @@ document.addEventListener('keydown', function(e) {
     if (APP.cmFilterType !== "all") list = list.filter(function(l){ return l.type === APP.cmFilterType; });
     if (APP.cmSearchTerm) {
       var q = APP.cmSearchTerm.toLowerCase();
-      list = list.filter(function(l){ return ((l.title||"").toLowerCase().indexOf(q) > -1) || ((l.description||"").toLowerCase().indexOf(q) > -1) || ((l.city||"").toLowerCase().indexOf(q) > -1); });
+      list = list.filter(function(l){ return ((l.title||l.name||"").toLowerCase().indexOf(q) > -1) || ((l.description||l.desc||"").toLowerCase().indexOf(q) > -1) || ((l.city||"").toLowerCase().indexOf(q) > -1) || ((l.brand||"").toLowerCase().indexOf(q) > -1); });
     }
     if (!list.length) {
-      grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">🛍️</div>لا توجد إعلانات<br><small>كن أول من ينشر!</small></div>';
+      grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">🛍️</div>لا توجد منتجات<br><small>كن أول من ينشر!</small></div>';
       return;
     }
     grid.innerHTML = list.map(function(l){
+      // إذا كان منتجاً (من لوحة المدير)
+      if (l._sourceType === 'product') {
+        var img = l.img || (l.images && l.images[0]) || '';
+        var price = Number(l.price) || 0;
+        var stock = Number(l.stock) || 0;
+        var brand = l.brand || '';
+        var sizes = Array.isArray(l.sizes) ? l.sizes.slice(0, 3) : [];
+        var colors = Array.isArray(l.colors) ? l.colors.slice(0, 4) : [];
+        var isFlash = l.flashSale && l.flashSale.enabled;
+        var rates = window._chzRates || { sarSouth: 350, usdSouth: 1300 };
+        var inputCurrency = l.inputCurrency || 'YER';
+        var displayPrice = price;
+        var displaySymbol = 'ر.ي';
+        if (inputCurrency === 'SAR') { displayPrice = price / rates.sarSouth; displaySymbol = 'ر.س'; }
+        else if (inputCurrency === 'USD') { displayPrice = price / rates.usdSouth; displaySymbol = '$'; }
+        var displayVal = (inputCurrency === 'YER') ? Math.round(displayPrice).toLocaleString() : displayPrice.toFixed(2);
+        
+        var badges = '';
+        if (isFlash) badges += '<div style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;z-index:2;">⚡ عرض</div>';
+        if (stock <= 0) badges += '<div style="position:absolute;top:6px;left:6px;background:#6b7280;color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;z-index:2;">نفد</div>';
+        
+        var colorsHtml = colors.length ? '<div style="display:flex;gap:3px;margin-top:4px;">' + colors.map(function(c){ return '<div style="width:12px;height:12px;border-radius:50%;background:' + (c.hex||'#ccc') + ';border:1px solid rgba(0,0,0,0.15);"></div>'; }).join('') + '</div>' : '';
+        var sizesHtml = sizes.length ? '<div style="display:flex;gap:3px;margin-top:4px;flex-wrap:wrap;">' + sizes.map(function(s){ return '<span style="font-size:9px;font-weight:900;color:#C5A059;background:rgba(197,160,89,0.15);border:1px solid rgba(197,160,89,0.4);padding:1px 5px;border-radius:4px;">' + s + '</span>'; }).join('') + '</div>' : '';
+        
+        return '<div onclick="APP.openProduct(\'' + esc(l.id) + '\')" style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);cursor:pointer;position:relative;">' +
+          badges +
+          '<div style="position:relative;padding-top:100%;background:#f4f6fa;">' +
+            (img ? '<img src="' + esc(img) + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" loading="lazy">' : '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;opacity:0.3;">📦</div>') +
+          '</div>' +
+          '<div style="padding:10px;">' +
+            (brand ? '<div style="font-size:10px;color:#a855f7;font-weight:900;margin-bottom:2px;">' + esc(brand) + '</div>' : '') +
+            '<div style="font-size:12px;color:#1a1a2e;font-weight:800;margin-bottom:6px;line-height:1.4;height:34px;overflow:hidden;">' + esc(l.name || l.title || '') + '</div>' +
+            '<div><span style="color:#ec4899;font-weight:900;font-size:15px;">' + displayVal + '</span> <span style="font-size:10px;color:#9ca3af;">' + displaySymbol + '</span></div>' +
+            colorsHtml +
+            sizesHtml +
+          '</div>' +
+        '</div>';
+      }
+      
+      // إعلانات الحراج (السلوك القديم)
+      return APP.cmRenderListing ? APP.cmRenderListing(l) : '';
       var images = l.images || (l.image ? [l.image] : []);
       var img = images[0] || "";
       var typeIcon = (l.type === "car" ? "🚗" : "📱");
