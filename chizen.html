@@ -11810,6 +11810,15 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     }, 50);
   },
   
+  validateSelection:function(){
+    var p = APP.currentProd;
+    if (p && p.sizes && p.sizes.length && !APP.selectedSize) {
+      APP.toast('⚠️ اختر المقاس أولاً');
+      return false;
+    }
+    return true;
+  },
+  
   getProduct:function(id){for(var i=0;i<this.products.length;i++)if(String(this.products[i].id)===String(id))return this.products[i];return null;},
   
   chCartQty:function(id,d){
