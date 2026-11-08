@@ -11511,10 +11511,19 @@ var APP={
     if(!p)return;
     this.currentProd=p;this.currentQty=1;
     
-    // الصورة الرئيسية
+    // الصورة الرئيسية (قابلة للنقر لفتح المعرض)
     var ic=document.getElementById('det-img');
     var oi=ic.querySelector('img');if(oi)oi.remove();
-    if(p.img){var img=document.createElement('img');img.src=p.img;ic.insertBefore(img,ic.firstChild);}
+    if(p.img){
+      var img=document.createElement('img');
+      img.src=p.img;
+      img.style.cursor = 'pointer';
+      img.onclick = function() {
+        var imgs = (p.images && p.images.length) ? p.images.slice() : (p.img ? [p.img] : []);
+        if (imgs.length) APP.openGallery(imgs, 0);
+      };
+      ic.insertBefore(img,ic.firstChild);
+    }
     
     // شريط الصور المصغرة
     (function(){
@@ -11548,6 +11557,10 @@ var APP={
             setTimeout(function(){ mainImg.src = src; mainImg.style.opacity = '1'; }, 120);
           }
           row.querySelectorAll('.det-thumb').forEach(function(x, j){ x.classList.toggle('active', j === i); });
+        };
+        // النقر المزدوج يفتح المعرض
+        t.ondblclick = function() {
+          APP.openGallery(imgs, i);
         };
         row.appendChild(t);
       });
@@ -11732,6 +11745,69 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     btn.style.borderColor = '#C5A059';
     if(btn.querySelector('span')) btn.querySelector('span').style.color = '#C5A059';
     APP.selectedColor = color;
+  },
+  
+  openGallery:function(images, startIdx){
+    startIdx = startIdx || 0;
+    if (!images || !images.length) return;
+    
+    // إنشاء الحاوية
+    var gallery = document.createElement('div');
+    gallery.id = 'chz-gallery';
+    gallery.style.cssText = 'position:fixed; inset:0; background:#000; z-index:9999999; display:flex; flex-direction:column; direction:rtl;';
+    
+    // شريط علوي (إغلاق + عداد)
+    var topBar = document.createElement('div');
+    topBar.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:16px; background:linear-gradient(180deg, rgba(0,0,0,0.8), transparent); position:absolute; top:0; left:0; right:0; z-index:10;';
+    topBar.innerHTML = 
+      '<div style="color:#fff; font-size:14px; font-weight:900; background:rgba(0,0,0,0.5); padding:6px 12px; border-radius:20px;"><span id="chz-gallery-idx">' + (startIdx + 1) + '</span> / ' + images.length + '</div>' +
+      '<button onclick="document.getElementById(\'chz-gallery\').remove();" style="background:rgba(255,255,255,0.2); color:#fff; border:none; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; backdrop-filter:blur(10px);">✕</button>';
+    gallery.appendChild(topBar);
+    
+    // حاوية الصور (Swipe)
+    var imagesContainer = document.createElement('div');
+    imagesContainer.style.cssText = 'flex:1; display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch;';
+    
+    images.forEach(function(src, idx) {
+      var slide = document.createElement('div');
+      slide.style.cssText = 'flex:0 0 100%; scroll-snap-align:center; display:flex; align-items:center; justify-content:center; padding:20px;';
+      var img = document.createElement('img');
+      img.src = src;
+      img.style.cssText = 'max-width:100%; max-height:100%; object-fit:contain; border-radius:8px;';
+      slide.appendChild(img);
+      imagesContainer.appendChild(slide);
+    });
+    gallery.appendChild(imagesContainer);
+    
+    // شريط سفلي (صور مصغرة)
+    var bottomBar = document.createElement('div');
+    bottomBar.style.cssText = 'display:flex; gap:8px; padding:16px; background:linear-gradient(0deg, rgba(0,0,0,0.8), transparent); position:absolute; bottom:0; left:0; right:0; overflow-x:auto; scrollbar-width:none;';
+    images.forEach(function(src, idx) {
+      var thumb = document.createElement('div');
+      thumb.style.cssText = 'flex:0 0 auto; width:60px; height:60px; border-radius:8px; overflow:hidden; border:2px solid ' + (idx === startIdx ? '#C5A059' : 'rgba(255,255,255,0.2)') + '; cursor:pointer; transition:all 0.2s;';
+      thumb.innerHTML = '<img src="' + src + '" style="width:100%; height:100%; object-fit:cover;">';
+      thumb.onclick = function() {
+        imagesContainer.scrollTo({ left: imagesContainer.offsetWidth * idx, behavior: 'smooth' });
+      };
+      bottomBar.appendChild(thumb);
+    });
+    gallery.appendChild(bottomBar);
+    
+    // Scroll snap (تحديث العداد والصور المصغرة)
+    imagesContainer.addEventListener('scroll', function() {
+      var idx = Math.round(imagesContainer.scrollLeft / imagesContainer.offsetWidth);
+      document.getElementById('chz-gallery-idx').textContent = idx + 1;
+      bottomBar.querySelectorAll('div').forEach(function(t, i) {
+        t.style.borderColor = (i === idx) ? '#C5A059' : 'rgba(255,255,255,0.2)';
+      });
+    });
+    
+    document.body.appendChild(gallery);
+    
+    // Scroll إلى الصورة المختارة
+    setTimeout(function() {
+      imagesContainer.scrollLeft = imagesContainer.offsetWidth * startIdx;
+    }, 50);
   },
   
   getProduct:function(id){for(var i=0;i<this.products.length;i++)if(String(this.products[i].id)===String(id))return this.products[i];return null;},
