@@ -11510,10 +11510,13 @@ var APP={
     var p=null;this.products.forEach(function(x){if(String(x.id)===String(id))p=x;});
     if(!p)return;
     this.currentProd=p;this.currentQty=1;
+    
+    // الصورة الرئيسية
     var ic=document.getElementById('det-img');
     var oi=ic.querySelector('img');if(oi)oi.remove();
     if(p.img){var img=document.createElement('img');img.src=p.img;ic.insertBefore(img,ic.firstChild);}
-    // v16: thumbnails gallery
+    
+    // شريط الصور المصغرة
     (function(){
       var host = ic.parentElement.querySelector('.det-thumbs-host');
       if (!host) {
@@ -11550,16 +11553,90 @@ var APP={
       });
       host.appendChild(row);
     })();
+    
+    // الماركة والاسم
     document.getElementById('det-brand').textContent=p.brand||'';
     document.getElementById('det-name').textContent=p.name;
-    document.getElementById('det-rate').innerHTML='⭐ '+esc(p.rating||4.5)+' ('+esc(p.reviews||0)+')';
-    document.getElementById('det-price').innerHTML=esc(p.price)+' <span style="font-size:14px;">ر.س</span>'+(p.old?' <span style="font-size:14px;color:var(--mt2);text-decoration:line-through;">'+esc(p.old)+'</span>':'');
-    document.getElementById('det-desc').textContent=p.desc||'';
+    
+    // التقييم (افتراضي)
+    var rating = p.rating || 4.5;
+    var reviews = p.reviews || 0;
+    document.getElementById('det-rate').innerHTML='⭐ '+rating+' ('+reviews+')';
+    
+    // السعر (مع العملات)
+    var priceYER = Number(p.price) || 0;
+    var priceSAR = Number(p.priceSAR) || (priceYER / 350);
+    var priceUSD = Number(p.priceUSD) || (priceYER / 1300);
+    var oldPrice = Number(p.oldPrice) || 0;
+    
+    var priceHtml = '';
+    if (oldPrice > 0 && oldPrice > priceYER) {
+      priceHtml = '<span style="font-size:24px; font-weight:900; color:#ec4899;">' + Math.round(priceYER).toLocaleString() + '</span> <span style="font-size:13px;">ر.ي</span> <span style="font-size:14px; color:#6b7280; text-decoration:line-through; margin-right:8px;">' + Math.round(oldPrice).toLocaleString() + ' ر.ي</span>';
+    } else {
+      priceHtml = '<span style="font-size:24px; font-weight:900; color:#ec4899;">' + Math.round(priceYER).toLocaleString() + '</span> <span style="font-size:13px;">ر.ي</span>';
+    }
+    document.getElementById('det-price').innerHTML = priceHtml;
+    
+    // إضافة العملات الأخرى (إذا كان هناك مكان)
+    var currenciesEl = document.getElementById('det-currencies');
+    if (!currenciesEl) {
+      currenciesEl = document.createElement('div');
+      currenciesEl.id = 'det-currencies';
+      currenciesEl.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0;';
+      document.getElementById('det-price').parentNode.insertBefore(currenciesEl, document.getElementById('det-price').nextSibling);
+    }
+    currenciesEl.innerHTML = 
+      '<div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; text-align:center;">' +
+        '<div style="font-size:10px; color:#6b7280;">🇸🇦 سعودي</div>' +
+        '<div style="font-size:15px; font-weight:900; color:#C5A059; margin-top:2px;">' + priceSAR.toFixed(2) + '</div>' +
+      '</div>' +
+      '<div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; text-align:center;">' +
+        '<div style="font-size:10px; color:#6b7280;">🇺🇸 دولار</div>' +
+        '<div style="font-size:15px; font-weight:900; color:#C5A059; margin-top:2px;">' + priceUSD.toFixed(2) + '</div>' +
+      '</div>';
+    
+    // الوصف + المميزات
+    var desc = p.description || p.desc || '';
+    document.getElementById('det-desc').textContent = desc;
+    
+    // إضافة قسم المقاسات والألوان (إذا لم يكن موجوداً)
+    var specsEl = document.getElementById('det-specs');
+    if (!specsEl) {
+      specsEl = document.createElement('div');
+      specsEl.id = 'det-specs';
+      specsEl.style.cssText = 'margin:12px 0;';
+      document.getElementById('det-desc').parentNode.insertBefore(specsEl, document.getElementById('det-desc').nextSibling);
+    }
+    
+    var specsHtml = '';
+    
+    // المقاسات
+    if (p.sizes && p.sizes.length) {
+      specsHtml += '<div style="margin-bottom:12px;">' +
+        '<div style="font-size:12px; font-weight:900; color:#C5A059; margin-bottom:8px;">📏 المقاسات:</div>' +
+        '<div style="display:flex; flex-wrap:wrap; gap:6px;">' +
+        p.sizes.map(function(s) { return '<span style="padding:6px 14px; background:rgba(197,160,89,0.15); border:1.5px solid #C5A059; border-radius:8px; color:#C5A059; font-weight:800; font-size:12px;">' + s + '</span>'; }).join('') +
+        '</div></div>';
+    }
+    
+    // الألوان
+    if (p.colors && p.colors.length) {
+      specsHtml += '<div style="margin-bottom:12px;">' +
+        '<div style="font-size:12px; font-weight:900; color:#C5A059; margin-bottom:8px;">🎨 الألوان:</div>' +
+        '<div style="display:flex; flex-wrap:wrap; gap:8px;">' +
+        p.colors.map(function(c) { return '<div style="display:flex; align-items:center; gap:6px; padding:6px 12px; background:rgba(0,0,0,0.05); border-radius:8px;"><div style="width:18px; height:18px; border-radius:50%; background:' + (c.hex || '#ccc') + '; border:1px solid #fff;"></div><span style="font-size:12px; color:#4b5563; font-weight:700;">' + c.name + '</span></div>'; }).join('') +
+        '</div></div>';
+    }
+    
+    specsEl.innerHTML = specsHtml;
+    
+    // الكمية
     document.getElementById('det-qty').textContent='1';
+    
     this.navigate('details',true);
   },
   
-  chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElementById('det-qty').textContent=this.currentQty;},
+chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElementById('det-qty').textContent=this.currentQty;},
   
   addDetCart:function(){if(!this.currentProd)return;this.addCart(this.currentProd.id,this.currentQty);this.toast('✓ تمت الإضافة');this.goTab('home');},
   buyNow:function(){if(!this.currentProd)return;this.addCart(this.currentProd.id,this.currentQty);this.goTab('cart');},
