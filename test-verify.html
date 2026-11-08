@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>فحص تأكيد الدفع</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<style>
+body { font-family: system-ui; padding: 20px; background: #0a0418; color: #F2E3C6; direction: rtl; }
+h1 { color: #C5A059; }
+.log { background: #1A2340; padding: 12px; border-radius: 10px; margin: 8px 0; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-wrap: break-word; }
+.success { border-right: 4px solid #10b981; }
+.error { border-right: 4px solid #ef4444; }
+.info { border-right: 4px solid #3b82f6; }
+button { padding: 10px 20px; background: #C5A059; color: #1A2340; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; font-family: inherit; margin: 8px 4px; }
+</style>
+</head>
+<body>
+<h1>🔍 فحص تأكيد الدفع</h1>
+<button onclick="runTest()">▶️ بدء الفحص</button>
+<button onclick="clearLog()">🗑️ مسح</button>
+<div id="log"></div>
+
+<script>
+if (!firebase.apps.length) firebase.initializeApp(window.FIREBASE_CONFIG);
+var auth = firebase.auth();
+var db = firebase.firestore();
+
+function log(msg, cls) {
+  var el = document.getElementById('log');
+  var div = document.createElement('div');
+  div.className = 'log ' + (cls || 'info');
+  div.textContent = msg;
+  el.appendChild(div);
+}
+function clearLog() { document.getElementById('log').innerHTML = ''; }
+
+async function runTest() {
+  clearLog();
+  log('═══════════════════════════════════════');
+  log('🔍 فحص تأكيد الدفع');
+  log('═══════════════════════════════════════');
+  
+  if (!auth.currentUser) {
+    log('⚠️ يجب تسجيل الدخول أولاً. انتقل إلى dashboard.html وسجّل الدخول.', 'error');
+    return;
+  }
+  log('✅ المستخدم:', auth.currentUser.email);
+  
+  try {
+    // 1. جلب طلب بحالة awaiting_verification
+    log('\n1️⃣ جلب طلب بحالة awaiting_verification...');
+    var snap = await db.collection('orders').where('workflowStatus', '==', 'awaiting_verification').limit(1).get();
+    
+    if (snap.empty) {
+      log('⚠️ لا توجد طلبات بحالة awaiting_verification', 'error');
+      var allSnap = await db.collection('orders').limit(3).get();
+      if (allSnap.empty) { log('❌ لا توجد طلبات في قاعدة البيانات', 'error'); return; }
+      log('📋 أول 3 طلبات (للمراجعة):');
+      allSnap.forEach(function(doc) {
+        var o = doc.data();
+        log('  - ' + doc.id.substring(0, 8) + ' | workflowStatus: ' + (o.workflowStatus || '—') + ' | status: ' + (o.status || '—') + ' | payment.status: ' + (o.payment ? o.payment.status : '—'));
+      });
+      return;
+    }
+    
+    var orderDoc = snap.docs[0];
+    var order = orderDoc.data();
+    var orderId = orderDoc.id;
+    log('✅ طلب:', orderId.substring(0, 8));
+    log('   workflowStatus قبل: ' + (order.workflowStatus || '—'));
+    log('   status قبل: ' + (order.status || '—'));
+    log('   payment.status قبل: ' + (order.payment ? order.payment.status : '—'));
+    
+    // 2. محاكاة verifyPayment
+    log('\n2️⃣ محاكاة verifyPayment...');
+    var updates = {
+      workflowStatus: 'awaiting_categories',
+      status: 'payment_verified',
+      'payment.status': 'verified',
+      'payment.verifiedBy': auth.currentUser.uid,
+      'payment.verifiedAt': firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    await db.collection('orders').doc(orderId).set(updates, { merge: true });
+    log('✅ تم تحديث الطلب', 'success');
+    
+    // 3. التحقق
+    log('\n3️⃣ التحقق من النتيجة...');
+    var updatedDoc = await db.collection('orders').doc(orderId).get();
+    var updated = updatedDoc.data();
+    log('   workflowStatus بعد: ' + updated.workflowStatus);
+    log('   status بعد: ' + updated.status);
+    log('   payment.status بعد: ' + (updated.payment ? updated.payment.status : '—'));
+    
+    // 4. فلترة showVerifiedPayments
+    log('\n4️⃣ فلترة "المدفوعات المؤكدة"...');
+    var isVerified = (updated.workflowStatus === 'awaiting_categories' || 
+                      updated.workflowStatus === 'payment_confirmed' || 
+                      (updated.payment && updated.payment.status === 'verified'));
+    if (isVerified) {
+      log('✅ الطلب يطابق الفلترة (سيظهر في القسم)', 'success');
+    } else {
+      log('❌ الطلب لا يطابق الفلترة', 'error');
+    }
+    
+    // 5. إحصائيات
+    log('\n5️⃣ إحصائيات...');
+    var allOrders = await db.collection('orders').get();
+    var verifiedCount = 0;
+    allOrders.forEach(function(doc) {
+      var o = doc.data();
+      if (o.workflowStatus === 'awaiting_categories' || 
+          o.workflowStatus === 'payment_confirmed' || 
+          (o.payment && o.payment.status === 'verified')) {
+        verifiedCount++;
+      }
+    });
+    log('   عدد الطلبات المؤكدة: ' + verifiedCount + ' / ' + allOrders.size);
+    
+    // 6. إعادة تعيين
+    log('\n6️⃣ إعادة تعيين الحالة...');
+    await db.collection('orders').doc(orderId).set({
+      workflowStatus: 'awaiting_verification',
+      status: 'pending',
+      'payment.status': 'pending'
+    }, { merge: true });
+    log('✅ تم إعادة تعيين الحالة', 'success');
+    
+    log('\n═══════════════════════════════════════');
+    log('✅ اكتمل الفحص');
+    log('═══════════════════════════════════════');
+    
+  } catch(e) {
+    log('\n❌ خطأ: ' + e.message, 'error');
+    console.error(e);
+  }
+}
+</script>
+</body>
+</html>
