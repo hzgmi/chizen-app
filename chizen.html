@@ -11597,7 +11597,14 @@ var APP={
     
     // الوصف
     var desc = p.description || p.desc || '';
-    document.getElementById('det-desc').textContent = desc;
+    var descEl = document.getElementById('det-desc');
+    // إخفاء الوصف المكرر (لأن المميزات ستعرضه)
+    if (desc && desc.split('\n').filter(function(l){return l.trim();}).length > 0) {
+      descEl.style.display = 'none';
+    } else {
+      descEl.style.display = 'block';
+      descEl.textContent = desc;
+    }
     
     // صندوق المميزات (جديد)
     var featEl = document.getElementById('det-features');
@@ -11711,6 +11718,22 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
   saveCart:function(){try{localStorage.setItem('chizen_cart',JSON.stringify(this.cart));}catch(e){}},
   updateCartB:function(){var t=0;this.cart.forEach(function(i){t+=i.qty;});var b=document.getElementById('cart-b');if(b)b.textContent=t;},
   updateNotifB:function(){var b=document.getElementById('notif-b');if(b)b.textContent=this.notifications.length;},
+  selectSize:function(btn, size){
+    document.querySelectorAll('.chz-size-btn').forEach(function(b){ b.style.background = '#fff'; b.style.borderColor = '#e5e7eb'; b.style.color = '#4b5563'; });
+    btn.style.background = '#C5A059';
+    btn.style.borderColor = '#C5A059';
+    btn.style.color = '#fff';
+    APP.selectedSize = size;
+  },
+  
+  selectColor:function(btn, color){
+    document.querySelectorAll('.chz-color-btn').forEach(function(b){ b.style.background = '#fff'; b.style.borderColor = '#e5e7eb'; if(b.querySelector('span')) b.querySelector('span').style.color = '#4b5563'; });
+    btn.style.background = 'rgba(197,160,89,0.15)';
+    btn.style.borderColor = '#C5A059';
+    if(btn.querySelector('span')) btn.querySelector('span').style.color = '#C5A059';
+    APP.selectedColor = color;
+  },
+  
   getProduct:function(id){for(var i=0;i<this.products.length;i++)if(String(this.products[i].id)===String(id))return this.products[i];return null;},
   
   chCartQty:function(id,d){
