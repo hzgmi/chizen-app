@@ -11825,9 +11825,36 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     for(var i=0;i<this.cart.length;i++){if(String(this.cart[i].id)===String(id)){this.cart[i].qty+=d;if(this.cart[i].qty<1)this.cart.splice(i,1);break;}}
     this.saveCart();this.updateCartB();this.renderCart();
   },
+  
+  chCartQtyFull:function(id, d, size, color){
+    for(var i=0;i<this.cart.length;i++){
+      var item = this.cart[i];
+      if(String(item.id)===String(id) && (item.size||'')===(size||'') && (item.color||'')===(color||'')){
+        item.qty += d;
+        if(item.qty < 1) this.cart.splice(i, 1);
+        break;
+      }
+    }
+    this.saveCart();
+    this.updateCartB();
+    this.renderCart();
+  },
+  
+  removeCartFull:function(id, size, color){
+    for(var i=0;i<this.cart.length;i++){
+      var item = this.cart[i];
+      if(String(item.id)===String(id) && (item.size||'')===(size||'') && (item.color||'')===(color||'')){
+        this.cart.splice(i, 1);
+        break;
+      }
+    }
+    this.saveCart();
+    this.updateCartB();
+    this.renderCart();
+  },
   removeCart:function(id){for(var i=0;i<this.cart.length;i++){if(String(this.cart[i].id)===String(id)){this.cart.splice(i,1);break;}}this.saveCart();this.updateCartB();this.renderCart();},
   
-  cartTotal:function(){var t=0;this.cart.forEach(function(i){var p=APP.getProduct(i.id);if(p)t+=p.price*i.qty;});return t;},
+  cartTotal:function(){var t=0;this.cart.forEach(function(i){var p=APP.getProduct(i.id);if(p)t+=(Number(p.price)||0)*i.qty;});return t;},
   
   renderCart:function(){
     var c=document.getElementById('cart-items');if(!c)return;
@@ -11839,8 +11866,14 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     var cp='';
     if(this.appliedCoupon)cp='<div class="tr" style="color:var(--gn);"><span>خصم ('+esc(this.appliedCoupon.code)+')</span><span>-' +disc+' ر.س <span style="cursor:pointer;color:var(--rd);" onclick="APP.rmCoupon()">✕</span></span></div>';
     else cp='<div class="f" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"><div style="display:flex;gap:6px;"><button class="btn-p" style="flex:1;min-width:0;padding:0 6px;font-size:11px;height:38px;display:flex;align-items:center;justify-content:center;" onclick="APP.applyCoupon()">تطبيق</button><button class="btn-p" style="flex:1;min-width:0;padding:0 6px;font-size:11px;height:38px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#F2C94C,#D4A017);color:#1a1a2e;" onclick="APP.redeemPoints()">🎁 نقاطي</button></div><div style="position:relative;display:flex;align-items:center;background:rgba(0,0,0,0.03);border-radius:10px;border:1px solid rgba(0,0,0,0.08);"><input type="text" id="coupon-in" class="fi" placeholder="كود الخصم..." style="flex:1;min-width:0;font-size:12px;padding:10px 70px 10px 8px;background:transparent;border:none;outline:none;"><button type="button" onclick="APP.copyCouponCode()" style="position:absolute;left:4px;top:4px;bottom:4px;background:linear-gradient(135deg,#7B2FBE,#D4A017);color:#fff;border:none;border-radius:8px;padding:0 12px;font-family:Tajawal,sans-serif;font-size:11px;font-weight:800;cursor:pointer;">نسخ</button></div></div><div id="coupon-msg" style="display:none;font-size:11px;color:#ef4444;margin:-6px 4px 8px;font-weight:700;"></div>';
-    var html=this.cart.map(function(i){var p=APP.getProduct(i.id);if(!p)return'';
-      return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCart(\''+esc(p.id)+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div><div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',-1)">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQty(\''+esc(p.id)+'\',1)">+</button></div></div></div>';
+    var html=this.cart.map(function(i){
+      var p=APP.getProduct(i.id);
+      if(!p)return'';
+      var specsHtml = '';
+      if (i.size) specsHtml += '<span style="display:inline-block; padding:2px 8px; background:rgba(197,160,89,0.15); border:1px solid #C5A059; border-radius:6px; color:#C5A059; font-size:10px; font-weight:800; margin-right:4px;">📏 ' + i.size + '</span>';
+      if (i.color) specsHtml += '<span style="display:inline-block; padding:2px 8px; background:rgba(168,85,247,0.15); border:1px solid #a855f7; border-radius:6px; color:#a855f7; font-size:10px; font-weight:800; margin-right:4px;">🎨 ' + i.color + '</span>';
+      
+      return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCartFull(\''+esc(p.id)+'\',\''+(i.size||'')+'\',\''+(i.color||'')+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div>' + (specsHtml ? '<div style="margin:4px 0;">' + specsHtml + '</div>' : '') + '<div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',-1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">+</button></div></div></div>';
     }).join('');
     html+=(window.__v336RenderSuggested?window.__v336RenderSuggested():'');html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
     c.innerHTML=html;
