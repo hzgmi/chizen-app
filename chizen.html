@@ -18272,24 +18272,34 @@ document.addEventListener('keydown', function(e) {
     var p1 = FB.db.collection("listings").where("status", "==", "active").limit(100).get();
     var p2 = FB.db.collection("products").get();
     
-    Promise.all([p1, p2]).then(function(results){
+    Promise.allSettled([p1, p2]).then(function(results){
       done = true;
       APP.cmAll = [];
       
-      // إعلانات الحراج
-      results[0].forEach(function(d){
-        var data = d.data();
-        data._sourceType = 'listing';
-        APP.cmAll.push(Object.assign({ id: d.id }, data));
-      });
+      // إعلانات الحراج (إذا نجحت)
+      if (results[0].status === 'fulfilled') {
+        results[0].value.forEach(function(d){
+          var data = d.data();
+          data._sourceType = 'listing';
+          APP.cmAll.push(Object.assign({ id: d.id }, data));
+        });
+        console.log('[cm] listings loaded:', results[0].value.size);
+      } else {
+        console.warn('[cm] listings failed:', results[0].reason);
+      }
       
-      // منتجات الأقسام
-      results[1].forEach(function(d){
-        var data = d.data();
-        data._sourceType = 'product';
-        data.type = 'product'; // تمييز المنتجات
-        APP.cmAll.push(Object.assign({ id: d.id }, data));
-      });
+      // منتجات الأقسام (إذا نجحت)
+      if (results[1].status === 'fulfilled') {
+        results[1].value.forEach(function(d){
+          var data = d.data();
+          data._sourceType = 'product';
+          data.type = 'product';
+          APP.cmAll.push(Object.assign({ id: d.id }, data));
+        });
+        console.log('[cm] products loaded:', results[1].value.size);
+      } else {
+        console.warn('[cm] products failed:', results[1].reason);
+      }
       
       APP.cmAll.sort(function(a,b){ var ta = a.createdAt ? (a.createdAt.seconds || 0) : 0; var tb = b.createdAt ? (b.createdAt.seconds || 0) : 0; return tb - ta; });
       
@@ -18298,10 +18308,6 @@ document.addEventListener('keydown', function(e) {
       if (count) count.textContent = products + " منتج · " + listings + " إعلان";
       
       APP.cmRender();
-    }).catch(function(e){
-      done = true;
-      console.warn("[cm]", e.message);
-      grid.innerHTML = '<div class="cm-empty"><div class="cm-empty-icon">⚠️</div>تعذر التحميل<br><small>' + (e.message || "") + '</small></div>';
     });
   };
 
@@ -18309,7 +18315,14 @@ document.addEventListener('keydown', function(e) {
     var grid = document.getElementById("cm-listings");
     if (!grid) return;
     var list = APP.cmAll.slice();
-    if (APP.cmFilterType !== "all") list = list.filter(function(l){ return l.type === APP.cmFilterType; });
+    if (APP.cmFilterType !== "all") {
+      list = list.filter(function(l){ 
+        // المنتجات تظهر دائماً
+        if (l._sourceType === 'product') return true;
+        // الإعلانات تفلتر حسب النوع
+        return l.type === APP.cmFilterType; 
+      });
+    }
     if (APP.cmSearchTerm) {
       var q = APP.cmSearchTerm.toLowerCase();
       list = list.filter(function(l){ return ((l.title||l.name||"").toLowerCase().indexOf(q) > -1) || ((l.description||l.desc||"").toLowerCase().indexOf(q) > -1) || ((l.city||"").toLowerCase().indexOf(q) > -1) || ((l.brand||"").toLowerCase().indexOf(q) > -1); });
