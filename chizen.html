@@ -10959,28 +10959,7 @@ var APP={
 
     if(window.FB){
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
-      // تحميل أسعار الصرف من Firestore
-FB.db.collection('config').doc('rates').get().then(function(doc){
-  if (doc.exists) {
-    var r = doc.data();
-    window._chzRates = {
-      sarSouth: Number(r.sarSouth) || 350,
-      usdSouth: Number(r.usdSouth) || 1300,
-      sarNorth: Number(r.sarNorth) || 500,
-      usdNorth: Number(r.usdNorth) || 2000
-    };
-  } else {
-    window._chzRates = { sarSouth: 350, usdSouth: 1300, sarNorth: 500, usdNorth: 2000 };
-  }
-  console.log('[rates] loaded:', window._chzRates);
-  // إعادة رسم المنتجات بعد تحميل الأسعار
-  if (self && self.renderProducts) self.renderProducts();
-}).catch(function(e){
-  console.warn('[rates] failed:', e);
-  window._chzRates = { sarSouth: 350, usdSouth: 1300, sarNorth: 500, usdNorth: 2000 };
-});
-
-FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();self.renderBrands();}});
+      FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();self.renderBrands();}});
       FB.getConfig('banners').then(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
       FB.getConfig('categories').then(function(c){
   var dbCats = (c && c.list) ? c.list : [];
@@ -11352,31 +11331,22 @@ FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderPro
       var colors = Array.isArray(p.colors) ? p.colors.slice(0, 4) : [];
       var isFlash = p.flashSale && p.flashSale.enabled;
       var flashPrice = isFlash ? Number(p.flashSale.price) || 0 : 0;
-      var inputCurrency = p.inputCurrency || 'YER';
-      var rates = window._chzRates || { sarSouth: 350, usdSouth: 1300 };
-      var displayPrice = price;
-      var displaySymbol = 'ر.ي';
-      if (inputCurrency === 'SAR') { displayPrice = price / rates.sarSouth; displaySymbol = 'ر.س'; }
-      else if (inputCurrency === 'USD') { displayPrice = price / rates.usdSouth; displaySymbol = '$'; }
       
       // شارات
       var badges = '';
       if (isFlash) badges += '<div style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;z-index:2;">⚡ عرض</div>';
       if (stock <= 0) badges += '<div style="position:absolute;top:6px;left:6px;background:#6b7280;color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;z-index:2;">نفد</div>';
       
-      // السعر (بالعملة الأصلية)
+      // السعر
       var priceHtml = '';
-      var displayVal = (inputCurrency === 'YER') ? Math.round(displayPrice).toLocaleString() : displayPrice.toFixed(2);
-      var oldDisplayVal = (inputCurrency === 'YER') ? Math.round(oldPrice).toLocaleString() : (oldPrice / rates.sarSouth).toFixed(2);
-      
       if (isFlash && flashPrice > 0) {
         priceHtml = '<span style="color:#f59e0b;font-weight:900;font-size:15px;">' + flashPrice.toLocaleString() + '</span> <span style="font-size:10px;color:#9ca3af;">ر.ي</span>' +
-                    '<span style="font-size:11px;color:#6b7280;text-decoration:line-through;margin-right:6px;">' + displayVal + ' ' + displaySymbol + '</span>';
+                    '<span style="font-size:11px;color:#6b7280;text-decoration:line-through;margin-right:6px;">' + price.toLocaleString() + '</span>';
       } else if (oldPrice > price) {
-        priceHtml = '<span style="color:#ec4899;font-weight:900;font-size:15px;">' + displayVal + '</span> <span style="font-size:10px;color:#9ca3af;">' + displaySymbol + '</span>' +
-                    '<span style="font-size:11px;color:#6b7280;text-decoration:line-through;margin-right:6px;">' + oldDisplayVal + ' ' + displaySymbol + '</span>';
+        priceHtml = '<span style="color:#ec4899;font-weight:900;font-size:15px;">' + price.toLocaleString() + '</span> <span style="font-size:10px;color:#9ca3af;">ر.ي</span>' +
+                    '<span style="font-size:11px;color:#6b7280;text-decoration:line-through;margin-right:6px;">' + oldPrice.toLocaleString() + '</span>';
       } else {
-        priceHtml = '<span style="color:#ec4899;font-weight:900;font-size:15px;">' + displayVal + '</span> <span style="font-size:10px;color:#9ca3af;">' + displaySymbol + '</span>';
+        priceHtml = '<span style="color:#ec4899;font-weight:900;font-size:15px;">' + price.toLocaleString() + '</span> <span style="font-size:10px;color:#9ca3af;">ر.ي</span>';
       }
       
       // دوائر الألوان
@@ -11647,31 +11617,21 @@ FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderPro
     var reviews = p.reviews || 0;
     document.getElementById('det-rate').innerHTML='⭐ '+rating+' ('+reviews+')';
     
-    // السعر (مع عزل العملة)
+    // السعر (مع العملات)
     var priceYER = Number(p.price) || 0;
-    var inputCurrency = p.inputCurrency || 'YER';
-    var rates = window._chzRates || { sarSouth: 350, usdSouth: 1300 };
-    var priceSAR = priceYER / rates.sarSouth;
-    var priceUSD = priceYER / rates.usdSouth;
+    var priceSAR = Number(p.priceSAR) || (priceYER / 350);
+    var priceUSD = Number(p.priceUSD) || (priceYER / 1300);
     var oldPrice = Number(p.oldPrice) || 0;
     
-    // العملة الأصلية
-    var origPrice = Number(p.inputPrice) || priceYER;
-    var origSymbol = 'ر.ي';
-    var origName = 'يمني';
-    if (inputCurrency === 'SAR') { origSymbol = 'ر.س'; origName = 'سعودي'; origPrice = priceYER / rates.sarSouth; }
-    else if (inputCurrency === 'USD') { origSymbol = '$'; origName = 'دولار'; origPrice = priceYER / rates.usdSouth; }
-    
-    // عرض السعر
     var priceHtml = '';
     if (oldPrice > 0 && oldPrice > priceYER) {
-      priceHtml = '<span style="font-size:24px; font-weight:900; color:#ec4899;">' + (inputCurrency === 'YER' ? Math.round(priceYER).toLocaleString() : origPrice.toFixed(2)) + '</span> <span style="font-size:13px;">' + origSymbol + '</span> <span style="font-size:14px; color:#6b7280; text-decoration:line-through; margin-right:8px;">' + Math.round(oldPrice).toLocaleString() + ' ر.ي</span>';
+      priceHtml = '<span style="font-size:24px; font-weight:900; color:#ec4899;">' + Math.round(priceYER).toLocaleString() + '</span> <span style="font-size:13px;">ر.ي</span> <span style="font-size:14px; color:#6b7280; text-decoration:line-through; margin-right:8px;">' + Math.round(oldPrice).toLocaleString() + ' ر.ي</span>';
     } else {
-      priceHtml = '<span style="font-size:24px; font-weight:900; color:#ec4899;">' + (inputCurrency === 'YER' ? Math.round(priceYER).toLocaleString() : origPrice.toFixed(2)) + '</span> <span style="font-size:13px;">' + origSymbol + '</span>';
+      priceHtml = '<span style="font-size:24px; font-weight:900; color:#ec4899;">' + Math.round(priceYER).toLocaleString() + '</span> <span style="font-size:13px;">ر.ي</span>';
     }
     document.getElementById('det-price').innerHTML = priceHtml;
     
-    // عرض العملات الأخرى (فقط إذا كانت مختلفة عن العملة الأصلية)
+    // إضافة العملات الأخرى (إذا كان هناك مكان)
     var currenciesEl = document.getElementById('det-currencies');
     if (!currenciesEl) {
       currenciesEl = document.createElement('div');
@@ -11679,24 +11639,15 @@ FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderPro
       currenciesEl.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0;';
       document.getElementById('det-price').parentNode.insertBefore(currenciesEl, document.getElementById('det-price').nextSibling);
     }
-    
-    var otherCurrencies = [];
-    if (inputCurrency !== 'YER') {
-      otherCurrencies.push({ flag: '🇾🇪', name: 'يمني', val: Math.round(priceYER).toLocaleString() });
-    }
-    if (inputCurrency !== 'SAR') {
-      otherCurrencies.push({ flag: '🇸🇦', name: 'سعودي', val: priceSAR.toFixed(2) });
-    }
-    if (inputCurrency !== 'USD') {
-      otherCurrencies.push({ flag: '🇺🇸', name: 'دولار', val: priceUSD.toFixed(2) });
-    }
-    
-    currenciesEl.innerHTML = otherCurrencies.map(function(c) {
-      return '<div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; text-align:center;">' +
-        '<div style="font-size:10px; color:#6b7280;">' + c.flag + ' ' + c.name + '</div>' +
-        '<div style="font-size:15px; font-weight:900; color:#C5A059; margin-top:2px;">' + c.val + '</div>' +
+    currenciesEl.innerHTML = 
+      '<div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; text-align:center;">' +
+        '<div style="font-size:10px; color:#6b7280;">🇸🇦 سعودي</div>' +
+        '<div style="font-size:15px; font-weight:900; color:#C5A059; margin-top:2px;">' + priceSAR.toFixed(2) + '</div>' +
+      '</div>' +
+      '<div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; text-align:center;">' +
+        '<div style="font-size:10px; color:#6b7280;">🇺🇸 دولار</div>' +
+        '<div style="font-size:15px; font-weight:900; color:#C5A059; margin-top:2px;">' + priceUSD.toFixed(2) + '</div>' +
       '</div>';
-    }).join('');
     
     // الوصف
     var desc = p.description || p.desc || '';
