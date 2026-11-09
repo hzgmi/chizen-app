@@ -157,6 +157,44 @@ window.FB = {
   },
   deleteDeal: async function() { if (!this.db) return; await this.db.collection('config').doc('deal').delete(); },
 
+  // ═══ دوال الاستماع اللحظي (onSnapshot) ═══
+
+  listenToConfig: function(key, callback) {
+    if (!this.db) { callback(null); return function(){}; }
+    return this.db.collection('config').doc(key).onSnapshot(function(doc){
+      callback(doc.exists ? doc.data() : null);
+    }, function(err){ console.warn('[listenToConfig]', key, err.message); callback(null); });
+  },
+
+  listenToUserOrders: function(uid, callback) {
+    if (!this.db || !uid) { callback([]); return function(){}; }
+    return this.db.collection('orders')
+      .where('userId', '==', uid)
+      .orderBy('createdAt', 'desc')
+      .limit(50)
+      .onSnapshot(function(snap){
+        var arr = [];
+        snap.forEach(function(d){ var o = d.data(); o.id = d.id; arr.push(o); });
+        callback(arr);
+      }, function(err){ console.warn('[listenToUserOrders]', err.message); callback([]); });
+  },
+
+  listenToProducts: function(callback) {
+    if (!this.db) { callback([]); return function(){}; }
+    return this.db.collection('products').limit(100).onSnapshot(function(snap){
+      var arr = [];
+      snap.forEach(function(d){ var p = d.data(); p.id = d.id; arr.push(p); });
+      callback(arr);
+    }, function(err){ console.warn('[listenToProducts]', err.message); callback([]); });
+  },
+
+  listenToDeal: function(callback) {
+    if (!this.db) { callback(null); return function(){}; }
+    return this.db.collection('config').doc('deal').onSnapshot(function(doc){
+      callback(doc.exists ? doc.data() : null);
+    }, function(err){ console.warn('[listenToDeal]', err.message); callback(null); });
+  },
+
   getUserOrders: async function() {
     if (!this.db || !this.currentUser) return [];
     try {

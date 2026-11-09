@@ -10976,10 +10976,10 @@ var APP={
   if(self.checkServices) self.checkServices();
   if(self.renderBrands) self.renderBrands();
 });
-      FB.getConfig('payments').then(function(p){if(p&&p.list){self.banks=p.list;self.renderBanks();}});
-      FB.getConfig('coupons').then(function(c){if(c&&c.list)self.coupons=c.list;});
-      FB.getConfig('shipping').then(function(s){if(s)self.shipping=s;});
-      FB.getUserOrders().then(function(o){if(o){self.orders=o;self.renderOrders();self.renderTrack();}});
+      FB.listenToConfig('payments', function(p){if(p&&p.list){self.banks=p.list;self.renderBanks();}});
+      FB.listenToConfig('coupons', function(c){if(c&&c.list)self.coupons=c.list;});
+      FB.listenToConfig('shipping', function(s){if(s)self.shipping=s;});
+      FB.listenToUserOrders(FB.currentUser && FB.currentUser.uid, function(o){if(o){self.orders=o;self.renderOrders();self.renderTrack();}});
       FB.getNotifications().then(function(n){if(n){self.notifications=n;self.updateNotifB();}});
     }
     setTimeout(function(){var sp=document.getElementById('splash');if(sp){sp.style.opacity='0';setTimeout(function(){sp.remove();},500);}},500);
