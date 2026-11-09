@@ -10959,9 +10959,9 @@ var APP={
 
     if(window.FB){
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
-      FB.getProducts().then(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();self.renderBrands();}});
-      FB.getConfig('banners').then(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
-      FB.getConfig('categories').then(function(c){
+      FB.listenToProducts(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();self.renderBrands();}});
+      FB.listenToBanners(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
+      FB.listenToCategories(function(c){
   var dbCats = (c && c.list) ? c.list : [];
   // إزالة أي قسم مكرر من الداتابيس يطابق الأقسام الثابتة
   var fixedKeys = window.FIXED_CATS.map(function(x){ return x.key; });

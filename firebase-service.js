@@ -195,6 +195,21 @@ window.FB = {
     }, function(err){ console.warn('[listenToDeal]', err.message); callback(null); });
   },
 
+  listenToBanners: function(callback) {
+    if (!this.db) { callback([]); return function(){}; }
+    return this.db.collection('config').doc('banners').onSnapshot(function(doc){
+      callback(doc.exists ? doc.data() : null);
+    }, function(err){ console.warn('[listenToBanners]', err.message); callback(null); });
+  },
+
+  listenToCategories: function(callback) {
+    if (!this.db) { callback([]); return function(){}; }
+    return this.db.collection('config').doc('categories').onSnapshot(function(doc){
+      callback(doc.exists ? doc.data() : null);
+    }, function(err){ console.warn('[listenToCategories]', err.message); callback(null); });
+  },
+
+
   getUserOrders: async function() {
     if (!this.db || !this.currentUser) return [];
     try {
