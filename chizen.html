@@ -617,15 +617,7 @@ APP.openCategoryPage = function(catKey, catName) {
             return;
         }
         
-        grid.innerHTML = filtered.map(function(p) {
-            const imgUrl = p.img || p.image || 'https://via.placeholder.com/200?text=No+Image';
-            const price = p.price || '0';
-            return '<div class="cat-prod-card" onclick="APP.openProduct(\'' + p.id + '\')">' +
-                   '<img src="' + imgUrl + '" onerror="this.src=\'https://via.placeholder.com/200\'">' +
-                   '<div class="name">' + (p.name || 'منتج') + '</div>' +
-                   '<div class="price">' + price + ' ر.س</div>' +
-                   '</div>';
-        }).join('');
+        APP.renderProducts(filtered, grid);
     }).catch(function(err) {
         console.error('خطأ في جلب المنتجات:', err);
         grid.innerHTML = '<div class="cat-empty">⚠️ حدث خطأ في تحميل المنتجات</div>';
@@ -12896,7 +12888,7 @@ window.renderCategoryProducts = function(catKey, catName) {
         <button class="back" onclick="APP.closeCategory()" style="background: none; border: none; color: #fff; margin-right: 10px;"><svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;"><path d="m9 18 6-6-6-6"/></svg></button>
         <div class="st2" id="cat-page-title" style="color: #fff; font-size: 18px; font-weight: bold;">القسم</div>
     </div>
-    <div id="cat-products-grid"></div>
+    <div id="cat-products-grid" class="prods"></div>
 </div>
 
 <script>
