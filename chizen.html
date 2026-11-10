@@ -22515,180 +22515,56 @@ body #sc-home #flash-c .flash-card {
 })();
 </script>
 
-<style id="chz-flash-custom-css">
-/* ================= شريط العروض الأفقي ================= */
-body #sc-home #flash-sec .flash-row {
-  display: flex;
-  gap: 15px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  padding: 5px 15px 20px 15px;
-  -webkit-overflow-scrolling: touch;
-}
-body #sc-home #flash-sec .flash-row::-webkit-scrollbar { display: none; }
 
-/* ================= بطاقة العرض ================= */
-body #sc-home #flash-sec .flash-card {
-  min-width: 280px;
-  max-width: 300px;
-  scroll-snap-align: center;
-  background: #fff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  position: relative;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-  transition: transform 0.2s;
-  height: auto !important; /* لإلغاء أي ارتفاع قديم */
-  margin: 0 !important;
-}
-body #sc-home #flash-sec .flash-card:active { transform: scale(0.97); }
 
-/* حاوية الصورة */
-body #sc-home #flash-sec .flash-img-wrapper {
-  width: 100%;
-  height: 180px;
-  background: #f8fafc;
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 12px;
-  position: relative;
-  border: 1px solid #e2e8f0;
-}
-body #sc-home #flash-sec .flash-img-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+<style id="chz-flash-perfect-css">
+/* إخفاء أي تصميم قديم */
+#flash-c { display: flex !important; gap: 15px !important; overflow-x: auto !important; padding: 5px 15px 20px 15px !important; scrollbar-width: none !important; -webkit-overflow-scrolling: touch !important; }
+#flash-c::-webkit-scrollbar { display: none !important; }
 
-/* المؤقت */
-body #sc-home #flash-sec .timer-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(239, 68, 68, 0.95);
-  backdrop-filter: blur(4px);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+/* البطاقة */
+#flash-c .flash-card {
+  min-width: 280px !important; max-width: 300px !important;
+  background: #ffffff !important; border: 1.5px solid #e2e8f0 !important;
+  border-radius: 20px !important; padding: 12px !important;
+  display: flex !important; flex-direction: column !important; position: relative !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
+  margin: 0 !important; height: auto !important; min-height: 0 !important;
 }
+#flash-c .flash-card:active { transform: scale(0.97) !important; }
 
-/* شارات الخصم */
-body #sc-home #flash-sec .flash-tags {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-body #sc-home #flash-sec .tag-discount { background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; width: fit-content; }
-body #sc-home #flash-sec .tag-fire { background: #f59e0b; color: white; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; width: fit-content; }
+/* الصورة */
+#flash-c .flash-img-wrapper { width: 100% !important; height: 180px !important; background: #f8fafc !important; border-radius: 16px !important; overflow: hidden !important; margin-bottom: 12px !important; position: relative !important; border: 1px solid #e2e8f0 !important; }
+#flash-c .flash-img-wrapper img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
 
-/* اسم المنتج */
-body #sc-home #flash-sec .flash-title {
-  font-size: 14px;
-  font-weight: 900;
-  color: #0f172a;
-  margin-bottom: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* المؤقت والشارات */
+#flash-c .timer-badge { position: absolute !important; top: 10px !important; right: 10px !important; background: rgba(239, 68, 68, 0.95) !important; color: white !important; padding: 5px 10px !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; display: flex !important; align-items: center !important; gap: 5px !important; }
+#flash-c .flash-tags { position: absolute !important; top: 10px !important; left: 10px !important; display: flex !important; flex-direction: column !important; gap: 6px !important; }
+#flash-c .tag-discount { background: #ef4444 !important; color: white !important; font-size: 10px !important; font-weight: 900 !important; padding: 3px 8px !important; border-radius: 6px !important; width: fit-content !important; }
+#flash-c .tag-fire { background: #f59e0b !important; color: white !important; font-size: 10px !important; font-weight: 900 !important; padding: 3px 8px !important; border-radius: 6px !important; width: fit-content !important; }
 
-/* السعر اليمني */
-body #sc-home #flash-sec .price-yemeni-row {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-body #sc-home #flash-sec .price-yemeni {
-  font-size: 18px;
-  font-weight: 900;
-  color: #e11d48;
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
-}
-body #sc-home #flash-sec .price-yemeni span { font-size: 11px; opacity: 0.8; }
-body #sc-home #flash-sec .price-old {
-  font-size: 11px;
-  color: #64748b;
-  text-decoration: line-through;
-  text-decoration-color: #ef4444;
-  text-decoration-thickness: 2px;
-  font-weight: 700;
-}
+/* الاسم */
+#flash-c .flash-title { font-size: 14px !important; font-weight: 900 !important; color: #0f172a !important; margin-bottom: 6px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
 
-/* صندوق العملات */
-body #sc-home #flash-sec .currency-box {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 6px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 10px;
-}
-body #sc-home #flash-sec .currency-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: #64748b;
-}
-body #sc-home #flash-sec .currency-row strong { color: #0f172a; font-size: 12px; }
-body #sc-home #flash-sec .currency-symbol {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  font-size: 10px;
-  font-weight: 800;
-  margin-left: 4px;
-}
-body #sc-home #flash-sec .sym-sar { background-color: #dcfce7; color: #166534; }
-body #sc-home #flash-sec .sym-usd { background-color: #e0f2fe; color: #0369a1; }
+/* السعر */
+#flash-c .price-yemeni-row { display: flex !important; align-items: baseline !important; gap: 8px !important; margin-bottom: 8px !important; }
+#flash-c .price-yemeni { font-size: 18px !important; font-weight: 900 !important; color: #e11d48 !important; display: flex !important; align-items: baseline !important; gap: 3px !important; }
+#flash-c .price-yemeni span { font-size: 11px !important; opacity: 0.8 !important; }
+#flash-c .price-old { font-size: 11px !important; color: #64748b !important; text-decoration: line-through !important; font-weight: 700 !important; }
+
+/* العملات */
+#flash-c .currency-box { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 6px 8px !important; display: flex !important; flex-direction: column !important; gap: 4px !important; margin-bottom: 10px !important; }
+#flash-c .currency-row { display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 11px !important; font-weight: 700 !important; color: #64748b !important; }
+#flash-c .currency-row strong { color: #0f172a !important; font-size: 12px !important; }
+#flash-c .currency-symbol { display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 18px !important; height: 18px !important; border-radius: 5px !important; font-size: 10px !important; font-weight: 800 !important; margin-left: 4px !important; }
+#flash-c .sym-sar { background-color: #dcfce7 !important; color: #166534 !important; }
+#flash-c .sym-usd { background-color: #e0f2fe !important; color: #0369a1 !important; }
 
 /* شريط التقدم */
-body #sc-home #flash-sec .progress-container {
-  width: 100%;
-  height: 6px;
-  background: rgba(0,0,0,0.08);
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 5px;
-  margin-top: auto;
-}
-body #sc-home #flash-sec .progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #ef4444, #f59e0b);
-  border-radius: 10px;
-}
-body #sc-home #flash-sec .sold-text {
-  font-size: 10px;
-  color: #e11d48;
-  font-weight: 800;
-  display: flex;
-  justify-content: space-between;
-}
-body #sc-home #flash-sec .sold-text span:last-child { color: #64748b; }
+#flash-c .progress-container { width: 100% !important; height: 6px !important; background: rgba(0,0,0,0.08) !important; border-radius: 10px !important; overflow: hidden !important; margin-top: auto !important; margin-bottom: 5px !important; }
+#flash-c .progress-bar { height: 100% !important; background: linear-gradient(90deg, #ef4444, #f59e0b) !important; border-radius: 10px !important; }
+#flash-c .sold-text { font-size: 10px !important; color: #e11d48 !important; font-weight: 800 !important; display: flex !important; justify-content: space-between !important; }
+#flash-c .sold-text span:last-child { color: #64748b !important; }
 </style>
 </body>
 </html
