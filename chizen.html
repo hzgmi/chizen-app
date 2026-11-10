@@ -22156,6 +22156,22 @@ html[data-theme="light"] .product-card {
 html[data-theme="light"] .currency-box {
   background: #f8fafc !important;
 }
+
+/* ═══ FORCE LUXURY CARDS IN #cat-prods ═══ */
+#cat-prods {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 14px !important;
+  padding: 12px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+#cat-prods .product-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
 </style>
 
 <script>
