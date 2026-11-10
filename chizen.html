@@ -11577,7 +11577,21 @@ var APP={
   
   renderFlash:function(){
     var c=document.getElementById('flash-c');
-    if(!c) return;
+    if(!c) {
+      console.warn('[FLASH] #flash-c not found');
+      return;
+    }
+    // Debug Badge
+    var dbg = document.getElementById('flash-debug');
+    if (!dbg) {
+      dbg = document.createElement('div');
+      dbg.id = 'flash-debug';
+      dbg.style.cssText = 'position:absolute;top:-20px;right:10px;background:#000;color:#0f0;font-size:10px;padding:2px 6px;border-radius:4px;z-index:9999;font-family:monospace;';
+      if (c.parentNode) c.parentNode.style.position = 'relative';
+      if (c.parentNode) c.parentNode.appendChild(dbg);
+    }
+    var _prodCount = (this.products || []).length;
+    dbg.textContent = 'FLASH: ' + _prodCount + ' products';
 
     // كل المنتجات (بدون فلتر — fallback لأول 10)
     var items = (this.products || []).slice(0, 10);
