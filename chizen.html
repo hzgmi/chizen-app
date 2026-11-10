@@ -13268,12 +13268,17 @@ window.setupWebNotifications = async function() {
 
 // التشغيل التلقائي بعد التحميل
 window.addEventListener('load', function() {
-  // تأكيد عرض العروض الخاطفة
-  setTimeout(function(){
-  if (window.APP && window.APP.products && window.APP.products.length > 0) {
-    try { window.APP.renderFlash(); } catch(e){ console.warn('[FLASH]', e); }
-  }
-}, 2000);
+  // ═══ محاولات متعددة لعرض العروض الخاطفة (لضمان بعد FB.init) ═══
+  [2000, 4000, 6000].forEach(function(delay){
+    setTimeout(function(){
+      if (window.APP && window.APP.renderFlash) {
+        try {
+          window.APP.renderFlash();
+          console.log('[FLASH] called at', delay, 'ms');
+        } catch(e) { console.warn('[FLASH]', e); }
+      }
+    }, delay);
+  });
   setTimeout(function() {
     if (window.setupAPKNotifications) window.setupAPKNotifications();
     if (window.setupWebNotifications) window.setupWebNotifications();
