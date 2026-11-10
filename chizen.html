@@ -11524,8 +11524,9 @@ var APP={
     }
   },
 
-  renderProducts:function(list){
-    var c=document.getElementById('prods');if(!c)return;
+  renderProducts:function(list, targetEl){
+    var c = targetEl || document.getElementById('prods');
+    if(!c) return;
     
     // إظهار Skeleton أثناء التحميل (إذا لم تكن القائمة ممررة)
     if(!list && (!this.products || this.products.length === 0)) {
@@ -12681,14 +12682,8 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
       c.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mt);">لا توجد منتجات في المفضلة</div>';
       return;
     }
-    // نستخدم renderProducts على #fav-list (مثل #prods)
-    var _prods = document.getElementById('prods');
-    if(_prods) _prods.id = 'prods_hidden_tmp';
-    c.id = 'prods';
-    try { APP.renderProducts(list); } finally {
-      c.id = 'fav-list';
-      if(_prods) _prods.id = 'prods';
-    }
+    // نستخدم renderProducts مباشرة على #fav-list
+    APP.renderProducts(list, c);
   },
   
   togFav:function(id,el){
