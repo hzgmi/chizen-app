@@ -22739,4 +22739,15 @@ body #sc-home #flash-c .flash-card {
       modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
       document.body.appendChild(modal);
     },
->
+><script>
+// مسبار تشخيص العروض - مؤقت
+setTimeout(function(){
+  var c = document.getElementById('flash-c');
+  if (!c) { alert('❌ عنصر flash-c غير موجود في الصفحة!'); return; }
+  var items = (window.APP && window.APP.products) ? window.APP.products.length : 'APP غير معرّف';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:red;color:white;padding:10px;text-align:center;font-weight:bold;font-size:14px;margin:10px;border-radius:5px;z-index:99999;position:relative;';
+  box.innerHTML = '🛠️ فحص: عدد المنتجات في APP = ' + items + '<br>محتوى الحاوية: ' + (c.innerHTML.length > 0 ? 'يوجد HTML' : 'فارغة تماماً');
+  c.parentNode.insertBefore(box, c);
+}, 5000); // ننتظر 5 ثواني لضمان تحميل البيانات
+</script>
