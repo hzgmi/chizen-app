@@ -8365,7 +8365,15 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 <div class="sec" id="brands-sec">
   <div class="brands" id="brands-list"></div>
-<div id="chizen-exact-flash"><div class="exact-flash-header"><h2>عروض خاطفة ⚡</h2><a class="exact-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a></div><div class="exact-flash-container" id="exactFlashContainer"></div></div>
+</div>
+
+<div class="sec" id="flash-sec">
+  <div class="sh">
+    <div class="stl">⚡ عروض خاطفة</div>
+    <a class="flash-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a>
+  </div>
+  <div id="flash-c" class="flash-row"></div>
+</div>
 
 <div class="sec">
   <div class="sh" style="display:flex; justify-content:space-between; align-items:center; padding:10px 15px;">
@@ -8764,8 +8772,6 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 
 <!-- ═══ CHIZEN COMMERCE v52 — full marketplace ═══ -->
-
-</div>
 
 <div class="screen" id="sc-commerce">
   <div class="cm-top">
@@ -9688,7 +9694,62 @@ html:not([data-theme="light"]) .det-thumb.active {
 
 
 
-<!-- OLD FLASH CSS REMOVED -->
+<style id="chz-flash-v37">
+/* ═══ FLASH SALE — horizontal forced ═══ */
+body #sc-home #flash-c,
+/* ═══ OLD FLASH CSS REMOVED (use .flash-card) ═══ */
+body #sc-home #flash-c::-webkit-scrollbar { display: none !important; }
+
+body #sc-home #flash-c .fcard,
+body #sc-home .flash-row .fcard {
+  flex: 0 0 145px !important;
+  min-width: 145px !important;
+  max-width: 145px !important;
+  width: 145px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  scroll-snap-align: start !important;
+  box-sizing: border-box !important;
+}
+
+/* ═══ Light theme — visible "عروض خاطفة" ═══ */
+html[data-theme="light"] body #sc-home #flash-sec .stl {
+  background: none !important;
+  -webkit-text-fill-color: #FF3D9A !important;
+  color: #FF3D9A !important;
+}
+html[data-theme="light"] body #sc-home #flash-sec .flash-view-all {
+  color: #FF3D9A !important;
+}
+
+/* Make sure flash-sec not hidden in light */
+html[data-theme="light"] body #sc-home #flash-sec {
+  display: block !important;
+}
+
+/* fcard styling in light theme */
+html[data-theme="light"] body #sc-home #flash-c .fcard {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08) !important;
+}
+html[data-theme="light"] body #sc-home #flash-c .fcard-img {
+  background: #f4f6fa !important;
+}
+html[data-theme="light"] body #sc-home #flash-c .fcard-name {
+  color: #1f2937 !important;
+}
+
+@media (max-width: 359px) {
+  body #sc-home #flash-c .fcard,
+  body #sc-home .flash-row .fcard {
+    flex: 0 0 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    width: 130px !important;
+  }
+}
+</style>
 
 <style id="chz-track-v40">
 /* ═══ v40 track strip — slim & elegant, below header ═══ */
@@ -10495,7 +10556,123 @@ html:not([data-theme="light"]) body #sc-home #brands-list .brand-chip { color: #
 body #sc-home #flash-timer { display: none !important; }
 </style>
 
+<style id="chz-flash-v17-css">
+body #sc-home #flash-sec {
+  margin: 16px 0 8px;
+  padding: 0;
+}
+body #sc-home #flash-sec .sh {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 15px 6px;
+}
+body #sc-home #flash-sec .stl {
+  font-weight: 900; font-size: 18px;
+  background: linear-gradient(90deg, #ff4d94, #a855f7);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body #sc-home #flash-sec .flash-view-all {
+  font-size: 12px; font-weight: 700;
+  color: #ff4d94; cursor: pointer;
+}
 
+
+
+
+html:not([data-theme="light"]) 
+body #sc-home .flash-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 15px 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+}
+body #sc-home .flash-row::-webkit-scrollbar { display: none; }
+/* ═══ OLD FCARD CSS REMOVED ═══ */
+body #sc-home .fcard:active { transform: scale(0.96); }
+body #sc-home .fcard-img {
+  position: relative; width: 100%; height: 130px;
+  background: #f4f6fa; overflow: hidden;
+}
+body #sc-home .fcard-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+body #sc-home .fcard-disc {
+  position: absolute; top: 6px; right: 6px;
+  background: linear-gradient(135deg, #ff4d94, #f97316);
+  color: #fff; font-weight: 900; font-size: 11px;
+  padding: 3px 8px; border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(255,77,148,0.4);
+}
+body #sc-home .fcard-body { padding: 8px 10px 10px; }
+body #sc-home .fcard-name {
+  font-size: 11px; font-weight: 700;
+  color: #1f2937; line-height: 1.3;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 28px;
+}
+body #sc-home .fcard-price {
+  display: flex; align-items: baseline; gap: 3px;
+  font-size: 13px;
+}
+body #sc-home .fcard-price .fp-new { color: #ff4d94; font-weight: 900; }
+body #sc-home .fcard-price .fp-cur { color: #ff4d94; font-size: 10px; }
+body #sc-home .fcard-price .fp-old {
+  color: #9ca3af; font-size: 10px;
+  text-decoration: line-through; margin-left: auto;
+}
+html:not([data-theme="light"]) body #sc-home .fcard {
+  background: linear-gradient(180deg, #1e2438, #181d30);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
+html:not([data-theme="light"]) body #sc-home .fcard-img { background: #131829; }
+html:not([data-theme="light"]) body #sc-home .fcard-name { color: #e8ecf5; }
+html:not([data-theme="light"]) body #sc-home .fcard-price .fp-old { color: #6b7280; }
+html:not([data-theme="light"]) 
+body #sc-home #brands-sec {
+  margin: 12px 0 4px;
+}
+body #sc-home #brands-sec .sh { padding: 0 15px 8px; }
+body #sc-home #brands-sec .stl { font-weight: 900; font-size: 16px; color: var(--chz-text, #1f2937); }
+html:not([data-theme="light"]) body #sc-home #brands-sec .stl { color: #e8ecf5; }
+body #sc-home #brands-list {
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  padding: 4px 15px 12px;
+  scrollbar-width: none;
+}
+body #sc-home #brands-list::-webkit-scrollbar { display: none; }
+body #sc-home #brands-list .brand-chip {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: var(--bg2, #f4f6fa);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 20px;
+  font-weight: 700; font-size: 12px;
+  color: var(--chz-text, #1f2937);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+}
+body #sc-home #brands-list .brand-chip:active { transform: scale(0.94); }
+html:not([data-theme="light"]) body #sc-home #brands-list .brand-chip {
+  background: #1e2438;
+  border-color: rgba(255,255,255,0.08);
+  color: #e8ecf5;
+}
+@media (max-width: 359px) {
+  body #sc-home .fcard { flex: 0 0 130px; min-width: 130px; max-width: 130px; }
+  body #sc-home .fcard-img { height: 115px; }
+  body #sc-home #flash-sec .stl { font-size: 16px; }
+}
+</style>
 
 <style id="chz-banner-v10-css">
 body #sc-home #slides {
@@ -11399,39 +11576,72 @@ var APP={
   },
   
   renderFlash:function(){
-    var wrap = document.getElementById('exactFlashContainer');
-    if (!wrap) { return; }
+    var c=document.getElementById('flash-c');
+    if(!c) {
+      console.warn('[FLASH] #flash-c not found');
+      return;
+    }
+    // Debug Badge
+    var dbg = document.getElementById('flash-debug');
+    if (!dbg) {
+      dbg = document.createElement('div');
+      dbg.id = 'flash-debug';
+      dbg.style.cssText = 'position:absolute;top:-20px;right:10px;background:#000;color:#0f0;font-size:10px;padding:2px 6px;border-radius:4px;z-index:9999;font-family:monospace;';
+      if (c.parentNode) c.parentNode.style.position = 'relative';
+      if (c.parentNode) c.parentNode.appendChild(dbg);
+    }
+    var _prodCount = (this.products || []).length;
+    dbg.textContent = 'FLASH: ' + _prodCount + ' products';
+
+    // كل المنتجات (بدون فلتر — fallback لأول 10)
     var items = (this.products || []).slice(0, 10);
-    if (!items.length) { wrap.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;">لا توجد منتجات حالياً</div>'; return; }
+    if (!items.length) {
+      c.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">لا توجد منتجات</div>';
+      return;
+    }
+
     var rates = { SAR: 135, USD: 505 };
-    var out = '';
+
+    var html = '';
     items.forEach(function(p){
-      var disc = 0;
-      if (p.old && p.price && p.old > p.price) disc = Math.round(((p.old - p.price)/p.old)*100);
-      var py = (p.priceYER != null) ? p.priceYER : (p.price || 0);
-      var op = Number(p.old) || 0;
-      var sar = (p.priceSAR != null) ? p.priceSAR : (py / rates.SAR);
-      var usd = (p.priceUSD != null) ? p.priceUSD : (py / rates.USD);
-      var sold = p.soldPercent || 75;
-      var rem = p.remaining || 5;
-      var img = p.img || p.image || 'https://via.placeholder.com/300';
-      var name = (p.name || 'منتج').replace(/</g, '&lt;').replace(/"/g, '');
-      var discHtml = disc > 0 ? '<div class="exact-badge-disc">-' + disc + '%</div>' : '';
-      var oldHtml = op > 0 ? '<span class="exact-price-old">' + Math.round(op).toLocaleString('en') + '</span>' : '';
-      out += '<div class="exact-flash-card" data-title="' + name + '" data-price="' + Math.round(py) + '" data-old="' + Math.round(op) + '" data-sar="' + sar.toFixed(2) + '" data-usd="' + usd.toFixed(2) + '" data-img="' + img + '">';
-      out += '<div class="exact-flash-img"><img src="' + img + '" loading="lazy">' + discHtml;
-      out += '<div class="exact-timer">⏱️ <span class="exact-timer-text">02:45:10</span></div></div>';
-      out += '<div class="exact-flash-name">' + name + '</div>';
-      out += '<div class="exact-price-row"><span class="exact-price-main">' + Math.round(py).toLocaleString('en') + ' <small>YER ¥</small></span>' + oldHtml + '</div>';
-      out += '<div class="exact-currency-box"><div><span>SAR ﷼</span><strong>' + sar.toFixed(2) + '</strong></div><div><span>USD $</span><strong>' + usd.toFixed(2) + '</strong></div></div>';
-      out += '<div class="exact-progress"><div style="width:' + sold + '%"></div></div>';
-      out += '<div class="exact-sold"><span>تم بيع ' + sold + '%</span><span>بقي ' + rem + '</span></div>';
-      out += '</div>';
+      var _disc = 0;
+      if (p.old && p.price && p.old > p.price) {
+        _disc = Math.round(((p.old - p.price)/p.old)*100);
+      }
+      var _priceYER = (p.priceYER != null) ? p.priceYER : (p.price || 0);
+      var _oldPrice = Number(p.old) || 0;
+      var _sar = (p.priceSAR != null) ? p.priceSAR : (_priceYER / rates.SAR);
+      var _usd = (p.priceUSD != null) ? p.priceUSD : (_priceYER / rates.USD);
+      var _soldPct = p.soldPercent || 75;
+      var _remaining = p.remaining || 5;
+
+      html += '<div class="flash-card" onclick="APP.openProduct(\'' + esc(p.id) + '\')">';
+      html += '<div class="flash-img-wrapper">';
+      html += '<img src="' + esc(p.img || p.image || '') + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
+      html += '<div class="timer-badge">⏱️ <span class="timer-text">02:45:10</span></div>';
+      html += '<div class="flash-tags">';
+      if (_disc > 0) html += '<div class="tag-discount">-' + _disc + '%</div>';
+      if (_disc >= 25) html += '<div class="tag-fire">🔥</div>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="flash-title">' + esc(p.name) + '</div>';
+      html += '<div class="price-yemeni-row">';
+      html += '<div class="price-yemeni">' + Math.round(_priceYER).toLocaleString('en') + ' <span>YER ¥</span></div>';
+      if (_oldPrice > 0) html += '<div class="price-old">' + Math.round(_oldPrice).toLocaleString('en') + '</div>';
+      html += '</div>';
+      html += '<div class="currency-box">';
+      html += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + _sar.toFixed(2) + '</strong></div>';
+      html += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + _usd.toFixed(2) + '</strong></div>';
+      html += '</div>';
+      html += '<div class="progress-container"><div class="progress-bar" style="width:' + _soldPct + '%;"></div></div>';
+      html += '<div class="sold-text"><span>تم بيع ' + _soldPct + '%</span><span>بقي ' + _remaining + ' قطع</span></div>';
+      html += '</div>';
     });
-    wrap.innerHTML = out;
-    if (window.exactFlashStartTimers) window.exactFlashStartTimers();
-    if (window.exactFlashBind) window.exactFlashBind();
+
+    c.innerHTML = html;
+    console.log('[FLASH] rendered', items.length, 'items');
   },
+
   renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
     var self=this;
@@ -22189,6 +22399,7 @@ body #sc-home #flash-c .flash-card {
   flex: 0 0 auto !important;
   min-width: 280px !important;
   max-width: 300px !important;
+  min-height: 400px !important;
   height: auto !important;
 }
 #flash-c .flash-card .currency-box,
@@ -22202,183 +22413,6 @@ body #sc-home #flash-c .flash-card {
   font-size: 18px !important;
   font-weight: 900 !important;
 }
-
-/* ═══ FLASH CARDS v2 (CLEAN) ═══ */
-#flash-c {
-  display: flex !important;
-  gap: 14px !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  padding: 6px 15px 16px !important;
-  scroll-snap-type: x mandatory !important;
-  scrollbar-width: none !important;
-  -webkit-overflow-scrolling: touch !important;
-}
-#flash-c::-webkit-scrollbar { display: none !important; }
-
-#flash-c .flash-card {
-  flex: 0 0 auto !important;
-  min-width: 270px !important;
-  max-width: 290px !important;
-  scroll-snap-align: start !important;
-  background: var(--nav, #fff) !important;
-  border: 1.5px solid var(--bd, #e2e8f0) !important;
-  border-radius: 20px !important;
-  padding: 12px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  cursor: pointer !important;
-  position: relative !important;
-  box-shadow: 0 8px 25px rgba(0,0,0,.06) !important;
-}
-#flash-c .flash-card:active { transform: scale(.97) !important; }
-
-#flash-c .flash-img-wrapper {
-  width: 100% !important;
-  height: 170px !important;
-  background: var(--bg-img-wrapper, #f8fafc) !important;
-  border-radius: 14px !important;
-  overflow: hidden !important;
-  margin-bottom: 10px !important;
-  position: relative !important;
-  border: 1px solid var(--bd, #e2e8f0) !important;
-}
-#flash-c .flash-img-wrapper img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-}
-
-#flash-c .timer-badge {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  background: rgba(239,68,68,.95) !important;
-  color: #fff !important;
-  padding: 4px 8px !important;
-  border-radius: 8px !important;
-  font-size: 10px !important;
-  font-weight: 800 !important;
-  z-index: 3 !important;
-}
-
-#flash-c .flash-tags {
-  position: absolute !important;
-  top: 8px !important;
-  left: 8px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 4px !important;
-  z-index: 3 !important;
-}
-#flash-c .tag-discount {
-  background: #ef4444 !important;
-  color: #fff !important;
-  font-size: 10px !important;
-  font-weight: 900 !important;
-  padding: 3px 7px !important;
-  border-radius: 6px !important;
-}
-#flash-c .tag-fire {
-  background: #f59e0b !important;
-  color: #fff !important;
-  font-size: 10px !important;
-  padding: 3px 7px !important;
-  border-radius: 6px !important;
-}
-
-#flash-c .flash-title {
-  font-size: 13px !important;
-  font-weight: 900 !important;
-  color: var(--cr, #0f172a) !important;
-  margin-bottom: 6px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-#flash-c .price-yemeni-row {
-  display: flex !important;
-  align-items: baseline !important;
-  gap: 6px !important;
-  margin-bottom: 6px !important;
-}
-#flash-c .price-yemeni {
-  font-size: 17px !important;
-  font-weight: 900 !important;
-  color: #e11d48 !important;
-}
-#flash-c .price-yemeni span {
-  font-size: 10px !important;
-  opacity: .8 !important;
-}
-#flash-c .price-old {
-  font-size: 10px !important;
-  color: #94a3b8 !important;
-  text-decoration: line-through !important;
-  text-decoration-color: #ef4444 !important;
-  text-decoration-thickness: 2px !important;
-  font-weight: 700 !important;
-}
-
-#flash-c .currency-box {
-  background: var(--bg-curr, #f8fafc) !important;
-  border: 1px solid var(--bd, #e2e8f0) !important;
-  border-radius: 8px !important;
-  padding: 5px 7px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 3px !important;
-  margin-bottom: 8px !important;
-}
-#flash-c .currency-row {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  color: #64748b !important;
-}
-#flash-c .currency-row strong {
-  color: var(--cr, #0f172a) !important;
-  font-size: 11px !important;
-}
-#flash-c .currency-symbol {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 16px !important;
-  height: 16px !important;
-  border-radius: 4px !important;
-  font-size: 9px !important;
-  font-weight: 800 !important;
-  margin-left: 3px !important;
-}
-#flash-c .sym-sar { background: #dcfce7 !important; color: #166534 !important; }
-#flash-c .sym-usd { background: #e0f2fe !important; color: #0369a1 !important; }
-
-#flash-c .progress-container {
-  width: 100% !important;
-  height: 5px !important;
-  background: rgba(0,0,0,.08) !important;
-  border-radius: 10px !important;
-  overflow: hidden !important;
-  margin-bottom: 4px !important;
-  margin-top: auto !important;
-}
-#flash-c .progress-bar {
-  height: 100% !important;
-  background: linear-gradient(90deg, #ef4444, #f59e0b) !important;
-  border-radius: 10px !important;
-}
-#flash-c .sold-text {
-  font-size: 9.5px !important;
-  color: #e11d48 !important;
-  font-weight: 800 !important;
-  display: flex !important;
-  justify-content: space-between !important;
-}
-#flash-c .sold-text span:last-child { color: #64748b !important; }
 </style>
 
 <script>
@@ -22473,139 +22507,6 @@ body #sc-home #flash-c .flash-card {
   document.addEventListener('DOMContentLoaded', attach);
   setTimeout(attach, 500);
   console.log('[Unified Select] ready — single source of truth');
-})();
-</script>
-
-
-
-<style id="chz-flash-perfect-css">
-/* إخفاء أي تصميم قديم */
-#flash-c { display: flex !important; gap: 15px !important; overflow-x: auto !important; padding: 5px 15px 20px 15px !important; scrollbar-width: none !important; -webkit-overflow-scrolling: touch !important; }
-#flash-c::-webkit-scrollbar { display: none !important; }
-
-/* البطاقة */
-#flash-c .flash-card {
-  min-width: 280px !important; max-width: 300px !important;
-  background: #ffffff !important; border: 1.5px solid #e2e8f0 !important;
-  border-radius: 20px !important; padding: 12px !important;
-  display: flex !important; flex-direction: column !important; position: relative !important;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
-  margin: 0 !important; height: auto !important; min-height: 0 !important;
-}
-#flash-c .flash-card:active { transform: scale(0.97) !important; }
-
-/* الصورة */
-#flash-c .flash-img-wrapper { width: 100% !important; height: 180px !important; background: #f8fafc !important; border-radius: 16px !important; overflow: hidden !important; margin-bottom: 12px !important; position: relative !important; border: 1px solid #e2e8f0 !important; }
-#flash-c .flash-img-wrapper img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
-
-/* المؤقت والشارات */
-#flash-c .timer-badge { position: absolute !important; top: 10px !important; right: 10px !important; background: rgba(239, 68, 68, 0.95) !important; color: white !important; padding: 5px 10px !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; display: flex !important; align-items: center !important; gap: 5px !important; }
-#flash-c .flash-tags { position: absolute !important; top: 10px !important; left: 10px !important; display: flex !important; flex-direction: column !important; gap: 6px !important; }
-#flash-c .tag-discount { background: #ef4444 !important; color: white !important; font-size: 10px !important; font-weight: 900 !important; padding: 3px 8px !important; border-radius: 6px !important; width: fit-content !important; }
-#flash-c .tag-fire { background: #f59e0b !important; color: white !important; font-size: 10px !important; font-weight: 900 !important; padding: 3px 8px !important; border-radius: 6px !important; width: fit-content !important; }
-
-/* الاسم */
-#flash-c .flash-title { font-size: 14px !important; font-weight: 900 !important; color: #0f172a !important; margin-bottom: 6px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
-
-/* السعر */
-#flash-c .price-yemeni-row { display: flex !important; align-items: baseline !important; gap: 8px !important; margin-bottom: 8px !important; }
-#flash-c .price-yemeni { font-size: 18px !important; font-weight: 900 !important; color: #e11d48 !important; display: flex !important; align-items: baseline !important; gap: 3px !important; }
-#flash-c .price-yemeni span { font-size: 11px !important; opacity: 0.8 !important; }
-#flash-c .price-old { font-size: 11px !important; color: #64748b !important; text-decoration: line-through !important; font-weight: 700 !important; }
-
-/* العملات */
-#flash-c .currency-box { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 6px 8px !important; display: flex !important; flex-direction: column !important; gap: 4px !important; margin-bottom: 10px !important; }
-#flash-c .currency-row { display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 11px !important; font-weight: 700 !important; color: #64748b !important; }
-#flash-c .currency-row strong { color: #0f172a !important; font-size: 12px !important; }
-#flash-c .currency-symbol { display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 18px !important; height: 18px !important; border-radius: 5px !important; font-size: 10px !important; font-weight: 800 !important; margin-left: 4px !important; }
-#flash-c .sym-sar { background-color: #dcfce7 !important; color: #166534 !important; }
-#flash-c .sym-usd { background-color: #e0f2fe !important; color: #0369a1 !important; }
-
-/* شريط التقدم */
-#flash-c .progress-container { width: 100% !important; height: 6px !important; background: rgba(0,0,0,0.08) !important; border-radius: 10px !important; overflow: hidden !important; margin-top: auto !important; margin-bottom: 5px !important; }
-#flash-c .progress-bar { height: 100% !important; background: linear-gradient(90deg, #ef4444, #f59e0b) !important; border-radius: 10px !important; }
-#flash-c .sold-text { font-size: 10px !important; color: #e11d48 !important; font-weight: 800 !important; display: flex !important; justify-content: space-between !important; }
-#flash-c .sold-text span:last-child { color: #64748b !important; }
-</style>
-<div id="exactFlashModal"><div class="exact-modal-content"><div class="exact-modal-close" onclick="document.getElementById('exactFlashModal').classList.remove('active')">×</div><div class="exact-modal-body"><div class="exact-modal-img"><img id="exactModalImg" src=""></div><h2 id="exactModalTitle"></h2><div class="exact-modal-price"><div class="main"><span id="exactModalPrice"></span><span class="old" id="exactModalOld"></span></div><div class="row"><span>SAR ﷼</span><strong id="exactModalSar"></strong></div><div class="row"><span>USD $</span><strong id="exactModalUsd"></strong></div></div><p style="color:#64748b;font-size:13px;line-height:1.6;">فرصة لا تعوض! احصل على هذا المنتج الآن بخصم حصري لفترة محدودة.</p></div><div class="exact-modal-footer"><button class="btn-add">🛒 أضف للسلة</button><button class="btn-buy">اشترِ الآن</button></div></div></div><script>window.exactFlashStartTimers=function(){document.querySelectorAll("#chizen-exact-flash .exact-timer-text").forEach(function(t){if(t.dataset.started)return;t.dataset.started="1";var h=2,m=45,s=10;setInterval(function(){s--;if(s<0){s=59;m--;}if(m<0){m=59;h--;}if(h<0){h=23;m=59;s=59;}t.textContent=String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");},1000);});};window.exactFlashBind=function(){document.querySelectorAll("#chizen-exact-flash .exact-flash-card").forEach(function(card){card.onclick=function(){var d=card.dataset;document.getElementById("exactModalImg").src=d.img;document.getElementById("exactModalTitle").textContent=d.title;document.getElementById("exactModalPrice").textContent=d.price+" YER";document.getElementById("exactModalOld").textContent=d.old>0?d.old:"";document.getElementById("exactModalSar").textContent=d.sar+" SAR";document.getElementById("exactModalUsd").textContent=d.usd+" USD";document.getElementById("exactFlashModal").classList.add("active");};});};</script>
-<script>
-// تشغيل العروض الجديدة
-(function() {
-  var tries = 0;
-  var iv = setInterval(function() {
-    tries++;
-    if (window.APP && window.APP.products && window.APP.products.length > 0) {
-      if (window.APP.renderFlash) window.APP.renderFlash();
-      clearInterval(iv);
-      console.log("[FLASH] Rendered from force-trigger after", tries, "tries");
-    }
-    if (tries > 20) clearInterval(iv); // التوقف بعد 20 محاولة (10 ثواني)
-  }, 500);
-})();
-</script>
-
-<style id="chz-exact-flash-isolated">
-#chizen-exact-flash {
-  background: #f8fafc !important;
-  padding: 12px 0 !important;
-  margin: 8px 0 !important;
-  border-radius: 16px !important;
-  direction: rtl !important;
-  display: block !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-#chizen-exact-flash .exact-flash-header {
-  display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 0 15px 10px !important;
-}
-#chizen-exact-flash .exact-flash-header h2 { font-size: 18px !important; font-weight: 900 !important; color: #0f172a !important; margin: 0 !important; }
-#chizen-exact-flash .exact-view-all { color: #e11d48 !important; font-size: 13px !important; font-weight: 700 !important; cursor: pointer !important; }
-#chizen-exact-flash .exact-flash-container {
-  display: flex !important; gap: 12px !important; overflow-x: auto !important;
-  scroll-snap-type: x mandatory !important; scrollbar-width: none !important;
-  padding: 5px 15px 12px !important; -webkit-overflow-scrolling: touch !important;
-}
-#chizen-exact-flash .exact-flash-container::-webkit-scrollbar { display: none !important; }
-#chizen-exact-flash .exact-flash-card {
-  min-width: 260px !important; max-width: 280px !important; flex: 0 0 auto !important;
-  scroll-snap-align: center !important; background: #ffffff !important;
-  border: 1.5px solid #e2e8f0 !important; border-radius: 18px !important;
-  padding: 10px !important; display: flex !important; flex-direction: column !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important; cursor: pointer !important;
-  margin: 0 !important; height: auto !important;
-}
-#chizen-exact-flash .exact-flash-img {
-  position: relative !important; width: 100% !important; height: 160px !important;
-  background: #f1f5f9 !important; border-radius: 14px !important; overflow: hidden !important; margin-bottom: 10px !important;
-}
-#chizen-exact-flash .exact-flash-img img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
-#chizen-exact-flash .exact-timer { position: absolute !important; top: 8px !important; right: 8px !important; background: rgba(239,68,68,0.95) !important; color: #fff !important; padding: 3px 7px !important; border-radius: 7px !important; font-size: 10px !important; font-weight: 800 !important; }
-#chizen-exact-flash .exact-badge-disc { position: absolute !important; top: 8px !important; left: 8px !important; background: #ef4444 !important; color: #fff !important; padding: 3px 7px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 900 !important; }
-#chizen-exact-flash .exact-flash-name { font-size: 13px !important; font-weight: 900 !important; color: #0f172a !important; margin-bottom: 6px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
-#chizen-exact-flash .exact-price-row { display: flex !important; align-items: baseline !important; gap: 6px !important; margin-bottom: 6px !important; }
-#chizen-exact-flash .exact-price-main { font-size: 17px !important; font-weight: 900 !important; color: #e11d48 !important; }
-#chizen-exact-flash .exact-price-main small { font-size: 10px !important; opacity: 0.7 !important; }
-#chizen-exact-flash .exact-price-old { font-size: 10px !important; color: #94a3b8 !important; text-decoration: line-through !important; font-weight: 700 !important; }
-#chizen-exact-flash .exact-currency-box { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 6px 8px !important; display: flex !important; flex-direction: column !important; gap: 4px !important; margin-bottom: 8px !important; }
-#chizen-exact-flash .exact-currency-box>div { display: flex !important; justify-content: space-between !important; font-size: 11px !important; font-weight: 700 !important; color: #64748b !important; }
-#chizen-exact-flash .exact-currency-box strong { color: #0f172a !important; font-size: 12px !important; }
-#chizen-exact-flash .exact-progress { width: 100% !important; height: 5px !important; background: rgba(0,0,0,0.08) !important; border-radius: 8px !important; overflow: hidden !important; margin-bottom: 4px !important; margin-top: auto !important; }
-#chizen-exact-flash .exact-progress>div { height: 100% !important; background: linear-gradient(90deg, #ef4444, #f59e0b) !important; border-radius: 8px !important; }
-#chizen-exact-flash .exact-sold { font-size: 10px !important; color: #e11d48 !important; font-weight: 800 !important; display: flex !important; justify-content: space-between !important; }
-#chizen-exact-flash .exact-sold span:last-child { color: #64748b !important; }
-</style>
-
-<script>
-(function(){
-  // حماية السوق: إزالة أي كلاسات متطابقة قد تسربت
-  setTimeout(function(){
-    document.querySelectorAll('.flash-card').forEach(function(card){
-      if(!card.closest('#chizen-exact-flash')) {
-        card.classList.remove('flash-card');
-        card.removeAttribute('style');
-      }
-    });
-  }, 1000);
 })();
 </script>
 </body>
