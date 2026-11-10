@@ -22390,6 +22390,27 @@ html[data-theme="light"] .currency-box {
   justify-content: space-between !important;
 }
 .sold-text span:last-child { color: var(--mt, #64748b) !important; }
+
+/* ═══ FORCE flash-card (flex 0 0 auto) ═══ */
+#flash-c .flash-card,
+body #sc-home #flash-c .flash-card {
+  flex: 0 0 auto !important;
+  min-width: 280px !important;
+  max-width: 300px !important;
+  min-height: 400px !important;
+  height: auto !important;
+}
+#flash-c .flash-card .currency-box,
+#flash-c .flash-card .progress-container {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+#flash-c .flash-card .price-yemeni {
+  color: #e11d48 !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+}
 </style>
 
 <script>
