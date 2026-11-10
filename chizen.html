@@ -260,12 +260,40 @@ APP.renderFavorites = function() {
             <svg class="fav-btn" data-id="${p.id}" onclick="APP.toggleFavorite('${p.id}', event)" viewBox="0 0 24 24" style="position:absolute;top:10px;left:10px;width:24px;height:24px;stroke:#D81B60;stroke-width:2;fill:#D81B60;z-index:10;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <img src="${p.img||p.image||''}" onerror="this.src='https://via.placeholder.com/150'">
             <div class="p-name">${p.name}</div>
-            <div class="p-price">${p.price} ر.س</div>
+            <div class="p-price">${formatPrice(p).primary} ${formatPrice(p).symbol}</div>
         </div>
     `).join('');
 };
 
 // --- المنتجات المشابهة (هتتنادى جوه صفحة المنتج) ---
+// ═══ دالة تنسيق السعر (حسب العملة الأساسية) ═══
+function formatPrice(p) {
+  var cur = (window.CHIZEN_SETTINGS && window.CHIZEN_SETTINGS.currency) || 'SAR';
+  var rates = { YER: 1, SAR: 135, USD: 505 };
+  
+  var priceYER = (p.priceYER != null) ? p.priceYER : (p.price || 0);
+  var priceSAR = (p.priceSAR != null) ? p.priceSAR : (priceYER / rates.SAR);
+  var priceUSD = (p.priceUSD != null) ? p.priceUSD : (priceYER / rates.USD);
+  
+  var primary, symbol;
+  if (cur === 'YER') { primary = priceYER; symbol = 'ر.ي'; }
+  else if (cur === 'USD') { primary = priceUSD; symbol = '$'; }
+  else { primary = priceSAR; symbol = 'ر.س'; }
+  
+  var primaryStr = (cur === 'YER') ? Math.round(primary).toLocaleString('en') : primary.toFixed(2);
+  
+  return {
+    primary: primaryStr,
+    symbol: symbol,
+    currency: cur,
+    others: [
+      { code: 'YER', text: '🇾🇪 ' + Math.round(priceYER).toLocaleString('en') + ' ر.ي' },
+      { code: 'SAR', text: '🇸🇦 ' + priceSAR.toFixed(2) + ' ر.س' },
+      { code: 'USD', text: '🇺🇸 $' + priceUSD.toFixed(2) }
+    ]
+  };
+}
+
 APP.renderRelatedProducts = function(currentProduct) {
     const relatedContainer = document.getElementById('related-products');
     if(!relatedContainer || !window.APP.products) return;
@@ -293,7 +321,7 @@ APP.renderRelatedProducts = function(currentProduct) {
                     <div onclick="APP.openProduct('${p.id}')" style="min-width: 120px; width: 120px; background: #f4f6fa; border-radius: 10px; overflow: hidden; padding-bottom: 8px;">
                         <img src="${p.img||p.image||''}" style="width: 100%; height: 100px; object-fit: cover;">
                         <div style="color: #fff; font-size: 11px; padding: 5px 8px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
-                        <div style="color: #D81B60; font-size: 12px; font-weight: bold; padding: 2px 8px;">${p.price} ر.س</div>
+                        <div style="color: #D81B60; font-size: 12px; font-weight: bold; padding: 2px 8px;">${formatPrice(p).primary} ${formatPrice(p).symbol}</div>
                     </div>
                 `).join('')}
             </div>
@@ -11336,7 +11364,7 @@ var APP={
     }
     c.innerHTML=list.map(function(p){
       var fav=APP.favorites.indexOf(p.id)>-1;
-      return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-b">'+esc(p.badge||'')+'</div><div class="prod-f'+(fav?' active':'')+'" onclick="event.stopPropagation();APP.togFav(\''+esc(p.id)+'\',this)"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><div class="prod-i"><img src="'+esc(p.img||'')+'" loading="lazy"><div class="color-swatches" id="color-swatches-container" style="display:none;"></div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-c">ر.س</span>'+(p.old?'<span class="price-o">'+esc(p.old)+'</span>':'')+'</div></div></div>';
+      return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-b">'+esc(p.badge||'')+'</div><div class="prod-f'+(fav?' active':'')+'" onclick="event.stopPropagation();APP.togFav(\''+esc(p.id)+'\',this)"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><div class="prod-i"><img src="'+esc(p.img||'')+'" loading="lazy"><div class="color-swatches" id="color-swatches-container" style="display:none;"></div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(formatPrice(p).primary)+'</span><span class="price-c">'+esc(formatPrice(p).symbol)+'</span>'+(p.old?'<span class="price-o">'+esc(p.old)+'</span>':'')+'</div></div></div>';
     }).join('');
   },
   
@@ -11450,7 +11478,7 @@ var APP={
            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#888;">لا توجد منتجات في هذا القسم حالياً</div>';
        } else {
            grid.innerHTML = prods.map(p => {
-              return '<div class="prod" onclick="APP.openProduct(\''+p.id+'\')"><div class="prod-i"><img src="'+(p.img||'')+'"></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+(p.price||0)+'</span><span class="price-c">ر.س</span></div></div></div>';
+              return '<div class="prod" onclick="APP.openProduct(\''+p.id+'\')"><div class="prod-i"><img src="'+(p.img||'')+'"></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(formatPrice(p).primary)+'</span><span class="price-c">'+esc(formatPrice(p).symbol)+'</span></div></div></div>';
            }).join('');
        }
     }
