@@ -11572,8 +11572,20 @@ var APP={
   
   renderFlash:function(){
     var c=document.getElementById('flash-c');if(!c)return;
-    var items=this.products.filter(function(p){return p.old&&p.price&&(p.old-p.price)/p.old>=0.1;}).slice(0,10);
-    if(!items.length){var fs=document.getElementById('flash-sec');if(fs)fs.style.display='none';return;}
+    var items=this.products.filter(function(p){
+      var hasDisc = p.old && p.price && (p.old - p.price)/p.old >= 0.1;
+      var isFlash = p.flashEnabled === true;
+      return hasDisc || isFlash;
+    }).slice(0,10);
+    if(!items.length){
+      // fallback: أول 6 منتجات (إذا لا يوجد خصم/flash)
+      items = this.products.slice(0, 6);
+      if (!items.length) {
+        var fs=document.getElementById('flash-sec');
+        if(fs)fs.style.display='none';
+        return;
+      }
+    }
 
     var rates = { SAR: 135, USD: 505 };
 
