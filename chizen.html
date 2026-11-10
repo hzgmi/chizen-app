@@ -16006,8 +16006,7 @@ document.addEventListener('keydown', function(e) {
     APP.renderFav = function() {
       var favList = document.getElementById('fav-list');
       var wishGrid = document.getElementById('wishlist-grid');
-      
-      // حالة فارغة
+
       if (!this.favorites.length) {
         var emptyHtml = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">' +
           '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
@@ -16018,15 +16017,14 @@ document.addEventListener('keydown', function(e) {
         if (wishGrid) wishGrid.innerHTML = emptyHtml;
         return;
       }
-      
-      // جمع المنتجات
+
       var list = [];
       var self = this;
       this.favorites.forEach(function(id) {
         var p = self.getProduct(id);
         if (p) list.push(p);
       });
-      
+
       if (!list.length) {
         var noProducts = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#888;">' +
           '<div style="font-size:52px;margin-bottom:14px;">💔</div>' +
@@ -16036,33 +16034,15 @@ document.addEventListener('keydown', function(e) {
         if (wishGrid) wishGrid.innerHTML = noProducts;
         return;
       }
-      
-      // بناء HTML
-      var html = list.map(function(p) {
-        return '<div class="prod" onclick="APP.openProduct(\'' + esc(p.id) + '\')">' +
-          '<div class="prod-f active" onclick="event.stopPropagation();APP.togFav(\'' + esc(p.id) + '\',this)">' +
-            '<svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>' +
-          '</div>' +
-          '<div class="prod-i"><img src="' + esc(p.img || '') + '" loading="lazy"></div>' +
-          '<div class="prod-inf">' +
-            '<div class="prod-n">' + esc(p.name) + '</div>' +
-            '<div class="pr">' +
-              '<span class="price">' + esc(p.price) + '</span>' +
-              '<span class="price-c">ر.س</span>' +
-              (p.old ? '<span class="price-o">' + esc(p.old) + '</span>' : '') +
-            '</div>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-      
-      // اكتب في كلتا الشبكتين
+
+      // استخدام renderProducts (التصميم الفاخر) على #fav-list
       if (favList) {
-        favList.innerHTML = html;
+        APP.renderProducts(list, favList);
         console.log('[FAV] rendered in #fav-list:', list.length);
       }
+      // نسخة احتياطية في #wishlist-grid (إن وجد)
       if (wishGrid) {
-        wishGrid.innerHTML = html;
-        console.log('[FAV] rendered in #wishlist-grid:', list.length);
+        APP.renderProducts(list, wishGrid);
       }
     };
     
