@@ -11126,7 +11126,12 @@ var APP={
 
     if(window.FB){
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
-      FB.listenToProducts(function(d){if(d&&d.length){self.products=d;self.renderProducts();self.renderFlash();self.renderBrands();}});
+      FB.listenToProducts(function(d){
+        self.products = d || [];
+        self.renderProducts();
+        self.renderFlash();
+        self.renderBrands();
+      });
       FB.listenToBanners(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
       FB.listenToCategories(function(c){
   var dbCats = (c && c.list) ? c.list : [];
@@ -11590,7 +11595,10 @@ var APP={
     var rates = { SAR: 135, USD: 505 };
 
     c.innerHTML=items.map(function(p){
-      var _disc = Math.round(((p.old-p.price)/p.old)*100);
+      var _disc = 0;
+      if (p.old && p.price && p.old > p.price) {
+        _disc = Math.round(((p.old - p.price)/p.old)*100);
+      }
       var _priceYER = (p.priceYER != null) ? p.priceYER : (p.price || 0);
       var _oldPrice = Number(p.old) || 0;
       var _sar = (p.priceSAR != null) ? p.priceSAR : (_priceYER / rates.SAR);
@@ -13260,6 +13268,8 @@ window.setupWebNotifications = async function() {
 
 // التشغيل التلقائي بعد التحميل
 window.addEventListener('load', function() {
+  // تأكيد عرض العروض الخاطفة
+  setTimeout(function(){ if(window.APP && APP.renderFlash) APP.renderFlash(); }, 1500);
   setTimeout(function() {
     if (window.setupAPKNotifications) window.setupAPKNotifications();
     if (window.setupWebNotifications) window.setupWebNotifications();
