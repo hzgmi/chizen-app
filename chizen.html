@@ -11696,7 +11696,17 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
   addDetCart:function(){
     if(!this.currentProd)return;
     if(!this.validateSelection())return;
-    var cartItem = { id: this.currentProd.id, qty: this.currentQty };
+    var _p = this.currentProd;
+    var cartItem = {
+      id: p.id, qty: this.currentQty,
+      name: _p.name,
+      image: _p.img || _p.image || '',
+      supplier: _p.supplier || _p.supplierId || '',
+      supplierName: _p.supplierName || '',
+      supplierPhone: _p.supplierPhone || '',
+      price: _p.price,
+      brand: _p.brand
+    };
     if (APP.selectedSize) cartItem.size = APP.selectedSize;
     if (APP.selectedColor) cartItem.color = APP.selectedColor;
     this.addCartFull(cartItem);
@@ -11708,14 +11718,36 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     var ex = null;
     this.cart.forEach(function(i){ if(String(i.id)===String(item.id) && i.size===item.size && i.color===item.color) ex = i; });
     if(ex) ex.qty += item.qty;
-    else this.cart.push(item);
+    else {
+      var _prod = APP.getProduct(item.id);
+      if (_prod) {
+        item.name = _prod.name;
+        item.image = _prod.img || _prod.image || '';
+        item.supplier = _prod.supplier || _prod.supplierId || '';
+        item.supplierName = _prod.supplierName || '';
+        item.supplierPhone = _prod.supplierPhone || '';
+        item.price = _prod.price;
+        item.brand = _prod.brand;
+      }
+      this.cart.push(item);
+    }
     this.saveCart();
     this.updateCartB();
   },
   buyNow:function(){
     if(!this.currentProd)return;
     if(!this.validateSelection())return;
-    var cartItem = { id: this.currentProd.id, qty: this.currentQty };
+    var _p = this.currentProd;
+    var cartItem = {
+      id: p.id, qty: this.currentQty,
+      name: _p.name,
+      image: _p.img || _p.image || '',
+      supplier: _p.supplier || _p.supplierId || '',
+      supplierName: _p.supplierName || '',
+      supplierPhone: _p.supplierPhone || '',
+      price: _p.price,
+      brand: _p.brand
+    };
     if (APP.selectedSize) cartItem.size = APP.selectedSize;
     if (APP.selectedColor) cartItem.color = APP.selectedColor;
     this.addCartFull(cartItem);
@@ -11724,7 +11756,19 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
   
   addCart:function(id,qty){
     var ex=null;this.cart.forEach(function(i){if(String(i.id)===String(id))ex=i;});
-    if(ex)ex.qty+=qty;else this.cart.push({id:id,qty:qty});
+    if(ex)ex.qty+=qty;else {
+      var _prod = APP.getProduct(id);
+      this.cart.push({
+        id: id, qty: qty,
+        name: _prod ? _prod.name : '',
+        image: _prod ? (_prod.img || _prod.image || '') : '',
+        supplier: _prod ? (_prod.supplier || _prod.supplierId || '') : '',
+        supplierName: _prod ? (_prod.supplierName || '') : '',
+        supplierPhone: _prod ? (_prod.supplierPhone || '') : '',
+        price: _prod ? _prod.price : 0,
+        brand: _prod ? _prod.brand : ''
+      });
+    }
     this.saveCart();this.updateCartB();
   },
   
