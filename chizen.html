@@ -12116,7 +12116,17 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
       var cat=(prod && prod.category) ? prod.category : "other";
       if(!catGroups[cat]) catGroups[cat]={items:[],subtotal:0};
       var price=prod ? (parseFloat(prod.price)||0) : 0;
-      catGroups[cat].items.push({id:cItem.id,name:prod ? prod.name : "منتج",img:prod ? (prod.img||"") : "",qty:cItem.qty,price:price,subtotal:price*cItem.qty});
+      catGroups[cat].items.push({
+        id: cItem.id,
+        name: prod ? prod.name : "منتج",
+        img: prod ? (prod.img || prod.image || "") : "",
+        qty: cItem.qty,
+        price: price,
+        subtotal: price * cItem.qty,
+        supplier: prod ? (prod.supplier || prod.supplierId || "") : "",
+        supplierName: prod ? (prod.supplierName || "") : "",
+        supplierPhone: prod ? (prod.supplierPhone || "") : ""
+      });
       catGroups[cat].subtotal+=price*cItem.qty;
     });
     
