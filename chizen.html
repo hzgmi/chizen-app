@@ -457,24 +457,16 @@ APP.toggleFavorite = function(id, event) {
     });
 };
 APP.renderFavorites = function() {
-    const grid = document.getElementById('wishlist-grid');
-    if(!grid) return;
-    const favs = this.getFavorites();
-    const prods = window.APP.products || [];
-    const favProds = prods.filter(p => favs.includes(p.id));
-    
-    if(favProds.length === 0) {
-        grid.innerHTML = '<div style="text-align:center;color:#888;grid-column:1/-1;padding:50px;">لا توجد منتجات في المفضلة</div>';
-        return;
+    var c = document.getElementById('fav-list');
+    if(!c) return;
+    var favs = this.getFavorites();
+    var prods = window.APP.products || [];
+    var list = prods.filter(function(p){ return favs.indexOf(p.id) > -1; });
+    if(!list.length){
+      c.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mt);">لا توجد منتجات في المفضلة</div>';
+      return;
     }
-    grid.innerHTML = favProds.map(p => `
-        <div class="p-card" onclick="APP.openProduct('${p.id}')">
-            <svg class="fav-btn" data-id="${p.id}" onclick="APP.toggleFavorite('${p.id}', event)" viewBox="0 0 24 24" style="position:absolute;top:10px;left:10px;width:24px;height:24px;stroke:#D81B60;stroke-width:2;fill:#D81B60;z-index:10;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            <img src="${p.img||p.image||''}" onerror="this.src='https://via.placeholder.com/150'">
-            <div class="p-name">${p.name}</div>
-            <div class="p-price">${p.price} ر.س</div>
-        </div>
-    `).join('');
+    APP.renderProducts(list, c);
 };
 
 // --- المنتجات المشابهة (هتتنادى جوه صفحة المنتج) ---
