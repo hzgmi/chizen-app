@@ -22208,6 +22208,188 @@ html[data-theme="light"] .currency-box {
   max-width: 100% !important;
   min-width: 0 !important;
 }
+
+/* ═══ Flash Cards (Luxury) ═══ */
+#flash-c.flash-row,
+#flash-c {
+  display: flex !important;
+  gap: 15px !important;
+  overflow-x: auto !important;
+  scroll-snap-type: x mandatory !important;
+  scrollbar-width: none !important;
+  padding: 5px 15px 20px 15px !important;
+}
+#flash-c::-webkit-scrollbar { display: none !important; }
+
+.flash-card {
+  min-width: 280px !important;
+  max-width: 300px !important;
+  scroll-snap-align: center !important;
+  background: var(--nav, #fff) !important;
+  border: 1.5px solid var(--bd, #e2e8f0) !important;
+  border-radius: 20px !important;
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  cursor: pointer !important;
+  position: relative !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
+  transition: transform 0.2s !important;
+}
+.flash-card:active { transform: scale(0.97) !important; }
+
+.flash-img-wrapper {
+  width: 100% !important;
+  height: 180px !important;
+  background: var(--bg-img-wrapper, #f8fafc) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  margin-bottom: 12px !important;
+  position: relative !important;
+  border: 1px solid var(--bd, #e2e8f0) !important;
+}
+.flash-img-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.timer-badge {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background: rgba(239, 68, 68, 0.95) !important;
+  backdrop-filter: blur(4px) !important;
+  color: white !important;
+  padding: 5px 10px !important;
+  border-radius: 10px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
+  z-index: 3 !important;
+}
+
+.flash-tags {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  z-index: 3 !important;
+}
+.tag-discount {
+  background: #ef4444 !important;
+  color: white !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  width: fit-content !important;
+}
+.tag-fire {
+  background: #f59e0b !important;
+  color: white !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  width: fit-content !important;
+}
+
+.flash-title {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: var(--cr, #0f172a) !important;
+  margin-bottom: 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.price-yemeni-row {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+}
+.price-yemeni {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: #e11d48 !important;
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 3px !important;
+}
+.price-yemeni span { font-size: 11px !important; opacity: 0.8 !important; }
+.price-old {
+  font-size: 11px !important;
+  color: var(--mt, #64748b) !important;
+  text-decoration: line-through !important;
+  text-decoration-color: #ef4444 !important;
+  text-decoration-thickness: 2px !important;
+  font-weight: 700 !important;
+}
+
+.currency-box {
+  background: var(--bg-curr, #f8fafc) !important;
+  border: 1px solid var(--bd, #e2e8f0) !important;
+  border-radius: 10px !important;
+  padding: 6px 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  margin-bottom: 10px !important;
+}
+.currency-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: var(--mt, #64748b) !important;
+}
+.currency-row strong { color: var(--cr, #0f172a) !important; font-size: 12px !important; }
+.currency-symbol {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 5px !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  margin-left: 4px !important;
+}
+.sym-sar { background: #dcfce7 !important; color: #166534 !important; }
+.sym-usd { background: #e0f2fe !important; color: #0369a1 !important; }
+
+.progress-container {
+  width: 100% !important;
+  height: 6px !important;
+  background: rgba(0,0,0,0.08) !important;
+  border-radius: 10px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  margin-bottom: 5px !important;
+  margin-top: auto !important;
+}
+.progress-bar {
+  height: 100% !important;
+  background: linear-gradient(90deg, #ef4444, #f59e0b) !important;
+  border-radius: 10px !important;
+}
+.sold-text {
+  font-size: 10px !important;
+  color: #e11d48 !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+.sold-text span:last-child { color: var(--mt, #64748b) !important; }
 </style>
 
 <script>
