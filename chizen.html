@@ -22109,56 +22109,84 @@ window.APP.openChzSelect = function(targetId, el) {
   box-sizing: border-box !important;
 }
 
-/* ═══ DARK MODE COLOR FIX ═══ */
-body.dark-mode .price-yemeni {
+/* ═══ DARK MODE COLOR FIX (v2) ═══ */
+html[data-theme="dark"] .price-yemeni,
+html.chz-dark .price-yemeni {
   color: #fb7185 !important;
   text-shadow: 0 0 15px rgba(251, 113, 133, 0.4) !important;
 }
-body.dark-mode .price-yemeni span {
+html[data-theme="dark"] .price-yemeni span,
+html.chz-dark .price-yemeni span {
   color: #f472b6 !important;
 }
-body.dark-mode .price-old {
+html[data-theme="dark"] .price-old,
+html.chz-dark .price-old {
   color: #94a3b8 !important;
   text-decoration-color: #f43f5e !important;
 }
-body.dark-mode .currency-row {
+html[data-theme="dark"] .currency-row,
+html.chz-dark .currency-row {
   color: #cbd5e1 !important;
 }
-body.dark-mode .currency-row strong {
+html[data-theme="dark"] .currency-row strong,
+html.chz-dark .currency-row strong {
   color: #f8fafc !important;
 }
-body.dark-mode .currency-box {
+html[data-theme="dark"] .currency-box,
+html.chz-dark .currency-box {
   background: #0f172a !important;
   border-color: #334155 !important;
 }
-body.dark-mode .sym-sar {
+html[data-theme="dark"] .sym-sar,
+html.chz-dark .sym-sar {
   background: rgba(22, 101, 52, 0.4) !important;
   color: #4ade80 !important;
 }
-body.dark-mode .sym-usd {
+html[data-theme="dark"] .sym-usd,
+html.chz-dark .sym-usd {
   background: rgba(3, 105, 161, 0.4) !important;
   color: #38bdf8 !important;
 }
-body.dark-mode .product-title {
+html[data-theme="dark"] .product-title,
+html.chz-dark .product-title {
   color: #f8fafc !important;
 }
-body.dark-mode .product-desc {
+html[data-theme="dark"] .product-desc,
+html.chz-dark .product-desc {
   color: #94a3b8 !important;
 }
-body.dark-mode .rating-num {
+html[data-theme="dark"] .rating-num,
+html.chz-dark .rating-num {
   color: #cbd5e1 !important;
 }
-body.dark-mode .product-card {
+html[data-theme="dark"] .product-card,
+html.chz-dark .product-card {
   background: #1e293b !important;
   border-color: #334155 !important;
 }
-body.dark-mode .product-img-wrapper {
+html[data-theme="dark"] .product-img-wrapper,
+html.chz-dark .product-img-wrapper {
   background: #0f172a !important;
   border-color: #334155 !important;
 }
-body.dark-mode .discount-badge {
+html[data-theme="dark"] .discount-badge,
+html.chz-dark .discount-badge {
   background: linear-gradient(135deg, #f43f5e, #e11d48) !important;
   box-shadow: 0 4px 15px rgba(244, 63, 94, 0.5) !important;
+}
+
+/* Light mode (default) - ensure visible */
+html[data-theme="light"] .price-yemeni {
+  color: #e11d48 !important;
+}
+html[data-theme="light"] .product-title {
+  color: #0f172a !important;
+}
+html[data-theme="light"] .product-card {
+  background: #ffffff !important;
+}
+html[data-theme="light"] .currency-box {
+  background: #f8fafc !important;
 }
 </style>
 
