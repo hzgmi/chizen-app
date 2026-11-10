@@ -11603,15 +11603,51 @@ var APP={
     var c=document.getElementById('flash-c');if(!c)return;
     var items=this.products.filter(function(p){return p.old&&p.price&&(p.old-p.price)/p.old>=0.1;}).slice(0,10);
     if(!items.length){var fs=document.getElementById('flash-sec');if(fs)fs.style.display='none';return;}
+
+    var rates = { SAR: 135, USD: 505 };
+
     c.innerHTML=items.map(function(p){
-      var disc=Math.round(((p.old-p.price)/p.old)*100);
-      return '<div class="fcard" onclick="APP.openProduct(\''+esc(p.id)+'\')">'+
-        '<div class="fcard-img"><img src="'+esc(p.img||'')+'" loading="lazy"><div class="fcard-disc">-'+disc+'%</div></div>'+
-        '<div class="fcard-body">'+
-          '<div class="fcard-name">'+esc(p.name)+'</div>'+
-          '<div class="fcard-price"><span class="fp-new">'+esc(p.price)+'</span><span class="fp-cur">ر.س</span><span class="fp-old">'+esc(p.old)+'</span></div>'+
-        '</div>'+
-      '</div>';
+      var _disc = Math.round(((p.old-p.price)/p.old)*100);
+      var _priceYER = (p.priceYER != null) ? p.priceYER : (p.price || 0);
+      var _oldPrice = Number(p.old) || 0;
+      var _sar = (p.priceSAR != null) ? p.priceSAR : (_priceYER / rates.SAR);
+      var _usd = (p.priceUSD != null) ? p.priceUSD : (_priceYER / rates.USD);
+      var _soldPct = p.soldPercent || 75;
+      var _remaining = p.remaining || 5;
+
+      var _html = '<div class="flash-card" onclick="APP.openProduct(\''+esc(p.id)+'\')">';
+
+      // Image
+      _html += '<div class="flash-img-wrapper">';
+      _html += '<img src="'+esc(p.img||p.image||'')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
+      _html += '<div class="timer-badge">⏱️ <span class="timer-text">02:45:10</span></div>';
+      _html += '<div class="flash-tags">';
+      _html += '<div class="tag-discount">-'+_disc+'%</div>';
+      if (_disc >= 25) _html += '<div class="tag-fire">🔥</div>';
+      _html += '</div>';
+      _html += '</div>';
+
+      // Title
+      _html += '<div class="flash-title">'+esc(p.name)+'</div>';
+
+      // Price (YER + old)
+      _html += '<div class="price-yemeni-row">';
+      _html += '<div class="price-yemeni">'+Math.round(_priceYER).toLocaleString('en')+' <span>YER ¥</span></div>';
+      if (_oldPrice > 0) _html += '<div class="price-old">'+Math.round(_oldPrice).toLocaleString('en')+'</div>';
+      _html += '</div>';
+
+      // Currency box (SAR + USD)
+      _html += '<div class="currency-box">';
+      _html += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>'+_sar.toFixed(2)+'</strong></div>';
+      _html += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>'+_usd.toFixed(2)+'</strong></div>';
+      _html += '</div>';
+
+      // Progress
+      _html += '<div class="progress-container"><div class="progress-bar" style="width:'+_soldPct+'%;"></div></div>';
+      _html += '<div class="sold-text"><span>تم بيع '+_soldPct+'%</span><span>بقي '+_remaining+' قطع</span></div>';
+
+      _html += '</div>';
+      return _html;
     }).join('');
   },
 
