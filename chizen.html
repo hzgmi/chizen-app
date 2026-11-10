@@ -12675,10 +12675,20 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
   
   renderFav:function(){
     var c=document.getElementById('fav-list');if(!c)return;
-    if(!this.favorites.length){c.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mt);">لا توجد منتجات في المفضلة</div>';return;}
-    var list=[];this.favorites.forEach(function(id){var p=APP.getProduct(id);if(p)list.push(p);});
-    this.renderProducts(list);
-    document.getElementById('fav-list').innerHTML=document.getElementById('prods').innerHTML;
+    var list=[];
+    this.favorites.forEach(function(id){var p=APP.getProduct(id);if(p)list.push(p);});
+    if(!list.length){
+      c.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mt);">لا توجد منتجات في المفضلة</div>';
+      return;
+    }
+    // نستخدم renderProducts على #fav-list (مثل #prods)
+    var _prods = document.getElementById('prods');
+    if(_prods) _prods.id = 'prods_hidden_tmp';
+    c.id = 'prods';
+    try { APP.renderProducts(list); } finally {
+      c.id = 'fav-list';
+      if(_prods) _prods.id = 'prods';
+    }
   },
   
   togFav:function(id,el){
