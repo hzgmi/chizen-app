@@ -10501,123 +10501,7 @@ html:not([data-theme="light"]) body #sc-home #brands-list .brand-chip { color: #
 body #sc-home #flash-timer { display: none !important; }
 </style>
 
-<style id="chz-flash-v17-css">
-body #sc-home #flash-sec {
-  margin: 16px 0 8px;
-  padding: 0;
-}
-body #sc-home #flash-sec .sh {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 15px 6px;
-}
-body #sc-home #flash-sec .stl {
-  font-weight: 900; font-size: 18px;
-  background: linear-gradient(90deg, #ff4d94, #a855f7);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-body #sc-home #flash-sec .flash-view-all {
-  font-size: 12px; font-weight: 700;
-  color: #ff4d94; cursor: pointer;
-}
 
-
-
-
-html:not([data-theme="light"]) 
-body #sc-home .flash-row {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 4px 15px 10px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-snap-type: x mandatory;
-}
-body #sc-home .flash-row::-webkit-scrollbar { display: none; }
-/* ═══ OLD FCARD CSS REMOVED ═══ */
-body #sc-home .fcard:active { transform: scale(0.96); }
-body #sc-home .fcard-img {
-  position: relative; width: 100%; height: 130px;
-  background: #f4f6fa; overflow: hidden;
-}
-body #sc-home .fcard-img img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-}
-body #sc-home .fcard-disc {
-  position: absolute; top: 6px; right: 6px;
-  background: linear-gradient(135deg, #ff4d94, #f97316);
-  color: #fff; font-weight: 900; font-size: 11px;
-  padding: 3px 8px; border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(255,77,148,0.4);
-}
-body #sc-home .fcard-body { padding: 8px 10px 10px; }
-body #sc-home .fcard-name {
-  font-size: 11px; font-weight: 700;
-  color: #1f2937; line-height: 1.3;
-  margin-bottom: 5px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 28px;
-}
-body #sc-home .fcard-price {
-  display: flex; align-items: baseline; gap: 3px;
-  font-size: 13px;
-}
-body #sc-home .fcard-price .fp-new { color: #ff4d94; font-weight: 900; }
-body #sc-home .fcard-price .fp-cur { color: #ff4d94; font-size: 10px; }
-body #sc-home .fcard-price .fp-old {
-  color: #9ca3af; font-size: 10px;
-  text-decoration: line-through; margin-left: auto;
-}
-html:not([data-theme="light"]) body #sc-home .fcard {
-  background: linear-gradient(180deg, #1e2438, #181d30);
-  border-color: rgba(255,255,255,0.08);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-}
-html:not([data-theme="light"]) body #sc-home .fcard-img { background: #131829; }
-html:not([data-theme="light"]) body #sc-home .fcard-name { color: #e8ecf5; }
-html:not([data-theme="light"]) body #sc-home .fcard-price .fp-old { color: #6b7280; }
-html:not([data-theme="light"]) 
-body #sc-home #brands-sec {
-  margin: 12px 0 4px;
-}
-body #sc-home #brands-sec .sh { padding: 0 15px 8px; }
-body #sc-home #brands-sec .stl { font-weight: 900; font-size: 16px; color: var(--chz-text, #1f2937); }
-html:not([data-theme="light"]) body #sc-home #brands-sec .stl { color: #e8ecf5; }
-body #sc-home #brands-list {
-  display: flex; gap: 8px;
-  overflow-x: auto;
-  padding: 4px 15px 12px;
-  scrollbar-width: none;
-}
-body #sc-home #brands-list::-webkit-scrollbar { display: none; }
-body #sc-home #brands-list .brand-chip {
-  flex-shrink: 0;
-  padding: 8px 16px;
-  background: var(--bg2, #f4f6fa);
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 20px;
-  font-weight: 700; font-size: 12px;
-  color: var(--chz-text, #1f2937);
-  white-space: nowrap;
-  cursor: pointer;
-  transition: transform .15s ease, background .15s ease;
-}
-body #sc-home #brands-list .brand-chip:active { transform: scale(0.94); }
-html:not([data-theme="light"]) body #sc-home #brands-list .brand-chip {
-  background: #1e2438;
-  border-color: rgba(255,255,255,0.08);
-  color: #e8ecf5;
-}
-@media (max-width: 359px) {
-  body #sc-home .fcard { flex: 0 0 130px; min-width: 130px; max-width: 130px; }
-  body #sc-home .fcard-img { height: 115px; }
-  body #sc-home #flash-sec .stl { font-size: 16px; }
-}
-</style>
 
 <style id="chz-banner-v10-css">
 body #sc-home #slides {
@@ -22633,6 +22517,182 @@ body #sc-home #flash-c .flash-card {
   console.log('[Unified Select] ready — single source of truth');
 })();
 </script>
+
+<style id="chz-flash-custom-css">
+/* ================= شريط العروض الأفقي ================= */
+body #sc-home #flash-sec .flash-row {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 5px 15px 20px 15px;
+  -webkit-overflow-scrolling: touch;
+}
+body #sc-home #flash-sec .flash-row::-webkit-scrollbar { display: none; }
+
+/* ================= بطاقة العرض ================= */
+body #sc-home #flash-sec .flash-card {
+  min-width: 280px;
+  max-width: 300px;
+  scroll-snap-align: center;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  transition: transform 0.2s;
+  height: auto !important; /* لإلغاء أي ارتفاع قديم */
+  margin: 0 !important;
+}
+body #sc-home #flash-sec .flash-card:active { transform: scale(0.97); }
+
+/* حاوية الصورة */
+body #sc-home #flash-sec .flash-img-wrapper {
+  width: 100%;
+  height: 180px;
+  background: #f8fafc;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  position: relative;
+  border: 1px solid #e2e8f0;
+}
+body #sc-home #flash-sec .flash-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* المؤقت */
+body #sc-home #flash-sec .timer-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(239, 68, 68, 0.95);
+  backdrop-filter: blur(4px);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* شارات الخصم */
+body #sc-home #flash-sec .flash-tags {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+body #sc-home #flash-sec .tag-discount { background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; width: fit-content; }
+body #sc-home #flash-sec .tag-fire { background: #f59e0b; color: white; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; width: fit-content; }
+
+/* اسم المنتج */
+body #sc-home #flash-sec .flash-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* السعر اليمني */
+body #sc-home #flash-sec .price-yemeni-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+body #sc-home #flash-sec .price-yemeni {
+  font-size: 18px;
+  font-weight: 900;
+  color: #e11d48;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+body #sc-home #flash-sec .price-yemeni span { font-size: 11px; opacity: 0.8; }
+body #sc-home #flash-sec .price-old {
+  font-size: 11px;
+  color: #64748b;
+  text-decoration: line-through;
+  text-decoration-color: #ef4444;
+  text-decoration-thickness: 2px;
+  font-weight: 700;
+}
+
+/* صندوق العملات */
+body #sc-home #flash-sec .currency-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+body #sc-home #flash-sec .currency-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+}
+body #sc-home #flash-sec .currency-row strong { color: #0f172a; font-size: 12px; }
+body #sc-home #flash-sec .currency-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  margin-left: 4px;
+}
+body #sc-home #flash-sec .sym-sar { background-color: #dcfce7; color: #166534; }
+body #sc-home #flash-sec .sym-usd { background-color: #e0f2fe; color: #0369a1; }
+
+/* شريط التقدم */
+body #sc-home #flash-sec .progress-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 5px;
+  margin-top: auto;
+}
+body #sc-home #flash-sec .progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444, #f59e0b);
+  border-radius: 10px;
+}
+body #sc-home #flash-sec .sold-text {
+  font-size: 10px;
+  color: #e11d48;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+}
+body #sc-home #flash-sec .sold-text span:last-child { color: #64748b; }
+</style>
 </body>
 </html
     renderPassengers: function() {
