@@ -16,6 +16,140 @@
     background-color: #0a0825 !important;
     color-scheme: dark !important;
   }
+
+/* ═══ Product Cards (Redesign) ═══ */
+.prods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px 12px; }
+.prod {
+  background: var(--nav);
+  border: 1px solid var(--bd);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  transition: transform .2s, box-shadow .2s;
+}
+.prod:active { transform: scale(.97); }
+.prod-i {
+  height: 190px;
+  background: linear-gradient(135deg, #f8f9ff, #eef0f8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 8px;
+}
+.prod-i img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform .3s;
+}
+.prod:active .prod-i img { transform: scale(1.05); }
+.prod-disc {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 8px;
+  border-radius: 8px;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(239,68,68,.4);
+}
+.prod-f {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  cursor: pointer;
+  transition: transform .2s;
+}
+.prod-f:active { transform: scale(.9); }
+.prod-f svg { width: 16px; height: 16px; stroke: #2D3748; stroke-width: 2; fill: none; }
+.prod-f.active svg { fill: #ec4899; stroke: #ec4899; }
+.prod-cart {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(59,130,246,.4);
+  cursor: pointer;
+  transition: transform .2s;
+}
+.prod-cart:active { transform: scale(.9); }
+.prod-cart svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; fill: none; }
+.prod-brand-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0,0,0,.75);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+  z-index: 3;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.prod-inf { padding: 12px 14px 14px; background: var(--nav); }
+.prod-n {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--cr);
+  margin-bottom: 6px;
+  line-height: 1.35;
+  height: 36px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.pr {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.price {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--pk);
+  letter-spacing: -.3px;
+}
+.price-c {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mt);
+}
+.price-o {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mt2);
+  text-decoration: line-through;
+}
 </style>
 <script id="v335-theme-lock">
   (function(){
@@ -11336,7 +11470,24 @@ var APP={
     }
     c.innerHTML=list.map(function(p){
       var fav=APP.favorites.indexOf(p.id)>-1;
-      return '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')"><div class="prod-b">'+esc(p.badge||'')+'</div><div class="prod-f'+(fav?' active':'')+'" onclick="event.stopPropagation();APP.togFav(\''+esc(p.id)+'\',this)"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><div class="prod-i"><img src="'+esc(p.img||'')+'" loading="lazy"><div class="color-swatches" id="color-swatches-container" style="display:none;"></div></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+esc(p.price)+'</span><span class="price-c">ر.س</span>'+(p.old?'<span class="price-o">'+esc(p.old)+'</span>':'')+'</div></div></div>';
+      var _disc = 0;
+      if (p.old && p.price && p.old > p.price) _disc = Math.round((1 - p.price / p.old) * 100);
+      var _brand = p.brand || '';
+      var _fp = formatPrice(p);
+      var _html = '<div class="prod" onclick="APP.openProduct(\''+esc(p.id)+'\')">';
+      _html += '<div class="prod-f'+(fav?' active':'')+'" onclick="event.stopPropagation();APP.togFav(\''+esc(p.id)+'\',this)"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>';
+      _html += '<div class="prod-i">';
+      _html += '<img src="'+esc(p.img||p.image||'')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
+      if (_disc > 0) _html += '<div class="prod-disc">-'+_disc+'%</div>';
+      if (_brand) _html += '<div class="prod-brand-badge">'+esc(_brand)+'</div>';
+      _html += '<div class="prod-cart" onclick="event.stopPropagation();APP.addCart(\''+esc(p.id)+'\',1)"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>';
+      _html += '</div>';
+      _html += '<div class="prod-inf">';
+      _html += '<div class="prod-n">'+esc(p.name)+'</div>';
+      _html += '<div class="pr"><span class="price">'+_fp.primary+'</span><span class="price-c">'+_fp.symbol+'</span>';
+      if (p.old && p.old > p.price) _html += '<span class="price-o">'+esc(p.old)+'</span>';
+      _html += '</div></div></div>';
+      return _html;
     }).join('');
   },
   
