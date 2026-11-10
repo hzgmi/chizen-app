@@ -11699,18 +11699,17 @@ var APP={
     catScreen.scrollTop = 0;
     this.currentSc = 'cat';
 
-    document.getElementById('cat-title').innerHTML = icon + ' ' + name;
+    var titleEl = document.getElementById('cat-title');
+    if (titleEl) titleEl.innerHTML = (icon || '') + ' ' + (name || 'القسم');
 
     var prods = this.products.filter(p => p.category === key);
     var grid = document.getElementById('cat-prods');
-    
+
     if(grid) {
        if(prods.length === 0) {
            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#888;">لا توجد منتجات في هذا القسم حالياً</div>';
        } else {
-           grid.innerHTML = prods.map(p => {
-              return '<div class="prod" onclick="APP.openProduct(\''+p.id+'\')"><div class="prod-i"><img src="'+(p.img||'')+'"></div><div class="prod-inf"><div class="prod-n">'+esc(p.name)+'</div><div class="pr"><span class="price">'+(p.price||0)+'</span><span class="price-c">ر.س</span></div></div></div>';
-           }).join('');
+           APP.renderProducts(prods, grid);
        }
     }
   },
