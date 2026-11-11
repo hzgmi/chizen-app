@@ -22573,55 +22573,34 @@ body #sc-home #flash-c .flash-card {
 
 
 
+
+
 <script>
-// VISIBLE-DEBUG
-(function(){
-  var tried = 0;
-  var iv = setInterval(function(){
-    tried++;
-    var c = document.getElementById('flash-c');
-    if (!c) return;
-    
-    if (window.APP && window.APP.products && window.APP.products.length > 0) {
-      var total = window.APP.products.length;
-      var withFlash = window.APP.products.filter(function(p){ return p.flashEnabled === true; }).length;
-      var withStock = window.APP.products.filter(function(p){ return p.flashEnabled === true && Number(p.flashStock) > 0; }).length;
+// FORCE-CALL
+setTimeout(function(){
+  try {
+    if (window.APP && window.APP.renderFlash) {
+      console.log('[FORCE] Calling APP.renderFlash()...');
+      window.APP.renderFlash();
+      var c = document.getElementById('flash-c');
+      var count = c ? c.children.length : -1;
+      console.log('[FORCE] After call, flash-c has', count, 'children');
       
-      // فحص حالة flash-c
-      var cardsInC = c.children.length;
-      var style = window.getComputedStyle(c);
-      var display = style.display;
-      var height = style.height;
-      
-      // أول 3 أسماء منتجات في flash-c (إذا وجدت)
-      var names = [];
-      for (var i = 0; i < Math.min(3, c.children.length); i++) {
-        var nameEl = c.children[i].querySelector('.flash-title');
-        if (nameEl) names.push(nameEl.textContent.substring(0, 15));
-      }
-      
-      // البحث عن بطاقات أخرى في الصفحة
-      var allCards = document.querySelectorAll('.flash-card');
-      var allProds = document.querySelectorAll('.prod, .product-card, [class*="product"]');
-      
-      if (!document.getElementById('debug-banner')) {
-        var b = document.createElement('div');
-        b.id = 'debug-banner';
-        b.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font-size:11px;padding:8px;z-index:999999;font-family:monospace;direction:ltr;text-align:center;line-height:1.5;';
-        document.body.appendChild(b);
-      }
-      
-      document.getElementById('debug-banner').innerHTML =
-        'TOTAL:' + total + ' | FLASH:' + withFlash + ' | STOCK>0:' + withStock + '<br>' +
-        'IN flash-c: ' + cardsInC + ' | display: ' + display + ' | height: ' + height + '<br>' +
-        'NAMES: ' + (names.length ? names.join(', ') : '—') + '<br>' +
-        'ALL .flash-card: ' + allCards.length + ' | ALL .prod: ' + allProds.length;
-      
-      clearInterval(iv);
+      // عرض النتيجة
+      var b = document.createElement('div');
+      b.style.cssText = 'position:fixed;top:50%;left:10%;right:10%;background:#000;color:#0f0;padding:15px;z-index:999999;font-family:monospace;direction:ltr;text-align:center;font-size:14px;border:2px solid #0f0;border-radius:10px;';
+      b.innerHTML = 'FORCE CALL RESULT:<br>' +
+        'flash-c children: ' + count + '<br>' +
+        'APP.products: ' + (window.APP.products ? window.APP.products.length : 'NO') + '<br>' +
+        'renderFlash exists: ' + (window.APP.renderFlash ? 'YES' : 'NO');
+      document.body.appendChild(b);
+    } else {
+      alert('APP.renderFlash غير موجود!');
     }
-    if (tried > 30) clearInterval(iv);
-  }, 500);
-})();
+  } catch(e) {
+    alert('خطأ: ' + e.message);
+  }
+}, 4000);
 </script>
 </body>
 </html
