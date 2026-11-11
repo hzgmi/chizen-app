@@ -22372,18 +22372,62 @@ html[data-theme="light"] .currency-box {
 /* في الوضع الليلي، البطاقة تبقى بيضاء لتظهر (كما في تصميمك المرجعي) */
 </style>
 
+
+
 <script>
-// final-flash-trigger
+// STRONG-FLASH-TRIGGER
 (function(){
+  var done = false;
+  function drawFlash(products) {
+    var c = document.getElementById('exactFlashContainer');
+    if (!c) return; // الحاوية غير موجودة
+    if (!products || products.length === 0) {
+      c.innerHTML = '<div style="padding:20px;text-align:center;color:#e11d48;font-weight:bold;font-size:14px;background:#fff;border-radius:12px;margin:10px;">⚠️ لم تصل المنتجات من السيرفر (عدد: 0)</div>';
+      return;
+    }
+    var rates = { SAR: 135, USD: 505 };
+    var out = '';
+    products.slice(0, 10).forEach(function(p){
+      var disc = (p.old && p.price && p.old > p.price) ? Math.round(((p.old - p.price)/p.old)*100) : 0;
+      var py = (p.priceYER != null) ? p.priceYER : (p.price || 0);
+      var op = Number(p.old) || 0;
+      var sar = (p.priceSAR != null) ? p.priceSAR : (py / rates.SAR);
+      var usd = (p.priceUSD != null) ? p.priceUSD : (py / rates.USD);
+      var sold = p.soldPercent || 75;
+      var rem = p.remaining || 5;
+      var img = p.img || p.image || 'https://via.placeholder.com/300';
+      var name = (p.name || 'منتج').replace(/</g, '&lt;');
+      
+      out += '<div class="exact-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
+      out += '<div class="exact-card-img"><img src="' + img + '">';
+      if (disc > 0) out += '<div class="exact-card-disc">-' + disc + '%</div>';
+      out += '<div class="exact-card-timer">02:45</div></div>';
+      out += '<div class="exact-card-name">' + name + '</div>';
+      out += '<div class="exact-card-price">' + Math.round(py).toLocaleString('en') + ' <small>YER</small>';
+      if (op > 0) out += ' <span class="exact-card-old">' + Math.round(op).toLocaleString('en') + '</span>';
+      out += '</div>';
+      out += '<div class="exact-card-cur"><div><span>SAR ﷼</span><b>' + sar.toFixed(2) + '</b></div><div><span>USD $</span><b>' + usd.toFixed(2) + '</b></div></div>';
+      out += '<div class="exact-card-prog"><div style="width:' + sold + '%"></div></div>';
+      out += '<div class="exact-card-sold"><span>تم بيع ' + sold + '%</span><span>بقي ' + rem + '</span></div>';
+      out += '</div>';
+    });
+    c.innerHTML = out;
+    done = true;
+    console.log('[FLASH-STRONG] Rendered', products.length, 'products');
+  }
+
+  // 1. نحاول البحث في APP.products كل نصف ثانية
   var tries = 0;
   var iv = setInterval(function(){
     tries++;
-    if (window.APP && window.APP.products && window.APP.products.length > 0 && window.APP.renderFlash) {
-      window.APP.renderFlash();
+    if (window.APP && window.APP.products && window.APP.products.length > 0) {
+      if (!done) drawFlash(window.APP.products);
       clearInterval(iv);
-      console.log('[FLASH-FINAL] rendered after', tries, 'tries');
     }
-    if (tries > 40) clearInterval(iv); // توقف بعد 20 ثانية
+    if (tries > 40) {
+      clearInterval(iv);
+      if (!done) drawFlash([]); // إذا فشل بعد 20 ثانية، نعرض رسالة الخطأ
+    }
   }, 500);
 })();
 </script>
