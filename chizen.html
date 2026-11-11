@@ -11458,26 +11458,38 @@ var APP={
   renderFlash:function(){
     var c = document.getElementById('exactFlashContainer');
     if (!c) return;
-    // فلترة المنتجات: يجب أن تكون flashEnabled و active و stock > 0
+    var now = new Date().getTime();
+    // فلترة: فلاش مفعّل + غير منتهي + كمية فلاش > 0
     var flashItems = (this.products || []).filter(function(p){
-      return p.flashEnabled === true && p.active !== false && (p.stock === undefined || p.stock > 0);
+      if (p.flashEnabled !== true) return false;
+      if (p.active === false) return false;
+      var fs = (p.flashStock != null) ? Number(p.flashStock) : null;
+      if (fs === null || fs <= 0) return false;
+      if (p.flashEndsAt) {
+        var end = new Date(p.flashEndsAt).getTime();
+        if (!isNaN(end) && end < now) return false;
+      }
+      return true;
     }).slice(0, 10);
+
     if (!flashItems.length) { c.innerHTML = ''; c.style.display = 'none'; return; }
     c.style.display = 'flex';
     var rates = { SAR: 135, USD: 505 };
     var out = '';
     flashItems.forEach(function(p){
-      var py = (p.priceYER != null) ? p.priceYER : (p.price || 0);
+      var py = (p.flashPrice != null) ? Number(p.flashPrice) : ((p.priceYER != null) ? p.priceYER : (p.price || 0));
       var op = Number(p.oldPriceYER || p.oldPrice) || 0;
       var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
-      var sar = (p.priceSAR != null) ? p.priceSAR : (py / rates.SAR);
-      var usd = (p.priceUSD != null) ? p.priceUSD : (py / rates.USD);
-      var rem = (p.stock != null) ? p.stock : 0;
-      var total = rem + (p.soldPercent ? Math.round(rem * (100/p.soldPercent) - rem) : 20);
-      var sold = total > 0 ? Math.round(((total - rem) / total) * 100) : 0;
-      if (sold > 95) sold = 95;
+      var sar = py / rates.SAR;
+      var usd = py / rates.USD;
+      var rem = Number(p.flashStock) || 0;
+      var initial = rem;
+      var pct = initial > 0 ? Math.round(((initial - rem) / initial) * 100) : 0;
+      if (pct === 0) pct = 75;
+      if (pct > 95) pct = 95;
       var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
       var name = (p.name || 'منتج').replace(/</g, '&lt;');
+      var endsAt = p.flashEndsAt || '';
       out += '<div class="exact-card">';
       out += '<div class="exact-card-img" onclick="APP.openProduct(\'' + (p.id||'') + '\')"><img src="' + img + '" loading="lazy">';
       if (disc > 0) out += '<div class="exact-card-disc">-' + disc + '%</div>';
@@ -11491,7 +11503,7 @@ var APP={
       out += '<div class="exact-card-stock">بقي ' + rem + ' قطع</div>';
       out += '<button class="exact-card-cart" onclick="event.stopPropagation();APP.addCart(\'' + (p.id||'') + '\',1);APP.toast(\'✅ أضيف للسلة\')">🛒</button>';
       out += '</div>';
-      out += '<div class="exact-card-prog"><div style="width:' + sold + '%"></div></div>';
+      out += '<div class="exact-card-prog"><div style="width:' + pct + '%"></div></div>';
       out += '</div>';
     });
     c.innerHTML = out;
