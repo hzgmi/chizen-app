@@ -11405,72 +11405,59 @@ var APP={
   },
   
   renderFlash:function(){
-    var c=document.getElementById('flash-c');
-    if(!c) {
-      console.warn('[FLASH] #flash-c not found');
-      return;
-    }
-    // Debug Badge
-    var dbg = document.getElementById('flash-debug');
-    if (!dbg) {
-      dbg = document.createElement('div');
-      dbg.id = 'flash-debug';
-      dbg.style.cssText = 'position:absolute;top:-20px;right:10px;background:#000;color:#0f0;font-size:10px;padding:2px 6px;border-radius:4px;z-index:9999;font-family:monospace;';
-      if (c.parentNode) c.parentNode.style.position = 'relative';
-      if (c.parentNode) c.parentNode.appendChild(dbg);
-    }
-    var _prodCount = (this.products || []).length;
-    dbg.textContent = 'FLASH: ' + _prodCount + ' products';
-
-    // كل المنتجات (بدون فلتر — fallback لأول 10)
-    var items = (this.products || []).slice(0, 10);
-    if (!items.length) {
-      c.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">لا توجد منتجات</div>';
-      return;
-    }
-
-    var rates = { SAR: 135, USD: 505 };
-
-    var html = '';
-    items.forEach(function(p){
-      var _disc = 0;
-      if (p.old && p.price && p.old > p.price) {
-        _disc = Math.round(((p.old - p.price)/p.old)*100);
+    var c = document.getElementById('flash-c');
+    if (!c) return;
+    
+    var now = new Date().getTime();
+    var items = (this.products || []).filter(function(p){
+      if (p.flashEnabled !== true) return false;
+      if (p.flashStock !== undefined && Number(p.flashStock) <= 0) return false;
+      if (p.flashEndsAt) {
+        var end = new Date(p.flashEndsAt).getTime();
+        if (!isNaN(end) && end < now) return false;
       }
-      var _priceYER = (p.priceYER != null) ? p.priceYER : (p.price || 0);
-      var _oldPrice = Number(p.old) || 0;
-      var _sar = (p.priceSAR != null) ? p.priceSAR : (_priceYER / rates.SAR);
-      var _usd = (p.priceUSD != null) ? p.priceUSD : (_priceYER / rates.USD);
-      var _soldPct = p.soldPercent || 75;
-      var _remaining = p.remaining || 5;
-
-      html += '<div class="flash-card" onclick="APP.openProduct(\'' + esc(p.id) + '\')">';
-      html += '<div class="flash-img-wrapper">';
-      html += '<img src="' + esc(p.img || p.image || '') + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
-      html += '<div class="timer-badge">⏱️ <span class="timer-text">02:45:10</span></div>';
+      return true;
+    }).slice(0, 10);
+    
+    if (!items.length) {
+      c.innerHTML = '';
+      return;
+    }
+    
+    var rates = { SAR: 135, USD: 505 };
+    var html = '';
+    
+    items.forEach(function(p){
+      var py = (p.flashPrice != null) ? Number(p.flashPrice) : ((p.priceYER != null) ? p.priceYER : (p.price || 0));
+      var op = Number(p.oldPriceYER || p.oldPrice) || 0;
+      var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
+      var sar = py / rates.SAR;
+      var usd = py / rates.USD;
+      var rem = (p.flashStock != null) ? Number(p.flashStock) : 5;
+      var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
+      var name = (p.name || 'منتج').replace(/</g, '&lt;');
+      
+      html += '<div class="flash-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
+      html += '<div class="flash-img-wrapper"><img src="' + img + '" loading="lazy">';
+      html += '<div class="timer-badge">⚡ <span class="timer-text">02:45</span></div>';
       html += '<div class="flash-tags">';
-      if (_disc > 0) html += '<div class="tag-discount">-' + _disc + '%</div>';
-      if (_disc >= 25) html += '<div class="tag-fire">🔥</div>';
-      html += '</div>';
-      html += '</div>';
-      html += '<div class="flash-title">' + esc(p.name) + '</div>';
-      html += '<div class="price-yemeni-row">';
-      html += '<div class="price-yemeni">' + Math.round(_priceYER).toLocaleString('en') + ' <span>YER ¥</span></div>';
-      if (_oldPrice > 0) html += '<div class="price-old">' + Math.round(_oldPrice).toLocaleString('en') + '</div>';
+      if (disc > 0) html += '<div class="tag-discount">-' + disc + '%</div>';
+      html += '</div></div>';
+      html += '<div class="flash-title">' + name + '</div>';
+      html += '<div class="price-yemeni-row"><div class="price-yemeni">' + Math.round(py).toLocaleString('en') + ' <span>YER ¥</span></div>';
+      if (op > 0) html += '<div class="price-old">' + Math.round(op).toLocaleString('en') + '</div>';
       html += '</div>';
       html += '<div class="currency-box">';
-      html += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + _sar.toFixed(2) + '</strong></div>';
-      html += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + _usd.toFixed(2) + '</strong></div>';
+      html += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div>';
+      html += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div>';
       html += '</div>';
-      html += '<div class="progress-container"><div class="progress-bar" style="width:' + _soldPct + '%;"></div></div>';
-      html += '<div class="sold-text"><span>تم بيع ' + _soldPct + '%</span><span>بقي ' + _remaining + ' قطع</span></div>';
+      html += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
+      html += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div>';
       html += '</div>';
     });
-
+    
     c.innerHTML = html;
-    console.log('[FLASH] rendered', items.length, 'items');
   },
-
   renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
     var self=this;
