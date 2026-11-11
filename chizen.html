@@ -11407,61 +11407,8 @@ var APP={
   },
   
   renderFlash:function(){
-    // قراءة من window.APP.products إذا كانت this.products فارغة
-    var products = (this.products && this.products.length > 0) ? this.products : (window.APP && window.APP.products ? window.APP.products : []);
-    
-    var c = document.getElementById('flash-c');
-    if (!c) return;
-    
-    var now = new Date().getTime();
-    var items = products.filter(function(p){
-      if (p.flashEnabled !== true) return false;
-      if (p.flashStock !== undefined && Number(p.flashStock) <= 0) return false;
-      if (p.flashEndsAt) {
-        var end = new Date(p.flashEndsAt).getTime();
-        if (!isNaN(end) && end < now) return false;
-      }
-      return true;
-    }).slice(0, 10);
-    
-    if (!items.length) {
-      c.innerHTML = '';
-      return;
-    }
-    
-    var rates = { SAR: 135, USD: 505 };
-    var html = '';
-    
-    items.forEach(function(p){
-      var py = (p.flashPrice != null) ? Number(p.flashPrice) : ((p.priceYER != null) ? p.priceYER : (p.price || 0));
-      var op = Number(p.oldPriceYER || p.oldPrice) || 0;
-      var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
-      var sar = py / rates.SAR;
-      var usd = py / rates.USD;
-      var rem = (p.flashStock != null) ? Number(p.flashStock) : 5;
-      var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
-      var name = (p.name || 'منتج').replace(/</g, '&lt;');
-      
-      html += '<div class="flash-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
-      html += '<div class="flash-img-wrapper"><img src="' + img + '" loading="lazy">';
-      html += '<div class="timer-badge">⚡ <span class="timer-text">02:45</span></div>';
-      html += '<div class="flash-tags">';
-      if (disc > 0) html += '<div class="tag-discount">-' + disc + '%</div>';
-      html += '</div></div>';
-      html += '<div class="flash-title">' + name + '</div>';
-      html += '<div class="price-yemeni-row"><div class="price-yemeni">' + Math.round(py).toLocaleString('en') + ' <span>YER ¥</span></div>';
-      if (op > 0) html += '<div class="price-old">' + Math.round(op).toLocaleString('en') + '</div>';
-      html += '</div>';
-      html += '<div class="currency-box">';
-      html += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div>';
-      html += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div>';
-      html += '</div>';
-      html += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
-      html += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div>';
-      html += '</div>';
-    });
-    
-    c.innerHTML = html;
+    // تم تعطيل هذه الدالة القديمة. الحارس (Observer) هو المسؤول عن رسم العروض.
+    return;
   },
   renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
