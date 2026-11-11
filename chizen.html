@@ -8347,9 +8347,6 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 <div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
 
-
-<div class="sec" id="brands-sec">
-  
 <div class="search-wrapper">
 <div class="smart-search-container">
   <div class="ss-wrapper">
@@ -8367,7 +8364,8 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 
 </div>
-<div class="brands" id="brands-list"></div>
+<div class="sec" id="brands-sec">
+  <div class="brands" id="brands-list"></div>
 </div>
 
 <div class="sec" id="flash-sec">
@@ -22780,33 +22778,6 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
   }, 500);
 })();
 </script>
-
-<style id="chz-search-style-fix">
-.search-wrapper input#search-in {
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  color: #0f172a !important; /* لون النص داكن وواضح */
-  padding: 14px 45px 14px 15px !important; /* مساحة للنص والأيقونة */
-  border-radius: 12px !important;
-  background: #f8fafc !important; /* خلفية فاتحة للنص */
-  border: 2px solid #e2e8f0 !important; /* إطار واضح */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-}
-.search-wrapper input#search-in::placeholder {
-  color: #64748b !important; /* لون النص الديناميكي */
-  font-weight: 700 !important;
-  opacity: 1 !important;
-}
-/* تعديل الوضع الليلي (إذا كان التطبيق داكناً) */
-html:not([data-theme="light"]) .search-wrapper input#search-in {
-  background: #1e293b !important;
-  color: #f8fafc !important;
-  border-color: #334155 !important;
-}
-html:not([data-theme="light"]) .search-wrapper input#search-in::placeholder {
-  color: #94a3b8 !important;
-}
-</style>
 </body>
 </html
     renderPassengers: function() {
