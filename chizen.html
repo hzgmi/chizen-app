@@ -22570,6 +22570,44 @@ body #sc-home #flash-c .flash-card {
 #flash-c .sold-text { font-size: 10px !important; color: #e11d48 !important; font-weight: 800 !important; display: flex !important; justify-content: space-between !important; }
 #flash-c .sold-text span:last-child { color: #64748b !important; }
 </style>
+
+<script>
+// VISIBLE-DEBUG
+(function(){
+  var tried = 0;
+  var iv = setInterval(function(){
+    tried++;
+    var c = document.getElementById('flash-c');
+    if (!c) return;
+    if (window.APP && window.APP.products && window.APP.products.length > 0) {
+      var total = window.APP.products.length;
+      var withFlash = window.APP.products.filter(function(p){ return p.flashEnabled === true; }).length;
+      var withFlashStock = window.APP.products.filter(function(p){ return p.flashEnabled === true && Number(p.flashStock) > 0; }).length;
+      
+      // نضيف بانر أخضر في أعلى الصفحة
+      if (!document.getElementById('debug-banner')) {
+        var banner = document.createElement('div');
+        banner.id = 'debug-banner';
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font-size:12px;padding:8px;z-index:999999;font-family:monospace;direction:ltr;text-align:center;';
+        banner.textContent = 'TOTAL:' + total + ' | FLASH:' + withFlash + ' | FLASH+STOCK:' + withFlashStock + ' | CARD IN DOM:' + c.children.length;
+        document.body.appendChild(banner);
+      } else {
+        document.getElementById('debug-banner').textContent = 'TOTAL:' + total + ' | FLASH:' + withFlash + ' | FLASH+STOCK:' + withFlashStock + ' | CARD IN DOM:' + c.children.length;
+      }
+      clearInterval(iv);
+    }
+    if (tried > 30) {
+      clearInterval(iv);
+      if (!document.getElementById('debug-banner')) {
+        var banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:#fff;font-size:14px;padding:10px;z-index:999999;text-align:center;';
+        banner.textContent = '⚠️ APP.products فارغ أو لم يصل بعد 15 ثانية';
+        document.body.appendChild(banner);
+      }
+    }
+  }, 500);
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
