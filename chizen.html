@@ -11458,31 +11458,40 @@ var APP={
   renderFlash:function(){
     var c = document.getElementById('exactFlashContainer');
     if (!c) return;
-    var items = (this.products || []).slice(0, 10);
-    if (!items.length) { c.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;">لا توجد منتجات</div>'; return; }
+    // فلترة المنتجات: يجب أن تكون flashEnabled و active و stock > 0
+    var flashItems = (this.products || []).filter(function(p){
+      return p.flashEnabled === true && p.active !== false && (p.stock === undefined || p.stock > 0);
+    }).slice(0, 10);
+    if (!flashItems.length) { c.innerHTML = ''; c.style.display = 'none'; return; }
+    c.style.display = 'flex';
     var rates = { SAR: 135, USD: 505 };
     var out = '';
-    items.forEach(function(p){
-      var disc = (p.old && p.price && p.old > p.price) ? Math.round(((p.old - p.price)/p.old)*100) : 0;
+    flashItems.forEach(function(p){
       var py = (p.priceYER != null) ? p.priceYER : (p.price || 0);
-      var op = Number(p.old) || 0;
+      var op = Number(p.oldPriceYER || p.oldPrice) || 0;
+      var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
       var sar = (p.priceSAR != null) ? p.priceSAR : (py / rates.SAR);
       var usd = (p.priceUSD != null) ? p.priceUSD : (py / rates.USD);
-      var sold = p.soldPercent || 75;
-      var rem = p.remaining || 5;
-      var img = p.img || p.image || 'https://via.placeholder.com/300';
+      var rem = (p.stock != null) ? p.stock : 0;
+      var total = rem + (p.soldPercent ? Math.round(rem * (100/p.soldPercent) - rem) : 20);
+      var sold = total > 0 ? Math.round(((total - rem) / total) * 100) : 0;
+      if (sold > 95) sold = 95;
+      var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
       var name = (p.name || 'منتج').replace(/</g, '&lt;');
-      out += '<div class="exact-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
-      out += '<div class="exact-card-img"><img src="' + img + '" loading="lazy">';
+      out += '<div class="exact-card">';
+      out += '<div class="exact-card-img" onclick="APP.openProduct(\'' + (p.id||'') + '\')"><img src="' + img + '" loading="lazy">';
       if (disc > 0) out += '<div class="exact-card-disc">-' + disc + '%</div>';
-      out += '<div class="exact-card-timer">02:45</div></div>';
-      out += '<div class="exact-card-name">' + name + '</div>';
-      out += '<div class="exact-card-price">' + Math.round(py).toLocaleString('en') + ' <small>YER</small>';
+      out += '<div class="exact-card-timer">⚡</div></div>';
+      out += '<div class="exact-card-name" onclick="APP.openProduct(\'' + (p.id||'') + '\')">' + name + '</div>';
+      out += '<div class="exact-card-price" onclick="APP.openProduct(\'' + (p.id||'') + '\')">' + Math.round(py).toLocaleString('en') + ' <small>YER</small>';
       if (op > 0) out += ' <span class="exact-card-old">' + Math.round(op).toLocaleString('en') + '</span>';
       out += '</div>';
       out += '<div class="exact-card-cur"><div><span>SAR ﷼</span><b>' + sar.toFixed(2) + '</b></div><div><span>USD $</span><b>' + usd.toFixed(2) + '</b></div></div>';
+      out += '<div class="exact-card-row">';
+      out += '<div class="exact-card-stock">بقي ' + rem + ' قطع</div>';
+      out += '<button class="exact-card-cart" onclick="event.stopPropagation();APP.addCart(\'' + (p.id||'') + '\',1);APP.toast(\'✅ أضيف للسلة\')">🛒</button>';
+      out += '</div>';
       out += '<div class="exact-card-prog"><div style="width:' + sold + '%"></div></div>';
-      out += '<div class="exact-card-sold"><span>تم بيع ' + sold + '%</span><span>بقي ' + rem + '</span></div>';
       out += '</div>';
     });
     c.innerHTML = out;
@@ -22463,6 +22472,40 @@ html:not([data-theme="light"]) .exact-card-prog,
 body.dark-mode .exact-card-prog {
   background: rgba(255,255,255,0.1) !important;
 }
+</style>
+
+<script>
+// SHUFFLE_MARKET
+(function(){
+  var origRender = null;
+  var iv = setInterval(function(){
+    if (window.APP && window.APP.renderProducts && !origRender) {
+      origRender = window.APP.renderProducts;
+      window.APP.renderProducts = function(){
+        // خلط المنتجات قبل العرض
+        if (this.products && this.products.length > 1) {
+          var arr = this.products.slice();
+          for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+          }
+          this.products = arr;
+        }
+        return origRender.apply(this, arguments);
+      };
+      clearInterval(iv);
+    }
+  }, 300);
+})();
+</script>
+
+<style id="chz-flash-extra-css">
+.exact-card-row { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 6px !important; }
+.exact-card-stock { font-size: 10px !important; color: #e11d48 !important; font-weight: 800 !important; }
+.exact-card-cart { background: linear-gradient(135deg, #ef4444, #dc2626) !important; border: none !important; color: white !important; width: 32px !important; height: 32px !important; border-radius: 8px !important; font-size: 15px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 0 !important; }
+.exact-card-cart:active { transform: scale(0.9) !important; }
+html:not([data-theme="light"]) .exact-card-stock,
+body.dark-mode .exact-card-stock { color: #fb7185 !important; }
 </style>
 </body>
 </html
