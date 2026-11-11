@@ -22732,6 +22732,52 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
   background: rgba(0,0,0,0.05) !important;
 }
 </style>
+
+<script>
+// DYNAMIC-PLACEHOLDER
+(function(){
+  var input = null;
+  var phrases = [];
+  var idx = 0;
+  var intervalId = null;
+
+  function updatePlaceholder() {
+    if (!input) input = document.getElementById('search-in');
+    if (!input) return;
+
+    // إذا كانت القائمة فارغة، نملؤها من المنتجات
+    if (phrases.length === 0 && window.APP && window.APP.products && window.APP.products.length > 0) {
+      var prods = window.APP.products;
+      // نأخذ 5 منتجات عشوائية
+      var shuffled = prods.slice().sort(function(){ return Math.random() - 0.5; });
+      for (var i = 0; i < Math.min(5, shuffled.length); i++) {
+        phrases.push(shuffled[i].name || 'منتج');
+      }
+      // نضيف كلمات بحث عامة
+      phrases.push('عروض خاطفة ⚡');
+      phrases.push('أفضل الأسعار');
+      phrases.push('تسوق الآن');
+    }
+
+    if (phrases.length > 0) {
+      input.placeholder = 'ابحث عن: ' + phrases[idx % phrases.length] + '...';
+      idx++;
+    }
+  }
+
+  // ننتظر حتى يظهر العنصر والمنتجات
+  var tries = 0;
+  intervalId = setInterval(function(){
+    tries++;
+    if (document.getElementById('search-in') && window.APP && window.APP.products && window.APP.products.length > 0) {
+      clearInterval(intervalId);
+      updatePlaceholder();
+      setInterval(updatePlaceholder, 3000); // كل 3 ثوانٍ
+    }
+    if (tries > 40) clearInterval(intervalId);
+  }, 500);
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
