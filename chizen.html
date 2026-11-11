@@ -8184,22 +8184,7 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 
 
-<script>
-// KILL-SERVICE-WORKER
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for (let reg of registrations) {
-      reg.unregister();
-      console.log('[SW] Unregistered:', reg.scope);
-    }
-  });
-}
-if ('caches' in window) {
-  caches.keys().then(function(names) {
-    for (let name of names) caches.delete(name);
-  });
-}
-</script>
+
 </head>
 <body>
 <div id="app">
@@ -22575,32 +22560,37 @@ body #sc-home #flash-c .flash-card {
 
 
 
+
+
 <script>
-// FORCE-CALL
-setTimeout(function(){
-  try {
-    if (window.APP && window.APP.renderFlash) {
-      console.log('[FORCE] Calling APP.renderFlash()...');
-      window.APP.renderFlash();
-      var c = document.getElementById('flash-c');
-      var count = c ? c.children.length : -1;
-      console.log('[FORCE] After call, flash-c has', count, 'children');
-      
-      // عرض النتيجة
-      var b = document.createElement('div');
-      b.style.cssText = 'position:fixed;top:50%;left:10%;right:10%;background:#000;color:#0f0;padding:15px;z-index:999999;font-family:monospace;direction:ltr;text-align:center;font-size:14px;border:2px solid #0f0;border-radius:10px;';
-      b.innerHTML = 'FORCE CALL RESULT:<br>' +
-        'flash-c children: ' + count + '<br>' +
-        'APP.products: ' + (window.APP.products ? window.APP.products.length : 'NO') + '<br>' +
-        'renderFlash exists: ' + (window.APP.renderFlash ? 'YES' : 'NO');
-      document.body.appendChild(b);
-    } else {
-      alert('APP.renderFlash غير موجود!');
+// SMART-FLASH-RENDER
+(function(){
+  var tries = 0;
+  var maxTries = 60; // 30 ثانية
+  var iv = setInterval(function(){
+    tries++;
+    if (window.APP && window.APP.products && window.APP.products.length > 0) {
+      // وجدنا البيانات! نستدعي renderFlash
+      if (window.APP.renderFlash) {
+        try {
+          window.APP.renderFlash();
+          var c = document.getElementById('flash-c');
+          var count = c ? c.children.length : 0;
+          if (count > 0) {
+            console.log('[SMART] Rendered', count, 'flash cards after', tries, 'tries');
+            clearInterval(iv); // نجحنا! نتوقف عن المحاولة
+          }
+        } catch(e) {
+          console.warn('[SMART] renderFlash error:', e.message);
+        }
+      }
     }
-  } catch(e) {
-    alert('خطأ: ' + e.message);
-  }
-}, 4000);
+    if (tries >= maxTries) {
+      clearInterval(iv);
+      console.warn('[SMART] Gave up after', tries, 'tries');
+    }
+  }, 500);
+})();
 </script>
 </body>
 </html
