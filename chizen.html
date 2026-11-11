@@ -22564,59 +22564,49 @@ body #sc-home #flash-c .flash-card {
 
 
 
+
+
 <script>
-// FINAL-FLASH-HOOK
-(function(){
-  // نعترض renderProducts (التي تعمل بنجاح) لاستدعاء renderFlash بعدها
-  var origRenderProducts = null;
-  var hooked = false;
+// DEEP-CHECK
+setTimeout(function(){
+  var c = document.getElementById('flash-c');
+  var report = [];
   
-  function hook() {
-    if (hooked) return;
-    if (window.APP && window.APP.renderProducts && !window.APP.renderProducts._hooked) {
-      origRenderProducts = window.APP.renderProducts;
-      window.APP.renderProducts = function() {
-        var result = origRenderProducts.apply(this, arguments);
-        // بعد رسم السوق، نرسم العروض
-        setTimeout(function() {
-          try {
-            if (window.APP && window.APP.renderFlash && window.APP.products && window.APP.products.length > 0) {
-              window.APP.renderFlash();
-              var c = document.getElementById('flash-c');
-              if (c && c.children.length > 0) {
-                console.log('[FINAL] Rendered', c.children.length, 'flash cards');
-              }
-            }
-          } catch(e) { console.warn('[FINAL]', e.message); }
-        }, 100);
-        return result;
-      };
-      window.APP.renderProducts._hooked = true;
-      hooked = true;
-      console.log('[FINAL] Hooked renderProducts');
+  report.push('=== FLASH DIAGNOSTIC ===');
+  report.push('flash-c exists: ' + (c ? 'YES' : 'NO'));
+  
+  if (window.APP) {
+    report.push('APP exists: YES');
+    report.push('APP.products: ' + (window.APP.products ? window.APP.products.length : 'NO'));
+    report.push('APP.renderFlash: ' + (window.APP.renderFlash ? 'YES' : 'NO'));
+    
+    if (window.APP.products && window.APP.products.length > 0) {
+      var withFlash = window.APP.products.filter(function(p){ return p.flashEnabled === true; });
+      report.push('Products with flashEnabled: ' + withFlash.length);
+      var withStock = withFlash.filter(function(p){ return Number(p.flashStock) > 0; });
+      report.push('With flashStock > 0: ' + withStock.length);
+      
+      // محاولة استدعاء renderFlash مع التقاط الأخطاء
+      try {
+        report.push('--- Calling renderFlash ---');
+        window.APP.renderFlash();
+        report.push('renderFlash called OK');
+        report.push('flash-c children after: ' + (c ? c.children.length : 'NO C'));
+      } catch(e) {
+        report.push('❌ renderFlash ERROR: ' + e.message);
+        report.push('Stack: ' + (e.stack || '').substring(0, 200));
+      }
     }
+  } else {
+    report.push('APP: NOT FOUND');
   }
   
-  // نحاول كل 300 مللي ثانية
-  var tries = 0;
-  var iv = setInterval(function(){
-    tries++;
-    hook();
-    if (hooked || tries > 60) clearInterval(iv);
-  }, 300);
-  
-  // محاولة فورية بعد 5 ثوانٍ كاحتياط
-  setTimeout(function() {
-    if (!hooked && window.APP && window.APP.renderFlash) {
-      try {
-        if (window.APP.products && window.APP.products.length > 0) {
-          window.APP.renderFlash();
-          console.log('[FINAL] Direct call after 5s');
-        }
-      } catch(e) {}
-    }
-  }, 5000);
-})();
+  // عرض التقرير على الشاشة
+  var box = document.createElement('div');
+  box.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:50%;background:#000;color:#0f0;font-size:11px;padding:10px;z-index:999999;font-family:monospace;overflow:auto;direction:ltr;white-space:pre-wrap;';
+  box.textContent = report.join('\n');
+  document.body.appendChild(box);
+}, 5000);
 </script>
 </body>
 </html
