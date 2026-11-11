@@ -8183,6 +8183,23 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 
 
+
+<script>
+// KILL-SERVICE-WORKER
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let reg of registrations) {
+      reg.unregister();
+      console.log('[SW] Unregistered:', reg.scope);
+    }
+  });
+}
+if ('caches' in window) {
+  caches.keys().then(function(names) {
+    for (let name of names) caches.delete(name);
+  });
+}
+</script>
 </head>
 <body>
 <div id="app">
