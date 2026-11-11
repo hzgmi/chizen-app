@@ -11455,54 +11455,57 @@ var APP={
     }).join('');
   },
   
+
   renderFlash:function(){
-    var c = document.getElementById('exactFlashContainer');
+    var c = document.getElementById('flash-c');
     if (!c) return;
-    var now = new Date().getTime();
-    var flashItems = (this.products || []).filter(function(p){
-      if (p.flashEnabled !== true) return false;
-      if (p.active === false) return false;
-      var fs = (p.flashStock != null) ? Number(p.flashStock) : null;
-      if (fs === null || fs <= 0) return false;
-      if (p.flashEndsAt) {
-        var end = new Date(p.flashEndsAt).getTime();
-        if (!isNaN(end) && end < now) return false;
-      }
-      return true;
-    }).slice(0, 10);
-    if (!flashItems.length) { c.innerHTML = ''; c.style.display = 'none'; return; }
-    c.style.display = 'flex';
+    var items = (this.products || []).slice(0, 10);
+    if (!items.length) { c.innerHTML = ''; return; }
+    
     var rates = { SAR: 135, USD: 505 };
     var out = '';
-    flashItems.forEach(function(p){
+    
+    items.forEach(function(p){
       var py = (p.flashPrice != null) ? Number(p.flashPrice) : ((p.priceYER != null) ? p.priceYER : (p.price || 0));
       var op = Number(p.oldPriceYER || p.oldPrice) || 0;
       var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
       var sar = py / rates.SAR;
       var usd = py / rates.USD;
-      var rem = Number(p.flashStock) || 0;
+      var rem = (p.flashStock != null) ? Number(p.flashStock) : ((p.stock != null) ? p.stock : 5);
       var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
       var name = (p.name || 'منتج').replace(/</g, '&lt;');
-      var endsAt = p.flashEndsAt || '';
-      out += '<div class="exact-card">';
-      out += '<div class="exact-card-img" onclick="APP.openProduct(\'' + (p.id||'') + '\')"><img src="' + img + '" loading="lazy">';
-      if (disc > 0) out += '<div class="exact-card-disc">-' + disc + '%</div>';
-      out += '<div class="exact-card-timer" data-ends="' + endsAt + '">⚡ ' + endsAt.split('T')[1] + '</div></div>';
-      out += '<div class="exact-card-name" onclick="APP.openProduct(\'' + (p.id||'') + '\')">' + name + '</div>';
-      out += '<div class="exact-card-price">' + Math.round(py).toLocaleString('en') + ' <small>YER</small>';
-      if (op > 0) out += ' <span class="exact-card-old">' + Math.round(op).toLocaleString('en') + '</span>';
+      
+      // بناء البطاقة بنفس الكلاسات القديمة (flash-card)
+      out += '<div class="flash-card">';
+      out += '<div class="flash-img-wrapper" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
+      out += '<img src="' + img + '" loading="lazy">';
+      if (disc > 0) out += '<div class="tag-discount">-' + disc + '%</div>';
+      out += '<div class="timer-badge">⏱️ 02:45</div></div>';
+      
+      out += '<div class="flash-title" onclick="APP.openProduct(\'' + (p.id||'') + '\')">' + name + '</div>';
+      
+      out += '<div class="price-yemeni-row">';
+      out += '<div class="price-yemeni">' + Math.round(py).toLocaleString('en') + ' <span>YER ¥</span></div>';
+      if (op > 0) out += '<div class="price-old">' + Math.round(op).toLocaleString('en') + '</div>';
       out += '</div>';
-      out += '<div class="exact-card-cur"><div><span>SAR ﷼</span><b>' + sar.toFixed(2) + '</b></div><div><span>USD $</span><b>' + usd.toFixed(2) + '</b></div></div>';
-      out += '<div class="exact-card-row">';
-      out += '<div class="exact-card-stock">بقي ' + rem + ' قطع</div>';
-      out += '<button class="exact-card-cart" onclick="event.stopPropagation();APP.addCart(\'' + (p.id||'') + '\',1);if(APP.toast)APP.toast(\'✅ أضيف للسلة\');">🛒</button>';
+      
+      out += '<div class="currency-box">';
+      out += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div>';
+      out += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div>';
       out += '</div>';
-      out += '<div class="exact-card-prog"><div style="width:75%"></div></div>';
+      
+      out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
+      out += '<div class="sold-text"><span>تم بيع 75%</span><span>بقي ' + rem + ' قطع</span></div>';
+      
+      // زر السلة الجديد
+      out += '<button class="btn-add-flash-cart" onclick="event.stopPropagation(); APP.addCart(\'' + (p.id||'') + '\', 1); if(APP.toast) APP.toast(\'✅ أضيف للسلة\');">🛒 أضف للسلة</button>';
+      
       out += '</div>';
     });
+    
     c.innerHTML = out;
   },
-  renderBrands:function(){
+    renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
     var self=this;
     // v20: 24 brands embedded — appear instantly, then Firestore overrides if available
