@@ -11456,6 +11456,7 @@ var APP={
   },
   
 
+
   renderFlash:function(){
     var c = document.getElementById('flash-c');
     if (!c) return;
@@ -11475,7 +11476,6 @@ var APP={
       var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
       var name = (p.name || 'منتج').replace(/</g, '&lt;');
       
-      // بناء البطاقة بنفس الكلاسات القديمة (flash-card)
       out += '<div class="flash-card">';
       out += '<div class="flash-img-wrapper" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
       out += '<img src="' + img + '" loading="lazy">';
@@ -11497,13 +11497,13 @@ var APP={
       out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
       out += '<div class="sold-text"><span>تم بيع 75%</span><span>بقي ' + rem + ' قطع</span></div>';
       
-      // زر السلة الجديد
       out += '<button class="btn-add-flash-cart" onclick="event.stopPropagation(); APP.addCart(\'' + (p.id||'') + '\', 1); if(APP.toast) APP.toast(\'✅ أضيف للسلة\');">🛒 أضف للسلة</button>';
       
       out += '</div>';
     });
     
     c.innerHTML = out;
+    c.style.display = 'flex';
   },
     renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
@@ -22454,6 +22454,8 @@ html:not([data-theme="light"]) .exact-card-stock,
 body.dark-mode .exact-card-stock { color: #fb7185 !important; }
 </style>
 
+
+
 <style id="chz-flash-btn-css">
 .btn-add-flash-cart {
   width: 100% !important;
@@ -22464,15 +22466,13 @@ body.dark-mode .exact-card-stock { color: #fb7185 !important; }
   padding: 8px 0 !important;
   font-size: 13px !important;
   font-weight: 800 !important;
-  margin-top: 8px !important;
+  margin-top: 10px !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 5px !important;
-  box-shadow: 0 2px 8px rgba(239,68,68,0.3) !important;
 }
-.btn-add-flash-cart:active { transform: scale(0.97) !important; }
 </style>
 </body>
 </html
