@@ -22575,25 +22575,33 @@ body #sc-home #flash-c .flash-card {
 
 
 
+
+
 <script>
-// NETWORK-INTERCEPT
+// OBSERVER-FORCE
 (function(){
-  var fetched = false;
+  var rendered = false;
   
-  function renderCards(products) {
-    if (fetched) return;
-    var flashItems = products.filter(function(p){
-      return p.flashEnabled === true && Number(p.flashStock) > 0;
-    });
-    if (flashItems.length === 0) return; // لا توجد عروض فلاش
-    
-    fetched = true;
+  function draw() {
     var c = document.getElementById('flash-c');
-    if (!c) return;
+    if (!c || !window.APP || !window.APP.products) return;
+    
+    var products = window.APP.products;
+    var flashItems = products.filter(function(p){
+      if (p.flashEnabled !== true) return false;
+      if (Number(p.flashStock) <= 0) return false;
+      if (p.flashEndsAt) {
+        var end = new Date(p.flashEndsAt).getTime();
+        if (end < new Date().getTime()) return false;
+      }
+      return true;
+    }).slice(0, 10);
+    
+    if (flashItems.length === 0) return;
     
     var rates = { SAR: 135, USD: 505 };
     var out = '';
-    flashItems.slice(0, 10).forEach(function(p){
+    flashItems.forEach(function(p){
       var py = p.flashPrice || p.priceYER || p.price || 0;
       var op = p.oldPriceYER || p.oldPrice || 0;
       var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
@@ -22614,45 +22622,42 @@ body #sc-home #flash-c .flash-card {
       out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
       out += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div></div>';
     });
-    c.innerHTML = out;
-    console.log('[NET] Rendered', flashItems.length, 'flash cards');
+    
+    if (c.innerHTML !== out) {
+      c.innerHTML = out;
+      console.log('[OBSERVER] Forced flash render');
+    }
   }
 
-  // اعتراض fetch لقراءة بيانات Firestore
-  var origFetch = window.fetch;
-  window.fetch = function() {
-    return origFetch.apply(this, arguments).then(function(res) {
-      var url = arguments[0];
-      if (typeof url === 'string' && url.includes('firestore') && url.includes('products')) {
-        res.clone().json().then(function(data) {
-          if (data && data.documents) {
-            var prods = data.documents.map(function(doc){
-              var f = doc.fields || {};
-              var obj = {};
-              for (var k in f) {
-                obj[k] = f[k].stringValue || f[k].booleanValue || f[k].integerValue || f[k].doubleValue;
-              }
-              return obj;
-            });
-            renderCards(prods);
-          }
-        }).catch(function(){});
-      }
-      return res;
-    });
-  };
-  
-  // محاولة دورية أيضاً
+  // 1. المحاولة الأولى
   var tries = 0;
   var iv = setInterval(function(){
     tries++;
-    if (fetched) { clearInterval(iv); return; }
     if (window.APP && window.APP.products && window.APP.products.length > 0) {
-      renderCards(window.APP.products);
+      draw();
       clearInterval(iv);
     }
     if (tries > 30) clearInterval(iv);
   }, 500);
+
+  // 2. الحارس (MutationObserver): إذا حاول التطبيق مسح البطاقات، نعيد رسمها فوراً
+  var c = document.getElementById('flash-c');
+  if (c) {
+    var observer = new MutationObserver(function(mutations) {
+      var hasFlash = false;
+      for (var i = 0; i < mutations.length; i++) {
+        if (mutations[i].type === 'childList' && c.children.length > 0) {
+          // نتحقق إذا كانت البطاقات الحالية ليست بطاقاتنا
+          var firstCard = c.children[0];
+          if (firstCard && !firstCard.querySelector('.timer-badge')) {
+            // التطبيق مسح بطاقاتنا، نعيد رسمها
+            draw();
+          }
+        }
+      }
+    });
+    observer.observe(c, { childList: true });
+  }
 })();
 </script>
 </body>
