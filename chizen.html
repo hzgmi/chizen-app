@@ -22571,20 +22571,80 @@ body #sc-home #flash-c .flash-card {
 
 
 
+
+
 <script>
-// FLASH-PERIODIC
+// ULTIMATE-INDEPENDENT-RENDER
 (function(){
-  var tries = 0;
-  var iv = setInterval(function(){
-    tries++;
-    if (window.APP && window.APP.products && window.APP.products.length > 0) {
-      if (window.APP.renderFlash) {
-        try { window.APP.renderFlash(); } catch(e) {}
+  var lastRenderedCount = -1;
+  
+  function drawFlashCards() {
+    var c = document.getElementById('flash-c');
+    if (!c) return;
+    
+    // نقرأ من APP.products (مصدر السوق الذي يعمل)
+    var products = (window.APP && window.APP.products) ? window.APP.products : [];
+    if (products.length === 0) return;
+    
+    // فلترة صارمة (فقط العروض الخاطفة النشطة)
+    var now = new Date().getTime();
+    var flashItems = products.filter(function(p) {
+      if (p.flashEnabled !== true) return false;
+      if (p.flashStock !== undefined && Number(p.flashStock) <= 0) return false;
+      if (p.flashEndsAt) {
+        var end = new Date(p.flashEndsAt).getTime();
+        if (!isNaN(end) && end < now) return false;
       }
-      clearInterval(iv);
+      return true;
+    }).slice(0, 10);
+
+    // منع إعادة الرسم إذا لم يتغير العدد (لتحسين الأداء)
+    if (flashItems.length === lastRenderedCount) return;
+    lastRenderedCount = flashItems.length;
+
+    if (flashItems.length === 0) {
+      c.innerHTML = ''; // لا عروض
+      return;
     }
-    if (tries > 40) clearInterval(iv);
-  }, 500);
+
+    var rates = { SAR: 135, USD: 505 };
+    var out = '';
+    
+    flashItems.forEach(function(p) {
+      var py = (p.flashPrice != null) ? Number(p.flashPrice) : ((p.priceYER != null) ? p.priceYER : (p.price || 0));
+      var op = Number(p.oldPriceYER || p.oldPrice) || 0;
+      var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
+      var sar = py / rates.SAR;
+      var usd = py / rates.USD;
+      var rem = (p.flashStock != null) ? Number(p.flashStock) : 5;
+      var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
+      var name = (p.name || 'منتج').replace(/</g, '&lt;');
+      
+      out += '<div class="flash-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
+      out += '<div class="flash-img-wrapper"><img src="' + img + '" loading="lazy">';
+      out += '<div class="timer-badge">⚡ <span class="timer-text">02:45</span></div>';
+      out += '<div class="flash-tags">';
+      if (disc > 0) out += '<div class="tag-discount">-' + disc + '%</div>';
+      out += '</div></div>';
+      out += '<div class="flash-title">' + name + '</div>';
+      out += '<div class="price-yemeni-row"><div class="price-yemeni">' + Math.round(py).toLocaleString('en') + ' <span>YER ¥</span></div>';
+      if (op > 0) out += '<div class="price-old">' + Math.round(op).toLocaleString('en') + '</div>';
+      out += '</div>';
+      out += '<div class="currency-box">';
+      out += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div>';
+      out += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div>';
+      out += '</div>';
+      out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
+      out += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div>';
+      out += '</div>';
+    });
+    
+    c.innerHTML = out;
+    console.log('[ULTIMATE] Rendered ' + flashItems.length + ' flash cards');
+  }
+
+  // مراقب مستمر (كل ثانية) لتحديث البطاقات عند وصول البيانات
+  setInterval(drawFlashCards, 1000);
 })();
 </script>
 </body>
