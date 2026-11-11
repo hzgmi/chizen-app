@@ -22571,6 +22571,8 @@ body #sc-home #flash-c .flash-card {
 #flash-c .sold-text span:last-child { color: #64748b !important; }
 </style>
 
+
+
 <script>
 // VISIBLE-DEBUG
 (function(){
@@ -22579,32 +22581,45 @@ body #sc-home #flash-c .flash-card {
     tried++;
     var c = document.getElementById('flash-c');
     if (!c) return;
+    
     if (window.APP && window.APP.products && window.APP.products.length > 0) {
       var total = window.APP.products.length;
       var withFlash = window.APP.products.filter(function(p){ return p.flashEnabled === true; }).length;
-      var withFlashStock = window.APP.products.filter(function(p){ return p.flashEnabled === true && Number(p.flashStock) > 0; }).length;
+      var withStock = window.APP.products.filter(function(p){ return p.flashEnabled === true && Number(p.flashStock) > 0; }).length;
       
-      // نضيف بانر أخضر في أعلى الصفحة
-      if (!document.getElementById('debug-banner')) {
-        var banner = document.createElement('div');
-        banner.id = 'debug-banner';
-        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font-size:12px;padding:8px;z-index:999999;font-family:monospace;direction:ltr;text-align:center;';
-        banner.textContent = 'TOTAL:' + total + ' | FLASH:' + withFlash + ' | FLASH+STOCK:' + withFlashStock + ' | CARD IN DOM:' + c.children.length;
-        document.body.appendChild(banner);
-      } else {
-        document.getElementById('debug-banner').textContent = 'TOTAL:' + total + ' | FLASH:' + withFlash + ' | FLASH+STOCK:' + withFlashStock + ' | CARD IN DOM:' + c.children.length;
+      // فحص حالة flash-c
+      var cardsInC = c.children.length;
+      var style = window.getComputedStyle(c);
+      var display = style.display;
+      var height = style.height;
+      
+      // أول 3 أسماء منتجات في flash-c (إذا وجدت)
+      var names = [];
+      for (var i = 0; i < Math.min(3, c.children.length); i++) {
+        var nameEl = c.children[i].querySelector('.flash-title');
+        if (nameEl) names.push(nameEl.textContent.substring(0, 15));
       }
+      
+      // البحث عن بطاقات أخرى في الصفحة
+      var allCards = document.querySelectorAll('.flash-card');
+      var allProds = document.querySelectorAll('.prod, .product-card, [class*="product"]');
+      
+      if (!document.getElementById('debug-banner')) {
+        var b = document.createElement('div');
+        b.id = 'debug-banner';
+        b.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font-size:11px;padding:8px;z-index:999999;font-family:monospace;direction:ltr;text-align:center;line-height:1.5;';
+        document.body.appendChild(b);
+      }
+      
+      document.getElementById('debug-banner').innerHTML =
+        'TOTAL:' + total + ' | FLASH:' + withFlash + ' | STOCK>0:' + withStock + '<br>' +
+        'IN flash-c: ' + cardsInC + ' | display: ' + display + ' | height: ' + height + '<br>' +
+        'NAMES: ' + (names.length ? names.join(', ') : '—') + '<br>' +
+        'ALL .flash-card: ' + allCards.length + ' | ALL .prod: ' + allProds.length;
+      
       clearInterval(iv);
     }
-    if (tried > 30) {
-      clearInterval(iv);
-      if (!document.getElementById('debug-banner')) {
-        var banner = document.createElement('div');
-        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:#fff;font-size:14px;padding:10px;z-index:999999;text-align:center;';
-        banner.textContent = '⚠️ APP.products فارغ أو لم يصل بعد 15 ثانية';
-        document.body.appendChild(banner);
-      }
-    }
+    if (tried > 30) clearInterval(iv);
   }, 500);
 })();
 </script>
