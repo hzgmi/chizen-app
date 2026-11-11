@@ -11576,13 +11576,19 @@ var APP={
   },
   
 
+
   renderFlash:function(){
     var c = document.getElementById('flash-c');
     if (!c) return;
     
-    // جلب المنتجات التي تم تفعيل الفلاش لها فقط، وتجاهل المنتهية
+    var all = this.products || [];
+    if (all.length === 0) {
+      c.innerHTML = '<div style="padding:20px;text-align:center;color:#e11d48;font-weight:bold;font-size:14px;background:#fff;border-radius:10px;margin:10px;">⚠️ لم تصل أي منتجات من فايربيس.</div>';
+      return;
+    }
+    
     var now = new Date().getTime();
-    var items = (this.products || []).filter(function(p){
+    var flashItems = all.filter(function(p){
       if (p.flashEnabled !== true) return false;
       if (p.flashStock !== undefined && Number(p.flashStock) <= 0) return false;
       if (p.flashEndsAt) {
@@ -11592,52 +11598,39 @@ var APP={
       return true;
     }).slice(0, 10);
     
-    if (!items.length) {
-      c.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px;">لا توجد عروض خاطفة حالياً</div>';
+    if (flashItems.length === 0) {
+      c.innerHTML = '<div style="padding:20px;text-align:center;color:#e11d48;font-weight:bold;font-size:14px;background:#fff;border-radius:10px;margin:10px;">⚠️ وصل ' + all.length + ' منتج، لكن لا يوجد أي منتج مفعل كـ "فلاش" أو كميته صفر.</div>';
       return;
     }
     
     var rates = { SAR: 135, USD: 505 };
     var out = '';
-    
-    items.forEach(function(p){
-      // استخدام السعر الحقيقي للفلاش إذا وجد، وإلا السعر العادي
+    flashItems.forEach(function(p){
       var py = (p.flashPrice != null) ? Number(p.flashPrice) : ((p.priceYER != null) ? p.priceYER : (p.price || 0));
       var op = Number(p.oldPriceYER || p.oldPrice) || 0;
       var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
       var sar = py / rates.SAR;
       var usd = py / rates.USD;
-      // العداد الحقيقي من فايربيس
       var rem = (p.flashStock != null) ? Number(p.flashStock) : ((p.stock != null) ? p.stock : 5);
       var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
       var name = (p.name || 'منتج').replace(/</g, '&lt;');
       
-      // بناء البطاقة بنفس التصميم الأصلي الذي يعمل
       out += '<div class="flash-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
-      out += '<div class="flash-img-wrapper">';
-      out += '<img src="' + img + '" loading="lazy">';
+      out += '<div class="flash-img-wrapper"><img src="' + img + '" loading="lazy">';
       if (disc > 0) out += '<div class="tag-discount">-' + disc + '%</div>';
       out += '<div class="timer-badge">⏱️ 02:45</div></div>';
       out += '<div class="flash-title">' + name + '</div>';
-      
-      out += '<div class="price-yemeni-row">';
-      out += '<div class="price-yemeni">' + Math.round(py).toLocaleString('en') + ' <span>YER ¥</span></div>';
+      out += '<div class="price-yemeni-row"><div class="price-yemeni">' + Math.round(py).toLocaleString('en') + ' <span>YER ¥</span></div>';
       if (op > 0) out += '<div class="price-old">' + Math.round(op).toLocaleString('en') + '</div>';
       out += '</div>';
-      
-      out += '<div class="currency-box">';
-      out += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div>';
-      out += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div>';
-      out += '</div>';
-      
+      out += '<div class="currency-box"><div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div><div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div></div>';
       out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
-      // العداد الحقيقي
       out += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div>';
-      
       out += '</div>';
     });
     
     c.innerHTML = out;
+    c.style.display = 'flex';
   },
     renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
@@ -22507,77 +22500,7 @@ body #sc-home #flash-c .flash-card {
 })();
 </script>
 
-<script>
-// ULTIMATE-INTERCEPT
-(function(){
-  var drawn = false;
-  // نعترض الدالة التي ترسم السوق لأنها تعمل 100%
-  var origRenderProducts = window.APP ? window.APP.renderProducts : null;
-  
-  function drawFlash(products) {
-    if (drawn) return;
-    drawn = true;
-    var c = document.getElementById('flash-c');
-    if (!c) return;
-    
-    var now = new Date().getTime();
-    var flashItems = (products || []).filter(function(p){
-      return p.flashEnabled === true && (p.flashStock !== undefined && Number(p.flashStock) > 0);
-    }).slice(0, 10);
-    
-    if (!flashItems.length) {
-      c.innerHTML = '<div style="padding:20px;text-align:center;color:#e11d48;font-weight:bold;background:#fff;border-radius:10px;margin:10px;">⚠️ البيانات وصلت (' + products.length + ' منتج) لكن لا يوجد أي منتج مفعل كـ "فلاش" أو كميته صفر.</div>';
-      return;
-    }
-    
-    var rates = { SAR: 135, USD: 505 };
-    var out = '';
-    flashItems.forEach(function(p){
-      var py = (p.flashPrice != null) ? Number(p.flashPrice) : ((p.priceYER != null) ? p.priceYER : (p.price || 0));
-      var op = Number(p.oldPriceYER || p.oldPrice) || 0;
-      var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
-      var sar = py / rates.SAR;
-      var usd = py / rates.USD;
-      var rem = Number(p.flashStock) || 0;
-      var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
-      var name = (p.name || 'منتج').replace(/</g, '&lt;');
-      
-      out += '<div class="flash-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
-      out += '<div class="flash-img-wrapper"><img src="' + img + '">';
-      if (disc > 0) out += '<div class="tag-discount">-' + disc + '%</div>';
-      out += '<div class="timer-badge">⏱️ 02:45</div></div>';
-      out += '<div class="flash-title">' + name + '</div>';
-      out += '<div class="price-yemeni-row"><div class="price-yemeni">' + Math.round(py).toLocaleString('en') + ' <span>YER ¥</span></div>';
-      if (op > 0) out += '<div class="price-old">' + Math.round(op).toLocaleString('en') + '</div>';
-      out += '</div>';
-      out += '<div class="currency-box"><div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div><div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div></div>';
-      out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
-      out += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div>';
-      out += '</div>';
-    });
-    c.innerHTML = out;
-  }
 
-  // محاولة الاعتراض كل 500 ملي ثانية حتى يجهز التطبيق
-  var tries = 0;
-  var iv = setInterval(function(){
-    tries++;
-    if (window.APP && window.APP.renderProducts) {
-      if (!window.APP.renderProducts._intercepted) {
-        window.APP.renderProducts._intercepted = true;
-        window.APP.renderProducts = function() {
-          if (this.products && this.products.length > 0) {
-            drawFlash(this.products);
-          }
-          return origRenderProducts.apply(this, arguments);
-        };
-      }
-      clearInterval(iv);
-    }
-    if (tries > 40) clearInterval(iv);
-  }, 500);
-})();
-</script>
 </body>
 </html
     renderPassengers: function() {
