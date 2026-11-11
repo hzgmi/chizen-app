@@ -11407,11 +11407,14 @@ var APP={
   },
   
   renderFlash:function(){
+    // قراءة من window.APP.products إذا كانت this.products فارغة
+    var products = (this.products && this.products.length > 0) ? this.products : (window.APP && window.APP.products ? window.APP.products : []);
+    
     var c = document.getElementById('flash-c');
     if (!c) return;
     
     var now = new Date().getTime();
-    var items = (this.products || []).filter(function(p){
+    var items = products.filter(function(p){
       if (p.flashEnabled !== true) return false;
       if (p.flashStock !== undefined && Number(p.flashStock) <= 0) return false;
       if (p.flashEndsAt) {
@@ -22566,47 +22569,23 @@ body #sc-home #flash-c .flash-card {
 
 
 
+
+
 <script>
-// DEEP-CHECK
-setTimeout(function(){
-  var c = document.getElementById('flash-c');
-  var report = [];
-  
-  report.push('=== FLASH DIAGNOSTIC ===');
-  report.push('flash-c exists: ' + (c ? 'YES' : 'NO'));
-  
-  if (window.APP) {
-    report.push('APP exists: YES');
-    report.push('APP.products: ' + (window.APP.products ? window.APP.products.length : 'NO'));
-    report.push('APP.renderFlash: ' + (window.APP.renderFlash ? 'YES' : 'NO'));
-    
-    if (window.APP.products && window.APP.products.length > 0) {
-      var withFlash = window.APP.products.filter(function(p){ return p.flashEnabled === true; });
-      report.push('Products with flashEnabled: ' + withFlash.length);
-      var withStock = withFlash.filter(function(p){ return Number(p.flashStock) > 0; });
-      report.push('With flashStock > 0: ' + withStock.length);
-      
-      // محاولة استدعاء renderFlash مع التقاط الأخطاء
-      try {
-        report.push('--- Calling renderFlash ---');
-        window.APP.renderFlash();
-        report.push('renderFlash called OK');
-        report.push('flash-c children after: ' + (c ? c.children.length : 'NO C'));
-      } catch(e) {
-        report.push('❌ renderFlash ERROR: ' + e.message);
-        report.push('Stack: ' + (e.stack || '').substring(0, 200));
+// FLASH-PERIODIC
+(function(){
+  var tries = 0;
+  var iv = setInterval(function(){
+    tries++;
+    if (window.APP && window.APP.products && window.APP.products.length > 0) {
+      if (window.APP.renderFlash) {
+        try { window.APP.renderFlash(); } catch(e) {}
       }
+      clearInterval(iv);
     }
-  } else {
-    report.push('APP: NOT FOUND');
-  }
-  
-  // عرض التقرير على الشاشة
-  var box = document.createElement('div');
-  box.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:50%;background:#000;color:#0f0;font-size:11px;padding:10px;z-index:999999;font-family:monospace;overflow:auto;direction:ltr;white-space:pre-wrap;';
-  box.textContent = report.join('\n');
-  document.body.appendChild(box);
-}, 5000);
+    if (tries > 40) clearInterval(iv);
+  }, 500);
+})();
 </script>
 </body>
 </html
