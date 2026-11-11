@@ -8183,8 +8183,6 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 
 
-
-
 </head>
 <body>
 <div id="app">
@@ -11407,9 +11405,72 @@ var APP={
   },
   
   renderFlash:function(){
-    // تم تعطيل هذه الدالة القديمة. الحارس (Observer) هو المسؤول عن رسم العروض.
-    return;
+    var c=document.getElementById('flash-c');
+    if(!c) {
+      console.warn('[FLASH] #flash-c not found');
+      return;
+    }
+    // Debug Badge
+    var dbg = document.getElementById('flash-debug');
+    if (!dbg) {
+      dbg = document.createElement('div');
+      dbg.id = 'flash-debug';
+      dbg.style.cssText = 'position:absolute;top:-20px;right:10px;background:#000;color:#0f0;font-size:10px;padding:2px 6px;border-radius:4px;z-index:9999;font-family:monospace;';
+      if (c.parentNode) c.parentNode.style.position = 'relative';
+      if (c.parentNode) c.parentNode.appendChild(dbg);
+    }
+    var _prodCount = (this.products || []).length;
+    dbg.textContent = 'FLASH: ' + _prodCount + ' products';
+
+    // كل المنتجات (بدون فلتر — fallback لأول 10)
+    var items = (this.products || []).slice(0, 10);
+    if (!items.length) {
+      c.innerHTML = '<div style="padding:20px;text-align:center;color:#888;">لا توجد منتجات</div>';
+      return;
+    }
+
+    var rates = { SAR: 135, USD: 505 };
+
+    var html = '';
+    items.forEach(function(p){
+      var _disc = 0;
+      if (p.old && p.price && p.old > p.price) {
+        _disc = Math.round(((p.old - p.price)/p.old)*100);
+      }
+      var _priceYER = (p.priceYER != null) ? p.priceYER : (p.price || 0);
+      var _oldPrice = Number(p.old) || 0;
+      var _sar = (p.priceSAR != null) ? p.priceSAR : (_priceYER / rates.SAR);
+      var _usd = (p.priceUSD != null) ? p.priceUSD : (_priceYER / rates.USD);
+      var _soldPct = p.soldPercent || 75;
+      var _remaining = p.remaining || 5;
+
+      html += '<div class="flash-card" onclick="APP.openProduct(\'' + esc(p.id) + '\')">';
+      html += '<div class="flash-img-wrapper">';
+      html += '<img src="' + esc(p.img || p.image || '') + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
+      html += '<div class="timer-badge">⏱️ <span class="timer-text">02:45:10</span></div>';
+      html += '<div class="flash-tags">';
+      if (_disc > 0) html += '<div class="tag-discount">-' + _disc + '%</div>';
+      if (_disc >= 25) html += '<div class="tag-fire">🔥</div>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="flash-title">' + esc(p.name) + '</div>';
+      html += '<div class="price-yemeni-row">';
+      html += '<div class="price-yemeni">' + Math.round(_priceYER).toLocaleString('en') + ' <span>YER ¥</span></div>';
+      if (_oldPrice > 0) html += '<div class="price-old">' + Math.round(_oldPrice).toLocaleString('en') + '</div>';
+      html += '</div>';
+      html += '<div class="currency-box">';
+      html += '<div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + _sar.toFixed(2) + '</strong></div>';
+      html += '<div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + _usd.toFixed(2) + '</strong></div>';
+      html += '</div>';
+      html += '<div class="progress-container"><div class="progress-bar" style="width:' + _soldPct + '%;"></div></div>';
+      html += '<div class="sold-text"><span>تم بيع ' + _soldPct + '%</span><span>بقي ' + _remaining + ' قطع</span></div>';
+      html += '</div>';
+    });
+
+    c.innerHTML = html;
+    console.log('[FLASH] rendered', items.length, 'items');
   },
+
   renderBrands:function(){
     var c=document.getElementById('brands-list');if(!c)return;
     var self=this;
@@ -22506,29 +22567,54 @@ body #sc-home #flash-c .flash-card {
 #flash-c .sold-text span:last-child { color: #64748b !important; }
 </style>
 
+<style id="chz-flash-final-v2">
+.flash-card-new {
+  min-width: 230px !important; max-width: 245px !important; flex: 0 0 auto !important;
+  background: var(--nav, #fff) !important; border: 1.5px solid var(--bd, #e2e8f0) !important;
+  border-radius: 16px !important; padding: 10px !important; display: flex !important; flex-direction: column !important;
+  margin: 0 !important; transition: transform 0.2s !important; cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+.flash-card-new:active { transform: scale(0.97) !important; }
+.flash-card-new .flash-img-wrapper { height: 130px !important; border-radius: 12px !important; margin-bottom: 8px !important; background: var(--bg-img-wrapper, #f1f5f9) !important; }
+.flash-card-new .flash-title { font-size: 12px !important; margin-bottom: 4px !important; color: var(--tx, #0f172a) !important; }
+.flash-card-new .price-yemeni { font-size: 15px !important; }
+.flash-card-new .price-old { font-size: 10px !important; }
+.flash-card-new .currency-box { padding: 5px 7px !important; margin-bottom: 6px !important; border-radius: 8px !important; background: var(--bg-currency-box, #f8fafc) !important; }
+.flash-card-new .currency-row { font-size: 10px !important; }
+.flash-card-new .currency-row strong { font-size: 11px !important; color: var(--tx, #0f172a) !important; }
+.flash-card-new .progress-container { height: 4px !important; margin-bottom: 4px !important; }
+.flash-card-new .sold-text { font-size: 9px !important; margin-bottom: 6px !important; }
+.flash-card-new .timer-badge { font-size: 10px !important; padding: 4px 6px !important; }
 
+.btn-add-flash-cart {
+  width: 100% !important; background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: #fff !important; border: none !important; border-radius: 10px !important;
+  padding: 8px 0 !important; font-size: 12px !important; font-weight: 800 !important;
+  cursor: pointer !important; display: flex !important; align-items: center !important;
+  justify-content: center !important; gap: 4px !important; margin-top: auto !important;
+}
+.btn-add-flash-cart:active { transform: scale(0.97) !important; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+html:not([data-theme="light"]) .flash-card-new,
+body.dark-mode .flash-card-new {
+  background: var(--nav, #1e293b) !important; border-color: var(--bd, #334155) !important;
+}
+html:not([data-theme="light"]) .flash-card-new .flash-title,
+body.dark-mode .flash-card-new .flash-title,
+html:not([data-theme="light"]) .flash-card-new .currency-row strong,
+body.dark-mode .flash-card-new .currency-row strong {
+  color: #f8fafc !important;
+}
+html:not([data-theme="light"]) .flash-card-new .currency-box,
+body.dark-mode .flash-card-new .currency-box {
+  background: var(--bg-currency-box, #0f172a) !important; border-color: var(--bd, #334155) !important;
+}
+</style>
 
 <script>
-// OBSERVER-FORCE
+// OBSERVER-FORCE-FINAL
 (function(){
-  var rendered = false;
-  
   function draw() {
     var c = document.getElementById('flash-c');
     if (!c || !window.APP || !window.APP.products) return;
@@ -22544,7 +22630,7 @@ body #sc-home #flash-c .flash-card {
       return true;
     }).slice(0, 10);
     
-    if (flashItems.length === 0) return;
+    if (flashItems.length === 0) { c.innerHTML = ''; return; }
     
     var rates = { SAR: 135, USD: 505 };
     var out = '';
@@ -22557,7 +22643,7 @@ body #sc-home #flash-c .flash-card {
       var rem = p.flashStock || 5;
       var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
       
-      out += '<div class="flash-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
+      out += '<div class="flash-card-new" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
       out += '<div class="flash-img-wrapper"><img src="' + img + '"><div class="timer-badge">⚡</div>';
       if (disc > 0) out += '<div class="flash-tags"><div class="tag-discount">-' + disc + '%</div></div>';
       out += '</div>';
@@ -22567,16 +22653,14 @@ body #sc-home #flash-c .flash-card {
       out += '</div>';
       out += '<div class="currency-box"><div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div><div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div></div>';
       out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
-      out += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div></div>';
+      out += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div>';
+      out += '<button class="btn-add-flash-cart" onclick="event.stopPropagation(); APP.addCart(\'' + (p.id||'') + '\', 1); if(APP.toast) APP.toast(\'✅ أضيف للسلة\');">🛒 أضف للسلة</button>';
+      out += '</div>';
     });
     
-    if (c.innerHTML !== out) {
-      c.innerHTML = out;
-      console.log('[OBSERVER] Forced flash render');
-    }
+    if (c.innerHTML !== out) { c.innerHTML = out; }
   }
 
-  // 1. المحاولة الأولى
   var tries = 0;
   var iv = setInterval(function(){
     tries++;
@@ -22587,17 +22671,13 @@ body #sc-home #flash-c .flash-card {
     if (tries > 30) clearInterval(iv);
   }, 500);
 
-  // 2. الحارس (MutationObserver): إذا حاول التطبيق مسح البطاقات، نعيد رسمها فوراً
   var c = document.getElementById('flash-c');
   if (c) {
     var observer = new MutationObserver(function(mutations) {
-      var hasFlash = false;
       for (var i = 0; i < mutations.length; i++) {
         if (mutations[i].type === 'childList' && c.children.length > 0) {
-          // نتحقق إذا كانت البطاقات الحالية ليست بطاقاتنا
           var firstCard = c.children[0];
-          if (firstCard && !firstCard.querySelector('.timer-badge')) {
-            // التطبيق مسح بطاقاتنا، نعيد رسمها
+          if (firstCard && !firstCard.classList.contains('flash-card-new')) {
             draw();
           }
         }
