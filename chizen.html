@@ -22348,63 +22348,7 @@ html[data-theme="light"] .currency-box {
 
 
 
-<script>
-// STRONG-FLASH-TRIGGER
-(function(){
-  var done = false;
-  function drawFlash(products) {
-    var c = document.getElementById('exactFlashContainer');
-    if (!c) return; // الحاوية غير موجودة
-    if (!products || products.length === 0) {
-      c.innerHTML = '<div style="padding:20px;text-align:center;color:#e11d48;font-weight:bold;font-size:14px;background:#fff;border-radius:12px;margin:10px;">⚠️ لم تصل المنتجات من السيرفر (عدد: 0)</div>';
-      return;
-    }
-    var rates = { SAR: 135, USD: 505 };
-    var out = '';
-    products.slice(0, 10).forEach(function(p){
-      var disc = (p.old && p.price && p.old > p.price) ? Math.round(((p.old - p.price)/p.old)*100) : 0;
-      var py = (p.priceYER != null) ? p.priceYER : (p.price || 0);
-      var op = Number(p.old) || 0;
-      var sar = (p.priceSAR != null) ? p.priceSAR : (py / rates.SAR);
-      var usd = (p.priceUSD != null) ? p.priceUSD : (py / rates.USD);
-      var sold = p.soldPercent || 75;
-      var rem = p.remaining || 5;
-      var img = p.img || p.image || 'https://via.placeholder.com/300';
-      var name = (p.name || 'منتج').replace(/</g, '&lt;');
-      
-      out += '<div class="exact-card" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
-      out += '<div class="exact-card-img"><img src="' + img + '">';
-      if (disc > 0) out += '<div class="exact-card-disc">-' + disc + '%</div>';
-      out += '<div class="exact-card-timer">02:45</div></div>';
-      out += '<div class="exact-card-name">' + name + '</div>';
-      out += '<div class="exact-card-price">' + Math.round(py).toLocaleString('en') + ' <small>YER</small>';
-      if (op > 0) out += ' <span class="exact-card-old">' + Math.round(op).toLocaleString('en') + '</span>';
-      out += '</div>';
-      out += '<div class="exact-card-cur"><div><span>SAR ﷼</span><b>' + sar.toFixed(2) + '</b></div><div><span>USD $</span><b>' + usd.toFixed(2) + '</b></div></div>';
-      out += '<div class="exact-card-prog"><div style="width:' + sold + '%"></div></div>';
-      out += '<div class="exact-card-sold"><span>تم بيع ' + sold + '%</span><span>بقي ' + rem + '</span></div>';
-      out += '</div>';
-    });
-    c.innerHTML = out;
-    done = true;
-    console.log('[FLASH-STRONG] Rendered', products.length, 'products');
-  }
 
-  // 1. نحاول البحث في APP.products كل نصف ثانية
-  var tries = 0;
-  var iv = setInterval(function(){
-    tries++;
-    if (window.APP && window.APP.products && window.APP.products.length > 0) {
-      if (!done) drawFlash(window.APP.products);
-      clearInterval(iv);
-    }
-    if (tries > 40) {
-      clearInterval(iv);
-      if (!done) drawFlash([]); // إذا فشل بعد 20 ثانية، نعرض رسالة الخطأ
-    }
-  }, 500);
-})();
-</script>
 
 <style id="chz-exact-flash-clean">
 .exact-flash-container * { box-sizing: border-box !important; }
@@ -22480,30 +22424,7 @@ body.dark-mode .exact-card-prog {
 }
 </style>
 
-<script>
-// SHUFFLE_MARKET
-(function(){
-  var origRender = null;
-  var iv = setInterval(function(){
-    if (window.APP && window.APP.renderProducts && !origRender) {
-      origRender = window.APP.renderProducts;
-      window.APP.renderProducts = function(){
-        // خلط المنتجات قبل العرض
-        if (this.products && this.products.length > 1) {
-          var arr = this.products.slice();
-          for (var i = arr.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
-          }
-          this.products = arr;
-        }
-        return origRender.apply(this, arguments);
-      };
-      clearInterval(iv);
-    }
-  }, 300);
-})();
-</script>
+
 
 <style id="chz-flash-extra-css">
 .exact-card-row { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 6px !important; }
@@ -22528,6 +22449,27 @@ body.dark-mode .exact-card-stock { color: #fb7185 !important; }
 .exact-card-timer { font-family: monospace !important; direction: ltr !important; }
 html:not([data-theme="light"]) .exact-card-stock,
 body.dark-mode .exact-card-stock { color: #fb7185 !important; }
+</style>
+
+<style id="chz-flash-btn-css">
+.btn-add-flash-cart {
+  width: 100% !important;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 8px 0 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  margin-top: 8px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.3) !important;
+}
+.btn-add-flash-cart:active { transform: scale(0.97) !important; }
 </style>
 </body>
 </html
