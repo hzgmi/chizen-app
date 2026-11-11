@@ -22645,27 +22645,68 @@ body #sc-home #flash-c .flash-card {
 })();
 </script>
 
-<style id="chz-flash-marketing-css-final">
+
+
+
+
+
+
+<style id="chz-flash-unified-css">
 .flash-card-new {
   min-width: 230px !important; max-width: 245px !important; flex: 0 0 auto !important;
-  background: #1e293b !important; border: 1.5px solid #334155 !important;
-  border-radius: 16px !important; padding: 10px !important; display: flex !important; flex-direction: column !important;
+  background: var(--nav) !important;
+  border: 1.5px solid var(--bd) !important;
+  border-radius: 16px !important; padding: 10px !important;
+  display: flex !important; flex-direction: column !important;
   margin: 0 !important; transition: transform 0.2s !important; cursor: pointer !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
 }
 .flash-card-new:active { transform: scale(0.97) !important; }
-.flash-card-new .flash-img-wrapper { height: 130px !important; border-radius: 12px !important; margin-bottom: 8px !important; background: #0f172a !important; }
-.flash-card-new .flash-title { font-size: 13px !important; font-weight: 800 !important; margin-bottom: 4px !important; color: #f8fafc !important; }
-.flash-card-new .price-yemeni { font-size: 15px !important; font-weight: 900 !important; color: #fb7185 !important; }
-.flash-card-new .price-old { font-size: 10px !important; color: #94a3b8 !important; }
-.flash-card-new .currency-box { padding: 5px 7px !important; margin-bottom: 6px !important; border-radius: 8px !important; background: #0f172a !important; border: 1px solid #334155 !important; }
-.flash-card-new .currency-row { font-size: 10px !important; color: #cbd5e1 !important; font-weight: 700 !important; }
-.flash-card-new .currency-row strong { font-size: 11px !important; color: #f8fafc !important; }
-.flash-card-new .progress-container { height: 5px !important; margin-bottom: 6px !important; background: #334155 !important; border-radius: 4px !important; overflow: hidden !important; }
-.flash-card-new .progress-bar { background: linear-gradient(90deg, #ef4444, #f59e0b) !important; border-radius: 4px !important; }
-.flash-card-new .sold-text { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 8px !important; }
-.flash-card-new .stock-count { font-size: 11px !important; font-weight: 800 !important; color: #fb7185 !important; background: rgba(239,68,68,0.15) !important; padding: 2px 6px !important; border-radius: 4px !important; }
-.flash-card-new .badge-limited { font-size: 9px !important; font-weight: 900 !important; color: #fbbf24 !important; background: rgba(245,158,11,0.15) !important; padding: 2px 6px !important; border-radius: 4px !important; }
+.flash-card-new .flash-img-wrapper {
+  height: 130px !important; border-radius: 12px !important; margin-bottom: 8px !important;
+  background: rgba(0,0,0,0.05) !important; overflow: hidden !important;
+}
+.flash-card-new .flash-title {
+  font-size: 13px !important; font-weight: 800 !important; margin-bottom: 4px !important;
+  color: var(--cr) !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;
+}
+.flash-card-new .price-yemeni {
+  font-size: 15px !important; font-weight: 900 !important; color: #fb7185 !important;
+}
+.flash-card-new .price-old {
+  font-size: 10px !important; color: var(--mt) !important;
+}
+.flash-card-new .currency-box {
+  padding: 6px 8px !important; margin-bottom: 6px !important; border-radius: 8px !important;
+  background: rgba(0,0,0,0.15) !important; border: 1px solid var(--bd) !important;
+}
+.flash-card-new .currency-row {
+  font-size: 10px !important; color: var(--mt) !important; font-weight: 700 !important;
+}
+.flash-card-new .currency-row strong {
+  font-size: 11px !important; color: var(--cr) !important;
+}
+.flash-card-new .currency-symbol {
+  background: rgba(255,255,255,0.1) !important; color: inherit !important;
+}
+.flash-card-new .progress-container {
+  height: 5px !important; margin-bottom: 6px !important;
+  background: rgba(0,0,0,0.15) !important; border-radius: 4px !important; overflow: hidden !important;
+}
+.flash-card-new .progress-bar {
+  background: linear-gradient(90deg, #ef4444, #f59e0b) !important; border-radius: 4px !important;
+}
+.flash-card-new .sold-text {
+  display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 8px !important;
+}
+.flash-card-new .stock-count {
+  font-size: 11px !important; font-weight: 800 !important; color: #fb7185 !important;
+  background: rgba(239,68,68,0.15) !important; padding: 2px 6px !important; border-radius: 4px !important;
+}
+.flash-card-new .badge-limited {
+  font-size: 9px !important; font-weight: 900 !important; color: #fff !important;
+  background: #f59e0b !important; padding: 2px 6px !important; border-radius: 4px !important;
+}
 
 .btn-add-flash-cart {
   width: 100% !important; background: linear-gradient(135deg, #ef4444, #dc2626) !important;
@@ -22682,40 +22723,10 @@ body #sc-home #flash-c .flash-card {
   100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
 }
 .btn-add-flash-cart:active { transform: scale(0.95) !important; animation: none !important; }
-</style>
 
-<style id="chz-flash-title-fix">
-.flash-card-new .flash-title {
-  color: #ffffff !important; /* اسم المنتج أبيض ناصع */
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
-}
-.flash-card-new .badge-limited {
-  background: #f59e0b !important; /* خلفية برتقالية للشارة */
-  color: #fff !important;
-  font-weight: 900 !important;
-  padding: 2px 8px !important;
-  border-radius: 6px !important;
-}
-</style>
-
-<style id="chz-flash-currency-fix">
-.flash-card-new .currency-box {
-  background: #0f172a !important; /* خلفية داكنة */
-  border: 1px solid #334155 !important; /* إطار رمادي داكن */
-  padding: 6px 8px !important;
-  border-radius: 8px !important;
-}
-.flash-card-new .currency-row {
-  color: #cbd5e1 !important; /* نص رمادي فاتح */
-  font-size: 10px !important;
-}
-.flash-card-new .currency-row strong {
-  color: #ffffff !important; /* الأرقام بيضاء ناصعة */
-  font-size: 11px !important;
-}
-.flash-card-new .currency-symbol {
-  background: rgba(255,255,255,0.1) !important; /* خلفية الرمز */
-  color: #f8fafc !important;
+/* في الوضع الفاتح الحقيقي (html:not([data-theme="light"])): خلفية العملات تصبح أفتح */
+html:not([data-theme="light"]) .flash-card-new .currency-box {
+  background: rgba(0,0,0,0.05) !important;
 }
 </style>
 </body>
