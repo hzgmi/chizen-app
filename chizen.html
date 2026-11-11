@@ -620,7 +620,25 @@ APP.openCategoryPage = function(catKey, catName) {
         APP.renderProducts(filtered, grid);
     }).catch(function(err) {
         console.error('خطأ في جلب المنتجات:', err);
-        grid.innerHTML = '<div class="cat-empty">⚠️ حدث خطأ في تحميل المنتجات</div>';
+        grid.innerHTML = '<div class="cat-empty">⚠️ حدث خطأ في تحميل المنتجات</div>
+<div class="search-wrapper">
+<div class="smart-search-container">
+  <div class="ss-wrapper">
+    <svg class="ss-icon" viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" class="ss-input" id="search-in" placeholder="ابحث عن منتج، علامة تجارية..." data-i18n-placeholder="home.search" data-i18n-placeholder-ar="ابحث عن منتج، علامة تجارية..." autocomplete="off">
+    <button class="ss-clear" id="ss-clear-btn" onclick="APP.clearSearch()" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <!-- القائمة المنسدلة للاقتراحات -->
+  <div id="search-dropdown" class="ss-dropdown" style="display:none;"></div>
+</div>
+
+      
+
+
+</div>
+';
     });
 };
 
@@ -8347,23 +8365,7 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 <div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
 
-<div class="search-wrapper">
-<div class="smart-search-container">
-  <div class="ss-wrapper">
-    <svg class="ss-icon" viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" class="ss-input" id="search-in" placeholder="ابحث عن منتج، علامة تجارية..." data-i18n-placeholder="home.search" data-i18n-placeholder-ar="ابحث عن منتج، علامة تجارية..." autocomplete="off">
-    <button class="ss-clear" id="ss-clear-btn" onclick="APP.clearSearch()" style="display:none;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-  <!-- القائمة المنسدلة للاقتراحات -->
-  <div id="search-dropdown" class="ss-dropdown" style="display:none;"></div>
-</div>
 
-      
-
-
-</div>
 <div class="sec" id="brands-sec">
   <div class="brands" id="brands-list"></div>
 </div>
@@ -22778,6 +22780,26 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
   }, 500);
 })();
 </script>
+
+<style id="chz-dynamic-text-enhance">
+.ss-input {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+.ss-input::placeholder {
+  color: #e11d48 !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  opacity: 1 !important;
+}
+html:not([data-theme="light"]) .ss-input {
+  color: #f8fafc !important;
+}
+html:not([data-theme="light"]) .ss-input::placeholder {
+  color: #fbbf24 !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
