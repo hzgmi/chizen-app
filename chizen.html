@@ -22371,6 +22371,22 @@ html[data-theme="light"] .currency-box {
 
 /* في الوضع الليلي، البطاقة تبقى بيضاء لتظهر (كما في تصميمك المرجعي) */
 </style>
+
+<script>
+// final-flash-trigger
+(function(){
+  var tries = 0;
+  var iv = setInterval(function(){
+    tries++;
+    if (window.APP && window.APP.products && window.APP.products.length > 0 && window.APP.renderFlash) {
+      window.APP.renderFlash();
+      clearInterval(iv);
+      console.log('[FLASH-FINAL] rendered after', tries, 'tries');
+    }
+    if (tries > 40) clearInterval(iv); // توقف بعد 20 ثانية
+  }, 500);
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
