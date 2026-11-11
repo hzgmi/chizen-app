@@ -620,25 +620,7 @@ APP.openCategoryPage = function(catKey, catName) {
         APP.renderProducts(filtered, grid);
     }).catch(function(err) {
         console.error('خطأ في جلب المنتجات:', err);
-        grid.innerHTML = '<div class="cat-empty">⚠️ حدث خطأ في تحميل المنتجات</div>
-<div class="search-wrapper">
-<div class="smart-search-container">
-  <div class="ss-wrapper">
-    <svg class="ss-icon" viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" class="ss-input" id="search-in" placeholder="ابحث عن منتج، علامة تجارية..." data-i18n-placeholder="home.search" data-i18n-placeholder-ar="ابحث عن منتج، علامة تجارية..." autocomplete="off">
-    <button class="ss-clear" id="ss-clear-btn" onclick="APP.clearSearch()" style="display:none;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-  <!-- القائمة المنسدلة للاقتراحات -->
-  <div id="search-dropdown" class="ss-dropdown" style="display:none;"></div>
-</div>
-
-      
-
-
-</div>
-';
+        grid.innerHTML = '<div class="cat-empty">⚠️ حدث خطأ في تحميل المنتجات</div>';
     });
 };
 
@@ -8300,7 +8282,23 @@ html:not([data-theme="light"]) .tvl-form select option {
 
   
   <div class="loy" onclick="APP.goTab('points')"><div class="loy-t"><span>💎</span> نقاط الولاء</div><div class="loy-p" id="loyalty">0 نقطة</div></div>
+      <div class="search-wrapper">
+<div class="smart-search-container">
+  <div class="ss-wrapper">
+    <svg class="ss-icon" viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" class="ss-input" id="search-in" placeholder="ابحث عن منتج، علامة تجارية..." data-i18n-placeholder="home.search" data-i18n-placeholder-ar="ابحث عن منتج، علامة تجارية..." autocomplete="off">
+    <button class="ss-clear" id="ss-clear-btn" onclick="APP.clearSearch()" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <!-- القائمة المنسدلة للاقتراحات -->
+  <div id="search-dropdown" class="ss-dropdown" style="display:none;"></div>
+</div>
+
       
+
+
+</div>
       
       
       
@@ -8365,7 +8363,6 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 <div id="cats" style="display:flex; gap:12px; overflow-x:auto; padding:15px; -webkit-overflow-scrolling:touch;"></div>
 
-
 <div class="sec" id="brands-sec">
   <div class="brands" id="brands-list"></div>
 </div>
@@ -8375,8 +8372,6 @@ html:not([data-theme="light"]) .tvl-form select option {
     <div class="stl">⚡ عروض خاطفة</div>
     <a class="flash-view-all" onclick="APP.filterCat('all')">عرض الكل ›</a>
   </div>
-
-
   <div id="flash-c" class="flash-row"></div>
 </div>
 
@@ -22732,72 +22727,6 @@ body #sc-home #flash-c .flash-card {
 /* في الوضع الفاتح الحقيقي (html:not([data-theme="light"])): خلفية العملات تصبح أفتح */
 html:not([data-theme="light"]) .flash-card-new .currency-box {
   background: rgba(0,0,0,0.05) !important;
-}
-</style>
-
-<script>
-// DYNAMIC-PLACEHOLDER
-(function(){
-  var input = null;
-  var phrases = [];
-  var idx = 0;
-  var intervalId = null;
-
-  function updatePlaceholder() {
-    if (!input) input = document.getElementById('search-in');
-    if (!input) return;
-
-    // إذا كانت القائمة فارغة، نملؤها من المنتجات
-    if (phrases.length === 0 && window.APP && window.APP.products && window.APP.products.length > 0) {
-      var prods = window.APP.products;
-      // نأخذ 5 منتجات عشوائية
-      var shuffled = prods.slice().sort(function(){ return Math.random() - 0.5; });
-      for (var i = 0; i < Math.min(5, shuffled.length); i++) {
-        phrases.push(shuffled[i].name || 'منتج');
-      }
-      // نضيف كلمات بحث عامة
-      phrases.push('عروض خاطفة ⚡');
-      phrases.push('أفضل الأسعار');
-      phrases.push('تسوق الآن');
-    }
-
-    if (phrases.length > 0) {
-      input.placeholder = 'ابحث عن: ' + phrases[idx % phrases.length] + '...';
-      idx++;
-    }
-  }
-
-  // ننتظر حتى يظهر العنصر والمنتجات
-  var tries = 0;
-  intervalId = setInterval(function(){
-    tries++;
-    if (document.getElementById('search-in') && window.APP && window.APP.products && window.APP.products.length > 0) {
-      clearInterval(intervalId);
-      updatePlaceholder();
-      setInterval(updatePlaceholder, 3000); // كل 3 ثوانٍ
-    }
-    if (tries > 40) clearInterval(intervalId);
-  }, 500);
-})();
-</script>
-
-<style id="chz-dynamic-text-enhance">
-.ss-input {
-  font-size: 15px !important;
-  font-weight: 800 !important;
-  color: #0f172a !important;
-}
-.ss-input::placeholder {
-  color: #e11d48 !important;
-  font-weight: 900 !important;
-  font-size: 15px !important;
-  opacity: 1 !important;
-}
-html:not([data-theme="light"]) .ss-input {
-  color: #f8fafc !important;
-}
-html:not([data-theme="light"]) .ss-input::placeholder {
-  color: #fbbf24 !important;
 }
 </style>
 </body>
