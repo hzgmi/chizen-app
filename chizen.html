@@ -22567,53 +22567,8 @@ body #sc-home #flash-c .flash-card {
 #flash-c .sold-text span:last-child { color: #64748b !important; }
 </style>
 
-<style id="chz-flash-final-v2">
-.flash-card-new {
-  min-width: 230px !important; max-width: 245px !important; flex: 0 0 auto !important;
-  background: var(--nav, #fff) !important; border: 1.5px solid var(--bd, #e2e8f0) !important;
-  border-radius: 16px !important; padding: 10px !important; display: flex !important; flex-direction: column !important;
-  margin: 0 !important; transition: transform 0.2s !important; cursor: pointer !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-}
-.flash-card-new:active { transform: scale(0.97) !important; }
-.flash-card-new .flash-img-wrapper { height: 130px !important; border-radius: 12px !important; margin-bottom: 8px !important; background: var(--bg-img-wrapper, #f1f5f9) !important; }
-.flash-card-new .flash-title { font-size: 12px !important; margin-bottom: 4px !important; color: var(--tx, #0f172a) !important; }
-.flash-card-new .price-yemeni { font-size: 15px !important; }
-.flash-card-new .price-old { font-size: 10px !important; }
-.flash-card-new .currency-box { padding: 5px 7px !important; margin-bottom: 6px !important; border-radius: 8px !important; background: var(--bg-currency-box, #f8fafc) !important; }
-.flash-card-new .currency-row { font-size: 10px !important; }
-.flash-card-new .currency-row strong { font-size: 11px !important; color: var(--tx, #0f172a) !important; }
-.flash-card-new .progress-container { height: 4px !important; margin-bottom: 4px !important; }
-.flash-card-new .sold-text { font-size: 9px !important; margin-bottom: 6px !important; }
-.flash-card-new .timer-badge { font-size: 10px !important; padding: 4px 6px !important; }
-
-.btn-add-flash-cart {
-  width: 100% !important; background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-  color: #fff !important; border: none !important; border-radius: 10px !important;
-  padding: 8px 0 !important; font-size: 12px !important; font-weight: 800 !important;
-  cursor: pointer !important; display: flex !important; align-items: center !important;
-  justify-content: center !important; gap: 4px !important; margin-top: auto !important;
-}
-.btn-add-flash-cart:active { transform: scale(0.97) !important; }
-
-html:not([data-theme="light"]) .flash-card-new,
-body.dark-mode .flash-card-new {
-  background: var(--nav, #1e293b) !important; border-color: var(--bd, #334155) !important;
-}
-html:not([data-theme="light"]) .flash-card-new .flash-title,
-body.dark-mode .flash-card-new .flash-title,
-html:not([data-theme="light"]) .flash-card-new .currency-row strong,
-body.dark-mode .flash-card-new .currency-row strong {
-  color: #f8fafc !important;
-}
-html:not([data-theme="light"]) .flash-card-new .currency-box,
-body.dark-mode .flash-card-new .currency-box {
-  background: var(--bg-currency-box, #0f172a) !important; border-color: var(--bd, #334155) !important;
-}
-</style>
-
 <script>
-// OBSERVER-FORCE-FINAL
+// OBSERVER-FORCE
 (function(){
   function draw() {
     var c = document.getElementById('flash-c');
@@ -22640,8 +22595,10 @@ body.dark-mode .flash-card-new .currency-box {
       var disc = (op > py) ? Math.round(((op - py)/op)*100) : 0;
       var sar = py / rates.SAR;
       var usd = py / rates.USD;
-      var rem = p.flashStock || 5;
+      var rem = Number(p.flashStock) || 0;
       var img = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
+      var progress = rem < 5 ? 90 : (rem < 10 ? 60 : 30);
+      var limitedBadge = rem <= 5 ? '<div class="badge-limited">🔥 كمية محدودة</div>' : '';
       
       out += '<div class="flash-card-new" onclick="APP.openProduct(\'' + (p.id||'') + '\')">';
       out += '<div class="flash-img-wrapper"><img src="' + img + '"><div class="timer-badge">⚡</div>';
@@ -22652,8 +22609,8 @@ body.dark-mode .flash-card-new .currency-box {
       if (op > 0) out += '<div class="price-old">' + Math.round(op).toLocaleString('en') + '</div>';
       out += '</div>';
       out += '<div class="currency-box"><div class="currency-row"><span><span class="currency-symbol sym-sar">﷼</span> SAR</span><strong>' + sar.toFixed(2) + '</strong></div><div class="currency-row"><span><span class="currency-symbol sym-usd">$</span> USD</span><strong>' + usd.toFixed(2) + '</strong></div></div>';
-      out += '<div class="progress-container"><div class="progress-bar" style="width:75%;"></div></div>';
-      out += '<div class="sold-text"><span>عرض خاطف</span><span>بقي ' + rem + ' قطع</span></div>';
+      out += '<div class="progress-container"><div class="progress-bar" style="width:' + progress + '%;"></div></div>';
+      out += '<div class="sold-text">' + limitedBadge + '<span class="stock-count">بقي ' + rem + ' قطع</span></div>';
       out += '<button class="btn-add-flash-cart" onclick="event.stopPropagation(); APP.addCart(\'' + (p.id||'') + '\', 1); if(APP.toast) APP.toast(\'✅ أضيف للسلة\');">🛒 أضف للسلة</button>';
       out += '</div>';
     });
@@ -22687,6 +22644,45 @@ body.dark-mode .flash-card-new .currency-box {
   }
 })();
 </script>
+
+<style id="chz-flash-marketing-css-final">
+.flash-card-new {
+  min-width: 230px !important; max-width: 245px !important; flex: 0 0 auto !important;
+  background: #1e293b !important; border: 1.5px solid #334155 !important;
+  border-radius: 16px !important; padding: 10px !important; display: flex !important; flex-direction: column !important;
+  margin: 0 !important; transition: transform 0.2s !important; cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+.flash-card-new:active { transform: scale(0.97) !important; }
+.flash-card-new .flash-img-wrapper { height: 130px !important; border-radius: 12px !important; margin-bottom: 8px !important; background: #0f172a !important; }
+.flash-card-new .flash-title { font-size: 13px !important; font-weight: 800 !important; margin-bottom: 4px !important; color: #f8fafc !important; }
+.flash-card-new .price-yemeni { font-size: 15px !important; font-weight: 900 !important; color: #fb7185 !important; }
+.flash-card-new .price-old { font-size: 10px !important; color: #94a3b8 !important; }
+.flash-card-new .currency-box { padding: 5px 7px !important; margin-bottom: 6px !important; border-radius: 8px !important; background: #0f172a !important; border: 1px solid #334155 !important; }
+.flash-card-new .currency-row { font-size: 10px !important; color: #cbd5e1 !important; font-weight: 700 !important; }
+.flash-card-new .currency-row strong { font-size: 11px !important; color: #f8fafc !important; }
+.flash-card-new .progress-container { height: 5px !important; margin-bottom: 6px !important; background: #334155 !important; border-radius: 4px !important; overflow: hidden !important; }
+.flash-card-new .progress-bar { background: linear-gradient(90deg, #ef4444, #f59e0b) !important; border-radius: 4px !important; }
+.flash-card-new .sold-text { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 8px !important; }
+.flash-card-new .stock-count { font-size: 11px !important; font-weight: 800 !important; color: #fb7185 !important; background: rgba(239,68,68,0.15) !important; padding: 2px 6px !important; border-radius: 4px !important; }
+.flash-card-new .badge-limited { font-size: 9px !important; font-weight: 900 !important; color: #fbbf24 !important; background: rgba(245,158,11,0.15) !important; padding: 2px 6px !important; border-radius: 4px !important; }
+
+.btn-add-flash-cart {
+  width: 100% !important; background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: #fff !important; border: none !important; border-radius: 10px !important;
+  padding: 8px 0 !important; font-size: 13px !important; font-weight: 800 !important;
+  cursor: pointer !important; display: flex !important; align-items: center !important;
+  justify-content: center !important; gap: 4px !important; margin-top: auto !important;
+  box-shadow: 0 4px 12px rgba(239,68,68,0.4) !important;
+  animation: pulse-red 2s infinite !important;
+}
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+  100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+}
+.btn-add-flash-cart:active { transform: scale(0.95) !important; animation: none !important; }
+</style>
 </body>
 </html
     renderPassengers: function() {
@@ -22793,5 +22789,4 @@ body.dark-mode .flash-card-new .currency-box {
       modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
       document.body.appendChild(modal);
     },
-</script>
 </html>
