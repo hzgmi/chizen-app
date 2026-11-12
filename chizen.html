@@ -24115,6 +24115,85 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   transform: scale(1.15) !important;
 }
 </style>
+
+<style id="chz-reviews-ui-fix">
+/* تحسين شكل قسم التقييمات */
+#reviewsList {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+#reviewsList > div {
+  background: #151a2d !important;
+  border: 1px solid #1f2742 !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  margin-bottom: 0 !important;
+}
+#reviewsList .chz-review-header,
+#reviewsList [style*="display: flex"] {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 6px !important;
+}
+#reviewsList .chz-review-user,
+#reviewsList [style*="font-weight"] {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+}
+#reviewsList .chz-review-date,
+#reviewsList [style*="font-size: 10px"] {
+  font-size: 10px !important;
+  color: #94a3b8 !important;
+}
+#reviewsList .chz-review-stars,
+#reviewsList [style*="color: #fbbf24"] {
+  color: #fbbf24 !important;
+  font-size: 12px !important;
+  margin-bottom: 6px !important;
+  direction: rtl !important;
+}
+#reviewsList .chz-review-text,
+#reviewsList [style*="font-size: 12px"]:not(.chz-review-user) {
+  font-size: 12px !important;
+  color: #cbd5e1 !important;
+  line-height: 1.5 !important;
+  margin-bottom: 8px !important;
+}
+#reviewsList .review-actions {
+  display: flex !important;
+  gap: 15px !important;
+  align-items: center !important;
+  border-top: 1px solid #1f2742 !important;
+  padding-top: 8px !important;
+  margin-top: 4px !important;
+}
+#reviewsList .action-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #9ca3af !important;
+  font-size: 11px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+}
+#reviewsList .action-btn i {
+  font-size: 14px !important;
+}
+#reviewsList .action-btn.active-like,
+#reviewsList .action-btn.active-like i {
+  color: #3b82f6 !important;
+}
+#reviewsList .action-btn.active-dislike,
+#reviewsList .action-btn.active-dislike i {
+  color: #ef4444 !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
