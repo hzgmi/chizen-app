@@ -24009,6 +24009,186 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
     </div>
   </div>
 </div>
+
+<script>
+// DETAILS-PAGE-FINAL-JS
+(function(){
+  window.APP = window.APP || {};
+
+  window.APP.openProductNew = function(id) {
+    var p = null;
+    (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    this.currentProd = p;
+    window.currentProduct = p;
+    this.currentQty = 1;
+
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    var det = document.getElementById('sc-details-new');
+    if (det) det.classList.add('active');
+    fillDetailsNew(p);
+    
+    // تحميل التقييمات (إذا كان reviews.js موجوداً)
+    if (typeof window.loadReviews === 'function') {
+      setTimeout(window.loadReviews, 500);
+    }
+  };
+
+  window.APP.closeDetailsNew = function() {
+    var det = document.getElementById('sc-details-new');
+    if (det) det.classList.remove('active');
+    document.querySelectorAll('.screen').forEach(function(s) {
+      if (s.id === 'sc-home') s.classList.add('active');
+    });
+  };
+
+  window.APP.changeDetailsQty = function(d) {
+    this.currentQty = Math.max(1, (this.currentQty || 1) + d);
+    var qtyEl = document.getElementById('det-new-qty');
+    if (qtyEl) qtyEl.textContent = this.currentQty;
+  };
+
+  function fillDetailsNew(p) {
+    // الصورة
+    var imgContainer = document.getElementById('det-new-img');
+    if (imgContainer) {
+      imgContainer.innerHTML = '';
+      var img = document.createElement('img');
+      img.src = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
+      img.onclick = function() {
+        if (p.images && p.images.length > 1 && window.APP.openGallery) {
+          window.APP.openGallery(p.images, 0);
+        }
+      };
+      imgContainer.appendChild(img);
+    }
+
+    // الصور المصغرة
+    var thumbsContainer = document.getElementById('det-new-thumbs');
+    if (thumbsContainer) {
+      thumbsContainer.innerHTML = '';
+      var images = (p.images && p.images.length) ? p.images : (p.img ? [p.img] : []);
+      if (images.length > 1) {
+        images.forEach(function(src, i) {
+          var thumb = document.createElement('div');
+          thumb.className = 'chz-thumb' + (i === 0 ? ' active' : '');
+          var ti = document.createElement('img');
+          ti.src = src;
+          ti.onclick = function() {
+            var mainImg = imgContainer.querySelector('img');
+            if (mainImg) mainImg.src = src;
+            thumbsContainer.querySelectorAll('.chz-thumb').forEach(function(t, j) {
+              t.classList.toggle('active', j === i);
+            });
+          };
+          thumb.appendChild(ti);
+          thumbsContainer.appendChild(thumb);
+        });
+      }
+    }
+
+    // الاسم والماركة والتقييم
+    document.getElementById('det-new-brand').textContent = p.brand || '';
+    document.getElementById('det-new-name').textContent = p.name || 'منتج';
+    document.getElementById('det-new-rate').innerHTML = '⭐ ' + (p.rating || 4.5) + ' (' + (p.reviews || 0) + ' تقييم)';
+
+    // السعر
+    var priceEl = document.getElementById('det-new-price');
+    var priceYER = Number(p.priceYER || p.price) || 0;
+    var oldPrice = Number(p.oldPriceYER || p.oldPrice) || 0;
+    var priceHTML = Math.round(priceYER).toLocaleString('en') + ' ر.ي';
+    if (oldPrice > priceYER) {
+      priceHTML += ' <span class="old">' + Math.round(oldPrice).toLocaleString('en') + ' ر.ي</span>';
+    }
+    priceEl.innerHTML = priceHTML;
+
+    // العملات
+    var currenciesEl = document.getElementById('det-new-currencies');
+    var priceSAR = Number(p.priceSAR) || (priceYER / 135);
+    var priceUSD = Number(p.priceUSD) || (priceYER / 505);
+    currenciesEl.innerHTML = 
+      '<div><div class="lbl">🇸🇦 سعودي</div><div class="val">' + priceSAR.toFixed(2) + '</div></div>' +
+      '<div><div class="lbl">🇺🇸 دولار</div><div class="val">' + priceUSD.toFixed(2) + '</div></div>';
+
+    // المقاسات (إذا وجدت)
+    var sizesSection = document.getElementById('det-new-sizes-section');
+    var sizesContainer = document.getElementById('det-new-sizes');
+    if (p.sizes && p.sizes.length > 0) {
+      sizesSection.style.display = 'block';
+      sizesContainer.innerHTML = '';
+      p.sizes.forEach(function(s, i) {
+        var div = document.createElement('div');
+        div.className = 'chz-det-size-option' + (i === 0 ? ' selected' : '');
+        div.textContent = s;
+        div.onclick = function() {
+          sizesContainer.querySelectorAll('.chz-det-size-option').forEach(function(o) { o.classList.remove('selected'); });
+          this.classList.add('selected');
+          window.APP.selectedSize = s;
+        };
+        sizesContainer.appendChild(div);
+      });
+    } else {
+      sizesSection.style.display = 'none';
+    }
+
+    // المواصفات والمميزات (في صناديق متجاورة)
+    var specsFeaturesContainer = document.getElementById('det-new-specs-features');
+    specsFeaturesContainer.innerHTML = '';
+    
+    var specs = p.specs || {};
+    var specsKeys = Object.keys(specs);
+    var features = p.features || [];
+    if (typeof features === 'string') features = features.split('\n').filter(function(l){ return l.trim(); });
+
+    if (specsKeys.length > 0 || features.length > 0) {
+      var grid = document.createElement('div');
+      grid.className = 'chz-det-specs-features';
+      
+      if (specsKeys.length > 0) {
+        var specBox = document.createElement('div');
+        specBox.className = 'chz-det-spec-box';
+        var shtml = '<h3><i class="fas fa-cogs"></i> المواصفات</h3><ul class="chz-det-spec-list">';
+        specsKeys.forEach(function(k) {
+          shtml += '<li><i class="fas fa-circle"></i> ' + k + ': ' + specs[k] + '</li>';
+        });
+        shtml += '</ul>';
+        specBox.innerHTML = shtml;
+        grid.appendChild(specBox);
+      }
+      
+      if (features.length > 0) {
+        var featBox = document.createElement('div');
+        featBox.className = 'chz-det-feat-box';
+        var fhtml = '<h3><i class="fas fa-gem"></i> المميزات</h3><ul class="chz-det-feat-list">';
+        features.forEach(function(f) {
+          fhtml += '<li><i class="fas fa-check-circle"></i> ' + f.trim() + '</li>';
+        });
+        fhtml += '</ul>';
+        featBox.innerHTML = fhtml;
+        grid.appendChild(featBox);
+      }
+      
+      specsFeaturesContainer.appendChild(grid);
+    }
+
+    // الوصف (إذا لم توجد مميزات)
+    var descWrapper = document.getElementById('det-new-desc-wrapper');
+    var descEl = document.getElementById('det-new-desc');
+    if (descWrapper && descEl) {
+      if (features.length > 0 || !p.desc) {
+        descWrapper.style.display = 'none';
+      } else {
+        descWrapper.style.display = 'block';
+        descEl.textContent = p.desc;
+      }
+    }
+
+    // الكمية
+    document.getElementById('det-new-qty').textContent = '1';
+    window.APP.currentQty = 1;
+  }
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
