@@ -22995,6 +22995,20 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   }, 1500);
 })();
 </script>
+
+<style id="chz-ultimate-consistency">
+/* إخفاء أي نص وصفي مكرر تماماً في صفحة التفاصيل */
+#det-desc, 
+.det-desc, 
+#sc-detail p:not([class]), 
+#sc-detail > div > div > p {
+  display: none !important;
+}
+/* إظهار المربعات فقط */
+#det-features-block, #det-specs-block {
+  display: block !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
