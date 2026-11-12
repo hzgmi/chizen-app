@@ -11627,17 +11627,36 @@ var APP={
   openProductNew:function(id){
     var iframe = document.getElementById('chz-details-iframe');
     var overlay = document.getElementById('chz-details-overlay');
-    if (iframe && overlay) {
-      // نرسل id إلى iframe عبر postMessage (لتجنب إعادة التحميل)
+    if (!iframe || !overlay) return;
+    
+    // إظهار الصفحة أولاً
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // دالة إرسال postMessage (تحاول عدة مرات)
+    var sendMsg = function() {
       try {
         iframe.contentWindow.postMessage({ action: 'loadProduct', id: id }, '*');
-      } catch(e) {
-        // إذا فشل postMessage، نعيد تحميل iframe بالرابط
+      } catch(e) {}
+    };
+    
+    // إرسال فوري
+    sendMsg();
+    // إرسال بعد 200ms (احتياطي)
+    setTimeout(sendMsg, 200);
+    // إرسال بعد 500ms (احتياطي)
+    setTimeout(sendMsg, 500);
+    // إرسال بعد 1000ms (احتياطي)
+    setTimeout(sendMsg, 1000);
+    
+    // إذا لم ينجح postMessage، نستخدم إعادة التحميل (احتياطي)
+    setTimeout(function() {
+      var currentUrl = iframe.src || '';
+      if (currentUrl.indexOf('details.html') !== -1 && !window._postMsgWorking) {
+        // لم ينجح postMessage، نعيد التحميل
         iframe.src = 'details.html?id=' + encodeURIComponent(id);
       }
-      overlay.style.display = 'block';
-      document.body.style.overflow = 'hidden';
-    }
+    }, 1500);
   },
 
   closeProductDetails:function(){
