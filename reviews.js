@@ -1,5 +1,18 @@
 // reviews.js - نظام التقييمات مع Firebase Auth
 (function(){
+// Firebase init (مستقل)
+if (window.FIREBASE_CONFIG && !firebase.apps.length) {
+  try {
+    firebase.initializeApp(window.FIREBASE_CONFIG);
+    console.log('[REVIEWS] Firebase initialized');
+  } catch(e) {
+    console.error('[REVIEWS] Firebase init error:', e.message);
+  }
+}
+var db = window.db || firebase.firestore();
+console.log('[REVIEWS] db ready:', !!db);
+console.log('[REVIEWS] auth ready:', !!firebase.auth);
+
   var selectedRating = 0;
   var currentUserId = null;
   var authReady = false;
@@ -8,11 +21,13 @@
   function initAuth() {
     if (!window.firebase || !firebase.auth) {
       console.error('[AUTH] Firebase Auth not available');
+      showToast('❌ Firebase Auth غير متاح');
       return;
     }
     var auth = firebase.auth();
-    console.log('[AUTH] State changed');
+    console.log('[AUTH] Got auth instance');
     auth.onAuthStateChanged(function(user) {
+      console.log('[AUTH] State changed:', user ? user.uid : 'null');
       if (user) {
         currentUserId = user.uid;
         authReady = true;
