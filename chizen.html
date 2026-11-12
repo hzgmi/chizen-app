@@ -22731,6 +22731,26 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
 </style>
 
 <script src="dynamic-search.js?v=1"></script>
+
+<style id="chz-performance-css">
+/* تحسين أداء الحركات */
+.ss-dropdown,
+.chz-top-search-wrapper,
+.flash-card-new,
+.btn-add-flash-cart {
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  transform: translateZ(0) !important; /* تفعيل تسريع GPU */
+}
+/* الحركات */
+.chz-top-search-wrapper input {
+  transition: opacity 0.3s ease !important;
+  will-change: auto;
+}
+.chz-top-search-wrapper input:focus {
+  will-change: transform, opacity !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
