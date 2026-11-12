@@ -507,40 +507,47 @@ html[data-theme="light"] .urgency-bar {
 </style>
 
 <script>
+
+<script>
 // URGENCY-BAR
 (function(){
   var timerInterval = null;
 
   function buildUrgencyBar() {
+    if (!window._product) return;
+    
+    // إخفاء الشريط إذا لم يكن المنتج عرضاً خاطفاً
+    var isFlash = window._product.flashEnabled === true;
+    var existingBar = document.querySelector('.urgency-bar');
+    
+    if (!isFlash) {
+      if (existingBar) existingBar.remove();
+      return;
+    }
+    
+    // التحقق من وجود الشريط مسبقاً
+    if (existingBar) return;
+    
     var container = document.querySelector('.container');
     if (!container) return;
     
-    // إزالة الشريط القديم إن وجد
-    var oldBar = document.querySelector('.urgency-bar');
-    if (oldBar) oldBar.remove();
-
-    // نبحث عن مكان الإدراج (بعد .gallery)
     var gallery = document.querySelector('.gallery');
     if (!gallery) return;
 
-    // إنشاء الشريط
     var bar = document.createElement('div');
     bar.className = 'urgency-bar';
     
-    // حساب الوقت المتبقي (نهاية اليوم أو من flashEndsAt)
-    var endsAt = window._product && window._product.flashEndsAt;
+    var endsAt = window._product.flashEndsAt;
     var endTime;
     if (endsAt) {
       endTime = new Date(endsAt).getTime();
     } else {
-      // افتراضي: نهاية اليوم
       endTime = new Date();
       endTime.setHours(23, 59, 59, 999);
       endTime = endTime.getTime();
     }
 
-    // الكمية المتبقية
-    var stock = (window._product && (window._product.flashStock != null ? window._product.flashStock : window._product.stock)) || 0;
+    var stock = window._product.flashStock != null ? Number(window._product.flashStock) : 0;
     var stockText = stock > 0 && stock <= 10 ? 'بقي ' + stock + ' قطع فقط!' : '';
 
     var html = '<div class="urgency-row">';
@@ -559,7 +566,6 @@ html[data-theme="light"] .urgency-bar {
     bar.innerHTML = html;
     gallery.parentNode.insertBefore(bar, gallery.nextSibling);
 
-    // تشغيل العداد
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(function() {
       var now = new Date().getTime();
@@ -583,15 +589,9 @@ html[data-theme="light"] .urgency-bar {
     }, 1000);
   }
 
-  // مراقبة ظهور الصفحة
-  setInterval(function() {
-    if (window._product && document.querySelector('.gallery')) {
-      if (!document.querySelector('.urgency-bar')) {
-        buildUrgencyBar();
-      }
-    }
-  }, 800);
+  setInterval(buildUrgencyBar, 800);
 })();
 </script>
+
 </body>
 </html>
