@@ -416,5 +416,182 @@ setTheme(savedTheme);
   color: var(--gold) !important;
 }
 </style>
+
+<style id="chz-urgency-bar">
+.urgency-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 14px;
+  background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(245,158,11,0.15));
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.urgency-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444);
+  animation: urgencyPulse 2s infinite;
+}
+@keyframes urgencyPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+.urgency-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.urgency-label {
+  font-size: 12px;
+  color: var(--mt);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.urgency-timer {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 900;
+  color: #ef4444;
+  background: rgba(239,68,68,0.15);
+  padding: 4px 10px;
+  border-radius: 8px;
+  letter-spacing: 2px;
+  direction: ltr;
+}
+.urgency-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.urgency-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.badge-cod {
+  background: rgba(16,185,129,0.15);
+  color: #10b981;
+  border: 1px solid rgba(16,185,129,0.3);
+}
+.badge-ship {
+  background: rgba(59,130,246,0.15);
+  color: #3b82f6;
+  border: 1px solid rgba(59,130,246,0.3);
+}
+.badge-stock {
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.3);
+  animation: stockPulse 1.5s infinite;
+}
+@keyframes stockPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+html[data-theme="light"] .urgency-bar {
+  background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(245,158,11,0.08));
+}
+</style>
+
+<script>
+// URGENCY-BAR
+(function(){
+  var timerInterval = null;
+
+  function buildUrgencyBar() {
+    var container = document.querySelector('.container');
+    if (!container) return;
+    
+    // إزالة الشريط القديم إن وجد
+    var oldBar = document.querySelector('.urgency-bar');
+    if (oldBar) oldBar.remove();
+
+    // نبحث عن مكان الإدراج (بعد .gallery)
+    var gallery = document.querySelector('.gallery');
+    if (!gallery) return;
+
+    // إنشاء الشريط
+    var bar = document.createElement('div');
+    bar.className = 'urgency-bar';
+    
+    // حساب الوقت المتبقي (نهاية اليوم أو من flashEndsAt)
+    var endsAt = window._product && window._product.flashEndsAt;
+    var endTime;
+    if (endsAt) {
+      endTime = new Date(endsAt).getTime();
+    } else {
+      // افتراضي: نهاية اليوم
+      endTime = new Date();
+      endTime.setHours(23, 59, 59, 999);
+      endTime = endTime.getTime();
+    }
+
+    // الكمية المتبقية
+    var stock = (window._product && (window._product.flashStock != null ? window._product.flashStock : window._product.stock)) || 0;
+    var stockText = stock > 0 && stock <= 10 ? 'بقي ' + stock + ' قطع فقط!' : '';
+
+    var html = '<div class="urgency-row">';
+    html += '<div class="urgency-label">⏳ ينتهي العرض بعد:</div>';
+    html += '<div class="urgency-timer" id="urgency-timer">--:--:--</div>';
+    html += '</div>';
+    
+    html += '<div class="urgency-badges">';
+    html += '<div class="urgency-badge badge-cod">💵 دفع عند الاستلام</div>';
+    html += '<div class="urgency-badge badge-ship">🚚 توصيل سريع</div>';
+    if (stockText) {
+      html += '<div class="urgency-badge badge-stock">🔥 ' + stockText + '</div>';
+    }
+    html += '</div>';
+    
+    bar.innerHTML = html;
+    gallery.parentNode.insertBefore(bar, gallery.nextSibling);
+
+    // تشغيل العداد
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(function() {
+      var now = new Date().getTime();
+      var diff = endTime - now;
+      if (diff <= 0) {
+        clearInterval(timerInterval);
+        var timerEl = document.getElementById('urgency-timer');
+        if (timerEl) timerEl.textContent = 'انتهى!';
+        return;
+      }
+      var h = Math.floor(diff / (1000 * 60 * 60));
+      var m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      var s = Math.floor((diff % (1000 * 60)) / 1000);
+      var timerEl = document.getElementById('urgency-timer');
+      if (timerEl) {
+        timerEl.textContent = 
+          String(h).padStart(2, '0') + ':' + 
+          String(m).padStart(2, '0') + ':' + 
+          String(s).padStart(2, '0');
+      }
+    }, 1000);
+  }
+
+  // مراقبة ظهور الصفحة
+  setInterval(function() {
+    if (window._product && document.querySelector('.gallery')) {
+      if (!document.querySelector('.urgency-bar')) {
+        buildUrgencyBar();
+      }
+    }
+  }, 800);
+})();
+</script>
 </body>
 </html>
