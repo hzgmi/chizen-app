@@ -23032,6 +23032,365 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
+
+<!-- NEW PRODUCT DETAILS PAGE -->
+<div class="screen" id="sc-details-new">
+  <div class="chz-new-det-container">
+    <!-- زر الرجوع -->
+    <button class="chz-new-back" onclick="APP.goTab('home')">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </button>
+
+    <!-- معرض الصور -->
+    <div class="chz-new-gallery">
+      <div class="chz-new-main-img" id="det-img"></div>
+      <div class="chz-new-thumbs" id="det-thumbs-host"></div>
+    </div>
+
+    <!-- المعلومات -->
+    <div class="chz-new-info">
+      <div class="chz-new-brand" id="det-brand"></div>
+      <h1 class="chz-new-name" id="det-name"></h1>
+      <div class="chz-new-rate" id="det-rate"></div>
+
+      <!-- السعر -->
+      <div class="chz-new-price-row">
+        <div class="chz-new-price" id="det-price"></div>
+        <div class="chz-new-currencies" id="det-currencies"></div>
+      </div>
+    </div>
+
+    <!-- المميزات -->
+    <div id="det-features-container"></div>
+
+    <!-- المواصفات -->
+    <div id="det-specs-container"></div>
+
+    <!-- الوصف (يظهر فقط إذا لم توجد مميزات) -->
+    <div class="chz-new-desc-wrapper" id="det-desc-wrapper">
+      <div class="chz-new-desc-title">📄 الوصف</div>
+      <div class="chz-new-desc" id="det-desc"></div>
+    </div>
+
+    <!-- الكمية وأزرار الشراء (ثابتة في الأسفل) -->
+    <div class="chz-new-actions">
+      <div class="chz-new-qty">
+        <button class="chz-new-qty-btn" onclick="APP.chQty(-1)">−</button>
+        <span class="chz-new-qty-val" id="det-qty">1</span>
+        <button class="chz-new-qty-btn" onclick="APP.chQty(1)">+</button>
+      </div>
+      <div class="chz-new-buttons">
+        <button class="chz-new-btn-cart" onclick="APP.addDetCart()">🛒 أضف للسلة</button>
+        <button class="chz-new-btn-buy" onclick="APP.buyNow()">⚡ اشترِ الآن</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style id="chz-hide-old-details">
+#sc-details { display: none !important; }
+</style>
+
+<style id="chz-new-details-css">
+#sc-details-new {
+  background: var(--bg, #0a0e1a);
+  min-height: 100vh;
+  padding-bottom: 120px;
+  overflow-y: auto;
+  display: none;
+}
+#sc-details-new.active {
+  display: block;
+}
+
+.chz-new-det-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 15px;
+  position: relative;
+}
+
+.chz-new-back {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--bd, #334155);
+  color: var(--cr, #f8fafc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.chz-new-gallery { margin-bottom: 20px; }
+.chz-new-main-img {
+  width: 100%;
+  height: 300px;
+  background: var(--bg2, #151030);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--bd, #334155);
+}
+.chz-new-main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.chz-new-thumbs { margin-top: 10px; display: flex; gap: 8px; overflow-x: auto; }
+.chz-new-thumbs .chz-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.chz-new-thumbs .chz-thumb.active { border-color: #ec4899; }
+.chz-new-thumbs .chz-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.chz-new-info { margin-bottom: 20px; }
+.chz-new-brand { font-size: 12px; color: var(--mt, #94a3b8); margin-bottom: 5px; }
+.chz-new-name { font-size: 20px; font-weight: 900; color: var(--cr, #f8fafc); margin: 0 0 10px 0; line-height: 1.4; }
+.chz-new-rate { font-size: 14px; color: #fbbf24; margin-bottom: 15px; }
+
+.chz-new-price-row { display: flex; flex-direction: column; gap: 10px; }
+.chz-new-price { font-size: 24px; font-weight: 900; color: #ec4899; }
+.chz-new-currencies { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chz-new-currencies > div {
+  background: var(--nav, #1e293b);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.chz-new-desc-wrapper {
+  margin: 20px 0;
+  padding: 15px;
+  background: var(--nav, #1e293b);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 16px;
+}
+.chz-new-desc-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 10px; }
+.chz-new-desc { font-size: 13px; color: var(--mt, #cbd5e1); line-height: 1.7; }
+
+.chz-new-actions {
+  position: fixed;
+  bottom: 70px;
+  left: 0;
+  right: 0;
+  background: var(--nav, #1e293b);
+  border-top: 1px solid var(--bd, #334155);
+  padding: 12px 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 999;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.chz-new-qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg2, #0f172a);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 12px;
+  padding: 5px;
+}
+.chz-new-qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bg2, #0f172a);
+  border: 1px solid var(--bd, #334155);
+  color: var(--cr, #f8fafc);
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.chz-new-qty-val {
+  min-width: 30px;
+  text-align: center;
+  color: var(--cr, #f8fafc);
+  font-weight: 900;
+}
+.chz-new-buttons { flex: 1; display: flex; gap: 10px; }
+.chz-new-btn-cart {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--bg2, #1e293b);
+  border: 1px solid var(--bd, #334155);
+  color: var(--cr, #f8fafc);
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+.chz-new-btn-buy {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ec4899, #be185d);
+  border: none;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* المميزات والمواصفات */
+.chz-feat-box-v3 {
+  background: var(--nav, #1e293b);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.chz-feat-title-v3 { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.chz-feat-list-v3 { list-style: none; padding: 0; margin: 0; }
+.chz-feat-item-v3 { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--bd, #334155); font-size: 13px; color: var(--mt, #cbd5e1); line-height: 1.5; }
+.chz-feat-item-v3:last-child { border-bottom: none; }
+.chz-feat-check-v3 { color: #10b981; font-weight: 900; font-size: 15px; flex-shrink: 0; }
+
+.chz-specs-box-v3 {
+  background: var(--nav, #1e293b);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.chz-specs-title-v3 { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.chz-specs-grid-v3 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chz-spec-card-v3 { background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 10px; padding: 10px; }
+.chz-spec-key-v3 { font-size: 11px; color: var(--mt, #94a3b8); font-weight: 700; margin-bottom: 4px; }
+.chz-spec-val-v3 { font-size: 13px; color: var(--cr, #f8fafc); font-weight: 800; }
+
+/* الوضع الفاتح */
+html[data-theme="light"] #sc-details-new { background: #f8fafc; }
+html[data-theme="light"] .chz-new-main-img { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-new-name { color: #0f172a; }
+html[data-theme="light"] .chz-new-brand { color: #64748b; }
+html[data-theme="light"] .chz-new-desc-wrapper,
+html[data-theme="light"] .chz-feat-box-v3,
+html[data-theme="light"] .chz-specs-box-v3 { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-new-desc-title,
+html[data-theme="light"] .chz-feat-title-v3,
+html[data-theme="light"] .chz-specs-title-v3 { color: #0f172a; }
+html[data-theme="light"] .chz-new-desc,
+html[data-theme="light"] .chz-feat-item-v3 { color: #334155; }
+html[data-theme="light"] .chz-new-actions { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-new-qty,
+html[data-theme="light"] .chz-new-qty-btn { background: #f8fafc; border-color: #e2e8f0; color: #0f172a; }
+html[data-theme="light"] .chz-new-qty-val { color: #0f172a; }
+html[data-theme="light"] .chz-new-btn-cart { background: #f8fafc; border-color: #e2e8f0; color: #0f172a; }
+html[data-theme="light"] .chz-spec-card-v3 { background: #f8fafc; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-spec-key-v3 { color: #64748b; }
+html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a; }
+</style>
+
+<script>
+// NEW-PAGE-RENDER
+(function(){
+  var lastProductId = null;
+  var origOpenProduct = window.APP.openProduct;
+
+  // استبدال دالة openProduct لفتح الصفحة الجديدة
+  window.APP.openProduct = function(id) {
+    // استدعاء الدالة الأصلية لتعبئة البيانات (نفس IDs)
+    origOpenProduct.call(this, id);
+    
+    // فتح الصفحة الجديدة
+    setTimeout(function() {
+      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+      var newPage = document.getElementById('sc-details-new');
+      if (newPage) newPage.classList.add('active');
+      
+      // تعبئة المميزات والمواصفات والوصف
+      renderNewDetails();
+    }, 100);
+  };
+
+  function renderNewDetails() {
+    if (!window.APP || !window.APP.currentProd) return;
+    var p = window.APP.currentProd;
+    if (lastProductId === p.id) return;
+    lastProductId = p.id;
+
+    // المميزات
+    var featContainer = document.getElementById('det-features-container');
+    if (featContainer) {
+      featContainer.innerHTML = '';
+      var features = p.features || [];
+      if (typeof features === 'string') features = features.split('\n').filter(function(l){ return l.trim(); });
+      
+      if (features.length > 0) {
+        var featBox = document.createElement('div');
+        featBox.className = 'chz-feat-box-v3';
+        var html = '<div class="chz-feat-title-v3"><span>✨</span> المميزات</div><ul class="chz-feat-list-v3">';
+        features.forEach(function(f) {
+          if (!f.trim()) return;
+          html += '<li class="chz-feat-item-v3"><span class="chz-feat-check-v3">✓</span><span>' + f.trim().replace(/</g, '&lt;') + '</span></li>';
+        });
+        html += '</ul>';
+        featBox.innerHTML = html;
+        featContainer.appendChild(featBox);
+      }
+    }
+
+    // المواصفات
+    var specsContainer = document.getElementById('det-specs-container');
+    if (specsContainer) {
+      specsContainer.innerHTML = '';
+      var specs = p.specs || {};
+      var specsKeys = Object.keys(specs);
+      
+      if (specsKeys.length > 0) {
+        var specsBox = document.createElement('div');
+        specsBox.className = 'chz-specs-box-v3';
+        var html = '<div class="chz-specs-title-v3"><span>📋</span> المواصفات</div><div class="chz-specs-grid-v3">';
+        specsKeys.forEach(function(key) {
+          html += '<div class="chz-spec-card-v3"><div class="chz-spec-key-v3">' + key.replace(/</g, '&lt;') + '</div><div class="chz-spec-val-v3">' + String(specs[key]).replace(/</g, '&lt;') + '</div></div>';
+        });
+        html += '</div>';
+        specsBox.innerHTML = html;
+        specsContainer.appendChild(specsBox);
+      }
+    }
+
+    // الوصف
+    var descWrapper = document.getElementById('det-desc-wrapper');
+    var descEl = document.getElementById('det-desc');
+    if (descWrapper && descEl) {
+      var hasFeatures = p.features && p.features.length > 0;
+      if (hasFeatures) {
+        descWrapper.style.display = 'none';
+      } else {
+        descWrapper.style.display = 'block';
+        descEl.textContent = p.desc || '';
+      }
+    }
+  }
+
+  // عرض الصور المصغرة (يُستدعى من openProduct الأصلي عبر id="det-thumbs-host")
+  // الدالة الأصلية تبحث عن .det-thumbs-host، لذلك سنضيف كلاس إضافي للحاوية
+  var thumbsHost = document.getElementById('det-thumbs-host');
+  if (thumbsHost) thumbsHost.classList.add('det-thumbs-host');
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
