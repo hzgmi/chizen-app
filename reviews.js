@@ -17,12 +17,14 @@
         authReady = true;
         console.log('[AUTH] Signed in:', user.uid);
         if (window.currentProduct) loadReviews();
+        if (pendingReview) { pendingReview.userId = user.uid; doSubmitReview(); }
       } else {
         auth.signInAnonymously().then(function(result) {
           currentUserId = result.user.uid;
           authReady = true;
           console.log('[AUTH] Anonymous:', result.user.uid);
           if (window.currentProduct) loadReviews();
+          if (pendingReview) { pendingReview.userId = currentUserId; doSubmitReview(); }
         }).catch(function(err) {
           console.error('[AUTH] Failed:', err.message);
           currentUserId = 'guest_' + Math.random().toString(36).substr(2, 9);
@@ -61,31 +63,13 @@
   };
 
   // إرسال تقييم
-  window.submitReview = function() {
-    if (selectedRating === 0) {
-      showToast('⚠️ اختر عدد النجوم أولاً');
-      return;
-    }
-    if (!authReady || !currentUserId) {
-      showToast('⏳ جاري الاتصال... يرجى المحاولة بعد ثانية');
-      return;
-    }
-    var text = document.getElementById('reviewText').value.trim();
-    if (!window.currentProduct) {
-      showToast('⚠️ المنتج غير محمل');
-      return;
-    }
+  var pendingReview = null;
 
-    var review = {
-      productId: window.currentProduct.id,
-      userId: currentUserId,
-      rating: Number(selectedRating),
-      text: text,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      likes: 0,
-      dislikes: 0
-    };
-
+  function doSubmitReview() {
+    if (!pendingReview) return;
+    var review = pendingReview;
+    pendingReview = null;
+    
     db.collection('reviews').add(review).then(function() {
       showToast('✅ تم إرسال تقييمك');
       document.getElementById('reviewFormContainer').style.display = 'none';
@@ -95,6 +79,36 @@
       console.error('[REVIEW] Error:', e);
       showToast('❌ فشل: ' + e.message);
     });
+  }
+
+  window.submitReview = function() {
+    if (selectedRating === 0) {
+      showToast('⚠️ اختر عدد النجوم أولاً');
+      return;
+    }
+    var text = document.getElementById('reviewText').value.trim();
+    if (!window.currentProduct) {
+      showToast('⚠️ المنتج غير محمل');
+      return;
+    }
+
+    pendingReview = {
+      productId: window.currentProduct.id,
+      userId: currentUserId || 'pending',
+      rating: Number(selectedRating),
+      text: text,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      likes: 0,
+      dislikes: 0
+    };
+
+    if (authReady && currentUserId) {
+      pendingReview.userId = currentUserId;
+      doSubmitReview();
+    } else {
+      showToast('⏳ جاري الاتصال... سيتم الإرسال تلقائياً');
+      // سيتم الإرسال تلقائياً عند اكتمال Auth (في onAuthStateChanged)
+    }
   };
 
   // جلب التقييمات
