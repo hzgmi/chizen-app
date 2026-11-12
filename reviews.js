@@ -309,12 +309,6 @@ window.showToast = function(msg) {
   initAuth();
   
   var tries = 0;
-  var iv = setInterval(function() {
-    tries++;
-    if ((window.currentProduct || (window.APP && window.APP.currentProd))) {
-      clearInterval(iv);
-      if (authReady) loadReviews();
-    }
-    if (tries > 30) clearInterval(iv);
-  }, 500);
+  // setInterval removed for performance
+
 })();
