@@ -1,16 +1,5 @@
 // reviews.js - نظام التقييمات مع Firebase Auth
 (function(){
-
-if (typeof window.showToast !== 'function') {
-  window.showToast = function(msg) {
-    var t = document.createElement('div');
-    t.style.cssText = 'position:fixed;bottom:120px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:10px 20px;border-radius:30px;font-size:13px;font-weight:600;z-index:99999;box-shadow:0 10px 25px rgba(0,0,0,0.3);';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(function() { t.remove(); }, 3000);
-  };
-}
-
 // Firebase init (مستقل)
 if (window.FIREBASE_CONFIG && !firebase.apps.length) {
   try {
@@ -25,7 +14,7 @@ if (!window.db && db) window.db = db;
 console.log('[REVIEWS] db ready:', !!db);
 console.log('[REVIEWS] auth ready:', !!firebase.auth);
 
-  window.window.selectedRating = 0;
+  var selectedRating = 0;
   var myReviewId = null;
   var myReviewData = null;
   var currentUserId = null;
@@ -73,10 +62,10 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
     if (!stars.length) return;
     stars.forEach(function(star) {
       star.addEventListener('mouseover', function() { highlightStars(this.dataset.value); });
-      star.addEventListener('mouseout', function() { highlightStars(window.selectedRating); });
+      star.addEventListener('mouseout', function() { highlightStars(selectedRating); });
       star.addEventListener('click', function() {
-        window.selectedRating = Number(this.dataset.value);
-        highlightStars(window.selectedRating);
+        selectedRating = Number(this.dataset.value);
+        highlightStars(selectedRating);
       });
     });
     starsAttached = true;
@@ -113,7 +102,7 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
   }
 
   window.submitReview = function() {
-    if (window.selectedRating === 0) {
+    if (selectedRating === 0) {
       showToast('⚠️ اختر عدد النجوم أولاً');
       return;
     }
@@ -126,7 +115,7 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
     var reviewData = {
       productId: (window.currentProduct || (window.APP && window.APP.currentProd)).id,
       userId: currentUserId || 'pending',
-      rating: Number(window.selectedRating),
+      rating: Number(selectedRating),
       text: text,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -146,7 +135,7 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
     pendingReview = {
       productId: (window.currentProduct || (window.APP && window.APP.currentProd)).id,
       userId: currentUserId || 'pending',
-      rating: Number(window.selectedRating),
+      rating: Number(selectedRating),
       text: text,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       likes: 0,
@@ -292,8 +281,8 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
   // دالة تعديل التقييم
   window.editMyReview = function() {
     if (!myReviewData) return;
-    window.selectedRating = myReviewData.rating;
-    highlightStars(window.selectedRating);
+    selectedRating = myReviewData.rating;
+    highlightStars(selectedRating);
     document.getElementById('reviewText').value = myReviewData.text || '';
     document.getElementById('reviewFormContainer').style.display = 'block';
     document.getElementById('alreadyReviewedMsg').style.display = 'none';
