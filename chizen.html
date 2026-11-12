@@ -22842,89 +22842,7 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
 
 
 
-<script>
-// PREMIUM-DETAILS-V2
-(function(){
-  var lastProductId = null;
 
-  function renderPremiumDetails() {
-    if (!window.APP || !window.APP.currentProd) return;
-    var p = window.APP.currentProd;
-    if (lastProductId === p.id) return;
-    lastProductId = p.id;
-
-    var detScreen = document.getElementById('sc-detail');
-    if (!detScreen) return;
-
-    // حذف أي أقسام قديمة إن وُجدت
-    var oldFeat = detScreen.querySelector('.chz-feat-box');
-    var oldSpecs = detScreen.querySelector('.chz-specs-box');
-    if (oldFeat) oldFeat.remove();
-    if (oldSpecs) oldSpecs.remove();
-
-    // البحث عن حاوية مناسبة للإدراج (بعد السعر أو الوصف)
-    var descEl = document.getElementById('det-desc');
-    if (!descEl) return;
-    var parent = descEl.parentNode;
-
-    // ═══ المميزات ═══
-    var features = p.features || [];
-    if (typeof features === 'string') {
-      features = features.split('\n').filter(function(l){ return l.trim(); });
-    }
-
-    if (features.length > 0) {
-      var featBox = document.createElement('div');
-      featBox.className = 'chz-feat-box';
-      var featHTML = '<div class="chz-feat-title"><span>✨</span> المميزات</div>';
-      featHTML += '<ul class="chz-feat-list">';
-      features.forEach(function(f) {
-        if (!f.trim()) return;
-        featHTML += '<li class="chz-feat-item">';
-        featHTML += '<span class="chz-feat-check">✓</span>';
-        featHTML += '<span>' + f.trim().replace(/</g, '&lt;') + '</span>';
-        featHTML += '</li>';
-      });
-      featHTML += '</ul>';
-      featBox.innerHTML = featHTML;
-      parent.insertBefore(featBox, descEl);
-    }
-
-    // ═══ المواصفات ═══
-    var specs = p.specs || {};
-    var specsKeys = Object.keys(specs);
-
-    if (specsKeys.length > 0) {
-      var specsBox = document.createElement('div');
-      specsBox.className = 'chz-specs-box';
-      var specsHTML = '<div class="chz-specs-title"><span>📋</span> المواصفات</div>';
-      specsHTML += '<div class="chz-specs-grid">';
-      specsKeys.forEach(function(key) {
-        specsHTML += '<div class="chz-spec-card">';
-        specsHTML += '<div class="chz-spec-key">' + key.replace(/</g, '&lt;') + '</div>';
-        specsHTML += '<div class="chz-spec-val">' + String(specs[key]).replace(/</g, '&lt;') + '</div>';
-        specsHTML += '</div>';
-      });
-      specsHTML += '</div>';
-      specsBox.innerHTML = specsHTML;
-      parent.insertBefore(specsBox, descEl.nextSibling);
-    }
-  }
-
-  // تشغيل عند فتح المنتج
-  setInterval(renderPremiumDetails, 800);
-
-  // تشغيل عند تغيير الشاشة
-  var observer = new MutationObserver(function() {
-    var detScreen = document.getElementById('sc-detail');
-    if (detScreen && detScreen.classList.contains('active')) {
-      lastProductId = null;
-      setTimeout(renderPremiumDetails, 300);
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-})();
-</script>
 
 <style id="chz-final-hide-desc">
 /* إخفاء كل النصوص المكررة القديمة */
@@ -22951,6 +22869,44 @@ html[data-theme="light"] #det-specs-block {
   border-color: #e2e8f0 !important;
 }
 </style>
+
+<script>
+// ULTIMATE-HIDE-DUPLICATE
+(function(){
+  function hideDuplicateDesc() {
+    var descEl = document.getElementById('det-desc');
+    if (!descEl) return;
+    
+    var featBlock = document.getElementById('det-features-block');
+    var specsBlock = document.getElementById('det-specs-block');
+    
+    var hasFeatures = featBlock && featBlock.children.length > 0;
+    var hasSpecs = specsBlock && specsBlock.children.length > 0;
+    
+    if (hasFeatures || hasSpecs) {
+      // إذا كان هناك مميزات أو مواصفات، أخفِ الوصف
+      descEl.style.display = 'none';
+      descEl.style.visibility = 'hidden';
+      descEl.style.height = '0';
+      descEl.style.overflow = 'hidden';
+    }
+  }
+  
+  // تطبيق كل 300 مللي ثانية (لضمان بعد الرسم)
+  setInterval(hideDuplicateDesc, 300);
+  
+  // أيضاً عند تغيير الشاشة
+  var observer = new MutationObserver(function() {
+    var detScreen = document.getElementById('sc-detail');
+    if (detScreen && detScreen.classList.contains('active')) {
+      setTimeout(hideDuplicateDesc, 100);
+      setTimeout(hideDuplicateDesc, 500);
+      setTimeout(hideDuplicateDesc, 1500);
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
