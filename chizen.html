@@ -23357,10 +23357,101 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
       }
     }
 
+    // ═══ المقاسات ═══
+    var sizesSection = document.getElementById('det-new-sizes-section');
+    var sizesContainer = document.getElementById('det-new-sizes');
+    if (sizesSection && sizesContainer) {
+      var allSizes = [];
+      // مقاسات الملابس
+      if (p.sizes && p.sizes.length > 0) {
+        p.sizes.forEach(function(s) { allSizes.push({ type: 'cloth', value: s }); });
+      }
+      // مقاسات الأحذية
+      if (p.shoeSizes && p.shoeSizes.length > 0) {
+        p.shoeSizes.forEach(function(s) { allSizes.push({ type: 'shoe', value: s }); });
+      }
+      
+      if (allSizes.length > 0) {
+        sizesSection.style.display = 'block';
+        sizesContainer.innerHTML = '';
+        
+        // عنوان المقاسات
+        var titleEl = sizesSection.querySelector('.chz-det-section-title');
+        if (!titleEl) {
+          titleEl = document.createElement('div');
+          titleEl.className = 'chz-det-section-title';
+          titleEl.textContent = '📏 اختر المقاس';
+          sizesSection.insertBefore(titleEl, sizesContainer);
+        }
+        
+        allSizes.forEach(function(item, i) {
+          var div = document.createElement('div');
+          div.className = 'chz-det-size-option' + (i === 0 ? ' selected' : '');
+          div.textContent = item.value;
+          div.onclick = function() {
+            sizesContainer.querySelectorAll('.chz-det-size-option').forEach(function(o) { o.classList.remove('selected'); });
+            this.classList.add('selected');
+            window.APP.selectedSize = item.value;
+          };
+          if (i === 0) window.APP.selectedSize = item.value;
+          sizesContainer.appendChild(div);
+        });
+      } else {
+        sizesSection.style.display = 'none';
+      }
+    }
+
+    // ═══ البوكسات + طريقة البيع ═══
+    var boxSection = document.getElementById('det-new-boxes-section');
+    if (!boxSection) {
+      boxSection = document.createElement('div');
+      boxSection.id = 'det-new-boxes-section';
+      boxSection.style.cssText = 'margin: 15px 0;';
+      // إدراجه بعد المقاسات
+      if (sizesSection && sizesSection.parentNode) {
+        sizesSection.parentNode.insertBefore(boxSection, sizesSection.nextSibling);
+      }
+    }
+    
+    var boxes = p.boxes || 1;
+    var saleType = p.saleType || 'box_only';
+    
+    if (boxes > 1 || saleType === 'box_and_piece') {
+      boxSection.style.display = 'block';
+      var bhtml = '<div class="chz-det-section-title">📦 اختر العبوة</div>';
+      bhtml += '<div class="chz-det-sizes">';
+      
+      // خيار البوكس الكامل (دائماً)
+      bhtml += '<div class="chz-det-size-option selected" data-sale="box" onclick="window.selectSaleType(\'box\', this, ' + boxes + ')">بوكس كامل (' + boxes + ' قطع)</div>';
+      
+      // خيار القطعة الفردية (إذا كان مسموحاً)
+      if (saleType === 'box_and_piece') {
+        bhtml += '<div class="chz-det-size-option" data-sale="piece" onclick="window.selectSaleType(\'piece\', this, ' + boxes + ')">قطعة فردية</div>';
+      }
+      
+      bhtml += '</div>';
+      boxSection.innerHTML = bhtml;
+      
+      // تعيين النوع الافتراضي
+      window.APP.selectedSaleType = 'box';
+      window.APP.selectedBoxes = boxes;
+    } else {
+      boxSection.style.display = 'none';
+    }
+
     // الكمية
     document.getElementById('det-new-qty').textContent = '1';
     window.APP.currentQty = 1;
-  }
+  };
+
+  // دالة اختيار نوع البيع
+  window.selectSaleType = function(type, el, boxes) {
+    var container = el.parentNode;
+    container.querySelectorAll('.chz-det-size-option').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+    window.APP.selectedSaleType = type;
+    window.APP.selectedBoxes = (type === 'box') ? boxes : 1;
+  };
 })();
 </script>
 
