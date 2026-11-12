@@ -138,8 +138,18 @@ window.showToast = function(msg) {
     // التحقق من db
     if (!db) {
       window.showToast('❌ خطأ في الاتصال');
+      console.error('[REVIEW] db is null', { windowDb: window.db, FB: window.FB, firebase: !!window.firebase });
       return;
     }
+    
+    // تشخيص
+    console.log('[REVIEW] Submitting:', {
+      productId: prod.id,
+      rating: window.selectedRating,
+      text: text,
+      userId: currentUserId,
+      dbReady: !!db
+    });
     
     // إنشاء بيانات التقييم
     var reviewData = {
