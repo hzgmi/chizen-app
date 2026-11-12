@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>تفاصيل المنتج - CHIZEN</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --nav: #1e293b;
+    --bg2: #151030;
+    --bd: #334155;
+    --cr: #f8fafc;
+    --mt: #94a3b8;
+    --price: #ec4899;
+  }
+  html[data-theme="light"] {
+    --bg: #f8fafc;
+    --nav: #ffffff;
+    --bg2: #f1f5f9;
+    --bd: #e2e8f0;
+    --cr: #0f172a;
+    --mt: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', system-ui, sans-serif; }
+  body {
+    background: var(--bg);
+    color: var(--cr);
+    min-height: 100vh;
+    padding-bottom: 100px;
+    overflow-x: hidden;
+  }
+  .container { max-width: 600px; margin: 0 auto; padding: 15px; }
+  .back-btn {
+    position: fixed; top: 15px; right: 15px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(0,0,0,0.5); border: 1px solid var(--bd);
+    color: var(--cr); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 100; backdrop-filter: blur(10px);
+    font-size: 20px;
+  }
+  .gallery { margin-bottom: 20px; }
+  .main-img {
+    width: 100%; height: 320px; background: var(--bg2);
+    border-radius: 16px; overflow: hidden; display: flex;
+    align-items: center; justify-content: center;
+    border: 1px solid var(--bd);
+  }
+  .main-img img { width: 100%; height: 100%; object-fit: contain; }
+  .thumbs { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; }
+  .thumb {
+    width: 60px; height: 60px; border-radius: 8px; overflow: hidden;
+    border: 2px solid transparent; flex-shrink: 0; cursor: pointer;
+  }
+  .thumb.active { border-color: var(--price); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .brand { font-size: 12px; color: var(--mt); margin-bottom: 5px; }
+  .name { font-size: 20px; font-weight: 900; line-height: 1.4; margin-bottom: 10px; }
+  .rate { font-size: 14px; color: #fbbf24; margin-bottom: 15px; }
+  .price-row { margin-bottom: 20px; }
+  .price { font-size: 26px; font-weight: 900; color: var(--price); margin-bottom: 10px; }
+  .price .old { font-size: 14px; color: var(--mt); text-decoration: line-through; margin-right: 8px; }
+  .currencies { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cur-card {
+    background: var(--nav); border: 1px solid var(--bd);
+    border-radius: 10px; padding: 10px; text-align: center;
+  }
+  .cur-card .lbl { font-size: 10px; color: var(--mt); }
+  .cur-card .val { font-size: 15px; font-weight: 900; color: #C5A059; margin-top: 2px; }
+  .section { margin: 20px 0; }
+  .section-title {
+    font-size: 15px; font-weight: 900; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .feat-list { list-style: none; }
+  .feat-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px dashed var(--bd);
+    font-size: 13px; color: var(--mt); line-height: 1.5;
+  }
+  .feat-item:last-child { border-bottom: none; }
+  .feat-check { color: #10b981; font-weight: 900; font-size: 15px; }
+  .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .spec-card {
+    background: var(--bg2); border: 1px solid var(--bd);
+    border-radius: 10px; padding: 10px;
+  }
+  .spec-key { font-size: 11px; color: var(--mt); font-weight: 700; margin-bottom: 4px; }
+  .spec-val { font-size: 13px; font-weight: 800; }
+  .desc { font-size: 13px; color: var(--mt); line-height: 1.7; }
+  .actions {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--nav); border-top: 1px solid var(--bd);
+    padding: 12px 15px; display: flex; gap: 10px;
+    align-items: center; z-index: 100; max-width: 600px; margin: 0 auto;
+  }
+  .qty-box {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg2); border: 1px solid var(--bd);
+    border-radius: 12px; padding: 5px;
+  }
+  .qty-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--bg2); border: 1px solid var(--bd);
+    color: var(--cr); font-size: 16px; font-weight: 900; cursor: pointer;
+  }
+  .qty-val { min-width: 30px; text-align: center; font-weight: 900; }
+  .btns { flex: 1; display: flex; gap: 10px; }
+  .btn-cart {
+    flex: 1; padding: 14px; border-radius: 12px;
+    background: var(--bg2); border: 1px solid var(--bd);
+    color: var(--cr); font-weight: 800; font-size: 14px; cursor: pointer;
+  }
+  .btn-buy {
+    flex: 1; padding: 14px; border-radius: 12px;
+    background: linear-gradient(135deg, #ec4899, #be185d);
+    border: none; color: #fff; font-weight: 800; font-size: 14px; cursor: pointer;
+  }
+  .loading {
+    display: flex; justify-content: center; align-items: center;
+    min-height: 60vh; color: var(--mt); font-size: 14px;
+  }
+  .error {
+    display: flex; justify-content: center; align-items: center;
+    min-height: 60vh; color: #ef4444; font-size: 14px; text-align: center; padding: 20px;
+  }
+</style>
+</head>
+<body>
+  <div class="container" id="content">
+    <div class="loading">⏳ جاري تحميل المنتج...</div>
+  </div>
+
+<script>
+// Firebase init
+var firebaseConfig = window.FIREBASE_CONFIG || {};
+if (firebaseConfig.apiKey && !firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+var db = firebase.firestore();
+
+// استخراج ID المنتج من الرابط
+var params = new URLSearchParams(window.location.search);
+var productId = params.get('id');
+
+if (!productId) {
+  document.getElementById('content').innerHTML = '<div class="error">⚠️ لم يتم تحديد منتج</div>';
+} else {
+  loadProduct(productId);
+}
+
+function loadProduct(id) {
+  db.collection('products').doc(id).get().then(function(doc) {
+    if (!doc.exists) {
+      document.getElementById('content').innerHTML = '<div class="error">⚠️ المنتج غير موجود</div>';
+      return;
+    }
+    var p = doc.data();
+    p.id = doc.id;
+    renderProduct(p);
+  }).catch(function(e) {
+    document.getElementById('content').innerHTML = '<div class="error">⚠️ خطأ في التحميل: ' + e.message + '</div>';
+  });
+}
+
+function renderProduct(p) {
+  var images = (p.images && p.images.length) ? p.images : (p.img ? [p.img] : []);
+  var mainImg = images.length > 0 ? images[0] : 'https://via.placeholder.com/300';
+  var priceYER = Number(p.priceYER || p.price) || 0;
+  var oldPrice = Number(p.oldPriceYER || p.oldPrice) || 0;
+  var priceSAR = Number(p.priceSAR) || (priceYER / 135);
+  var priceUSD = Number(p.priceUSD) || (priceYER / 505);
+  
+  var html = '';
+  html += '<button class="back-btn" onclick="history.back()">→</button>';
+  
+  html += '<div class="gallery">';
+  html += '<div class="main-img"><img id="main-img" src="' + mainImg + '" alt="' + (p.name || '') + '"></div>';
+  if (images.length > 1) {
+    html += '<div class="thumbs">';
+    images.forEach(function(src, i) {
+      html += '<div class="thumb' + (i === 0 ? ' active' : '') + '" onclick="changeImage(\'' + src + '\', this)"><img src="' + src + '"></div>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  
+  html += '<div class="brand">' + (p.brand || '') + '</div>';
+  html += '<h1 class="name">' + (p.name || 'منتج') + '</h1>';
+  html += '<div class="rate">⭐ ' + (p.rating || 4.5) + ' (' + (p.reviews || 0) + ')</div>';
+  
+  html += '<div class="price-row">';
+  html += '<div class="price">' + Math.round(priceYER).toLocaleString('en') + ' ر.ي';
+  if (oldPrice > priceYER) html += '<span class="old">' + Math.round(oldPrice).toLocaleString('en') + ' ر.ي</span>';
+  html += '</div>';
+  html += '<div class="currencies">';
+  html += '<div class="cur-card"><div class="lbl">🇸🇦 سعودي</div><div class="val">' + priceSAR.toFixed(2) + '</div></div>';
+  html += '<div class="cur-card"><div class="lbl">🇺🇸 دولار</div><div class="val">' + priceUSD.toFixed(2) + '</div></div>';
+  html += '</div>';
+  html += '</div>';
+  
+  if (p.features && p.features.length > 0) {
+    html += '<div class="section">';
+    html += '<div class="section-title">✨ المميزات</div>';
+    html += '<ul class="feat-list">';
+    p.features.forEach(function(f) {
+      html += '<li class="feat-item"><span class="feat-check">✓</span><span>' + f + '</span></li>';
+    });
+    html += '</ul>';
+    html += '</div>';
+  }
+  
+  if (p.specs && Object.keys(p.specs).length > 0) {
+    html += '<div class="section">';
+    html += '<div class="section-title">📋 المواصفات</div>';
+    html += '<div class="specs-grid">';
+    Object.keys(p.specs).forEach(function(k) {
+      html += '<div class="spec-card"><div class="spec-key">' + k + '</div><div class="spec-val">' + p.specs[k] + '</div></div>';
+    });
+    html += '</div>';
+    html += '</div>';
+  }
+  
+  if (p.desc && (!p.features || p.features.length === 0)) {
+    html += '<div class="section">';
+    html += '<div class="section-title">📄 الوصف</div>';
+    html += '<div class="desc">' + p.desc + '</div>';
+    html += '</div>';
+  }
+  
+  html += '<div class="actions">';
+  html += '<div class="qty-box">';
+  html += '<button class="qty-btn" onclick="changeQty(-1)">−</button>';
+  html += '<span class="qty-val" id="qty">1</span>';
+  html += '<button class="qty-btn" onclick="changeQty(1)">+</button>';
+  html += '</div>';
+  html += '<div class="btns">';
+  html += '<button class="btn-cart" onclick="addToCart()">🛒 أضف للسلة</button>';
+  html += '<button class="btn-buy" onclick="buyNow()">⚡ اشترِ الآن</button>';
+  html += '</div>';
+  html += '</div>';
+  
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('content').className = 'container';
+  document.getElementById('content').style.padding = '15px';
+  
+  window._product = p;
+  window._qty = 1;
+}
+
+function changeImage(src, el) {
+  document.getElementById('main-img').src = src;
+  document.querySelectorAll('.thumb').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+function changeQty(d) {
+  window._qty = Math.max(1, window._qty + d);
+  document.getElementById('qty').textContent = window._qty;
+}
+
+function addToCart() {
+  if (window.parent && window.parent.APP) {
+    window.parent.APP.addCart(window._product.id, window._qty);
+    window.parent.APP.toast('✅ أضيف للسلة');
+  } else {
+    alert('تمت الإضافة للسلة (Qty: ' + window._qty + ')');
+  }
+}
+
+function buyNow() {
+  if (window.parent && window.parent.APP) {
+    window.parent.APP.addCart(window._product.id, window._qty);
+    setTimeout(function() {
+      window.parent.APP.goTab('cart');
+    }, 300);
+  } else {
+    alert('شراء الآن (Qty: ' + window._qty + ')');
+  }
+}
+
+// تغيير الثيم
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+}
+var savedTheme = localStorage.getItem('theme') || 'dark';
+setTheme(savedTheme);
+</script>
+</body>
+</html>
