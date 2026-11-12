@@ -23046,6 +23046,43 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
+
+<script>
+// SMART-DESC-HIDE
+(function(){
+  function applySmartHide() {
+    var descEl = document.getElementById('det-desc');
+    if (!descEl) return;
+    
+    var featBlock = document.getElementById('det-features-block');
+    var specsBlock = document.getElementById('det-specs-block');
+    
+    // التحقق من وجود مميزات أو مواصفات
+    var hasFeatures = featBlock && featBlock.style.display !== 'none' && featBlock.innerHTML.trim() !== '';
+    var hasSpecs = specsBlock && specsBlock.innerHTML.trim() !== '';
+    
+    if (hasFeatures || hasSpecs) {
+      // إذا كان هناك مميزات أو مواصفات، أخفِ الوصف
+      descEl.style.display = 'none';
+    } else {
+      // إذا لم يكن هناك مميزات ولا مواصفات، اعرض الوصف
+      descEl.style.display = '';
+    }
+  }
+
+  // تطبيق عند فتح المنتج
+  setInterval(applySmartHide, 500);
+  
+  // أيضاً عند تغيير الشاشة
+  var observer = new MutationObserver(function() {
+    var detScreen = document.getElementById('sc-detail');
+    if (detScreen && detScreen.classList.contains('active')) {
+      setTimeout(applySmartHide, 300);
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
