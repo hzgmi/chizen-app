@@ -1,18 +1,17 @@
 // reviews.js - نظام التقييمات مع Firebase Auth
 (function(){
-// Firebase init (مستقل)
-if (window.FIREBASE_CONFIG && !firebase.apps.length) {
-  try {
-    firebase.initializeApp(window.FIREBASE_CONFIG);
-    console.log('[REVIEWS] Firebase initialized');
-  } catch(e) {
-    console.error('[REVIEWS] Firebase init error:', e.message);
+// Firebase init (بدون إعادة تهيئة)
+// chizen.html يهيئ Firebase بالفعل، لذا لا نعيد التهيئة
+var db = window.db || (window.FB && window.FB.db);
+if (!db) {
+  // إذا لم يكن هناك db (لأننا في details.html مثلاً)، نهيئ Firebase
+  if (window.FIREBASE_CONFIG && !firebase.apps.length) {
+    try { firebase.initializeApp(window.FIREBASE_CONFIG); } catch(e) {}
   }
+  db = firebase.firestore();
+  window.db = db;
 }
-var db = window.db || (window.FB && window.FB.db) || firebase.firestore();
-if (!window.db && db) window.db = db;
 console.log('[REVIEWS] db ready:', !!db);
-console.log('[REVIEWS] auth ready:', !!firebase.auth);
 
   
 window.showToast = function(msg) {
