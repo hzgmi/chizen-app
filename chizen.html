@@ -23382,7 +23382,19 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
 (function(){
   window.APP = window.APP || {};
 
-  ;
+  window.APP.openProductNew = function(id) {
+    var p = null;
+    (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    this.currentProd = p;
+    window.currentProduct = p;
+    this.currentQty = 1;
+
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    var det = document.getElementById('sc-details-new');
+    if (det) det.classList.add('active');
+    fillDetailsNew(p);
+  };
 
   window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
