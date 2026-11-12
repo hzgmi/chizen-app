@@ -23191,6 +23191,10 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.add('active');
     fillDetailsNew(p);
+    // تحميل التقييمات الخاصة بهذا المنتج
+    if (typeof window.loadReviews === 'function') {
+      setTimeout(window.loadReviews, 300);
+    }
   };
 
   window.APP.closeDetailsNew = function() {
