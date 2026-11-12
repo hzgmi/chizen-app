@@ -10918,6 +10918,19 @@ body #sc-home .chz-badge { position: absolute; top: -5px; right: -5px; min-width
 </script>
 
 <script src="firebase-config.js"></script>
+<script>
+// Firebase Init (early)
+if (window.FIREBASE_CONFIG && !firebase.apps.length) {
+  try {
+    firebase.initializeApp(window.FIREBASE_CONFIG);
+    window.db = firebase.firestore();
+    console.log('[FIREBASE] Initialized early');
+  } catch(e) {
+    console.error('[FIREBASE] Init error:', e.message);
+  }
+}
+</script>
+
 <script src="firebase-service.js"></script>
 <script src="client/notification-sound.js"></script>
 <script src="client/sound-haptic.js"></script>
