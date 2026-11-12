@@ -291,5 +291,65 @@ setTheme(savedTheme);
 </script>
 
 <script src="urgency.js?v=1"></script>
+
+<style id="chz-luxury-features-box">
+/* تغليف المميزات في مربع زجاجي */
+.section:has(.feat-list) {
+  background: rgba(30, 41, 59, 0.6) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(197, 160, 89, 0.3) !important;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 60px rgba(197, 160, 89, 0.05) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* إضافة توهج ذهبي خفيف في الزاوية */
+.section:has(.feat-list)::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -50% !important;
+  right: -50% !important;
+  width: 200% !important;
+  height: 200% !important;
+  background: radial-gradient(circle, rgba(197, 160, 89, 0.1) 0%, transparent 70%) !important;
+  pointer-events: none !important;
+}
+
+/* إزالة الخطوط الفاصلة بين المميزات */
+.feat-item {
+  border-bottom: none !important;
+  padding: 12px 0 !important;
+  gap: 14px !important;
+}
+.feat-item:last-child { border-bottom: none !important; }
+
+/* تحسين شكل علامة الصح */
+.feat-check {
+  color: #C5A059 !important;
+  font-size: 18px !important;
+  filter: drop-shadow(0 0 6px rgba(197, 160, 89, 0.6)) !important;
+}
+
+/* تحسين الخط */
+.feat-item span:last-child {
+  font-size: 14px !important;
+  color: #cbd5e1 !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+}
+
+/* في الوضع الفاتح */
+html[data-theme="light"] .section:has(.feat-list) {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(197, 160, 89, 0.4) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 0 60px rgba(197, 160, 89, 0.03) !important;
+}
+html[data-theme="light"] .feat-item span:last-child {
+  color: #334155 !important;
+}
+</style>
 </body>
 </html>
