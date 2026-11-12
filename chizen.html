@@ -22807,6 +22807,43 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
   }, 500);
 })();
 </script>
+
+<style id="chz-search-beauty">
+.chz-top-search-wrapper > div {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 30px !important; /* حواف دائرية */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important; /* ظل ناعم */
+  padding: 2px 8px !important;
+}
+.chz-top-search-wrapper input {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  padding: 12px 10px 12px 0 !important;
+}
+.chz-top-search-wrapper input::placeholder {
+  color: #94a3b8 !important;
+  font-weight: 700 !important;
+}
+.chz-top-search-wrapper span {
+  color: #e11d48 !important; /* لون أيقونة البحث */
+  font-size: 20px !important;
+  padding: 0 10px !important;
+}
+
+/* الوضع الليلي */
+html:not([data-theme="light"]) .chz-top-search-wrapper > div {
+  background: #1e293b !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+html:not([data-theme="light"]) .chz-top-search-wrapper input {
+  color: #f8fafc !important;
+}
+html:not([data-theme="light"]) .chz-top-search-wrapper input::placeholder {
+  color: #94a3b8 !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
