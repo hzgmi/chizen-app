@@ -11892,7 +11892,7 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     if(!this.validateSelection())return;
     var _p = this.currentProd;
     var cartItem = {
-      id: p.id, qty: this.currentQty,
+      id: _p.id, qty: this.currentQty,
       name: _p.name,
       image: _p.img || _p.image || '',
       supplier: _p.supplier || _p.supplierId || '',
@@ -11933,7 +11933,7 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     if(!this.validateSelection())return;
     var _p = this.currentProd;
     var cartItem = {
-      id: p.id, qty: this.currentQty,
+      id: _p.id, qty: this.currentQty,
       name: _p.name,
       image: _p.img || _p.image || '',
       supplier: _p.supplier || _p.supplierId || '',
