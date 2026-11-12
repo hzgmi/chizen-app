@@ -22909,6 +22909,49 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
+
+<style id="chz-product-details-fix">
+/* إخفاء النص المكرر القديم */
+#det-desc {
+  display: none !important;
+}
+
+/* تجميل مربع المميزات */
+#det-features-block {
+  background: var(--bg2, #f8fafc) !important;
+  border: 1px solid var(--bd, #e2e8f0) !important;
+  border-radius: 16px !important;
+  padding: 15px !important;
+  margin-bottom: 15px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+}
+
+/* تجميل مربع المواصفات */
+#det-specs-block {
+  background: var(--bg2, #f8fafc) !important;
+  border: 1px solid var(--bd, #e2e8f0) !important;
+  border-radius: 16px !important;
+  padding: 15px !important;
+  margin-bottom: 15px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+}
+
+/* تنسيق القوائم داخل المميزات */
+#det-features-block ul li {
+  border-bottom: 1px dashed var(--bd, #e2e8f0) !important;
+}
+#det-features-block ul li:last-child {
+  border-bottom: none !important;
+}
+
+/* تنسيق جدول المواصفات */
+#det-specs-block table td {
+  border-bottom: 1px dashed var(--bd, #e2e8f0) !important;
+}
+#det-specs-block table tr:last-child td {
+  border-bottom: none !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
