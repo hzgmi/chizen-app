@@ -10958,7 +10958,7 @@ var APP={
     // v59: render cats immediately (before Firestore)
     try { this.renderCats(); } catch(e){ console.warn('cats early:', e.message); }
     var _catRetry = 0;
-    var _catTimer = setInterval(function(){ var el = document.getElementById('cats'); if (el && el.children.length > 0) { clearInterval(_catTimer); return; } if (++_catRetry > 10) { clearInterval(_catTimer); return; } try { window.APP.renderCats(); } catch(e){} }, 300);
+    // _catTimer removed for performance
     try { if (this.renderBrands) this.renderBrands(); } catch(e){}
     // chz-active-coupon-restore
     try {
@@ -23116,7 +23116,7 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
   }
 
   // مراقبة مستمرة (كل 500 مللي ثانية)
-  setInterval(renderDetails, 500);
+  // setInterval(renderDetails, 500); // removed for performance
 
   // أيضاً عند تغيير الشاشة
   var observer = new MutationObserver(function() {
