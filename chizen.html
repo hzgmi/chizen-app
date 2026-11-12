@@ -23426,6 +23426,47 @@ html[data-theme="light"] .chz-det-btn-cart {
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
+
+<style id="chz-details-height-fix">
+/* إصلاح ارتفاع الصفحة والتمرير */
+#sc-details {
+  height: 100vh !important;
+  overflow-y: auto !important;
+  padding-bottom: 120px !important; /* مساحة للأزرار الثابتة */
+  display: block !important;
+}
+
+#sc-details.active {
+  display: block !important;
+}
+
+.chz-det-container {
+  padding-bottom: 20px !important;
+  min-height: 100% !important;
+}
+
+/* إصلاح الأزرار الثابتة */
+.chz-det-actions {
+  position: fixed !important;
+  bottom: 70px !important; /* فوق شريط التنقل السفلي */
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 999 !important;
+  padding: 12px 15px !important;
+  background: var(--nav, #1e293b) !important;
+  border-top: 1px solid var(--bd, #334155) !important;
+  display: flex !important;
+  gap: 10px !important;
+  align-items: center !important;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.2) !important;
+}
+
+/* في الوضع الفاتح */
+html[data-theme="light"] .chz-det-actions {
+  background: #ffffff !important;
+  border-top-color: #e2e8f0 !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
