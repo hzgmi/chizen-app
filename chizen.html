@@ -23785,117 +23785,118 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 
 
 
-<style id="chz-details-master-css">
-/* إعدادات عامة للصفحة */
+
+
+<style id="chz-sticky-bar-clean">
+/* المساحة السفلية للصفحة (حتى لا يغطي الشريط المحتوى) */
 #sc-details-new {
-  background: #0d1120;
-  min-height: 100vh;
-  padding-bottom: 200px; /* مساحة كافية لشريط الشراء */
-  overflow-y: auto;
-  display: none;
-  direction: rtl;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding-bottom: 180px !important;
 }
-#sc-details-new.active { display: block; }
-
-/* الحاوية الرئيسية */
-.chz-det-page { max-width: 600px; margin: 0 auto; padding: 15px; position: relative; }
-
-/* زر الرجوع */
-.chz-det-back {
-  position: absolute; top: 15px; right: 15px;
-  width: 40px; height: 40px; border-radius: 50%;
-  background: rgba(0,0,0,0.6); border: 1px solid #C5A059;
-  color: #C5A059; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; z-index: 10; backdrop-filter: blur(10px);
-}
-
-/* معرض الصور */
-.chz-det-gallery { margin-bottom: 20px; }
-.chz-det-main-img { width: 100%; height: 320px; background: #fff; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #1f2742; }
-.chz-det-main-img img { width: 100%; height: 100%; object-fit: contain; }
-.chz-det-thumbs { display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; padding: 5px 0; }
-.chz-det-thumbs .chz-thumb { width: 60px; height: 60px; border-radius: 12px; overflow: hidden; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; background: #14182b; padding: 2px; }
-.chz-det-thumbs .chz-thumb.active { border-color: #ec2a79; }
-.chz-det-thumbs .chz-thumb img { width: 100%; height: 100%; object-fit: cover; }
-
-/* المعلومات الأساسية */
-.chz-det-info { margin-bottom: 20px; }
-.chz-det-brand { font-size: 12px; color: #9ca3af; margin-bottom: 5px; }
-.chz-det-name { font-size: 20px; font-weight: 800; color: #fff; margin: 0 0 10px 0; line-height: 1.4; }
-.chz-det-rate { font-size: 14px; color: #f5b342; margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
-
-/* السعر */
-.chz-det-price-row { display: flex; flex-direction: column; gap: 10px; }
-.chz-det-price { font-size: 30px; font-weight: 800; color: #ec2a79; display: flex; align-items: center; gap: 8px; }
-.chz-det-price .old { font-size: 16px; color: #6b7280; text-decoration: line-through; }
-.chz-det-currencies { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.chz-det-currencies > div { background: #151a2d; border: 1px solid #1f2742; border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 65px; }
-.chz-det-currencies .lbl { font-size: 11px; color: #9ca3af; }
-.chz-det-currencies .val { font-size: 16px; font-weight: 700; color: #fff; }
-
-/* المقاسات */
-.chz-det-section-title { font-size: 14px; font-weight: 700; color: #fff; margin: 15px 0 10px; display: flex; align-items: center; gap: 6px; }
-.chz-det-sizes { display: flex; flex-wrap: wrap; gap: 8px; }
-.chz-det-size-option { background: transparent; border: 2px solid #2a3452; color: #e2e8f0; font-weight: 600; padding: 6px 18px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: 0.2s; }
-.chz-det-size-option.selected { border-color: #3b82f6; background: rgba(59,130,246,0.1); color: #60a5fa; }
-
-/* المواصفات والمميزات */
-.chz-det-specs-features { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-.chz-det-spec-box, .chz-det-feat-box { background: #151a2d; border-radius: 12px; padding: 12px; border: 1px solid #1f2742; }
-.chz-det-spec-box h3, .chz-det-feat-box h3 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
-.chz-det-spec-box h3 i, .chz-det-feat-box h3 i { color: #3b82f6; font-size: 13px; }
-.chz-det-spec-list, .chz-det-feat-list { list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 0; margin: 0; }
-.chz-det-spec-list li, .chz-det-feat-list li { font-size: 11px; color: #d1d5db; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; }
-.chz-det-spec-list li i, .chz-det-feat-list li i { color: #3b82f6; font-size: 10px; margin-top: 3px; }
-.chz-det-feat-list li i.fa-check-circle { color: #10b981; }
-
-/* الوصف */
-.chz-det-desc-wrapper { margin: 20px 0; padding: 15px; background: #151a2d; border: 1px solid #1f2742; border-radius: 16px; }
-.chz-det-desc-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-.chz-det-desc { font-size: 13px; color: #d1d5db; line-height: 1.7; }
-
-/* التقييمات */
-.chz-det-reviews { margin: 20px 0; }
-.chz-det-reviews-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 12px; }
-.chz-det-review-form { background: #151a2d; border: 1px solid #1f2742; border-radius: 16px; padding: 15px; margin-bottom: 15px; }
-.chz-star-input { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; direction: ltr; }
-.chz-star-input i { font-size: 28px; color: #4b5563; cursor: pointer; transition: 0.2s; }
-.chz-star-input i.active { color: #f5b342; }
-.chz-review-textarea { width: 100%; background: #0d1120; border: 1px solid #2a3452; color: #fff; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-family: inherit; font-size: 13px; resize: vertical; min-height: 50px; outline: none; }
-.chz-submit-review { width: 100%; background: #3b82f6; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
-.chz-already-reviewed { background: rgba(16,185,129,0.1); border: 1px solid #10b981; color: #10b981; padding: 12px; border-radius: 10px; font-size: 12px; text-align: center; font-weight: 700; margin-bottom: 15px; }
 
 /* شريط الشراء السفلي */
-.chz-det-actions {
-  position: fixed; bottom: 70px; left: 0; right: 0;
-  background: #0d1120; border-top: 1px solid #1f2742;
-  padding: 12px 15px; display: flex; flex-direction: column; gap: 10px;
-  z-index: 9999; max-width: 600px; margin: 0 auto;
-  box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+#sc-details-new .chz-det-actions {
+  position: fixed !important;
+  bottom: 70px !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: #0d1120 !important;
+  border-top: 1px solid #1f2742 !important;
+  padding: 12px 15px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  z-index: 9999 !important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.3) !important;
 }
-.chz-det-qty {
-  display: flex; align-items: center; background: #151a2d;
-  border: 1px solid #2a3452; border-radius: 12px;
-  overflow: hidden; height: 48px; width: fit-content;
+
+/* الصف الأول: العداد + أضف للسلة */
+#sc-details-new .chz-det-actions .row1,
+#sc-details-new .chz-det-actions > .chz-det-qty {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
 }
-.chz-det-qty-btn { background: transparent; border: none; width: 35px; height: 48px; font-size: 20px; font-weight: 600; color: #fff; cursor: pointer; }
-.chz-det-qty-val { width: 40px; height: 48px; line-height: 48px; text-align: center; font-size: 16px; font-weight: 600; color: #fff; }
 
-/* الأزرار */
-.chz-det-buttons { display: flex; gap: 10px; width: 100%; }
-.chz-det-btn-cart { flex: 1; height: 48px; background: #1b112b; color: white; border: 1px solid #2a1b40; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.chz-det-btn-buy { width: 100%; height: 48px; background: #ec2a79; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(236,42,121,0.25); }
+/* العداد */
+#sc-details-new .chz-det-qty {
+  display: flex !important;
+  align-items: center !important;
+  background: #151a2d !important;
+  border: 1px solid #2a3452 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  height: 48px !important;
+  width: fit-content !important;
+  flex-shrink: 0 !important;
+}
+#sc-details-new .chz-det-qty-btn {
+  background: transparent !important;
+  border: none !important;
+  width: 35px !important;
+  height: 48px !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+}
+#sc-details-new .chz-det-qty-val {
+  width: 40px !important;
+  height: 48px !important;
+  line-height: 48px !important;
+  text-align: center !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+}
 
-/* الوضع الفاتح */
-html[data-theme="light"] #sc-details-new { background: #f8fafc; }
-html[data-theme="light"] .chz-det-main-img { background: #fff; border-color: #e2e8f0; }
-html[data-theme="light"] .chz-det-name { color: #0f172a; }
-html[data-theme="light"] .chz-det-brand { color: #64748b; }
-html[data-theme="light"] .chz-det-spec-box, html[data-theme="light"] .chz-det-feat-box, html[data-theme="light"] .chz-det-desc-wrapper, html[data-theme="light"] .chz-det-review-form { background: #fff; border-color: #e2e8f0; }
-html[data-theme="light"] .chz-det-spec-box h3, html[data-theme="light"] .chz-det-feat-box h3, html[data-theme="light"] .chz-det-desc-title, html[data-theme="light"] .chz-det-reviews-title { color: #0f172a; }
-html[data-theme="light"] .chz-det-spec-list li, html[data-theme="light"] .chz-det-feat-list li, html[data-theme="light"] .chz-det-desc { color: #334155; }
-html[data-theme="light"] .chz-det-actions { background: #fff; border-color: #e2e8f0; }
+/* زر أضف للسلة */
+#sc-details-new .chz-det-btn-cart {
+  flex: 1 !important;
+  height: 48px !important;
+  background: #1b112b !important;
+  color: white !important;
+  border: 1px solid #2a1b40 !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+/* زر اشتر الآن (الصف الثاني) */
+#sc-details-new .chz-det-btn-buy {
+  width: 100% !important;
+  height: 48px !important;
+  background: #ec2a79 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 12px rgba(236,42,121,0.25) !important;
+}
+
+/* إخفاء الحاوية القديمة للأزرار (لأننا نعرضها مباشرة) */
+#sc-details-new .chz-det-buttons {
+  display: contents !important;
+}
+
+/* في الوضع الفاتح */
+html[data-theme="light"] #sc-details-new .chz-det-actions {
+  background: #fff !important;
+  border-color: #e2e8f0 !important;
+}
 </style>
 </body>
 </html
