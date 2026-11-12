@@ -22952,6 +22952,49 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   border-bottom: none !important;
 }
 </style>
+
+<script>
+// REMOVE-DUPLICATE-TEXT
+(function(){
+  setInterval(function(){
+    // نبحث عن أي عنصر يحتوي على "المميزات" أو "المواصفات" في الصفحة
+    var detScreen = document.getElementById('sc-detail');
+    if (!detScreen || !detScreen.classList.contains('active')) return;
+
+    var featuresBlock = document.getElementById('det-features-block');
+    var specsBlock = document.getElementById('det-specs-block');
+    if (!featuresBlock) return;
+
+    // جمع نصوص المميزات التي في المربع
+    var featuresTexts = [];
+    featuresBlock.querySelectorAll('li span:last-child').forEach(function(span){
+      featuresTexts.push(span.textContent.trim());
+    });
+
+    // البحث في جميع العناصر النصية في الشاشة
+    var allElements = detScreen.querySelectorAll('div, p, span');
+    allElements.forEach(function(el){
+      // تجاهل العناصر التي بداخل المربعات (المميزات/المواصفات) أو الأزرار
+      if (el.closest('#det-features-block') || el.closest('#det-specs-block')) return;
+      if (el.closest('button') || el.closest('.det-actions')) return;
+      
+      var text = el.textContent.trim();
+      if (text.length < 20) return; // تجاهل النصوص القصيرة
+
+      // إذا كان النص يحتوي على أغلب المميزات (تكرار)
+      var matchCount = 0;
+      featuresTexts.forEach(function(ft){
+        if (text.indexOf(ft) !== -1) matchCount++;
+      });
+
+      // إذا كان يحتوي على 3 مميزات أو أكثر، فهو النص المكرر
+      if (matchCount >= 3 && el.children.length === 0) {
+        el.style.display = 'none';
+      }
+    });
+  }, 1500);
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
