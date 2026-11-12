@@ -14,6 +14,15 @@ if (!window.db && db) window.db = db;
 console.log('[REVIEWS] db ready:', !!db);
 console.log('[REVIEWS] auth ready:', !!firebase.auth);
 
+  
+window.showToast = function(msg) {
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:120px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:10px 20px;border-radius:30px;font-size:13px;font-weight:600;z-index:99999;box-shadow:0 10px 25px rgba(0,0,0,0.3);';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 3000);
+};
+
   var selectedRating = 0;
   var myReviewId = null;
   var myReviewData = null;
@@ -73,7 +82,15 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
   }
 
   // محاولة ربط النجوم كل 300ms حتى تظهر
-  setInterval(setupStars, 300);
+
+  // استخدام MutationObserver بدلاً من setInterval (أكثر كفاءة)
+  var observer = new MutationObserver(function() {
+    setupStars();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  // محاولة أولية
+  setTimeout(setupStars, 100);
+
 
   window.highlightStars = function(count) {
     document.querySelectorAll('#starInput i').forEach(function(star) {
