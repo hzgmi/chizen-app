@@ -23079,6 +23079,7 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     this.currentProd = p;
+    window.currentProduct = p; // لـ reviews.js
     this.currentQty = 1;
 
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
@@ -23204,6 +23205,8 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
   }
 })();
 </script>
+
+<script src="reviews.js?v=4"></script>
 </body>
 </html
     renderPassengers: function() {

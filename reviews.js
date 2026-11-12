@@ -9,7 +9,8 @@ if (window.FIREBASE_CONFIG && !firebase.apps.length) {
     console.error('[REVIEWS] Firebase init error:', e.message);
   }
 }
-var db = window.db || firebase.firestore();
+var db = window.db || (window.FB && window.FB.db) || firebase.firestore();
+if (!window.db && db) window.db = db;
 console.log('[REVIEWS] db ready:', !!db);
 console.log('[REVIEWS] auth ready:', !!firebase.auth);
 
@@ -34,20 +35,20 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
         currentUserId = user.uid;
         authReady = true;
         console.log('[AUTH] Signed in:', user.uid);
-        if (window.currentProduct) loadReviews();
+        if ((window.currentProduct || (window.APP && window.APP.currentProd))) loadReviews();
         if (pendingReview) { pendingReview.userId = user.uid; doSubmitReview(); }
       } else {
         auth.signInAnonymously().then(function(result) {
           currentUserId = result.user.uid;
           authReady = true;
           console.log('[AUTH] Anonymous:', result.user.uid);
-          if (window.currentProduct) loadReviews();
+          if ((window.currentProduct || (window.APP && window.APP.currentProd))) loadReviews();
           if (pendingReview) { pendingReview.userId = currentUserId; doSubmitReview(); }
         }).catch(function(err) {
           console.error('[AUTH] Failed:', err.code, err.message);
           showToast('❌ Auth: ' + err.code);
           currentUserId = 'guest_' + Math.random().toString(36).substr(2, 9);
-          if (window.currentProduct) loadReviews();
+          if ((window.currentProduct || (window.APP && window.APP.currentProd))) loadReviews();
         });
       }
     });
@@ -106,13 +107,13 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
       return;
     }
     var text = document.getElementById('reviewText').value.trim();
-    if (!window.currentProduct) {
+    if (!(window.currentProduct || (window.APP && window.APP.currentProd))) {
       showToast('⚠️ المنتج غير محمل');
       return;
     }
 
     var reviewData = {
-      productId: window.currentProduct.id,
+      productId: (window.currentProduct || (window.APP && window.APP.currentProd)).id,
       userId: currentUserId || 'pending',
       rating: Number(selectedRating),
       text: text,
@@ -132,7 +133,7 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
     }
     
     pendingReview = {
-      productId: window.currentProduct.id,
+      productId: (window.currentProduct || (window.APP && window.APP.currentProd)).id,
       userId: currentUserId || 'pending',
       rating: Number(selectedRating),
       text: text,
@@ -158,12 +159,12 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
 
   // جلب التقييمات
   window.loadReviews = function() {
-    if (!window.currentProduct) return;
+    if (!(window.currentProduct || (window.APP && window.APP.currentProd))) return;
     var list = document.getElementById('reviewsList');
     if (!list) return;
 
     db.collection('reviews')
-      .where('productId', '==', window.currentProduct.id)
+      .where('productId', '==', (window.currentProduct || (window.APP && window.APP.currentProd)).id)
       .limit(20)
       .get()
       .then(function(snapshot) {
@@ -293,7 +294,7 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
   var tries = 0;
   var iv = setInterval(function() {
     tries++;
-    if (window.currentProduct) {
+    if ((window.currentProduct || (window.APP && window.APP.currentProd))) {
       clearInterval(iv);
       if (authReady) loadReviews();
     }
