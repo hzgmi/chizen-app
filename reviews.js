@@ -32,8 +32,10 @@
     });
   }
 
-  // تفعيل النجوم
+  // تفعيل النجوم (مع انتظار ظهورها)
+  var starsAttached = false;
   function setupStars() {
+    if (starsAttached) return;
     var stars = document.querySelectorAll('#starInput i');
     if (!stars.length) return;
     stars.forEach(function(star) {
@@ -44,7 +46,12 @@
         highlightStars(selectedRating);
       });
     });
+    starsAttached = true;
+    console.log('[STARS] Events attached to', stars.length, 'stars');
   }
+
+  // محاولة ربط النجوم كل 300ms حتى تظهر
+  setInterval(setupStars, 300);
 
   window.highlightStars = function(count) {
     document.querySelectorAll('#starInput i').forEach(function(star) {
@@ -189,7 +196,6 @@
 
   // بدء التشغيل
   initAuth();
-  setTimeout(setupStars, 500);
   
   var tries = 0;
   var iv = setInterval(function() {
