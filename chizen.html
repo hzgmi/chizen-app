@@ -22874,24 +22874,30 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
       var specs = p.specs || {};
       var specsKeys = Object.keys(specs);
       
+      
       if (specsKeys.length > 0) {
         var table = document.createElement('div');
         table.id = 'det-specs-block';
-        table.style.cssText = 'margin-top:20px;background:var(--bg2, #f8fafc);border:1px solid var(--bd, #e2e8f0);border-radius:12px;padding:15px;';
+        // تصميم الحاوية الرئيسية
+        table.style.cssText = 'margin-top:20px; background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
         
-        var htmlSpecs = '<div style="font-weight:900;font-size:15px;margin-bottom:10px;color:var(--text-primary, #0f172a);">📋 المواصفات</div>';
-        htmlSpecs += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+        var htmlSpecs = '<div style="font-weight:900;font-size:15px;margin-bottom:12px;color:var(--cr, #f8fafc);">📋 المواصفات</div>';
+        
+        // تصميم الشبكة (كل مواصفة في صندوق)
+        htmlSpecs += '<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">';
         specsKeys.forEach(function(key){
-          htmlSpecs += '<tr>';
-          htmlSpecs += '<td style="padding:8px 5px;font-weight:700;color:var(--text-secondary, #64748b);border-bottom:1px solid var(--bd, #e2e8f0);width:40%;">' + key.replace(/</g,'&lt;') + '</td>';
-          htmlSpecs += '<td style="padding:8px 5px;color:var(--text-primary, #0f172a);border-bottom:1px solid var(--bd, #e2e8f0);">' + String(specs[key]).replace(/</g,'&lt;') + '</td>';
-          htmlSpecs += '</tr>';
+          htmlSpecs += '<div style="background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: flex-start;">';
+          htmlSpecs += '<span style="font-size:11px; color: var(--mt, #94a3b8); margin-bottom: 4px;">' + key.replace(/</g,'&lt;') + '</span>';
+          htmlSpecs += '<span style="font-weight: 700; font-size: 13px; color: var(--cr, #f8fafc);">' + String(specs[key]).replace(/</g,'&lt;') + '</span>';
+          htmlSpecs += '</div>';
         });
-        htmlSpecs += '</table>';
+        htmlSpecs += '</div>';
+        
         table.innerHTML = htmlSpecs;
         
         // إدراج الجدول بعد الوصف
         descEl.parentNode.insertBefore(table, descEl.nextSibling);
+      }
       }
     }
   }
@@ -23111,6 +23117,21 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   background: var(--nav) !important;
   border: 1px solid var(--bd) !important;
   color: var(--cr) !important;
+}
+</style>
+
+<style id="chz-specs-cards-css">
+/* في الوضع الفاتح، نغير الخلفيات لتناسب */
+html[data-theme="light"] #det-specs-block {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+html[data-theme="light"] #det-specs-block div[style*="font-weight:900"] {
+  color: #0f172a !important;
+}
+html[data-theme="light"] #det-specs-block .spec-card {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
 }
 </style>
 </body>
