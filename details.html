@@ -198,18 +198,23 @@ html[data-theme="light"] .quantity-input { color: #0f172a; }
 
       <div class="reviews-section">
         <div class="section-title"><i class="fas fa-comments"></i> تقييمات العملاء</div>
-        <div id="reviewsList">
-          <div class="review-card">
-            <div class="review-header"><span class="review-user">أحمد م.</span><span class="review-date">منذ يومين</span></div>
-            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-            <p class="review-text">روائح ممتازة وثباتها جيد جداً. التغليف أنيق ويصلح كهدية.</p>
+        <div id="reviewFormContainer" class="add-review-form">
+          <div class="star-rating-input" id="starInput">
+            <i class="fas fa-star" data-value="1"></i>
+            <i class="fas fa-star" data-value="2"></i>
+            <i class="fas fa-star" data-value="3"></i>
+            <i class="fas fa-star" data-value="4"></i>
+            <i class="fas fa-star" data-value="5"></i>
           </div>
-          <div class="review-card">
-            <div class="review-header"><span class="review-user">سارة ع.</span><span class="review-date">منذ أسبوع</span></div>
-            <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
-            <p class="review-text">جودة ممتازة مقابل السعر. الألوان جميلة جداً.</p>
-          </div>
+          <textarea id="reviewText" class="form-textarea" placeholder="أضف تعليقاً (اختياري)..."></textarea>
+          <button class="btn-submit-review" onclick="submitReview()">
+            <i class="fas fa-paper-plane"></i> إرسال التقييم
+          </button>
         </div>
+        <div id="alreadyReviewedMsg" class="already-reviewed-msg" style="display:none;">
+          <i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. شكراً لك!
+        </div>
+        <div id="reviewsList"></div>
       </div>
     </div>
   </div>
@@ -418,6 +423,192 @@ function buyNow() {
 // الثيم
 var savedTheme = localStorage.getItem('theme') || 'dark';
 document.documentElement.setAttribute('data-theme', savedTheme);
+</script>
+
+<style id="chz-reviews-css">
+.add-review-form {
+  background: #151a2d;
+  border: 1px solid #1f2742;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 15px;
+}
+html[data-theme="light"] .add-review-form { background: #ffffff; border-color: #e2e8f0; }
+.star-rating-input {
+  display: flex; gap: 6px; margin-bottom: 10px;
+  direction: ltr; justify-content: center;
+}
+.star-rating-input i {
+  font-size: 24px; color: #4b5563; cursor: pointer; transition: transform 0.2s, color 0.2s;
+}
+.star-rating-input i:hover { transform: scale(1.1); }
+.star-rating-input i.active { color: #f5b342; }
+.form-textarea {
+  width: 100%; background: #0d1120; border: 1px solid #2a3452;
+  color: #fff; padding: 8px 10px; border-radius: 8px; margin-bottom: 10px;
+  font-family: inherit; font-size: 12px; outline: none; resize: vertical; min-height: 45px;
+}
+html[data-theme="light"] .form-textarea { background: #f8fafc; color: #0f172a; border-color: #e2e8f0; }
+.btn-submit-review {
+  background: #3b82f6; color: #fff; border: none; padding: 8px 15px;
+  border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer;
+  transition: 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-submit-review:hover { background: #2563eb; }
+.review-actions {
+  display: flex; gap: 15px; align-items: center;
+  border-top: 1px solid #1f2742; padding-top: 8px; margin-top: 4px;
+}
+.action-btn {
+  background: transparent; border: none; color: #9ca3af; font-size: 11px;
+  cursor: pointer; display: flex; align-items: center; gap: 5px;
+  transition: 0.2s; padding: 4px 8px; border-radius: 6px;
+}
+.action-btn:hover { background: rgba(255,255,255,0.05); color: #e2e8f0; }
+.action-btn i { font-size: 14px; }
+.action-btn.active-like, .action-btn.active-like i { color: #3b82f6; }
+.action-btn.active-dislike, .action-btn.active-dislike i { color: #ef4444; }
+.already-reviewed-msg {
+  background: rgba(16,185,129,0.1); border: 1px solid #10b981; color: #10b981;
+  padding: 10px; border-radius: 8px; font-size: 12px; text-align: center;
+  font-weight: 600; margin-bottom: 15px;
+}
+</style>
+
+<script>
+// REVIEWS-AND-SIZES
+(function(){
+  var selectedRating = 0;
+  var currentUserId = null;
+
+  // المستخدم المجهول (إذا لم يكن مسجلاً)
+  try {
+    var user = JSON.parse(localStorage.getItem('chz_user') || '{}');
+    currentUserId = user.uid || 'guest_' + Math.random().toString(36).substr(2, 9);
+    if (!user.uid) localStorage.setItem('chz_guest_id', currentUserId);
+  } catch(e) { currentUserId = 'guest_' + Math.random().toString(36).substr(2, 9); }
+
+  // تفعيل النجوم
+  setTimeout(function() {
+    var stars = document.querySelectorAll('#starInput i');
+    stars.forEach(function(star) {
+      star.addEventListener('mouseover', function() { highlightStars(this.dataset.value); });
+      star.addEventListener('mouseout', function() { highlightStars(selectedRating); });
+      star.addEventListener('click', function() {
+        selectedRating = this.dataset.value;
+        highlightStars(selectedRating);
+      });
+    });
+  }, 500);
+
+  window.highlightStars = function(count) {
+    document.querySelectorAll('#starInput i').forEach(function(star) {
+      if (star.dataset.value <= count) star.classList.add('active');
+      else star.classList.remove('active');
+    });
+  };
+
+  // إرسال تقييم
+  window.submitReview = function() {
+    if (selectedRating === 0) {
+      showToast('⚠️ اختر عدد النجوم أولاً');
+      return;
+    }
+    var text = document.getElementById('reviewText').value.trim();
+    if (!currentProduct) return;
+
+    var review = {
+      productId: currentProduct.id,
+      userId: currentUserId,
+      rating: Number(selectedRating),
+      text: text,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      likes: 0,
+      dislikes: 0
+    };
+
+    db.collection('reviews').add(review).then(function() {
+      showToast('✅ تم إرسال تقييمك');
+      document.getElementById('reviewFormContainer').style.display = 'none';
+      document.getElementById('alreadyReviewedMsg').style.display = 'block';
+      loadReviews();
+    }).catch(function(e) {
+      showToast('❌ فشل: ' + e.message);
+    });
+  };
+
+  // جلب التقييمات
+  function loadReviews() {
+    if (!currentProduct) return;
+    db.collection('reviews')
+      .where('productId', '==', currentProduct.id)
+      .orderBy('createdAt', 'desc')
+      .limit(10)
+      .get()
+      .then(function(snapshot) {
+        var list = document.getElementById('reviewsList');
+        list.innerHTML = '';
+        if (snapshot.empty) {
+          list.innerHTML = '<div style="text-align:center;padding:15px;color:#94a3b8;font-size:12px;">لا توجد تقييمات بعد. كن أول من يقيم!</div>';
+          return;
+        }
+        snapshot.forEach(function(doc) {
+          var r = doc.data();
+          var starsHtml = '';
+          for (var i = 1; i <= 5; i++) {
+            starsHtml += '<i class="' + (i <= r.rating ? 'fas' : 'far') + ' fa-star"></i>';
+          }
+          var card = document.createElement('div');
+          card.className = 'review-card';
+          card.innerHTML = 
+            '<div class="review-header"><span class="review-user">' + (r.userId === currentUserId ? 'أنت' : 'عميل') + '</span><span class="review-date">' + (r.createdAt ? 'مؤخراً' : 'الآن') + '</span></div>' +
+            '<div class="review-stars">' + starsHtml + '</div>' +
+            '<p class="review-text">' + (r.text || '<em style="color:#6b7280;">تقييم سريع</em>') + '</p>' +
+            '<div class="review-actions">' +
+              '<button class="action-btn" onclick="voteReview(\'' + doc.id + '\', \'like\', this)"><i class="far fa-thumbs-up"></i> <span>' + (r.likes || 0) + '</span></button>' +
+              '<button class="action-btn" onclick="voteReview(\'' + doc.id + '\', \'dislike\', this)"><i class="far fa-thumbs-down"></i> <span>' + (r.dislikes || 0) + '</span></button>' +
+            '</div>';
+          list.appendChild(card);
+        });
+      });
+  }
+
+  window.voteReview = function(reviewId, type, btn) {
+    var field = type === 'like' ? 'likes' : 'dislikes';
+    var span = btn.querySelector('span');
+    var count = parseInt(span.textContent) + 1;
+    span.textContent = count;
+    btn.classList.add(type === 'like' ? 'active-like' : 'active-dislike');
+    btn.disabled = true;
+    db.collection('reviews').doc(reviewId).update({
+      [field]: firebase.firestore.FieldValue.increment(1)
+    }).catch(function() {});
+  };
+
+  // المقاسات
+  setTimeout(function() {
+    if (currentProduct && currentProduct.sizes && currentProduct.sizes.length > 0) {
+      document.getElementById('sizesSection').style.display = 'block';
+      var container = document.getElementById('sizesContainer');
+      container.innerHTML = '';
+      currentProduct.sizes.forEach(function(s, i) {
+        var div = document.createElement('div');
+        div.className = 'size-option' + (i === 0 ? ' selected' : '');
+        div.textContent = s;
+        div.onclick = function() { selectSize(this); };
+        container.appendChild(div);
+      });
+    }
+  }, 1000);
+
+  // تحميل التقييمات عند جاهزية المنتج
+  var loadTimer = setInterval(function() {
+    if (currentProduct) {
+      clearInterval(loadTimer);
+      loadReviews();
+    }
+  }, 500);
+})();
 </script>
 </body>
 </html>
