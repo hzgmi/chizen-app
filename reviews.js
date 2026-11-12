@@ -14,6 +14,8 @@ console.log('[REVIEWS] db ready:', !!db);
 console.log('[REVIEWS] auth ready:', !!firebase.auth);
 
   var selectedRating = 0;
+  var myReviewId = null;
+  var myReviewData = null;
   var currentUserId = null;
   var authReady = false;
 
@@ -109,6 +111,26 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
       return;
     }
 
+    var reviewData = {
+      productId: window.currentProduct.id,
+      userId: currentUserId || 'pending',
+      rating: Number(selectedRating),
+      text: text,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    if (myReviewId) {
+      // تحديث التقييم الموجود
+      db.collection('reviews').doc(myReviewId).update(reviewData).then(function() {
+        showToast('✅ شكراً لك! تم تحديث تقييمك');
+        document.getElementById('reviewFormContainer').style.display = 'none';
+        loadReviews();
+      }).catch(function(e) {
+        showToast('❌ فشل: ' + e.message);
+      });
+      return;
+    }
+    
     pendingReview = {
       productId: window.currentProduct.id,
       userId: currentUserId || 'pending',
@@ -161,6 +183,29 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
           var tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
           return tb - ta;
         });
+        // البحث عن تقييم المستخدم الحالي
+        myReviewId = null;
+        myReviewData = null;
+        reviews.forEach(function(r) {
+          if (r.userId === currentUserId) {
+            myReviewId = r.id;
+            myReviewData = r;
+          }
+        });
+        // إذا كان لديه تقييم، اعرض زر التعديل بدلاً من النموذج
+        var formContainer = document.getElementById('reviewFormContainer');
+        var alreadyMsg = document.getElementById('alreadyReviewedMsg');
+        if (myReviewId) {
+          if (formContainer) formContainer.style.display = 'none';
+          if (alreadyMsg) {
+            alreadyMsg.style.display = 'block';
+            alreadyMsg.innerHTML = '<i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. <button onclick="editMyReview()" style="background:#3b82f6;color:#fff;border:none;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:8px;">✏️ تعديل التقييم</button>';
+          }
+        } else {
+          if (formContainer) formContainer.style.display = 'block';
+          if (alreadyMsg) alreadyMsg.style.display = 'none';
+        }
+        
         reviews.forEach(function(r) {
           var starsHtml = '';
           for (var i = 1; i <= 5; i++) {
@@ -229,6 +274,16 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
     var update = {};
     update[field] = firebase.firestore.FieldValue.increment(1);
     db.collection('reviews').doc(reviewId).update(update).catch(function() {});
+  };
+
+  // دالة تعديل التقييم
+  window.editMyReview = function() {
+    if (!myReviewData) return;
+    selectedRating = myReviewData.rating;
+    highlightStars(selectedRating);
+    document.getElementById('reviewText').value = myReviewData.text || '';
+    document.getElementById('reviewFormContainer').style.display = 'block';
+    document.getElementById('alreadyReviewedMsg').style.display = 'none';
   };
 
   // بدء التشغيل
