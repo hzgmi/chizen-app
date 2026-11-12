@@ -11624,6 +11624,11 @@ var APP={
 
 
   openProduct:function(id){
+    // فتح الصفحة الجديدة (إذا كانت متاحة)
+    if (typeof this.openProductNew === 'function') {
+      this.openProductNew(id);
+      return;
+    }
     var p=null;this.products.forEach(function(x){if(String(x.id)===String(id))p=x;});
     if(!p)return;
     this.currentProd=p;this.currentQty=1;
@@ -23192,6 +23197,159 @@ html[data-theme="light"] .chz-feat-item, html[data-theme="light"] .chz-det-desc 
 html[data-theme="light"] .chz-det-actions { background: #fff; border-color: #e2e8f0; }
 html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2e8f0; }
 </style>
+
+<script>
+// DETAILS-PAGE-V2
+(function(){
+  window.APP = window.APP || {};
+
+  // فتح صفحة التفاصيل الجديدة
+  window.APP.openProductNew = function(id) {
+    var p = null;
+    (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) return;
+    this.currentProd = p;
+    this.currentQty = 1;
+
+    // إخفاء كل الشاشات
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    // إظهار الصفحة الجديدة
+    var det = document.getElementById('sc-details-new');
+    if (det) det.classList.add('active');
+
+    // تعبئة البيانات
+    fillDetailsNew(p);
+  };
+
+  window.APP.closeDetailsNew = function() {
+    var det = document.getElementById('sc-details-new');
+    if (det) det.classList.remove('active');
+    document.querySelectorAll('.screen').forEach(function(s) {
+      if (s.id === 'sc-home') s.classList.add('active');
+    });
+  };
+
+  window.APP.changeDetailsQty = function(d) {
+    this.currentQty = Math.max(1, (this.currentQty || 1) + d);
+    var qtyEl = document.getElementById('det-new-qty');
+    if (qtyEl) qtyEl.textContent = this.currentQty;
+  };
+
+  function fillDetailsNew(p) {
+    // الصورة
+    var imgContainer = document.getElementById('det-new-img');
+    if (imgContainer) {
+      imgContainer.innerHTML = '';
+      var img = document.createElement('img');
+      img.src = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
+      imgContainer.appendChild(img);
+    }
+
+    // الصور المصغرة
+    var thumbsContainer = document.getElementById('det-new-thumbs');
+    if (thumbsContainer) {
+      thumbsContainer.innerHTML = '';
+      var images = (p.images && p.images.length) ? p.images : (p.img ? [p.img] : []);
+      if (images.length > 1) {
+        images.forEach(function(src, i) {
+          var thumb = document.createElement('div');
+          thumb.className = 'chz-thumb' + (i === 0 ? ' active' : '');
+          var ti = document.createElement('img');
+          ti.src = src;
+          ti.onclick = function() {
+            var mainImg = imgContainer.querySelector('img');
+            if (mainImg) mainImg.src = src;
+            thumbsContainer.querySelectorAll('.chz-thumb').forEach(function(t, j) {
+              t.classList.toggle('active', j === i);
+            });
+          };
+          thumb.appendChild(ti);
+          thumbsContainer.appendChild(thumb);
+        });
+      }
+    }
+
+    // الاسم والماركة والتقييم
+    document.getElementById('det-new-brand').textContent = p.brand || '';
+    document.getElementById('det-new-name').textContent = p.name || 'منتج';
+    document.getElementById('det-new-rate').innerHTML = '⭐ ' + (p.rating || 4.5) + ' (' + (p.reviews || 0) + ')';
+
+    // السعر
+    var priceEl = document.getElementById('det-new-price');
+    var priceYER = Number(p.priceYER || p.price) || 0;
+    var oldPrice = Number(p.oldPriceYER || p.oldPrice) || 0;
+    var priceHTML = Math.round(priceYER).toLocaleString('en') + ' ر.ي';
+    if (oldPrice > priceYER) {
+      priceHTML += ' <span class="old">' + Math.round(oldPrice).toLocaleString('en') + ' ر.ي</span>';
+    }
+    priceEl.innerHTML = priceHTML;
+
+    // العملات
+    var currenciesEl = document.getElementById('det-new-currencies');
+    var priceSAR = Number(p.priceSAR) || (priceYER / 135);
+    var priceUSD = Number(p.priceUSD) || (priceYER / 505);
+    currenciesEl.innerHTML = 
+      '<div><div class="lbl">🇸🇦 سعودي</div><div class="val">' + priceSAR.toFixed(2) + '</div></div>' +
+      '<div><div class="lbl">🇺🇸 دولار</div><div class="val">' + priceUSD.toFixed(2) + '</div></div>';
+
+    // المميزات
+    var featContainer = document.getElementById('det-new-features');
+    if (featContainer) {
+      featContainer.innerHTML = '';
+      var features = p.features || [];
+      if (typeof features === 'string') features = features.split('\n').filter(function(l){ return l.trim(); });
+      if (features.length > 0) {
+        var featBox = document.createElement('div');
+        featBox.className = 'chz-feat-box';
+        var fhtml = '<div class="chz-feat-title">✨ المميزات</div><ul class="chz-feat-list">';
+        features.forEach(function(f) {
+          if (!f.trim()) return;
+          fhtml += '<li class="chz-feat-item"><span class="chz-feat-check">✓</span><span>' + f.trim().replace(/</g, '&lt;') + '</span></li>';
+        });
+        fhtml += '</ul>';
+        featBox.innerHTML = fhtml;
+        featContainer.appendChild(featBox);
+      }
+    }
+
+    // المواصفات
+    var specsContainer = document.getElementById('det-new-specs');
+    if (specsContainer) {
+      specsContainer.innerHTML = '';
+      var specs = p.specs || {};
+      var specsKeys = Object.keys(specs);
+      if (specsKeys.length > 0) {
+        var specsBox = document.createElement('div');
+        specsBox.className = 'chz-specs-box';
+        var shtml = '<div class="chz-specs-title">📋 المواصفات</div><div class="chz-specs-grid">';
+        specsKeys.forEach(function(key) {
+          shtml += '<div class="chz-spec-card"><div class="chz-spec-key">' + key.replace(/</g, '&lt;') + '</div><div class="chz-spec-val">' + String(specs[key]).replace(/</g, '&lt;') + '</div></div>';
+        });
+        shtml += '</div>';
+        specsBox.innerHTML = shtml;
+        specsContainer.appendChild(specsBox);
+      }
+    }
+
+    // الوصف (إذا لم توجد مميزات)
+    var descWrapper = document.getElementById('det-new-desc-wrapper');
+    var descEl = document.getElementById('det-new-desc');
+    if (descWrapper && descEl) {
+      var hasFeatures = p.features && p.features.length > 0;
+      if (hasFeatures || !p.desc) {
+        descWrapper.style.display = 'none';
+      } else {
+        descWrapper.style.display = 'block';
+        descEl.textContent = p.desc;
+      }
+    }
+
+    // الكمية
+    document.getElementById('det-new-qty').textContent = '1';
+    this.currentQty = 1;
+  }
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
