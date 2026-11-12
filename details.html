@@ -476,34 +476,69 @@ html[data-theme="light"] .form-textarea { background: #f8fafc; color: #0f172a; b
 </style>
 
 <script>
-// REVIEWS-AND-SIZES
+
+<script>
+// REVIEWS-AND-SIZES-V2
 (function(){
   var selectedRating = 0;
   var currentUserId = null;
+  var authReady = false;
+  var currentProductRef = null;
+  var reviewsLoaded = false;
 
-  // المستخدم المجهول (إذا لم يكن مسجلاً)
-  try {
-    var user = JSON.parse(localStorage.getItem('chz_user') || '{}');
-    currentUserId = user.uid || 'guest_' + Math.random().toString(36).substr(2, 9);
-    if (!user.uid) localStorage.setItem('chz_guest_id', currentUserId);
-  } catch(e) { currentUserId = 'guest_' + Math.random().toString(36).substr(2, 9); }
+  // تهيئة Firebase Auth
+  function initAuth() {
+    if (!window.firebase || !firebase.auth) {
+      console.error('[AUTH] Firebase Auth not available');
+      return;
+    }
+    var auth = firebase.auth();
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        currentUserId = user.uid;
+        authReady = true;
+        console.log('[AUTH] Signed in:', user.uid);
+        // تحميل التقييمات بعد Auth
+        if (window.currentProduct) {
+          loadReviews();
+        }
+      } else {
+        auth.signInAnonymously().then(function(result) {
+          currentUserId = result.user.uid;
+          authReady = true;
+          console.log('[AUTH] Anonymous:', result.user.uid);
+          if (window.currentProduct) {
+            loadReviews();
+          }
+        }).catch(function(err) {
+          console.error('[AUTH] Failed:', err.message);
+          currentUserId = 'guest_' + Math.random().toString(36).substr(2, 9);
+          authReady = false;
+          if (window.currentProduct) {
+            loadReviews();
+          }
+        });
+      }
+    });
+  }
 
   // تفعيل النجوم
-  setTimeout(function() {
+  function setupStars() {
     var stars = document.querySelectorAll('#starInput i');
+    if (!stars.length) return;
     stars.forEach(function(star) {
       star.addEventListener('mouseover', function() { highlightStars(this.dataset.value); });
       star.addEventListener('mouseout', function() { highlightStars(selectedRating); });
       star.addEventListener('click', function() {
-        selectedRating = this.dataset.value;
+        selectedRating = Number(this.dataset.value);
         highlightStars(selectedRating);
       });
     });
-  }, 500);
+  }
 
   window.highlightStars = function(count) {
     document.querySelectorAll('#starInput i').forEach(function(star) {
-      if (star.dataset.value <= count) star.classList.add('active');
+      if (Number(star.dataset.value) <= count) star.classList.add('active');
       else star.classList.remove('active');
     });
   };
@@ -514,11 +549,18 @@ html[data-theme="light"] .form-textarea { background: #f8fafc; color: #0f172a; b
       showToast('⚠️ اختر عدد النجوم أولاً');
       return;
     }
+    if (!authReady || !currentUserId) {
+      showToast('⏳ جاري الاتصال... يرجى المحاولة بعد ثانية');
+      return;
+    }
     var text = document.getElementById('reviewText').value.trim();
-    if (!currentProduct) return;
+    if (!window.currentProduct) {
+      showToast('⚠️ المنتج غير محمل');
+      return;
+    }
 
     var review = {
-      productId: currentProduct.id,
+      productId: window.currentProduct.id,
       userId: currentUserId,
       rating: Number(selectedRating),
       text: text,
@@ -533,27 +575,40 @@ html[data-theme="light"] .form-textarea { background: #f8fafc; color: #0f172a; b
       document.getElementById('alreadyReviewedMsg').style.display = 'block';
       loadReviews();
     }).catch(function(e) {
+      console.error('[REVIEW] Error:', e);
       showToast('❌ فشل: ' + e.message);
     });
   };
 
   // جلب التقييمات
-  function loadReviews() {
-    if (!currentProduct) return;
+  window.loadReviews = function() {
+    if (!window.currentProduct) return;
+    var list = document.getElementById('reviewsList');
+    if (!list) return;
+    
     db.collection('reviews')
-      .where('productId', '==', currentProduct.id)
-      .orderBy('createdAt', 'desc')
-      .limit(10)
+      .where('productId', '==', window.currentProduct.id)
+      .limit(20)
       .get()
       .then(function(snapshot) {
-        var list = document.getElementById('reviewsList');
         list.innerHTML = '';
         if (snapshot.empty) {
           list.innerHTML = '<div style="text-align:center;padding:15px;color:#94a3b8;font-size:12px;">لا توجد تقييمات بعد. كن أول من يقيم!</div>';
           return;
         }
+        var reviews = [];
         snapshot.forEach(function(doc) {
           var r = doc.data();
+          r.id = doc.id;
+          reviews.push(r);
+        });
+        // ترتيب يدوي (لأن orderBy قد يفشل بدون index)
+        reviews.sort(function(a, b) {
+          var ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+          var tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+          return tb - ta;
+        });
+        reviews.forEach(function(r) {
           var starsHtml = '';
           for (var i = 1; i <= 5; i++) {
             starsHtml += '<i class="' + (i <= r.rating ? 'fas' : 'far') + ' fa-star"></i>';
@@ -565,33 +620,42 @@ html[data-theme="light"] .form-textarea { background: #f8fafc; color: #0f172a; b
             '<div class="review-stars">' + starsHtml + '</div>' +
             '<p class="review-text">' + (r.text || '<em style="color:#6b7280;">تقييم سريع</em>') + '</p>' +
             '<div class="review-actions">' +
-              '<button class="action-btn" onclick="voteReview(\'' + doc.id + '\', \'like\', this)"><i class="far fa-thumbs-up"></i> <span>' + (r.likes || 0) + '</span></button>' +
-              '<button class="action-btn" onclick="voteReview(\'' + doc.id + '\', \'dislike\', this)"><i class="far fa-thumbs-down"></i> <span>' + (r.dislikes || 0) + '</span></button>' +
+              '<button class="action-btn" onclick="voteReview(\'' + r.id + '\', \'like\', this)"><i class="far fa-thumbs-up"></i> <span>' + (r.likes || 0) + '</span></button>' +
+              '<button class="action-btn" onclick="voteReview(\'' + r.id + '\', \'dislike\', this)"><i class="far fa-thumbs-down"></i> <span>' + (r.dislikes || 0) + '</span></button>' +
             '</div>';
           list.appendChild(card);
         });
+      })
+      .catch(function(e) {
+        console.error('[REVIEWS] Load error:', e);
+        list.innerHTML = '<div style="text-align:center;padding:15px;color:#ef4444;font-size:12px;">⚠️ فشل تحميل التقييمات</div>';
       });
-  }
+  };
 
+  // إعجاب/عدم إعجاب
   window.voteReview = function(reviewId, type, btn) {
+    if (!currentUserId) {
+      showToast('⚠️ يرجى تسجيل الدخول');
+      return;
+    }
     var field = type === 'like' ? 'likes' : 'dislikes';
     var span = btn.querySelector('span');
     var count = parseInt(span.textContent) + 1;
     span.textContent = count;
     btn.classList.add(type === 'like' ? 'active-like' : 'active-dislike');
     btn.disabled = true;
-    db.collection('reviews').doc(reviewId).update({
-      [field]: firebase.firestore.FieldValue.increment(1)
-    }).catch(function() {});
+    var update = {};
+    update[field] = firebase.firestore.FieldValue.increment(1);
+    db.collection('reviews').doc(reviewId).update(update).catch(function() {});
   };
 
   // المقاسات
-  setTimeout(function() {
-    if (currentProduct && currentProduct.sizes && currentProduct.sizes.length > 0) {
+  function loadSizes() {
+    if (window.currentProduct && window.currentProduct.sizes && window.currentProduct.sizes.length > 0) {
       document.getElementById('sizesSection').style.display = 'block';
       var container = document.getElementById('sizesContainer');
       container.innerHTML = '';
-      currentProduct.sizes.forEach(function(s, i) {
+      window.currentProduct.sizes.forEach(function(s, i) {
         var div = document.createElement('div');
         div.className = 'size-option' + (i === 0 ? ' selected' : '');
         div.textContent = s;
@@ -599,16 +663,24 @@ html[data-theme="light"] .form-textarea { background: #f8fafc; color: #0f172a; b
         container.appendChild(div);
       });
     }
-  }, 1000);
+  }
 
-  // تحميل التقييمات عند جاهزية المنتج
-  var loadTimer = setInterval(function() {
-    if (currentProduct) {
-      clearInterval(loadTimer);
-      loadReviews();
+  // بدء التشغيل
+  initAuth();
+  setTimeout(setupStars, 500);
+  
+  var tries = 0;
+  var iv = setInterval(function() {
+    tries++;
+    if (window.currentProduct) {
+      clearInterval(iv);
+      loadSizes();
+      if (authReady) loadReviews();
     }
+    if (tries > 30) clearInterval(iv);
   }, 500);
 })();
 </script>
+
 </body>
 </html>
