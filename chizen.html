@@ -11623,7 +11623,38 @@ var APP={
 
 
 
+
+  openProductNew:function(id){
+    var iframe = document.getElementById('chz-details-iframe');
+    var overlay = document.getElementById('chz-details-overlay');
+    if (iframe && overlay) {
+      // نرسل id إلى iframe عبر postMessage (لتجنب إعادة التحميل)
+      try {
+        iframe.contentWindow.postMessage({ action: 'loadProduct', id: id }, '*');
+      } catch(e) {
+        // إذا فشل postMessage، نعيد تحميل iframe بالرابط
+        iframe.src = 'details.html?id=' + encodeURIComponent(id);
+      }
+      overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+  },
+
+  closeProductDetails:function(){
+    var iframe = document.getElementById('chz-details-iframe');
+    var overlay = document.getElementById('chz-details-overlay');
+    if (iframe && overlay) {
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  },
+
   openProduct:function(id){
+    // فتح iframe (الصفحة الجديدة)
+    if (typeof this.openProductNew === 'function') {
+      this.openProductNew(id);
+      return;
+    }
     var p=null;this.products.forEach(function(x){if(String(x.id)===String(id))p=x;});
     if(!p)return;
     this.currentProd=p;this.currentQty=1;
@@ -23037,6 +23068,14 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 </script>
 
 
+
+<!-- PRODUCT DETAILS IFRAME (v2) -->
+<div id="chz-details-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0d1120; z-index:9999;">
+  <button id="chz-close-details" onclick="window.APP.closeProductDetails()" style="position:absolute; top:15px; left:15px; width:40px; height:40px; border-radius:50%; background:rgba(0,0,0,0.7); color:#fff; border:1px solid #C5A059; font-size:22px; cursor:pointer; z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(10px);">
+    ←
+  </button>
+  <iframe id="chz-details-iframe" src="details.html" loading="eager" style="width:100%; height:100%; border:none; background:#0d1120;" allow="autoplay"></iframe>
+</div>
 </body>
 </html
     renderPassengers: function() {
