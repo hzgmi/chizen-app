@@ -109,7 +109,7 @@ window.showToast = function(msg) {
     db.collection('reviews').add(review).then(function() {
       showToast('✅ شكراً لك! تم إرسال تقييمك بنجاح');
       document.getElementById('reviewFormContainer').style.display = 'none';
-      document.getElementById('alreadyReviewedMsg').style.display = 'block';
+      // document.getElementById('alreadyReviewedMsg').style.display = 'block'; // removed
       loadReviews();
     }).catch(function(e) {
       console.error('[REVIEW] Error:', e);
@@ -173,7 +173,7 @@ window.showToast = function(msg) {
     db.collection('reviews').add(reviewData).then(function() {
       window.showToast('✅ شكراً لك! تم إرسال تقييمك');
       var form = document.getElementById('reviewFormContainer');
-      var msg = document.getElementById('alreadyReviewedMsg');
+      // var msg = document.getElementById('alreadyReviewedMsg'); // removed
       if (form) form.style.display = 'none';
       if (msg) msg.style.display = 'block';
       if (typeof window.loadReviews === 'function') window.loadReviews();
@@ -227,7 +227,7 @@ window.showToast = function(msg) {
         });
         // إذا كان لديه تقييم، اعرض زر التعديل بدلاً من النموذج
         var formContainer = document.getElementById('reviewFormContainer');
-        var alreadyMsg = document.getElementById('alreadyReviewedMsg');
+        // var alreadyMsg = document.getElementById('alreadyReviewedMsg'); // removed
         if (myReviewId) {
           if (formContainer) formContainer.style.display = 'none';
           if (alreadyMsg) alreadyMsg.style.display = 'none';
@@ -317,7 +317,7 @@ window.showToast = function(msg) {
     highlightStars(window.selectedRating);
     document.getElementById('reviewText').value = myReviewData.text || '';
     document.getElementById('reviewFormContainer').style.display = 'block';
-    document.getElementById('alreadyReviewedMsg').style.display = 'none';
+    document.getElementById('alreadyReviewedMsg').style.display = 'none'; // يبقى مخفياً
   };
 
   // بدء التشغيل
