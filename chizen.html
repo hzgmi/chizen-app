@@ -22840,117 +22840,7 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
 
 
 
-<style id="chz-premium-details-v2">
-/* ═══ قسم المميزات (Features) ═══ */
-.chz-feat-box {
-  background: var(--nav, #1e293b);
-  border: 1px solid var(--bd, #334155);
-  border-radius: 16px;
-  padding: 16px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.chz-feat-title {
-  font-size: 15px;
-  font-weight: 900;
-  color: var(--cr, #f8fafc);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.chz-feat-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.chz-feat-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px dashed var(--bd, #334155);
-  font-size: 13px;
-  color: var(--mt, #cbd5e1);
-  line-height: 1.5;
-}
-.chz-feat-item:last-child {
-  border-bottom: none;
-}
-.chz-feat-check {
-  color: #10b981;
-  font-weight: 900;
-  font-size: 15px;
-  flex-shrink: 0;
-}
 
-/* ═══ قسم المواصفات (Specs) ═══ */
-.chz-specs-box {
-  background: var(--nav, #1e293b);
-  border: 1px solid var(--bd, #334155);
-  border-radius: 16px;
-  padding: 16px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.chz-specs-title {
-  font-size: 15px;
-  font-weight: 900;
-  color: var(--cr, #f8fafc);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.chz-specs-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.chz-spec-card {
-  background: var(--bg2, #0f172a);
-  border: 1px solid var(--bd, #334155);
-  border-radius: 10px;
-  padding: 10px;
-}
-.chz-spec-key {
-  font-size: 11px;
-  color: var(--mt, #94a3b8);
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.chz-spec-val {
-  font-size: 13px;
-  color: var(--cr, #f8fafc);
-  font-weight: 800;
-}
-
-/* ═══ الوضع الفاتح ═══ */
-html[data-theme="light"] .chz-feat-box,
-html[data-theme="light"] .chz-specs-box {
-  background: #ffffff;
-  border-color: #e2e8f0;
-}
-html[data-theme="light"] .chz-feat-title,
-html[data-theme="light"] .chz-specs-title {
-  color: #0f172a;
-}
-html[data-theme="light"] .chz-feat-item {
-  color: #334155;
-  border-bottom-color: #e2e8f0;
-}
-html[data-theme="light"] .chz-spec-card {
-  background: #f8fafc;
-  border-color: #e2e8f0;
-}
-html[data-theme="light"] .chz-spec-key { color: #64748b; }
-html[data-theme="light"] .chz-spec-val { color: #0f172a; }
-
-/* إخفاء النص القديم (الوصف) دائماً */
-#det-desc { display: none !important; }
-</style>
 
 <script>
 // PREMIUM-DETAILS-V2
@@ -23035,6 +22925,32 @@ html[data-theme="light"] .chz-spec-val { color: #0f172a; }
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
+
+<style id="chz-final-hide-desc">
+/* إخفاء كل النصوص المكررة القديمة */
+#det-desc, .det-d, .det-desc {
+  display: none !important;
+}
+
+/* تجميل المربعات (احتياطي) */
+#det-features-block, 
+#det-specs-block {
+  display: block !important;
+  background: var(--nav, #1e293b) !important;
+  border: 1px solid var(--bd, #334155) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin: 16px 0 !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+/* في الوضع الفاتح */
+html[data-theme="light"] #det-features-block,
+html[data-theme="light"] #det-specs-block {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
