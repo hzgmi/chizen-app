@@ -71,7 +71,7 @@
     pendingReview = null;
     
     db.collection('reviews').add(review).then(function() {
-      showToast('✅ تم إرسال تقييمك');
+      showToast('✅ شكراً لك! تم إرسال تقييمك بنجاح');
       document.getElementById('reviewFormContainer').style.display = 'none';
       document.getElementById('alreadyReviewedMsg').style.display = 'block';
       loadReviews();
