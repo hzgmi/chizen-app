@@ -23187,14 +23187,20 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     window.currentProduct = p;
     this.currentQty = 1;
 
+    // 1. إخفاء كل الشاشات وإظهار صفحة التفاصيل فوراً
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.add('active');
+
+    // 2. ملء البيانات الأساسية فوراً (من الذاكرة، بدون انتظار)
     fillDetailsNew(p);
-    // تحميل التقييمات الخاصة بهذا المنتج
-    if (typeof window.loadReviews === 'function') {
-      setTimeout(window.loadReviews, 300);
-    }
+
+    // 3. تحميل التقييمات في الخلفية (بعد 500ms، حتى لا تؤخر فتح الصفحة)
+    setTimeout(function() {
+      if (typeof window.loadReviews === 'function') {
+        window.loadReviews();
+      }
+    }, 500);
   };
 
   window.APP.closeDetailsNew = function() {
