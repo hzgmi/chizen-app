@@ -22939,16 +22939,24 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 
 
 
-<!-- NEW PRODUCT DETAILS PAGE -->
+
+
+
+
+
+
+<!-- FULL PRODUCT DETAILS PAGE -->
 <div class="screen" id="sc-details-new">
   <div class="chz-det-container">
     <button class="chz-det-back" onclick="APP.closeDetailsNew()">
       <svg viewBox="0 0 24 24" width="24" height="24"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
     </button>
+
     <div class="chz-det-gallery">
       <div class="chz-det-main-img" id="det-new-img"></div>
       <div class="chz-det-thumbs" id="det-new-thumbs"></div>
     </div>
+
     <div class="chz-det-info">
       <div class="chz-det-brand" id="det-new-brand"></div>
       <h1 class="chz-det-name" id="det-new-name"></h1>
@@ -22958,16 +22966,29 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
         <div class="chz-det-currencies" id="det-new-currencies"></div>
       </div>
     </div>
+
     <div id="det-new-features"></div>
     <div id="det-new-specs"></div>
-    <div class="chz-det-desc-wrapper" id="det-new-desc-wrapper" style="display:none;">
-      <div class="chz-det-desc-title">📄 الوصف</div>
-      <div class="chz-det-desc" id="det-new-desc"></div>
-    </div>
-    <div class="chz-det-reviews" id="det-new-reviews">
+
+    <div class="chz-det-reviews">
       <div class="chz-det-reviews-title">💬 تقييمات العملاء</div>
-      <div id="det-new-reviews-list"></div>
+      <div class="chz-det-review-form" id="reviewFormContainer">
+        <div class="chz-star-input" id="starInput">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <textarea id="reviewText" class="chz-review-textarea" placeholder="أضف تعليقاً (اختياري)..."></textarea>
+        <button class="chz-submit-review" onclick="APP.submitReview()">📤 إرسال التقييم</button>
+      </div>
+      <div id="alreadyReviewedMsg" class="chz-already-reviewed" style="display:none;">
+        <i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. شكراً لك!
+      </div>
+      <div id="reviewsList"></div>
     </div>
+
     <div class="chz-det-actions">
       <div class="chz-det-qty">
         <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(-1)">−</button>
@@ -22983,34 +23004,15 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 </div>
 
 <style id="chz-details-new-css">
-#sc-details-new {
-  background: var(--bg, #0a0e1a);
-  min-height: 100vh;
-  padding-bottom: 130px;
-  overflow-y: auto;
-  display: none;
-}
+#sc-details-new { background: var(--bg, #0a0e1a); min-height: 100vh; padding-bottom: 130px; overflow-y: auto; display: none; }
 #sc-details-new.active { display: block; }
 .chz-det-container { max-width: 600px; margin: 0 auto; padding: 15px; position: relative; }
-.chz-det-back {
-  position: absolute; top: 15px; right: 15px;
-  width: 42px; height: 42px; border-radius: 50%;
-  background: rgba(0,0,0,0.5); border: 1px solid #C5A059;
-  color: #C5A059; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; z-index: 10; backdrop-filter: blur(10px);
-}
+.chz-det-back { position: absolute; top: 15px; right: 15px; width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,0.5); border: 1px solid #C5A059; color: #C5A059; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; backdrop-filter: blur(10px); }
 .chz-det-gallery { margin-bottom: 20px; }
-.chz-det-main-img {
-  width: 100%; height: 320px; background: var(--bg2, #151030);
-  border-radius: 16px; overflow: hidden; display: flex;
-  align-items: center; justify-content: center; border: 1px solid var(--bd, #334155);
-}
+.chz-det-main-img { width: 100%; height: 320px; background: var(--bg2, #151030); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--bd, #334155); }
 .chz-det-main-img img { width: 100%; height: 100%; object-fit: contain; }
 .chz-det-thumbs { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; }
-.chz-det-thumbs .chz-thumb {
-  width: 60px; height: 60px; border-radius: 8px; overflow: hidden;
-  border: 2px solid transparent; cursor: pointer; flex-shrink: 0;
-}
+.chz-det-thumbs .chz-thumb { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; }
 .chz-det-thumbs .chz-thumb.active { border-color: #ec4899; }
 .chz-det-thumbs .chz-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .chz-det-info { margin-bottom: 20px; }
@@ -23035,17 +23037,21 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 .chz-spec-card { background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 10px; padding: 10px; }
 .chz-spec-key { font-size: 11px; color: var(--mt, #94a3b8); font-weight: 700; margin-bottom: 4px; }
 .chz-spec-val { font-size: 13px; color: var(--cr, #f8fafc); font-weight: 800; }
-.chz-det-desc-wrapper { margin: 20px 0; padding: 15px; background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; }
-.chz-det-desc-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 10px; }
-.chz-det-desc { font-size: 13px; color: var(--mt, #cbd5e1); line-height: 1.7; }
 .chz-det-reviews { margin: 20px 0; }
 .chz-det-reviews-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 12px; }
-.chz-det-actions {
-  position: fixed; bottom: 70px; left: 0; right: 0;
-  background: var(--nav, #1e293b); border-top: 1px solid var(--bd, #334155);
-  padding: 12px 15px; display: flex; gap: 10px; align-items: center;
-  z-index: 999; max-width: 600px; margin: 0 auto;
-}
+.chz-det-review-form { background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
+.chz-star-input { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; direction: ltr; }
+.chz-star-input i { font-size: 28px; color: #4b5563; cursor: pointer; transition: 0.2s; }
+.chz-star-input i.active { color: #f5b342; }
+.chz-review-textarea { width: 100%; background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); color: var(--cr, #f8fafc); padding: 10px; border-radius: 10px; margin-bottom: 10px; font-family: inherit; font-size: 13px; resize: vertical; min-height: 50px; outline: none; }
+.chz-submit-review { width: 100%; background: #3b82f6; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
+.chz-already-reviewed { background: rgba(16,185,129,0.1); border: 1px solid #10b981; color: #10b981; padding: 12px; border-radius: 10px; font-size: 12px; text-align: center; font-weight: 700; margin-bottom: 15px; }
+.chz-review-card { background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.chz-review-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.chz-review-user { font-size: 12px; font-weight: 700; color: var(--cr, #f8fafc); }
+.chz-review-stars { color: #fbbf24; font-size: 12px; margin-bottom: 6px; }
+.chz-review-text { font-size: 12px; color: var(--mt, #cbd5e1); line-height: 1.5; }
+.chz-det-actions { position: fixed; bottom: 70px; left: 0; right: 0; background: var(--nav, #1e293b); border-top: 1px solid var(--bd, #334155); padding: 12px 15px; display: flex; gap: 10px; align-items: center; z-index: 999; max-width: 600px; margin: 0 auto; }
 .chz-det-qty { display: flex; align-items: center; gap: 8px; background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 12px; padding: 5px; }
 .chz-det-qty-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); color: var(--cr, #f8fafc); font-size: 16px; font-weight: 900; cursor: pointer; }
 .chz-det-qty-val { min-width: 30px; text-align: center; color: var(--cr, #f8fafc); font-weight: 900; }
@@ -23056,32 +23062,34 @@ html[data-theme="light"] #sc-details-new { background: #f8fafc; }
 html[data-theme="light"] .chz-det-main-img { background: #fff; border-color: #e2e8f0; }
 html[data-theme="light"] .chz-det-name { color: #0f172a; }
 html[data-theme="light"] .chz-det-brand { color: #64748b; }
-html[data-theme="light"] .chz-feat-box, html[data-theme="light"] .chz-specs-box, html[data-theme="light"] .chz-det-desc-wrapper { background: #fff; border-color: #e2e8f0; }
-html[data-theme="light"] .chz-feat-title, html[data-theme="light"] .chz-specs-title, html[data-theme="light"] .chz-det-desc-title { color: #0f172a; }
-html[data-theme="light"] .chz-feat-item, html[data-theme="light"] .chz-det-desc { color: #334155; }
+html[data-theme="light"] .chz-feat-box, html[data-theme="light"] .chz-specs-box, html[data-theme="light"] .chz-det-review-form { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-feat-title, html[data-theme="light"] .chz-specs-title, html[data-theme="light"] .chz-det-reviews-title { color: #0f172a; }
+html[data-theme="light"] .chz-feat-item, html[data-theme="light"] .chz-review-text { color: #334155; }
 html[data-theme="light"] .chz-det-actions { background: #fff; border-color: #e2e8f0; }
 html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2e8f0; }
 </style>
 
 <script>
-// DETAILS-PAGE-V2-FINAL
+// FULL-DETAILS-JS
 (function(){
   window.APP = window.APP || {};
 
   window.APP.openProductNew = function(id) {
     var p = null;
     (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
-    if (!p) { console.warn('[DETAILS] product not found:', id); return; }
+    if (!p) return;
     this.currentProd = p;
     this.currentQty = 1;
 
-    // إخفاء كل الشاشات
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-    // إظهار الصفحة الجديدة
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.add('active');
-    // تعبئة البيانات
     fillDetailsNew(p);
+    
+    // تحميل التقييمات (إذا كانت reviews.js موجودة)
+    if (typeof window.loadReviews === 'function') {
+      setTimeout(window.loadReviews, 500);
+    }
   };
 
   window.APP.closeDetailsNew = function() {
@@ -23133,91 +23141,66 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     }
 
     // الاسم والماركة والتقييم
-    var brandEl = document.getElementById('det-new-brand');
-    var nameEl = document.getElementById('det-new-name');
-    var rateEl = document.getElementById('det-new-rate');
-    if (brandEl) brandEl.textContent = p.brand || '';
-    if (nameEl) nameEl.textContent = p.name || 'منتج';
-    if (rateEl) rateEl.innerHTML = '⭐ ' + (p.rating || 4.5) + ' (' + (p.reviews || 0) + ' تقييم)';
+    document.getElementById('det-new-brand').textContent = p.brand || '';
+    document.getElementById('det-new-name').textContent = p.name || 'منتج';
+    document.getElementById('det-new-rate').innerHTML = '⭐ ' + (p.rating || 4.5) + ' (' + (p.reviews || 0) + ' تقييم)';
 
     // السعر
     var priceEl = document.getElementById('det-new-price');
     var priceYER = Number(p.priceYER || p.price) || 0;
     var oldPrice = Number(p.oldPriceYER || p.oldPrice) || 0;
-    if (priceEl) {
-      var priceHTML = Math.round(priceYER).toLocaleString('en') + ' ر.ي';
-      if (oldPrice > priceYER) {
-        priceHTML += ' <span class="old">' + Math.round(oldPrice).toLocaleString('en') + ' ر.ي</span>';
-      }
-      priceEl.innerHTML = priceHTML;
+    var priceHTML = Math.round(priceYER).toLocaleString('en') + ' ر.ي';
+    if (oldPrice > priceYER) {
+      priceHTML += ' <span class="old">' + Math.round(oldPrice).toLocaleString('en') + ' ر.ي</span>';
     }
+    priceEl.innerHTML = priceHTML;
 
     // العملات
     var currenciesEl = document.getElementById('det-new-currencies');
-    if (currenciesEl) {
-      var priceSAR = Number(p.priceSAR) || (priceYER / 135);
-      var priceUSD = Number(p.priceUSD) || (priceYER / 505);
-      currenciesEl.innerHTML = 
-        '<div><div class="lbl">🇸🇦 سعودي</div><div class="val">' + priceSAR.toFixed(2) + '</div></div>' +
-        '<div><div class="lbl">🇺🇸 دولار</div><div class="val">' + priceUSD.toFixed(2) + '</div></div>';
-    }
+    var priceSAR = Number(p.priceSAR) || (priceYER / 135);
+    var priceUSD = Number(p.priceUSD) || (priceYER / 505);
+    currenciesEl.innerHTML = 
+      '<div><div class="lbl">🇸🇦 سعودي</div><div class="val">' + priceSAR.toFixed(2) + '</div></div>' +
+      '<div><div class="lbl">🇺🇸 دولار</div><div class="val">' + priceUSD.toFixed(2) + '</div></div>';
 
     // المميزات
     var featContainer = document.getElementById('det-new-features');
-    if (featContainer) {
-      featContainer.innerHTML = '';
-      var features = p.features || [];
-      if (typeof features === 'string') features = features.split('\n').filter(function(l){ return l.trim(); });
-      if (features.length > 0) {
-        var featBox = document.createElement('div');
-        featBox.className = 'chz-feat-box';
-        var fhtml = '<div class="chz-feat-title">✨ المميزات</div><ul class="chz-feat-list">';
-        features.forEach(function(f) {
-          if (!f.trim()) return;
-          fhtml += '<li class="chz-feat-item"><span class="chz-feat-check">✓</span><span>' + f.trim().replace(/</g, '&lt;') + '</span></li>';
-        });
-        fhtml += '</ul>';
-        featBox.innerHTML = fhtml;
-        featContainer.appendChild(featBox);
-      }
+    featContainer.innerHTML = '';
+    var features = p.features || [];
+    if (typeof features === 'string') features = features.split('\n').filter(function(l){ return l.trim(); });
+    if (features.length > 0) {
+      var featBox = document.createElement('div');
+      featBox.className = 'chz-feat-box';
+      var fhtml = '<div class="chz-feat-title">✨ المميزات</div><ul class="chz-feat-list">';
+      features.forEach(function(f) {
+        if (!f.trim()) return;
+        fhtml += '<li class="chz-feat-item"><span class="chz-feat-check">✓</span><span>' + f.trim().replace(/</g, '&lt;') + '</span></li>';
+      });
+      fhtml += '</ul>';
+      featBox.innerHTML = fhtml;
+      featContainer.appendChild(featBox);
     }
 
     // المواصفات
     var specsContainer = document.getElementById('det-new-specs');
-    if (specsContainer) {
-      specsContainer.innerHTML = '';
-      var specs = p.specs || {};
-      var specsKeys = Object.keys(specs);
-      if (specsKeys.length > 0) {
-        var specsBox = document.createElement('div');
-        specsBox.className = 'chz-specs-box';
-        var shtml = '<div class="chz-specs-title">📋 المواصفات</div><div class="chz-specs-grid">';
-        specsKeys.forEach(function(key) {
-          shtml += '<div class="chz-spec-card"><div class="chz-spec-key">' + key.replace(/</g, '&lt;') + '</div><div class="chz-spec-val">' + String(specs[key]).replace(/</g, '&lt;') + '</div></div>';
-        });
-        shtml += '</div>';
-        specsBox.innerHTML = shtml;
-        specsContainer.appendChild(specsBox);
-      }
-    }
-
-    // الوصف (إذا لم توجد مميزات)
-    var descWrapper = document.getElementById('det-new-desc-wrapper');
-    var descEl = document.getElementById('det-new-desc');
-    if (descWrapper && descEl) {
-      var hasFeatures = p.features && p.features.length > 0;
-      if (hasFeatures || !p.desc) {
-        descWrapper.style.display = 'none';
-      } else {
-        descWrapper.style.display = 'block';
-        descEl.textContent = p.desc;
-      }
+    specsContainer.innerHTML = '';
+    var specs = p.specs || {};
+    var specsKeys = Object.keys(specs);
+    if (specsKeys.length > 0) {
+      var specsBox = document.createElement('div');
+      specsBox.className = 'chz-specs-box';
+      var shtml = '<div class="chz-specs-title">📋 المواصفات</div><div class="chz-specs-grid">';
+      specsKeys.forEach(function(key) {
+        shtml += '<div class="chz-spec-card"><div class="chz-spec-key">' + key.replace(/</g, '&lt;') + '</div><div class="chz-spec-val">' + String(specs[key]).replace(/</g, '&lt;') + '</div></div>';
+      });
+      shtml += '</div>';
+      specsBox.innerHTML = shtml;
+      specsContainer.appendChild(specsBox);
     }
 
     // الكمية
-    var qtyEl = document.getElementById('det-new-qty');
-    if (qtyEl) qtyEl.textContent = '1';
-    this.currentQty = 1;
+    document.getElementById('det-new-qty').textContent = '1';
+    window.APP.currentQty = 1;
   }
 })();
 </script>
