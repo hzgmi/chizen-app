@@ -23989,7 +23989,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
           <i class="fas fa-star" data-value="5"></i>
         </div>
         <textarea id="reviewText" class="chz-review-textarea" placeholder="أضف تعليقاً (اختياري)..."></textarea>
-        <button class="chz-submit-review" onclick="APP.submitReview()">📤 إرسال التقييم</button>
+        <button class="chz-submit-review" onclick="window.submitReview()">📤 إرسال التقييم</button>
       </div>
       <div id="alreadyReviewedMsg" class="chz-already-reviewed" style="display:none;">
         <i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. شكراً لك!
@@ -24088,6 +24088,23 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 </style>
 
 <script src="reviews.js?v=5"></script>
+
+<style id="chz-review-stars-fix">
+.chz-star-input i {
+  font-size: 32px !important;
+  color: #4b5563 !important;
+  cursor: pointer !important;
+  transition: color 0.2s, transform 0.2s !important;
+  margin: 0 2px !important;
+}
+.chz-star-input i.active {
+  color: #f5b342 !important;
+  text-shadow: 0 0 10px rgba(245, 179, 66, 0.5) !important;
+}
+.chz-star-input i:hover {
+  transform: scale(1.15) !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
