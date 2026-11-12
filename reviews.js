@@ -189,6 +189,12 @@ window.showToast = function(msg) {
     var list = document.getElementById('reviewsList');
     if (!list) return;
 
+    // إذا لم يكن currentUserId جاهزاً، انتظر قليلاً
+    if (!currentUserId) {
+      setTimeout(window.loadReviews, 300);
+      return;
+    }
+
     db.collection('reviews')
       .where('productId', '==', (window.currentProduct || (window.APP && window.APP.currentProd)).id)
       .limit(20)
