@@ -399,5 +399,56 @@ body {
   font-weight: 700 !important;
 }
 </style>
+
+<script>
+// POST-MESSAGE-LISTENER
+window.addEventListener('message', function(event) {
+  if (event.data && event.data.action === 'loadProduct' && event.data.id) {
+    var id = event.data.id;
+    console.log('[DETAILS] Received product id:', id);
+    
+    // تحديث رابط الصفحة (للتقييمات التي تعتمد على id)
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, '', 'details.html?id=' + encodeURIComponent(id));
+    }
+    
+    // إعادة تحميل المنتج
+    if (typeof loadProductById === 'function') {
+      loadProductById(id);
+    } else if (window.db) {
+      // إذا لم تكن الدالة موجودة، نجلب المنتج مباشرة
+      window.db.collection('products').doc(id).get().then(function(doc) {
+        if (doc.exists) {
+          var p = doc.data();
+          p.id = doc.id;
+          window.currentProduct = p;
+          if (typeof renderProduct === 'function') {
+            renderProduct(p);
+          }
+          if (typeof loadReviews === 'function') {
+            setTimeout(loadReviews, 500);
+          }
+        }
+      });
+    }
+  }
+});
+
+// دالة مساعدة: جلب المنتج بالمعرف (إذا لم تكن موجودة)
+if (typeof loadProductById !== 'function') {
+  window.loadProductById = function(id) {
+    if (!window.db) return;
+    window.db.collection('products').doc(id).get().then(function(doc) {
+      if (doc.exists) {
+        var p = doc.data();
+        p.id = doc.id;
+        window.currentProduct = p;
+        if (typeof renderProduct === 'function') renderProduct(p);
+        if (typeof loadReviews === 'function') setTimeout(loadReviews, 500);
+      }
+    });
+  };
+}
+</script>
 </body>
 </html>
