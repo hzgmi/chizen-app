@@ -22945,7 +22945,15 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 
 
 
-<!-- FULL PRODUCT DETAILS PAGE -->
+
+
+
+
+
+
+<script src="reviews.js?v=4"></script>
+
+<!-- FINAL PRODUCT DETAILS PAGE -->
 <div class="screen" id="sc-details-new">
   <div class="chz-det-container">
     <button class="chz-det-back" onclick="APP.closeDetailsNew()">
@@ -22969,6 +22977,11 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 
     <div id="det-new-features"></div>
     <div id="det-new-specs"></div>
+
+    <div class="chz-det-desc-wrapper" id="det-new-desc-wrapper" style="display:none;">
+      <div class="chz-det-desc-title">📄 الوصف</div>
+      <div class="chz-det-desc" id="det-new-desc"></div>
+    </div>
 
     <div class="chz-det-reviews">
       <div class="chz-det-reviews-title">💬 تقييمات العملاء</div>
@@ -23037,6 +23050,9 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 .chz-spec-card { background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 10px; padding: 10px; }
 .chz-spec-key { font-size: 11px; color: var(--mt, #94a3b8); font-weight: 700; margin-bottom: 4px; }
 .chz-spec-val { font-size: 13px; color: var(--cr, #f8fafc); font-weight: 800; }
+.chz-det-desc-wrapper { margin: 20px 0; padding: 15px; background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; }
+.chz-det-desc-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 10px; }
+.chz-det-desc { font-size: 13px; color: var(--mt, #cbd5e1); line-height: 1.7; }
 .chz-det-reviews { margin: 20px 0; }
 .chz-det-reviews-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 12px; }
 .chz-det-review-form { background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
@@ -23062,15 +23078,15 @@ html[data-theme="light"] #sc-details-new { background: #f8fafc; }
 html[data-theme="light"] .chz-det-main-img { background: #fff; border-color: #e2e8f0; }
 html[data-theme="light"] .chz-det-name { color: #0f172a; }
 html[data-theme="light"] .chz-det-brand { color: #64748b; }
-html[data-theme="light"] .chz-feat-box, html[data-theme="light"] .chz-specs-box, html[data-theme="light"] .chz-det-review-form { background: #fff; border-color: #e2e8f0; }
-html[data-theme="light"] .chz-feat-title, html[data-theme="light"] .chz-specs-title, html[data-theme="light"] .chz-det-reviews-title { color: #0f172a; }
-html[data-theme="light"] .chz-feat-item, html[data-theme="light"] .chz-review-text { color: #334155; }
+html[data-theme="light"] .chz-feat-box, html[data-theme="light"] .chz-specs-box, html[data-theme="light"] .chz-det-review-form, html[data-theme="light"] .chz-det-desc-wrapper { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-feat-title, html[data-theme="light"] .chz-specs-title, html[data-theme="light"] .chz-det-reviews-title, html[data-theme="light"] .chz-det-desc-title { color: #0f172a; }
+html[data-theme="light"] .chz-feat-item, html[data-theme="light"] .chz-review-text, html[data-theme="light"] .chz-det-desc { color: #334155; }
 html[data-theme="light"] .chz-det-actions { background: #fff; border-color: #e2e8f0; }
 html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2e8f0; }
 </style>
 
 <script>
-// FULL-DETAILS-JS
+// FINAL-DETAILS-JS
 (function(){
   window.APP = window.APP || {};
 
@@ -23079,7 +23095,7 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
     if (!p) return;
     this.currentProd = p;
-    window.currentProduct = p; // لـ reviews.js
+    window.currentProduct = p;
     this.currentQty = 1;
 
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
@@ -23087,7 +23103,7 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     if (det) det.classList.add('active');
     fillDetailsNew(p);
     
-    // تحميل التقييمات (إذا كانت reviews.js موجودة)
+    // تحميل التقييمات
     if (typeof window.loadReviews === 'function') {
       setTimeout(window.loadReviews, 500);
     }
@@ -23199,14 +23215,25 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
       specsContainer.appendChild(specsBox);
     }
 
+    // الوصف (إذا لم توجد مميزات)
+    var descWrapper = document.getElementById('det-new-desc-wrapper');
+    var descEl = document.getElementById('det-new-desc');
+    if (descWrapper && descEl) {
+      var hasFeatures = p.features && p.features.length > 0;
+      if (hasFeatures || !p.desc) {
+        descWrapper.style.display = 'none';
+      } else {
+        descWrapper.style.display = 'block';
+        descEl.textContent = p.desc;
+      }
+    }
+
     // الكمية
     document.getElementById('det-new-qty').textContent = '1';
     window.APP.currentQty = 1;
   }
 })();
 </script>
-
-<script src="reviews.js?v=4"></script>
 </body>
 </html
     renderPassengers: function() {
