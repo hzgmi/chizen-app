@@ -22823,6 +22823,92 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   color: #b8860b !important; /* ذهبي داكن للنص الفاتح */
 }
 </style>
+
+<script>
+// PRODUCT-DETAILS-ENHANCE
+(function(){
+  var lastProductId = null;
+
+  function enhanceDetails() {
+    if (!window.APP || !window.APP.currentProd) return;
+    var p = window.APP.currentProd;
+    
+    // تجنب التكرار لنفس المنتج
+    if (lastProductId === p.id) return;
+    lastProductId = p.id;
+
+    // 1. المميزات (Features)
+    var featBlock = document.getElementById('det-features-block');
+    if (featBlock) {
+      var features = p.features || [];
+      // دعم الصيغ القديمة (إذا كانت features نصية)
+      if (typeof features === 'string') {
+        features = features.split('\n').filter(function(l){ return l.trim(); });
+      }
+      
+      if (features.length > 0) {
+        var htmlFeat = '<div class="det-features-title" style="font-weight:900;font-size:15px;margin-bottom:10px;color:var(--text-primary, #0f172a);">✨ المميزات</div>';
+        htmlFeat += '<ul style="list-style:none;padding:0;margin:0;">';
+        features.forEach(function(f){
+          if (!f.trim()) return;
+          htmlFeat += '<li style="padding:6px 0;font-size:13px;color:var(--text-secondary, #64748b);display:flex;align-items:flex-start;gap:8px;">';
+          htmlFeat += '<span style="color:#10b981;font-weight:900;">✓</span>';
+          htmlFeat += '<span>' + f.trim().replace(/</g,'&lt;') + '</span>';
+          htmlFeat += '</li>';
+        });
+        htmlFeat += '</ul>';
+        featBlock.innerHTML = htmlFeat;
+        featBlock.style.display = 'block';
+      } else {
+        featBlock.style.display = 'none';
+      }
+    }
+
+    // 2. المواصفات (Specs) - إضافة جدول جديد بعد الوصف
+    var descEl = document.getElementById('det-desc');
+    if (descEl) {
+      // حذف الجدول القديم إن وجد
+      var oldSpecs = document.getElementById('det-specs-block');
+      if (oldSpecs) oldSpecs.remove();
+
+      var specs = p.specs || {};
+      var specsKeys = Object.keys(specs);
+      
+      if (specsKeys.length > 0) {
+        var table = document.createElement('div');
+        table.id = 'det-specs-block';
+        table.style.cssText = 'margin-top:20px;background:var(--bg2, #f8fafc);border:1px solid var(--bd, #e2e8f0);border-radius:12px;padding:15px;';
+        
+        var htmlSpecs = '<div style="font-weight:900;font-size:15px;margin-bottom:10px;color:var(--text-primary, #0f172a);">📋 المواصفات</div>';
+        htmlSpecs += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+        specsKeys.forEach(function(key){
+          htmlSpecs += '<tr>';
+          htmlSpecs += '<td style="padding:8px 5px;font-weight:700;color:var(--text-secondary, #64748b);border-bottom:1px solid var(--bd, #e2e8f0);width:40%;">' + key.replace(/</g,'&lt;') + '</td>';
+          htmlSpecs += '<td style="padding:8px 5px;color:var(--text-primary, #0f172a);border-bottom:1px solid var(--bd, #e2e8f0);">' + String(specs[key]).replace(/</g,'&lt;') + '</td>';
+          htmlSpecs += '</tr>';
+        });
+        htmlSpecs += '</table>';
+        table.innerHTML = htmlSpecs;
+        
+        // إدراج الجدول بعد الوصف
+        descEl.parentNode.insertBefore(table, descEl.nextSibling);
+      }
+    }
+  }
+
+  // مراقبة فتح صفحة المنتج (عندما يتغير currentProd أو عند النقر على منتج)
+  setInterval(enhanceDetails, 1000);
+  
+  // أيضاً عند تغيير الشاشة
+  var observer = new MutationObserver(function() {
+    var detScreen = document.getElementById('sc-detail');
+    if (detScreen && detScreen.classList.contains('active')) {
+      enhanceDetails();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
