@@ -24009,6 +24009,82 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
     </div>
   </div>
 </div>
+
+<style id="chz-sticky-grid">
+/* ترتيب شريط الشراء باستخدام CSS Grid */
+#sc-details-new .chz-det-actions {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  grid-template-rows: auto auto !important;
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+/* العداد: الخلية (1,1) */
+#sc-details-new .chz-det-actions .chz-det-qty {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  background: #151a2d !important;
+  border: 1px solid #2a3452 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  height: 48px !important;
+  width: fit-content !important;
+}
+
+/* زر أضف للسلة: الخلية (1,2) */
+#sc-details-new .chz-det-actions .chz-det-buttons {
+  display: contents !important;
+}
+#sc-details-new .chz-det-actions .chz-det-btn-cart {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  height: 48px !important;
+  background: #1b112b !important;
+  color: white !important;
+  border: 1px solid #2a1b40 !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+/* زر اشتر الآن: الصف الثاني (بعرض كامل) */
+#sc-details-new .chz-det-actions .chz-det-btn-buy {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  height: 48px !important;
+  background: #ec2a79 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 12px rgba(236,42,121,0.25) !important;
+}
+
+/* إصلاح المساحة السفلية (للتقييمات) */
+#sc-details-new {
+  padding-bottom: 200px !important;
+}
+
+/* في الوضع الفاتح */
+html[data-theme="light"] #sc-details-new .chz-det-actions {
+  background: #fff !important;
+  border-color: #e2e8f0 !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
