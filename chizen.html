@@ -22844,16 +22844,16 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
 
 
 
-<style id="chz-final-hide-desc">
-/* إخفاء كل النصوص المكررة القديمة */
-#det-desc, .det-d, .det-desc {
-  display: none !important;
-}
 
-/* تجميل المربعات (احتياطي) */
-#det-features-block, 
-#det-specs-block {
-  display: block !important;
+
+
+
+<style id="chz-premium-details-v3">
+/* إخفاء الوصف القديم نهائياً */
+#det-desc, .det-d { display: none !important; }
+
+/* مربع المميزات */
+.chz-feat-box-v3 {
   background: var(--nav, #1e293b) !important;
   border: 1px solid var(--bd, #334155) !important;
   border-radius: 16px !important;
@@ -22861,47 +22861,172 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   margin: 16px 0 !important;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
 }
+.chz-feat-title-v3 {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: var(--cr, #f8fafc) !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.chz-feat-list-v3 {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.chz-feat-item-v3 {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px dashed var(--bd, #334155) !important;
+  font-size: 13px !important;
+  color: var(--mt, #cbd5e1) !important;
+  line-height: 1.5 !important;
+}
+.chz-feat-item-v3:last-child { border-bottom: none !important; }
+.chz-feat-check-v3 { color: #10b981 !important; font-weight: 900 !important; font-size: 15px !important; flex-shrink: 0 !important; }
 
-/* في الوضع الفاتح */
-html[data-theme="light"] #det-features-block,
-html[data-theme="light"] #det-specs-block {
+/* مربع المواصفات */
+.chz-specs-box-v3 {
+  background: var(--nav, #1e293b) !important;
+  border: 1px solid var(--bd, #334155) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin: 16px 0 !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+.chz-specs-title-v3 {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: var(--cr, #f8fafc) !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.chz-specs-grid-v3 {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+.chz-spec-card-v3 {
+  background: var(--bg2, #0f172a) !important;
+  border: 1px solid var(--bd, #334155) !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+}
+.chz-spec-key-v3 {
+  font-size: 11px !important;
+  color: var(--mt, #94a3b8) !important;
+  font-weight: 700 !important;
+  margin-bottom: 4px !important;
+}
+.chz-spec-val-v3 {
+  font-size: 13px !important;
+  color: var(--cr, #f8fafc) !important;
+  font-weight: 800 !important;
+}
+
+/* الوضع الفاتح */
+html[data-theme="light"] .chz-feat-box-v3,
+html[data-theme="light"] .chz-specs-box-v3 {
   background: #ffffff !important;
   border-color: #e2e8f0 !important;
 }
+html[data-theme="light"] .chz-feat-title-v3,
+html[data-theme="light"] .chz-specs-title-v3 {
+  color: #0f172a !important;
+}
+html[data-theme="light"] .chz-feat-item-v3 {
+  color: #334155 !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+html[data-theme="light"] .chz-spec-card-v3 {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+html[data-theme="light"] .chz-spec-key-v3 { color: #64748b !important; }
+html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 </style>
 
 <script>
-// ULTIMATE-HIDE-DUPLICATE
+// PREMIUM-DETAILS-V3
 (function(){
-  function hideDuplicateDesc() {
-    var descEl = document.getElementById('det-desc');
-    if (!descEl) return;
-    
-    var featBlock = document.getElementById('det-features-block');
-    var specsBlock = document.getElementById('det-specs-block');
-    
-    var hasFeatures = featBlock && featBlock.children.length > 0;
-    var hasSpecs = specsBlock && specsBlock.children.length > 0;
-    
-    if (hasFeatures || hasSpecs) {
-      // إذا كان هناك مميزات أو مواصفات، أخفِ الوصف
-      descEl.style.display = 'none';
-      descEl.style.visibility = 'hidden';
-      descEl.style.height = '0';
-      descEl.style.overflow = 'hidden';
+  var lastProductId = null;
+
+  function renderDetails() {
+    if (!window.APP || !window.APP.currentProd) return;
+    var p = window.APP.currentProd;
+    if (lastProductId === p.id) return;
+    lastProductId = p.id;
+
+    // البحث عن حاوية مناسبة (بعد السعر)
+    var priceEl = document.getElementById('det-price');
+    if (!priceEl) return;
+    var parent = priceEl.parentNode;
+
+    // حذف الأقسام القديمة إن وجدت
+    var oldFeat = parent.querySelector('.chz-feat-box-v3');
+    var oldSpecs = parent.querySelector('.chz-specs-box-v3');
+    if (oldFeat) oldFeat.remove();
+    if (oldSpecs) oldSpecs.remove();
+
+    // ═══ المميزات ═══
+    var features = p.features || [];
+    if (typeof features === 'string') {
+      features = features.split('\n').filter(function(l){ return l.trim(); });
+    }
+
+    if (features.length > 0) {
+      var featBox = document.createElement('div');
+      featBox.className = 'chz-feat-box-v3';
+      var featHTML = '<div class="chz-feat-title-v3"><span>✨</span> المميزات</div>';
+      featHTML += '<ul class="chz-feat-list-v3">';
+      features.forEach(function(f) {
+        if (!f.trim()) return;
+        featHTML += '<li class="chz-feat-item-v3">';
+        featHTML += '<span class="chz-feat-check-v3">✓</span>';
+        featHTML += '<span>' + f.trim().replace(/</g, '&lt;') + '</span>';
+        featHTML += '</li>';
+      });
+      featHTML += '</ul>';
+      featBox.innerHTML = featHTML;
+      parent.insertBefore(featBox, priceEl.nextSibling);
+    }
+
+    // ═══ المواصفات ═══
+    var specs = p.specs || {};
+    var specsKeys = Object.keys(specs);
+
+    if (specsKeys.length > 0) {
+      var specsBox = document.createElement('div');
+      specsBox.className = 'chz-specs-box-v3';
+      var specsHTML = '<div class="chz-specs-title-v3"><span>📋</span> المواصفات</div>';
+      specsHTML += '<div class="chz-specs-grid-v3">';
+      specsKeys.forEach(function(key) {
+        specsHTML += '<div class="chz-spec-card-v3">';
+        specsHTML += '<div class="chz-spec-key-v3">' + key.replace(/</g, '&lt;') + '</div>';
+        specsHTML += '<div class="chz-spec-val-v3">' + String(specs[key]).replace(/</g, '&lt;') + '</div>';
+        specsHTML += '</div>';
+      });
+      specsHTML += '</div>';
+      specsBox.innerHTML = specsHTML;
+      parent.insertBefore(specsBox, priceEl.nextSibling);
     }
   }
-  
-  // تطبيق كل 300 مللي ثانية (لضمان بعد الرسم)
-  setInterval(hideDuplicateDesc, 300);
-  
+
+  // مراقبة مستمرة (كل 500 مللي ثانية)
+  setInterval(renderDetails, 500);
+
   // أيضاً عند تغيير الشاشة
   var observer = new MutationObserver(function() {
     var detScreen = document.getElementById('sc-detail');
     if (detScreen && detScreen.classList.contains('active')) {
-      setTimeout(hideDuplicateDesc, 100);
-      setTimeout(hideDuplicateDesc, 500);
-      setTimeout(hideDuplicateDesc, 1500);
+      lastProductId = null;
+      setTimeout(renderDetails, 100);
+      setTimeout(renderDetails, 300);
     }
   });
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
