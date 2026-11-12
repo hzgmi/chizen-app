@@ -197,10 +197,7 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
         var alreadyMsg = document.getElementById('alreadyReviewedMsg');
         if (myReviewId) {
           if (formContainer) formContainer.style.display = 'none';
-          if (alreadyMsg) {
-            alreadyMsg.style.display = 'block';
-            alreadyMsg.innerHTML = '<i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. <button onclick="editMyReview()" style="background:#3b82f6;color:#fff;border:none;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:8px;">✏️ تعديل التقييم</button>';
-          }
+          if (alreadyMsg) alreadyMsg.style.display = 'none';
         } else {
           if (formContainer) formContainer.style.display = 'block';
           if (alreadyMsg) alreadyMsg.style.display = 'none';
@@ -218,7 +215,11 @@ console.log('[REVIEWS] auth ready:', !!firebase.auth);
           header.className = 'review-header';
           var userSpan = document.createElement('span');
           userSpan.className = 'review-user';
-          userSpan.textContent = (r.userId === currentUserId ? 'أنت' : 'عميل');
+          if (r.userId === currentUserId) {
+            userSpan.innerHTML = 'أنت <button onclick="editMyReview()" style="background:transparent;border:none;color:#3b82f6;cursor:pointer;font-size:14px;padding:0 4px;" title="تعديل تقييمك">✏️</button>';
+          } else {
+            userSpan.textContent = 'عميل';
+          }
           var dateSpan = document.createElement('span');
           dateSpan.className = 'review-date';
           dateSpan.textContent = (r.createdAt ? 'مؤخراً' : 'الآن');
