@@ -11386,6 +11386,11 @@ var APP={
     }
   },
 
+  openProduct:function(id){
+    if (typeof this.openProductNew === 'function') {
+      this.openProductNew(id);
+    }
+  },
   renderProducts:function(list, targetEl){
     var c = targetEl || document.getElementById('prods');
     if(!c) return;
@@ -11698,7 +11703,13 @@ var APP={
 
 
   
-chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElementById('det-qty').textContent=this.currentQty;},
+chQty:function(d){
+    this.currentQty = Math.max(1, (this.currentQty || 1) + d);
+    var el = document.getElementById('det-qty');
+    if (el) el.textContent = this.currentQty;
+    var el2 = document.getElementById('det-new-qty');
+    if (el2) el2.textContent = this.currentQty;
+  },
   
   addDetCart:function(){
     if(!this.currentProd)return;
@@ -22927,6 +22938,289 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a !important; }
 </script>
 
 
+
+<!-- NEW PRODUCT DETAILS PAGE -->
+<div class="screen" id="sc-details-new">
+  <div class="chz-det-container">
+    <button class="chz-det-back" onclick="APP.closeDetailsNew()">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </button>
+    <div class="chz-det-gallery">
+      <div class="chz-det-main-img" id="det-new-img"></div>
+      <div class="chz-det-thumbs" id="det-new-thumbs"></div>
+    </div>
+    <div class="chz-det-info">
+      <div class="chz-det-brand" id="det-new-brand"></div>
+      <h1 class="chz-det-name" id="det-new-name"></h1>
+      <div class="chz-det-rate" id="det-new-rate"></div>
+      <div class="chz-det-price-row">
+        <div class="chz-det-price" id="det-new-price"></div>
+        <div class="chz-det-currencies" id="det-new-currencies"></div>
+      </div>
+    </div>
+    <div id="det-new-features"></div>
+    <div id="det-new-specs"></div>
+    <div class="chz-det-desc-wrapper" id="det-new-desc-wrapper" style="display:none;">
+      <div class="chz-det-desc-title">📄 الوصف</div>
+      <div class="chz-det-desc" id="det-new-desc"></div>
+    </div>
+    <div class="chz-det-reviews" id="det-new-reviews">
+      <div class="chz-det-reviews-title">💬 تقييمات العملاء</div>
+      <div id="det-new-reviews-list"></div>
+    </div>
+    <div class="chz-det-actions">
+      <div class="chz-det-qty">
+        <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(-1)">−</button>
+        <span class="chz-det-qty-val" id="det-new-qty">1</span>
+        <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(1)">+</button>
+      </div>
+      <div class="chz-det-buttons">
+        <button class="chz-det-btn-cart" onclick="APP.addDetCart()">🛒 أضف للسلة</button>
+        <button class="chz-det-btn-buy" onclick="APP.buyNow()">⚡ اشترِ الآن</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style id="chz-details-new-css">
+#sc-details-new {
+  background: var(--bg, #0a0e1a);
+  min-height: 100vh;
+  padding-bottom: 130px;
+  overflow-y: auto;
+  display: none;
+}
+#sc-details-new.active { display: block; }
+.chz-det-container { max-width: 600px; margin: 0 auto; padding: 15px; position: relative; }
+.chz-det-back {
+  position: absolute; top: 15px; right: 15px;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(0,0,0,0.5); border: 1px solid #C5A059;
+  color: #C5A059; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 10; backdrop-filter: blur(10px);
+}
+.chz-det-gallery { margin-bottom: 20px; }
+.chz-det-main-img {
+  width: 100%; height: 320px; background: var(--bg2, #151030);
+  border-radius: 16px; overflow: hidden; display: flex;
+  align-items: center; justify-content: center; border: 1px solid var(--bd, #334155);
+}
+.chz-det-main-img img { width: 100%; height: 100%; object-fit: contain; }
+.chz-det-thumbs { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; }
+.chz-det-thumbs .chz-thumb {
+  width: 60px; height: 60px; border-radius: 8px; overflow: hidden;
+  border: 2px solid transparent; cursor: pointer; flex-shrink: 0;
+}
+.chz-det-thumbs .chz-thumb.active { border-color: #ec4899; }
+.chz-det-thumbs .chz-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.chz-det-info { margin-bottom: 20px; }
+.chz-det-brand { font-size: 12px; color: var(--mt, #94a3b8); margin-bottom: 5px; }
+.chz-det-name { font-size: 20px; font-weight: 900; color: var(--cr, #f8fafc); margin: 0 0 10px 0; line-height: 1.4; }
+.chz-det-rate { font-size: 14px; color: #fbbf24; margin-bottom: 15px; }
+.chz-det-price-row { display: flex; flex-direction: column; gap: 10px; }
+.chz-det-price { font-size: 24px; font-weight: 900; color: #ec4899; }
+.chz-det-price .old { font-size: 14px; color: #94a3b8; text-decoration: line-through; margin-right: 8px; }
+.chz-det-currencies { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chz-det-currencies > div { background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 10px; padding: 10px; text-align: center; }
+.chz-det-currencies .lbl { font-size: 10px; color: var(--mt, #94a3b8); }
+.chz-det-currencies .val { font-size: 15px; font-weight: 900; color: #C5A059; margin-top: 2px; }
+.chz-feat-box { background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; padding: 16px; margin: 16px 0; }
+.chz-feat-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 12px; }
+.chz-feat-list { list-style: none; padding: 0; margin: 0; }
+.chz-feat-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--mt, #cbd5e1); line-height: 1.5; }
+.chz-feat-check { color: #10b981; font-weight: 900; font-size: 15px; flex-shrink: 0; }
+.chz-specs-box { background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; padding: 16px; margin: 16px 0; }
+.chz-specs-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 12px; }
+.chz-specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chz-spec-card { background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 10px; padding: 10px; }
+.chz-spec-key { font-size: 11px; color: var(--mt, #94a3b8); font-weight: 700; margin-bottom: 4px; }
+.chz-spec-val { font-size: 13px; color: var(--cr, #f8fafc); font-weight: 800; }
+.chz-det-desc-wrapper { margin: 20px 0; padding: 15px; background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; }
+.chz-det-desc-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 10px; }
+.chz-det-desc { font-size: 13px; color: var(--mt, #cbd5e1); line-height: 1.7; }
+.chz-det-reviews { margin: 20px 0; }
+.chz-det-reviews-title { font-size: 15px; font-weight: 900; color: var(--cr, #f8fafc); margin-bottom: 12px; }
+.chz-det-actions {
+  position: fixed; bottom: 70px; left: 0; right: 0;
+  background: var(--nav, #1e293b); border-top: 1px solid var(--bd, #334155);
+  padding: 12px 15px; display: flex; gap: 10px; align-items: center;
+  z-index: 999; max-width: 600px; margin: 0 auto;
+}
+.chz-det-qty { display: flex; align-items: center; gap: 8px; background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 12px; padding: 5px; }
+.chz-det-qty-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); color: var(--cr, #f8fafc); font-size: 16px; font-weight: 900; cursor: pointer; }
+.chz-det-qty-val { min-width: 30px; text-align: center; color: var(--cr, #f8fafc); font-weight: 900; }
+.chz-det-buttons { flex: 1; display: flex; gap: 10px; }
+.chz-det-btn-cart { flex: 1; padding: 14px; border-radius: 12px; background: var(--bg2, #1e293b); border: 1px solid var(--bd, #334155); color: var(--cr, #f8fafc); font-weight: 800; font-size: 14px; cursor: pointer; }
+.chz-det-btn-buy { flex: 1; padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #ec4899, #be185d); border: none; color: #fff; font-weight: 800; font-size: 14px; cursor: pointer; }
+html[data-theme="light"] #sc-details-new { background: #f8fafc; }
+html[data-theme="light"] .chz-det-main-img { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-det-name { color: #0f172a; }
+html[data-theme="light"] .chz-det-brand { color: #64748b; }
+html[data-theme="light"] .chz-feat-box, html[data-theme="light"] .chz-specs-box, html[data-theme="light"] .chz-det-desc-wrapper { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-feat-title, html[data-theme="light"] .chz-specs-title, html[data-theme="light"] .chz-det-desc-title { color: #0f172a; }
+html[data-theme="light"] .chz-feat-item, html[data-theme="light"] .chz-det-desc { color: #334155; }
+html[data-theme="light"] .chz-det-actions { background: #fff; border-color: #e2e8f0; }
+html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2e8f0; }
+</style>
+
+<script>
+// DETAILS-PAGE-V2-FINAL
+(function(){
+  window.APP = window.APP || {};
+
+  window.APP.openProductNew = function(id) {
+    var p = null;
+    (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
+    if (!p) { console.warn('[DETAILS] product not found:', id); return; }
+    this.currentProd = p;
+    this.currentQty = 1;
+
+    // إخفاء كل الشاشات
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    // إظهار الصفحة الجديدة
+    var det = document.getElementById('sc-details-new');
+    if (det) det.classList.add('active');
+    // تعبئة البيانات
+    fillDetailsNew(p);
+  };
+
+  window.APP.closeDetailsNew = function() {
+    var det = document.getElementById('sc-details-new');
+    if (det) det.classList.remove('active');
+    document.querySelectorAll('.screen').forEach(function(s) {
+      if (s.id === 'sc-home') s.classList.add('active');
+    });
+  };
+
+  window.APP.changeDetailsQty = function(d) {
+    this.currentQty = Math.max(1, (this.currentQty || 1) + d);
+    var qtyEl = document.getElementById('det-new-qty');
+    if (qtyEl) qtyEl.textContent = this.currentQty;
+  };
+
+  function fillDetailsNew(p) {
+    // الصورة
+    var imgContainer = document.getElementById('det-new-img');
+    if (imgContainer) {
+      imgContainer.innerHTML = '';
+      var img = document.createElement('img');
+      img.src = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
+      imgContainer.appendChild(img);
+    }
+
+    // الصور المصغرة
+    var thumbsContainer = document.getElementById('det-new-thumbs');
+    if (thumbsContainer) {
+      thumbsContainer.innerHTML = '';
+      var images = (p.images && p.images.length) ? p.images : (p.img ? [p.img] : []);
+      if (images.length > 1) {
+        images.forEach(function(src, i) {
+          var thumb = document.createElement('div');
+          thumb.className = 'chz-thumb' + (i === 0 ? ' active' : '');
+          var ti = document.createElement('img');
+          ti.src = src;
+          ti.onclick = function() {
+            var mainImg = imgContainer.querySelector('img');
+            if (mainImg) mainImg.src = src;
+            thumbsContainer.querySelectorAll('.chz-thumb').forEach(function(t, j) {
+              t.classList.toggle('active', j === i);
+            });
+          };
+          thumb.appendChild(ti);
+          thumbsContainer.appendChild(thumb);
+        });
+      }
+    }
+
+    // الاسم والماركة والتقييم
+    var brandEl = document.getElementById('det-new-brand');
+    var nameEl = document.getElementById('det-new-name');
+    var rateEl = document.getElementById('det-new-rate');
+    if (brandEl) brandEl.textContent = p.brand || '';
+    if (nameEl) nameEl.textContent = p.name || 'منتج';
+    if (rateEl) rateEl.innerHTML = '⭐ ' + (p.rating || 4.5) + ' (' + (p.reviews || 0) + ' تقييم)';
+
+    // السعر
+    var priceEl = document.getElementById('det-new-price');
+    var priceYER = Number(p.priceYER || p.price) || 0;
+    var oldPrice = Number(p.oldPriceYER || p.oldPrice) || 0;
+    if (priceEl) {
+      var priceHTML = Math.round(priceYER).toLocaleString('en') + ' ر.ي';
+      if (oldPrice > priceYER) {
+        priceHTML += ' <span class="old">' + Math.round(oldPrice).toLocaleString('en') + ' ر.ي</span>';
+      }
+      priceEl.innerHTML = priceHTML;
+    }
+
+    // العملات
+    var currenciesEl = document.getElementById('det-new-currencies');
+    if (currenciesEl) {
+      var priceSAR = Number(p.priceSAR) || (priceYER / 135);
+      var priceUSD = Number(p.priceUSD) || (priceYER / 505);
+      currenciesEl.innerHTML = 
+        '<div><div class="lbl">🇸🇦 سعودي</div><div class="val">' + priceSAR.toFixed(2) + '</div></div>' +
+        '<div><div class="lbl">🇺🇸 دولار</div><div class="val">' + priceUSD.toFixed(2) + '</div></div>';
+    }
+
+    // المميزات
+    var featContainer = document.getElementById('det-new-features');
+    if (featContainer) {
+      featContainer.innerHTML = '';
+      var features = p.features || [];
+      if (typeof features === 'string') features = features.split('\n').filter(function(l){ return l.trim(); });
+      if (features.length > 0) {
+        var featBox = document.createElement('div');
+        featBox.className = 'chz-feat-box';
+        var fhtml = '<div class="chz-feat-title">✨ المميزات</div><ul class="chz-feat-list">';
+        features.forEach(function(f) {
+          if (!f.trim()) return;
+          fhtml += '<li class="chz-feat-item"><span class="chz-feat-check">✓</span><span>' + f.trim().replace(/</g, '&lt;') + '</span></li>';
+        });
+        fhtml += '</ul>';
+        featBox.innerHTML = fhtml;
+        featContainer.appendChild(featBox);
+      }
+    }
+
+    // المواصفات
+    var specsContainer = document.getElementById('det-new-specs');
+    if (specsContainer) {
+      specsContainer.innerHTML = '';
+      var specs = p.specs || {};
+      var specsKeys = Object.keys(specs);
+      if (specsKeys.length > 0) {
+        var specsBox = document.createElement('div');
+        specsBox.className = 'chz-specs-box';
+        var shtml = '<div class="chz-specs-title">📋 المواصفات</div><div class="chz-specs-grid">';
+        specsKeys.forEach(function(key) {
+          shtml += '<div class="chz-spec-card"><div class="chz-spec-key">' + key.replace(/</g, '&lt;') + '</div><div class="chz-spec-val">' + String(specs[key]).replace(/</g, '&lt;') + '</div></div>';
+        });
+        shtml += '</div>';
+        specsBox.innerHTML = shtml;
+        specsContainer.appendChild(specsBox);
+      }
+    }
+
+    // الوصف (إذا لم توجد مميزات)
+    var descWrapper = document.getElementById('det-new-desc-wrapper');
+    var descEl = document.getElementById('det-new-desc');
+    if (descWrapper && descEl) {
+      var hasFeatures = p.features && p.features.length > 0;
+      if (hasFeatures || !p.desc) {
+        descWrapper.style.display = 'none';
+      } else {
+        descWrapper.style.display = 'block';
+        descEl.textContent = p.desc;
+      }
+    }
+
+    // الكمية
+    var qtyEl = document.getElementById('det-new-qty');
+    if (qtyEl) qtyEl.textContent = '1';
+    this.currentQty = 1;
+  }
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
