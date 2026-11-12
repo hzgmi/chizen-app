@@ -23083,6 +23083,36 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
+
+<style id="chz-specs-theme-fix">
+/* إصلاح خلفية جدول المواصفات لتتناسب مع التطبيق */
+#det-specs-block {
+  background: var(--nav) !important; /* نفس خلفية البطاقات */
+  border: 1px solid var(--bd) !important; /* نفس حدود البطاقات */
+  color: var(--cr) !important; /* نفس لون النص */
+  border-radius: 16px !important;
+  padding: 15px !important;
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+#det-specs-block div[style*="font-weight:900"] {
+  color: var(--cr) !important; /* لون العنوان */
+}
+
+#det-specs-block table td {
+  color: var(--cr) !important; /* لون النص في الجدول */
+  border-bottom-color: var(--bd) !important; /* لون الفاصل */
+}
+
+/* إصلاح عنوان مربع المميزات ليتطابق */
+#det-features-block {
+  background: var(--nav) !important;
+  border: 1px solid var(--bd) !important;
+  color: var(--cr) !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
