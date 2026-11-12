@@ -22824,316 +22824,217 @@ html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
 }
 </style>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="chz-premium-details-v2">
+/* ═══ قسم المميزات (Features) ═══ */
+.chz-feat-box {
+  background: var(--nav, #1e293b);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.chz-feat-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--cr, #f8fafc);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chz-feat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.chz-feat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--bd, #334155);
+  font-size: 13px;
+  color: var(--mt, #cbd5e1);
+  line-height: 1.5;
+}
+.chz-feat-item:last-child {
+  border-bottom: none;
+}
+.chz-feat-check {
+  color: #10b981;
+  font-weight: 900;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* ═══ قسم المواصفات (Specs) ═══ */
+.chz-specs-box {
+  background: var(--nav, #1e293b);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.chz-specs-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--cr, #f8fafc);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chz-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.chz-spec-card {
+  background: var(--bg2, #0f172a);
+  border: 1px solid var(--bd, #334155);
+  border-radius: 10px;
+  padding: 10px;
+}
+.chz-spec-key {
+  font-size: 11px;
+  color: var(--mt, #94a3b8);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.chz-spec-val {
+  font-size: 13px;
+  color: var(--cr, #f8fafc);
+  font-weight: 800;
+}
+
+/* ═══ الوضع الفاتح ═══ */
+html[data-theme="light"] .chz-feat-box,
+html[data-theme="light"] .chz-specs-box {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+html[data-theme="light"] .chz-feat-title,
+html[data-theme="light"] .chz-specs-title {
+  color: #0f172a;
+}
+html[data-theme="light"] .chz-feat-item {
+  color: #334155;
+  border-bottom-color: #e2e8f0;
+}
+html[data-theme="light"] .chz-spec-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+html[data-theme="light"] .chz-spec-key { color: #64748b; }
+html[data-theme="light"] .chz-spec-val { color: #0f172a; }
+
+/* إخفاء النص القديم (الوصف) دائماً */
+#det-desc { display: none !important; }
+</style>
+
 <script>
-// PRODUCT-DETAILS-ENHANCE
+// PREMIUM-DETAILS-V2
 (function(){
   var lastProductId = null;
 
-  function enhanceDetails() {
+  function renderPremiumDetails() {
     if (!window.APP || !window.APP.currentProd) return;
     var p = window.APP.currentProd;
-    
-    // تجنب التكرار لنفس المنتج
     if (lastProductId === p.id) return;
     lastProductId = p.id;
 
-    // 1. المميزات (Features)
-    var featBlock = document.getElementById('det-features-block');
-    if (featBlock) {
-      var features = p.features || [];
-      // دعم الصيغ القديمة (إذا كانت features نصية)
-      if (typeof features === 'string') {
-        features = features.split('\n').filter(function(l){ return l.trim(); });
-      }
-      
-      if (features.length > 0) {
-        var htmlFeat = '<div class="det-features-title" style="font-weight:900;font-size:15px;margin-bottom:10px;color:var(--text-primary, #0f172a);">✨ المميزات</div>';
-        htmlFeat += '<ul style="list-style:none;padding:0;margin:0;">';
-        features.forEach(function(f){
-          if (!f.trim()) return;
-          htmlFeat += '<li style="padding:6px 0;font-size:13px;color:var(--text-secondary, #64748b);display:flex;align-items:flex-start;gap:8px;">';
-          htmlFeat += '<span style="color:#10b981;font-weight:900;">✓</span>';
-          htmlFeat += '<span>' + f.trim().replace(/</g,'&lt;') + '</span>';
-          htmlFeat += '</li>';
-        });
-        htmlFeat += '</ul>';
-        featBlock.innerHTML = htmlFeat;
-        featBlock.style.display = 'block';
-      } else {
-        featBlock.style.display = 'none';
-      }
-    }
+    var detScreen = document.getElementById('sc-detail');
+    if (!detScreen) return;
 
-    // 2. المواصفات (Specs) - إضافة جدول جديد بعد الوصف
+    // حذف أي أقسام قديمة إن وُجدت
+    var oldFeat = detScreen.querySelector('.chz-feat-box');
+    var oldSpecs = detScreen.querySelector('.chz-specs-box');
+    if (oldFeat) oldFeat.remove();
+    if (oldSpecs) oldSpecs.remove();
+
+    // البحث عن حاوية مناسبة للإدراج (بعد السعر أو الوصف)
     var descEl = document.getElementById('det-desc');
-    if (descEl) {
-      // حذف الجدول القديم إن وجد
-      var oldSpecs = document.getElementById('det-specs-block');
-      if (oldSpecs) oldSpecs.remove();
+    if (!descEl) return;
+    var parent = descEl.parentNode;
 
-      var specs = p.specs || {};
-      var specsKeys = Object.keys(specs);
-      
-      
-      if (specsKeys.length > 0) {
-        var table = document.createElement('div');
-        table.id = 'det-specs-block';
-        // تصميم الحاوية الرئيسية
-        table.style.cssText = 'margin-top:20px; background: var(--nav, #1e293b); border: 1px solid var(--bd, #334155); border-radius: 16px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
-        
-        var htmlSpecs = '<div style="font-weight:900;font-size:15px;margin-bottom:12px;color:var(--cr, #f8fafc);">📋 المواصفات</div>';
-        
-        // تصميم الشبكة (كل مواصفة في صندوق)
-        htmlSpecs += '<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">';
-        specsKeys.forEach(function(key){
-          htmlSpecs += '<div style="background: var(--bg2, #0f172a); border: 1px solid var(--bd, #334155); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: flex-start;">';
-          htmlSpecs += '<span style="font-size:11px; color: var(--mt, #94a3b8); margin-bottom: 4px;">' + key.replace(/</g,'&lt;') + '</span>';
-          htmlSpecs += '<span style="font-weight: 700; font-size: 13px; color: var(--cr, #f8fafc);">' + String(specs[key]).replace(/</g,'&lt;') + '</span>';
-          htmlSpecs += '</div>';
-        });
-        htmlSpecs += '</div>';
-        
-        table.innerHTML = htmlSpecs;
-        
-        // إدراج الجدول بعد الوصف
-        descEl.parentNode.insertBefore(table, descEl.nextSibling);
-      }
-      }
+    // ═══ المميزات ═══
+    var features = p.features || [];
+    if (typeof features === 'string') {
+      features = features.split('\n').filter(function(l){ return l.trim(); });
     }
-  }
 
-  // مراقبة فتح صفحة المنتج (عندما يتغير currentProd أو عند النقر على منتج)
-  setInterval(enhanceDetails, 1000);
-  
-  // أيضاً عند تغيير الشاشة
-  var observer = new MutationObserver(function() {
-    var detScreen = document.getElementById('sc-detail');
-    if (detScreen && detScreen.classList.contains('active')) {
-      enhanceDetails();
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-})();
-</script>
-
-<style id="chz-product-details-fix">
-/* إخفاء النص المكرر القديم */
-#det-desc {
-  display: none !important;
-}
-
-/* تجميل مربع المميزات */
-#det-features-block {
-  background: var(--bg2, #f8fafc) !important;
-  border: 1px solid var(--bd, #e2e8f0) !important;
-  border-radius: 16px !important;
-  padding: 15px !important;
-  margin-bottom: 15px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
-}
-
-/* تجميل مربع المواصفات */
-#det-specs-block {
-  background: var(--bg2, #f8fafc) !important;
-  border: 1px solid var(--bd, #e2e8f0) !important;
-  border-radius: 16px !important;
-  padding: 15px !important;
-  margin-bottom: 15px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
-}
-
-/* تنسيق القوائم داخل المميزات */
-#det-features-block ul li {
-  border-bottom: 1px dashed var(--bd, #e2e8f0) !important;
-}
-#det-features-block ul li:last-child {
-  border-bottom: none !important;
-}
-
-/* تنسيق جدول المواصفات */
-#det-specs-block table td {
-  border-bottom: 1px dashed var(--bd, #e2e8f0) !important;
-}
-#det-specs-block table tr:last-child td {
-  border-bottom: none !important;
-}
-</style>
-
-<script>
-// REMOVE-DUPLICATE-TEXT
-(function(){
-  setInterval(function(){
-    // نبحث عن أي عنصر يحتوي على "المميزات" أو "المواصفات" في الصفحة
-    var detScreen = document.getElementById('sc-detail');
-    if (!detScreen || !detScreen.classList.contains('active')) return;
-
-    var featuresBlock = document.getElementById('det-features-block');
-    var specsBlock = document.getElementById('det-specs-block');
-    if (!featuresBlock) return;
-
-    // جمع نصوص المميزات التي في المربع
-    var featuresTexts = [];
-    featuresBlock.querySelectorAll('li span:last-child').forEach(function(span){
-      featuresTexts.push(span.textContent.trim());
-    });
-
-    // البحث في جميع العناصر النصية في الشاشة
-    var allElements = detScreen.querySelectorAll('div, p, span');
-    allElements.forEach(function(el){
-      // تجاهل العناصر التي بداخل المربعات (المميزات/المواصفات) أو الأزرار
-      if (el.closest('#det-features-block') || el.closest('#det-specs-block')) return;
-      if (el.closest('button') || el.closest('.det-actions')) return;
-      
-      var text = el.textContent.trim();
-      if (text.length < 20) return; // تجاهل النصوص القصيرة
-
-      // إذا كان النص يحتوي على أغلب المميزات (تكرار)
-      var matchCount = 0;
-      featuresTexts.forEach(function(ft){
-        if (text.indexOf(ft) !== -1) matchCount++;
+    if (features.length > 0) {
+      var featBox = document.createElement('div');
+      featBox.className = 'chz-feat-box';
+      var featHTML = '<div class="chz-feat-title"><span>✨</span> المميزات</div>';
+      featHTML += '<ul class="chz-feat-list">';
+      features.forEach(function(f) {
+        if (!f.trim()) return;
+        featHTML += '<li class="chz-feat-item">';
+        featHTML += '<span class="chz-feat-check">✓</span>';
+        featHTML += '<span>' + f.trim().replace(/</g, '&lt;') + '</span>';
+        featHTML += '</li>';
       });
+      featHTML += '</ul>';
+      featBox.innerHTML = featHTML;
+      parent.insertBefore(featBox, descEl);
+    }
 
-      // إذا كان يحتوي على 3 مميزات أو أكثر، فهو النص المكرر
-      if (matchCount >= 3 && el.children.length === 0) {
-        el.style.display = 'none';
-      }
-    });
-  }, 1500);
-})();
-</script>
+    // ═══ المواصفات ═══
+    var specs = p.specs || {};
+    var specsKeys = Object.keys(specs);
 
-<style id="chz-ultimate-consistency">
-/* إخفاء أي نص وصفي مكرر تماماً في صفحة التفاصيل */
-#det-desc, 
-.det-desc, 
-#sc-detail p:not([class]), 
-#sc-detail > div > div > p {
-  display: none !important;
-}
-/* إظهار المربعات فقط */
-#det-features-block, #det-specs-block {
-  display: block !important;
-}
-</style>
-
-<script>
-// SMART-DESC-HIDE
-(function(){
-  function applySmartHide() {
-    var descEl = document.getElementById('det-desc');
-    if (!descEl) return;
-    
-    var featBlock = document.getElementById('det-features-block');
-    var specsBlock = document.getElementById('det-specs-block');
-    
-    // التحقق من وجود مميزات أو مواصفات
-    var hasFeatures = featBlock && featBlock.style.display !== 'none' && featBlock.innerHTML.trim() !== '';
-    var hasSpecs = specsBlock && specsBlock.innerHTML.trim() !== '';
-    
-    if (hasFeatures || hasSpecs) {
-      // إذا كان هناك مميزات أو مواصفات، أخفِ الوصف
-      descEl.style.display = 'none';
-    } else {
-      // إذا لم يكن هناك مميزات ولا مواصفات، اعرض الوصف
-      descEl.style.display = '';
+    if (specsKeys.length > 0) {
+      var specsBox = document.createElement('div');
+      specsBox.className = 'chz-specs-box';
+      var specsHTML = '<div class="chz-specs-title"><span>📋</span> المواصفات</div>';
+      specsHTML += '<div class="chz-specs-grid">';
+      specsKeys.forEach(function(key) {
+        specsHTML += '<div class="chz-spec-card">';
+        specsHTML += '<div class="chz-spec-key">' + key.replace(/</g, '&lt;') + '</div>';
+        specsHTML += '<div class="chz-spec-val">' + String(specs[key]).replace(/</g, '&lt;') + '</div>';
+        specsHTML += '</div>';
+      });
+      specsHTML += '</div>';
+      specsBox.innerHTML = specsHTML;
+      parent.insertBefore(specsBox, descEl.nextSibling);
     }
   }
 
-  // تطبيق عند فتح المنتج
-  setInterval(applySmartHide, 500);
-  
-  // أيضاً عند تغيير الشاشة
+  // تشغيل عند فتح المنتج
+  setInterval(renderPremiumDetails, 800);
+
+  // تشغيل عند تغيير الشاشة
   var observer = new MutationObserver(function() {
     var detScreen = document.getElementById('sc-detail');
     if (detScreen && detScreen.classList.contains('active')) {
-      setTimeout(applySmartHide, 300);
+      lastProductId = null;
+      setTimeout(renderPremiumDetails, 300);
     }
   });
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 })();
 </script>
-
-<script>
-// SMART-DESC-HIDE
-(function(){
-  function applySmartHide() {
-    var descEl = document.getElementById('det-desc');
-    if (!descEl) return;
-    
-    var featBlock = document.getElementById('det-features-block');
-    var specsBlock = document.getElementById('det-specs-block');
-    
-    // التحقق من وجود مميزات أو مواصفات
-    var hasFeatures = featBlock && featBlock.style.display !== 'none' && featBlock.innerHTML.trim() !== '';
-    var hasSpecs = specsBlock && specsBlock.innerHTML.trim() !== '';
-    
-    if (hasFeatures || hasSpecs) {
-      // إذا كان هناك مميزات أو مواصفات، أخفِ الوصف
-      descEl.style.display = 'none';
-    } else {
-      // إذا لم يكن هناك مميزات ولا مواصفات، اعرض الوصف
-      descEl.style.display = '';
-    }
-  }
-
-  // تطبيق عند فتح المنتج
-  setInterval(applySmartHide, 500);
-  
-  // أيضاً عند تغيير الشاشة
-  var observer = new MutationObserver(function() {
-    var detScreen = document.getElementById('sc-detail');
-    if (detScreen && detScreen.classList.contains('active')) {
-      setTimeout(applySmartHide, 300);
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-})();
-</script>
-
-<style id="chz-specs-theme-fix">
-/* إصلاح خلفية جدول المواصفات لتتناسب مع التطبيق */
-#det-specs-block {
-  background: var(--nav) !important; /* نفس خلفية البطاقات */
-  border: 1px solid var(--bd) !important; /* نفس حدود البطاقات */
-  color: var(--cr) !important; /* نفس لون النص */
-  border-radius: 16px !important;
-  padding: 15px !important;
-  margin-top: 15px !important;
-  margin-bottom: 15px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-}
-
-#det-specs-block div[style*="font-weight:900"] {
-  color: var(--cr) !important; /* لون العنوان */
-}
-
-#det-specs-block table td {
-  color: var(--cr) !important; /* لون النص في الجدول */
-  border-bottom-color: var(--bd) !important; /* لون الفاصل */
-}
-
-/* إصلاح عنوان مربع المميزات ليتطابق */
-#det-features-block {
-  background: var(--nav) !important;
-  border: 1px solid var(--bd) !important;
-  color: var(--cr) !important;
-}
-</style>
-
-<style id="chz-specs-cards-css">
-/* في الوضع الفاتح، نغير الخلفيات لتناسب */
-html[data-theme="light"] #det-specs-block {
-  background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
-html[data-theme="light"] #det-specs-block div[style*="font-weight:900"] {
-  color: #0f172a !important;
-}
-html[data-theme="light"] #det-specs-block .spec-card {
-  background: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-}
-</style>
 </body>
 </html
     renderPassengers: function() {
