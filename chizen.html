@@ -23318,68 +23318,7 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
 })();
 </script>
 
-<div class="screen" id="sc-details-new">
-  <div class="chz-det-page">
-    <button class="chz-det-back" onclick="APP.closeDetailsNew()">
-      <svg viewBox="0 0 24 24" width="24" height="24"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-    </button>
 
-    <div class="chz-det-gallery">
-      <div class="chz-det-main-img" id="det-new-img"></div>
-      <div class="chz-det-thumbs" id="det-new-thumbs"></div>
-    </div>
-
-    <div class="chz-det-info">
-      <div class="chz-det-brand" id="det-new-brand"></div>
-      <h1 class="chz-det-name" id="det-new-name"></h1>
-      <div class="chz-det-rate" id="det-new-rate"></div>
-      <div class="chz-det-price-row">
-        <div class="chz-det-price" id="det-new-price"></div>
-        <div class="chz-det-currencies" id="det-new-currencies"></div>
-      </div>
-    </div>
-
-    <div id="det-new-sizes"></div>
-
-    <div class="chz-det-specs-features" id="det-new-specs-features"></div>
-
-    <div class="chz-det-desc-wrapper" id="det-new-desc-wrapper" style="display:none;">
-      <div class="chz-det-desc-title">📄 الوصف</div>
-      <div class="chz-det-desc" id="det-new-desc"></div>
-    </div>
-
-    <div class="chz-det-reviews">
-      <div class="chz-det-reviews-title">💬 تقييمات العملاء</div>
-      <div class="chz-det-review-form" id="reviewFormContainer">
-        <div class="chz-star-input" id="starInput">
-          <i class="fas fa-star" data-value="1"></i>
-          <i class="fas fa-star" data-value="2"></i>
-          <i class="fas fa-star" data-value="3"></i>
-          <i class="fas fa-star" data-value="4"></i>
-          <i class="fas fa-star" data-value="5"></i>
-        </div>
-        <textarea id="reviewText" class="chz-review-textarea" placeholder="أضف تعليقاً (اختياري)..."></textarea>
-        <button class="chz-submit-review" onclick="APP.submitReview()">📤 إرسال التقييم</button>
-      </div>
-      <div id="alreadyReviewedMsg" class="chz-already-reviewed" style="display:none;">
-        <i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. شكراً لك!
-      </div>
-      <div id="reviewsList"></div>
-    </div>
-
-    <div class="chz-det-actions">
-      <div class="chz-det-row1">
-        <div class="chz-det-qty">
-          <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(-1)">−</button>
-          <span class="chz-det-qty-val" id="det-new-qty">1</span>
-          <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(1)">+</button>
-        </div>
-        <button class="chz-det-btn-cart" onclick="APP.addDetCart()">🛒 أضف للسلة</button>
-      </div>
-      <button class="chz-det-btn-buy" onclick="APP.buyNow()">⚡ اشترِ الآن</button>
-    </div>
-  </div>
-</div>
 
 <style id="chz-details-new-css">
 #sc-details-new { background: #0d1120; min-height: 100vh; padding-bottom: 130px; overflow-y: auto; display: none; }
@@ -24004,6 +23943,72 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   border-color: #e2e8f0 !important;
 }
 </style>
+
+<div class="screen" id="sc-details-new">
+  <div class="chz-det-page">
+    <button class="chz-det-back" onclick="APP.closeDetailsNew()">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </button>
+
+    <div class="chz-det-gallery">
+      <div class="chz-det-main-img" id="det-new-img"></div>
+      <div class="chz-det-thumbs" id="det-new-thumbs"></div>
+    </div>
+
+    <div class="chz-det-info">
+      <div class="chz-det-brand" id="det-new-brand"></div>
+      <h1 class="chz-det-name" id="det-new-name"></h1>
+      <div class="chz-det-rate" id="det-new-rate"></div>
+      <div class="chz-det-price-row">
+        <div class="chz-det-price" id="det-new-price"></div>
+        <div class="chz-det-currencies" id="det-new-currencies"></div>
+      </div>
+    </div>
+
+    <div id="det-new-sizes-section" style="display:none;">
+      <div class="chz-det-section-title">📦 اختر العبوة</div>
+      <div class="chz-det-sizes" id="det-new-sizes"></div>
+    </div>
+
+    <div class="chz-det-specs-features" id="det-new-specs-features"></div>
+
+    <div class="chz-det-desc-wrapper" id="det-new-desc-wrapper" style="display:none;">
+      <div class="chz-det-desc-title">📄 الوصف</div>
+      <div class="chz-det-desc" id="det-new-desc"></div>
+    </div>
+
+    <div class="chz-det-reviews">
+      <div class="chz-det-reviews-title">💬 تقييمات العملاء</div>
+      <div class="chz-det-review-form" id="reviewFormContainer">
+        <div class="chz-star-input" id="starInput">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <textarea id="reviewText" class="chz-review-textarea" placeholder="أضف تعليقاً (اختياري)..."></textarea>
+        <button class="chz-submit-review" onclick="APP.submitReview()">📤 إرسال التقييم</button>
+      </div>
+      <div id="alreadyReviewedMsg" class="chz-already-reviewed" style="display:none;">
+        <i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. شكراً لك!
+      </div>
+      <div id="reviewsList"></div>
+    </div>
+
+    <div class="chz-det-actions">
+      <div class="chz-det-qty">
+        <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(-1)">−</button>
+        <span class="chz-det-qty-val" id="det-new-qty">1</span>
+        <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(1)">+</button>
+      </div>
+      <div class="chz-det-buttons">
+        <button class="chz-det-btn-cart" onclick="APP.addDetCart()">🛒 أضف للسلة</button>
+        <button class="chz-det-btn-buy" onclick="APP.buyNow()">⚡ اشترِ الآن</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html
     renderPassengers: function() {
