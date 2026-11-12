@@ -22735,9 +22735,10 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
 </style>
 
 <script>
+
+<script>
 // TOP-SEARCH-INJECT
 (function(){
-  // إنشاء عنصر البحث الجديد
   function createNewSearch() {
     var wrapper = document.createElement('div');
     wrapper.className = 'chz-top-search-wrapper';
@@ -22752,7 +22753,7 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
     
     var input = document.createElement('input');
     input.type = 'text';
-    input.id = 'search-in-new'; // ID جديد لتجنب التعارض
+    input.id = 'search-in-new';
     input.placeholder = 'ابحث عن منتج...';
     input.style.cssText = 'flex: 1; border: none; outline: none; padding: 14px 10px 14px 0; font-size: 15px; font-weight: 800; color: #0f172a; background: transparent; font-family: inherit;';
     
@@ -22760,7 +22761,6 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
     inputContainer.appendChild(input);
     wrapper.appendChild(inputContainer);
     
-    // إضافة حدث البحث (نفس دالة التطبيق)
     input.addEventListener('input', function(e) {
       var q = this.value;
       if (window.APP && window.APP.search) {
@@ -22771,42 +22771,51 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
     return wrapper;
   }
 
-  // إدراج البحث في المكان الصحيح (بعد الهيدر chz-hdr وقبل brands-sec)
   function insertSearch() {
     var home = document.getElementById('sc-home');
     if (!home) return false;
     
-    // البحث عن الهيدر chz-hdr
-    var header = home.querySelector('.chz-hdr');
-    if (!header) {
-      // إذا لم نجد الهيدر، نبحث عن brands-sec
-      var brands = home.querySelector('#brands-sec');
-      if (brands && brands.parentNode) {
-        var search = createNewSearch();
-        brands.parentNode.insertBefore(search, brands);
-        return true;
-      }
-      return false;
+    // البحث عن شريط النقاط
+    var loyaltyBar = home.querySelector('#loyalty-bar') || home.querySelector('.loyalty-bar') || home.querySelector('.chz-loyalty');
+    
+    if (loyaltyBar) {
+      // إدراج البحث قبل شريط النقاط
+      var search = createNewSearch();
+      loyaltyBar.parentNode.insertBefore(search, loyaltyBar);
+      return true;
     }
     
-    // إدراج البحث بعد الهيدر مباشرة
-    var search = createNewSearch();
-    header.parentNode.insertBefore(search, header.nextSibling);
-    return true;
+    // إذا لم نجد شريط النقاط، نضعه قبل brands-sec
+    var brands = home.querySelector('#brands-sec');
+    if (brands) {
+      var search = createNewSearch();
+      brands.parentNode.insertBefore(search, brands);
+      return true;
+    }
+    
+    // إذا لم نجد شيئاً، نضعه بعد الهيدر
+    var header = home.querySelector('.chz-hdr');
+    if (header) {
+      var search = createNewSearch();
+      header.parentNode.insertBefore(search, header.nextSibling);
+      return true;
+    }
+    
+    return false;
   }
 
-  // محاولة الإدراج بعد التحميل
   var tries = 0;
   var iv = setInterval(function(){
     tries++;
     if (insertSearch()) {
       clearInterval(iv);
-      console.log('[TOP-SEARCH] Inserted new search bar');
+      console.log('[TOP-SEARCH] Inserted before loyalty bar');
     }
     if (tries > 30) clearInterval(iv);
   }, 500);
 })();
 </script>
+
 
 <style id="chz-search-beauty">
 .chz-top-search-wrapper > div {
