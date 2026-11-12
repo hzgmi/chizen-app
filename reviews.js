@@ -23,7 +23,7 @@ window.showToast = function(msg) {
   setTimeout(function() { t.remove(); }, 3000);
 };
 
-  var selectedRating = 0;
+  window.selectedRating = 0;
   var myReviewId = null;
   var myReviewData = null;
   var currentUserId = null;
@@ -71,10 +71,10 @@ window.showToast = function(msg) {
     if (!stars.length) return;
     stars.forEach(function(star) {
       star.addEventListener('mouseover', function() { highlightStars(this.dataset.value); });
-      star.addEventListener('mouseout', function() { highlightStars(selectedRating); });
+      star.addEventListener('mouseout', function() { highlightStars(window.selectedRating); });
       star.addEventListener('click', function() {
-        selectedRating = Number(this.dataset.value);
-        highlightStars(selectedRating);
+        window.selectedRating = Number(this.dataset.value);
+        highlightStars(window.selectedRating);
       });
     });
     starsAttached = true;
@@ -119,59 +119,52 @@ window.showToast = function(msg) {
   }
 
   window.submitReview = function() {
-    if (selectedRating === 0) {
-      showToast('⚠️ اختر عدد النجوم أولاً');
+    // التحقق من النجوم
+    if (!window.selectedRating || window.selectedRating === 0) {
+      window.showToast('⚠️ اختر عدد النجوم أولاً');
       return;
     }
-    var text = document.getElementById('reviewText').value.trim();
-    if (!(window.currentProduct || (window.APP && window.APP.currentProd))) {
-      showToast('⚠️ المنتج غير محمل');
+    
+    // التحقق من المنتج
+    var prod = window.currentProduct || (window.APP && window.APP.currentProd);
+    if (!prod) {
+      window.showToast('⚠️ المنتج غير محمل');
       return;
     }
-
+    
+    // التحقق من النص
+    var textEl = document.getElementById('reviewText');
+    var text = textEl ? textEl.value.trim() : '';
+    
+    // التحقق من db
+    if (!db) {
+      window.showToast('❌ خطأ في الاتصال');
+      return;
+    }
+    
+    // إنشاء بيانات التقييم
     var reviewData = {
-      productId: (window.currentProduct || (window.APP && window.APP.currentProd)).id,
+      productId: prod.id,
       userId: currentUserId || 'pending',
-      rating: Number(selectedRating),
-      text: text,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    
-    if (myReviewId) {
-      // تحديث التقييم الموجود
-      db.collection('reviews').doc(myReviewId).update(reviewData).then(function() {
-        showToast('✅ شكراً لك! تم تحديث تقييمك');
-        document.getElementById('reviewFormContainer').style.display = 'none';
-        loadReviews();
-      }).catch(function(e) {
-        showToast('❌ فشل: ' + e.message);
-      });
-      return;
-    }
-    
-    pendingReview = {
-      productId: (window.currentProduct || (window.APP && window.APP.currentProd)).id,
-      userId: currentUserId || 'pending',
-      rating: Number(selectedRating),
+      rating: Number(window.selectedRating),
       text: text,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       likes: 0,
       dislikes: 0
     };
-
-    if (authReady && currentUserId) {
-      pendingReview.userId = currentUserId;
-      doSubmitReview();
-    } else {
-      showToast('⏳ جاري الإرسال...');
-      // محاولة الإرسال بعد 3 ثوانٍ حتى لو Auth لم يكتمل
-      setTimeout(function() {
-        if (!authReady && pendingReview) {
-          showToast('⚠️ فشل الاتصال. تحقق من Anonymous Auth في Firebase');
-        }
-      }, 3000);
-      // سيتم الإرسال تلقائياً عند اكتمال Auth (في onAuthStateChanged)
-    }
+    
+    // إرسال التقييم
+    db.collection('reviews').add(reviewData).then(function() {
+      window.showToast('✅ شكراً لك! تم إرسال تقييمك');
+      var form = document.getElementById('reviewFormContainer');
+      var msg = document.getElementById('alreadyReviewedMsg');
+      if (form) form.style.display = 'none';
+      if (msg) msg.style.display = 'block';
+      if (typeof window.loadReviews === 'function') window.loadReviews();
+    }).catch(function(e) {
+      console.error('[REVIEW] Error:', e);
+      window.showToast('❌ فشل: ' + e.message);
+    });
   };
 
   // جلب التقييمات
@@ -299,7 +292,7 @@ window.showToast = function(msg) {
   window.editMyReview = function() {
     if (!myReviewData) return;
     selectedRating = myReviewData.rating;
-    highlightStars(selectedRating);
+    highlightStars(window.selectedRating);
     document.getElementById('reviewText').value = myReviewData.text || '';
     document.getElementById('reviewFormContainer').style.display = 'block';
     document.getElementById('alreadyReviewedMsg').style.display = 'none';
