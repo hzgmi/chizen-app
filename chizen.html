@@ -485,7 +485,7 @@ APP.renderRelatedProducts = function(currentProduct) {
     }
 
     if(related.length === 0) {
-        relatedContainer.innerHTML = '';
+        if (relatedContainer) relatedContainer.innerHTML = '';
         return;
     }
 
