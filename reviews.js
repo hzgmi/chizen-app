@@ -11,6 +11,7 @@
       return;
     }
     var auth = firebase.auth();
+    console.log('[AUTH] State changed');
     auth.onAuthStateChanged(function(user) {
       if (user) {
         currentUserId = user.uid;
@@ -26,7 +27,8 @@
           if (window.currentProduct) loadReviews();
           if (pendingReview) { pendingReview.userId = currentUserId; doSubmitReview(); }
         }).catch(function(err) {
-          console.error('[AUTH] Failed:', err.message);
+          console.error('[AUTH] Failed:', err.code, err.message);
+          showToast('❌ Auth: ' + err.code);
           currentUserId = 'guest_' + Math.random().toString(36).substr(2, 9);
           if (window.currentProduct) loadReviews();
         });
@@ -107,6 +109,12 @@
       doSubmitReview();
     } else {
       showToast('⏳ جاري الإرسال...');
+      // محاولة الإرسال بعد 3 ثوانٍ حتى لو Auth لم يكتمل
+      setTimeout(function() {
+        if (!authReady && pendingReview) {
+          showToast('⚠️ فشل الاتصال. تحقق من Anonymous Auth في Firebase');
+        }
+      }, 3000);
       // سيتم الإرسال تلقائياً عند اكتمال Auth (في onAuthStateChanged)
     }
   };
