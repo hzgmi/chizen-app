@@ -24189,6 +24189,89 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   }
 })();
 </script>
+
+<style id="chz-spacing-fix">
+/* إضافة مساحة سفلية للصفحة (حتى لا يغطي شريط الشراء التقييمات) */
+#sc-details-new {
+  padding-bottom: 180px !important;
+}
+
+/* رفع شريط الشراء (ليكون فوق شريط التنقل السفلي) */
+#sc-details-new .chz-det-actions {
+  position: fixed !important;
+  bottom: 70px !important; /* فوق شريط التنقل */
+  left: 0 !important;
+  right: 0 !important;
+  background: #0d1120 !important;
+  border-top: 1px solid #1f2742 !important;
+  padding: 12px 15px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  z-index: 999 !important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.3) !important;
+}
+
+/* ترتيب الصف الأول: الكمية + أضف للسلة */
+#sc-details-new .chz-det-actions .row1,
+#sc-details-new .chz-det-actions > .chz-det-qty {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+/* زر أضف للسلة (يظهر بجانب الكمية) */
+#sc-details-new .chz-det-btn-cart {
+  flex: 1 !important;
+  height: 48px !important;
+  background: #1b112b !important;
+  color: white !important;
+  border: 1px solid #2a1b40 !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+/* زر اشتر الآن (في صف مستقل) */
+#sc-details-new .chz-det-btn-buy {
+  width: 100% !important;
+  height: 48px !important;
+  background: #ec2a79 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 12px rgba(236,42,121,0.25) !important;
+}
+
+/* إخفاء الحاوية القديمة للأزرار (لأننا نعرضها مباشرة) */
+#sc-details-new .chz-det-buttons {
+  display: contents !important;
+}
+
+/* في الوضع الفاتح */
+html[data-theme="light"] #sc-details-new {
+  background: #f8fafc !important;
+}
+html[data-theme="light"] #sc-details-new .chz-det-actions {
+  background: #fff !important;
+  border-color: #e2e8f0 !important;
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
