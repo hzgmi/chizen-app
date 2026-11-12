@@ -11043,7 +11043,7 @@ var APP={
     // دالة تحميل المنتجات (تنتظر FB.ready)
     function loadProducts() {
       if (!window.FB || !FB.ready) {
-        setTimeout(loadProducts, 500);
+        setTimeout(loadProducts, 50); // 50ms بدلاً من 500ms
         return;
       }
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
