@@ -106,7 +106,7 @@
       pendingReview.userId = currentUserId;
       doSubmitReview();
     } else {
-      showToast('⏳ جاري الاتصال... سيتم الإرسال تلقائياً');
+      showToast('⏳ جاري الإرسال...');
       // سيتم الإرسال تلقائياً عند اكتمال Auth (في onAuthStateChanged)
     }
   };
