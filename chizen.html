@@ -11040,7 +11040,12 @@ var APP={
       setTimeout(function(){ window.sendWelcomeIfNeeded(u); }, 2000);
     }
 
-    if(window.FB){
+    // دالة تحميل المنتجات (تنتظر FB.ready)
+    function loadProducts() {
+      if (!window.FB || !FB.ready) {
+        setTimeout(loadProducts, 500);
+        return;
+      }
       FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
       FB.listenToProducts(function(d){
         self.products = d || [];
