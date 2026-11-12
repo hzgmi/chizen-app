@@ -351,5 +351,77 @@ html[data-theme="light"] .feat-item span:last-child {
   color: #334155 !important;
 }
 </style>
+
+<style id="chz-features-glass-force">
+.features-box-glass {
+  background: rgba(30, 41, 59, 0.6) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(197, 160, 89, 0.4) !important;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  margin: 20px 0 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.features-box-glass::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(197, 160, 89, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.features-box-glass .feat-item {
+  border-bottom: none !important;
+}
+.features-box-glass .feat-check {
+  color: #C5A059 !important;
+  font-size: 18px !important;
+  filter: drop-shadow(0 0 6px rgba(197, 160, 89, 0.6)) !important;
+}
+.features-box-glass .feat-item span:last-child {
+  font-size: 14px !important;
+  color: #cbd5e1 !important;
+  line-height: 1.6 !important;
+}
+html[data-theme="light"] .features-box-glass {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(197, 160, 89, 0.5) !important;
+}
+html[data-theme="light"] .features-box-glass .feat-item span:last-child {
+  color: #334155 !important;
+}
+</style>
+
+<script>
+// FORCE-FEATURES-GLASS
+(function(){
+  function wrapFeatures() {
+    // البحث عن قائمة المميزات
+    var featList = document.querySelector('.feat-list');
+    if (!featList) return;
+    
+    // التحقق إذا كانت مغلفة مسبقاً
+    if (featList.parentNode.classList.contains('features-box-glass')) return;
+    
+    // البحث عن الحاوية الأصلية (القسم)
+    var section = featList.closest('.section');
+    if (!section) return;
+    
+    // إنشاء المربع الزجاجي
+    var glassBox = document.createElement('div');
+    glassBox.className = 'features-box-glass';
+    
+    // نقل القسم بالكامل إلى داخل المربع (أو نقل المحتوى فقط)
+    section.parentNode.insertBefore(glassBox, section);
+    glassBox.appendChild(section);
+  }
+
+  // تطبيق عند تحميل الصفحة وعند تغييرها
+  setInterval(wrapFeatures, 800);
+})();
+</script>
 </body>
 </html>
