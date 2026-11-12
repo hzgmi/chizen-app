@@ -118,6 +118,13 @@ window.showToast = function(msg) {
   }
 
   window.submitReview = function() {
+    console.log('[REVIEW] submitReview called!', {
+      selectedRating: window.selectedRating,
+      currentProduct: !!window.currentProduct,
+      appCurrentProd: !!(window.APP && window.APP.currentProd),
+      dbReady: !!db,
+      textareaValue: document.getElementById('reviewText') ? document.getElementById('reviewText').value : 'NO TEXTAREA'
+    });
     // التحقق من النجوم
     if (!window.selectedRating || window.selectedRating === 0) {
       window.showToast('⚠️ اختر عدد النجوم أولاً');
