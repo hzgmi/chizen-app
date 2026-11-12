@@ -11034,8 +11034,25 @@ var APP={
         self.renderProducts();
         self.renderFlash();
         self.renderBrands();
+        
+        // بعد تحميل المنتجات، نحمّل الباقي (بدون ازدحام الشبكة)
+        setTimeout(function() {
+          if (FB.listenToBanners) FB.listenToBanners(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
+          if (FB.listenToCategories) FB.listenToCategories(function(c){
+            var dbCats = (c && c.list) ? c.list : [];
+            var fixedKeys = (window.FIXED_CATS || []).map(function(x){ return x.key; });
+            var fixedNames = (window.FIXED_CATS || []).map(function(x){ return x.name; });
+            var extraCats = dbCats.filter(function(x){
+              return fixedKeys.indexOf(x.key) === -1 && fixedNames.indexOf(x.name) === -1;
+            });
+            self.cats = (window.FIXED_CATS || []).slice();
+            self.renderCats();
+            if(self.checkServices) self.checkServices();
+            if(self.renderBrands) self.renderBrands();
+          });
+        }, 1500);
       });
-      FB.listenToBanners(function(b){if(b&&b.list){self.banners=b.list;self.renderBanners();}});
+      // (تم نقلها داخل listenToProducts)
       FB.listenToCategories(function(c){
   var dbCats = (c && c.list) ? c.list : [];
   // إزالة أي قسم مكرر من الداتابيس يطابق الأقسام الثابتة
