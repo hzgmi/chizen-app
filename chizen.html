@@ -8183,6 +8183,91 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 
 
+
+<style id="chz-details-modal-css">
+#chz-details-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #0d1120;
+  z-index: 99999;
+  overflow-y: auto;
+  padding: 0 0 110px 0;
+  direction: rtl;
+}
+#chz-details-modal.active { display: block; }
+
+#chz-details-modal .chz-modal-close {
+  position: fixed;
+  top: 15px; left: 15px;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #C5A059;
+  border: 1px solid #C5A059;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 100000;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+#chz-details-modal .chz-modal-grid { max-width: 600px; margin: 0 auto; padding: 15px; }
+
+#chz-details-modal .chz-modal-main-img {
+  width: 100%; height: 320px; background: #fff;
+  border-radius: 16px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid #334155;
+}
+#chz-details-modal .chz-modal-main-img img { width: 100%; height: 100%; object-fit: contain; }
+#chz-details-modal .chz-modal-thumbs { display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; padding: 5px 0; }
+#chz-details-modal .chz-modal-thumb {
+  width: 64px; height: 64px; border-radius: 12px; overflow: hidden;
+  border: 2px solid transparent; cursor: pointer; flex-shrink: 0;
+}
+#chz-details-modal .chz-modal-thumb.active { border-color: #ec4899; }
+#chz-details-modal .chz-modal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+#chz-details-modal .chz-modal-title { font-size: 20px; font-weight: 800; color: #fff; margin: 15px 0 8px; line-height: 1.4; }
+#chz-details-modal .chz-modal-rating { font-size: 14px; color: #f5b342; margin-bottom: 12px; }
+#chz-details-modal .chz-modal-price { font-size: 30px; font-weight: 800; color: #ec2a79; margin-bottom: 5px; }
+#chz-details-modal .chz-modal-price .old { font-size: 16px; color: #6b7280; text-decoration: line-through; margin-right: 10px; }
+
+#chz-details-modal .chz-modal-currencies { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+#chz-details-modal .chz-modal-cur-card {
+  background: #151a2d; border: 1px solid #1f2742; border-radius: 12px;
+  padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 65px;
+}
+#chz-details-modal .chz-modal-cur-name { font-size: 11px; color: #9ca3af; }
+#chz-details-modal .chz-modal-cur-val { font-size: 16px; font-weight: 700; color: #fff; }
+
+#chz-details-modal .chz-modal-section-title { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; margin: 20px 0 10px; }
+#chz-details-modal .chz-modal-specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#chz-details-modal .chz-modal-spec-card { background: #151a2d; border-radius: 12px; padding: 10px; border: 1px solid #1f2742; }
+#chz-details-modal .chz-modal-spec-key { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
+#chz-details-modal .chz-modal-spec-val { font-size: 13px; color: #fff; font-weight: 700; }
+
+#chz-details-modal .chz-modal-feat-list { list-style: none; padding: 0; margin: 0; }
+#chz-details-modal .chz-modal-feat-item { display: flex; gap: 8px; font-size: 13px; color: #d1d5db; padding: 6px 0; }
+#chz-details-modal .chz-modal-feat-item i { color: #10b981; margin-top: 3px; }
+
+#chz-details-modal .chz-modal-qty-box { display: flex; align-items: center; gap: 10px; background: #151a2d; border: 1px solid #2a3452; border-radius: 12px; padding: 5px; width: fit-content; margin: 20px 0; }
+#chz-details-modal .chz-modal-qty-btn { width: 35px; height: 35px; border-radius: 8px; background: #0d1120; border: 1px solid #2a3452; color: #fff; font-size: 18px; cursor: pointer; }
+#chz-details-modal .chz-modal-qty-val { min-width: 30px; text-align: center; font-weight: 700; color: #fff; }
+
+#chz-details-modal .chz-modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+#chz-details-modal .chz-modal-btn-cart {
+  flex: 1; background: #1b112b; color: #fff; border: 1px solid #2a1b40;
+  padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer;
+}
+#chz-details-modal .chz-modal-btn-buy {
+  flex: 1; background: #ec2a79; color: #fff; border: none;
+  padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(236,42,121,0.3);
+}
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -11624,6 +11709,10 @@ var APP={
 
 
   openProduct:function(id){
+    if (typeof this.openProductNew === 'function') {
+      this.openProductNew(id);
+      return;
+    }
     var p=null;this.products.forEach(function(x){if(String(x.id)===String(id))p=x;});
     if(!p)return;
     this.currentProd=p;this.currentQty=1;
