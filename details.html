@@ -387,5 +387,34 @@ function setTheme(theme) {
 var savedTheme = localStorage.getItem('theme') || 'dark';
 setTheme(savedTheme);
 </script>
+
+<style id="chz-details-specs-cards">
+/* تحويل المواصفات إلى شبكة صناديق */
+.specs-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+}
+.spec-card {
+  background: var(--nav) !important;
+  border: 1px solid var(--bd-gold) !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.spec-key {
+  font-size: 11px !important;
+  color: var(--mt) !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+}
+.spec-val {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: var(--gold) !important;
+}
+</style>
 </body>
 </html>
