@@ -22751,6 +22751,78 @@ html:not([data-theme="light"]) .flash-card-new .currency-box {
   will-change: transform, opacity !important;
 }
 </style>
+
+<style id="chz-luxury-search-css">
+/* شريط البحث الفخم */
+.chz-top-search-wrapper > div {
+  background: linear-gradient(135deg, #1a1535 0%, #2a1f5c 100%) !important;
+  border: 1.5px solid #C5A059 !important; /* إطار ذهبي */
+  border-radius: 30px !important;
+  box-shadow: 0 8px 20px rgba(197,160,89,0.2), inset 0 0 10px rgba(255,255,255,0.05) !important;
+  padding: 4px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* النص الديناميكي */
+.chz-top-search-wrapper input {
+  color: #f8fafc !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  letter-spacing: 0.5px !important;
+  padding: 12px 8px !important;
+  background: transparent !important;
+}
+.chz-top-search-wrapper input::placeholder {
+  color: #C5A059 !important; /* لون ذهبي */
+  font-weight: 800 !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
+}
+
+/* أيقونة البحث */
+.chz-top-search-wrapper span {
+  color: #C5A059 !important;
+  font-size: 20px !important;
+  filter: drop-shadow(0 0 5px rgba(197,160,89,0.6)) !important;
+}
+
+/* زر المسح (X) - إذا كان موجوداً */
+.chz-top-search-wrapper .clear-btn,
+.chz-top-search-wrapper .search-clear {
+  color: #C5A059 !important;
+  background: rgba(197,160,89,0.1) !important;
+  border-radius: 50% !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 5px !important;
+}
+
+/* تأثير النبض عند الحركة */
+@keyframes search-glow {
+  0% { box-shadow: 0 8px 20px rgba(197,160,89,0.2); }
+  50% { box-shadow: 0 8px 25px rgba(197,160,89,0.5); }
+  100% { box-shadow: 0 8px 20px rgba(197,160,89,0.2); }
+}
+.chz-top-search-wrapper > div:focus-within {
+  animation: search-glow 2s infinite !important;
+}
+
+/* الوضع الفاتح */
+html[data-theme="light"] .chz-top-search-wrapper > div {
+  background: #ffffff !important;
+  border-color: #C5A059 !important;
+}
+html[data-theme="light"] .chz-top-search-wrapper input {
+  color: #0f172a !important;
+}
+html[data-theme="light"] .chz-top-search-wrapper input::placeholder {
+  color: #b8860b !important; /* ذهبي داكن للنص الفاتح */
+}
+</style>
 </body>
 </html
     renderPassengers: function() {
