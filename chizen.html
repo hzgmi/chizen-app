@@ -23303,6 +23303,8 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a; }
 </style>
 
 <script>
+
+<script>
 // NEW-PAGE-RENDER
 (function(){
   var lastProductId = null;
@@ -23310,68 +23312,134 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a; }
 
   // استبدال دالة openProduct لفتح الصفحة الجديدة
   window.APP.openProduct = function(id) {
-    // استدعاء الدالة الأصلية لتعبئة البيانات (نفس IDs)
     origOpenProduct.call(this, id);
     
-    // فتح الصفحة الجديدة
     setTimeout(function() {
+      // إخفاء كل الشاشات
       document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+      // إظهار الصفحة الجديدة
       var newPage = document.getElementById('sc-details-new');
       if (newPage) newPage.classList.add('active');
       
-      // تعبئة المميزات والمواصفات والوصف
-      renderNewDetails();
-    }, 100);
+      // تعبئة البيانات
+      fillNewPage();
+    }, 150);
   };
 
-  function renderNewDetails() {
+  function fillNewPage() {
     if (!window.APP || !window.APP.currentProd) return;
     var p = window.APP.currentProd;
     if (lastProductId === p.id) return;
     lastProductId = p.id;
 
-    // المميزات
+    // 1. الصورة الرئيسية
+    var imgContainer = document.getElementById('det-img');
+    if (imgContainer) {
+      imgContainer.innerHTML = '';
+      var img = document.createElement('img');
+      img.src = p.img || (p.images && p.images[0]) || 'https://via.placeholder.com/300';
+      img.style.cursor = 'pointer';
+      img.onclick = function() {
+        var imgs = (p.images && p.images.length) ? p.images.slice() : (p.img ? [p.img] : []);
+        if (imgs.length && APP.openGallery) APP.openGallery(imgs, 0);
+      };
+      imgContainer.appendChild(img);
+    }
+
+    // 2. الصور المصغرة
+    var thumbsHost = document.getElementById('det-thumbs-host');
+    if (thumbsHost) {
+      thumbsHost.innerHTML = '';
+      var imgs = (p.images && p.images.length) ? p.images : (p.img ? [p.img] : []);
+      if (imgs.length > 1) {
+        imgs.forEach(function(src, i) {
+          var thumb = document.createElement('div');
+          thumb.className = 'chz-thumb' + (i === 0 ? ' active' : '');
+          var ti = document.createElement('img');
+          ti.src = src;
+          ti.onclick = function() {
+            var mainImg = imgContainer.querySelector('img');
+            if (mainImg) mainImg.src = src;
+            thumbsHost.querySelectorAll('.chz-thumb').forEach(function(t, j) {
+              t.classList.toggle('active', j === i);
+            });
+          };
+          thumb.appendChild(ti);
+          thumbsHost.appendChild(thumb);
+        });
+      }
+    }
+
+    // 3. الاسم والماركة والتقييم
+    var brandEl = document.getElementById('det-brand');
+    var nameEl = document.getElementById('det-name');
+    var rateEl = document.getElementById('det-rate');
+    if (brandEl) brandEl.textContent = p.brand || '';
+    if (nameEl) nameEl.textContent = p.name || 'منتج';
+    if (rateEl) rateEl.innerHTML = '⭐ ' + (p.rating || 4.5) + ' (' + (p.reviews || 0) + ')';
+
+    // 4. السعر
+    var priceEl = document.getElementById('det-price');
+    if (priceEl) {
+      var priceYER = Number(p.price) || 0;
+      var oldPrice = Number(p.oldPrice) || 0;
+      var html = '<span style="font-size:24px;font-weight:900;color:#ec4899;">' + Math.round(priceYER).toLocaleString() + '</span> <span style="font-size:13px;">ر.ي</span>';
+      if (oldPrice > 0 && oldPrice > priceYER) {
+        html += ' <span style="font-size:14px;color:#6b7280;text-decoration:line-through;margin-right:8px;">' + Math.round(oldPrice).toLocaleString() + ' ر.ي</span>';
+      }
+      priceEl.innerHTML = html;
+    }
+
+    // 5. العملات
+    var currenciesEl = document.getElementById('det-currencies');
+    if (currenciesEl) {
+      var priceSAR = Number(p.priceSAR) || (Number(p.price) / 135);
+      var priceUSD = Number(p.priceUSD) || (Number(p.price) / 505);
+      currenciesEl.innerHTML = 
+        '<div style="text-align:center;"><div style="font-size:10px;color:#94a3b8;">🇸🇦 سعودي</div><div style="font-size:15px;font-weight:900;color:#C5A059;margin-top:2px;">' + priceSAR.toFixed(2) + '</div></div>' +
+        '<div style="text-align:center;"><div style="font-size:10px;color:#94a3b8;">🇺🇸 دولار</div><div style="font-size:15px;font-weight:900;color:#C5A059;margin-top:2px;">' + priceUSD.toFixed(2) + '</div></div>';
+    }
+
+    // 6. المميزات
     var featContainer = document.getElementById('det-features-container');
     if (featContainer) {
       featContainer.innerHTML = '';
       var features = p.features || [];
       if (typeof features === 'string') features = features.split('\n').filter(function(l){ return l.trim(); });
-      
       if (features.length > 0) {
         var featBox = document.createElement('div');
         featBox.className = 'chz-feat-box-v3';
-        var html = '<div class="chz-feat-title-v3"><span>✨</span> المميزات</div><ul class="chz-feat-list-v3">';
+        var fhtml = '<div class="chz-feat-title-v3"><span>✨</span> المميزات</div><ul class="chz-feat-list-v3">';
         features.forEach(function(f) {
           if (!f.trim()) return;
-          html += '<li class="chz-feat-item-v3"><span class="chz-feat-check-v3">✓</span><span>' + f.trim().replace(/</g, '&lt;') + '</span></li>';
+          fhtml += '<li class="chz-feat-item-v3"><span class="chz-feat-check-v3">✓</span><span>' + f.trim().replace(/</g, '&lt;') + '</span></li>';
         });
-        html += '</ul>';
-        featBox.innerHTML = html;
+        fhtml += '</ul>';
+        featBox.innerHTML = fhtml;
         featContainer.appendChild(featBox);
       }
     }
 
-    // المواصفات
+    // 7. المواصفات
     var specsContainer = document.getElementById('det-specs-container');
     if (specsContainer) {
       specsContainer.innerHTML = '';
       var specs = p.specs || {};
       var specsKeys = Object.keys(specs);
-      
       if (specsKeys.length > 0) {
         var specsBox = document.createElement('div');
         specsBox.className = 'chz-specs-box-v3';
-        var html = '<div class="chz-specs-title-v3"><span>📋</span> المواصفات</div><div class="chz-specs-grid-v3">';
+        var shtml = '<div class="chz-specs-title-v3"><span>📋</span> المواصفات</div><div class="chz-specs-grid-v3">';
         specsKeys.forEach(function(key) {
-          html += '<div class="chz-spec-card-v3"><div class="chz-spec-key-v3">' + key.replace(/</g, '&lt;') + '</div><div class="chz-spec-val-v3">' + String(specs[key]).replace(/</g, '&lt;') + '</div></div>';
+          shtml += '<div class="chz-spec-card-v3"><div class="chz-spec-key-v3">' + key.replace(/</g, '&lt;') + '</div><div class="chz-spec-val-v3">' + String(specs[key]).replace(/</g, '&lt;') + '</div></div>';
         });
-        html += '</div>';
-        specsBox.innerHTML = html;
+        shtml += '</div>';
+        specsBox.innerHTML = shtml;
         specsContainer.appendChild(specsBox);
       }
     }
 
-    // الوصف
+    // 8. الوصف
     var descWrapper = document.getElementById('det-desc-wrapper');
     var descEl = document.getElementById('det-desc');
     if (descWrapper && descEl) {
@@ -23385,12 +23453,16 @@ html[data-theme="light"] .chz-spec-val-v3 { color: #0f172a; }
     }
   }
 
-  // عرض الصور المصغرة (يُستدعى من openProduct الأصلي عبر id="det-thumbs-host")
-  // الدالة الأصلية تبحث عن .det-thumbs-host، لذلك سنضيف كلاس إضافي للحاوية
-  var thumbsHost = document.getElementById('det-thumbs-host');
-  if (thumbsHost) thumbsHost.classList.add('det-thumbs-host');
+  // عند التحميل، تحديث البيانات
+  setInterval(function() {
+    var newPage = document.getElementById('sc-details-new');
+    if (newPage && newPage.classList.contains('active')) {
+      fillNewPage();
+    }
+  }, 800);
 })();
 </script>
+
 </body>
 </html
     renderPassengers: function() {
