@@ -23361,6 +23361,7 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     var sizesSection = document.getElementById('det-new-sizes-section');
     var sizesContainer = document.getElementById('det-new-sizes');
     if (sizesSection && sizesContainer) {
+      try {
       var allSizes = [];
       // مقاسات الملابس
       if (p.sizes && p.sizes.length > 0) {
@@ -23399,17 +23400,23 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
       } else {
         sizesSection.style.display = 'none';
       }
+      } catch(e) { console.warn('[SIZES] Error:', e.message); }
     }
 
     // ═══ البوكسات + طريقة البيع ═══
     var boxSection = document.getElementById('det-new-boxes-section');
+    
+    // إذا لم يكن موجوداً، ننشئه ونضيفه إلى الصفحة
     if (!boxSection) {
       boxSection = document.createElement('div');
       boxSection.id = 'det-new-boxes-section';
       boxSection.style.cssText = 'margin: 15px 0;';
-      // إدراجه بعد المقاسات
-      if (sizesSection && sizesSection.parentNode) {
-        sizesSection.parentNode.insertBefore(boxSection, sizesSection.nextSibling);
+      
+      // إدراجه بعد المقاسات (إن وجدت) أو في مكان آخر
+      var sizesContainer = document.getElementById('det-new-sizes');
+      var parent = (sizesContainer && sizesContainer.parentNode) ? sizesContainer.parentNode : document.querySelector('.chz-det-container');
+      if (parent) {
+        parent.appendChild(boxSection);
       }
     }
     
