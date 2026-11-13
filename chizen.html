@@ -24371,5 +24371,48 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
       modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
       document.body.appendChild(modal);
     },
+
+// === AUTO-FIX FOR PRODUCTS & CART ===
+(function(){
+  // دالة لضمان أن كل منتج له ID
+  function ensureProductIds() {
+    if (!window.APP || !Array.isArray(window.APP.products)) return;
+    let fixed = 0;
+    window.APP.products.forEach(function(p) {
+      if (!p.id) {
+        p.id = (p._id || p.name || "prod_" + Math.random().toString(36).substring(2, 9)).replace(/\s+/g, "_");
+        fixed++;
+      }
+    });
+    if (fixed > 0) console.log("[Auto-Fix] تم إصلاح " + fixed + " منتج في الذاكرة");
+  }
+
+  // دالة لتنظيف السلة من المنتجات المعلقة
+  function fixCart() {
+    try {
+      let cart = JSON.parse(localStorage.getItem("chizen_cart") || "[]");
+      if (!Array.isArray(cart)) return;
+      let fixedCart = cart.filter(function(item) { return item && item.id; });
+      if (fixedCart.length !== cart.length) {
+        localStorage.setItem("chizen_cart", JSON.stringify(fixedCart));
+        console.log("[Auto-Fix] تم إزالة " + (cart.length - fixedCart.length) + " منتج معلق من السلة");
+      }
+    } catch(e) {}
+  }
+
+  // التشغيل عند تحميل التطبيق
+  const interval = setInterval(function() {
+    if (window.APP && window.APP.products && window.APP.products.length > 0) {
+      clearInterval(interval);
+      ensureProductIds();
+      fixCart();
+      // إعادة رسم السلة إذا كانت الدالة متاحة
+      if (typeof window.APP.renderCart === "function") {
+        try { window.APP.renderCart(); } catch(e) {}
+      }
+    }
+  }, 500);
+})();
+// ===================================
 </script>
 </html>
