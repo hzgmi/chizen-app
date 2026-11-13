@@ -485,11 +485,11 @@ APP.renderRelatedProducts = function(currentProduct) {
     }
 
     if(related.length === 0) {
-        if (relatedContainer) relatedContainer.innerHTML = '';
+        if (relatedContainer) if (relatedContainer) relatedContainer.innerHTML = "";';
         return;
     }
 
-    relatedContainer.innerHTML = `
+    if (relatedContainer) relatedContainer.innerHTML = "";
         <div style="margin-top: 30px; padding: 0 15px 30px;">
             <h3 style="color:#fff; font-size:16px; margin-bottom:15px; font-weight:bold;">منتجات مشابهة</h3>
             <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
