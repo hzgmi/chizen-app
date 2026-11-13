@@ -185,94 +185,143 @@ window.showToast = function(msg) {
 
   // جلب التقييمات
   window.loadReviews = function() {
-    if (!(window.currentProduct || (window.APP && window.APP.currentProd))) return;
-    var list = document.getElementById('reviewsList');
-    if (!list) return;
+  var prod = window.currentProduct || (window.APP && window.APP.currentProd);
+  if (!prod || !prod.id) return; // لا يوجد منتج حالي
+  
+  var list = document.getElementById('reviewsList');
+  var formContainer = document.getElementById('reviewFormContainer');
+  var alreadyMsg = document.getElementById('alreadyReviewedMsg');
+  
+  // 1. عرض مؤشر تحميل فوري (Skeleton) للسرعة
+  if (list) list.innerHTML = '<div style="text-align:center;padding:20px;color:#64748b;font-size:12px;">⏳ جاري تحميل التقييمات...</div>';
+  if (formContainer) formContainer.style.display = 'block';
+  if (alreadyMsg) alreadyMsg.style.display = 'none';
 
-    // إذا لم يكن currentUserId جاهزاً، انتظر قليلاً
-    if (!currentUserId) {
-      setTimeout(window.loadReviews, 300);
-      return;
-    }
+  // 2. الحصول على الـ ID الحالي وحفظه في متغير محلي لعزل الطلب
+  var targetProductId = String(prod.id);
+  
+  // 3. إلغاء أي طلب سابق (إذا وجد)
+  if (window._reviewLoadToken) {
+    window._reviewLoadToken.cancelled = true;
+  }
+  var currentToken = { cancelled: false };
+  window._reviewLoadToken = currentToken;
 
-    db.collection('reviews')
-      .where('productId', '==', (window.currentProduct || (window.APP && window.APP.currentProd)).id)
-      .limit(20)
-      .get()
-      .then(function(snapshot) {
-        list.innerHTML = '';
-        if (snapshot.empty) {
-          list.innerHTML = '<div style="text-align:center;padding:15px;color:#94a3b8;font-size:12px;">لا توجد تقييمات بعد. كن أول من يقيم!</div>';
-          return;
-        }
-        var reviews = [];
-        snapshot.forEach(function(doc) {
-          var r = doc.data();
-          r.id = doc.id;
-          reviews.push(r);
-        });
-        reviews.sort(function(a, b) {
-          var ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
-          var tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
-          return tb - ta;
-        });
-        // البحث عن تقييم المستخدم الحالي
-        myReviewId = null;
-        myReviewData = null;
-        reviews.forEach(function(r) {
-          if (r.userId === currentUserId) {
-            myReviewId = r.id;
-            myReviewData = r;
-          }
-        });
-        // إذا كان لديه تقييم، اعرض زر التعديل بدلاً من النموذج
-        var formContainer = document.getElementById('reviewFormContainer');
-        if (myReviewId) {
-          if (formContainer) formContainer.style.display = 'none';
-        } else {
-          if (formContainer) formContainer.style.display = 'block';
+  // 4. انتظار بسيط لـ currentUserId إذا لم يكن جاهزاً
+  if (typeof currentUserId === 'undefined' || !currentUserId) {
+    setTimeout(function() { 
+      if (!currentToken.cancelled) window.loadReviews(); 
+    }, 300);
+    return;
+  }
+
+  db.collection('reviews')
+    .where('productId', '==', targetProductId)
+    .limit(20)
+    .get()
+    .then(function(snapshot) {
+      // ═══ الحماية الصارمة: إذا تم إلغاء الطلب أو تغير المنتج، لا نعرض شيئاً ═══
+      if (currentToken.cancelled) {
+        console.log("[Reviews] Request cancelled (product changed)");
+        return;
+      }
+      var currentProdNow = window.currentProduct || (window.APP && window.APP.currentProd);
+      if (!currentProdNow || String(currentProdNow.id) !== targetProductId) {
+        console.log("[Reviews] Product changed during load, aborting render");
+        return;
+      }
+      // ═══════════════════════════════════════════════════════════════════════════
+
+      if (!list) return;
+      list.innerHTML = '';
+      
+      if (snapshot.empty) {
+        list.innerHTML = '<div style="text-align:center;padding:20px;color:#94a3b8;font-size:12px;">لا توجد تقييمات بعد. كن أول من يقيم!</div>';
+        return;
+      }
+      
+      var reviews = [];
+      snapshot.forEach(function(doc) {
+        var r = doc.data();
+        r.id = doc.id;
+        reviews.push(r);
+      });
+      
+      // ترتيب حسب الأحدث
+      reviews.sort(function(a, b) {
+        var ta = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+        var tb = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+        return tb - ta;
+      });
+      
+      // البحث عن تقييم المستخدم الحالي
+      var myReviewId = null;
+      reviews.forEach(function(r) {
+        if (r.userId === currentUserId) myReviewId = r.id;
+      });
+      
+      // إخفاء النموذج وإظهار رسالة إذا كان المستخدم قد قيّم مسبقاً
+      if (myReviewId) {
+        if (formContainer) formContainer.style.display = 'none';
+        if (alreadyMsg) alreadyMsg.style.display = 'block';
+      } else {
+        if (formContainer) formContainer.style.display = 'block';
+        if (alreadyMsg) alreadyMsg.style.display = 'none';
+      }
+      
+      // عرض التقييمات
+      reviews.forEach(function(r) {
+        var starsHtml = '';
+        for (var i = 1; i <= 5; i++) {
+          starsHtml += '<i class="' + (i <= r.rating ? 'fas' : 'far') + ' fa-star"></i>';
         }
         
-        reviews.forEach(function(r) {
-          var starsHtml = '';
-          for (var i = 1; i <= 5; i++) {
-            starsHtml += '<i class="' + (i <= r.rating ? 'fas' : 'far') + ' fa-star"></i>';
-          }
-          var card = document.createElement('div');
-          card.className = 'review-card';
-          
-          var header = document.createElement('div');
-          header.className = 'review-header';
-          var userSpan = document.createElement('span');
-          userSpan.className = 'review-user';
-          if (r.userId === currentUserId) {
-            userSpan.innerHTML = 'أنت <button onclick="editMyReview()" style="background:transparent;border:none;color:#3b82f6;cursor:pointer;font-size:14px;padding:0 4px;" title="تعديل تقييمك">✏️</button>';
-          } else {
-            userSpan.textContent = 'عميل';
-          }
-          var dateSpan = document.createElement('span');
-          dateSpan.className = 'review-date';
-          dateSpan.textContent = (r.createdAt ? 'مؤخراً' : 'الآن');
-          header.appendChild(userSpan);
-          header.appendChild(dateSpan);
-          card.appendChild(header);
-
-          var starsDiv = document.createElement('div');
-          starsDiv.className = 'review-stars';
-          starsDiv.innerHTML = starsHtml;
-          card.appendChild(starsDiv);
-
+        var card = document.createElement('div');
+        card.className = 'review-card';
+        
+        var header = document.createElement('div');
+        header.className = 'review-header';
+        
+        var userSpan = document.createElement('span');
+        userSpan.className = 'review-user';
+        if (r.userId === currentUserId) {
+          userSpan.innerHTML = 'أنت <button onclick="editMyReview()" style="background:transparent;border:none;color:#3b82f6;cursor:pointer;font-size:14px;padding:0 4px;" title="تعديل تقييمك">✏️</button>';
+        } else {
+          userSpan.textContent = 'عميل';
+        }
+        
+        var dateSpan = document.createElement('span');
+        dateSpan.className = 'review-date';
+        dateSpan.textContent = (r.createdAt ? 'مؤخراً' : 'الآن');
+        
+        header.appendChild(userSpan);
+        header.appendChild(dateSpan);
+        
+        var starsContainer = document.createElement('div');
+        starsContainer.className = 'review-stars';
+        starsContainer.innerHTML = starsHtml;
+        
+        card.appendChild(header);
+        card.appendChild(starsContainer);
+        
+        if (r.comment && r.comment.trim() !== '') {
           var textP = document.createElement('p');
           textP.className = 'review-text';
-          textP.textContent = r.text || 'تقييم سريع';
+          textP.textContent = r.comment;
           card.appendChild(textP);
+        }
+        
+        list.appendChild(card);
+      });
+    })
+    .catch(function(e) {
+      if (currentToken.cancelled) return;
+      console.error('[REVIEWS] Load error:', e);
+      if (list) list.innerHTML = '<div style="text-align:center;padding:15px;color:#ef4444;font-size:12px;">⚠️ فشل تحميل التقييمات</div>';
+    });
+};
 
-          var actions = document.createElement('div');
-          actions.className = 'review-actions';
-          var likeBtn = document.createElement('button');
-          likeBtn.className = 'action-btn';
-          likeBtn.innerHTML = '<i class="far fa-thumbs-up"></i> <span>' + (r.likes || 0) + '</span>';
-          likeBtn.onclick = function() { voteReview(r.id, 'like', this); };
+
           var dislikeBtn = document.createElement('button');
           dislikeBtn.className = 'action-btn';
           dislikeBtn.innerHTML = '<i class="far fa-thumbs-down"></i> <span>' + (r.dislikes || 0) + '</span>';
