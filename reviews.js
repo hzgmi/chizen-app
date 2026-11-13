@@ -227,13 +227,10 @@ window.showToast = function(msg) {
         });
         // إذا كان لديه تقييم، اعرض زر التعديل بدلاً من النموذج
         var formContainer = document.getElementById('reviewFormContainer');
-        // var alreadyMsg = document.getElementById('alreadyReviewedMsg'); // removed
         if (myReviewId) {
           if (formContainer) formContainer.style.display = 'none';
-          if (alreadyMsg) alreadyMsg.style.display = 'none';
         } else {
           if (formContainer) formContainer.style.display = 'block';
-          if (alreadyMsg) alreadyMsg.style.display = 'none';
         }
         
         reviews.forEach(function(r) {
