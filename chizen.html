@@ -23216,21 +23216,47 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
 
   window.APP.openProductNew = function(id) {
     var p = null;
-    (this.products || []).forEach(function(x) { if (String(x.id) === String(id)) p = x; });
-    if (!p) return;
+    var prods = this.products || [];
+    
+    // البحث بالـ id
+    if (id !== null && id !== undefined && id !== "") {
+      prods.forEach(function(x) { if (String(x.id) === String(id)) p = x; });
+    }
+    
+    // إذا لم يوجد بالـ id، نبحث بالاسم (حل لمشكلة id=null)
+    if (!p && typeof id === "string" && id.length > 0) {
+      prods.forEach(function(x) { if (x.name && x.name === id) p = x; });
+    }
+    
+    // إذا كان id = null، نبحث عن المنتج الذي id الخاص به null أيضاً (للتجربة)
+    if (!p && (id === null || id === undefined)) {
+      console.warn("[openProductNew] id is null. Falling back to first product with null id.");
+      prods.forEach(function(x) { if (x.id === null || x.id === undefined) p = x; });
+    }
+
+    if (!p) {
+      console.error("[openProductNew] Product not found for id:", id);
+      if (window.showToast) window.showToast("❌ تعذر العثور على المنتج");
+      return;
+    }
+    
     this.currentProd = p;
     window.currentProduct = p;
     this.currentQty = 1;
 
     // 1. إخفاء كل الشاشات وإظهار صفحة التفاصيل فوراً
-    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-    var det = document.getElementById('sc-details-new');
-    if (det) det.classList.add('active');
+    document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
+    var det = document.getElementById("sc-details-new");
+    if (det) det.classList.add("active");
 
-    // 2. ملء البيانات الأساسية فوراً (من الذاكرة، بدون انتظار)
-    fillDetailsNew(p);
+    // 2. ملء البيانات الأساسية (محمي بـ try/catch)
+    try {
+      fillDetailsNew(p);
+    } catch(e) {
+      console.error("[openProductNew] fillDetailsNew failed:", e.message);
+    }
 
-    // 3. تحميل التقييمات في الخلفية (بعد 500ms، حتى لا تؤخر فتح الصفحة)
+    // 3. تحميل التقييمات
     setTimeout(function() {
       if (typeof window.loadReviews === 'function') {
         window.loadReviews();
