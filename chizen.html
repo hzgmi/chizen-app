@@ -23215,23 +23215,49 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
   window.APP = window.APP || {};
 
   window.APP.openProductNew = function(id) {
+    // 1. فحص سريع: إذا لم يكن هناك id أو كان نصاً فارغاً
+    if (!id && id !== 0) {
+       console.warn("[openProductNew] Warning: called with no id.");
+    }
+
     var p = null;
     var prods = this.products || [];
     
-    // البحث بالـ id
-    if (id !== null && id !== undefined && id !== "") {
+    // محاولة البحث بالـ id
+    if (id) {
       prods.forEach(function(x) { if (String(x.id) === String(id)) p = x; });
     }
     
-    // إذا لم يوجد بالـ id، نبحث بالاسم (حل لمشكلة id=null)
-    if (!p && typeof id === "string" && id.length > 0) {
+    // إذا فشل البحث بالـ id، نحاول البحث بالاسم (احتياطي)
+    if (!p && typeof id === "string") {
       prods.forEach(function(x) { if (x.name && x.name === id) p = x; });
     }
-    
-    // إذا كان id = null، نبحث عن المنتج الذي id الخاص به null أيضاً (للتجربة)
+
+    // إذا كان id = null (منتجات البوكسات)، نبحث عن أول منتج ليس له id
     if (!p && (id === null || id === undefined)) {
-      console.warn("[openProductNew] id is null. Falling back to first product with null id.");
-      prods.forEach(function(x) { if (x.id === null || x.id === undefined) p = x; });
+      p = prods.find(function(x) { return x.id === null || x.id === undefined; });
+    }
+
+    // إذا لم نجد المنتج، نطلبه من Firebase مباشرة
+    if (!p && window.FB && typeof window.FB.getProducts === "function") {
+      console.warn("[openProductNew] Not found in cache. Fetching from Firebase...");
+      window.FB.getProducts().then(function(fbProds) {
+        var found = null;
+        if (id) found = fbProds.find(function(x){ return String(x.id) === String(id); });
+        else if (id === null || id === undefined) found = fbProds.find(function(x){ return x.id === null || x.id === undefined; });
+        
+        if (found) {
+           window.APP.products = fbProds; // تحديث الكاش
+           window.APP.openProductNew.call(window.APP, found.id || found.name); // إعادة المحاولة
+        } else {
+           if (window.showToast) window.showToast("❌ تعذر العثور على المنتج في قاعدة البيانات");
+           console.error("[openProductNew] Product not found even in Firebase");
+        }
+      }).catch(function(err) {
+        if (window.showToast) window.showToast("❌ خطأ في الاتصال بالشبكة");
+        console.error("[openProductNew] Fetch error:", err);
+      });
+      return;
     }
 
     if (!p) {
@@ -23244,19 +23270,18 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     window.currentProduct = p;
     this.currentQty = 1;
 
-    // 1. إخفاء كل الشاشات وإظهار صفحة التفاصيل فوراً
+    // إخفاء كل الشاشات وإظهار صفحة التفاصيل
     document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
     var det = document.getElementById("sc-details-new");
     if (det) det.classList.add("active");
 
-    // 2. ملء البيانات الأساسية (محمي بـ try/catch)
     try {
       fillDetailsNew(p);
     } catch(e) {
       console.error("[openProductNew] fillDetailsNew failed:", e.message);
     }
 
-    // 3. تحميل التقييمات
+    // // 3. تحميل التقييمات
     setTimeout(function() {
       if (typeof window.loadReviews === 'function') {
         window.loadReviews();
