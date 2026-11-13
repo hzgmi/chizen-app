@@ -23276,7 +23276,7 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     if (det) det.classList.add("active");
 
     try {
-      fillDetailsNew(p);
+      window.fillDetailsNew(p);
     } catch(e) {
       console.error("[openProductNew] fillDetailsNew failed:", e.message);
     }
@@ -23303,7 +23303,7 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
     if (qtyEl) qtyEl.textContent = this.currentQty;
   };
 
-  function fillDetailsNew(p) {
+  window.fillDetailsNew = function(p) {
     // الصورة
     var imgContainer = document.getElementById('det-new-img');
     if (imgContainer) {
