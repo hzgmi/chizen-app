@@ -23300,20 +23300,35 @@ if (window.APP.products && window.APP.products.length) {
   };
 
   
-// === AUTO HIDE EMPTY SECTIONS ===
-setTimeout(function() {
-  var feat = document.getElementById("det-new-features");
-  if (feat && feat.innerHTML.trim() === "") { feat.style.display = "none"; }
-  var specs = document.getElementById("det-new-specs");
-  if (specs && specs.innerHTML.trim() === "") { specs.style.display = "none"; }
-  var desc = document.getElementById("det-new-desc-wrapper");
-  if (desc && desc.querySelector(".chz-det-desc") && desc.querySelector(".chz-det-desc").textContent.trim() === "") { desc.style.display = "none"; }
-  var sizes = document.getElementById("det-new-sizes-section");
-  if (sizes && sizes.style.display !== "none" && (!document.getElementById("det-new-sizes") || document.getElementById("det-new-sizes").children.length === 0)) { sizes.style.display = "none"; }
-  var boxes = document.getElementById("det-new-boxes-section");
-  if (boxes && boxes.innerHTML.trim() === "") { boxes.style.display = "none"; }
-}, 100);
-// ================================
+    // --- SMART HIDE: إخفاء الأقسام بناءً على البيانات الفعلية ---
+    setTimeout(function() {
+      // المميزات
+      if (!p.features || p.features.length === 0) {
+        var featEl = document.getElementById("det-new-features");
+        if (featEl) featEl.style.display = "none";
+      }
+      // المواصفات
+      if (!p.specs || Object.keys(p.specs).length === 0) {
+        var specsEl = document.getElementById("det-new-specs");
+        if (specsEl) specsEl.style.display = "none";
+      }
+      // الوصف
+      if (!p.desc || p.desc.trim() === "") {
+        var descEl = document.getElementById("det-new-desc-wrapper");
+        if (descEl) descEl.style.display = "none";
+      }
+      // المقاسات (إذا كانت مصفوفة فارغة)
+      if ((!p.sizes || p.sizes.length === 0) && (!p.shoeSizes || p.shoeSizes.length === 0)) {
+        var sizesEl = document.getElementById("det-new-sizes-section");
+        if (sizesEl) sizesEl.style.display = "none";
+      }
+      // البوكسات (إذا لم تكن هناك بوكسات أو كانت 1 فقط)
+      if (!p.boxes || p.boxes <= 1) {
+         var boxesEl = document.getElementById("det-new-boxes-section");
+         if (boxesEl) boxesEl.style.display = "none";
+      }
+    }, 50);
+    // -----------------------------------------------------
 window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.remove('active');
