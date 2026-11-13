@@ -23247,7 +23247,17 @@ html[data-theme="light"] .chz-spec-card { background: #f8fafc; border-color: #e2
         else if (id === null || id === undefined) found = fbProds.find(function(x){ return x.id === null || x.id === undefined; });
         
         if (found) {
-           window.APP.products = fbProds; // تحديث الكاش
+           window.APP.products = fbProds;
+if (window.APP.products && window.APP.products.length) {
+  let needsUpdate = false;
+  window.APP.products.forEach(function(p) {
+    if (!p.id && p._id) { p.id = p._id; needsUpdate = true; }
+    // إذا كان هناك id فارغ في قاعدة البيانات، نستخدم الاسم كبديل مؤقت
+    if (!p.id) { p.id = p.name ? String(p.name) : "unknown"; needsUpdate = true; }
+  });
+  if (needsUpdate) console.log("[Auto-Fix] تم إصلاح المنتجات الناقصة محلياً");
+}
+ // تحديث الكاش
            window.APP.openProductNew.call(window.APP, found.id || found.name); // إعادة المحاولة
         } else {
            if (window.showToast) window.showToast("❌ تعذر العثور على المنتج في قاعدة البيانات");
