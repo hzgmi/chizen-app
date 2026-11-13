@@ -24018,6 +24018,72 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   background: #fff !important;
   border-color: #e2e8f0 !important;
 }
+
+/* ═══ LAYOUT: ترتيب صفحة التفاصيل ═══ */
+#sc-details-new .chz-det-page {
+  display: flex !important;
+  flex-direction: column !important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
+  padding: 15px !important;
+  position: relative !important;
+}
+#sc-details-new .chz-det-page > * { flex: 0 0 auto; }
+#sc-details-new .chz-det-back { order: 0; }
+#sc-details-new .chz-det-gallery { order: 1; }
+#sc-details-new .chz-det-info { order: 2; }
+#sc-details-new #det-new-sizes-section { order: 3; }
+#sc-details-new #det-new-boxes-section { order: 4; }
+#sc-details-new .chz-det-specs-features { order: 5; }
+#sc-details-new #det-new-features { order: 6; }
+#sc-details-new #det-new-specs { order: 7; }
+#sc-details-new .chz-det-desc-wrapper { order: 8; }
+#sc-details-new .chz-det-reviews { order: 9; }
+#sc-details-new .chz-det-actions { order: 99; }
+
+/* فواصل بصرية بين الأقسام */
+#sc-details-new #det-new-sizes-section,
+#sc-details-new #det-new-boxes-section,
+#sc-details-new #det-new-features,
+#sc-details-new #det-new-specs,
+#sc-details-new .chz-det-reviews {
+  margin-top: 16px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+/* تحسين عرض قسم المقاسات */
+#sc-details-new .chz-det-section-title {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: #f8fafc !important;
+  margin-bottom: 12px !important;
+}
+
+/* تحسين عرض زرّي المقاسات والبوكسات */
+#sc-details-new .chz-det-sizes {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+}
+#sc-details-new .chz-det-size-option {
+  padding: 8px 16px !important;
+  border-radius: 10px !important;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+#sc-details-new .chz-det-size-option.selected {
+  background: linear-gradient(135deg, #ec4899, #be185d) !important;
+  border-color: #ec4899 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(236,72,153,0.3) !important;
+}
 </style>
 
 <div class="screen" id="sc-details-new">
@@ -24042,7 +24108,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
     </div>
 
     <div id="det-new-sizes-section" style="display:none;">
-      <div class="chz-det-section-title">📦 اختر العبوة</div>
+      <div class="chz-det-section-title">📏 اختر المقاس</div>
       <div class="chz-det-sizes" id="det-new-sizes"></div>
     </div>
 
