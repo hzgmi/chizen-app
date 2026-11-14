@@ -24763,6 +24763,56 @@ html[data-theme="light"] .chz-det-actions {
   border-top: 1px solid #fce7f3 !important;
   box-shadow: 0 -8px 24px rgba(157, 78, 221, 0.05) !important;
 }
+
+/* ═══ إصلاح ألوان المربعات (الوضع الفاتح) ═══ */
+html[data-theme="light"] #sc-details-new {
+  /* تأكيد الخلفية الوردية الفاتحة */
+  background: linear-gradient(180deg, #fdf4f7 0%, #f8f2fc 100%) !important;
+}
+
+/* 1. زر أضف للسلة (إجباره على أن يكون فاتحاً) */
+html[data-theme="light"] #sc-details-new .chz-det-btn-cart {
+  background: #ffffff !important;
+  color: #be185d !important; /* نص وردي داكن */
+  border: 1px solid #fbcfe8 !important;
+}
+
+/* 2. العداد (− 1 +) */
+html[data-theme="light"] #sc-details-new .chz-det-qty {
+  background: #ffffff !important;
+  border: 1px solid #fce7f3 !important;
+}
+html[data-theme="light"] #sc-details-new .chz-det-qty-btn {
+  background: transparent !important;
+  color: #be185d !important;
+}
+html[data-theme="light"] #sc-details-new .chz-det-qty-val {
+  color: #0f172a !important;
+}
+
+/* 3. المربعات الداخلية (مثل المواصفات "غلا / هلل") */
+html[data-theme="light"] #sc-details-new .chz-spec-card,
+html[data-theme="light"] #sc-details-new .chz-det-spec-box .chz-spec-card {
+  background: #fdf4f7 !important;
+  border: 1px solid #fce7f3 !important;
+  color: #0f172a !important;
+}
+html[data-theme="light"] #sc-details-new .chz-spec-key {
+  color: #64748b !important;
+}
+html[data-theme="light"] #sc-details-new .chz-spec-val {
+  color: #0f172a !important;
+}
+
+/* 4. ملخص الاختيار (المقاس والبوكس) */
+html[data-theme="light"] #sc-details-new .chz-det-summary {
+  background: transparent !important;
+}
+html[data-theme="light"] #sc-details-new .chz-sum-item {
+  background: #ffffff !important;
+  border: 1px solid #fce7f3 !important;
+  color: #be185d !important;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
