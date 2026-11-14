@@ -24582,14 +24582,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 
 /* ═══ إخفاء زر AI في صفحة التفاصيل ═══ */
 
-body.in-details .chat-fab,
-body.in-details .ai-fab,
-body.in-details #ai-btn,
-body.in-details [class*="ai-button"] {
-  transform: translateY(150%) !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
+
 
 /* ═══ إصلاح الشريط السفلي بعد إخفاء شريط التنقل ═══ */
 /* نعطي الشريط مساحة إضافية من الأسفل */
@@ -24610,14 +24603,7 @@ body.in-details [class*="ai-button"] {
 
 /* ═══ إخفاء زر AI (v2-fab) في صفحة التفاصيل ═══ */
 
-body.in-details 
 
-/* ═══ IMMERSIVE MODE (الوضع الغامر) ═══ */
-/* إخفاء شريط التنقل الرئيسي عند دخول التفاصيل */
-
-#bottom-nav {
-  transition: transform 0.3s ease, opacity 0.3s ease !important;
-}
 
 /* إخفاء زر AI العائم عند دخول التفاصيل */
 
@@ -24634,11 +24620,7 @@ body.in-details
 
 
 /* ═══ 3. ضمان ظهور المقاسات والبوكسات داخل الشريط ═══ */
-body.in-details #sc-details-new .chz-det-summary {
-  display: flex !important;
-  width: 100% !important;
-  margin-bottom: 5px !important;
-}
+
 
 /* ═══ الحل الجذري: إخفاء شريط التنقل بصرياً دون كسر التخطيط ═══ */
 #bottom-nav {
@@ -24748,6 +24730,67 @@ body.in-details #sc-details-new .chz-det-summary {
 
 
 
+
+<script>
+(function() {
+  function fixDetailsLayout() {
+    var isDetails = document.body.classList.contains("in-details");
+    var nav = document.getElementById("bottom-nav");
+    var aiBtn = document.getElementById("v2-fab") || document.querySelector(".v2-fab");
+    
+    // العنصر الذي يحتوي على السلة والعداد (شريط الشراء)
+    var actions = document.querySelector("#sc-details-new .chz-det-actions");
+
+    if (isDetails) {
+      // 1. إخفاء شريط التنقل وزر AI
+      if (nav) { nav.style.setProperty("display", "none", "important"); }
+      if (aiBtn) { aiBtn.style.setProperty("display", "none", "important"); }
+      
+      // 2. إظهار شريط الشراء وتثبيته في الأسفل
+      if (actions) {
+        actions.style.setProperty("display", "flex", "important");
+        actions.style.setProperty("position", "fixed", "important");
+        actions.style.setProperty("bottom", "0", "important");
+        actions.style.setProperty("left", "0", "important");
+        actions.style.setProperty("right", "0", "important");
+        actions.style.setProperty("z-index", "99999", "important");
+        actions.style.setProperty("background", "#1e293b", "important");
+        actions.style.setProperty("border-radius", "16px 16px 0 0", "important");
+        actions.style.setProperty("padding-bottom", "20px", "important");
+      }
+    } else {
+      // العودة للوضع الطبيعي
+      if (nav) { nav.style.removeProperty("display"); }
+      if (aiBtn) { aiBtn.style.removeProperty("display"); }
+      
+      if (actions) {
+        actions.style.removeProperty("display");
+        actions.style.removeProperty("position");
+        actions.style.removeProperty("bottom");
+        actions.style.removeProperty("left");
+        actions.style.removeProperty("right");
+        actions.style.removeProperty("z-index");
+        actions.style.removeProperty("background");
+        actions.style.removeProperty("border-radius");
+        actions.style.removeProperty("padding-bottom");
+      }
+    }
+  }
+
+  // تطبيق فوري عند أي تغيير في كلاس body
+  var observer = new MutationObserver(function(m) {
+    if (m[0].attributeName === "class") {
+      setTimeout(fixDetailsLayout, 30);
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    observer.observe(document.body, { attributes: true });
+    // تطبيق مستمر لضمان عدم تدخل أي سكربت آخر
+    setInterval(fixDetailsLayout, 500);
+  });
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
