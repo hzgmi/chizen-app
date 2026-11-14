@@ -12225,6 +12225,33 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     this.updateCartB();
     this.renderCart();
   },
+  updateShipBar:function(){
+    var bar = document.getElementById("chz-ship-bar");
+    var text = document.getElementById("ship-bar-text");
+    var amount = document.getElementById("ship-bar-amount");
+    var fill = document.getElementById("ship-bar-fill");
+    if (!bar || !text || !amount || !fill) return;
+    
+    var total = this.cartTotal();
+    var FREE_THRESHOLD = 500;
+    var remaining = FREE_THRESHOLD - total;
+    
+    if (remaining <= 0) {
+      text.textContent = "🎉 حصلت على شحن مجاني!";
+      text.style.color = "#10b981";
+      amount.textContent = "مكتمل";
+      amount.style.color = "#10b981";
+      fill.style.width = "100%";
+      fill.style.background = "linear-gradient(90deg,#10b981,#059669)";
+    } else {
+      text.textContent = "أضف " + remaining.toLocaleString("en") + " ر.ي للحصول على شحن مجاني!";
+      text.style.color = "#334155";
+      amount.textContent = Math.round((total/FREE_THRESHOLD)*100) + "%";
+      amount.style.color = "#64748b";
+      fill.style.width = Math.min(100, (total/FREE_THRESHOLD)*100) + "%";
+      fill.style.background = "linear-gradient(90deg,#ec4899,#be185d)";
+    }
+  },
   removeCart:function(id){for(var i=0;i<this.cart.length;i++){if(String(this.cart[i].id)===String(id)){this.cart.splice(i,1);break;}}this.saveCart();this.updateCartB();this.renderCart();},
   
   cartTotal:function(){var t=0;this.cart.forEach(function(i){var p=APP.getProduct(i.id);if(p)t+=(Number(p.price)||0)*i.qty;});return t;},
@@ -12248,8 +12275,18 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
       
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCartFull(\''+esc(p.id)+'\',\''+(i.size||'')+'\',\''+(i.color||'')+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div>' + (specsHtml ? '<div style="margin:4px 0;">' + specsHtml + '</div>' : '') + '<div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',-1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">+</button></div></div></div>';
     }).join('');
+    html+='<div id="chz-ship-bar" style="margin-bottom:16px;padding:16px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'+
+        '<span style="font-size:12px;font-weight:800;color:#334155;" id="ship-bar-text"></span>'+
+        '<span style="font-size:11px;color:#64748b;" id="ship-bar-amount"></span>'+
+      '</div>'+
+      '<div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;">'+
+        '<div id="ship-bar-fill" style="height:100%;background:linear-gradient(90deg,#ec4899,#be185d);border-radius:4px;transition:width 0.4s ease;"></div>'+
+      '</div>'+
+    '</div>';
     html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
     html+=(window.__v336RenderSuggested?window.__v336RenderSuggested():'');
+    setTimeout(function(){ if (APP.updateShipBar) APP.updateShipBar(); }, 50);
     c.innerHTML=html;
   },
   
