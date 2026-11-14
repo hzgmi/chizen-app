@@ -11116,8 +11116,17 @@ var APP={
     // ★ تحميل نقاط التسليم في الخلفية (لتكون جاهزة فوراً)
     setTimeout(function() {
       if (window.__preloadPickupData) window.__preloadPickupData();
-      if (window.FB && FB.listenToConfig) {
-        FB.listenToConfig('payments', function(p){ if(p && p.list){ window.APP.banks = p.list; try { localStorage.setItem('chizen_payments_cache', JSON.stringify(p.list)); } catch(e){} } });
+      if (window.FB && FB.db) {
+        FB.db.collection('config').doc('payments').get().then(function(doc){
+          if (doc.exists) {
+            var d = doc.data();
+            if (d.list) {
+              window.APP.banks = d.list;
+              try { localStorage.setItem('chizen_payments_cache', JSON.stringify(d.list)); } catch(e){}
+              if (window.APP.renderBanks) window.APP.renderBanks();
+            }
+          }
+        }).catch(function(e){ console.warn('[PAYMENTS] get error:', e.message); });
       }
     }, 2000);
   },
