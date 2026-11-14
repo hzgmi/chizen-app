@@ -23642,6 +23642,42 @@ window.APP.closeDetailsNew = function() {
     summaryEl.style.display = (hasSize || hasBox || qty > 1) ? "flex" : "none";
   };
 
+
+    // ═══ عرض الألوان (مع حماية كاملة) ═══
+    try {
+      var colorSection = document.getElementById("det-new-colors-section");
+      var colorsContainer = document.getElementById("det-new-colors");
+      if (colorSection && colorsContainer && p.colors && Array.isArray(p.colors) && p.colors.length > 0) {
+        colorSection.style.display = "block";
+        colorsContainer.innerHTML = "";
+        p.colors.forEach(function(color, i) {
+          var swatch = document.createElement("div");
+          swatch.className = "chz-color-swatch" + (i === 0 ? " selected" : "");
+          if (color.indexOf("#") === 0) {
+            swatch.style.background = color;
+          } else if (color.indexOf("http") === 0) {
+            swatch.style.backgroundImage = "url(" + color + ")";
+          } else {
+            swatch.style.background = color;
+          }
+          swatch.title = color;
+          swatch.onclick = function() {
+            colorsContainer.querySelectorAll(".chz-color-swatch").forEach(function(s) { s.classList.remove("selected"); });
+            this.classList.add("selected");
+            window.APP.selectedColor = color;
+            var mainImg = document.querySelector("#det-new-img img");
+            if (mainImg && color.indexOf("http") === 0) mainImg.src = color;
+          };
+          colorsContainer.appendChild(swatch);
+        });
+        window.APP.selectedColor = p.colors[0];
+      } else {
+        if (colorSection) colorSection.style.display = "none";
+      }
+    } catch(e) {
+      console.warn("[Colors] Render error:", e.message);
+    }
+    // ═══════════════════════════════════
   window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.remove('active');
@@ -24166,6 +24202,12 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
       </div>
     </div>
 
+
+    <!-- قسم اختيار اللون (جديد) -->
+    <div id="det-new-colors-section" class="chz-det-colors-section" style="display:none;">
+      <div class="chz-det-section-title">🎨 اختر اللون</div>
+      <div class="chz-det-colors" id="det-new-colors"></div>
+    </div>
     <div id="det-new-sizes-section" style="display:none;">
       <div class="chz-det-section-title">📏 اختر المقاس</div>
       <div class="chz-det-sizes" id="det-new-sizes"></div>
@@ -24882,6 +24924,19 @@ html[data-theme="light"] #sc-details-new .chz-det-section-title {
 html[data-theme="light"] #sc-details-new .chz-det-section-title::before {
   display: none !important;
 }
+
+/* ═══ قسم الألوان ═══ */
+.chz-det-colors-section { margin: 20px 0; padding-top: 20px; border-top: 1px solid var(--bd, #334155); }
+.chz-det-colors { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.chz-color-swatch {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 3px solid var(--bd, #334155);
+  cursor: pointer; transition: all 0.2s ease;
+  display: flex; align-items: center; justify-content: center;
+  background-size: cover; background-position: center;
+}
+.chz-color-swatch.selected { border-color: #ec4899; transform: scale(1.1); box-shadow: 0 0 15px rgba(236,72,153,0.4); }
+.chz-color-swatch:hover { transform: scale(1.05); }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
