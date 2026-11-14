@@ -23564,7 +23564,26 @@ window.APP.closeDetailsNew = function() {
         }
         // ★ استخدام دالة renderProducts لبناء بطاقات السوق الأصلية ★
         if (typeof APP.renderProducts === "function") {
-          APP.renderProducts(related, grid);
+        // ★ بناء يدوي بسيط (بطاقة 160px مع 3 أسعار) ★
+        grid.innerHTML = related.map(function(r) {
+          var img = r.img || r.image || (r.images && r.images[0]) || "";
+          var priceYER = Number(r.priceYER || r.price) || 0;
+          var priceSAR = Number(r.priceSAR) || (priceYER / 135);
+          var priceUSD = Number(r.priceUSD) || (priceYER / 505);
+          return '<div onclick="APP.openProductNew(\'' + r.id + '\')" style="min-width:160px;max-width:160px;flex-shrink:0;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.06);">' +
+            '<div style="width:100%;height:140px;background:#f1f5f9;">' +
+              '<img src="' + img + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.src=\'https://via.placeholder.com/200\'">' +
+            '</div>' +
+            '<div style="padding:10px;">' +
+              '<div style="font-size:12px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px;">' + (r.name || 'منتج') + '</div>' +
+              '<div style="font-size:13px;font-weight:900;color:#ec4899;margin-bottom:6px;">' + priceYER.toLocaleString("en") + ' ر.ي</div>' +
+              '<div style="display:flex;gap:8px;font-size:10px;color:#64748b;justify-content:space-between;">' +
+                '<span>﷼ ' + priceSAR.toFixed(2) + '</span>' +
+                '<span>$ ' + priceUSD.toFixed(2) + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }).join("");
         } else {
           // احتياطي: بناء يدوي إذا لم تكن الدالة موجودة
           grid.innerHTML = related.map(function(r) {
