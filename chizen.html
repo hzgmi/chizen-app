@@ -16434,18 +16434,50 @@ document.addEventListener('keydown', function(e) {
   
   function loadPickupData() {
     return new Promise(function(resolve) {
+      // 1. جرّب القراءة من الكاش أولاً (فوري)
+      try {
+        var cached = localStorage.getItem("chizen_pickup_cache");
+        if (cached) {
+          var c = JSON.parse(cached);
+          if (c.aden && c.yemen) {
+            ADEN_AREAS = c.aden;
+            YEMEN_CITIES = c.yemen;
+            dataLoaded = true;
+            console.log("[PICKUP-V3] loaded from cache:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen");
+            resolve();
+            // 2. في الخلفية: جلب أحدث بيانات من Firebase
+            if (window.FB && FB.db) {
+              FB.db.collection("config").doc("pickup_areas").get().then(function(doc) {
+                if (doc.exists) {
+                  var d = doc.data();
+                  if (d.aden && d.yemen) {
+                    localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: d.aden, yemen: d.yemen}));
+                    console.log("[PICKUP-V3] cache updated from Firestore");
+                  }
+                }
+              }).catch(function(e) { console.warn("[PICKUP-V3] bg update error:", e.message); });
+            }
+            return;
+          }
+        }
+      } catch(e) {}
+      
+      // 3. إذا لم يوجد كاش: اجلب من Firebase
       if (dataLoaded || !window.FB || !FB.db) { resolve(); return; }
-      FB.db.collection('config').doc('pickup_areas').get().then(function(doc) {
+      FB.db.collection("config").doc("pickup_areas").get().then(function(doc) {
         if (doc.exists) {
           var d = doc.data();
           ADEN_AREAS = d.aden || [];
           YEMEN_CITIES = d.yemen || [];
           dataLoaded = true;
-          console.log('[PICKUP-V3] loaded from Firestore:', ADEN_AREAS.length, 'aden +', YEMEN_CITIES.length, 'yemen');
+          try {
+            localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: ADEN_AREAS, yemen: YEMEN_CITIES}));
+          } catch(e) {}
+          console.log("[PICKUP-V3] loaded from Firestore:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen");
         }
         resolve();
       }).catch(function(e) {
-        console.warn('[PICKUP-V3] load error:', e.message);
+        console.warn("[PICKUP-V3] load error:", e.message);
         resolve();
       });
     });
