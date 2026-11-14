@@ -8189,7 +8189,7 @@ html:not([data-theme="light"]) .tvl-form select option {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: #0d1120;
+  background: var(--nav, #0d1120);
   z-index: 99999;
   overflow-y: auto;
   padding: 0 0 110px 0;
@@ -8236,7 +8236,7 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 #chz-details-modal .chz-modal-currencies { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
 #chz-details-modal .chz-modal-cur-card {
-  background: #151a2d; border: 1px solid #1f2742; border-radius: 12px;
+  background: var(--nav, #151a2d); border: 1px solid #1f2742; border-radius: 12px;
   padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 65px;
 }
 #chz-details-modal .chz-modal-cur-name { font-size: 11px; color: #9ca3af; }
@@ -8244,7 +8244,7 @@ html:not([data-theme="light"]) .tvl-form select option {
 
 #chz-details-modal .chz-modal-section-title { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; margin: 20px 0 10px; }
 #chz-details-modal .chz-modal-specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-#chz-details-modal .chz-modal-spec-card { background: #151a2d; border-radius: 12px; padding: 10px; border: 1px solid #1f2742; }
+#chz-details-modal .chz-modal-spec-card { background: var(--nav, #151a2d); border-radius: 12px; padding: 10px; border: 1px solid #1f2742; }
 #chz-details-modal .chz-modal-spec-key { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
 #chz-details-modal .chz-modal-spec-val { font-size: 13px; color: #fff; font-weight: 700; }
 
@@ -8252,8 +8252,8 @@ html:not([data-theme="light"]) .tvl-form select option {
 #chz-details-modal .chz-modal-feat-item { display: flex; gap: 8px; font-size: 13px; color: #d1d5db; padding: 6px 0; }
 #chz-details-modal .chz-modal-feat-item i { color: #10b981; margin-top: 3px; }
 
-#chz-details-modal .chz-modal-qty-box { display: flex; align-items: center; gap: 10px; background: #151a2d; border: 1px solid #2a3452; border-radius: 12px; padding: 5px; width: fit-content; margin: 20px 0; }
-#chz-details-modal .chz-modal-qty-btn { width: 35px; height: 35px; border-radius: 8px; background: #0d1120; border: 1px solid #2a3452; color: #fff; font-size: 18px; cursor: pointer; }
+#chz-details-modal .chz-modal-qty-box { display: flex; align-items: center; gap: 10px; background: var(--nav, #151a2d); border: 1px solid #2a3452; border-radius: 12px; padding: 5px; width: fit-content; margin: 20px 0; }
+#chz-details-modal .chz-modal-qty-btn { width: 35px; height: 35px; border-radius: 8px; background: var(--nav, #0d1120); border: 1px solid #2a3452; color: #fff; font-size: 18px; cursor: pointer; }
 #chz-details-modal .chz-modal-qty-val { min-width: 30px; text-align: center; font-weight: 700; color: #fff; }
 
 #chz-details-modal .chz-modal-actions { display: flex; gap: 10px; margin-top: 20px; }
@@ -22085,7 +22085,7 @@ html.chz-dark .currency-row strong {
 }
 html[data-theme="dark"] .currency-box,
 html.chz-dark .currency-box {
-  background: #0f172a !important;
+  background: var(--nav, #0f172a) !important;
   border-color: #334155 !important;
 }
 html[data-theme="dark"] .sym-sar,
@@ -22112,12 +22112,12 @@ html.chz-dark .rating-num {
 }
 html[data-theme="dark"] .product-card,
 html.chz-dark .product-card {
-  background: #1e293b !important;
+  background: var(--nav, #1e293b) !important;
   border-color: #334155 !important;
 }
 html[data-theme="dark"] .product-img-wrapper,
 html.chz-dark .product-img-wrapper {
-  background: #0f172a !important;
+  background: var(--nav, #0f172a) !important;
   border-color: #334155 !important;
 }
 html[data-theme="dark"] .discount-badge,
@@ -23562,7 +23562,7 @@ window.APP.closeDetailsNew = function() {
 
 
 <style id="chz-details-new-css">
-#sc-details-new { background: #0d1120; min-height: 100vh; padding-bottom: 130px; overflow-y: auto; display: none; }
+#sc-details-new { background: var(--nav, #0d1120); min-height: 100vh; padding-bottom: 130px; overflow-y: auto; display: none; }
 #sc-details-new.active { display: block; }
 .chz-det-page { max-width: 600px; margin: 0 auto; padding: 15px; position: relative; }
 .chz-det-back { position: absolute; top: 15px; left: 15px; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 1px solid #C5A059; color: #C5A059; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; backdrop-filter: blur(10px); }
@@ -23601,10 +23601,10 @@ window.APP.closeDetailsNew = function() {
 .chz-star-input { display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; direction: ltr; }
 .chz-star-input i { font-size: 28px; color: #4b5563; cursor: pointer; transition: 0.2s; }
 .chz-star-input i.active { color: #f5b342; }
-.chz-review-textarea { width: 100%; background: #0d1120; border: 1px solid #2a3452; color: #fff; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-family: inherit; font-size: 13px; resize: vertical; min-height: 50px; outline: none; }
+.chz-review-textarea { width: 100%; background: var(--bg2, #0d1120); border: 1px solid var(--bd, #2a3452); color: var(--cr, #fff); padding: 10px; border-radius: 10px; margin-bottom: 10px; font-family: inherit; font-size: 13px; resize: vertical; min-height: 50px; outline: none; }
 .chz-submit-review { width: 100%; background: #3b82f6; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
 .chz-already-reviewed { background: rgba(16,185,129,0.1); border: 1px solid #10b981; color: #10b981; padding: 12px; border-radius: 10px; font-size: 12px; text-align: center; font-weight: 700; margin-bottom: 15px; }
-.chz-det-actions { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1120; border-top: 1px solid #1f2742; padding: 12px 15px; display: flex; gap: 10px; align-items: center; z-index: 999; max-width: 600px; margin: 0 auto; flex-direction: column; }
+.chz-det-actions { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav, #0d1120); border-top: 1px solid #1f2742; padding: 12px 15px; display: flex; gap: 10px; align-items: center; z-index: 999; max-width: 600px; margin: 0 auto; flex-direction: column; }
 .chz-det-actions .row1 { display: flex; align-items: center; gap: 10px; width: 100%; }
 .chz-det-qty { display: flex; align-items: center; gap: 8px; background: var(--nav, #151a2d); border: 1px solid var(--bd, #2a3452); border-radius: 12px; padding: 5px; }
 .chz-det-qty-btn { width: 35px; height: 45px; background: transparent; border: none; color: #fff; font-size: 20px; font-weight: 600; cursor: pointer; }
@@ -23668,7 +23668,7 @@ window.APP.closeDetailsNew = function() {
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  background: #0d1120 !important;
+  background: var(--nav, #0d1120) !important;
   border-top: 1px solid #1f2742 !important;
   padding: 12px 15px !important;
   display: flex !important;
@@ -23691,7 +23691,7 @@ window.APP.closeDetailsNew = function() {
 #sc-details-new .chz-det-qty {
   display: flex !important;
   align-items: center !important;
-  background: #151a2d !important;
+  background: var(--nav, #151a2d) !important;
   border: 1px solid #2a3452 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -23772,7 +23772,7 @@ window.APP.closeDetailsNew = function() {
   bottom: 70px !important;
   left: 0 !important;
   right: 0 !important;
-  background: #0d1120 !important;
+  background: var(--nav, #0d1120) !important;
   border-top: 1px solid #1f2742 !important;
   padding: 12px 15px !important;
   display: flex !important;
@@ -23787,7 +23787,7 @@ window.APP.closeDetailsNew = function() {
 #sc-details-new .chz-det-actions > .chz-det-qty {
   display: flex !important;
   align-items: center !important;
-  background: #151a2d !important;
+  background: var(--nav, #151a2d) !important;
   border: 1px solid #2a3452 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -23879,7 +23879,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   bottom: 70px !important;
   left: 0 !important;
   right: 0 !important;
-  background: #0d1120 !important;
+  background: var(--nav, #0d1120) !important;
   border-top: 1px solid #1f2742 !important;
   padding: 12px 15px !important;
   display: flex !important;
@@ -23900,7 +23900,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 #sc-details-new .chz-det-actions .row1 .chz-det-qty {
   display: flex !important;
   align-items: center !important;
-  background: #151a2d !important;
+  background: var(--nav, #151a2d) !important;
   border: 1px solid #2a3452 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -23986,7 +23986,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   bottom: 70px !important;
   left: 0 !important;
   right: 0 !important;
-  background: #0d1120 !important;
+  background: var(--nav, #0d1120) !important;
   border-top: 1px solid #1f2742 !important;
   padding: 12px 15px !important;
   display: flex !important;
@@ -24005,7 +24005,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 #sc-details-new .chz-det-qty {
   display: flex !important;
   align-items: center !important;
-  background: #151a2d !important;
+  background: var(--nav, #151a2d) !important;
   border: 1px solid #2a3452 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -24129,7 +24129,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 #sc-details-new .chz-det-size-option {
   padding: 8px 16px !important;
   border-radius: 10px !important;
-  background: #1e293b !important;
+  background: var(--nav, #1e293b) !important;
   border: 1px solid #334155 !important;
   color: #cbd5e1 !important;
   font-size: 13px !important;
@@ -24235,7 +24235,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   grid-row: 1 !important;
   display: flex !important;
   align-items: center !important;
-  background: #151a2d !important;
+  background: var(--nav, #151a2d) !important;
   border: 1px solid #2a3452 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -24322,7 +24322,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   gap: 10px !important;
 }
 #reviewsList > div {
-  background: #151a2d !important;
+  background: var(--nav, #151a2d) !important;
   border: 1px solid #1f2742 !important;
   border-radius: 12px !important;
   padding: 12px !important;
@@ -24440,11 +24440,11 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 .chz-review-textarea {
   width: 100% !important;
   min-height: 80px !important;
-  background: #0f1425 !important;
-  border: 1px solid #2a3452 !important;
+  background: var(--bg2, #0d1120) !important;
+  border: 1px solid var(--bd, #2a3452);
   border-radius: 14px !important;
   padding: 14px !important;
-  color: #e2e8f0 !important;
+  color: var(--cr, #fff) !important;
   font-size: 14px !important;
   font-family: inherit !important;
   resize: vertical !important;
@@ -24476,7 +24476,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   box-shadow: 0 6px 20px rgba(236,72,153,0.5) !important;
 }
 .review-card {
-  background: #151a2d !important;
+  background: var(--nav, #151a2d) !important;
   border: 1px solid #2a3452 !important;
   border-radius: 16px !important;
   padding: 16px !important;
