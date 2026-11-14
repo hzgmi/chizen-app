@@ -9135,6 +9135,15 @@ html:not([data-theme="light"]) .tvl-form select option {
     <div class="screen" id="sc-cart">
       <div class="st"></div>
       <div class="sh2"><div class="st2" data-i18n="cart.title" data-i18n-ar="🛒 سلة التسوق">🛒 سلة التسوق</div></div>
+      <div id="chz-ship-bar" style="margin: 0 15px 16px; padding: 14px 16px; background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:12px;font-weight:800;color:#334155;" id="ship-bar-text"></span>
+          <span style="font-size:11px;color:#64748b;" id="ship-bar-amount"></span>
+        </div>
+        <div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;">
+          <div id="ship-bar-fill" style="height:100%;background:linear-gradient(90deg,#ec4899,#be185d);border-radius:4px;transition:width 0.4s ease;"></div>
+        </div>
+      </div>
       <div class="ch" id="cart-items" style="padding: 0 15px;"></div>
     </div>
     
@@ -12275,16 +12284,7 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
       
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCartFull(\''+esc(p.id)+'\',\''+(i.size||'')+'\',\''+(i.color||'')+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div>' + (specsHtml ? '<div style="margin:4px 0;">' + specsHtml + '</div>' : '') + '<div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',-1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">+</button></div></div></div>';
     }).join('');
-    html+='<div id="chz-ship-bar" style="margin-bottom:16px;padding:16px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'+
-        '<span style="font-size:12px;font-weight:800;color:#334155;" id="ship-bar-text"></span>'+
-        '<span style="font-size:11px;color:#64748b;" id="ship-bar-amount"></span>'+
-      '</div>'+
-      '<div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;">'+
-        '<div id="ship-bar-fill" style="height:100%;background:linear-gradient(90deg,#ec4899,#be185d);border-radius:4px;transition:width 0.4s ease;"></div>'+
-      '</div>'+
-    '</div>';
-    html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
+html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtotal" data-i18n-ar="المجموع">المجموع</span></span><span>'+sub+' ر.س</span></div><div class="tr"><span><span data-i18n="cart.shipping" data-i18n-ar="الشحن">الشحن</span></span><span>'+(shipF===0?'مجاني':shipF+' ر.س')+'</span></div><div class="tf"><span><span data-i18n="cart.total" data-i18n-ar="الإجمالي">الإجمالي</span></span><span>'+total+' ر.س</span></div></div><button class="btn-p" style="margin-top:16px;" onclick="APP.goCheckout()"><span data-i18n="cart.checkout" data-i18n-ar="إتمام الشراء">إتمام الشراء</span></button>';
     html+=(window.__v336RenderSuggested?window.__v336RenderSuggested():'');
     setTimeout(function(){ if (APP.updateShipBar) APP.updateShipBar(); }, 50);
     c.innerHTML=html;
