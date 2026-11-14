@@ -24727,37 +24727,43 @@ body.in-details #sc-details-new .chz-det-summary {
 
 
 
+
+
 <script>
+// ★★★ FINAL FORCE LAYOUT (Inline Styles) ★★★
 (function() {
-  function forceLayout() {
+  function applyForceLayout() {
     var isDetails = document.body.classList.contains("in-details");
     var nav = document.getElementById("bottom-nav");
     var aiBtn = document.getElementById("v2-fab") || document.querySelector(".v2-fab");
-    var actions = document.querySelector("#sc-details-new .chz-det-actions");
+    var actions = document.querySelector(".chz-det-actions");
 
     if (isDetails) {
-      // 1. إخفاء شريط التنقل وزر AI
-      if (nav) nav.style.setProperty("display", "none", "important");
-      if (aiBtn) aiBtn.style.setProperty("display", "none", "important");
+      // إخفاء شريط التنقل وزر AI بشكل قاطع
+      if (nav) { nav.style.setProperty("display", "none", "important"); }
+      if (aiBtn) { aiBtn.style.setProperty("display", "none", "important"); }
       
-      // 2. تثبيت شريط الشراء في الأسفل
+      // تثبيت شريط الشراء في الأسفل
       if (actions) {
-        actions.style.setProperty("display", "flex", "important");
         actions.style.setProperty("position", "fixed", "important");
         actions.style.setProperty("bottom", "0", "important");
+        actions.style.setProperty("left", "0", "important");
+        actions.style.setProperty("right", "0", "important");
         actions.style.setProperty("z-index", "99999", "important");
-        actions.style.setProperty("background", "#1e293b", "important");
+        actions.style.setProperty("background", "#1e293b", "important"); // لون داكن
         actions.style.setProperty("border-radius", "16px 16px 0 0", "important");
         actions.style.setProperty("padding-bottom", "20px", "important");
+        actions.style.setProperty("display", "flex", "important");
       }
     } else {
-      // العودة للوضع الطبيعي
-      if (nav) nav.style.removeProperty("display");
-      if (aiBtn) aiBtn.style.removeProperty("display");
-      
+      // إعادة كل شيء إلى طبيعته
+      if (nav) { nav.style.removeProperty("display"); }
+      if (aiBtn) { aiBtn.style.removeProperty("display"); }
       if (actions) {
         actions.style.removeProperty("position");
         actions.style.removeProperty("bottom");
+        actions.style.removeProperty("left");
+        actions.style.removeProperty("right");
         actions.style.removeProperty("z-index");
         actions.style.removeProperty("background");
         actions.style.removeProperty("border-radius");
@@ -24768,19 +24774,19 @@ body.in-details #sc-details-new .chz-det-summary {
   }
 
   // مراقبة تغير الكلاس في body
-  var observer = new MutationObserver(function(m) {
-    if (m[0].attributeName === "class") {
-      setTimeout(forceLayout, 50);
-    }
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.attributeName === "class" && m.target === document.body) {
+        setTimeout(applyForceLayout, 50);
+      }
+    });
   });
 
   document.addEventListener("DOMContentLoaded", function() {
     observer.observe(document.body, { attributes: true });
-    // تشغيل عند التحميل
-    forceLayout();
-    
-    // مراقبة إضافية لضمان عدم تدخل أي سكربت آخر
-    setInterval(forceLayout, 1000);
+    applyForceLayout(); // تطبيق أولي
+    // تطبيق مستمر كل ثانية لضمان عدم تدخل أي ملف آخر
+    setInterval(applyForceLayout, 1000);
   });
 })();
 </script>
