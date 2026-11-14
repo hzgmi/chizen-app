@@ -24581,9 +24581,7 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
 }
 
 /* ═══ إخفاء زر AI في صفحة التفاصيل ═══ */
-.chat-fab, .ai-fab, #ai-btn, [class*="ai-button"] {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease !important;
-}
+
 body.in-details .chat-fab,
 body.in-details .ai-fab,
 body.in-details #ai-btn,
@@ -24595,10 +24593,7 @@ body.in-details [class*="ai-button"] {
 
 /* ═══ إصلاح الشريط السفلي بعد إخفاء شريط التنقل ═══ */
 /* نعطي الشريط مساحة إضافية من الأسفل */
-body.in-details #sc-details-new .chz-det-actions {
-  bottom: 0 !important;
-  padding: 12px 15px 20px 15px !important; /* زيادة الحشوة السفلية */
-}
+
 
 /* ═══ إصلاح الأزرار (حل مشكلة الضغط) ═══ */
 #sc-details-new .chz-det-actions .chz-det-btn-cart,
@@ -24614,13 +24609,40 @@ body.in-details #sc-details-new .chz-det-actions {
 }
 
 /* ═══ إخفاء زر AI (v2-fab) في صفحة التفاصيل ═══ */
-#v2-fab {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease !important;
+
+body.in-details 
+
+/* ═══ IMMERSIVE MODE (الوضع الغامر) ═══ */
+/* إخفاء شريط التنقل الرئيسي عند دخول التفاصيل */
+body.in-details #bottom-nav {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
 }
-body.in-details #v2-fab {
+#bottom-nav {
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+}
+
+/* إخفاء زر AI العائم عند دخول التفاصيل */
+body.in-details #v2-fab,
+body.in-details .v2-fab,
+body.in-details .chat-fab,
+body.in-details .ai-fab,
+body.in-details #ai-btn {
   transform: translateY(150%) !important;
   opacity: 0 !important;
   pointer-events: none !important;
+  transition: transform 0.3s ease, opacity 0.3s ease !important;
+}
+
+/* إبقاء شريط الشراء ثابتاً في مكانه (فوق شريط التنقل) */
+/* لا نغيره، هو أصلاً position: fixed; bottom: 70px; */
+/* لكن نضمن أنه لا يتأثر بأي قاعدة أخرى */
+body.in-details #sc-details-new .chz-det-actions {
+  position: fixed !important;
+  bottom: 70px !important;
+  z-index: 999 !important;
 }
 </style>
 
