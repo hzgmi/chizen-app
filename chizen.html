@@ -24621,6 +24621,16 @@ body.in-details #sc-details-new .chz-det-actions {
   justify-content: center !important;
   white-space: nowrap !important; /* منع قطع النص */
 }
+
+/* ═══ إخفاء زر AI (v2-fab) في صفحة التفاصيل ═══ */
+#v2-fab {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease !important;
+}
+body.in-details #v2-fab {
+  transform: translateY(150%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
