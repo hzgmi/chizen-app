@@ -6305,7 +6305,7 @@ html[data-theme="light"] {
   --pk-pink: #d81b60;
 }
 .pickup-overlay-v3 { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: flex-end; justify-content: center; }
-.pickup-sheet-v3 { background: var(--pk-bg); border-radius: 24px 24px 0 0; width: 100%; max-width: 500px; max-height: 92vh; overflow-y: auto; padding: 8px 20px 24px; font-family: Tajawal, sans-serif; direction: rtl; box-shadow: 0 -8px 40px rgba(0,0,0,0.5); }
+.pickup-sheet-v3 { background: var(--pk-bg); border-radius: 24px 24px 0 0; width: 100%; max-width: 100%; max-height: 95vh; overflow-y: auto; padding: 12px 20px 32px; font-family: Tajawal, sans-serif; direction: rtl; box-shadow: 0 -8px 40px rgba(0,0,0,0.5); }
 .pickup-tab-v3 { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid var(--pk-border); background: var(--pk-input); color: var(--pk-sub); font-family: Tajawal, sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; }
 .pickup-tab-v3.active { background: linear-gradient(135deg, #ec4899, #8b5cf6); color: #fff; border-color: transparent; }
 </style>
@@ -16533,7 +16533,7 @@ document.addEventListener('keydown', function(e) {
           '<input type="text" id="pickup-search-v3" placeholder="ابحث عن منطقتك..." style="width:100%;padding:12px 40px 12px 14px;border-radius:12px;border:1.5px solid var(--pk-border);background:var(--pk-input);color:var(--pk-text);font-family:Tajawal,sans-serif;font-size:13px;box-sizing:border-box;outline:none;">' +
           '<span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;">🔍</span>' +
         '</div>' +
-        '<div id="pickup-content-v3" style="max-height:240px;overflow-y:auto;margin-bottom:12px;"></div>' +
+        '<div id="pickup-content-v3" style="max-height:55vh;overflow-y:auto;margin-bottom:12px;"></div>' +
         '<button onclick="window.__pickupManual()" style="width:100%;padding:12px;border-radius:12px;border:2px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.08);color:#a855f7;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;">✏️ إدخال عنوان يدوي</button>' +
       '</div>' +
     '</div>';
