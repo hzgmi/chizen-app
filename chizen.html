@@ -23562,19 +23562,31 @@ window.APP.closeDetailsNew = function() {
           if (section) section.style.display = "none";
           return;
         }
-        grid.innerHTML = related.map(function(r) {
-          var img = r.img || r.image || (r.images && r.images[0]) || "";
-          var price = Number(r.price) || 0;
-          return '<div class="p-card" onclick="APP.openProductNew(\'' + r.id + '\')" style="cursor:pointer;">' +
-            '<div style="width:100%;height:140px;background:#f1f5f9;border-radius:10px;overflow:hidden;">' +
-              '<img src="' + img + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.src=\'https://via.placeholder.com/200\'">' +
-            '</div>' +
-            '<div style="padding:8px 4px;">' +
-              '<div style="font-size:12px;font-weight:700;color:var(--cr,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (r.name || 'منتج') + '</div>' +
-              '<div style="font-size:13px;font-weight:900;color:#ec4899;margin-top:4px;">' + price.toLocaleString("en") + ' ر.س</div>' +
-            '</div>' +
-          '</div>';
-        }).join("");
+        // ★ استخدام دالة renderProducts لبناء بطاقات السوق الأصلية ★
+        if (typeof APP.renderProducts === "function") {
+          APP.renderProducts(related, grid);
+        } else {
+          // احتياطي: بناء يدوي إذا لم تكن الدالة موجودة
+          grid.innerHTML = related.map(function(r) {
+            var img = r.img || r.image || (r.images && r.images[0]) || "";
+            var price = Number(r.priceYER || r.price) || 0;
+            var priceSAR = Number(r.priceSAR) || (price / 135);
+            var priceUSD = Number(r.priceUSD) || (price / 505);
+            return '<div class="p-card" onclick="APP.openProductNew(\'' + r.id + '\')" style="cursor:pointer;">' +
+              '<div style="width:100%;height:140px;background:#f1f5f9;border-radius:10px;overflow:hidden;">' +
+                '<img src="' + img + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.src=\'https://via.placeholder.com/200\'">' +
+              '</div>' +
+              '<div style="padding:8px 4px;">' +
+                '<div style="font-size:11px;font-weight:700;color:var(--cr,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (r.name || 'منتج') + '</div>' +
+                '<div style="font-size:12px;font-weight:900;color:#ec4899;margin-top:4px;">' + price.toLocaleString("en") + ' ر.ي</div>' +
+                '<div style="display:flex;gap:4px;margin-top:4px;font-size:10px;color:#64748b;">' +
+                  '<span>﷼ ' + priceSAR.toFixed(2) + '</span>' +
+                  '<span>$ ' + priceUSD.toFixed(2) + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+          }).join("");
+        }
       }, 150);
     })();
     window.APP.currentQty = 1;
