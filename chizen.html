@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html data-theme="light" lang="ar" dir="rtl" style="background:#faf7ff !important;color-scheme:light">
-<head><script>
-// ★ Global Error Guard: يمنع خطأ "p is not defined" من إيقاف التطبيق
-window.addEventListener("error", function(e) {
-  if (e.message && (e.message.indexOf("p is not defined") !== -1 || e.message.indexOf("\"p\" is not defined") !== -1)) {
-    console.warn("[Guard] Caught non-critical error:", e.message);
-    e.preventDefault();
-    return true;
-  }
-}, true);
-</script>
+<head>
 <!-- force-rebuild-1794005757 -->
 <!-- v335-critical-light: LIGHT theme is the app default, always -->
 <meta name="color-scheme" content="light only">
@@ -23293,7 +23284,6 @@ if (window.APP.products && window.APP.products.length) {
     document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
     var det = document.getElementById("sc-details-new");
     if (det) det.classList.add("active");
-    document.body.classList.add("in-details"); // ★ Immersive mode
 
     try {
       window.fillDetailsNew(p);
@@ -23343,7 +23333,6 @@ if (window.APP.products && window.APP.products.length) {
 window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.remove('active');
-    document.body.classList.remove("in-details"); // ★ Exit immersive
     document.querySelectorAll('.screen').forEach(function(s) {
       if (s.id === 'sc-home') s.classList.add('active');
     });
@@ -23654,7 +23643,6 @@ window.APP.closeDetailsNew = function() {
   window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.remove('active');
-    document.body.classList.remove("in-details"); // ★ Exit immersive
     document.querySelectorAll('.screen').forEach(function(s) {
       if (s.id === 'sc-home') s.classList.add('active');
     });
@@ -24568,238 +24556,10 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   font-weight: 600 !important;
   font-size: 11px !important;
 }
-
-/* ═══ IMMERSIVE MODE (صفحة التفاصيل) ═══ */
-#bottom-nav.chz-bottom-nav-v64 {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease !important;
-}
-
-
-/* رفع الشريط السفلي عند اختفاء شريط التنقل */
-
-
-/* تحسين تباعد الأزرار (حل مشكلة الازدحام) */
-#sc-details-new .chz-det-actions {
-  padding: 12px 15px !important;
-  gap: 10px !important;
-}
-#sc-details-new .chz-det-actions .chz-det-btn-cart,
-#sc-details-new .chz-det-actions .chz-det-btn-buy {
-  padding: 14px 10px !important;
-  font-size: 13px !important;
-}
-
-/* ═══ إخفاء زر AI في صفحة التفاصيل ═══ */
-
-
-
-/* ═══ إصلاح الشريط السفلي بعد إخفاء شريط التنقل ═══ */
-/* نعطي الشريط مساحة إضافية من الأسفل */
-
-
-/* ═══ إصلاح الأزرار (حل مشكلة الضغط) ═══ */
-#sc-details-new .chz-det-actions .chz-det-btn-cart,
-#sc-details-new .chz-det-actions .chz-det-btn-buy {
-  height: 46px !important;
-  line-height: 46px !important; /* لضمان توسط النص رأسياً */
-  padding: 0 10px !important;   /* إزالة الحشوة الرأسية */
-  margin: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  white-space: nowrap !important; /* منع قطع النص */
-}
-
-/* ═══ إخفاء زر AI (v2-fab) في صفحة التفاصيل ═══ */
-
-
-
-/* إخفاء زر AI العائم عند دخول التفاصيل */
-
-
-/* إبقاء شريط الشراء ثابتاً في مكانه (فوق شريط التنقل) */
-/* لا نغيره، هو أصلاً position: fixed; bottom: 70px; */
-/* لكن نضمن أنه لا يتأثر بأي قاعدة أخرى */
-
-
-/* ═══ 1. إخفاء شريط التنقل الرئيسي ═══ */
-
-
-/* ═══ 2. تثبيت شريط الشراء (السلة والعداد) في الأسفل مباشرة ═══ */
-
-
-/* ═══ 3. ضمان ظهور المقاسات والبوكسات داخل الشريط ═══ */
-
-
-/* ═══ الحل الجذري: إخفاء شريط التنقل بصرياً دون كسر التخطيط ═══ */
-#bottom-nav {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  transform: translateY(0) !important;
-}
-
-
-/* زر AI: نستخدم نفس الحيلة */
-#v2-fab {
-  transition: transform 0.35s ease, opacity 0.25s ease !important;
-}
-
-
-/* شريط الشراء: يبقى في مكانه الطبيعي (bottom: 70px) */
-/* لأن شريط التنقل تحت الشاشة، سيبدو وكأنه في الأسفل */
-/* نضيف فقط مساحة سفلية ليبدو أنيقاً */
-
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
-
-<script>
-// ★ Safety: إزالة in-details عند أي تغيير في الشاشات
-(function() {
-  function cleanup() {
-    var det = document.getElementById("sc-details-new");
-    if (!det || !det.classList.contains("active")) {
-      if (document.body.classList.contains("in-details")) {
-        document.body.classList.remove("in-details");
-      }
-    }
-  }
-  // عند تغيير history (زر الرجوع)
-  window.addEventListener("popstate", cleanup);
-  // عند أي استدعاء لـ goTab
-  if (window.APP && window.APP.goTab) {
-    var origGoTab = window.APP.goTab;
-    window.APP.goTab = function(tab) {
-      document.body.classList.remove("in-details");
-      return origGoTab.apply(this, arguments);
-    };
-  }
-})();
-</script>
-
-
-
-<script>
-(function() {
-  // دالة الحذف المباشر
-  function forceHideAI() {
-    if (!document.body.classList.contains("in-details")) return;
-    
-    // نبحث عن كل العناصر
-    var all = document.querySelectorAll("div, button, a, span, i, svg");
-    all.forEach(function(el) {
-      var style = window.getComputedStyle(el);
-      // إذا كان العنصر عائماً (fixed) وفي الزاوية اليسرى السفلى
-      if (style.position === "fixed" && (style.bottom !== "auto" || style.top !== "auto")) {
-        var rect = el.getBoundingClientRect();
-        // إذا كان في النصف السفلي من الشاشة
-        if (rect.top > window.innerHeight / 2) {
-          // التحقق مما إذا كان يحتوي على كلمة AI أو أيقونة روبوت
-          var html = el.innerHTML.toLowerCase();
-          var text = el.textContent.toLowerCase();
-          if (html.indexOf("ai") !== -1 || text.indexOf("ai") !== -1 || html.indexOf("robot") !== -1 || html.indexOf("bot") !== -1) {
-            el.style.setProperty("display", "none", "important");
-            el.style.setProperty("opacity", "0", "important");
-            el.style.setProperty("pointer-events", "none", "important");
-            el.style.setProperty("visibility", "hidden", "important");
-          }
-        }
-      }
-    });
-  }
-
-  // نراقب تغير الكلاس في body
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(m) {
-      if (m.attributeName === "class" && m.target === document.body) {
-        if (document.body.classList.contains("in-details")) {
-          forceHideAI();
-          setTimeout(forceHideAI, 300);
-          setTimeout(forceHideAI, 800);
-        }
-      }
-    });
-  });
-  
-  document.addEventListener("DOMContentLoaded", function() {
-    observer.observe(document.body, { attributes: true });
-    
-    // أيضاً نستدعي الدالة بشكل متكرر كخطة بديلة
-    setInterval(function() {
-      if (document.body.classList.contains("in-details")) {
-        forceHideAI();
-      }
-    }, 1000);
-  });
-})();
-</script>
-
-
-
-
-
-
-
-<script>
-(function() {
-  function fixDetailsLayout() {
-    var isDetails = document.body.classList.contains("in-details");
-    var nav = document.getElementById("bottom-nav");
-    var aiBtn = document.getElementById("v2-fab") || document.querySelector(".v2-fab");
-    
-    // العنصر الذي يحتوي على السلة والعداد (شريط الشراء)
-    var actions = document.querySelector("#sc-details-new .chz-det-actions");
-
-    if (isDetails) {
-      // 1. إخفاء شريط التنقل وزر AI
-      if (nav) { nav.style.setProperty("display", "none", "important"); }
-      if (aiBtn) { aiBtn.style.setProperty("display", "none", "important"); }
-      
-      // 2. إظهار شريط الشراء وتثبيته في الأسفل
-      if (actions) {
-        actions.style.setProperty("display", "flex", "important");
-        actions.style.setProperty("position", "fixed", "important");
-        actions.style.setProperty("bottom", "0", "important");
-        actions.style.setProperty("left", "0", "important");
-        actions.style.setProperty("right", "0", "important");
-        actions.style.setProperty("z-index", "99999", "important");
-        actions.style.setProperty("background", "#1e293b", "important");
-        actions.style.setProperty("border-radius", "16px 16px 0 0", "important");
-        actions.style.setProperty("padding-bottom", "20px", "important");
-      }
-    } else {
-      // العودة للوضع الطبيعي
-      if (nav) { nav.style.removeProperty("display"); }
-      if (aiBtn) { aiBtn.style.removeProperty("display"); }
-      
-      if (actions) {
-        actions.style.removeProperty("display");
-        actions.style.removeProperty("position");
-        actions.style.removeProperty("bottom");
-        actions.style.removeProperty("left");
-        actions.style.removeProperty("right");
-        actions.style.removeProperty("z-index");
-        actions.style.removeProperty("background");
-        actions.style.removeProperty("border-radius");
-        actions.style.removeProperty("padding-bottom");
-      }
-    }
-  }
-
-  // تطبيق فوري عند أي تغيير في كلاس body
-  var observer = new MutationObserver(function(m) {
-    if (m[0].attributeName === "class") {
-      setTimeout(fixDetailsLayout, 30);
-    }
-  });
-
-  document.addEventListener("DOMContentLoaded", function() {
-    observer.observe(document.body, { attributes: true });
-    // تطبيق مستمر لضمان عدم تدخل أي سكربت آخر
-    setInterval(fixDetailsLayout, 500);
-  });
-})();
-</script>
 </body>
 </html
     renderPassengers: function() {
