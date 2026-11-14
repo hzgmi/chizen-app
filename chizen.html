@@ -11113,6 +11113,10 @@ var APP={
     self.applyState();
     self.syncBg();
     self.setupHistory();
+    // ★ تحميل نقاط التسليم في الخلفية (لتكون جاهزة فوراً)
+    setTimeout(function() {
+      if (window.__preloadPickupData) window.__preloadPickupData();
+    }, 2000);
   },
   
   onCountryChange:function(country){
@@ -16483,6 +16487,11 @@ document.addEventListener('keydown', function(e) {
     });
   }
   
+  // ★ تحميل البيانات مسبقاً (للفتح الفوري)
+  window.__preloadPickupData = function() {
+    if (!dataLoaded) loadPickupData();
+  };
+
   var state = {
     tab: 'aden',
     view: 'districts',
