@@ -24813,6 +24813,65 @@ html[data-theme="light"] #sc-details-new .chz-sum-item {
   border: 1px solid #fce7f3 !important;
   color: #be185d !important;
 }
+
+/* ═══ إصلاح النصوص الباهتة والمربعات (الوضع الفاتح) ═══ */
+html[data-theme="light"] #sc-details-new {
+  /* 1. إصلاح أزرار المقاسات والبوكسات: نص داكن */
+  .chz-det-size-option,
+  .chz-det-size-btn {
+    color: #334155 !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+  
+  /* إصلاح الزر المختار (يبقى وردياً) */
+  .chz-det-size-option.selected,
+  .chz-det-size-btn.selected {
+    background: #ec4899 !important;
+    color: #ffffff !important;
+    border-color: #ec4899 !important;
+  }
+  
+  /* 2. إصلاح الكلمات الباهتة في المميزات (مثل "غلا / هلل") */
+  .chz-det-feat-list li,
+  .chz-det-spec-list li,
+  .chz-spec-card,
+  .chz-spec-key,
+  .chz-spec-val {
+    color: #334155 !important;
+  }
+  
+  /* 3. إعطاء المربعات خلفية ناعمة بدلاً من الشفافية */
+  .chz-spec-card,
+  .chz-det-feat-list li {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+  }
+  
+  /* 4. إصلاح عنوان "المواصفات" و "المميزات" */
+  .chz-det-spec-box h3,
+  .chz-det-feat-box h3 {
+    color: #0f172a !important;
+  }
+  
+  /* 5. إصلاح زر أضف للسلة (إذا كان النص باهتاً) */
+  .chz-det-btn-cart {
+    color: #be185d !important;
+    background: #ffffff !important;
+    border: 1px solid #fce7f3 !important;
+  }
+  
+  /* 6. إصلاح زر العداد (+ و -) */
+  .chz-det-qty-btn {
+    color: #be185d !important;
+    background: transparent !important;
+  }
+  .chz-det-qty-val {
+    color: #0f172a !important;
+  }
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
