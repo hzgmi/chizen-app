@@ -733,13 +733,112 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .sh2{padding:12px 20px;display:flex;align-items:center;gap:12px;}
 .st2{font-size:18px;font-weight:900;color:var(--cr);}
 .ch{padding:8px 20px 20px;}
-.ci{display:flex;gap:12px;background:var(--nav);border:1.5px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:10px;}
-.ci-i{width:76px;height:76px;background: #f4f6fa;border-radius:12px;overflow:hidden;flex-shrink:0;position:relative;}
-.ci-i img{width:100%;height:100%;object-fit:cover;}
-.ci-inf{flex:1;display:flex;flex-direction:column;justify-content:space-between;}
-.ci-n{font-size:13px;font-weight:700;color:var(--cr);}
-.ci-p{font-size:14px;font-weight:900;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:4px;}
-.qty{display:flex;align-items:center;gap:10px;margin-top:6px;}
+
+/* ═══ بطاقة المنتج في السلة (تصميم عالمي) ═══ */
+.ci {
+  display: flex !important;
+  gap: 12px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+  margin-bottom: 12px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+  position: relative !important;
+  align-items: stretch !important;
+}
+.ci-i {
+  width: 90px !important;
+  height: 90px !important;
+  background: #f8fafc !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+.ci-i img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.ci-inf {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding-right: 8px !important;
+}
+.ci-n {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  line-height: 1.4 !important;
+  margin-bottom: 4px !important;
+  padding-left: 24px !important;
+}
+.ci-p {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: #ec4899 !important;
+  background: none !important;
+  -webkit-text-fill-color: #ec4899 !important;
+  margin-bottom: 6px !important;
+}
+.qty {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: #f1f5f9 !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  width: fit-content !important;
+  margin-top: auto !important;
+}
+.qty .qb {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 6px !important;
+  border: none !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+.qty .qn {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+  min-width: 20px !important;
+  text-align: center !important;
+}
+/* زر الحذف */
+.cr {
+  position: absolute !important;
+  top: 8px !important;
+  left: 8px !important;
+  width: 22px !important;
+  height: 22px !important;
+  background: #fee2e2 !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 5 !important;
+}
+.cr svg {
+  width: 12px !important;
+  height: 12px !important;
+  stroke: #ef4444 !important;
+  stroke-width: 2.5 !important;
+}
+.cr line { stroke: #ef4444 !important; }
+
 .qb{width:26px;height:26px;background:var(--ce);border:1.5px solid var(--bd);border-radius:8px;color:var(--pl);font-size:14px;font-weight:900;cursor:pointer;}
 .qn{font-size:13px;font-weight:900;color:var(--cr);min-width:20px;text-align:center;}
 .cr{position:absolute;top:4px;right:4px;width:22px;height:22px;background:var(--rd);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--cd);}
