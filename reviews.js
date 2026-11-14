@@ -204,7 +204,7 @@ window.showToast = function(msg) {
     }
 
     db.collection('reviews')
-      .where('productId', '==', (window.currentProduct || (window.APP && window.APP.currentProd)).id)
+      .where('productId', '==', targetProductId) // ★ Strict: use cached target id, not live currentProduct
       .limit(20)
       .get()
       .then(function(snapshot) {
