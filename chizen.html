@@ -24614,12 +24614,7 @@ body.in-details
 
 /* ═══ IMMERSIVE MODE (الوضع الغامر) ═══ */
 /* إخفاء شريط التنقل الرئيسي عند دخول التفاصيل */
-body.in-details #bottom-nav {
-  transform: translateY(100%) !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: transform 0.3s ease, opacity 0.3s ease !important;
-}
+
 #bottom-nav {
   transition: transform 0.3s ease, opacity 0.3s ease !important;
 }
@@ -24639,10 +24634,38 @@ body.in-details #ai-btn {
 /* إبقاء شريط الشراء ثابتاً في مكانه (فوق شريط التنقل) */
 /* لا نغيره، هو أصلاً position: fixed; bottom: 70px; */
 /* لكن نضمن أنه لا يتأثر بأي قاعدة أخرى */
+
+
+/* ═══ 1. إخفاء شريط التنقل الرئيسي ═══ */
+body.in-details #bottom-nav {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: all 0.3s ease !important;
+}
+
+/* ═══ 2. تثبيت شريط الشراء (السلة والعداد) في الأسفل مباشرة ═══ */
 body.in-details #sc-details-new .chz-det-actions {
   position: fixed !important;
-  bottom: 70px !important;
-  z-index: 999 !important;
+  bottom: 0 !important;          /* يلتصق بأسفل الشاشة لأن شريط التنقل مخفي */
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  background: #1e293b !important; /* لون داكن ليتناسب مع التصميم */
+  border-top: 1px solid #334155 !important;
+  border-radius: 16px 16px 0 0 !important; /* حواف علوية دائرية */
+  padding: 12px 15px 25px 15px !important; /* مساحة سفلية أمان */
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.5) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+/* ═══ 3. ضمان ظهور المقاسات والبوكسات داخل الشريط ═══ */
+body.in-details #sc-details-new .chz-det-summary {
+  display: flex !important;
+  width: 100% !important;
+  margin-bottom: 5px !important;
 }
 </style>
 
