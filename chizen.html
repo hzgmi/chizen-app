@@ -24620,16 +24620,7 @@ body.in-details
 }
 
 /* إخفاء زر AI العائم عند دخول التفاصيل */
-body.in-details #v2-fab,
-body.in-details .v2-fab,
-body.in-details .chat-fab,
-body.in-details .ai-fab,
-body.in-details #ai-btn {
-  transform: translateY(150%) !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: transform 0.3s ease, opacity 0.3s ease !important;
-}
+
 
 /* إبقاء شريط الشراء ثابتاً في مكانه (فوق شريط التنقل) */
 /* لا نغيره، هو أصلاً position: fixed; bottom: 70px; */
@@ -24637,29 +24628,10 @@ body.in-details #ai-btn {
 
 
 /* ═══ 1. إخفاء شريط التنقل الرئيسي ═══ */
-body.in-details #bottom-nav {
-  transform: translateY(100%) !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: all 0.3s ease !important;
-}
+
 
 /* ═══ 2. تثبيت شريط الشراء (السلة والعداد) في الأسفل مباشرة ═══ */
-body.in-details #sc-details-new .chz-det-actions {
-  position: fixed !important;
-  bottom: 0 !important;          /* يلتصق بأسفل الشاشة لأن شريط التنقل مخفي */
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 9999 !important;
-  background: #1e293b !important; /* لون داكن ليتناسب مع التصميم */
-  border-top: 1px solid #334155 !important;
-  border-radius: 16px 16px 0 0 !important; /* حواف علوية دائرية */
-  padding: 12px 15px 25px 15px !important; /* مساحة سفلية أمان */
-  box-shadow: 0 -10px 30px rgba(0,0,0,0.5) !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 10px !important;
-}
+
 
 /* ═══ 3. ضمان ظهور المقاسات والبوكسات داخل الشريط ═══ */
 body.in-details #sc-details-new .chz-det-summary {
@@ -24749,6 +24721,51 @@ body.in-details #sc-details-new .chz-det-summary {
         forceHideAI();
       }
     }, 1000);
+  });
+})();
+</script>
+
+<script>
+// ★ التحكم المباشر في الشريط السفلي عند فتح/إغلاق المنتج
+(function() {
+  function applyImmersiveMode() {
+    var isDetails = document.body.classList.contains("in-details");
+    var nav = document.getElementById("bottom-nav");
+    var aiBtn = document.getElementById("v2-fab");
+    var actions = document.querySelector("#sc-details-new .chz-det-actions");
+    
+    if (isDetails) {
+      if (nav) nav.style.display = "none";
+      if (aiBtn) aiBtn.style.display = "none";
+      if (actions) {
+        actions.style.bottom = "0px";
+        actions.style.borderRadius = "16px 16px 0 0";
+        actions.style.paddingBottom = "20px";
+      }
+    } else {
+      if (nav) nav.style.display = "";
+      if (aiBtn) aiBtn.style.display = "";
+      if (actions) {
+        actions.style.bottom = "70px"; // القيمة الافتراضية
+        actions.style.borderRadius = "";
+        actions.style.paddingBottom = "12px";
+      }
+    }
+  }
+
+  // مراقبة تغيير الكلاس على body
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.attributeName === "class" && m.target === document.body) {
+        setTimeout(applyImmersiveMode, 50); // تأخير بسيط لضمان جاهزية العناصر
+      }
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    observer.observe(document.body, { attributes: true });
+    // التطبيق الأولي
+    applyImmersiveMode();
   });
 })();
 </script>
