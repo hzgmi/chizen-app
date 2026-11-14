@@ -24616,7 +24616,7 @@ html[data-theme="light"] #sc-details-new {
   background: #f8fafc !important;
 }
 html[data-theme="light"] .chz-det-reviews-title,
-html[data-theme="light"] .chz-det-section-title,
+html[data-theme="light"] #sc-details-new .chz-det-section-title,
 html[data-theme="light"] .chz-feat-title,
 html[data-theme="light"] .chz-specs-title,
 html[data-theme="light"] .chz-det-desc-title {
@@ -24871,6 +24871,16 @@ html[data-theme="light"] #sc-details-new {
   .chz-det-qty-val {
     color: #0f172a !important;
   }
+}
+
+/* ═══ إصلاح قوي لعناوين المقاسات والعبوات (الوضع الفاتح) ═══ */
+html[data-theme="light"] #sc-details-new .chz-det-section-title {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+html[data-theme="light"] #sc-details-new .chz-det-section-title::before {
+  display: none !important;
 }
 </style>
 
