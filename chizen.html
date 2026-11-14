@@ -11116,6 +11116,9 @@ var APP={
     // ★ تحميل نقاط التسليم في الخلفية (لتكون جاهزة فوراً)
     setTimeout(function() {
       if (window.__preloadPickupData) window.__preloadPickupData();
+      if (window.FB && FB.listenToConfig) {
+        FB.listenToConfig('payments', function(p){ if(p && p.list){ window.APP.banks = p.list; try { localStorage.setItem('chizen_payments_cache', JSON.stringify(p.list)); } catch(e){} } });
+      }
     }, 2000);
   },
   
@@ -12493,6 +12496,14 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
     var sub=this.cartTotal();
     document.getElementById('co-sub').textContent=sub+' ر.س';
     document.getElementById('co-total').textContent=sub+' ر.س';
+    // ★ عرض البنوك من الكاش فوراً (قبل أن تصل من Firebase)
+    if (!this.banks || this.banks.length === 0) {
+      try {
+        var cached = localStorage.getItem('chizen_payments_cache');
+        if (cached) { this.banks = JSON.parse(cached); }
+      } catch(e) {}
+    }
+    this.renderBanks();
     this.navigate('checkout',true);
   },
   
