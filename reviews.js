@@ -189,6 +189,14 @@ window.showToast = function(msg) {
     var list = document.getElementById('reviewsList');
     if (!list) return;
 
+    // ★ Strict: عزل الطلب + Skeleton فوري
+    var targetProductId = String((window.currentProduct || (window.APP && window.APP.currentProd)).id);
+    if (window._reviewLoadToken) window._reviewLoadToken.cancelled = true;
+    var _token = { cancelled: false, productId: targetProductId };
+    window._reviewLoadToken = _token;
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:#64748b;font-size:12px;">⏳ جاري تحميل التقييمات...</div>';
+    // ★
+
     // إذا لم يكن currentUserId جاهزاً، انتظر قليلاً
     if (!currentUserId) {
       setTimeout(window.loadReviews, 300);
