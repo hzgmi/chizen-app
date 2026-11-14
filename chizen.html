@@ -23544,6 +23544,39 @@ window.APP.closeDetailsNew = function() {
 
     // الكمية
     document.getElementById('det-new-qty').textContent = '1';
+
+    // ★ منتجات قد تعجبك (أسفل التقييمات) ★
+    (function() {
+      setTimeout(function() {
+        var grid = document.getElementById("related-products-grid");
+        if (!grid) return;
+        var allProds = window.APP.products || [];
+        var related = allProds.filter(function(x) {
+          return x.category === p.category && String(x.id) !== String(p.id);
+        }).slice(0, 4);
+        if (related.length === 0) {
+          related = allProds.filter(function(x) { return String(x.id) !== String(p.id); }).slice(0, 4);
+        }
+        if (related.length === 0) {
+          var section = document.getElementById("related-products-bottom");
+          if (section) section.style.display = "none";
+          return;
+        }
+        grid.innerHTML = related.map(function(r) {
+          var img = r.img || r.image || (r.images && r.images[0]) || "";
+          var price = Number(r.price) || 0;
+          return '<div class="p-card" onclick="APP.openProductNew(\'' + r.id + '\')" style="cursor:pointer;">' +
+            '<div style="width:100%;height:140px;background:#f1f5f9;border-radius:10px;overflow:hidden;">' +
+              '<img src="' + img + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.src=\'https://via.placeholder.com/200\'">' +
+            '</div>' +
+            '<div style="padding:8px 4px;">' +
+              '<div style="font-size:12px;font-weight:700;color:var(--cr,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (r.name || 'منتج') + '</div>' +
+              '<div style="font-size:13px;font-weight:900;color:#ec4899;margin-top:4px;">' + price.toLocaleString("en") + ' ر.س</div>' +
+            '</div>' +
+          '</div>';
+        }).join("");
+      }, 150);
+    })();
     window.APP.currentQty = 1;
   };
 
@@ -24256,6 +24289,15 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
         <i class="fas fa-check-circle"></i> لقد قمت بتقييم هذا المنتج مسبقاً. شكراً لك!
       </div>
       <div id="reviewsList"></div>
+    </div>
+
+    <!-- ★ منتجات قد تعجبك ★ -->
+    <div id="related-products-bottom" style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08);">
+      <div style="font-size: 16px; font-weight: 900; color: var(--cr, #fff); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+        <span style="display:inline-block; width:4px; height:18px; background:linear-gradient(180deg,#ec4899,#be185d); border-radius:4px;"></span>
+        ✨ منتجات قد تعجبك
+      </div>
+      <div id="related-products-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;"></div>
     </div>
 
     <div class="chz-det-actions">
