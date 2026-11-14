@@ -208,6 +208,11 @@ window.showToast = function(msg) {
       .limit(20)
       .get()
       .then(function(snapshot) {
+        // ★ Strict Guard 1: منع عرض التقييمات إذا تغيّر المنتج أو أُلغي الطلب
+        if (_token.cancelled) { console.log("[Reviews] cancelled, skip render"); return; }
+        var _cur = window.currentProduct || (window.APP && window.APP.currentProd);
+        if (!_cur || String(_cur.id) !== targetProductId) { console.log("[Reviews] product changed, skip render"); return; }
+        // ★
         list.innerHTML = '';
         if (snapshot.empty) {
           list.innerHTML = '<div style="text-align:center;padding:15px;color:#94a3b8;font-size:12px;">لا توجد تقييمات بعد. كن أول من يقيم!</div>';
