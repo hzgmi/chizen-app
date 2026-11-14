@@ -23287,6 +23287,7 @@ if (window.APP.products && window.APP.products.length) {
 
     try {
       window.fillDetailsNew(p);
+    if (typeof window.APP.updateSummary === "function") setTimeout(window.APP.updateSummary, 100);
     } catch(e) {
       console.error("[openProductNew] fillDetailsNew failed:", e.message);
     }
@@ -23341,6 +23342,7 @@ window.APP.closeDetailsNew = function() {
     this.currentQty = Math.max(1, (this.currentQty || 1) + d);
     var qtyEl = document.getElementById('det-new-qty');
     if (qtyEl) qtyEl.textContent = this.currentQty;
+    if (typeof window.APP.updateSummary === "function") window.APP.updateSummary();
   };
 
   window.fillDetailsNew = function(p) {
@@ -23486,6 +23488,7 @@ window.APP.closeDetailsNew = function() {
             window.APP.selectedSize = item.value;
           };
           if (i === 0) window.APP.selectedSize = item.value;
+          if (typeof window.APP.updateSummary === "function") window.APP.updateSummary();
           sizesContainer.appendChild(div);
         });
       } else {
@@ -23549,6 +23552,7 @@ window.APP.closeDetailsNew = function() {
     el.classList.add('selected');
     window.APP.selectedSaleType = type;
     window.APP.selectedBoxes = (type === 'box') ? boxes : 1;
+    if (typeof window.APP.updateSummary === "function") window.APP.updateSummary();
   };
 })();
 </script>
@@ -23613,6 +23617,28 @@ window.APP.closeDetailsNew = function() {
   window.APP = window.APP || {};
 
   ;
+
+  // ═══ دالة تحديث ملخص الاختيار ═══
+  window.APP.updateSummary = function() {
+    var summaryEl = document.getElementById("det-new-summary");
+    var sumSize = document.getElementById("sum-size");
+    var sumBox = document.getElementById("sum-box");
+    var sumQty = document.getElementById("sum-qty");
+    if (!summaryEl || !sumSize || !sumBox || !sumQty) return;
+    
+    var p = window.currentProduct || (window.APP && window.APP.currentProd);
+    if (!p) { summaryEl.style.display = "none"; return; }
+    
+    var hasSize = window.APP.selectedSize && String(window.APP.selectedSize).length > 0;
+    var hasBox = window.APP.selectedSaleType;
+    var qty = window.APP.currentQty || 1;
+    
+    sumSize.innerHTML = hasSize ? '<span class="chz-sum-key">📏</span> ' + window.APP.selectedSize : "";
+    sumBox.innerHTML = hasBox ? '<span class="chz-sum-key">📦</span> ' + (window.APP.selectedSaleType === "piece" ? "قطعة فردية" : "بوكس كامل") : "";
+    sumQty.innerHTML = '<span class="chz-sum-key">🛒</span> ' + qty;
+    
+    summaryEl.style.display = (hasSize || hasBox || qty > 1) ? "flex" : "none";
+  };
 
   window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
@@ -24172,6 +24198,11 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
     </div>
 
     <div class="chz-det-actions">
+      <div class="chz-det-summary" id="det-new-summary" style="display:none;">
+        <span class="chz-sum-item" id="sum-size"></span>
+        <span class="chz-sum-item" id="sum-box"></span>
+        <span class="chz-sum-item" id="sum-qty"></span>
+      </div>
       <div class="chz-det-qty">
         <button class="chz-det-qty-btn" onclick="APP.changeDetailsQty(-1)">−</button>
         <span class="chz-det-qty-val" id="det-new-qty">1</span>
@@ -24489,6 +24520,41 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   color: #cbd5e1 !important;
   line-height: 1.6 !important;
   margin-top: 8px !important;
+}
+
+/* ═══ SUMMARY ROW (فوق أزرار الشريط السفلي) ═══ */
+#sc-details-new .chz-det-actions {
+  flex-wrap: wrap !important;
+  row-gap: 8px !important;
+}
+#sc-details-new .chz-det-summary {
+  flex: 0 0 100% !important;
+  display: flex !important;
+  gap: 8px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 6px 10px !important;
+  background: linear-gradient(90deg, rgba(236,72,153,0.08), rgba(139,92,246,0.08)) !important;
+  border-radius: 10px !important;
+  margin-bottom: 4px !important;
+}
+#sc-details-new .chz-sum-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  color: #f8fafc !important;
+  background: rgba(255,255,255,0.06) !important;
+  padding: 3px 10px !important;
+  border-radius: 20px !important;
+  white-space: nowrap !important;
+}
+#sc-details-new .chz-sum-item:empty { display: none !important; }
+#sc-details-new .chz-sum-item .chz-sum-key {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
 }
 </style>
 
