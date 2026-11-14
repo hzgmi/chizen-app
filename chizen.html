@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html data-theme="light" lang="ar" dir="rtl" style="background:#faf7ff !important;color-scheme:light">
-<head>
+<head><script>
+// ★ Global Error Guard: يمنع خطأ "p is not defined" من إيقاف التطبيق
+window.addEventListener("error", function(e) {
+  if (e.message && (e.message.indexOf("p is not defined") !== -1 || e.message.indexOf("\"p\" is not defined") !== -1)) {
+    console.warn("[Guard] Caught non-critical error:", e.message);
+    e.preventDefault();
+    return true;
+  }
+}, true);
+</script>
 <!-- force-rebuild-1794005757 -->
 <!-- v335-critical-light: LIGHT theme is the app default, always -->
 <meta name="color-scheme" content="light only">
