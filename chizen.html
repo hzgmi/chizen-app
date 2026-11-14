@@ -24650,24 +24650,61 @@ body.in-details #sc-details-new .chz-det-actions {
 })();
 </script>
 
+
+
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  var hideTimer = setInterval(function() {
-    if (document.body.classList.contains("in-details")) {
-      // البحث عن أي زر أو ديف يحتوي على النص "AI"
-      var els = document.querySelectorAll("div, button, a");
-      els.forEach(function(el) {
-        var text = (el.textContent || "").trim();
-        if (text === "AI" || text.indexOf("AI") === 0) {
-           var style = window.getComputedStyle(el);
-           if (style.position === "fixed" || el.style.position === "fixed") {
-              el.style.display = "none";
-           }
+(function() {
+  // دالة الحذف المباشر
+  function forceHideAI() {
+    if (!document.body.classList.contains("in-details")) return;
+    
+    // نبحث عن كل العناصر
+    var all = document.querySelectorAll("div, button, a, span, i, svg");
+    all.forEach(function(el) {
+      var style = window.getComputedStyle(el);
+      // إذا كان العنصر عائماً (fixed) وفي الزاوية اليسرى السفلى
+      if (style.position === "fixed" && (style.bottom !== "auto" || style.top !== "auto")) {
+        var rect = el.getBoundingClientRect();
+        // إذا كان في النصف السفلي من الشاشة
+        if (rect.top > window.innerHeight / 2) {
+          // التحقق مما إذا كان يحتوي على كلمة AI أو أيقونة روبوت
+          var html = el.innerHTML.toLowerCase();
+          var text = el.textContent.toLowerCase();
+          if (html.indexOf("ai") !== -1 || text.indexOf("ai") !== -1 || html.indexOf("robot") !== -1 || html.indexOf("bot") !== -1) {
+            el.style.setProperty("display", "none", "important");
+            el.style.setProperty("opacity", "0", "important");
+            el.style.setProperty("pointer-events", "none", "important");
+            el.style.setProperty("visibility", "hidden", "important");
+          }
         }
-      });
-    }
-  }, 500);
-});
+      }
+    });
+  }
+
+  // نراقب تغير الكلاس في body
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.attributeName === "class" && m.target === document.body) {
+        if (document.body.classList.contains("in-details")) {
+          forceHideAI();
+          setTimeout(forceHideAI, 300);
+          setTimeout(forceHideAI, 800);
+        }
+      }
+    });
+  });
+  
+  document.addEventListener("DOMContentLoaded", function() {
+    observer.observe(document.body, { attributes: true });
+    
+    // أيضاً نستدعي الدالة بشكل متكرر كخطة بديلة
+    setInterval(function() {
+      if (document.body.classList.contains("in-details")) {
+        forceHideAI();
+      }
+    }, 1000);
+  });
+})();
 </script>
 </body>
 </html
