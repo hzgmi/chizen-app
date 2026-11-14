@@ -24997,6 +24997,51 @@ html[data-theme="light"] #sc-details-new .chz-det-section-title::before {
 }
 .chz-color-swatch.selected { border-color: #ec4899; transform: scale(1.1); box-shadow: 0 0 15px rgba(236,72,153,0.4); }
 .chz-color-swatch:hover { transform: scale(1.05); }
+
+/* ═══ تنسيق شبكة المنتجات المقترحة (أفقي مصغر مثل السوق) ═══ */
+#related-products-grid {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  gap: 10px !important;
+  padding-bottom: 10px !important;
+  -webkit-overflow-scrolling: touch;
+}
+#related-products-grid::-webkit-scrollbar { display: none; }
+#related-products-grid .p-card {
+  min-width: 140px !important;
+  max-width: 140px !important;
+  flex-shrink: 0 !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+#related-products-grid .p-card img {
+  width: 100% !important;
+  height: 120px !important;
+  object-fit: cover !important;
+}
+#related-products-grid .p-card > div:last-child {
+  padding: 8px !important;
+}
+#related-products-grid .p-card .p-name,
+#related-products-grid .p-card > div > div:first-child {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin-bottom: 4px !important;
+}
+#related-products-grid .p-card .p-price,
+#related-products-grid .p-card > div > div:last-child {
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  color: #ec4899 !important;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
