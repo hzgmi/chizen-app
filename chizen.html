@@ -16499,7 +16499,6 @@ document.addEventListener('keydown', function(e) {
     searchQuery: ''
   };
 
-  var map = null;
   var mapMarkers = [];
 
   function isOpen() {
@@ -16509,7 +16508,7 @@ document.addEventListener('keydown', function(e) {
   function closePickup() {
     var o = document.querySelector('.pickup-overlay-v3');
     if (o) o.remove();
-    if (map) { try { map.remove(); } catch(e) {} map = null; }
+    // map removed
     mapMarkers = [];
     state.view = 'districts';
     state.district = null;
@@ -16529,7 +16528,7 @@ document.addEventListener('keydown', function(e) {
           '<button class="pickup-tab-v3 active" data-tab="aden" onclick="window.__pickupSwitchTab(&quot;aden&quot;)">🏙️ داخل عدن</button>' +
           '<button class="pickup-tab-v3" data-tab="yemen" onclick="window.__pickupSwitchTab(&quot;yemen&quot;)">🚌 خارج عدن</button>' +
         '</div>' +
-        '<div id="pickup-map-v3" style="height:220px;border-radius:14px;overflow:hidden;border:2px solid var(--pk-border);margin-bottom:14px;background:var(--pk-input);"></div>' +
+        
         '<div style="position:relative;margin-bottom:12px;">' +
           '<input type="text" id="pickup-search-v3" placeholder="ابحث عن منطقتك..." style="width:100%;padding:12px 40px 12px 14px;border-radius:12px;border:1.5px solid var(--pk-border);background:var(--pk-input);color:var(--pk-text);font-family:Tajawal,sans-serif;font-size:13px;box-sizing:border-box;outline:none;">' +
           '<span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;">🔍</span>' +
@@ -16540,60 +16539,8 @@ document.addEventListener('keydown', function(e) {
     '</div>';
   }
 
-  function clearMarkers() {
-    mapMarkers.forEach(function(m) { try { map.removeLayer(m); } catch(e) {} });
-    mapMarkers = [];
-  }
-
-  function renderMap() {
-    var el = document.getElementById('pickup-map-v3');
-    if (!el || typeof L === 'undefined') return;
-
-    if (!map) {
-      var center = state.tab === 'aden' ? [12.7895, 45.0099] : [15.3694, 44.1910];
-      var zoom = state.tab === 'aden' ? 12 : 6;
-      map = L.map(el, { center: center, zoom: zoom, zoomControl: true, attributionControl: false });
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
-    }
-
-    clearMarkers();
-
-    if (state.view === 'districts') {
-      var areas = state.tab === 'aden' ? ADEN_AREAS : YEMEN_CITIES;
-      areas.forEach(function(a) {
-        var m = L.marker([a.lat, a.lng], {
-          icon: L.divIcon({
-            className: '',
-            html: '<div style="background:linear-gradient(135deg,#ec4899,#8b5cf6);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);font-size:16px;">' + a.icon + '</div>',
-            iconSize: [36, 36], iconAnchor: [18, 18]
-          })
-        }).addTo(map)
-          .bindTooltip(a.name, { direction: 'top', offset: [0, -18] })
-          .on('click', function() { window.__pickupSelectDistrict(a.name); });
-        mapMarkers.push(m);
-      });
-      if (state.tab === 'aden') map.setView([12.7895, 45.0099], 12);
-      else map.setView([15.3694, 44.1910], 6);
-    } else if (state.view === 'points' && state.district) {
-      var d = state.district;
-      var points = d.points || [];
-      points.forEach(function(p) {
-        var m = L.marker([p.lat, p.lng], {
-          icon: L.divIcon({
-            className: '',
-            html: '<div style="background:linear-gradient(135deg,#10b981,#059669);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);font-size:16px;">' + (p.icon || '📦') + '</div>',
-            iconSize: [34, 34], iconAnchor: [17, 17]
-          })
-        }).addTo(map)
-          .bindTooltip(p.name, { direction: 'top', offset: [0, -17] })
-          .on('click', function() { window.__pickupSelectPoint(p.name); });
-        mapMarkers.push(m);
-      });
-      map.setView([d.lat, d.lng], 14);
-    }
-
-    setTimeout(function() { if (map) map.invalidateSize(); }, 200);
-  }
+  function clearMarkers() { mapMarkers = []; }
+  function renderMap() { /* removed */ }
 
   function renderContent() {
     var c = document.getElementById('pickup-content-v3');
@@ -16680,7 +16627,7 @@ document.addEventListener('keydown', function(e) {
     state.view = 'districts';
     state.district = null;
     state.searchQuery = '';
-    if (map) { try { map.remove(); } catch(e) {} map = null; }
+    // map removed
     updateUI();
   };
 
@@ -16703,7 +16650,7 @@ document.addEventListener('keydown', function(e) {
   window.__pickupBackToDistricts = function() {
     state.view = 'districts';
     state.district = null;
-    if (map) { try { map.remove(); } catch(e) {} map = null; }
+    // map removed
     updateUI();
   };
 
