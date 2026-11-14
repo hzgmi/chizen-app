@@ -12515,7 +12515,9 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
     var sub=this.cartTotal();
     document.getElementById('co-sub').textContent=sub+' ر.س';
     document.getElementById('co-total').textContent=sub+' ر.س';
-    // ★ عرض البنوك من الكاش فوراً (قبل أن تصل من Firebase)
+    
+    // ★ تحميل البنوك مباشرة من Firebase (إذا لم تكن محملة)
+    var self = this;
     if (!this.banks || this.banks.length === 0) {
       try {
         var cached = localStorage.getItem('chizen_payments_cache');
@@ -12523,6 +12525,22 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
       } catch(e) {}
     }
     this.renderBanks();
+    
+    // جلب مباشر من Firebase (إذا كان FB جاهزاً)
+    if (window.FB && FB.db && (!this.banks || this.banks.length === 0)) {
+      FB.db.collection('config').doc('payments').get().then(function(doc){
+        if (doc.exists) {
+          var d = doc.data();
+          if (d.list && d.list.length > 0) {
+            self.banks = d.list;
+            try { localStorage.setItem('chizen_payments_cache', JSON.stringify(d.list)); } catch(e){}
+            self.renderBanks();
+            console.log('[PAYMENTS] loaded on demand:', d.list.length, 'methods');
+          }
+        }
+      }).catch(function(e){ console.warn('[PAYMENTS] get error:', e.message); });
+    }
+    
     this.navigate('checkout',true);
   },
   
