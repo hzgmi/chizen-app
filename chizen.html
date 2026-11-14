@@ -24726,6 +24726,43 @@ html[data-theme="light"] .chz-sum-item {
   color: #0f172a !important;
   border: 1px solid #e2e8f0 !important;
 }
+
+/* ═══ محاكاة ألوان الصفحة الرئيسية في الوضع الفاتح ═══ */
+html[data-theme="light"] #sc-details-new {
+  /* خلفية بتدرج وردي/بنفسجي فاتح جداً مثل الرئيسية */
+  background: linear-gradient(180deg, #fdf4f7 0%, #f8f2fc 100%) !important;
+}
+
+/* البطاقات: بيضاء نقية مع ظل ناعم */
+html[data-theme="light"] .chz-det-review-form,
+html[data-theme="light"] .review-card,
+html[data-theme="light"] .chz-det-spec-box,
+html[data-theme="light"] .chz-det-feat-box,
+html[data-theme="light"] .chz-det-desc-wrapper {
+  background: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 8px 24px rgba(157, 78, 221, 0.05) !important; /* ظل بنفسجي خفيف */
+}
+
+/* العداد: خلفية وردية فاتحة جداً */
+html[data-theme="light"] .chz-det-qty {
+  background: #fdf4f7 !important;
+  border: 1px solid #fce7f3 !important;
+}
+
+/* زر أضف للسلة: خلفية بيضاء مع حدود وردية فاتحة */
+html[data-theme="light"] .chz-det-btn-cart {
+  background: #ffffff !important;
+  color: #be185d !important;
+  border: 1px solid #fbcfe8 !important;
+}
+
+/* شريط الشراء السفلي: أبيض نقي */
+html[data-theme="light"] .chz-det-actions {
+  background: #ffffff !important;
+  border-top: 1px solid #fce7f3 !important;
+  box-shadow: 0 -8px 24px rgba(157, 78, 221, 0.05) !important;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
