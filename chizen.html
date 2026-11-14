@@ -24651,65 +24651,23 @@ body.in-details #sc-details-new .chz-det-actions {
 </script>
 
 <script>
-// ★ Dynamic AI Killer — يخفي زر AI في صفحة التفاصيل
-(function() {
-  function findAndHideAI() {
-    if (!document.body.classList.contains("in-details")) return;
-    
-    // البحث عن أي عنصر في الزاوية السفلية يحتوي على "AI"
-    var allElements = document.querySelectorAll("div, button, a, span");
-    allElements.forEach(function(el) {
-      var text = (el.textContent || "").trim();
-      var aria = (el.getAttribute("aria-label") || "").toLowerCase();
-      var title = (el.getAttribute("title") || "").toLowerCase();
-      
-      // شرط: النص هو "AI" فقط، أو aria/title يحتوي على "ai" أو "دعم"
-      var isAI = (text === "AI" || text === "ai" || text === "Ai");
-      var isSupport = (aria.indexOf("ai") !== -1 || title.indexOf("ai") !== -1 || 
-                       aria.indexOf("support") !== -1 || title.indexOf("support") !== -1 ||
-                       aria.indexOf("دعم") !== -1 || title.indexOf("دعم") !== -1);
-      
-      if (isAI || isSupport) {
-        // التحقق من أنه عنصر عائم (position: fixed)
-        var style = window.getComputedStyle(el);
-        if (style.position === "fixed" || el.style.position === "fixed") {
-          el.style.setProperty("display", "none", "important");
-        }
-        // أو إذا كان داخل عنصر أب عائم
-        var parent = el.parentElement;
-        while (parent && parent !== document.body) {
-          var pStyle = window.getComputedStyle(parent);
-          if (pStyle.position === "fixed") {
-            parent.style.setProperty("display", "none", "important");
-            break;
-          }
-          parent = parent.parentElement;
-        }
-      }
-    });
-  }
-  
-  // عند إضافة in-details
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(m) {
-      if (m.attributeName === "class" && m.target === document.body) {
-        if (document.body.classList.contains("in-details")) {
-          setTimeout(findAndHideAI, 100);
-          setTimeout(findAndHideAI, 500);
-        }
-      }
-    });
-  });
-  observer.observe(document.body, { attributes: true });
-  
-  // أيضاً عند أي تغيير في DOM (لأن الزر قد يُضاف متأخراً)
-  var domObserver = new MutationObserver(function() {
+document.addEventListener("DOMContentLoaded", function() {
+  var hideTimer = setInterval(function() {
     if (document.body.classList.contains("in-details")) {
-      findAndHideAI();
+      // البحث عن أي زر أو ديف يحتوي على النص "AI"
+      var els = document.querySelectorAll("div, button, a");
+      els.forEach(function(el) {
+        var text = (el.textContent || "").trim();
+        if (text === "AI" || text.indexOf("AI") === 0) {
+           var style = window.getComputedStyle(el);
+           if (style.position === "fixed" || el.style.position === "fixed") {
+              el.style.display = "none";
+           }
+        }
+      });
     }
-  });
-  domObserver.observe(document.body, { childList: true, subtree: true });
-})();
+  }, 500);
+});
 </script>
 </body>
 </html
