@@ -24639,6 +24639,39 @@ body.in-details #sc-details-new .chz-det-summary {
   width: 100% !important;
   margin-bottom: 5px !important;
 }
+
+/* ═══ الحل الجذري: إخفاء شريط التنقل بصرياً دون كسر التخطيط ═══ */
+#bottom-nav {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transform: translateY(0) !important;
+}
+body.in-details #bottom-nav {
+  transform: translateY(100%) !important; /* ينزلق خارج الشاشة، لكن المساحة محجوزة */
+}
+
+/* زر AI: نستخدم نفس الحيلة */
+#v2-fab {
+  transition: transform 0.35s ease, opacity 0.25s ease !important;
+}
+body.in-details #v2-fab {
+  transform: translateY(150%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* شريط الشراء: يبقى في مكانه الطبيعي (bottom: 70px) */
+/* لأن شريط التنقل تحت الشاشة، سيبدو وكأنه في الأسفل */
+/* نضيف فقط مساحة سفلية ليبدو أنيقاً */
+body.in-details #sc-details-new .chz-det-actions {
+  position: fixed !important;
+  bottom: 0 !important; /* ملتصق بالأسفل مباشرة (لأن شريط التنقل تحت الشاشة) */
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.5) !important;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
@@ -24729,67 +24762,7 @@ body.in-details #sc-details-new .chz-det-summary {
 
 
 
-<script>
-// ★★★ FINAL FORCE LAYOUT (Inline Styles) ★★★
-(function() {
-  function applyForceLayout() {
-    var isDetails = document.body.classList.contains("in-details");
-    var nav = document.getElementById("bottom-nav");
-    var aiBtn = document.getElementById("v2-fab") || document.querySelector(".v2-fab");
-    var actions = document.querySelector(".chz-det-actions");
 
-    if (isDetails) {
-      // إخفاء شريط التنقل وزر AI بشكل قاطع
-      if (nav) { nav.style.setProperty("display", "none", "important"); }
-      if (aiBtn) { aiBtn.style.setProperty("display", "none", "important"); }
-      
-      // تثبيت شريط الشراء في الأسفل
-      if (actions) {
-        actions.style.setProperty("position", "fixed", "important");
-        actions.style.setProperty("bottom", "0", "important");
-        actions.style.setProperty("left", "0", "important");
-        actions.style.setProperty("right", "0", "important");
-        actions.style.setProperty("z-index", "99999", "important");
-        actions.style.setProperty("background", "#1e293b", "important"); // لون داكن
-        actions.style.setProperty("border-radius", "16px 16px 0 0", "important");
-        actions.style.setProperty("padding-bottom", "20px", "important");
-        actions.style.setProperty("display", "flex", "important");
-      }
-    } else {
-      // إعادة كل شيء إلى طبيعته
-      if (nav) { nav.style.removeProperty("display"); }
-      if (aiBtn) { aiBtn.style.removeProperty("display"); }
-      if (actions) {
-        actions.style.removeProperty("position");
-        actions.style.removeProperty("bottom");
-        actions.style.removeProperty("left");
-        actions.style.removeProperty("right");
-        actions.style.removeProperty("z-index");
-        actions.style.removeProperty("background");
-        actions.style.removeProperty("border-radius");
-        actions.style.removeProperty("padding-bottom");
-        actions.style.removeProperty("display");
-      }
-    }
-  }
-
-  // مراقبة تغير الكلاس في body
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(m) {
-      if (m.attributeName === "class" && m.target === document.body) {
-        setTimeout(applyForceLayout, 50);
-      }
-    });
-  });
-
-  document.addEventListener("DOMContentLoaded", function() {
-    observer.observe(document.body, { attributes: true });
-    applyForceLayout(); // تطبيق أولي
-    // تطبيق مستمر كل ثانية لضمان عدم تدخل أي ملف آخر
-    setInterval(applyForceLayout, 1000);
-  });
-})();
-</script>
 </body>
 </html
     renderPassengers: function() {
