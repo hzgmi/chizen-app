@@ -23284,6 +23284,7 @@ if (window.APP.products && window.APP.products.length) {
     document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
     var det = document.getElementById("sc-details-new");
     if (det) det.classList.add("active");
+    document.body.classList.add("in-details"); // ★ Immersive mode
 
     try {
       window.fillDetailsNew(p);
@@ -23333,6 +23334,7 @@ if (window.APP.products && window.APP.products.length) {
 window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.remove('active');
+    document.body.classList.remove("in-details"); // ★ Exit immersive
     document.querySelectorAll('.screen').forEach(function(s) {
       if (s.id === 'sc-home') s.classList.add('active');
     });
@@ -23643,6 +23645,7 @@ window.APP.closeDetailsNew = function() {
   window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.remove('active');
+    document.body.classList.remove("in-details"); // ★ Exit immersive
     document.querySelectorAll('.screen').forEach(function(s) {
       if (s.id === 'sc-home') s.classList.add('active');
     });
@@ -24556,10 +24559,63 @@ html[data-theme="light"] #sc-details-new .chz-det-actions {
   font-weight: 600 !important;
   font-size: 11px !important;
 }
+
+/* ═══ IMMERSIVE MODE (صفحة التفاصيل) ═══ */
+#bottom-nav.chz-bottom-nav-v64 {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease !important;
+}
+body.in-details #bottom-nav {
+  transform: translateY(120%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* رفع الشريط السفلي عند اختفاء شريط التنقل */
+body.in-details #sc-details-new .chz-det-actions {
+  bottom: 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  padding-bottom: 18px !important;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.5) !important;
+}
+
+/* تحسين تباعد الأزرار (حل مشكلة الازدحام) */
+#sc-details-new .chz-det-actions {
+  padding: 12px 15px !important;
+  gap: 10px !important;
+}
+#sc-details-new .chz-det-actions .chz-det-btn-cart,
+#sc-details-new .chz-det-actions .chz-det-btn-buy {
+  padding: 14px 10px !important;
+  font-size: 13px !important;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
+
+<script>
+// ★ Safety: إزالة in-details عند أي تغيير في الشاشات
+(function() {
+  function cleanup() {
+    var det = document.getElementById("sc-details-new");
+    if (!det || !det.classList.contains("active")) {
+      if (document.body.classList.contains("in-details")) {
+        document.body.classList.remove("in-details");
+      }
+    }
+  }
+  // عند تغيير history (زر الرجوع)
+  window.addEventListener("popstate", cleanup);
+  // عند أي استدعاء لـ goTab
+  if (window.APP && window.APP.goTab) {
+    var origGoTab = window.APP.goTab;
+    window.APP.goTab = function(tab) {
+      document.body.classList.remove("in-details");
+      return origGoTab.apply(this, arguments);
+    };
+  }
+})();
+</script>
 </body>
 </html
     renderPassengers: function() {
