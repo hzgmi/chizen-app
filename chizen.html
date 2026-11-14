@@ -23643,41 +23643,57 @@ window.APP.closeDetailsNew = function() {
   };
 
 
-    // ═══ عرض الألوان (مع حماية كاملة) ═══
+    // ═══ عرض الألوان (يتعامل مع كائنات {name, hex}) ═══
     try {
       var colorSection = document.getElementById("det-new-colors-section");
       var colorsContainer = document.getElementById("det-new-colors");
       if (colorSection && colorsContainer && p.colors && Array.isArray(p.colors) && p.colors.length > 0) {
-        colorSection.style.display = "block";
-        colorsContainer.innerHTML = "";
-        p.colors.forEach(function(color, i) {
-          var swatch = document.createElement("div");
-          swatch.className = "chz-color-swatch" + (i === 0 ? " selected" : "");
-          if (color.indexOf("#") === 0) {
+        // التحقق: هل الألوان كائنات {name, hex} أم نصوص؟
+        var firstColor = p.colors[0];
+        var isObjectFormat = (typeof firstColor === "object" && firstColor !== null && (firstColor.hex || firstColor.name));
+        
+        if (isObjectFormat) {
+          colorSection.style.display = "block";
+          colorsContainer.innerHTML = "";
+          p.colors.forEach(function(color, i) {
+            var swatch = document.createElement("div");
+            swatch.className = "chz-color-swatch" + (i === 0 ? " selected" : "");
+            swatch.style.background = color.hex || "#888";
+            swatch.title = color.name || color.hex || "";
+            swatch.onclick = function() {
+              colorsContainer.querySelectorAll(".chz-color-swatch").forEach(function(s) { s.classList.remove("selected"); });
+              this.classList.add("selected");
+              window.APP.selectedColor = { name: color.name, hex: color.hex };
+            };
+            colorsContainer.appendChild(swatch);
+          });
+          window.APP.selectedColor = { name: p.colors[0].name, hex: p.colors[0].hex };
+        } else {
+          // شكل قديم (نصوص) - احتياطي
+          colorSection.style.display = "block";
+          colorsContainer.innerHTML = "";
+          p.colors.forEach(function(color, i) {
+            if (typeof color !== "string") return;
+            var swatch = document.createElement("div");
+            swatch.className = "chz-color-swatch" + (i === 0 ? " selected" : "");
             swatch.style.background = color;
-          } else if (color.indexOf("http") === 0) {
-            swatch.style.backgroundImage = "url(" + color + ")";
-          } else {
-            swatch.style.background = color;
-          }
-          swatch.title = color;
-          swatch.onclick = function() {
-            colorsContainer.querySelectorAll(".chz-color-swatch").forEach(function(s) { s.classList.remove("selected"); });
-            this.classList.add("selected");
-            window.APP.selectedColor = color;
-            var mainImg = document.querySelector("#det-new-img img");
-            if (mainImg && color.indexOf("http") === 0) mainImg.src = color;
-          };
-          colorsContainer.appendChild(swatch);
-        });
-        window.APP.selectedColor = p.colors[0];
+            swatch.title = color;
+            swatch.onclick = function() {
+              colorsContainer.querySelectorAll(".chz-color-swatch").forEach(function(s) { s.classList.remove("selected"); });
+              this.classList.add("selected");
+              window.APP.selectedColor = color;
+            };
+            colorsContainer.appendChild(swatch);
+          });
+          window.APP.selectedColor = p.colors[0];
+        }
       } else {
         if (colorSection) colorSection.style.display = "none";
       }
     } catch(e) {
       console.warn("[Colors] Render error:", e.message);
     }
-    // ═══════════════════════════════════
+    // ═══════════════════════════════════════════════════
   window.APP.closeDetailsNew = function() {
     var det = document.getElementById('sc-details-new');
     if (det) det.classList.remove('active');
