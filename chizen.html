@@ -9195,6 +9195,16 @@ html:not([data-theme="light"]) .tvl-form select option {
         </div>
       </div>
       
+      <div style="margin-bottom:12px;">
+        <label style="display:block;font-size:11px;font-weight:800;color:var(--chz-sub);margin-bottom:6px;">🌍 الدولة</label>
+        <select id="co-country" onchange="APP.onCountryChange(this.value)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:\Tajawal,sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
+          <option value="YE">🇾🇪 اليمن (شحن مجاني)</option>
+          <option value="SA">🇸🇦 السعودية (شحن مجاني فوق 200 ر.س)</option>
+          <option value="AE">🇦🇪 الإمارات (شحن مدفوع)</option>
+          <option value="OTHER">🌍 دول أخرى</option>
+        </select>
+      </div>
+
       <button id="pickup-btn" onclick="APP.openPickup()" type="button" style="width:100%;padding:14px 16px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:14px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;text-align:right;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;">
         <span id="pickup-txt" style="display:flex;align-items:center;gap:8px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;">
@@ -11096,6 +11106,40 @@ var APP={
     self.setupHistory();
   },
   
+  onCountryChange:function(country){
+    window.APP.selectedCountry = country;
+    try { localStorage.setItem("chizen_country", country); } catch(e){}
+    
+    var pickupBtn = document.getElementById("pickup-btn");
+    var pickupTxt = document.getElementById("pickup-txt");
+    if (!pickupBtn) return;
+    
+    if (country === "YE") {
+      // اليمن: استخدم النقاط العادية
+      pickupBtn.setAttribute("onclick", "APP.openPickup()");
+      if (pickupTxt) pickupTxt.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> اختر نقطة التسليم';
+    } else {
+      // خارج اليمن: عنوان يدوي
+      pickupBtn.setAttribute("onclick", "APP.openIntlAddress()");
+      if (pickupTxt) pickupTxt.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> أدخل عنوان الشحن';
+    }
+    
+    // تحديث ملخص الطلب
+    if (window.APP.updateCheckoutTotals) window.APP.updateCheckoutTotals();
+  },
+
+  openIntlAddress:function(){
+    var current = document.getElementById("pickup-val") ? document.getElementById("pickup-val").value : "";
+    var addr = prompt("أدخل عنوان الشحن الكامل (الدولة، المدينة، الحي، الشارع):", current);
+    if (addr && addr.trim()) {
+      var pv = document.getElementById("pickup-val");
+      if (pv) pv.value = "INTL:" + addr.trim();
+      var pt = document.getElementById("pickup-txt");
+      if (pt) pt.innerHTML = '📍 ' + addr.trim();
+      if (window.APP.updateCheckoutTotals) window.APP.updateCheckoutTotals();
+    }
+  },
+
   syncBg:function(){
     var self=this;
     if(!window.FB||!FB.ready){setTimeout(function(){self.syncBg();},200);return;}
