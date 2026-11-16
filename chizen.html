@@ -11544,8 +11544,12 @@ var APP={
   applyState:function(){
     document.documentElement.lang=this.state.lang;
     document.documentElement.dir=this.state.lang==='ar'?'rtl':'ltr';
-    if(this.state.theme==='light')document.documentElement.setAttribute('data-theme','light');
-    else document.documentElement.removeAttribute('data-theme');
+    // ★ لا نحذف data-theme أبداً (الوضع الفاتح افتراضي، والداكن فقط عند التغيير) ★
+    if(this.state.theme==='dark'){
+      document.documentElement.setAttribute('data-theme','dark');
+    } else {
+      document.documentElement.setAttribute('data-theme','light');
+    }
   },
   
   saveState:function(){try{localStorage.setItem('chizen_state',JSON.stringify(this.state));}catch(e){}},
