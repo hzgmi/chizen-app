@@ -11103,6 +11103,43 @@ window.FIXED_CATS = [
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 var APP={
   state:{lang:'ar',theme:'dark',notifications:true,offers:true,orderNotifs:true,biometric:false,fontSize:'medium',user:null},
+  selectCountry:function(country){
+    window.APP.selectedCountry = country;
+    try { localStorage.setItem("chizen_country", country); } catch(e){}
+    var intlBtn = document.getElementById('country-btn-intl');
+    var adenBtn = document.getElementById('country-btn-aden');
+    var yemenBtn = document.getElementById('country-btn-yemen');
+    var pickupBtn = document.getElementById('pickup-btn');
+    var pickupLabel = document.getElementById('pickup-label');
+    
+    [intlBtn, adenBtn, yemenBtn].forEach(function(b) {
+      if (b) { b.style.background = 'var(--chz-bg2)'; b.style.color = 'var(--chz-text)'; b.style.border = '1.5px solid var(--chz-border)'; }
+    });
+    
+    if (country === 'INTL') {
+      if (intlBtn) { intlBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; intlBtn.style.color = '#fff'; intlBtn.style.border = 'none'; }
+      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openIntlCitiesPicker()');
+      if (pickupLabel) pickupLabel.textContent = 'اختر المدينة الدولية';
+    } else if (country === 'ADEN') {
+      if (adenBtn) { adenBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; adenBtn.style.color = '#fff'; adenBtn.style.border = 'none'; }
+      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openPickup()');
+      if (pickupLabel) pickupLabel.textContent = 'اختر نقطة في عدن';
+      window.APP.pickupInitialTab = 'aden';
+    } else if (country === 'YEMEN') {
+      if (yemenBtn) { yemenBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; yemenBtn.style.color = '#fff'; yemenBtn.style.border = 'none'; }
+      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openPickup()');
+      if (pickupLabel) pickupLabel.textContent = 'اختر مدينة يمنية';
+      window.APP.pickupInitialTab = 'yemen';
+    }
+    
+    var sd = document.getElementById('shipping-details');
+    if (sd) sd.style.display = 'none';
+    var pv = document.getElementById('pickup-val');
+    if (pv) pv.value = '';
+    
+    if (window.APP.updateCheckoutTotals) window.APP.updateCheckoutTotals();
+  },
+
   cart:[],orders:[],favorites:[],notifications:[],
   products:[],banners:[],cats:[],banks:[],
   coupons:[],shipping:{fee:0,freeAbove:0},appliedCoupon:null,
