@@ -16563,20 +16563,19 @@ document.addEventListener('keydown', function(e) {
       '<div class="pickup-sheet-v3" onclick="event.stopPropagation()">' +
         '<div style="width:40px;height:4px;background:rgba(168,85,247,0.3);border-radius:2px;margin:8px auto 16px;"></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
-          '<div style="font-size:18px;font-weight:900;color:var(--pk-text);">📍 أين تريد استلام طلبك؟</div>' +
+          '<div style="font-size:18px;font-weight:900;color:var(--pk-text);">اختر نقطة التسليم</div>' +
           '<button onclick="window.__pickupClose()" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:var(--pk-text);cursor:pointer;font-size:16px;">✕</button>' +
         '</div>' +
         '<div style="display:flex;gap:8px;margin-bottom:14px;">' +
-          '<button class="pickup-tab-v3 active" data-tab="aden" onclick="window.__pickupSwitchTab(&quot;aden&quot;)">🏙️ داخل عدن</button>' +
-          '<button class="pickup-tab-v3" data-tab="yemen" onclick="window.__pickupSwitchTab(&quot;yemen&quot;)">🚌 خارج عدن</button>' +
+          '<button class="pickup-tab-v3 active" data-tab="aden" onclick="window.__pickupSwitchTab(&quot;aden&quot;)">داخل عدن</button>' +
+          '<button class="pickup-tab-v3" data-tab="yemen" onclick="window.__pickupSwitchTab(&quot;yemen&quot;)">خارج عدن</button>' +
         '</div>' +
-        '<div id="pickup-map-v3" style="height:220px;border-radius:14px;overflow:hidden;border:2px solid var(--pk-border);margin-bottom:14px;background:var(--pk-input);"></div>' +
         '<div style="position:relative;margin-bottom:12px;">' +
           '<input type="text" id="pickup-search-v3" placeholder="ابحث عن منطقتك..." style="width:100%;padding:12px 40px 12px 14px;border-radius:12px;border:1.5px solid var(--pk-border);background:var(--pk-input);color:var(--pk-text);font-family:Tajawal,sans-serif;font-size:13px;box-sizing:border-box;outline:none;">' +
-          '<span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;">🔍</span>' +
+          '<span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;color:var(--pk-muted);">بحث</span>' +
         '</div>' +
-        '<div id="pickup-content-v3" style="max-height:240px;overflow-y:auto;margin-bottom:12px;"></div>' +
-        '<button onclick="window.__pickupManual()" style="width:100%;padding:12px;border-radius:12px;border:2px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.08);color:#a855f7;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;">✏️ إدخال عنوان يدوي</button>' +
+        '<div id="pickup-content-v3" style="max-height:55vh;overflow-y:auto;margin-bottom:12px;"></div>' +
+        '<button onclick="window.__pickupManual()" style="width:100%;padding:12px;border-radius:12px;border:2px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.08);color:#a855f7;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;">إدخال عنوان يدوي</button>' +
       '</div>' +
     '</div>';
   }
@@ -16756,12 +16755,26 @@ document.addEventListener('keydown', function(e) {
 
   function selectAddress(addr) {
     var valEl = document.getElementById('pickup-val');
-    var txtEl = document.getElementById('pickup-txt');
+    var pickupLabel = document.getElementById('pickup-label');
     if (valEl) valEl.value = addr;
-    if (txtEl) { txtEl.textContent = '📍 ' + addr; txtEl.style.color = '#10b981'; }
+    if (pickupLabel) pickupLabel.textContent = addr;
     if (window.APP) APP.selectedPickup = addr;
-    try { localStorage.setItem('chizen_last_pickup', addr); } catch(e) {}
-    if (window.APP && APP.toast) APP.toast('✓ تم اختيار النقطة');
+    try { localStorage.setItem('chizen_last_pickup', addr); } catch(e){}
+    
+    // ★ تحديث لوحة التفاصيل للنقاط المحلية ★
+    window.APP.selectedCountry = 'YE';
+    window.APP.intlShippingFee = 0;
+    var sd = document.getElementById('shipping-details');
+    var sc = document.getElementById('ship-city');
+    var sf = document.getElementById('ship-fee');
+    var st = document.getElementById('ship-time');
+    if (sd) sd.style.display = 'block';
+    if (sc) sc.textContent = addr;
+    if (sf) { sf.textContent = 'مجاني'; sf.style.color = '#10b981'; }
+    if (st) st.textContent = '2-4 ساعات';
+    
+    if (window.APP && APP.updateCheckoutTotals) APP.updateCheckoutTotals();
+    if (window.APP && APP.toast) APP.toast('تم اختيار النقطة');
     closePickup();
   }
 
