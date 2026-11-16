@@ -11143,51 +11143,57 @@ var APP={
   
   openIntlCities:function(country){
     var self = this;
-    // جلب من الكاش أو Firebase
     var cached = null;
-    try { cached = JSON.parse(localStorage.getItem('chizen_pickup_intl_cache') || 'null'); } catch(e) {}
+    try { cached = JSON.parse(localStorage.getItem('chizen_pickup_cache') || 'null'); } catch(e) {}
     
     function showCities(data) {
       var intl = (data && Array.isArray(data.international)) ? data.international : [];
       var cities = intl.filter(function(c) { return c.country === country; });
       if (cities.length === 0) {
-        // لا توجد مدن لهذه الدولة: استخدم العنوان اليدوي
         self.openIntlAddress();
         return;
       }
-      var html = '<div style="max-height:60vh;overflow-y:auto;padding:4px;">';
-      html += '<div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:10px;">اختر مدينة في ' + country + '</div>';
+      
+      // ★ استخدام نفس تصميم نافذة النقاط المحلية ★
+      var html = '<div class="pickup-overlay-v3" onclick="if(event.target===this)this.remove()">' +
+        '<div class="pickup-sheet-v3" onclick="event.stopPropagation()">' +
+          '<div style="width:40px;height:4px;background:rgba(168,85,247,0.3);border-radius:2px;margin:8px auto 16px;"></div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+            '<div style="font-size:18px;font-weight:900;color:var(--pk-text);">🌍 اختر مدينة في ' + country + '</div>' +
+            '<button onclick="this.closest(\'.pickup-overlay-v3\').remove()" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:var(--pk-text);cursor:pointer;font-size:16px;">✕</button>' +
+          '</div>' +
+          '<div id="intl-cities-list" style="max-height:55vh;overflow-y:auto;">';
+      
       cities.forEach(function(c) {
-        html += '<div onclick="APP.selectIntlCity(\'' + c.name.replace(/'/g, "\\'") + '\', ' + (c.shippingFee || 0) + ', \'' + (c.deliveryTime || '').replace(/'/g, "\\'") + '\')" style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.3);border-radius:12px;margin-bottom:8px;cursor:pointer;">';
-        html += '<div><div style="font-size:13px;font-weight:800;color:#fff;">' + c.name + '</div>';
-        html += '<div style="font-size:11px;color:#a78bfa;margin-top:2px;">⏱ ' + (c.deliveryTime || 'حسب الدولة') + '</div></div>';
-        html += '<div style="font-size:12px;font-weight:900;color:#fbbf24;">' + (c.shippingFee ? c.shippingFee + ' ر.س' : 'مجاني') + '</div>';
-        html += '</div>';
+        html += '<div onclick="APP.selectIntlCity(\'' + c.name.replace(/'/g, "\\'") + '\', ' + (c.shippingFee || 0) + ', \'' + (c.deliveryTime || '').replace(/'/g, "\\'") + '\')" ' +
+          'style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;margin-bottom:10px;background:var(--pk-input);border:1.5px solid var(--pk-border);border-radius:14px;cursor:pointer;">' +
+          '<div style="flex:1;"><div style="font-size:14px;font-weight:900;color:var(--pk-text);">' + c.name + '</div>' +
+          '<div style="font-size:11px;color:var(--pk-muted);margin-top:4px;">⏱ ' + (c.deliveryTime || 'حسب الدولة') + '</div></div>' +
+          '<div style="font-size:13px;font-weight:900;color:#fbbf24;">' + (c.shippingFee ? c.shippingFee + ' ر.س' : 'مجاني') + '</div>' +
+          '</div>';
       });
-      html += '</div>';
+      
+      html += '</div>' +
+        '<button onclick="APP.openIntlAddress()" style="width:100%;padding:12px;border-radius:12px;border:2px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.08);color:#a855f7;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;margin-top:8px;">✏️ إدخال عنوان يدوي</button>' +
+        '</div></div>';
+      
       // إغلاق أي نافذة سابقة
-      var oldModal = document.getElementById('intl-cities-modal');
+      var oldModal = document.querySelector('.pickup-overlay-v3');
       if (oldModal) oldModal.remove();
-      var modal = document.createElement('div');
-      modal.id = 'intl-cities-modal';
-      modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;';
-      modal.innerHTML = '<div style="background:#1a1535;border-radius:20px;padding:20px;max-width:400px;width:100%;color:#fff;border:1px solid rgba(155,77,255,0.3);">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">' +
-          '<h3 style="margin:0;font-size:16px;font-weight:900;">🌍 ' + country + '</h3>' +
-          '<button onclick="document.getElementById(\'intl-cities-modal\').remove()" style="background:transparent;border:none;color:#94a3b8;font-size:20px;cursor:pointer;">✕</button>' +
-        '</div>' + html + '</div>';
-      document.body.appendChild(modal);
+      
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      document.body.appendChild(wrapper.firstElementChild);
     }
     
     if (cached && cached.international) {
       showCities(cached);
       return;
     }
-    // جلب من Firebase
     if (window.FB && FB.db) {
       FB.db.collection('config').doc('pickup_areas').get().then(function(doc){
         var data = doc.exists ? doc.data() : {};
-        try { localStorage.setItem('chizen_pickup_intl_cache', JSON.stringify(data)); } catch(e) {}
+        try { localStorage.setItem('chizen_pickup_cache', JSON.stringify(data)); } catch(e) {}
         showCities(data);
       }).catch(function(){ self.openIntlAddress(); });
     } else {
