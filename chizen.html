@@ -11095,6 +11095,53 @@ window.FIXED_CATS = [
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 var APP={
   state:{lang:'ar',theme:'dark',notifications:true,offers:true,orderNotifs:true,biometric:false,fontSize:'medium',user:null},
+  openIntlCities:function(country){
+    var self = this;
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem('chizen_pickup_cache') || 'null'); } catch(e) {}
+    
+    function showCities(data) {
+      var intl = (data && Array.isArray(data.international)) ? data.international : [];
+      var cities = intl.filter(function(c) { return c.country === country; });
+      if (cities.length === 0) { self.openIntlAddress(); return; }
+      
+      var html = '<div class="pickup-overlay-v3" onclick="if(event.target===this)this.remove()">' +
+        '<div class="pickup-sheet-v3" onclick="event.stopPropagation()">' +
+          '<div style="width:40px;height:4px;background:rgba(168,85,247,0.3);border-radius:2px;margin:8px auto 16px;"></div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+            '<div style="font-size:18px;font-weight:900;color:var(--pk-text);">مدن ' + country + '</div>' +
+            '<button onclick="this.closest(\'.pickup-overlay-v3\').remove()" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:var(--pk-text);cursor:pointer;font-size:16px;">✕</button>' +
+          '</div>' +
+          '<div style="max-height:55vh;overflow-y:auto;">';
+      cities.forEach(function(c) {
+        html += '<div onclick="APP.selectIntlCity(\'' + c.name.replace(/'/g, "\\'") + '\', ' + (c.shippingFee || 0) + ', \'' + (c.deliveryTime || '').replace(/'/g, "\\'") + '\')" ' +
+          'style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;margin-bottom:10px;background:var(--pk-input);border:1.5px solid var(--pk-border);border-radius:14px;cursor:pointer;">' +
+          '<div style="flex:1;">' +
+            '<div style="font-size:14px;font-weight:900;color:var(--pk-text);">' + c.name + '</div>' +
+            '<div style="font-size:11px;color:var(--pk-muted);margin-top:4px;">⏱ ' + (c.deliveryTime || 'حسب الدولة') + '</div>' +
+          '</div>' +
+          '<div style="font-size:13px;font-weight:900;color:#fbbf24;">' + (c.shippingFee ? c.shippingFee + ' ر.س' : 'مجاني') + '</div>' +
+          '</div>';
+      });
+      html += '</div></div></div>';
+      
+      var old = document.querySelector('.pickup-overlay-v3');
+      if (old) old.remove();
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      document.body.appendChild(wrapper.firstElementChild);
+    }
+    
+    if (cached && cached.international) { showCities(cached); return; }
+    if (window.FB && FB.db) {
+      FB.db.collection('config').doc('pickup_areas').get().then(function(doc){
+        var data = doc.exists ? doc.data() : {};
+        try { localStorage.setItem('chizen_pickup_cache', JSON.stringify(data)); } catch(e) {}
+        showCities(data);
+      }).catch(function(){ self.openIntlAddress(); });
+    } else { self.openIntlAddress(); }
+  },
+
   openIntlCitiesPicker:function(){
     var self = this;
     var cached = null;
