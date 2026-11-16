@@ -16560,7 +16560,7 @@ document.addEventListener('keydown', function(e) {
   
   function loadPickupData() {
     return new Promise(function(resolve) {
-      // 1. جرّب القراءة من الكاش أولاً (فوري)
+      // 1. جرّب القراءة من الكاش أولاً (فوري) - يشمل international
       try {
         var cached = localStorage.getItem("chizen_pickup_cache");
         if (cached) {
@@ -16568,17 +16568,19 @@ document.addEventListener('keydown', function(e) {
           if (c.aden && c.yemen) {
             ADEN_AREAS = c.aden;
             YEMEN_CITIES = c.yemen;
+            window.__intlData = c.international || [];
             dataLoaded = true;
-            console.log("[PICKUP-V3] loaded from cache:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen");
+            console.log("[PICKUP-V3] loaded from cache:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen +", (c.international ? c.international.length : 0), "intl");
             resolve();
-            // 2. في الخلفية: جلب أحدث بيانات من Firebase
+            // 2. في الخلفية: جلب أحدث بيانات من Firebase (بما فيها international)
             if (window.FB && FB.db) {
               FB.db.collection("config").doc("pickup_areas").get().then(function(doc) {
                 if (doc.exists) {
                   var d = doc.data();
                   if (d.aden && d.yemen) {
-                    localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: d.aden, yemen: d.yemen}));
-                    console.log("[PICKUP-V3] cache updated from Firestore");
+                    localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: d.aden, yemen: d.yemen, international: d.international || []}));
+                    window.__intlData = d.international || [];
+                    console.log("[PICKUP-V3] cache updated from Firestore (incl. intl)");
                   }
                 }
               }).catch(function(e) { console.warn("[PICKUP-V3] bg update error:", e.message); });
@@ -16595,9 +16597,10 @@ document.addEventListener('keydown', function(e) {
           var d = doc.data();
           ADEN_AREAS = d.aden || [];
           YEMEN_CITIES = d.yemen || [];
+          window.__intlData = d.international || [];
           dataLoaded = true;
           try {
-            localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: ADEN_AREAS, yemen: YEMEN_CITIES}));
+            localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: ADEN_AREAS, yemen: YEMEN_CITIES, international: window.__intlData}));
           } catch(e) {}
           console.log("[PICKUP-V3] loaded from Firestore:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen");
         }
