@@ -9288,7 +9288,7 @@ html:not([data-theme="light"]) .tvl-form select option {
       <div class="bank-l" id="bank-list" style="display:flex;flex-direction:column;gap:10px;"></div>
       <div style="margin-top:14px;">
         <label style="display:block;font-size:11px;font-weight:800;color:var(--chz-sub);margin-bottom:6px;">طريقة الدفع</label>
-        <select id="co-payment-method" onchange="APP.setPaymentMethod(this.value)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
+        <select id="co-payment-method" onchange="APP.onPaymentMethodChange(this)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
           <option value="bank">تحويل بنكي</option>
           <option value="cod">دفع عند الاستلام</option>
         </select>
@@ -11221,6 +11221,23 @@ var APP={
     if (window.APP && APP.toast) APP.toast('✓ تم اختيار ' + cityName);
   },
 
+  onPaymentMethodChange:function(sel){
+    var method = sel.value;
+    var country = window.APP.selectedCountry;
+    if (method === 'cod' && country !== 'ADEN') {
+      // رسالة جميلة
+      if (window.APP && APP.showNiceAlert) {
+        APP.showNiceAlert('الدفع عند الاستلام', 'متاح فقط داخل عدن حالياً. قريباً سيتم تفعيله في مدن ودول أخرى.', 'حسناً');
+      } else if (window.APP && APP.toast) {
+        APP.toast('الدفع عند الاستلام متاح فقط داخل عدن');
+      }
+      // إعادة التحديد إلى "تحويل بنكي"
+      sel.value = 'bank';
+      method = 'bank';
+    }
+    APP.setPaymentMethod(method);
+  },
+
   setPaymentMethod:function(method){
     window.APP.selectedPaymentMethod = method;
     // إظهار/إخفاء بنك إذا لزم الأمر
@@ -11306,18 +11323,22 @@ var APP={
     if (pv) pv.value = '';
     
     
-    // ★ تحديث خيار الدفع عند الاستلام: متاح فقط لداخل عدن ★
+    // ★ تحديث خيار الدفع عند الاستلام: متاح فقط لداخل عدن، مع رسالة ★
     var paySel = document.getElementById('co-payment-method');
     if (paySel) {
+      // إزالة التعطيل (لن نعطله، بل نتحكم عند النقر)
       var codOption = paySel.querySelector('option[value="cod"]');
       if (codOption) {
-        if (country === 'ADEN') {
-          codOption.disabled = false;
-          codOption.textContent = 'دفع عند الاستلام';
-        } else {
-          codOption.disabled = true;
-          codOption.textContent = 'دفع عند الاستلام (متاح فقط لداخل عدن)';
-          if (paySel.value === 'cod') paySel.value = 'bank';
+        codOption.disabled = false;
+        codOption.textContent = 'دفع عند الاستلام';
+      }
+      // إذا كانت المنطقة ليست عدن، نغير القيمة فوراً ونظهر رسالة
+      if (country !== 'ADEN' && paySel.value === 'cod') {
+        paySel.value = 'bank';
+        if (window.APP && APP.showNiceAlert) {
+          APP.showNiceAlert('الدفع عند الاستلام', 'متاح فقط داخل عدن حالياً. قريباً سيتم تفعيله في مدن ودول أخرى.', 'حسناً');
+        } else if (window.APP && APP.toast) {
+          APP.toast('الدفع عند الاستلام متاح فقط داخل عدن حالياً');
         }
       }
     }
