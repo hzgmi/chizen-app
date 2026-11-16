@@ -402,7 +402,6 @@ window.addEventListener("error", function(e) {
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <script>
 APP.renderColorSwatches = function(p) {
-    if (!p) return;
     const container = document.getElementById('color-swatches-container');
     if (!container) return;
 
@@ -481,7 +480,6 @@ APP.renderFavorites = function() {
 
 // --- المنتجات المشابهة (هتتنادى جوه صفحة المنتج) ---
 APP.renderRelatedProducts = function(currentProduct) {
-    if (!currentProduct) return;
     const relatedContainer = document.getElementById('related-products');
     if(!relatedContainer || !window.APP.products) return;
     
@@ -616,7 +614,6 @@ APP.openCategoryPage = function(catKey, catName) {
     window.FB.getProducts().then(function(prods) {
         // فلترة دقيقة (تشمل category و cat)
         const filtered = prods.filter(function(p) {
-            if (!p) return false;
             const pCat = (p.category || p.cat || '').toString().toLowerCase();
             const targetCat = (catKey || '').toString().toLowerCase();
             return pCat === targetCat;
@@ -6308,7 +6305,7 @@ html[data-theme="light"] {
   --pk-pink: #d81b60;
 }
 .pickup-overlay-v3 { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: flex-end; justify-content: center; }
-.pickup-sheet-v3 { background: var(--pk-bg); border-radius: 24px 24px 0 0; width: 100%; max-width: 100%; max-height: 95vh; overflow-y: auto; padding: 12px 20px 32px; font-family: Tajawal, sans-serif; direction: rtl; box-shadow: 0 -8px 40px rgba(0,0,0,0.5); }
+.pickup-sheet-v3 { background: var(--pk-bg); border-radius: 24px 24px 0 0; width: 100%; max-width: 500px; max-height: 92vh; overflow-y: auto; padding: 8px 20px 24px; font-family: Tajawal, sans-serif; direction: rtl; box-shadow: 0 -8px 40px rgba(0,0,0,0.5); }
 .pickup-tab-v3 { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid var(--pk-border); background: var(--pk-input); color: var(--pk-sub); font-family: Tajawal, sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; }
 .pickup-tab-v3.active { background: linear-gradient(135deg, #ec4899, #8b5cf6); color: #fff; border-color: transparent; }
 </style>
@@ -8380,15 +8377,6 @@ html:not([data-theme="light"]) .tvl-form select option {
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-<script>
-window.addEventListener('error', function(e) {
-  if (e.message && e.message.indexOf('p is not defined') !== -1) {
-    e.preventDefault();
-    return true;
-  }
-}, true);
-</script>
 </head>
 <body>
 <div id="app">
@@ -9218,43 +9206,24 @@ window.addEventListener('error', function(e) {
       
       <div style="margin-bottom:12px;">
         <label style="display:block;font-size:11px;font-weight:800;color:var(--chz-sub);margin-bottom:6px;">🌍 الدولة</label>
-        <!-- ★ أزرار اختيار المنطقة ★ -->
-      <div style="display:flex;gap:10px;margin-bottom:14px;">
-        <button id="country-btn-ye" onclick="APP.selectCountry('YE')" type="button" style="flex:1;padding:16px;background:linear-gradient(135deg,#a855f7,#7c3aed);border:none;border-radius:14px;color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:900;cursor:pointer;transition:all 0.2s;box-shadow:0 6px 20px rgba(168,85,247,0.3);">
-          🇾🇪 اليمن
-        </button>
-        <button id="country-btn-intl" onclick="APP.selectCountry('INTL')" type="button" style="flex:1;padding:16px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:14px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;font-weight:900;cursor:pointer;transition:all 0.2s;">
-          🌍 دولي
-        </button>
+        <select id="co-country" onchange="APP.onCountryChange(this.value)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:\Tajawal,sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
+          <option value="YE">🇾🇪 اليمن (شحن مجاني)</option>
+          <option value="SA">🇸🇦 السعودية (شحن مجاني فوق 200 ر.س)</option>
+          <option value="AE">🇦🇪 الإمارات (شحن مدفوع)</option>
+          <option value="OTHER">🌍 دول أخرى</option>
+        </select>
       </div>
 
-      <!-- ★ زر اختيار المدينة/النقطة ★ -->
       <button id="pickup-btn" onclick="APP.openPickup()" type="button" style="width:100%;padding:14px 16px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:14px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;text-align:right;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;">
         <span id="pickup-txt" style="display:flex;align-items:center;gap:8px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
           </svg>
-          <span id="pickup-label">اختر نقطة التسليم</span>
+          <span data-i18n="checkout.choose_delivery" data-i18n-ar="اختر نقطة التسليم">اختر نقطة التسليم</span>
         </span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--chz-sub);"><path d="m9 18 6-6-6-6"/></svg>
       </button>
       <input type="hidden" id="pickup-val" value="">
-
-      <!-- ★ تفاصيل الشحن (تظهر بعد الاختيار) ★ -->
-      <div id="shipping-details" style="display:none;margin-top:14px;padding:14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-size:12px;color:var(--chz-sub);font-weight:800;">📍 المدينة/المنطقة</span>
-          <span id="ship-city" style="font-size:13px;font-weight:900;color:var(--chz-text);">—</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-size:12px;color:var(--chz-sub);font-weight:800;">🚚 سعر الشحن</span>
-          <span id="ship-fee" style="font-size:13px;font-weight:900;color:#10b981;">مجاني</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:12px;color:var(--chz-sub);font-weight:800;">⏱ وقت التوصيل</span>
-          <span id="ship-time" style="font-size:13px;font-weight:900;color:var(--chz-text);">—</span>
-        </div>
-      </div>
     </div>
 
     <!-- ═══ 2) معلومات الاتصال ═══ -->
@@ -11147,197 +11116,9 @@ var APP={
     // ★ تحميل نقاط التسليم في الخلفية (لتكون جاهزة فوراً)
     setTimeout(function() {
       if (window.__preloadPickupData) window.__preloadPickupData();
-      // تحميل payments مع إعادة محاولة (حتى يصبح FB.db جاهزاً)
-      (function loadPayments(retries) {
-        retries = retries || 0;
-        if (!window.FB || !FB.db) {
-          if (retries < 20) setTimeout(function(){ loadPayments(retries + 1); }, 500);
-          return;
-        }
-        FB.db.collection('config').doc('payments').get().then(function(doc){
-          if (doc.exists) {
-            var d = doc.data();
-            if (d.list && d.list.length > 0) {
-              window.APP.banks = d.list;
-              try { localStorage.setItem('chizen_payments_cache', JSON.stringify(d.list)); } catch(e){}
-              if (window.APP.renderBanks) window.APP.renderBanks();
-              console.log('[PAYMENTS] loaded:', d.list.length, 'methods');
-            }
-          }
-        }).catch(function(e){
-          console.warn('[PAYMENTS] get error:', e.message);
-          if (retries < 5) setTimeout(function(){ loadPayments(retries + 1); }, 1000);
-        });
-      })();
     }, 2000);
   },
   
-  openIntlCities:function(country){
-    var self = this;
-    var cached = null;
-    try { cached = JSON.parse(localStorage.getItem('chizen_pickup_cache') || 'null'); } catch(e) {}
-    
-    function showCities(data) {
-      var intl = (data && Array.isArray(data.international)) ? data.international : [];
-      var cities = intl.filter(function(c) { return c.country === country; });
-      if (cities.length === 0) {
-        self.openIntlAddress();
-        return;
-      }
-      
-      // ★ استخدام نفس تصميم نافذة النقاط المحلية ★
-      var html = '<div class="pickup-overlay-v3" onclick="if(event.target===this)this.remove()">' +
-        '<div class="pickup-sheet-v3" onclick="event.stopPropagation()">' +
-          '<div style="width:40px;height:4px;background:rgba(168,85,247,0.3);border-radius:2px;margin:8px auto 16px;"></div>' +
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
-            '<div style="font-size:18px;font-weight:900;color:var(--pk-text);">🌍 اختر مدينة في ' + country + '</div>' +
-            '<button onclick="this.closest(\'.pickup-overlay-v3\').remove()" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:var(--pk-text);cursor:pointer;font-size:16px;">✕</button>' +
-          '</div>' +
-          '<div id="intl-cities-list" style="max-height:55vh;overflow-y:auto;">';
-      
-      cities.forEach(function(c) {
-        html += '<div onclick="APP.selectIntlCity(\'' + c.name.replace(/'/g, "\\'") + '\', ' + (c.shippingFee || 0) + ', \'' + (c.deliveryTime || '').replace(/'/g, "\\'") + '\')" ' +
-          'style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;margin-bottom:10px;background:var(--pk-input);border:1.5px solid var(--pk-border);border-radius:14px;cursor:pointer;">' +
-          '<div style="flex:1;"><div style="font-size:14px;font-weight:900;color:var(--pk-text);">' + c.name + '</div>' +
-          '<div style="font-size:11px;color:var(--pk-muted);margin-top:4px;">⏱ ' + (c.deliveryTime || 'حسب الدولة') + '</div></div>' +
-          '<div style="font-size:13px;font-weight:900;color:#fbbf24;">' + (c.shippingFee ? c.shippingFee + ' ر.س' : 'مجاني') + '</div>' +
-          '</div>';
-      });
-      
-      html += '</div>' +
-        '<button onclick="APP.openIntlAddress()" style="width:100%;padding:12px;border-radius:12px;border:2px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.08);color:#a855f7;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;margin-top:8px;">✏️ إدخال عنوان يدوي</button>' +
-        '</div></div>';
-      
-      // إغلاق أي نافذة سابقة
-      var oldModal = document.querySelector('.pickup-overlay-v3');
-      if (oldModal) oldModal.remove();
-      
-      var wrapper = document.createElement('div');
-      wrapper.innerHTML = html;
-      document.body.appendChild(wrapper.firstElementChild);
-    }
-    
-    if (cached && cached.international) {
-      showCities(cached);
-      return;
-    }
-    if (window.FB && FB.db) {
-      FB.db.collection('config').doc('pickup_areas').get().then(function(doc){
-        var data = doc.exists ? doc.data() : {};
-        try { localStorage.setItem('chizen_pickup_cache', JSON.stringify(data)); } catch(e) {}
-        showCities(data);
-      }).catch(function(){ self.openIntlAddress(); });
-    } else {
-      self.openIntlAddress();
-    }
-  },
-
-  selectIntlCity:function(cityName, fee, time){
-    var valEl = document.getElementById('pickup-val');
-    var pickupBtn = document.getElementById('pickup-btn');
-    var pickupLabel = document.getElementById('pickup-label');
-    if (valEl) valEl.value = 'INTL|' + cityName;
-    if (pickupLabel) pickupLabel.textContent = '📍 ' + cityName;
-    if (pickupBtn) pickupBtn.style.borderColor = '#10b981';
-    window.APP.selectedIntlCity = cityName;
-    window.APP.intlShippingFee = Number(fee) || 0;
-    window.APP.selectedCountry = 'INTL';
-    
-    // ★ تحديث لوحة التفاصيل ★
-    var sd = document.getElementById('shipping-details');
-    var sc = document.getElementById('ship-city');
-    var sf = document.getElementById('ship-fee');
-    var st = document.getElementById('ship-time');
-    if (sd) sd.style.display = 'block';
-    if (sc) sc.textContent = cityName;
-    if (sf) {
-      sf.textContent = (Number(fee) > 0) ? Number(fee) + ' ر.س' : 'مجاني';
-      sf.style.color = (Number(fee) > 0) ? '#fbbf24' : '#10b981';
-    }
-    if (st) st.textContent = time || 'حسب الدولة';
-    
-    // إغلاق أي نافذة مفتوحة
-    var modal = document.querySelector('.pickup-overlay-v3');
-    if (modal) modal.remove();
-    var oldModal = document.getElementById('intl-cities-modal');
-    if (oldModal) oldModal.remove();
-    
-    if (window.APP.updateCheckoutTotals) window.APP.updateCheckoutTotals();
-    if (window.APP.toast) window.APP.toast('✅ تم اختيار ' + cityName);
-  },
-
-  selectCountry:function(country){
-    window.APP.selectedCountry = country;
-    try { localStorage.setItem("chizen_country", country); } catch(e){}
-    
-    var yeBtn = document.getElementById('country-btn-ye');
-    var intlBtn = document.getElementById('country-btn-intl');
-    var pickupBtn = document.getElementById('pickup-btn');
-    var pickupLabel = document.getElementById('pickup-label');
-    
-    if (country === 'YE') {
-      if (yeBtn) { yeBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; yeBtn.style.color = '#fff'; yeBtn.style.border = 'none'; yeBtn.style.boxShadow = '0 6px 20px rgba(168,85,247,0.3)'; }
-      if (intlBtn) { intlBtn.style.background = 'var(--chz-bg2)'; intlBtn.style.color = 'var(--chz-text)'; intlBtn.style.border = '1.5px solid var(--chz-border)'; intlBtn.style.boxShadow = 'none'; }
-      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openPickup()');
-      if (pickupLabel) pickupLabel.textContent = 'اختر نقطة التسليم';
-    } else {
-      if (intlBtn) { intlBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; intlBtn.style.color = '#fff'; intlBtn.style.border = 'none'; intlBtn.style.boxShadow = '0 6px 20px rgba(168,85,247,0.3)'; }
-      if (yeBtn) { yeBtn.style.background = 'var(--chz-bg2)'; yeBtn.style.color = 'var(--chz-text)'; yeBtn.style.border = '1.5px solid var(--chz-border)'; yeBtn.style.boxShadow = 'none'; }
-      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openIntlCitiesPicker()');
-      if (pickupLabel) pickupLabel.textContent = 'اختر المدينة الدولية';
-    }
-    
-    // مسح التفاصيل عند التبديل
-    var sd = document.getElementById('shipping-details');
-    if (sd) sd.style.display = 'none';
-    var pv = document.getElementById('pickup-val');
-    if (pv) pv.value = '';
-    
-    if (window.APP.updateCheckoutTotals) window.APP.updateCheckoutTotals();
-  },
-
-  // دالة مساعدة: تفتح قائمة المدن الدولية (تسأل عن الدولة أولاً)
-  openIntlCitiesPicker:function(){
-    var self = this;
-    var cached = null;
-    try { cached = JSON.parse(localStorage.getItem('chizen_pickup_cache') || 'null'); } catch(e) {}
-    
-    function showCountries(data) {
-      var intl = (data && Array.isArray(data.international)) ? data.international : [];
-      var countries = [];
-      intl.forEach(function(c) { if (c.country && countries.indexOf(c.country) === -1) countries.push(c.country); });
-      if (countries.length === 0) { self.openIntlAddress(); return; }
-      
-      var html = '<div class="pickup-overlay-v3" onclick="if(event.target===this)this.remove()">' +
-        '<div class="pickup-sheet-v3" onclick="event.stopPropagation()">' +
-          '<div style="width:40px;height:4px;background:rgba(168,85,247,0.3);border-radius:2px;margin:8px auto 16px;"></div>' +
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
-            '<div style="font-size:18px;font-weight:900;color:var(--pk-text);">🌍 اختر الدولة</div>' +
-            '<button onclick="this.closest(\'.pickup-overlay-v3\').remove()" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:var(--pk-text);cursor:pointer;font-size:16px;">✕</button>' +
-          '</div>' +
-          '<div style="max-height:55vh;overflow-y:auto;">';
-      countries.forEach(function(co) {
-        html += '<div onclick="this.closest(\'.pickup-overlay-v3\').remove();APP.openIntlCities(\'' + co + '\')" style="padding:14px 16px;margin-bottom:10px;background:var(--pk-input);border:1.5px solid var(--pk-border);border-radius:14px;cursor:pointer;font-size:14px;font-weight:900;color:var(--pk-text);">' + co + '</div>';
-      });
-      html += '</div></div></div>';
-      
-      var old = document.querySelector('.pickup-overlay-v3');
-      if (old) old.remove();
-      var wrapper = document.createElement('div');
-      wrapper.innerHTML = html;
-      document.body.appendChild(wrapper.firstElementChild);
-    }
-    
-    if (cached && cached.international) { showCountries(cached); return; }
-    if (window.FB && FB.db) {
-      FB.db.collection('config').doc('pickup_areas').get().then(function(doc){
-        var data = doc.exists ? doc.data() : {};
-        try { localStorage.setItem('chizen_pickup_cache', JSON.stringify(data)); } catch(e) {}
-        showCountries(data);
-      }).catch(function(){ self.openIntlAddress(); });
-    } else { self.openIntlAddress(); }
-  },
-
   onCountryChange:function(country){
     window.APP.selectedCountry = country;
     try { localStorage.setItem("chizen_country", country); } catch(e){}
@@ -11351,11 +11132,9 @@ var APP={
       pickupBtn.setAttribute("onclick", "APP.openPickup()");
       if (pickupTxt) pickupTxt.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> اختر نقطة التسليم';
     } else {
-      // خارج اليمن: عرض مدن الدولة
-      var countryNames = { 'SA': 'السعودية', 'AE': 'الإمارات', 'KW': 'الكويت', 'QA': 'قطر', 'BH': 'البحرين', 'OM': 'عمان', 'JO': 'الأردن', 'EG': 'مصر', 'OTHER': 'دول أخرى' };
-      var cName = countryNames[country] || country;
-      pickupBtn.setAttribute("onclick", "APP.openIntlCities('" + cName + "')");
-      if (pickupTxt) pickupTxt.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> اختر مدينة في ' + cName;
+      // خارج اليمن: عنوان يدوي
+      pickupBtn.setAttribute("onclick", "APP.openIntlAddress()");
+      if (pickupTxt) pickupTxt.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ec4899;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> أدخل عنوان الشحن';
     }
     
     // تحديث ملخص الطلب
@@ -12714,42 +12493,11 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
     var sub=this.cartTotal();
     document.getElementById('co-sub').textContent=sub+' ر.س';
     document.getElementById('co-total').textContent=sub+' ر.س';
-    
-    // ★ تحميل البنوك مباشرة من Firebase (إذا لم تكن محملة)
-    var self = this;
-    if (!this.banks || this.banks.length === 0) {
-      try {
-        var cached = localStorage.getItem('chizen_payments_cache');
-        if (cached) { this.banks = JSON.parse(cached); }
-      } catch(e) {}
-    }
-    this.renderBanks();
-    
-    // جلب مباشر من Firebase (إذا كان FB جاهزاً)
-    if (window.FB && FB.db && (!this.banks || this.banks.length === 0)) {
-      FB.db.collection('config').doc('payments').get().then(function(doc){
-        if (doc.exists) {
-          var d = doc.data();
-          if (d.list && d.list.length > 0) {
-            self.banks = d.list;
-            try { localStorage.setItem('chizen_payments_cache', JSON.stringify(d.list)); } catch(e){}
-            self.renderBanks();
-            console.log('[PAYMENTS] loaded on demand:', d.list.length, 'methods');
-          }
-        }
-      }).catch(function(e){ console.warn('[PAYMENTS] get error:', e.message); });
-    }
-    
     this.navigate('checkout',true);
   },
   
   renderBanks:function(){
     var c=document.getElementById('bank-list');if(!c)return;
-    // حماية: إذا كانت banks غير معرّفة أو فارغة
-    if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
-      c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--chz-sub);font-size:13px;">⏳ جاري تحميل طرق الدفع...</div>';
-      return;
-    }
     c.innerHTML=this.banks.map(function(b){
       return '<div class="bank" onclick="APP.selectBank(\''+esc(b.id)+'\')"><div class="bank-i" style="background:'+esc(b.color)+'">'+esc(b.icon)+'</div><div style="flex:1;"><div class="bank-n">'+esc(b.name)+'</div><div class="bank-d">'+(b.account?esc(b.account):'ادفع عند الاستلام')+'</div></div><div class="bank-c"></div></div>';
     }).join('');
@@ -13217,22 +12965,6 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   renderPickup:function(){/* v2 handles UI */},
   switchPickup:function(){/* v2 handles */},
   selectPickup:function(v){
-    // ★ تحديث لوحة التفاصيل للنقاط المحلية ★
-    window.APP.selectedCountry = 'YE';
-    window.APP.intlShippingFee = 0;
-    var sd = document.getElementById('shipping-details');
-    var sc = document.getElementById('ship-city');
-    var sf = document.getElementById('ship-fee');
-    var st = document.getElementById('ship-time');
-    if (sd) sd.style.display = 'block';
-    if (sc) sc.textContent = v;
-    if (sf) { sf.textContent = 'مجاني'; sf.style.color = '#10b981'; }
-    if (st) st.textContent = '2-4 ساعات';
-    var pickupLabel = document.getElementById('pickup-label');
-    if (pickupLabel) pickupLabel.textContent = '📍 ' + v;
-    
-    // ★ الكود الأصلي ★
-    this.selectedPickup=v;
     this.selectedPickup=v;
     document.getElementById('pickup-val').value=v;
     var btn=document.getElementById('pickup-txt');if(btn){btn.textContent='📍 '+v;btn.style.color='var(--gn)';}
@@ -16706,7 +16438,7 @@ document.addEventListener('keydown', function(e) {
   
   function loadPickupData() {
     return new Promise(function(resolve) {
-      // 1. جرّب القراءة من الكاش أولاً (فوري) - يشمل international
+      // 1. جرّب القراءة من الكاش أولاً (فوري)
       try {
         var cached = localStorage.getItem("chizen_pickup_cache");
         if (cached) {
@@ -16714,19 +16446,17 @@ document.addEventListener('keydown', function(e) {
           if (c.aden && c.yemen) {
             ADEN_AREAS = c.aden;
             YEMEN_CITIES = c.yemen;
-            window.__intlData = c.international || [];
             dataLoaded = true;
-            console.log("[PICKUP-V3] loaded from cache:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen +", (c.international ? c.international.length : 0), "intl");
+            console.log("[PICKUP-V3] loaded from cache:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen");
             resolve();
-            // 2. في الخلفية: جلب أحدث بيانات من Firebase (بما فيها international)
+            // 2. في الخلفية: جلب أحدث بيانات من Firebase
             if (window.FB && FB.db) {
               FB.db.collection("config").doc("pickup_areas").get().then(function(doc) {
                 if (doc.exists) {
                   var d = doc.data();
                   if (d.aden && d.yemen) {
-                    localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: d.aden, yemen: d.yemen, international: d.international || []}));
-                    window.__intlData = d.international || [];
-                    console.log("[PICKUP-V3] cache updated from Firestore (incl. intl)");
+                    localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: d.aden, yemen: d.yemen}));
+                    console.log("[PICKUP-V3] cache updated from Firestore");
                   }
                 }
               }).catch(function(e) { console.warn("[PICKUP-V3] bg update error:", e.message); });
@@ -16743,10 +16473,9 @@ document.addEventListener('keydown', function(e) {
           var d = doc.data();
           ADEN_AREAS = d.aden || [];
           YEMEN_CITIES = d.yemen || [];
-          window.__intlData = d.international || [];
           dataLoaded = true;
           try {
-            localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: ADEN_AREAS, yemen: YEMEN_CITIES, international: window.__intlData}));
+            localStorage.setItem("chizen_pickup_cache", JSON.stringify({aden: ADEN_AREAS, yemen: YEMEN_CITIES}));
           } catch(e) {}
           console.log("[PICKUP-V3] loaded from Firestore:", ADEN_AREAS.length, "aden +", YEMEN_CITIES.length, "yemen");
         }
@@ -16770,6 +16499,7 @@ document.addEventListener('keydown', function(e) {
     searchQuery: ''
   };
 
+  var map = null;
   var mapMarkers = [];
 
   function isOpen() {
@@ -16779,7 +16509,7 @@ document.addEventListener('keydown', function(e) {
   function closePickup() {
     var o = document.querySelector('.pickup-overlay-v3');
     if (o) o.remove();
-    // map removed
+    if (map) { try { map.remove(); } catch(e) {} map = null; }
     mapMarkers = [];
     state.view = 'districts';
     state.district = null;
@@ -16799,19 +16529,71 @@ document.addEventListener('keydown', function(e) {
           '<button class="pickup-tab-v3 active" data-tab="aden" onclick="window.__pickupSwitchTab(&quot;aden&quot;)">🏙️ داخل عدن</button>' +
           '<button class="pickup-tab-v3" data-tab="yemen" onclick="window.__pickupSwitchTab(&quot;yemen&quot;)">🚌 خارج عدن</button>' +
         '</div>' +
-        
+        '<div id="pickup-map-v3" style="height:220px;border-radius:14px;overflow:hidden;border:2px solid var(--pk-border);margin-bottom:14px;background:var(--pk-input);"></div>' +
         '<div style="position:relative;margin-bottom:12px;">' +
           '<input type="text" id="pickup-search-v3" placeholder="ابحث عن منطقتك..." style="width:100%;padding:12px 40px 12px 14px;border-radius:12px;border:1.5px solid var(--pk-border);background:var(--pk-input);color:var(--pk-text);font-family:Tajawal,sans-serif;font-size:13px;box-sizing:border-box;outline:none;">' +
           '<span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;">🔍</span>' +
         '</div>' +
-        '<div id="pickup-content-v3" style="max-height:55vh;overflow-y:auto;margin-bottom:12px;"></div>' +
+        '<div id="pickup-content-v3" style="max-height:240px;overflow-y:auto;margin-bottom:12px;"></div>' +
         '<button onclick="window.__pickupManual()" style="width:100%;padding:12px;border-radius:12px;border:2px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.08);color:#a855f7;font-family:Tajawal,sans-serif;font-weight:800;font-size:13px;cursor:pointer;">✏️ إدخال عنوان يدوي</button>' +
       '</div>' +
     '</div>';
   }
 
-  function clearMarkers() { mapMarkers = []; }
-  function renderMap() { /* removed */ }
+  function clearMarkers() {
+    mapMarkers.forEach(function(m) { try { map.removeLayer(m); } catch(e) {} });
+    mapMarkers = [];
+  }
+
+  function renderMap() {
+    var el = document.getElementById('pickup-map-v3');
+    if (!el || typeof L === 'undefined') return;
+
+    if (!map) {
+      var center = state.tab === 'aden' ? [12.7895, 45.0099] : [15.3694, 44.1910];
+      var zoom = state.tab === 'aden' ? 12 : 6;
+      map = L.map(el, { center: center, zoom: zoom, zoomControl: true, attributionControl: false });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+    }
+
+    clearMarkers();
+
+    if (state.view === 'districts') {
+      var areas = state.tab === 'aden' ? ADEN_AREAS : YEMEN_CITIES;
+      areas.forEach(function(a) {
+        var m = L.marker([a.lat, a.lng], {
+          icon: L.divIcon({
+            className: '',
+            html: '<div style="background:linear-gradient(135deg,#ec4899,#8b5cf6);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);font-size:16px;">' + a.icon + '</div>',
+            iconSize: [36, 36], iconAnchor: [18, 18]
+          })
+        }).addTo(map)
+          .bindTooltip(a.name, { direction: 'top', offset: [0, -18] })
+          .on('click', function() { window.__pickupSelectDistrict(a.name); });
+        mapMarkers.push(m);
+      });
+      if (state.tab === 'aden') map.setView([12.7895, 45.0099], 12);
+      else map.setView([15.3694, 44.1910], 6);
+    } else if (state.view === 'points' && state.district) {
+      var d = state.district;
+      var points = d.points || [];
+      points.forEach(function(p) {
+        var m = L.marker([p.lat, p.lng], {
+          icon: L.divIcon({
+            className: '',
+            html: '<div style="background:linear-gradient(135deg,#10b981,#059669);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);font-size:16px;">' + (p.icon || '📦') + '</div>',
+            iconSize: [34, 34], iconAnchor: [17, 17]
+          })
+        }).addTo(map)
+          .bindTooltip(p.name, { direction: 'top', offset: [0, -17] })
+          .on('click', function() { window.__pickupSelectPoint(p.name); });
+        mapMarkers.push(m);
+      });
+      map.setView([d.lat, d.lng], 14);
+    }
+
+    setTimeout(function() { if (map) map.invalidateSize(); }, 200);
+  }
 
   function renderContent() {
     var c = document.getElementById('pickup-content-v3');
@@ -16898,7 +16680,7 @@ document.addEventListener('keydown', function(e) {
     state.view = 'districts';
     state.district = null;
     state.searchQuery = '';
-    // map removed
+    if (map) { try { map.remove(); } catch(e) {} map = null; }
     updateUI();
   };
 
@@ -16921,7 +16703,7 @@ document.addEventListener('keydown', function(e) {
   window.__pickupBackToDistricts = function() {
     state.view = 'districts';
     state.district = null;
-    // map removed
+    if (map) { try { map.remove(); } catch(e) {} map = null; }
     updateUI();
   };
 
