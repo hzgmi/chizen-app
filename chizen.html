@@ -9286,6 +9286,13 @@ html:not([data-theme="light"]) .tvl-form select option {
         </div>
       </div>
       <div class="bank-l" id="bank-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+      <div style="margin-top:14px;">
+        <label style="display:block;font-size:11px;font-weight:800;color:var(--chz-sub);margin-bottom:6px;">طريقة الدفع</label>
+        <select id="co-payment-method" onchange="APP.setPaymentMethod(this.value)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
+          <option value="bank">تحويل بنكي</option>
+          <option value="cod">دفع عند الاستلام</option>
+        </select>
+      </div>
     </div>
 
     <!-- ═══ ملخص الطلب ═══ -->
@@ -11212,6 +11219,58 @@ var APP={
     // ★ تحديث الإجمالي ★
     if (window.APP && APP.updateCheckoutTotals) APP.updateCheckoutTotals();
     if (window.APP && APP.toast) APP.toast('✓ تم اختيار ' + cityName);
+  },
+
+  setPaymentMethod:function(method){
+    window.APP.selectedPaymentMethod = method;
+    // إظهار/إخفاء بنك إذا لزم الأمر
+    var bankList = document.getElementById('bank-list');
+    if (bankList) {
+      bankList.style.display = (method === 'bank') ? 'flex' : 'none';
+    }
+    var receiptCard = document.querySelector('[id*="receipt"]');
+    // يمكن إخفاء رفع الإيصال إذا كان الدفع عند الاستلام
+    var receiptInput = document.getElementById('co-receipt');
+    if (receiptInput) {
+      var receiptLabel = receiptInput.previousElementSibling;
+      if (receiptLabel) receiptLabel.style.display = (method === 'bank') ? 'flex' : 'none';
+    }
+  },
+
+  updateCheckoutTotals:function(){
+    // حساب المجموع الفرعي
+    var sub = 0;
+    if (this.cart && this.cart.length) {
+      var self = this;
+      this.cart.forEach(function(item) {
+        var p = self.getProduct ? self.getProduct(item.id) : null;
+        if (p) sub += (Number(p.price) || 0) * (Number(item.qty) || 1);
+      });
+    }
+    
+    // حساب الشحن
+    var ship = 0;
+    var country = window.APP.selectedCountry;
+    if (country === 'INTL') {
+      ship = Number(window.APP.intlShippingFee) || 0;
+    } else if (country === 'YEMEN') {
+      ship = 0; // مجاني
+    } else {
+      ship = 0; // داخل عدن مجاني
+    }
+    
+    var total = sub + ship;
+    
+    // تحديث العناصر في الصفحة
+    var coSub = document.getElementById('co-sub');
+    var coShip = document.getElementById('co-ship');
+    var coTotal = document.getElementById('co-total');
+    if (coSub) coSub.textContent = sub.toLocaleString('en') + ' ر.س';
+    if (coShip) {
+      coShip.textContent = ship > 0 ? ship + ' ر.س' : 'مجاني';
+      coShip.style.color = ship > 0 ? '#fbbf24' : '#10b981';
+    }
+    if (coTotal) coTotal.textContent = total.toLocaleString('en') + ' ر.س';
   },
 
   selectCountry:function(country){
