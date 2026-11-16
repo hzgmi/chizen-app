@@ -9285,13 +9285,20 @@ html:not([data-theme="light"]) .tvl-form select option {
           </div>
         </div>
       </div>
-      <div class="bank-l" id="bank-list" style="display:flex;flex-direction:column;gap:10px;"></div>
-      <div style="margin-top:14px;">
-        <label style="display:block;font-size:11px;font-weight:800;color:var(--chz-sub);margin-bottom:6px;">طريقة الدفع</label>
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:12px;font-weight:800;color:var(--chz-sub);margin-bottom:8px;">طريقة الدفع</label>
         <select id="co-payment-method" onchange="APP.onPaymentMethodChange(this)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
           <option value="bank">تحويل بنكي</option>
           <option value="cod">دفع عند الاستلام</option>
         </select>
+      </div>
+      <div id="bank-section" style="display:block;">
+        <label style="display:block;font-size:12px;font-weight:800;color:var(--chz-sub);margin-bottom:8px;">اختر البنك</label>
+        <div class="bank-l" id="bank-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+        <div id="bank-confirm-msg" style="display:none;margin-top:10px;padding:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;font-size:12px;color:#10b981;text-align:center;"></div>
+      </div>
+      <div id="cod-section" style="display:none;padding:12px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:12px;font-size:12px;color:#4ade80;text-align:center;">
+        ✅ سيتم الدفع نقداً عند استلام طلبك
       </div>
     </div>
 
@@ -12755,10 +12762,42 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   },
   
   renderBanks:function(){
-    var c=document.getElementById('bank-list');if(!c)return;
-    c.innerHTML=this.banks.map(function(b){
-      return '<div class="bank" onclick="APP.selectBank(\''+esc(b.id)+'\')"><div class="bank-i" style="background:'+esc(b.color)+'">'+esc(b.icon)+'</div><div style="flex:1;"><div class="bank-n">'+esc(b.name)+'</div><div class="bank-d">'+(b.account?esc(b.account):'ادفع عند الاستلام')+'</div></div><div class="bank-c"></div></div>';
+    var c = document.getElementById('bank-list');
+    if (!c) return;
+    if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
+      c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--chz-sub);font-size:12px;">لا توجد بنوك متاحة حالياً</div>';
+      return;
+    }
+    c.innerHTML = this.banks.map(function(b){
+      var accountText = b.account ? 'الحساب: ' + b.account : 'تواصل معنا للتأكيد';
+      return '<div class="bank" onclick="APP.selectBank(\''+esc(b.id)+'\')" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;cursor:pointer;margin-bottom:8px;">' +
+        '<div style="width:40px;height:40px;border-radius:10px;background:' + (b.color || '#1e293b') + ';display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;">' + (b.icon || '🏦') + '</div>' +
+        '<div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--chz-text);">' + (b.name || 'بنك') + '</div>' +
+        '<div style="font-size:11px;color:var(--chz-sub);margin-top:2px;">' + accountText + '</div></div>' +
+        '<button onclick="event.stopPropagation();APP.copyAccount(\'' + (b.account || '') + '\')" style="background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3);padding:6px 10px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">نسخ</button>' +
+        '</div>';
     }).join('');
+  },
+
+  copyAccount:function(account){
+    if (!account) { APP.toast('لا يوجد رقم حساب'); return; }
+    navigator.clipboard.writeText(account).then(function(){
+      APP.toast('✅ تم نسخ رقم الحساب');
+    }).catch(function(){
+      APP.toast('رقم الحساب: ' + account);
+    });
+  },
+
+  selectBank:function(id){
+    this.selectedBank = id;
+    var msg = document.getElementById('bank-confirm-msg');
+    if (msg) {
+      var bank = this.banks.find(function(b) { return b.id === id; });
+      if (bank) {
+        msg.style.display = 'block';
+        msg.textContent = '✅ تم اختيار ' + bank.name + '. يرجى تحويل المبلغ إلى الحساب المذكور.';
+      }
+    }
   },
   
   selectBank:function(id){
