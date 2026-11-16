@@ -6,7 +6,7 @@
 (function() {
   try {
     var saved = localStorage.getItem('chizen_state');
-    var theme = 'dark'; // الافتراضي
+    var theme = 'light'; // الافتراضي
     if (saved) {
       var s = JSON.parse(saved);
       if (s.theme) theme = s.theme;
