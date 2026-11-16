@@ -481,6 +481,7 @@ APP.renderFavorites = function() {
 
 // --- المنتجات المشابهة (هتتنادى جوه صفحة المنتج) ---
 APP.renderRelatedProducts = function(currentProduct) {
+    if (!currentProduct) return;
     const relatedContainer = document.getElementById('related-products');
     if(!relatedContainer || !window.APP.products) return;
     
