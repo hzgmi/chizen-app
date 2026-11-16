@@ -11103,6 +11103,47 @@ window.FIXED_CATS = [
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 var APP={
   state:{lang:'ar',theme:'dark',notifications:true,offers:true,orderNotifs:true,biometric:false,fontSize:'medium',user:null},
+  openIntlCitiesPicker:function(){
+    var self = this;
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem('chizen_pickup_cache') || 'null'); } catch(e) {}
+    
+    function showCountries(data) {
+      var intl = (data && Array.isArray(data.international)) ? data.international : [];
+      var countries = [];
+      intl.forEach(function(c) { if (c.country && countries.indexOf(c.country) === -1) countries.push(c.country); });
+      if (countries.length === 0) { self.openIntlAddress(); return; }
+      
+      var html = '<div class="pickup-overlay-v3" onclick="if(event.target===this)this.remove()">' +
+        '<div class="pickup-sheet-v3" onclick="event.stopPropagation()">' +
+          '<div style="width:40px;height:4px;background:rgba(168,85,247,0.3);border-radius:2px;margin:8px auto 16px;"></div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+            '<div style="font-size:18px;font-weight:900;color:var(--pk-text);">اختر الدولة</div>' +
+            '<button onclick="this.closest(\'.pickup-overlay-v3\').remove()" style="width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:var(--pk-text);cursor:pointer;font-size:16px;">✕</button>' +
+          '</div>' +
+          '<div style="max-height:55vh;overflow-y:auto;">';
+      countries.forEach(function(co) {
+        html += '<div onclick="this.closest(\'.pickup-overlay-v3\').remove();APP.openIntlCities(\'' + co + '\')" style="padding:14px 16px;margin-bottom:10px;background:var(--pk-input);border:1.5px solid var(--pk-border);border-radius:14px;cursor:pointer;font-size:14px;font-weight:900;color:var(--pk-text);">' + co + '</div>';
+      });
+      html += '</div></div></div>';
+      
+      var old = document.querySelector('.pickup-overlay-v3');
+      if (old) old.remove();
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      document.body.appendChild(wrapper.firstElementChild);
+    }
+    
+    if (cached && cached.international) { showCountries(cached); return; }
+    if (window.FB && FB.db) {
+      FB.db.collection('config').doc('pickup_areas').get().then(function(doc){
+        var data = doc.exists ? doc.data() : {};
+        try { localStorage.setItem('chizen_pickup_cache', JSON.stringify(data)); } catch(e) {}
+        showCountries(data);
+      }).catch(function(){ self.openIntlAddress(); });
+    } else { self.openIntlAddress(); }
+  },
+
   selectCountry:function(country){
     window.APP.selectedCountry = country;
     try { localStorage.setItem("chizen_country", country); } catch(e){}
@@ -11118,18 +11159,16 @@ var APP={
     
     if (country === 'INTL') {
       if (intlBtn) { intlBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; intlBtn.style.color = '#fff'; intlBtn.style.border = 'none'; }
-      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openIntlCitiesPicker()');
-      if (pickupLabel) pickupLabel.textContent = 'اختر المدينة الدولية';
+      window.APP.pickupInitialTab = 'intl';
+      APP.openIntlCitiesPicker();  // ★ فتح نافذة الدول مباشرة ★
     } else if (country === 'ADEN') {
       if (adenBtn) { adenBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; adenBtn.style.color = '#fff'; adenBtn.style.border = 'none'; }
-      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openPickup()');
-      if (pickupLabel) pickupLabel.textContent = 'اختر نقطة في عدن';
       window.APP.pickupInitialTab = 'aden';
+      APP.openPickup();  // ★ فتح نافذة النقاط مباشرة ★
     } else if (country === 'YEMEN') {
       if (yemenBtn) { yemenBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; yemenBtn.style.color = '#fff'; yemenBtn.style.border = 'none'; }
-      if (pickupBtn) pickupBtn.setAttribute('onclick', 'APP.openPickup()');
-      if (pickupLabel) pickupLabel.textContent = 'اختر مدينة يمنية';
       window.APP.pickupInitialTab = 'yemen';
+      APP.openPickup();  // ★ فتح نافذة النقاط مباشرة ★
     }
     
     var sd = document.getElementById('shipping-details');
@@ -16581,7 +16620,7 @@ document.addEventListener('keydown', function(e) {
           '<button class="pickup-tab-v3 active" data-tab="aden" onclick="window.__pickupSwitchTab(&quot;aden&quot;)">داخل عدن</button>' +
           '<button class="pickup-tab-v3" data-tab="yemen" onclick="window.__pickupSwitchTab(&quot;yemen&quot;)">خارج عدن</button>' +
         '</div>' +
-        '<div id="pickup-map-v3" style="height:220px;border-radius:14px;overflow:hidden;border:2px solid var(--pk-border);margin-bottom:14px;background:var(--pk-input);"></div>' +
+        '' +
         '<div style="position:relative;margin-bottom:12px;">' +
           '<input type="text" id="pickup-search-v3" placeholder="ابحث عن منطقتك..." style="width:100%;padding:12px 40px 12px 14px;border-radius:12px;border:1.5px solid var(--pk-border);background:var(--pk-input);color:var(--pk-text);font-family:Tajawal,sans-serif;font-size:13px;box-sizing:border-box;outline:none;">' +
           '<span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;">🔍</span>' +
