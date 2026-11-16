@@ -16746,7 +16746,7 @@ document.addEventListener('keydown', function(e) {
       var wrapper = document.createElement('div');
       wrapper.innerHTML = buildHTML();
       document.body.appendChild(wrapper.firstElementChild);
-      state.tab = 'aden';
+      state.tab = (window.APP && window.APP.pickupInitialTab) ? window.APP.pickupInitialTab : 'aden';
       state.view = 'districts';
       state.district = null;
       state.searchQuery = '';
