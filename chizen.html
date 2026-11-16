@@ -11305,6 +11305,23 @@ var APP={
     var pv = document.getElementById('pickup-val');
     if (pv) pv.value = '';
     
+    
+    // ★ تحديث خيار الدفع عند الاستلام: متاح فقط لداخل عدن ★
+    var paySel = document.getElementById('co-payment-method');
+    if (paySel) {
+      var codOption = paySel.querySelector('option[value="cod"]');
+      if (codOption) {
+        if (country === 'ADEN') {
+          codOption.disabled = false;
+          codOption.textContent = 'دفع عند الاستلام';
+        } else {
+          codOption.disabled = true;
+          codOption.textContent = 'دفع عند الاستلام (متاح فقط لداخل عدن)';
+          if (paySel.value === 'cod') paySel.value = 'bank';
+        }
+      }
+    }
+
     if (window.APP.updateCheckoutTotals) window.APP.updateCheckoutTotals();
   },
 
