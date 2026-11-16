@@ -12753,6 +12753,14 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   
   goCheckout:function(){
     if(!this.cart.length)return;
+    // ★ تحميل البنوك من الكاش فوراً ★
+    if (!this.banks || this.banks.length === 0) {
+      try {
+        var cachedBanks = localStorage.getItem('chizen_banks_cache');
+        if (cachedBanks) this.banks = JSON.parse(cachedBanks);
+      } catch(e) {}
+    }
+    this.renderBanks();
     try{var s=localStorage.getItem('chizen_last_pickup');if(s&&!this.selectedPickup)this.selectPickup(s);}catch(e){}
     if(this.state.user){var n=document.getElementById('co-name');if(n)n.value=this.state.user.name||'';}
     var sub=this.cartTotal();
@@ -12764,6 +12772,16 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   renderBanks:function(){
     var c = document.getElementById('bank-list');
     if (!c) return;
+    // ★ إذا كانت banks فارغة، حاول القراءة من الكاش ★
+    if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
+      try {
+        var cachedBanks = localStorage.getItem('chizen_banks_cache');
+        if (cachedBanks) {
+          this.banks = JSON.parse(cachedBanks);
+          console.log('[BANKS] loaded from cache:', this.banks.length);
+        }
+      } catch(e) {}
+    }
     if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
       c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--chz-sub);font-size:12px;">لا توجد بنوك متاحة حالياً</div>';
       return;
