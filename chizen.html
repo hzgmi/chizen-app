@@ -11183,6 +11183,37 @@ var APP={
     } else { self.openIntlAddress(); }
   },
 
+  selectIntlCity:function(cityName, fee, time){
+    var valEl = document.getElementById('pickup-val');
+    if (valEl) valEl.value = 'INTL|' + cityName;
+    window.APP.selectedIntlCity = cityName;
+    window.APP.intlShippingFee = Number(fee) || 0;
+    window.APP.selectedCountry = 'INTL';
+    
+    // ★ تحديث لوحة التفاصيل ★
+    var sd = document.getElementById('shipping-details');
+    var sc = document.getElementById('ship-city');
+    var sf = document.getElementById('ship-fee');
+    var st = document.getElementById('ship-time');
+    if (sd) sd.style.display = 'block';
+    if (sc) sc.textContent = cityName;
+    if (sf) {
+      sf.textContent = (Number(fee) > 0) ? Number(fee) + ' ر.س' : 'مجاني';
+      sf.style.color = (Number(fee) > 0) ? '#fbbf24' : '#10b981';
+    }
+    if (st) st.textContent = time || 'حسب الدولة';
+    
+    // ★ إغلاق النافذة ★
+    var modal = document.querySelector('.pickup-overlay-v3');
+    if (modal) modal.remove();
+    var oldModal = document.getElementById('intl-cities-modal');
+    if (oldModal) oldModal.remove();
+    
+    // ★ تحديث الإجمالي ★
+    if (window.APP && APP.updateCheckoutTotals) APP.updateCheckoutTotals();
+    if (window.APP && APP.toast) APP.toast('✓ تم اختيار ' + cityName);
+  },
+
   selectCountry:function(country){
     window.APP.selectedCountry = country;
     try { localStorage.setItem("chizen_country", country); } catch(e){}
