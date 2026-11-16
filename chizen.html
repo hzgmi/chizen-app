@@ -9206,12 +9206,27 @@ html:not([data-theme="light"]) .tvl-form select option {
       
       <div style="margin-bottom:12px;">
         <label style="display:block;font-size:11px;font-weight:800;color:var(--chz-sub);margin-bottom:6px;">🌍 الدولة</label>
-        <select id="co-country" onchange="APP.onCountryChange(this.value)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:\Tajawal,sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
-          <option value="YE">🇾🇪 اليمن (شحن مجاني)</option>
-          <option value="SA">🇸🇦 السعودية (شحن مجاني فوق 200 ر.س)</option>
-          <option value="AE">🇦🇪 الإمارات (شحن مدفوع)</option>
-          <option value="OTHER">🌍 دول أخرى</option>
-        </select>
+      <!-- ★ ثلاثة أزرار: دولي | داخل عدن | خارج عدن ★ -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <button id="country-btn-intl" onclick="APP.selectCountry('INTL')" type="button" style="flex:1;padding:12px 8px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:12px;font-weight:900;cursor:pointer;">دولي</button>
+        <button id="country-btn-aden" onclick="APP.selectCountry('ADEN')" type="button" style="flex:1;padding:12px 8px;background:linear-gradient(135deg,#a855f7,#7c3aed);border:none;border-radius:12px;color:#fff;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:900;cursor:pointer;">داخل عدن</button>
+        <button id="country-btn-yemen" onclick="APP.selectCountry('YEMEN')" type="button" style="flex:1;padding:12px 8px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:12px;font-weight:900;cursor:pointer;">خارج عدن</button>
+      </div>
+      <!-- لوحة تفاصيل الشحن (تظهر بعد الاختيار) -->
+      <div id="shipping-details" style="display:none;margin-top:14px;padding:14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:12px;color:var(--chz-sub);font-weight:800;">المنطقة</span>
+          <span id="ship-city" style="font-size:13px;font-weight:900;color:var(--chz-text);">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:12px;color:var(--chz-sub);font-weight:800;">سعر الشحن</span>
+          <span id="ship-fee" style="font-size:13px;font-weight:900;color:#10b981;">مجاني</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--chz-sub);font-weight:800;">وقت التوصيل</span>
+          <span id="ship-time" style="font-size:13px;font-weight:900;color:var(--chz-text);">—</span>
+        </div>
+      </div>
       </div>
 
       <button id="pickup-btn" onclick="APP.openPickup()" type="button" style="width:100%;padding:14px 16px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:14px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;text-align:right;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;">
