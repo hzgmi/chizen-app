@@ -1,28 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<script>
-// ★ منع وميض الثيم: يطبق الوضع المحفوظ فوراً قبل تحميل CSS ★
-(function() {
-  try {
-    var saved = localStorage.getItem('chizen_state');
-    var theme = 'light'; // الافتراضي
-    if (saved) {
-      var s = JSON.parse(saved);
-      if (s.theme) theme = s.theme;
-    }
-    document.documentElement.setAttribute('data-theme', theme);
-    if (theme === 'light') {
-      document.documentElement.style.background = '#f8fafc';
-    } else {
-      document.documentElement.style.background = '#0a0820';
-    }
-  } catch(e) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.documentElement.style.background = '#0a0820';
-  }
-})();
-</script>
+
 <script>
 // ★ Global Error Guard: يمنع خطأ "p is not defined" من إيقاف التطبيق
 window.addEventListener("error", function(e) {
@@ -11131,7 +11110,7 @@ window.FIXED_CATS = [
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 var APP={
-  state:{lang:'ar',theme:'dark',notifications:true,offers:true,orderNotifs:true,biometric:false,fontSize:'medium',user:null},
+  state:{lang:'ar',theme:'light',notifications:true,offers:true,orderNotifs:true,biometric:false,fontSize:'medium',user:null},
   openIntlCities:function(country){
     var self = this;
     var cached = null;
