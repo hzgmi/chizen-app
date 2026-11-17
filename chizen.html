@@ -16665,12 +16665,42 @@ document.addEventListener('keydown', function(e) {
     if (APP.__banksShow) return;
     APP.__banksShow = true;
     
-    var DEFAULT_BANKS = [
-      {id:'kuraimi', name:'الكريمي', account:'', color:'#0d47a1', icon:'🏦'},
-      {id:'umflos', name:'أم فلوس', account:'', color:'#10b981', icon:'💳'},
-      {id:'onecash', name:'OneCash', account:'', color:'#a855f7', icon:'💰'},
-      {id:'kuraimi-jawali', name:'الكريمي جوالي', account:'', color:'#f59e0b', icon:'📱'}
+    var ALL_PAYMENTS = [
+      // === بنوك اليمن ===
+      {id:'kuraimi', cat:'bank', name:'بنك الكريمي الإسلامي', account:'', color:'#0d47a1', icon:'🏦'},
+      {id:'cac', cat:'bank', name:'كاك بنك - CAC Bank', account:'', color:'#047857', icon:'🏦'},
+      {id:'tadhamon', cat:'bank', name:'بنك التضامن', account:'', color:'#7c3aed', icon:'🏦'},
+      {id:'saba', cat:'bank', name:'بنك سبأ الإسلامي', account:'', color:'#b45309', icon:'🏦'},
+      {id:'ykb', cat:'bank', name:'بنك اليمن والكويت', account:'', color:'#1d4ed8', icon:'🏦'},
+      {id:'nby', cat:'bank', name:'البنك الأهلي اليمني', account:'', color:'#991b1b', icon:'🏦'},
+      {id:'ycb', cat:'bank', name:'البنك التجاري اليمني', account:'', color:'#0e7490', icon:'🏦'},
+      {id:'iby', cat:'bank', name:'بنك اليمن الدولي', account:'', color:'#6d28d9', icon:'🏦'},
+      {id:'shamil', cat:'bank', name:'مصرف اليمن البحرين الشامل', account:'', color:'#be185d', icon:'🏦'},
+      {id:'yemen-gulf', cat:'bank', name:'بنك اليمن والخليج', account:'', color:'#0369a1', icon:'🏦'},
+      {id:'amal', cat:'bank', name:'بنك الأمل للتمويل الأصغر', account:'', color:'#65a30d', icon:'🏦'},
+      {id:'qutaibi', cat:'bank', name:'بنك القطيبي', account:'', color:'#c026d3', icon:'🏦'},
+      {id:'hadhramout', cat:'bank', name:'بنك حضرموت التجاري', account:'', color:'#ea580c', icon:'🏦'},
+      {id:'aden-bank', cat:'bank', name:'بنك عدن', account:'', color:'#0891b2', icon:'🏦'},
+      {id:'busairi', cat:'bank', name:'بنك البسيري', account:'', color:'#4d7c0f', icon:'🏦'},
+      {id:'arab', cat:'bank', name:'البنك العربي - اليمن', account:'', color:'#b91c1c', icon:'🏦'},
+      {id:'ybrd', cat:'bank', name:'البنك اليمني للإنشاء والتعمير', account:'', color:'#334155', icon:'🏦'},
+      // === محافظ اليمن ===
+      {id:'jawali', cat:'wallet', name:'محفظة جوالي', account:'', color:'#2563eb', icon:'📱'},
+      {id:'umflos', cat:'wallet', name:'أم فلوس - الكريمي', account:'', color:'#10b981', icon:'💳'},
+      {id:'onecash', cat:'wallet', name:'ون كاش - OneCash', account:'', color:'#a855f7', icon:'💰'},
+      {id:'kuraimi-jawali', cat:'wallet', name:'الكريمي جوالي', account:'', color:'#f59e0b', icon:'📱'},
+      {id:'mobile-money', cat:'wallet', name:'موبايل موني - كاك بنك', account:'', color:'#059669', icon:'📱'},
+      {id:'flosak', cat:'wallet', name:'فلوسك', account:'', color:'#db2777', icon:'💳'},
+      {id:'cash-ye', cat:'wallet', name:'كاش يمن', account:'', color:'#f97316', icon:'💵'},
+      {id:'easy', cat:'wallet', name:'إيزي - Easy Wallet', account:'', color:'#06b6d4', icon:'📱'},
+      {id:'jeeb', cat:'wallet', name:'جيب - Jeeb', account:'', color:'#84cc16', icon:'👛'},
+      // === عالمية ===
+      {id:'visa', cat:'global', name:'Visa / Mastercard', account:'دفع بالبطاقة - قريباً', color:'#1a1f71', icon:'💳'},
+      {id:'paypal', cat:'global', name:'PayPal', account:'دفع عبر PayPal - قريباً', color:'#003087', icon:'🅿️'},
+      {id:'applepay', cat:'global', name:'Apple Pay / Google Pay', account:'دفع بالجوال - قريباً', color:'#000000', icon:'📲'},
+      {id:'usdt', cat:'global', name:'USDT - Tether', account:'', color:'#26a17b', icon:'₮'}
     ];
+    var DEFAULT_BANKS = ALL_PAYMENTS;
     APP.renderBanks = function() {
       var c = document.getElementById('bank-list');
       if (!c) return;
@@ -16693,7 +16723,7 @@ document.addEventListener('keydown', function(e) {
         var color = b.color || colors[i % colors.length];
         var icon = b.icon || icons[i % icons.length];
         var name = (b.name || 'طريقة الدفع').replace(/'/g, "\\'");
-        var account = (b.account || 'غير محدد').replace(/'/g, "\\'");
+        var account = ((b.account && b.account.trim() ? b.account : 'اضغط لعرض التفاصيل')).replace(/'/g, "\\'");
         
         return '<div class="bank-item" onclick="window.showBankDetails(\'' + (b.id || i) + '\',\'' + name + '\',\'' + account + '\',\'' + color + '\',\'' + icon + '\')" style="' +
           'display:flex;align-items:center;gap:14px;padding:14px 16px;' +
@@ -16703,7 +16733,7 @@ document.addEventListener('keydown', function(e) {
           '<div style="width:48px;height:48px;border-radius:14px;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px ' + color + '55;">' + icon + '</div>' +
           '<div style="flex:1;min-width:0;">' +
             '<div style="font-weight:900;font-size:14px;color:var(--cr);margin-bottom:3px;">' + (b.name || 'طريقة الدفع') + '</div>' +
-            '<div style="font-size:12px;color:var(--mt);direction:ltr;text-align:right;font-family:monospace;letter-spacing:0.5px;">' + (b.account || 'غير محدد') + '</div>' +
+            '<div style="font-size:12px;color:var(--mt);direction:ltr;text-align:right;font-family:monospace;letter-spacing:0.5px;">' + ((b.account && b.account.trim() ? b.account : 'اضغط لعرض التفاصيل')) + '</div>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">' +
             '<span style="font-size:9px;background:rgba(16,185,129,0.15);color:#10b981;padding:3px 8px;border-radius:6px;font-weight:800;">متاح</span>' +
