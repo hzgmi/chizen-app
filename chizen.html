@@ -8337,6 +8337,16 @@ html:not([data-theme="light"]) .tvl-form select option {
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style id="pay-tabs-css">
+.pay-tabs{display:flex;gap:0;background:#f1f1f1;border-radius:14px;padding:4px;margin:12px 0;overflow:hidden}
+.pay-tabs button{flex:1;padding:12px 6px;border:none;background:transparent;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:#666}
+.pay-tabs button.active{background:#fff;color:#e91e63;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.pay-panel{display:none}
+.pay-panel.active{display:block}
+.pay-empty{padding:24px;text-align:center;color:#999;background:#fafafa;border-radius:12px;margin-top:10px}
+</style>
+
 </head>
 <body>
 <div id="app">
@@ -16701,7 +16711,43 @@ document.addEventListener('keydown', function(e) {
       {id:'usdt', cat:'global', name:'USDT - Tether', account:'', color:'#26a17b', icon:'₮'}
     ];
     var DEFAULT_BANKS = ALL_PAYMENTS;
-    APP.renderBanks = function() {
+
+// --- تبويبات الدفع: بنك / محفظة / عالمي ---
+window.renderPayTabs = function(){
+  var banks = (window.APP && window.APP.banks && window.APP.banks.length>0) ? window.APP.banks : (typeof ALL_PAYMENTS !== 'undefined' ? ALL_PAYMENTS : (typeof DEFAULT_BANKS !== 'undefined' ? DEFAULT_BANKS : []));
+  var cats = [
+    {id:'bank', label:'🏦 بنك', list: banks.filter(function(b){return (b.cat||'bank')==='bank'})},
+    {id:'wallet', label:'📱 محفظة', list: banks.filter(function(b){return b.cat==='wallet'})},
+    {id:'global', label:'🌍 عالمي', list: banks.filter(function(b){return b.cat==='global'})}
+  ];
+  var html = '<div class="pay-tabs">';
+  cats.forEach(function(c, i){
+    html += '<button data-tab="'+c.id+'" onclick="switchPayTab(\''+c.id+'\', this)" class="'+(i===0?'active':'')+'">'+c.label+' ('+c.list.length+')</button>';
+  });
+  html += '</div>';
+  cats.forEach(function(c, i){
+    html += '<div class="pay-panel '+(i===0?'active':'')+'" id="pay-panel-'+c.id+'">';
+    if(c.list.length===0){ html += '<div class="pay-empty">لا توجد طرق متاحة في هذا القسم</div>'; }
+    c.list.forEach(function(b){
+      var acct = (b.account && b.account.trim()) ? b.account : 'اضغط لعرض التفاصيل';
+      html += '<div class="bank-card" data-cat="'+c.id+'" onclick="window.APP && window.APP.selectBank && window.APP.selectBank(\''+b.id+'\')" style="display:flex;align-items:center;gap:12px;padding:14px;margin-bottom:10px;background:#fff;border:1px solid #eee;border-radius:14px;cursor:pointer">';
+      html += '<div style="width:48px;height:48px;border-radius:12px;background:'+(b.color||'#e91e63')+';display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff">'+(b.icon||'🏦')+'</div>';
+      html += '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+b.name+'</div><div style="font-size:13px;color:#888">'+acct+'</div></div>';
+      html += '<span style="background:#dcfce7;color:#15803d;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">متاح</span><span>›</span></div>';
+    });
+    html += '</div>';
+  });
+  return html;
+};
+window.switchPayTab = function(id, btn){
+  document.querySelectorAll('.pay-tabs button').forEach(function(b){b.classList.remove('active')});
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('.pay-panel').forEach(function(p){p.classList.remove('active')});
+  var el = document.getElementById('pay-panel-'+id);
+  if(el) el.classList.add('active');
+};
+
+    APP.renderBanks = function() { if (window.APP && window.APP.paymentMethod === 'bank' || true) { try { var _h = window.renderPayTabs(); if(_h) return _h; } catch(e){} }
       var c = document.getElementById('bank-list');
       if (!c) return;
       
