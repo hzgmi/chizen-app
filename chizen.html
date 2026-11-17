@@ -16665,6 +16665,12 @@ document.addEventListener('keydown', function(e) {
     if (APP.__banksShow) return;
     APP.__banksShow = true;
     
+    var DEFAULT_BANKS = [
+      {id:'kuraimi', name:'الكريمي', account:'', color:'#0d47a1', icon:'🏦'},
+      {id:'umflos', name:'أم فلوس', account:'', color:'#10b981', icon:'💳'},
+      {id:'onecash', name:'OneCash', account:'', color:'#a855f7', icon:'💰'},
+      {id:'kuraimi-jawali', name:'الكريمي جوالي', account:'', color:'#f59e0b', icon:'📱'}
+    ];
     APP.renderBanks = function() {
       var c = document.getElementById('bank-list');
       if (!c) return;
@@ -16673,7 +16679,7 @@ document.addEventListener('keydown', function(e) {
       if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
         try { var cached = localStorage.getItem('chizen_banks_cache'); if (cached) { this.banks = JSON.parse(cached); console.log('[BANKS] override loaded from cache:', this.banks.length); } } catch(e) {}
       }
-      var banks = this.banks || [];
+      var banks = (this.banks && this.banks.length > 0) ? this.banks : DEFAULT_BANKS; if (banks && banks.length>0 && (!this.banks || this.banks.length===0)) { this.banks = banks; }
       
       if (banks.length === 0) {
         c.innerHTML = '<div style="padding:16px;text-align:center;color:var(--mt);font-size:12px;">لا توجد طرق دفع متاحة حالياً</div>';
