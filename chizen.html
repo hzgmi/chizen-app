@@ -9311,7 +9311,12 @@ html:not([data-theme="light"]) .tvl-form select option {
         </div>
       </div>
       <div id="bank-section" style="display:block;">
-        <label style="display:block;font-size:12px;font-weight:800;color:var(--chz-sub);margin-bottom:8px;">اختر البنك</label>
+        <!-- ★ تبويبات طريقة الدفع: بنك | محفظة | دولي ★ -->
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <button id="pay-tab-bank" onclick="APP.switchPayTab('bank')" style="flex:1;padding:10px;border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;border:1.5px solid #a855f7;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;">بنك</button>
+          <button id="pay-tab-wallet" onclick="APP.switchPayTab('wallet')" style="flex:1;padding:10px;border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;border:1.5px solid var(--chz-border);background:var(--chz-bg2);color:var(--chz-text);">محفظة</button>
+          <button id="pay-tab-global" onclick="APP.switchPayTab('global')" style="flex:1;padding:10px;border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;border:1.5px solid var(--chz-border);background:var(--chz-bg2);color:var(--chz-text);">دولي</button>
+        </div>
         <div class="bank-l" id="bank-list" style="display:flex;flex-direction:column;gap:10px;"></div>
         <div id="bank-confirm-msg" style="display:none;margin-top:10px;padding:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;font-size:12px;color:#10b981;text-align:center;"></div>
       </div>
@@ -11261,6 +11266,19 @@ var APP={
       method = 'bank';
     }
     APP.setPaymentMethod(method);
+  },
+
+  switchPayTab:function(tab){
+    window.APP.currentPayTab = tab;
+    var bankBtn = document.getElementById('pay-tab-bank');
+    var walletBtn = document.getElementById('pay-tab-wallet');
+    var globalBtn = document.getElementById('pay-tab-global');
+    [bankBtn, walletBtn, globalBtn].forEach(function(b) {
+      if (b) { b.style.background = 'var(--chz-bg2)'; b.style.color = 'var(--chz-text)'; b.style.border = '1.5px solid var(--chz-border)'; }
+    });
+    var activeBtn = document.getElementById('pay-tab-' + tab);
+    if (activeBtn) { activeBtn.style.background = 'linear-gradient(135deg,#a855f7,#7c3aed)'; activeBtn.style.color = '#fff'; activeBtn.style.border = 'none'; }
+    this.renderBanks();
   },
 
   setPaymentMethod:function(method){
@@ -16711,17 +16729,45 @@ document.addEventListener('keydown', function(e) {
     APP.renderBanks = function() {
       var c = document.getElementById('bank-list');
       if (!c) return;
-      if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
-        try {
-          var cached = localStorage.getItem('chizen_banks_cache');
-          if (cached) this.banks = JSON.parse(cached);
-        } catch(e) {}
-      }
-      var banks = (this.banks && this.banks.length > 0) ? this.banks : DEFAULT_BANKS;
-      if (!banks || banks.length === 0) {
-        c.innerHTML = '<div style="padding:16px;text-align:center;color:var(--chz-sub);font-size:12px;">لا توجد طرق دفع متاحة حالياً</div>';
+      var tab = window.APP.currentPayTab || 'bank';
+      
+      // إذا كان التبويب "دولي" → عرض "قريباً"
+      if (tab === 'global') {
+        c.innerHTML = '<div style="text-align:center;padding:30px 20px;background:var(--chz-bg2);border:1.5px dashed var(--chz-border);border-radius:14px;">' +
+          '<div style="font-size:32px;margin-bottom:10px;">🌍</div>' +
+          '<div style="font-size:15px;font-weight:900;color:var(--chz-text);margin-bottom:6px;">الدفع الدولي</div>' +
+          '<div style="font-size:12px;color:var(--chz-sub);">قريباً سيتم تفعيل الدفع الدولي</div>' +
+          '</div>';
         return;
       }
+      
+      // إذا كان التبويب "محفظة" → عرض المحافظ
+      // إذا كان التبويب "بنك" → عرض البنوك
+      var banks = [];
+      if (tab === 'wallet') {
+        banks = [
+          {id:'jawali', name:'جوالي', account:'', color:'#2563eb', icon:'📱'},
+          {id:'umflos', name:'أم فلوس', account:'', color:'#10b981', icon:'💳'}
+        ];
+      } else {
+        // بنك: استخدام APP.banks (أو DEFAULT_BANKS)
+        if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
+          try {
+            var cached = localStorage.getItem('chizen_banks_cache');
+            if (cached) this.banks = JSON.parse(cached);
+          } catch(e) {}
+        }
+        banks = (this.banks && this.banks.length > 0) ? this.banks : [
+          {id:'kuraimi', name:'بنك الكريمي الإسلامي', account:'1234-567-890', color:'#0d47a1', icon:'🏦'},
+          {id:'qutaibi', name:'بنك القطيبي', account:'', color:'#0f766e', icon:'🏦'}
+        ];
+      }
+      
+      if (!banks || banks.length === 0) {
+        c.innerHTML = '<div style="padding:16px;text-align:center;color:var(--chz-sub);font-size:12px;">لا توجد طرق متاحة حالياً</div>';
+        return;
+      }
+      
       c.innerHTML = banks.map(function(b){
         var color = b.color || '#1e293b';
         var icon = b.icon || '🏦';
