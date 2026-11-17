@@ -11497,7 +11497,7 @@ var APP={
   if(self.checkServices) self.checkServices();
   if(self.renderBrands) self.renderBrands();
 });
-      FB.listenToConfig('payments', function(p){if(p&&p.list){self.banks=p.list;self.renderBanks();}});
+      FB.listenToConfig('payments', function(p){if(p&&p.list){self.banks=p.list; try{localStorage.setItem('chizen_banks_cache', JSON.stringify(p.list));}catch(e){}self.renderBanks();}});
       FB.listenToConfig('coupons', function(c){if(c&&c.list)self.coupons=c.list;});
       FB.listenToConfig('shipping', function(s){if(s)self.shipping=s;});
       FB.listenToUserOrders(FB.currentUser && FB.currentUser.uid, function(o){if(o){self.orders=o;self.renderOrders();self.renderTrack();}});
@@ -16669,6 +16669,10 @@ document.addEventListener('keydown', function(e) {
       var c = document.getElementById('bank-list');
       if (!c) return;
       
+      // ★ FIX: لو banks فاضية، جرب الكاش مثل الأصلية ★
+      if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
+        try { var cached = localStorage.getItem('chizen_banks_cache'); if (cached) { this.banks = JSON.parse(cached); console.log('[BANKS] override loaded from cache:', this.banks.length); } } catch(e) {}
+      }
       var banks = this.banks || [];
       
       if (banks.length === 0) {
