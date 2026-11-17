@@ -12767,29 +12767,51 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   renderBanks:function(){
     var c = document.getElementById('bank-list');
     if (!c) return;
-    // ★ إذا كانت banks فارغة، حاول القراءة من الكاش ★
+    // ★ Fallback: إذا banks فاضية، خذ من ALL_PAYMENTS / DEFAULT_BANKS ★
     if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
       try {
-        var cachedBanks = localStorage.getItem('chizen_banks_cache');
-        if (cachedBanks) {
-          this.banks = JSON.parse(cachedBanks);
-          console.log('[BANKS] loaded from cache:', this.banks.length);
-        }
+        var cached = localStorage.getItem('chizen_banks_cache');
+        if (cached) this.banks = JSON.parse(cached);
       } catch(e) {}
+    }
+    if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
+      if (typeof ALL_PAYMENTS !== 'undefined' && ALL_PAYMENTS.length) this.banks = ALL_PAYMENTS;
+      else if (typeof DEFAULT_BANKS !== 'undefined' && DEFAULT_BANKS.length) this.banks = DEFAULT_BANKS;
     }
     if (!this.banks || !Array.isArray(this.banks) || this.banks.length === 0) {
       c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--chz-sub);font-size:12px;">لا توجد بنوك متاحة حالياً</div>';
       return;
     }
-    c.innerHTML = this.banks.map(function(b){
-      var accountText = b.account ? 'الحساب: ' + b.account : 'تواصل معنا للتأكيد';
-      return '<div class="bank" onclick="APP.selectBank(\''+esc(b.id)+'\')" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;cursor:pointer;margin-bottom:8px;">' +
-        '<div style="width:40px;height:40px;border-radius:10px;background:' + (b.color || '#1e293b') + ';display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;">' + (b.icon || '🏦') + '</div>' +
-        '<div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--chz-text);">' + (b.name || 'بنك') + '</div>' +
-        '<div style="font-size:11px;color:var(--chz-sub);margin-top:2px;">' + accountText + '</div></div>' +
-        '<button onclick="event.stopPropagation();APP.copyAccount(\'' + (b.account || '') + '\')" style="background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3);padding:6px 10px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">نسخ</button>' +
-        '</div>';
-    }).join('');
+    var banks = this.banks;
+    var cats = [
+      {id:'bank', label:'🏦 بنك', list: banks.filter(function(b){return (b.cat||'bank')==='bank'})},
+      {id:'wallet', label:'📱 محفظة', list: banks.filter(function(b){return b.cat==='wallet'})},
+      {id:'global', label:'🌍 عالمي', list: banks.filter(function(b){return b.cat==='global'})}
+    ];
+    var h = '<div class="pay-tabs" style="display:flex;gap:0;background:#f1f1f1;border-radius:14px;padding:4px;margin-bottom:12px">';
+    cats.forEach(function(cc,i){ h += '<button data-tab="'+cc.id+'" onclick="APP.switchPayTab(\''+cc.id+'\',this)" style="flex:1;padding:12px 6px;border:none;background:'+(i===0?'#fff':'transparent')+';border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:'+(i===0?'#e91e63':'#666')+';box-shadow:'+(i===0?'0 2px 8px rgba(0,0,0,.12)':'none')+'">'+cc.label+' ('+cc.list.length+')</button>'; });
+    h += '</div>';
+    cats.forEach(function(cc,i){
+      h += '<div class="pay-panel2" id="pay2-'+cc.id+'" style="display:'+(i===0?'block':'none')+'">';
+      if(!cc.list.length) h += '<div style="padding:20px;text-align:center;color:#999">لا توجد طرق في هذا القسم</div>';
+      cc.list.forEach(function(b){
+        var acct = (b.account && String(b.account).trim()) ? 'الحساب: '+b.account : 'اضغط لعرض التفاصيل';
+        h += '<div class="bank" onclick="APP.selectBank(\''+b.id+'\')" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;cursor:pointer;margin-bottom:8px;">' +
+          '<div style="width:40px;height:40px;border-radius:10px;background:'+(b.color||'#1e293b')+';display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;">'+(b.icon||'🏦')+'</div>' +
+          '<div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--chz-text);">'+(b.name||'بنك')+'</div>' +
+          '<div style="font-size:11px;color:var(--chz-sub);margin-top:2px;">'+acct+'</div></div>' +
+          '<span style="background:#dcfce7;color:#15803d;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800">متاح</span></div>';
+      });
+      h += '</div>';
+    });
+    c.innerHTML = h;
+  },
+
+  switchPayTab:function(id, btn){
+    document.querySelectorAll('.pay-tabs button').forEach(function(b){b.style.background='transparent';b.style.color='#666';b.style.boxShadow='none'});
+    if(btn){btn.style.background='#fff';btn.style.color='#e91e63';btn.style.boxShadow='0 2px 8px rgba(0,0,0,.12)'}
+    document.querySelectorAll('.pay-panel2').forEach(function(pp){pp.style.display='none'});
+    var el = document.getElementById('pay2-'+id); if(el) el.style.display='block';
   },
 
   copyAccount:function(account){
@@ -16747,7 +16769,7 @@ window.switchPayTab = function(id, btn){
   if(el) el.classList.add('active');
 };
 
-    APP.renderBanks = function() { if (window.APP && window.APP.paymentMethod === 'bank' || true) { try { var _h = window.renderPayTabs(); if(_h) return _h; } catch(e){} }
+    // تم حذف التجاوز القديم
       var c = document.getElementById('bank-list');
       if (!c) return;
       
