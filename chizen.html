@@ -9247,10 +9247,31 @@ html:not([data-theme="light"]) .tvl-form select option {
       </div>
       <div style="margin-bottom:14px;">
         <label style="display:block;font-size:12px;font-weight:800;color:var(--chz-sub);margin-bottom:8px;">طريقة الدفع</label>
-        <select id="co-payment-method" onchange="APP.onPaymentMethodChange(this)" style="width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
+        <select id="co-payment-method" style="display:none;width:100%;padding:12px 14px;background:var(--chz-bg2);border:1.5px solid var(--chz-border);border-radius:12px;color:var(--chz-text);font-family:'Tajawal',sans-serif;font-size:14px;box-sizing:border-box;outline:none;cursor:pointer;">
           <option value="bank">تحويل بنكي</option>
           <option value="cod">دفع عند الاستلام</option>
         </select>
+        <!-- ═══ CHIZEN PAY UPGRADE - بطاقات دفع رسمية ═══ -->
+        <div id="chz-pay-upgrade" style="margin-top:4px;">
+          <div style="display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(59,130,246,0.12));border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:8px 10px;margin-bottom:12px;font-size:11px;color:#10b981;font-weight:700;">
+            <span>🔒</span><span>دفع آمن ومشفر 100% • بياناتك محمية مع شيزن</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div id="chz-pay-bank" onclick="window.chzSelectPay('bank')" style="cursor:pointer;border:2px solid #ec4899;background:linear-gradient(135deg,rgba(236,72,153,0.12),rgba(139,92,246,0.12));border-radius:16px;padding:14px;text-align:center;transition:all .2s;">
+              <div style="font-size:26px;">🏦</div>
+              <div style="font-weight:900;font-size:13px;color:var(--chz-text);margin:6px 0 2px;">تحويل بنكي</div>
+              <div style="font-size:11px;color:var(--chz-sub);">الكريمي • أم فلوس • OneCash</div>
+              <div id="chz-pay-bank-check" style="margin-top:8px;font-size:11px;font-weight:800;color:#ec4899;">✓ مختار</div>
+            </div>
+            <div id="chz-pay-cod" onclick="window.chzSelectPay('cod')" style="cursor:pointer;border:2px solid var(--chz-border);background:var(--chz-bg2);border-radius:16px;padding:14px;text-align:center;transition:all .2s;">
+              <div style="font-size:26px;">💵</div>
+              <div style="font-weight:900;font-size:13px;color:var(--chz-text);margin:6px 0 2px;">عند الاستلام</div>
+              <div style="font-size:11px;color:var(--chz-sub);">ادفع نقداً • عدن فقط</div>
+              <div id="chz-pay-cod-check" style="margin-top:8px;font-size:11px;font-weight:800;color:var(--chz-sub);">○ اختر</div>
+            </div>
+          </div>
+          <div style="text-align:center;font-size:10px;color:var(--chz-sub);margin-bottom:2px;">🔒 مدعوم بتقنية تشفير • CHIZEN SECURE PAY</div>
+        </div>
       </div>
       <div id="bank-section" style="display:block;">
         <label style="display:block;font-size:12px;font-weight:800;color:var(--chz-sub);margin-bottom:8px;">اختر البنك</label>
@@ -25639,6 +25660,31 @@ html[data-theme="light"] #sc-details-new .chz-det-section-title::before {
     };
   }
 })();
+</script>
+
+<script>
+// ═══ CHIZEN PAY UPGRADE - مزامنة البطاقات مع النظام القديم ═══
+window.chzSelectPay = function(method){
+  var sel = document.getElementById('co-payment-method');
+  if(sel){ sel.value = method; }
+  // نستدعي نفس دالة النظام القديم - لا نعيد اختراع المنطق
+  if(window.APP && APP.onPaymentMethodChange && sel){ APP.onPaymentMethodChange(sel); }
+  // تحديث شكل البطاقات حسب القيمة الفعلية (لأن COD قد يرفض خارج عدن)
+  var real = sel ? sel.value : method;
+  var b = document.getElementById('chz-pay-bank');
+  var cd = document.getElementById('chz-pay-cod');
+  var bc = document.getElementById('chz-pay-bank-check');
+  var cc = document.getElementById('chz-pay-cod-check');
+  if(!b||!cd) return;
+  var active = '2px solid #ec4899', inactive = '2px solid var(--chz-border)';
+  var activeBg = 'linear-gradient(135deg,rgba(236,72,153,0.12),rgba(139,92,246,0.12))', inactiveBg = 'var(--chz-bg2)';
+  b.style.border = real==='bank'?active:inactive; b.style.background = real==='bank'?activeBg:inactiveBg;
+  cd.style.border = real==='cod'?active:inactive; cd.style.background = real==='cod'?activeBg:inactiveBg;
+  if(bc) bc.textContent = real==='bank'?'✓ مختار':'○ اختر';
+  if(bc) bc.style.color = real==='bank'?'#ec4899':'var(--chz-sub)';
+  if(cc) cc.textContent = real==='cod'?'✓ مختار':'○ اختر';
+  if(cc) cc.style.color = real==='cod'?'#ec4899':'var(--chz-sub)';
+};
 </script>
 </body>
 </html
