@@ -25958,6 +25958,42 @@ window.chzSelectPay = function(method){
   if(cc) cc.style.color = real==='cod'?'#ec4899':'var(--chz-sub)';
 };
 </script>
+
+<style id="chz-compact-product-buttons">
+#sc-details-new .chz-det-actions {
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 10px 0 !important;
+  padding: 8px !important;
+  border-radius: 12px !important;
+}
+#sc-details-new .chz-det-buttons {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+#sc-details-new .chz-det-buttons button {
+  flex: 0 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 38px !important;
+  padding: 8px 13px !important;
+  font-size: 13px !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important;
+}
+#sc-details-new .chz-det-qty {
+  width: fit-content !important;
+  margin-bottom: 8px !important;
+}
+</style>
+
 </body>
 </html
     renderPassengers: function() {
@@ -26134,180 +26170,5 @@ window.chzSelectPay = function(method){
   </div>
   <p style="font-size:12px; color:#888; margin-top:18px;">حساب واحد • هوية واحدة • تجربة موحدة</p>
 </section>
-
-<style id="chz-sticky-bar-premium-final">
-/* CHIZEN Premium Product Purchase Bar */
-#sc-details-new .chz-det-actions {
-  position: fixed !important;
-  bottom: 70px !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  max-width: 600px !important;
-  box-sizing: border-box !important;
-  margin: 0 auto !important;
-  padding: 13px 14px calc(13px + env(safe-area-inset-bottom, 0px)) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 11px !important;
-  background: #ffffff !important;
-  border: 1px solid #f1dce7 !important;
-  border-bottom: 0 !important;
-  border-radius: 22px 22px 0 0 !important;
-  box-shadow: 0 -8px 30px rgba(25, 12, 30, .12) !important;
-  z-index: 1200 !important;
-  direction: rtl !important;
-}
-
-/* Quantity */
-#sc-details-new .chz-det-actions > .chz-det-qty {
-  align-self: flex-end !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 132px !important;
-  min-width: 132px !important;
-  height: 44px !important;
-  box-sizing: border-box !important;
-  background: #fff7fb !important;
-  border: 1px solid #f2d5e4 !important;
-  border-radius: 14px !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-}
-
-#sc-details-new .chz-det-actions .chz-det-qty-btn {
-  width: 42px !important;
-  height: 44px !important;
-  color: #d92378 !important;
-  background: transparent !important;
-  border: 0 !important;
-  font-size: 22px !important;
-  font-weight: 800 !important;
-}
-
-#sc-details-new .chz-det-actions .chz-det-qty-val {
-  width: 42px !important;
-  height: 44px !important;
-  line-height: 44px !important;
-  color: #202033 !important;
-  font-size: 17px !important;
-  font-weight: 800 !important;
-  text-align: center !important;
-}
-
-/* Two balanced action buttons */
-#sc-details-new .chz-det-actions .chz-det-buttons {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-  width: 100% !important;
-  min-width: 0 !important;
-}
-
-#sc-details-new .chz-det-actions .chz-det-btn-cart,
-#sc-details-new .chz-det-actions .chz-det-btn-buy {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  height: 51px !important;
-  box-sizing: border-box !important;
-  border-radius: 15px !important;
-  font-family: inherit !important;
-  font-size: 13px !important;
-  font-weight: 800 !important;
-  white-space: nowrap !important;
-  cursor: pointer !important;
-  transition: transform .16s ease, box-shadow .16s ease !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-#sc-details-new .chz-det-actions .chz-det-btn-cart {
-  color: #cf2875 !important;
-  background: #fff !important;
-  border: 1.5px solid #e9a9c9 !important;
-  box-shadow: 0 3px 9px rgba(207,40,117,.06) !important;
-}
-
-#sc-details-new .chz-det-actions .chz-det-btn-buy {
-  color: #fff !important;
-  background: linear-gradient(135deg,#ff3d91 0%,#d91d75 100%) !important;
-  border: 0 !important;
-  box-shadow: 0 5px 14px rgba(217,29,117,.24) !important;
-}
-
-#sc-details-new .chz-det-actions .chz-det-btn-cart:active,
-#sc-details-new .chz-det-actions .chz-det-btn-buy:active {
-  transform: scale(.97) !important;
-}
-
-/* Selected product options */
-#sc-details-new .chz-det-actions .chz-det-summary {
-  flex-wrap: wrap !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 7px !important;
-  width: 100% !important;
-}
-
-#sc-details-new .chz-det-actions .chz-sum-item {
-  padding: 5px 12px !important;
-  border: 1px solid #f0dce7 !important;
-  border-radius: 20px !important;
-  background: #fff8fb !important;
-  color: #a51e60 !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-}
-
-/* Keep product details visible above the fixed bar */
-#sc-details-new {
-  padding-bottom: 175px !important;
-}
-
-/* Dark theme */
-html:not([data-theme="light"]) #sc-details-new .chz-det-actions {
-  background: #111426 !important;
-  border-color: #29243b !important;
-  box-shadow: 0 -8px 30px rgba(0,0,0,.28) !important;
-}
-
-html:not([data-theme="light"]) #sc-details-new .chz-det-actions > .chz-det-qty {
-  background: #1b2035 !important;
-  border-color: #39304b !important;
-}
-
-html:not([data-theme="light"]) #sc-details-new .chz-det-actions .chz-det-qty-val {
-  color: #fff !important;
-}
-
-html:not([data-theme="light"]) #sc-details-new .chz-det-actions .chz-det-btn-cart {
-  background: #21172c !important;
-  border-color: #71405f !important;
-  color: #ff91c2 !important;
-}
-
-html:not([data-theme="light"]) #sc-details-new .chz-det-actions .chz-sum-item {
-  background: #21172c !important;
-  border-color: #493047 !important;
-  color: #ffacd0 !important;
-}
-
-@media (max-width: 360px) {
-  #sc-details-new .chz-det-actions {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-  }
-  #sc-details-new .chz-det-actions .chz-det-buttons {
-    gap: 7px !important;
-  }
-  #sc-details-new .chz-det-actions .chz-det-btn-cart,
-  #sc-details-new .chz-det-actions .chz-det-btn-buy {
-    font-size: 11px !important;
-  }
-}
-</style>
 </body>
 </html>
