@@ -891,6 +891,7 @@ var AUTH = {
     if (!raw || raw.length < 7) { this.showErr(errId, 'أدخل رقم جوال صحيح'); return; }
     if (raw.length < (this._selectedCountry.len - 2)) { this.showErr(errId, 'الرقم قصير جداً'); return; }
     if (!this._fbReady) { this.showErr(errId, 'جاري التحميل — حاول بعد لحظات'); return; }
+    if (!window.FB || !FB.auth || typeof FB.auth.signInWithPhoneNumber !== 'function') { this.showErr(errId, 'خدمة تسجيل الدخول غير متاحة حالياً؛ أعد المحاولة'); return; }
     var clean = raw.replace(/^0+/, ''); var fullPhone = this._selectedCountry.code + clean;
     this._setBusy(true); this.setLoading('btn-send-otp', true);
     try {
@@ -927,6 +928,7 @@ var AUTH = {
   resendOTP: async function() {
     if (this._resendCooldown > 0 || this._busy) return;
     if (!this._phoneNumber) { this.showErr('otp-err', 'أعد إدخال الرقم أولاً'); return; }
+    if (!window.FB || !FB.auth || typeof FB.auth.signInWithPhoneNumber !== 'function') { this.showErr('otp-err', 'خدمة تسجيل الدخول غير متاحة حالياً؛ أعد المحاولة'); return; }
     this._setBusy(true); var btn = document.getElementById('btn-resend'); var orig = btn.textContent; btn.textContent = 'جاري...'; btn.disabled = true;
     try {
       if (this._recaptchaVerifier) { try { this._recaptchaVerifier.clear(); } catch(e) {} this._recaptchaVerifier = null; }
@@ -963,6 +965,10 @@ var AUTH = {
     var email = (document.getElementById('login-email').value || '').trim().toLowerCase(); var pass = document.getElementById('login-password').value || ''; var remember = document.getElementById('login-remember').checked;
     if (!this.isEmail(email)) { this.showErr('login-err', 'أدخل بريداً صحيحاً'); return; }
     if (pass.length < 6) { this.showErr('login-err', 'كلمة المرور 6 أحرف على الأقل'); return; }
+    if (!window.FB || !FB.auth || typeof FB.loginEmail !== 'function') {
+      this.showErr('login-err', 'خدمة تسجيل الدخول غير متاحة حالياً؛ أعد المحاولة');
+      return;
+    }
     /* تم إزالة فحص _fbReady — Firebase جاهز دائماً */
     this._setBusy(true); this.setLoading('btn-login', true);
     try {
@@ -991,6 +997,10 @@ var AUTH = {
     if (pass.length < 6) { this.showErr('signup-err', 'كلمة المرور 6 أحرف على الأقل'); return; }
     if (pass !== confirm) { this.showErr('signup-err', 'كلمتا المرور غير متطابقتين'); return; }
     if (!terms) { this.showErr('signup-err', 'يجب الموافقة على الشروط والأحكام'); return; }
+    if (!window.FB || !FB.auth || typeof FB.signupEmail !== 'function' || typeof FB.saveUserProfile !== 'function') {
+      this.showErr('signup-err', 'خدمة إنشاء الحساب غير متاحة حالياً؛ أعد المحاولة');
+      return;
+    }
     if (!this._fbReady) { this.showErr('signup-err', 'جاري التحميل — حاول بعد لحظات'); return; }
     this._setBusy(true); this.setLoading('btn-signup', true);
     try {
@@ -1011,12 +1021,16 @@ var AUTH = {
   },
   googleLogin: async function() {
     if (this._busy) return;
+    if (!window.FB || !FB.auth ||
+        typeof FB.auth.signInWithRedirect !== 'function' ||
+        typeof FB.auth.signInWithPopup !== 'function') {
+      this.showErr('login-err', 'خدمة تسجيل الدخول غير متاحة حالياً؛ أعد المحاولة');
+      return;
+    }
     /* تم إزالة فحص _fbReady — Firebase جاهز دائماً */
     this._setBusy(true); this.setLoading('btn-google', true);
     try {
       var provider = new firebase.auth.GoogleAuthProvider(); provider.setCustomParameters({ prompt: 'select_account' });
-      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-      if (isMobile) { this.showOverlay('جاري التحويل إلى Google...'); await FB.auth.signInWithRedirect(provider); return; }
       var result = await withTimeout(FB.auth.signInWithPopup(provider), 60000, null); if (!result) throw new Error('timeout');
       if (result.user) {
         var existing = await withTimeout(FB.getUserProfile(), 5000, null);
@@ -1035,6 +1049,12 @@ var AUTH = {
   },
   facebookLogin: async function() {
     if (this._busy) return;
+    if (!window.FB || !FB.auth ||
+        typeof FB.auth.signInWithRedirect !== 'function' ||
+        typeof FB.auth.signInWithPopup !== 'function') {
+      this.showErr('login-err', 'خدمة تسجيل الدخول غير متاحة حالياً؛ أعد المحاولة');
+      return;
+    }
     /* تم إزالة فحص _fbReady — Firebase جاهز دائماً */
     this._setBusy(true); this.setLoading('btn-facebook', true);
     try {
@@ -1063,6 +1083,10 @@ var AUTH = {
     var email = (document.getElementById('forgot-email').value || '').trim().toLowerCase();
     if (!this.isEmail(email)) { this.showErr('forgot-err', 'أدخل بريداً صحيحاً'); return; }
     if (!this._fbReady) { this.showErr('forgot-err', 'جاري التحميل — حاول بعد لحظات'); return; }
+    if (!window.FB || !FB.auth || typeof FB.sendPasswordReset !== 'function') {
+      this.showErr('forgot-err', 'خدمة استعادة كلمة المرور غير متاحة حالياً؛ أعد المحاولة');
+      return;
+    }
     this._setBusy(true); this.setLoading('btn-forgot', true);
     try {
       await withTimeout(FB.sendPasswordReset(email), 15000, null);

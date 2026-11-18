@@ -11457,6 +11457,23 @@ var APP={
   syncBg:function(){
     var self=this;
     if(!window.FB||!FB.ready){setTimeout(function(){self.syncBg();},200);return;}
+    if(!FB.auth || typeof FB.auth.onAuthStateChanged !== 'function'){
+      console.error('[AUTH] Firebase Auth غير متاح؛ تشغيل وضع الزائر');
+      window.__guestActive = true;
+      try { localStorage.setItem('chizen_guest', 'true'); } catch(e){}
+      document.documentElement.classList.add('chz-auth-ok');
+      if(document.body) document.body.classList.add('chz-is-guest');
+      if(self.state) self.state.user = null;
+      var failedSplash = document.getElementById('chz-splash-v63');
+      if(failedSplash){
+        failedSplash.style.opacity = '0';
+        failedSplash.style.transition = 'opacity 0.3s ease';
+        setTimeout(function(){
+          if(failedSplash.parentNode) failedSplash.parentNode.removeChild(failedSplash);
+        }, 350);
+      }
+      return;
+    }
     if(FB.currentUser){self.onUserReady(FB.currentUser);return;}
     FB.auth.onAuthStateChanged(function(u){
       if(u){
@@ -13376,8 +13393,8 @@ else APP.init();
 <script src="client/chizen-ai-v2.js"></script>
 <script src="client/chizen-ai-v2-smartsearch.js"></script>
 <script src="client/my-bookings-reminders.js"></script>
-<script src="client/my-bookings-v3.js
-<script src="client/product-view.js?v=1"></script>"></script>
+<script src="client/my-bookings-v3.js"></script>
+<script src="client/product-view.js?v=1"></script>
 <script src="client/chizen-extra.js"></script>
 
 
