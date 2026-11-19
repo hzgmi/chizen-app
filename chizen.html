@@ -12428,6 +12428,7 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
     if (APP.selectedColor) cartItem.color = APP.selectedColor;
     this.addCartFull(cartItem);
     this.toast('✓ تمت الإضافة' + (APP.selectedSize ? ' (مقاس ' + APP.selectedSize + ')' : ''));
+    if(window.APP.closeDetailsNew)window.APP.closeDetailsNew();
     this.goTab('home');
   },
   
