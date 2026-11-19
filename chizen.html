@@ -26222,5 +26222,37 @@ html body #prods .product-card .price-yemeni-row{margin:2px 0 6px!important}
 html body #prods .product-card .btn-add-cart{
 height:36px!important;padding:0 8px!important;font-size:12px!important;border-radius:10px!important}
 </style>
+<style id="chz-rows-css">
+#chz-hrows .chz-h-title{font-size:17px;font-weight:800;padding:6px 15px;color:var(--text-primary,#1f2937)}
+#chz-hrows .chz-h-row{display:flex;gap:10px;overflow-x:auto;padding:4px 15px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#chz-hrows .chz-h-row::-webkit-scrollbar{display:none}
+#chz-hrows .chz-hcard{flex:0 0 42%;max-width:170px;background:var(--bg-card,#fff);border-radius:16px;padding:8px;box-shadow:0 2px 12px rgba(0,0,0,.10)}
+#chz-hrows .chz-hcard img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;display:block}
+#chz-hrows .chz-hn{font-size:13px;margin:6px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary,#1f2937)}
+#chz-hrows .chz-hp{font-size:14px;font-weight:800;color:#ec2a79}
+</style>
+<script id="chz-rows-js">
+(function(){
+function e(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function card(p){var pr=Math.round(p.priceYER!=null?p.priceYER:(p.price||0)).toLocaleString('en');return '<div class="chz-hcard" onclick="APP.openProduct(\''+e(p.id)+'\')"><img loading="lazy" src="'+e(p.img||p.image||'')+'"><div class="chz-hn">'+e(p.name)+'</div><div class="chz-hp">'+pr+' YER</div></div>'}
+function row(t,l){return l.length?'<div class="chz-h-title">'+t+'</div><div class="chz-h-row">'+l.map(card).join('')+'</div>':''}
+function ts(p){return p.createdAt&&p.createdAt.seconds?p.createdAt.seconds:0}
+function render(show,force){
+var A=window.APP;if(!A||!A.products||!A.products.length)return;
+var pr=document.getElementById('prods');if(!pr)return;
+var sec=pr.parentNode;var box=document.getElementById('chz-hrows');
+if(!box){box=document.createElement('div');box.id='chz-hrows';sec.parentNode.insertBefore(box,sec)}
+box.style.display=show?'':'none';
+var L=A.products;var k=L.length+':'+(L[0]&&L[0].id);
+if(box._k===k&&!force)return;box._k=k;
+var nw=L.slice().sort(function(a,b){return ts(b)-ts(a)}).slice(0,10);
+var ds=L.filter(function(p){return p.old&&p.price&&p.old>p.price}).slice(0,10);
+box.innerHTML=row('🆕 وصل حديثاً',nw)+row('🏷️ تخفيضات',ds)}
+function hook(){var A=window.APP;if(!A||!A.renderProducts||A.renderProducts._chz)return;
+var o=A.renderProducts;A.renderProducts=function(l){var r=o.apply(this,arguments);try{render(!l,true)}catch(x){console.warn('[chz-rows]',x)}return r};A.renderProducts._chz=1}
+var n=0,t=setInterval(function(){hook();try{render(true,false)}catch(x){}if(++n>12)clearInterval(t)},1000);
+})();
+</script>
+
 </body>
 </html>
