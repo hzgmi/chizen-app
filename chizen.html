@@ -11505,7 +11505,10 @@ var APP={
   
   onUserReady:function(u){
     var self=this;
-    self.state.user={name:u.displayName||'User',email:u.email||'',uid:u.uid};
+    // ★ التمييز بين المستخدم الحقيقي والزائر (Anonymous) ★
+    var isAnonymous = u.isAnonymous || (!u.email && !u.displayName);
+    var displayName = isAnonymous ? 'زائر' : (u.displayName || 'User');
+    self.state.user = { name: displayName, email: u.email || '', uid: u.uid, isGuest: isAnonymous };
     self.updateUserUI();
     // [FCM] onUserReady hook — استعادة التوكن وحفظه بعد الدخول
     try {
