@@ -21709,10 +21709,10 @@ window.__showLoginModal = function(actionLabel, pendingAction){
   var tries = 0;
   var check = setInterval(function(){
     tries++;
-    if (window.APP && window.APP.state) {
+    if (window.APP && window.APP.products && window.APP.products.length > 0) {
       clearInterval(check);
       setTimeout(hideLoader, 250); // 250ms لضمان استقرار أولي
-    } else if (tries > 30) {
+    } else if (tries > 80) {
       clearInterval(check);
       hideLoader(); // إخفاء قسري بعد 3s
     }
