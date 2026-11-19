@@ -12814,6 +12814,19 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   
   goCheckout:function(){
     if(!this.cart.length)return;
+    
+    // ★ حماية: منع الزائر من إتمام الشراء ★
+    var isGuest = !this.state.user || this.state.user.isGuest || !this.state.user.uid;
+    if (isGuest) {
+      if (window.APP && APP.toast) APP.toast('يجب تسجيل الدخول لإتمام الشراء');
+      if (window.APP && APP.showNiceAlert) {
+        APP.showNiceAlert('تسجيل الدخول مطلوب', 'يجب تسجيل الدخول أو إنشاء حساب لإتمام عملية الشراء.', 'تسجيل الدخول');
+      }
+      setTimeout(function() {
+        try { window.location.href = 'client/index.html?login=1'; } catch(e) {}
+      }, 800);
+      return;
+    }
     // ★ تحميل البنوك من الكاش فوراً ★
     if (!this.banks || this.banks.length === 0) {
       try {
