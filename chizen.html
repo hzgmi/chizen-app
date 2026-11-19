@@ -26267,5 +26267,26 @@ var n=0,iv=setInterval(function(){hook();if(!document.getElementById('chz-hrows'
 })();
 </script>
 
+<style id="chz-skel-css">
+html body .v328-removed-card{display:none!important}
+.chz-sk{background:var(--bg-card,#fff);border-radius:16px;padding:8px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.chz-sk i{display:block;border-radius:10px;background:linear-gradient(90deg,#e8e8ee 25%,#f6f6fa 50%,#e8e8ee 75%);background-size:200% 100%;animation:chzsk 1.2s linear infinite}
+html[data-theme="dark"] .chz-sk i,html:not([data-theme="light"]) .chz-sk i{background:linear-gradient(90deg,#1f2640 25%,#2a3354 50%,#1f2640 75%);background-size:200% 100%}
+.chz-sk .a{aspect-ratio:1/1;border-radius:12px}
+.chz-sk .b{height:12px;margin:10px 0 6px;width:80%}
+.chz-sk .c{height:12px;width:50%;margin-bottom:10px}
+.chz-sk .d{height:34px}
+@keyframes chzsk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+<script id="chz-skel-js">
+(function(){
+var H='';for(var i=0;i<6;i++)H+='<div class="chz-sk"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div>';
+function go(){var p=document.getElementById('prods');if(!p)return;var A=window.APP;
+if(A&&A.products&&A.products.length)return;
+if(!p.children.length||p.dataset.chzSk){p.innerHTML=H;p.dataset.chzSk='1'}}
+go();var n=0,iv=setInterval(function(){go();if(++n>40)clearInterval(iv)},250);
+})();
+</script>
+
 </body>
 </html>
