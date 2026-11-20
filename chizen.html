@@ -21340,7 +21340,7 @@ window.__matchCat = function(productCat, selectedCat) {
 <script>
 // ═══ v301: Guest Mode Helpers ═══
 window.__isGuest = function() {
-  if (window.FB && window.FB.currentUser) return false;
+  if (window.FB && window.FB.currentUser && !window.FB.currentUser.isAnonymous) return false;
   return window.__guestActive === true || (localStorage.getItem('chizen_guest') === 'true');
 };
 window.__checkGuest = function(action) {
