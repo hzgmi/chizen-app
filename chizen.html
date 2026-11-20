@@ -26355,5 +26355,34 @@ html body:has(#sc-home.active) #v2-fab{display:flex!important}
 html body #sc-cart .cr{top:4px!important;left:4px!important}
 </style>
 
+<style id="chz-cart-v4">
+html body:not(.chz-on-home) #v2-fab{display:none!important}
+html body.chz-on-home #v2-fab{display:flex!important}
+html body #sc-cart .btn-p[onclick*="goCheckout"]{left:16px!important;right:16px!important;width:auto!important;margin:0 auto!important;max-width:520px!important}
+html body #sc-cart .v336-suggested-scroll{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important;overflow:visible!important;padding-bottom:0!important}
+html body #sc-cart .v336-suggested-card{width:auto!important;flex-shrink:1!important;padding:8px!important;border-radius:16px!important}
+html body #sc-cart .v336-suggested-img{border-radius:12px!important}
+html body #sc-cart .v336-suggested-info{padding:6px 2px 0!important}
+html body #sc-cart .v336-suggested-name{font-size:13px!important}
+html body #sc-cart .v336-suggested-price{font-size:15px!important;margin:2px 0 6px!important}
+html body #sc-cart .chz-sug-btn{width:100%;height:34px;border:none;border-radius:10px;background:#7c3aed;color:#fff;font-size:12px;font-weight:700}
+</style>
+<script id="chz-cart-v4-js">
+(function(){
+function home(){var h=document.getElementById('sc-home');document.body.classList.toggle('chz-on-home',!!(h&&h.classList.contains('active')))}
+function btns(){var A=window.APP;if(!A)return;document.querySelectorAll('#sc-cart .v336-suggested-card').forEach(function(c){
+if(c.querySelector('.chz-sug-btn'))return;var m=(c.getAttribute('onclick')||'').match(/openProduct && APP\.openProduct\('([^']+)'/);if(!m)return;
+var b=document.createElement('button');b.className='chz-sug-btn';b.textContent='🛒 أضف للسلة';
+b.onclick=function(e){e.stopPropagation();A.addCart(m[1],1)};
+c.querySelector('.v336-suggested-info').appendChild(b)})}
+function run(){home();btns()}
+var mo=new MutationObserver(run);
+function start(){document.querySelectorAll('.screen').forEach(function(s){mo.observe(s,{attributes:true,attributeFilter:['class']})});
+var ci=document.getElementById('cart-items');if(ci)mo.observe(ci,{childList:true});run()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+setInterval(run,1500);
+})();
+</script>
+
 </body>
 </html>
