@@ -6794,7 +6794,7 @@ body.chz-auth-ok {
 
 
 
-<style id="v318-guest-css">
+<style media="not all" data-off="v318-guest-css">
   body.chz-is-guest .chz-profile-group {
     background: #1a1a2e !important;
     border: none !important;
@@ -6925,7 +6925,7 @@ body.chz-auth-ok {
   }
 </style>
 
-<style id="v321-guest-profile">
+<style media="not all" data-off="v321-guest-profile">
   .v321-guest-banner {
     margin: 10px 14px 14px;
     background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
@@ -6964,7 +6964,7 @@ body.chz-auth-ok {
   document.documentElement.classList.add("chz-auth-ok");
 </script>
 
-<script id="v323-guest-instant">
+<script type="text/plain" data-off="v323-guest-instant">
   (function(){
     try {
       if (localStorage.getItem("chizen_guest") === "true") {
@@ -21533,7 +21533,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 
 
 
-<script id="v315-guest-class">
+<script type="text/plain" data-off="v315-guest-class">
 (function(){
   function apply(){
     var isGuest = (typeof window.__isGuest === "function") ? window.__isGuest() : false;
@@ -21566,7 +21566,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 
 
 
-<script id="v318-guest-js">
+<script type="text/plain" data-off="v318-guest-js">
 (function(){
   var originalHTML = null;
   
@@ -21658,7 +21658,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
-<script id="v321-guest-profile-js">
+<script type="text/plain" data-off="v321-guest-profile-js">
 (function(){
   function applyGuestProfile(){
     if (typeof window.__isGuest !== "function" || !window.__isGuest()) return;
@@ -26381,6 +26381,36 @@ function start(){document.querySelectorAll('.screen').forEach(function(s){mo.obs
 var ci=document.getElementById('cart-items');if(ci)mo.observe(ci,{childList:true});run()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 setInterval(run,1500);
+})();
+</script>
+
+<style id="chz-guest-css">
+.chz-g-card{margin:12px 16px;padding:16px;border-radius:18px;background:linear-gradient(135deg,#D81B60,#6A1B9A);color:#fff;display:none}
+body.chz-guest .chz-g-card{display:block}
+.chz-g-card b{display:block;font-size:16px;margin-bottom:4px}
+.chz-g-card span{display:block;font-size:12px;opacity:.9;margin-bottom:12px}
+.chz-g-card button{width:100%;height:42px;border:none;border-radius:12px;background:#fff;color:#D81B60;font-size:14px;font-weight:800}
+</style>
+<script id="chz-guest-js">
+(function(){
+var LOCKED=['booking','points','orders','order-detail','notifications','addresses','commerce-new','commerce-mine'];
+function user(){var F=window.FB;return F&&F.currentUser?F.currentUser:(window.firebase&&firebase.auth&&firebase.auth().currentUser)||null}
+window.chzIsGuest=function(){var u=user();return !u||u.isAnonymous===true||(!u.email&&!u.displayName&&!u.phoneNumber)};
+window.__isGuest=window.chzIsGuest;
+function login(t){if(typeof window.__showLoginModal==='function')window.__showLoginModal(t||'للمتابعة');else window.location.href='index.html?login=1'}
+function hook(){var A=window.APP;if(!A||!A.goTab||A.goTab._chzG)return false;var o=A.goTab;
+A.goTab=function(id,el){if(window.chzIsGuest()&&LOCKED.indexOf(id)>-1){login('للوصول إلى هذه الميزة');return}return o.apply(this,arguments)};
+A.goTab._chzG=1;return true}
+function head(){var g=window.chzIsGuest();document.body.classList.toggle('chz-guest',g);
+var n=document.getElementById('chz-prof-name-dynamic');if(!n)return;var w=n.parentNode.querySelector('.chz-prof-welcome');
+if(g){n.textContent='سجّل الآن';if(w)w.textContent='واحصل على المزايا';
+var p=n.closest('.chz-profile-group');if(p&&!p._chzG){p._chzG=1;p.onclick=function(e){e.stopPropagation();e.preventDefault();login('لإنشاء حسابك')}}}}
+function cards(){['sc-profile','sc-settings'].forEach(function(id){var s=document.getElementById(id);if(!s||s.querySelector('.chz-g-card'))return;
+var d=document.createElement('div');d.className='chz-g-card';d.innerHTML='<b>🎁 سجّل الآن واحصل على المزايا</b><span>تتبع طلباتك، اجمع النقاط، واحجز رحلاتك</span><button>تسجيل الدخول</button>';
+d.querySelector('button').onclick=function(){login('لإنشاء حسابك')};s.insertBefore(d,s.firstChild)})}
+function run(){hook();if(document.body){head();cards()}}
+var n=0,iv=setInterval(function(){run();if(++n>40)clearInterval(iv)},500);
+if(window.FB&&FB.auth)FB.auth.onAuthStateChanged(function(){setTimeout(run,150)});
 })();
 </script>
 
