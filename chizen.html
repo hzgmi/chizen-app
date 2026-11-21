@@ -26458,5 +26458,15 @@ var n=0,iv=setInterval(function(){wrap();ui();if(++n>60)clearInterval(iv)},500);
 })();
 </script>
 
+<script id="chz-hdr4-js">
+window.addEventListener('click',function(e){
+var t=e.target;if(!t||!t.closest)return;
+var n=document.getElementById('chz-prof-name-dynamic');var hit=t.closest('.chz-g-card button')||(t.closest('.chz-profile-group')&&n&&n.textContent.trim()==='سجّل الآن');
+if(!hit)return;
+e.stopImmediatePropagation();e.preventDefault();
+if(typeof window.__showLoginModal==='function')window.__showLoginModal('لإنشاء حسابك');else window.location.href='index.html?login=1';
+},true);
+</script>
+
 </body>
 </html>
