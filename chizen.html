@@ -11532,7 +11532,7 @@ var APP={
         setTimeout(loadProducts, 50); // 50ms بدلاً من 500ms
         return;
       }
-      FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();});
+      FB.getUserProfile().then(function(p){if(p&&p.loyaltyPoints)self.state.loyaltyPoints=p.loyaltyPoints;self.updateLoyalty();var nm=p&&(p.name||p.displayName||p.fullName);if(nm&&self.state.user&&!self.state.user.isGuest){self.state.user.name=nm;try{self.updateUserUI()}catch(e){}}});
       FB.listenToProducts(function(d){
         self.products = d || [];
         self.renderProducts();
