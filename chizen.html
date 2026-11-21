@@ -20041,7 +20041,7 @@ document.addEventListener('keydown', function(e) {
         .where('userId', '==', uid)
         .where('read', '==', false)
         .limit(99).get();
-      updateNavBadge('profile', nSnap.size);
+      if (!window.__chzNBLive) updateNavBadge('profile', nSnap.size);
     } catch(e) {
       console.warn('[nav badges]', e.message);
     }
@@ -26493,6 +26493,42 @@ try{localStorage.setItem(key(u),String(n))}catch(e){}
 }
 function hook(){var F=window.FB;if(hooked||!F||!F.auth||!F.auth.onAuthStateChanged)return;hooked=true;F.auth.onAuthStateChanged(function(){setTimeout(start,100)})}
 var k=0,iv=setInterval(function(){hook();start();if(++k>120)clearInterval(iv)},500);
+})();
+</script>
+
+<script id="chz-read-js">
+(function(){
+var CK='chz_notifs_c4';
+function uid(){var F=window.FB;return F&&F.currentUser?F.currentUser.uid:null}
+function gkey(u){return 'chz_gread_'+u}
+function readG(u){try{return JSON.parse(localStorage.getItem(gkey(u))||'[]')}catch(e){return[]}}
+function saveG(u,a){try{localStorage.setItem(gkey(u),JSON.stringify(a))}catch(e){}}
+function paintBadges(n){['notif-badge','notif-b','bn-badge-profile'].forEach(function(id){var el=document.getElementById(id);if(!el)return;if(n>0){el.textContent=n>99?'99+':n;el.style.display='flex'}else{el.style.display='none'}})}
+function mark(id){
+var u=uid();if(!u)return;
+var raw;try{raw=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){raw=null}
+if(!raw||!raw.list)return;
+var item=null;raw.list.forEach(function(n){if(n.id===id)item=n});
+if(!item||item.read!==false)return;
+item.read=true;
+try{localStorage.setItem(CK,JSON.stringify(raw))}catch(e){}
+if(item.userId===u){
+try{window.FB.db.collection('notifications').doc(id).update({read:true}).catch(function(){})}catch(e){}
+}else{
+var g=readG(u);if(g.indexOf(id)<0){g.push(id);saveG(u,g)}
+}
+var left=raw.list.filter(function(n){return n.read===false}).length;
+paintBadges(left);
+try{localStorage.setItem('chz_nb_'+u,String(left))}catch(e){}
+var c=document.getElementById('notif-list');
+if(c&&window.nrfRenderAndListen)window.nrfRenderAndListen(u,c);
+}
+document.addEventListener('click',function(e){
+var t=e.target;if(!t||!t.closest)return;
+if(t.closest('button'))return;
+var card=t.closest('#notif-list [data-id]');if(!card)return;
+mark(card.getAttribute('data-id'));
+},true);
 })();
 </script>
 
