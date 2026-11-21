@@ -26428,5 +26428,35 @@ if(typeof window.__showLoginModal==='function')window.__showLoginModal('لإنش
 },true);
 </script>
 
+<style id="chz-lock-css">
+.chz-g-card{margin:0 16px 14px;padding:16px;border-radius:18px;background:linear-gradient(135deg,#D81B60,#6A1B9A);color:#fff;display:none;box-shadow:0 8px 24px rgba(216,27,96,.25)}
+body.chz-guest .chz-g-card{display:block}
+.chz-g-card b{display:block;font-size:16px;margin-bottom:4px}
+.chz-g-card span{display:block;font-size:12px;opacity:.92;margin-bottom:12px}
+.chz-g-card button{width:100%;height:42px;border:none;border-radius:12px;background:#fff;color:#D81B60;font-size:14px;font-weight:800}
+body.chz-guest .chz-lock{position:relative;opacity:.7}
+body.chz-guest .chz-lock::after{content:"🔒";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px}
+</style>
+<script id="chz-lock-js">
+(function(){
+var L=['booking','points','orders','order-detail','notifications','addresses','commerce-new','commerce-mine'];
+var K=['settings.security','settings.notifications','settings.data','settings.account'];
+function g(){return document.body&&document.body.classList.contains('chz-guest')}
+function login(t){if(typeof window.__showLoginModal==='function')window.__showLoginModal(t);else window.location.href='index.html?login=1'}
+function wrap(){var A=window.APP;if(!A||!A.goTab||A.goTab._chzL)return;var o=A.goTab;
+A.goTab=function(id){if(g()&&L.indexOf(id)>-1){login('للوصول إلى هذه الميزة');return}return o.apply(this,arguments)};A.goTab._chzL=1}
+function ui(){['sc-profile','sc-settings'].forEach(function(id){var s=document.getElementById(id);if(!s||s.querySelector('.chz-g-card'))return;
+var d=document.createElement('div');d.className='chz-g-card';d.innerHTML='<b>🎁 سجّل الآن واحصل على المزايا</b><span>تتبع طلباتك، اجمع النقاط، واحجز رحلاتك</span><button>تسجيل الدخول</button>';
+d.querySelector('button').onclick=function(){login('لإنشاء حسابك')};
+var h=s.querySelector('.sh2');if(h&&h.nextSibling)s.insertBefore(d,h.nextSibling);else s.appendChild(d)});
+var s=document.getElementById('sc-settings');if(!s)return;
+s.querySelectorAll('.sg').forEach(function(x){var t=x.querySelector('.sgt span');var k=t?t.getAttribute('data-i18n'):'';
+if(K.indexOf(k)>-1)x.querySelectorAll('.sit').forEach(function(i){i.classList.add('chz-lock')})})}
+document.addEventListener('click',function(e){if(!g())return;var i=e.target.closest&&e.target.closest('#sc-settings .sit.chz-lock');
+if(i){e.stopImmediatePropagation();e.preventDefault();login('لاستخدام هذا الإعداد')}},true);
+var n=0,iv=setInterval(function(){wrap();ui();if(++n>60)clearInterval(iv)},500);
+})();
+</script>
+
 </body>
 </html>
