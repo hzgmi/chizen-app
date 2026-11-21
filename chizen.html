@@ -6794,7 +6794,7 @@ body.chz-auth-ok {
 
 
 
-<style id="v318-guest-css">
+<style media="not all" data-off="v318-guest-css">
   body.chz-is-guest .chz-profile-group {
     background: #1a1a2e !important;
     border: none !important;
@@ -6925,7 +6925,7 @@ body.chz-auth-ok {
   }
 </style>
 
-<style id="v321-guest-profile">
+<style media="not all" data-off="v321-guest-profile">
   .v321-guest-banner {
     margin: 10px 14px 14px;
     background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
@@ -6964,7 +6964,7 @@ body.chz-auth-ok {
   document.documentElement.classList.add("chz-auth-ok");
 </script>
 
-<script id="v323-guest-instant">
+<script type="text/plain" data-off="v323-guest-instant">
   (function(){
     try {
       if (localStorage.getItem("chizen_guest") === "true") {
@@ -21533,7 +21533,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 
 
 
-<script id="v315-guest-class">
+<script type="text/plain" data-off="v315-guest-class">
 (function(){
   function apply(){
     var isGuest = (typeof window.__isGuest === "function") ? window.__isGuest() : false;
@@ -21566,7 +21566,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 
 
 
-<script id="v318-guest-js">
+<script type="text/plain" data-off="v318-guest-js">
 (function(){
   var originalHTML = null;
   
@@ -21658,7 +21658,7 @@ window.__showLoginModal = function(actionLabel, pendingAction){
 })();
 </script>
 
-<script id="v321-guest-profile-js">
+<script type="text/plain" data-off="v321-guest-profile-js">
 (function(){
   function applyGuestProfile(){
     if (typeof window.__isGuest !== "function" || !window.__isGuest()) return;
@@ -26381,6 +26381,40 @@ function start(){document.querySelectorAll('.screen').forEach(function(s){mo.obs
 var ci=document.getElementById('cart-items');if(ci)mo.observe(ci,{childList:true});run()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 setInterval(run,1500);
+})();
+</script>
+
+<style id="chz-hdr-guest">
+html body.chz-guest .chz-hdr .chz-main{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;padding-left:10px!important;padding-right:10px!important;overflow:hidden!important}
+html body.chz-guest .chz-hdr .chz-profile-group{grid-column:1!important;border-radius:16px!important;padding:6px 14px!important;min-width:0!important;justify-self:start!important}
+html body.chz-guest .chz-hdr .chz-profile-group .chz-prof-avatar{display:none!important}
+html body.chz-guest .chz-hdr .chz-profile-group .chz-prof-name{font-size:14px!important;white-space:nowrap!important}
+html body.chz-guest .chz-hdr .chz-brand-group{grid-column:2!important;min-width:0!important;flex:none!important;overflow:hidden!important}
+html body.chz-guest .chz-hdr .chz-icons-group{grid-column:3!important;justify-self:end!important;flex:none!important;gap:2px!important;padding:4px 6px!important}
+html body.chz-guest .chz-hdr .chz-icons-group .chz-icon-box{width:30px!important;height:30px!important}
+</style>
+<style id="chz-hdr2-css">
+body.chz-guest .chz-prof-welcome{display:none!important}
+body.chz-guest .chz-prof-name{white-space:nowrap!important;font-size:15px!important}
+</style>
+<script id="chz-hdr2-js">
+(function(){
+var ready=false;
+function user(){var F=window.FB;return F&&F.currentUser?F.currentUser:(window.firebase&&firebase.auth&&firebase.auth().currentUser)||null}
+function guest(){var u=user();return !u||u.isAnonymous===true||(!u.email&&!u.displayName&&!u.phoneNumber)}
+function login(){if(typeof window.__showLoginModal==='function')window.__showLoginModal('لإنشاء حسابك');else window.location.href='index.html?login=1'}
+function head(){if(!ready||!document.body)return;var g=guest();document.body.classList.toggle('chz-guest',g);
+var n=document.getElementById('chz-prof-name-dynamic');if(!n)return;
+var p=n.closest('.chz-profile-group');
+if(p&&!p._chzH){p._chzH=1;p.onclick=function(e){if(guest()){e.stopPropagation();e.preventDefault();login()}else if(window.APP&&APP.goTab)APP.goTab('profile')}}
+if(g){if(n.textContent!=='سجّل الآن')n.textContent='سجّل الآن'}
+else if(n.textContent==='سجّل الآن'){var s=window.APP&&APP.state&&APP.state.user;n.textContent=(s&&s.name)||'مرحباً'}}
+var mo=new MutationObserver(function(){head()});
+function obs(){var e=document.getElementById('chz-prof-name-dynamic');if(e&&!e._chzO){e._chzO=1;mo.observe(e,{childList:true,characterData:true,subtree:true})}}
+var hooked=false;
+function wait(){if(!hooked&&window.FB&&FB.auth&&FB.auth.onAuthStateChanged){hooked=true;FB.auth.onAuthStateChanged(function(){ready=true;head()})}}
+var k=0,iv=setInterval(function(){wait();obs();head();if(++k>60)clearInterval(iv)},500);
+setTimeout(function(){ready=true;head()},6000);
 })();
 </script>
 
