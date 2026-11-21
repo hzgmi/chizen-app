@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1A0B2E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231A0B2E'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='900' fill='%23EC4899' text-anchor='middle'>C</text></svg>">
+<title>سياسة الخصوصية — CHIZEN</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg-deep:#1A0B2E;--bg-card:#372254;--bg-elev:#422663;--pink-hot:#EC4899;--pink-light:#F472B6;--orange-sunset:#FB923C;--purple-vibrant:#A855F7;--blue-sky:#38BDF8;--mint:#5EEAD4;--cream:#FEF3E2;--muted:#B8A5D4;--muted-2:#6E5A8A;--nav-border:#3A2560;}
+  html[data-theme="light"]{--bg-deep:#FAF7F2;--bg-card:#FFFFFF;--bg-elev:#F0E8DC;--nav-border:#E5D9C8;--cream:#2A1F3D;--muted:#7A6B95;--muted-2:#A895BF;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{height:100%;}
+  body{height:100%;overflow:hidden;font-family:'Cairo',sans-serif;background:var(--bg-deep);color:var(--cream);}
+  #app{width:100%;height:100vh;height:100dvh;max-width:600px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg-deep);overflow:hidden;position:relative;}
+  .header{padding:14px 20px;display:flex;align-items:center;gap:12px;background:var(--bg-deep);border-bottom:1px solid var(--nav-border);flex-shrink:0;position:sticky;top:0;z-index:10;}
+  .back-btn{width:42px;height:42px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .back-btn svg{width:20px;height:20px;stroke:#FFD1F0;stroke-width:2.5;fill:none;}
+  .page-title{font-size:18px;font-weight:900;color:var(--cream);}
+  .content{flex:1;overflow-y:auto;padding:20px;padding-bottom:60px;-webkit-overflow-scrolling:touch;}
+  .content::-webkit-scrollbar{display:none;}
+  .hero{padding:24px;background:linear-gradient(135deg,rgba(236,72,153,0.15),rgba(168,85,247,0.1));border:1px solid rgba(236,72,153,0.3);border-radius:20px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);border-radius:50%;}
+  .hero-icon{font-size:44px;margin-bottom:10px;position:relative;z-index:2;}
+  .hero-title{font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot),var(--purple-vibrant));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;position:relative;z-index:2;}
+  .hero-date{font-size:11px;color:var(--muted);position:relative;z-index:2;}
+  .section{margin-bottom:22px;}
+  .section-title{font-size:15px;font-weight:900;color:var(--cream);display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--nav-border);}
+  .section-title::before{content:'';width:3px;height:18px;background:linear-gradient(180deg,var(--orange-sunset),var(--pink-hot));border-radius:2px;flex-shrink:0;}
+  .section-num{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;background:linear-gradient(135deg,var(--pink-hot),var(--purple-vibrant));border-radius:7px;color:white;font-size:12px;font-weight:900;padding:0 6px;}
+  .section p{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:10px;}
+  .section ul{padding-right:20px;margin-bottom:10px;list-style:none;}
+  .section li{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:8px;position:relative;padding-right:18px;}
+  .section li::before{content:'✦';position:absolute;right:0;color:var(--pink-light);font-size:11px;top:3px;}
+  .section strong{color:var(--cream);font-weight:900;}
+  .section a{color:var(--pink-light);text-decoration:none;font-weight:700;}
+  .contact-row{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-card);border:1px solid var(--nav-border);border-radius:12px;margin-bottom:10px;text-decoration:none;color:inherit;}
+  .contact-icon{width:42px;height:42px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(168,85,247,0.15));border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
+  .contact-text{flex:1;}
+  .contact-label{font-size:11px;color:var(--muted);font-weight:700;}
+  .contact-value{font-size:13px;color:var(--cream);font-weight:700;margin-top:2px;font-family:monospace;}
+  .footer{text-align:center;padding:30px 0;color:var(--muted-2);font-size:11px;line-height:1.7;}
+  .footer-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--orange-sunset),var(--pink-hot),var(--purple-vibrant));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:6px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="header">
+    <button class="back-btn" onclick="goBack()">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <div class="page-title">سياسة الخصوصية</div>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <div class="hero-icon">🔒</div>
+      <div class="hero-title">سياسة الخصوصية</div>
+      <div class="hero-date">آخر تحديث: يناير 2025</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">1</span> المعلومات التي نجمعها</div>
+      <p>عند إنشاء حساب في CHIZEN، نحتفظ بالمعلومات التالية:</p>
+      <ul>
+        <li><strong>الاسم</strong> — لمعرفة كيف نخاطبك في التطبيق</li>
+        <li><strong>البريد الإلكتروني</strong> — لتسجيل الدخول واستعادة الحساب</li>
+        <li><strong>رقم الجوال</strong> — للتواصل بخصوص طلباتك</li>
+        <li><strong>كلمة المرور</strong> — محفوظة مشفرة في Firebase (لا نراها)</li>
+      </ul>
+      <p>لا نطلب أي معلومات إضافية مثل العنوان أو رقم الهوية أو بيانات بنكية.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">2</span> كيف نستخدم المعلومات</div>
+      <ul>
+        <li>لإنشاء حسابك والتحقق من هويتك عند تسجيل الدخول</li>
+        <li>لمعالجة طلباتك وإرسال تحديثات عنها</li>
+        <li>لإرسال إشعارات العروض والمنتجات الجديدة (يمكنك إيقافها)</li>
+        <li>لحساب نقاط الولاء الخاصة بك</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">3</span> أين تُحفظ بياناتك</div>
+      <p>نستخدم <strong>Google Firebase</strong> لتخزين البيانات — وهي خدمة سحابية آمنة تابعة لشركة Google. البيانات مشفرة أثناء النقل وأثناء التخزين.</p>
+      <p>بعض البيانات (مثل السلة والمفضلة) تُحفظ أيضاً على جهازك لتعمل بدون إنترنت.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">4</span> لا نشارك بياناتك</div>
+      <p>لا نبيع ولا نشارك معلوماتك الشخصية مع أي طرف ثالث. لا نستخدم بياناتك للإعلانات. لا نرسل رسائل تسويقية من طرف آخر.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">5</span> الإعلانات</div>
+      <p>قد يعرض التطبيق إعلانات من Google AdMob أو AdSense لتغطية تكاليف التشغيل. هذه الإعلانات لا تصل إلى معلوماتك الشخصية — تعتمد على نوع الجهاز والمنطقة فقط.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">6</span> الإشعارات</div>
+      <p>عند تفعيل الإشعارات، نرسل لك:</p>
+      <ul>
+        <li>تحديثات حالة طلباتك</li>
+        <li>العروض والمنتجات الجديدة</li>
+        <li>تذكيرات بنقاط الولاء</li>
+      </ul>
+      <p>يمكنك إيقاف الإشعارات في أي وقت من إعدادات التطبيق أو من إعدادات جهازك.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">7</span> حذف بياناتك</div>
+      <p>يمكنك حذف حسابك نهائياً من صفحة الإعدادات في التطبيق. عند الحذف:</p>
+      <ul>
+        <li>تُحذف معلومات حسابك فوراً</li>
+        <li>تُحذف سجل طلباتك</li>
+        <li>تُحذف نقاط الولاء الخاصة بك</li>
+      </ul>
+      <p>احتفظ ببيانات <strong>الطلبات المكتملة</strong> لمدة 90 يوماً بعد الحذف للأغراض المحاسبية فقط، ثم تُحذف تلقائياً.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">8</span> الأمان</div>
+      <p>كلمات المرور محفوظة مشفرة. البيانات تُنقل عبر HTTPS. صلاحيات الوصول محدودة — حتى فريق التطبيق لا يرى كلمات المرور.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">9</span> التغييرات على هذه السياسة</div>
+      <p>إذا حدّثنا السياسة، سنبلغك عبر إشعار داخل التطبيق. استمرارك في استخدام التطبيق يعني موافقتك على النسخة المحدثة.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span class="section-num">10</span> التواصل معنا</div>
+      <p>لأي سؤال أو استفسار عن خصوصيتك:</p>
+      <div id="contact-info"></div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-logo">CHIZEN</div>
+      <div>© 2025 CHIZEN — جميع الحقوق محفوظة</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function goBack() {
+  if (window.history.length > 1) window.history.back();
+  else window.location.href = 'chizen.html';
+}
+
+(function() {
+  var c = {phone:'+967 77 123 4567', whatsapp:'967771234567', email:'support@chizen.com'};
+  try {
+    var s = localStorage.getItem('chizen_contact');
+    if (s) c = Object.assign(c, JSON.parse(s));
+  } catch(e) {}
+
+  var el = document.getElementById('contact-info');
+  if (el) {
+    el.innerHTML =
+      '<div class="contact-row"><div class="contact-icon">📱</div><div class="contact-text"><div class="contact-label">الهاتف</div><div class="contact-value">' + c.phone + '</div></div></div>' +
+      '<div class="contact-row"><div class="contact-icon">💬</div><div class="contact-text"><div class="contact-label">واتساب</div><div class="contact-value">+' + c.whatsapp + '</div></div></div>' +
+      '<div class="contact-row"><div class="contact-icon">✉️</div><div class="contact-text"><div class="contact-label">البريد الإلكتروني</div><div class="contact-value">' + c.email + '</div></div></div>';
+  }
+
+  try {
+    var st = localStorage.getItem('chizen_state');
+    if (st) {
+      var p = JSON.parse(st);
+      if (p.theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.lang = p.lang || 'ar';
+      document.documentElement.dir = (p.lang === 'ar' ? 'rtl' : 'ltr');
+    }
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

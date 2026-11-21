@@ -8,7 +8,7 @@
       // إذا طلب المستخدم الدخول صراحة → ابق في صفحة الدخول
       if (params.get("login") === "1") return;
       // وإلا → الرئيسية (guest mode تلقائياً من v300)
-      window.location.replace("chizen.html");
+      window.location.replace("../chizen.html");
     } catch(e){}
   })();
 </script>
@@ -806,7 +806,7 @@ var AUTH = {
       return false;
     })(), 4000, false).then(function(redirected){
       if (redirected) return;
-      try { FB.onAuthChange(function(user) { if (user && !self._redirecting) { self.redirect(); } }); } catch(e) { console.warn('onAuthChange failed:', e); }
+      try { FB.onAuthChange(function(user) { if (user && !user.isAnonymous && !self._redirecting) { self.redirect(); } }); } catch(e) { console.warn('onAuthChange failed:', e); }
     });
   },
   waitForFB: function(timeout) { return new Promise(function(resolve) { var start = Date.now(); (function check() { if (window.FB && window.FB.ready) return resolve(true); if (Date.now() - start > timeout) return resolve(false); setTimeout(check, 100); })(); }); },
