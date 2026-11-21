@@ -14277,9 +14277,11 @@ window.updateBadges = async function() {
     updateBadge('wishlist-b', favs.length);
     
     // 3) الإشعارات من Firebase
+    if (!window.__chzNBLive) {
     var notifSnap = await FB.db.collection('notifications').where('userId', '==', uid).where('read', '==', false).get();
     updateBadge('notif-badge', notifSnap.size);
     updateBadge('notif-b', notifSnap.size);
+    }
     
   } catch(e) {
     console.log('Badge update error:', e);
@@ -26466,6 +26468,32 @@ if(!hit)return;
 e.stopImmediatePropagation();e.preventDefault();
 if(typeof window.__showLoginModal==='function')window.__showLoginModal('لإنشاء حسابك');else window.location.href='index.html?login=1';
 },true);
+</script>
+
+<script id="chz-nb-js">
+(function(){
+var live=null,uidNow=null,hooked=false;
+function key(u){return 'chz_nb_'+u}
+function paint(n){['notif-badge','notif-b'].forEach(function(id){var el=document.getElementById(id);if(!el)return;if(n>0){el.textContent=n>99?'99+':n;el.style.display='flex'}else{el.style.display='none'}})}
+function stop(){if(live){try{live()}catch(e){}}live=null;uidNow=null;window.__chzNBLive=false}
+function start(){
+var F=window.FB;
+if(!F||!F.db)return;
+if(!F.currentUser){stop();return}
+var u=F.currentUser.uid;
+if(uidNow===u&&live)return;
+stop();uidNow=u;
+try{var c=localStorage.getItem(key(u));if(c!==null)paint(parseInt(c,10)||0)}catch(e){}
+try{
+live=F.db.collection('notifications').where('userId','==',u).where('read','==',false).onSnapshot(function(s){
+window.__chzNBLive=true;var n=s.size;paint(n);
+try{localStorage.setItem(key(u),String(n))}catch(e){}
+},function(){window.__chzNBLive=false});
+}catch(e){window.__chzNBLive=false}
+}
+function hook(){var F=window.FB;if(hooked||!F||!F.auth||!F.auth.onAuthStateChanged)return;hooked=true;F.auth.onAuthStateChanged(function(){setTimeout(start,100)})}
+var k=0,iv=setInterval(function(){hook();start();if(++k>120)clearInterval(iv)},500);
+})();
 </script>
 
 </body>
