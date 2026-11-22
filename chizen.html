@@ -18933,7 +18933,7 @@ document.addEventListener('keydown', function(e) {
     for (var i = 0; i < list.length; i++) {
       var o = list[i];
       var st = o.status || 'pending';
-      if (st === 'cancelled' || st === 'completed' || st === 'delivered') continue;
+      if (['cancelled','completed','delivered','returned'].indexOf(st)>-1 || ['cancelled','completed','delivered','returned'].indexOf(o.workflowStatus)>-1 || ['cancelled','completed','delivered','returned'].indexOf(o.fulfillmentStage)>-1) continue;
       return o;
     }
     return null;
@@ -19003,7 +19003,7 @@ document.addEventListener('keydown', function(e) {
                 (phone && custPhone === phone) ||
                 (email && d.userEmail === email)) {
               var st = d.status || 'pending';
-              if (st === 'cancelled' || st === 'completed') continue;
+              if (['cancelled','completed','delivered','returned'].indexOf(st)>-1 || ['cancelled','completed','delivered','returned'].indexOf(d.workflowStatus)>-1 || ['cancelled','completed','delivered','returned'].indexOf(d.fulfillmentStage)>-1) continue;
               matched = arr[i];
               break;
             }
