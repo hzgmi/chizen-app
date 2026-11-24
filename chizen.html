@@ -19892,7 +19892,7 @@ document.addEventListener('keydown', function(e) {
       .onSnapshot(function(snap) {
         if (snap.metadata.hasPendingWrites) return;
         var products = [];
-        snap.forEach(function(d){ products.push(Object.assign({ id: d.id }, d.data())); });
+        snap.forEach(function(d){ var x = d.data(); if (x.active === false) return; products.push(Object.assign({ id: d.id }, x)); });
         // Only update if actually changed
         var newSig = products.length + '_' + products.map(function(p){ return p.id + (p.price||''); }).join(',');
         if (APP._productsSig === newSig) return;
