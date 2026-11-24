@@ -11967,7 +11967,7 @@ var APP={
 
       // Image
       _html += '<div class="product-img-wrapper">';
-      _html += '<img src="'+esc(p.img||p.image||'')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
+      _html += '<img src="'+esc((p.images&&p.images[0])||p.img||p.image||'')+'" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
       _html += '</div>';
 
       // Rating
@@ -12045,7 +12045,7 @@ var APP={
 
       html += '<div class="flash-card" onclick="APP.openProduct(\'' + esc(p.id) + '\')">';
       html += '<div class="flash-img-wrapper">';
-      html += '<img src="' + esc(p.img || p.image || '') + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
+      html += '<img src="' + esc((p.images&&p.images[0]) || p.img || p.image || '') + '" loading="lazy" onerror="this.src=\'https://via.placeholder.com/200\'">';
       html += '<div class="timer-badge">⏱️ <span class="timer-text">02:45:10</span></div>';
       html += '<div class="flash-tags">';
       if (_disc > 0) html += '<div class="tag-discount">-' + _disc + '%</div>';
