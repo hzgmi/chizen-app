@@ -111,7 +111,12 @@ window.FB = {
 
   getProducts: async function() {
     if (!this.db) return [];
-    try { var snap = await this.db.collection('products').limit(500).get(); var arr = []; snap.forEach(function(doc){ var d = doc.data(); d.id = doc.id; arr.push(d); }); return arr; } catch(e) { return []; }
+    try {
+      var snap = await this.db.collection('products').limit(500).get();
+      var arr = [];
+      snap.forEach(function(doc){ var d = doc.data(); if (d.active === false) return; d.id = doc.id; arr.push(d); });
+      return arr;
+    } catch(e) { return []; }
   },
   addProduct: async function(p) {
     if (!this.db) throw new Error('Firebase not ready');
@@ -183,7 +188,7 @@ window.FB = {
     if (!this.db) { callback([]); return function(){}; }
     return this.db.collection('products').limit(100).onSnapshot(function(snap){
       var arr = [];
-      snap.forEach(function(d){ var p = d.data(); p.id = d.id; arr.push(p); });
+      snap.forEach(function(d){ var p = d.data(); if (p.active === false) return; p.id = d.id; arr.push(p); });
       callback(arr);
     }, function(err){ console.warn('[listenToProducts]', err.message); callback([]); });
   },
