@@ -233,3 +233,45 @@ exports.getChatHistory = functions.region(REGION).https.onCall(async (data, cont
   }); });
   return { messages: messages.reverse() };
 });
+
+/* ═══ 6. chatAI — OpenRouter proxy with server-side key ═══ */
+exports.chatAI = functions.region(REGION).runWith({ timeoutSeconds: 30, memory: '256MB' })
+  .https.onCall(async (data, context) => {
+    const message = String(data.message || '').trim();
+    const lang = data.lang === 'en' ? 'en' : 'ar';
+    if (message.length < 2 || message.length > 500) {
+      throw new functions.https.HttpsError('invalid-argument', lang === 'en' ? 'Message must be 2-500 chars' : 'الرسالة 2-500 حرف');
+    }
+    const key = functions.config().openrouter?.key;
+    if (!key) {
+      throw new functions.https.HttpsError('failed-precondition', 'AI key is not configured on the server');
+    }
+    // Preserve guest-chat behavior; add App Check / rate limiting before public launch.
+    try {
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${key}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://chizen.netlify.app',
+          'X-Title': 'CHIZEN Store'
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.0-flash-lite-preview-02-05:free',
+          messages: [
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: message }
+          ]
+        })
+      });
+      if (!res.ok) throw new Error('openrouter_failed');
+      const result = await res.json();
+      const answer = result?.choices?.[0]?.message?.content || '';
+      if (!answer) throw new Error('empty_answer');
+      return { answer };
+    } catch (e) {
+      console.error('chatAI:', e.message);
+      if (e instanceof functions.https.HttpsError) throw e;
+      throw new functions.https.HttpsError('internal', lang === 'en' ? 'AI unavailable' : 'المساعد غير متاح حالياً');
+    }
+  });

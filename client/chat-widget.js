@@ -216,37 +216,26 @@
   }
 
   
-  const OPENROUTER_KEY = "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";
   
   async function callOpenRouterAI(userMessage) {
-    try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${OPENROUTER_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://chizen.netlify.app",
-          "X-Title": "CHIZEN Store"
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.0-flash-lite-preview-02-05:free",
-          messages: [
-            { role: "system", content: "أنت مساعد ذكي لمتجر CHIZEN اليمني. مهمتك فقط الإجابة على أسئلة العملاء المتعلقة بالمتجر (منتجات، أقسام، أسعار، دفع، توصيل، تتبع طلبات). إذا سألك المستخدم أي سؤال خارجي، اعتذر بلطف وقل: 'أنا مساعد شيزن، وأقدر أساعدك فقط في كل ما يتعلق بتسوقك من تطبيقنا الحبيب.' ولا تجب على أي سؤال خارجي مهما حدث. تحدث بلهجة ودودة." },
-            { role: "user", content: userMessage }
-          ]
-        })
+  try {
+    if (!window.firebase || !firebase.functions) {
+      await new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions-compat.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
       });
-
-      const data = await response.json();
-      if (data.choices && data.choices.length > 0) {
-        return data.choices[0].message.content;
-      }
-      return "عذراً، لم أفهم سؤالك. جرب تسأل بطريقة تانية.";
-    } catch (error) {
-      console.error("AI Error:", error);
-      return "عذراً، هناك مشكلة في الاتصال حالياً. حاول لاحقاً.";
     }
+    var callable = firebase.functions().httpsCallable('chatAI');
+    var result = await callable({ message: userMessage, lang: state.currentLang });
+    return result.data.answer;
+  } catch (error) {
+    console.error('AI Error:', error);
+    return 'عذراً، حدث خطأ أثناء الاتصال بالمساعد. حاول مرة أخرى لاحقاً.';
   }
+}
 
 async function sendMessage() {
     if (state.isTyping) return;
