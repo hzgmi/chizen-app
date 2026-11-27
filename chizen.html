@@ -12673,8 +12673,8 @@ chQty:function(d){this.currentQty=Math.max(1,this.currentQty+d);document.getElem
       var p=APP.getProduct(i.id);
       if(!p)return'';
       var specsHtml = '';
-      if (i.size) specsHtml += '<span style="display:inline-block; padding:2px 8px; background:rgba(197,160,89,0.15); border:1px solid #C5A059; border-radius:6px; color:#C5A059; font-size:10px; font-weight:800; margin-right:4px;">📏 ' + i.size + '</span>';
-      if (i.color) specsHtml += '<span style="display:inline-block; padding:2px 8px; background:rgba(168,85,247,0.15); border:1px solid #a855f7; border-radius:6px; color:#a855f7; font-size:10px; font-weight:800; margin-right:4px;">🎨 ' + i.color + '</span>';
+      if (i.size) specsHtml += '<span style="display:inline-block; padding:2px 8px; background:rgba(197,160,89,0.15); border:1px solid #C5A059; border-radius:6px; color:#C5A059; font-size:10px; font-weight:800; margin-right:4px;">📏 ' + esc(i.size) + '</span>';
+      if (i.color) { var _cdisp = (typeof i.color === 'object' && i.color) ? (i.color.name || i.color.hex || '') : i.color; specsHtml += '<span style="display:inline-block; padding:2px 8px; background:rgba(168,85,247,0.15); border:1px solid #a855f7; border-radius:6px; color:#a855f7; font-size:10px; font-weight:800; margin-right:4px;">🎨 ' + esc(_cdisp) + '</span>'; }
       
       return '<div class="ci"><div class="ci-i"><img src="'+esc(p.img||'')+'"><div class="cr" onclick="APP.removeCartFull(\''+esc(p.id)+'\',\''+(i.size||'')+'\',\''+(i.color||'')+'\')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div><div class="ci-inf"><div class="ci-n">'+esc(p.name)+'</div>' + (specsHtml ? '<div style="margin:4px 0;">' + specsHtml + '</div>' : '') + '<div class="ci-p">'+esc(p.price)+' ر.س</div><div class="qty"><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',-1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">−</button><span class="qn">'+i.qty+'</span><button class="qb" onclick="APP.chCartQtyFull(\''+esc(p.id)+'\',1,\''+(i.size||'')+'\',\''+(i.color||'')+'\')">+</button></div></div></div>';
     }).join('');
@@ -23937,6 +23937,8 @@ if (window.APP.products && window.APP.products.length) {
     this.currentProd = p;
     window.currentProduct = p;
     this.currentQty = 1;
+    this.selectedSize = null;
+    this.selectedColor = null;
 
     // إخفاء كل الشاشات وإظهار صفحة التفاصيل
     document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
@@ -24102,7 +24104,7 @@ window.APP.closeDetailsNew = function() {
     var descEl = document.getElementById('det-new-desc');
     if (descWrapper && descEl) {
       var hasFeatures = p.features && p.features.length > 0;
-      if (hasFeatures || !p.desc) {
+      if (!p.desc || !String(p.desc).trim()) {
         descWrapper.style.display = 'none';
       } else {
         descWrapper.style.display = 'block';
