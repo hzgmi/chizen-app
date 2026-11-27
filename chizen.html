@@ -403,6 +403,8 @@ window.addEventListener("error", function(e) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <script>
+// ═══ تُنفَّذ بعد تعريف APP (كانت تُنفَّذ قبله فتفشل كل الدوال أدناه) ═══
+document.addEventListener('DOMContentLoaded', function() {
 APP.renderColorSwatches = function(p) {
     const container = document.getElementById('color-swatches-container');
     if (!container) return;
@@ -547,8 +549,8 @@ APP.getTimelineHtml = function(status) {
 
 
 
-// ربط الأزرار (مرة واحدة بس)
-document.addEventListener('DOMContentLoaded', function() {
+// ربط الأزرار (مرة واحدة بس) — نسجّل مباشرة لأننا داخل DOMContentLoaded
+(function() {
     document.body.addEventListener('click', function(e) {
         const el = e.target.closest('.cat-card, .c-item, .category-item');
         if (!el) return;
@@ -567,7 +569,7 @@ document.addEventListener('DOMContentLoaded', function() {
             APP.openCategoryPage(key, name);
         }
     }, true);
-});
+})();
 
 
 
@@ -647,6 +649,7 @@ APP.closeCategory = function() {
     APP.goTab('home');
 };
 
+}); // نهاية DOMContentLoaded
 </script>
 <link rel="stylesheet" href="client/chat-widget.css">
 <link rel="stylesheet" href="client/chizen-ai-v2.css">
