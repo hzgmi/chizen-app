@@ -16814,7 +16814,7 @@ document.addEventListener('keydown', function(e) {
         var icon = b.icon || '🏦';
         var name = (b.name || 'طريقة الدفع').replace(/'/g, "\\'");
         var account = ((b.account && b.account.trim() ? b.account : 'اضغط لعرض التفاصيل')).replace(/'/g, "\\'");
-        return '<div class="bank-item" onclick="window.showBankDetails(\'' + (b.id || '') + '\',\'' + name + '\',\'' + account + '\',\'' + color + '\',\'' + icon + '\')" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--chz-bg2);border:2px solid var(--chz-border);border-radius:14px;cursor:pointer;margin-bottom:8px;">' +
+        return '<div class="bank-item" onclick="APP.selectBank(\'' + (b.id || '') + '\'); window.showBankDetails(\'' + (b.id || '') + '\',\'' + name + '\',\'' + account + '\',\'' + color + '\',\'' + icon + '\')" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--chz-bg2);border:2px solid var(--chz-border);border-radius:14px;cursor:pointer;margin-bottom:8px;">' +
           '<div style="width:48px;height:48px;border-radius:14px;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">' + icon + '</div>' +
           '<div style="flex:1;min-width:0;">' +
             '<div style="font-weight:900;font-size:14px;color:var(--chz-text);margin-bottom:3px;">' + (b.name || 'طريقة الدفع') + '</div>' +
