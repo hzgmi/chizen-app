@@ -24359,6 +24359,20 @@ window.APP.closeDetailsNew = function() {
       try {
         var colorSection = document.getElementById("det-new-colors-section");
         var colorsContainer = document.getElementById("det-new-colors");
+        // ★ اشتقاق الألوان من imageColors إن لم تكن colors موجودة (منتجات قديمة) ★
+        if (!p.colors || !Array.isArray(p.colors) || p.colors.length === 0) {
+          if (Array.isArray(p.imageColors) && p.imageColors.length > 0) {
+            var __seen = {};
+            var __derived = [];
+            p.imageColors.forEach(function(ic) {
+              if (!ic || !ic.color) return;
+              var c = ic.color;
+              var key = (c.name || '') + '|' + (c.hex || '');
+              if (!__seen[key]) { __seen[key] = true; __derived.push({ name: c.name || c.hex || '', hex: c.hex || c.name || '#888' }); }
+            });
+            if (__derived.length > 0) p.colors = __derived;
+          }
+        }
         if (colorSection && colorsContainer && p && p.colors && Array.isArray(p.colors) && p.colors.length > 0) {
           var firstColor = p.colors[0];
           var isObjectFormat = (typeof firstColor === "object" && firstColor !== null && (firstColor.hex || firstColor.name));
