@@ -12939,11 +12939,15 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
     if(!name||phone.length<8){this.showNiceAlert("👤 أكمل بياناتك","الاسم ورقم الهاتف مطلوبان (8 أرقام على الأقل)","","co-name");return;}
     
     // 3. فحص طريقة الدفع
-    if(!this.selectedBank){this.showNiceAlert("💳 اختر طريقة الدفع","اختر البنك الذي حوّلت إليه المبلغ","openBanks");return;}
+    var isCod = (window.APP.selectedPaymentMethod === 'cod');
+    if(!isCod && !this.selectedBank){this.showNiceAlert("💳 اختر طريقة الدفع","اختر البنك الذي حوّلت إليه المبلغ","openBanks");return;}
     
-    // 4. فحص السند (إجباري)
-    var receiptFile = document.getElementById("co-receipt") ? document.getElementById("co-receipt").files[0] : null;
-    if(!receiptFile){this.showNiceAlert("📸 صورة السند مطلوبة","ارفع صورة سند الحوالة أولاً — لا يمكن إتمام الطلب بدونها","","co-receipt");return;}
+    // 4. فحص السند (إجباري فقط للتحويل البنكي)
+    var receiptFile = null;
+    if(!isCod){
+      receiptFile = document.getElementById("co-receipt") ? document.getElementById("co-receipt").files[0] : null;
+      if(!receiptFile){this.showNiceAlert("📸 صورة السند مطلوبة","ارفع صورة سند الحوالة أولاً — لا يمكن إتمام الطلب بدونها","","co-receipt");return;}
+    }
     
     // 5. تجهيز البيانات
     var oid="CH-"+Date.now().toString().slice(-8);
@@ -13005,37 +13009,45 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
       }
       
       var receiptUrl = null;
-      try {
-        var compressed = await compressReceipt(receiptFile);
-        console.log('[V297] Original:', Math.round(receiptFile.size/1024) + 'KB → Compressed:', Math.round(compressed.size/1024) + 'KB');
-        
-        var res = await fetch(WORKER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'image/jpeg' },
-          body: compressed
-        });
-        if(!res.ok) throw new Error('استجابة ' + res.status);
-        var result = await res.json();
-        if(result.url) receiptUrl = result.url;
-      } catch(upErr) {
-        console.error('[V297] upload error:', upErr);
+      if (!isCod) {
+        try {
+          var compressed = await compressReceipt(receiptFile);
+          console.log('[V297] Original:', Math.round(receiptFile.size/1024) + 'KB → Compressed:', Math.round(compressed.size/1024) + 'KB');
+          
+          var res = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'image/jpeg' },
+            body: compressed
+          });
+          if (!res.ok) throw new Error('استجابة ' + res.status);
+          var result = await res.json();
+          if (result.url) receiptUrl = result.url;
+        } catch (upErr) {
+          console.error('[V297] upload error:', upErr);
+        }
+        if (!receiptUrl) { throw new Error('فشل رفع السند — تحقق من الإنترنت'); }
       }
-      if(!receiptUrl) { throw new Error('فشل رفع السند — تحقق من الإنترنت'); }
       
       // 8. بناء الطلب
-      var bankId=(this.selectedBank&&typeof this.selectedBank==="object")?(this.selectedBank.id||this.selectedBank.name):this.selectedBank;
-      var bankName=(this.selectedBank&&typeof this.selectedBank==="object")?(this.selectedBank.name||bankId):bankId;
-      var order={
-        id:oid,
-        customerId:(window.FB && FB.currentUser) ? FB.currentUser.uid : "",
-        customerName:name,name:name,phone:phone,pickup:pickup,
-        bank:this.selectedBank,
-        subtotal:sub,discount:disc,shipping:shipF,total:total,
-        items:JSON.parse(JSON.stringify(this.cart)),
-        status:"pending",workflowStatus:"awaiting_verification",
-        payment:{status:"pending",method:bankName,bankId:bankId,bankName:bankName,receiptUrl:receiptUrl,verifiedBy:null,verifiedAt:null,note:""},
-        categories:{},allCategoriesConfirmed:false,sentToCustomer:false,
-        categoryStatus:{},categoryNotes:{},categoryConfirmedBy:{},categoryConfirmedAt:{}
+      // 8. بناء الطلب
+      var bankId, bankName;
+      if (isCod) { bankId = 'cod'; bankName = 'دفع عند الاستلام'; }
+      else {
+        bankId = (this.selectedBank && typeof this.selectedBank === "object") ? (this.selectedBank.id || this.selectedBank.name) : this.selectedBank;
+        bankName = (this.selectedBank && typeof this.selectedBank === "object") ? (this.selectedBank.name || bankId) : bankId;
+      }
+      var order = {
+        id: oid,
+        customerId: (window.FB && FB.currentUser) ? FB.currentUser.uid : "",
+        customerName: name, name: name, phone: phone, pickup: pickup,
+        bank: isCod ? 'cod' : this.selectedBank,
+        subtotal: sub, discount: disc, shipping: shipF, total: total,
+        items: JSON.parse(JSON.stringify(this.cart)),
+        status: "pending",
+        workflowStatus: isCod ? "awaiting_categories" : "awaiting_verification",
+        payment: { status: isCod ? "cod" : "pending", method: isCod ? "cod" : bankName, bankId: bankId, bankName: bankName, receiptUrl: receiptUrl, verifiedBy: null, verifiedAt: null, note: "" },
+        categories: {}, allCategoriesConfirmed: false, sentToCustomer: false,
+        categoryStatus: {}, categoryNotes: {}, categoryConfirmedBy: {}, categoryConfirmedAt: {}
       };
       for(var catKey in catGroups){
         order.categories[catKey]={items:catGroups[catKey].items,subtotal:catGroups[catKey].subtotal,status:"pending",confirmedBy:null,confirmedAt:null,note:""};
