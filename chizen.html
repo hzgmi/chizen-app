@@ -23985,21 +23985,6 @@ if (window.APP.products && window.APP.products.length) {
       }
     }, 50);
     // -----------------------------------------------------
-window.APP.closeDetailsNew = function() {
-    var det = document.getElementById('sc-details-new');
-    if (det) det.classList.remove('active');
-    document.body.classList.remove("in-details"); // ★ Exit immersive
-    document.querySelectorAll('.screen').forEach(function(s) {
-      if (s.id === 'sc-home') s.classList.add('active');
-    });
-  };
-
-  window.APP.changeDetailsQty = function(d) {
-    this.currentQty = Math.max(1, (this.currentQty || 1) + d);
-    var qtyEl = document.getElementById('det-new-qty');
-    if (qtyEl) qtyEl.textContent = this.currentQty;
-    if (typeof window.APP.updateSummary === "function") window.APP.updateSummary();
-  };
 
   window.fillDetailsNew = function(p) {
     // الصورة
