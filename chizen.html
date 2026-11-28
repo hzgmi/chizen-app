@@ -12914,21 +12914,15 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   },
 
   selectBank:function(id){
-    this.selectedBank = id;
+    var bank = (this.banks||[]).find(function(b){ return b && b.id === id; });
+    this.selectedBank = bank || id;
+    document.querySelectorAll('.bank').forEach(function(b){ b.classList.remove('selected'); });
+    document.querySelectorAll('.bank').forEach(function(b, i){ if (APP.banks && APP.banks[i] && APP.banks[i].id === id) b.classList.add('selected'); });
     var msg = document.getElementById('bank-confirm-msg');
-    if (msg) {
-      var bank = this.banks.find(function(b) { return b.id === id; });
-      if (bank) {
-        msg.style.display = 'block';
-        msg.textContent = '✅ تم اختيار ' + bank.name + '. يرجى تحويل المبلغ إلى الحساب المذكور.';
-      }
+    if (msg && bank) {
+      msg.style.display = 'block';
+      msg.textContent = '✅ تم اختيار ' + bank.name + '. يرجى تحويل المبلغ إلى الحساب المذكور.';
     }
-  },
-  
-  selectBank:function(id){
-    this.selectedBank=id;
-    document.querySelectorAll('.bank').forEach(function(b){b.classList.remove('selected');});
-    document.querySelectorAll('.bank').forEach(function(b,i){if(APP.banks[i]&&APP.banks[i].id===id)b.classList.add('selected');});
   },
   
   confirmOrder:async function(){
@@ -13038,7 +13032,7 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
         subtotal:sub,discount:disc,shipping:shipF,total:total,
         items:JSON.parse(JSON.stringify(this.cart)),
         status:"pending",workflowStatus:"awaiting_verification",
-        payment:{status:"pending",method:this.selectedBank,bankId:bankId,bankName:bankName,receiptUrl:receiptUrl,verifiedBy:null,verifiedAt:null,note:""},
+        payment:{status:"pending",method:bankName,bankId:bankId,bankName:bankName,receiptUrl:receiptUrl,verifiedBy:null,verifiedAt:null,note:""},
         categories:{},allCategoriesConfirmed:false,sentToCustomer:false,
         categoryStatus:{},categoryNotes:{},categoryConfirmedBy:{},categoryConfirmedAt:{}
       };
