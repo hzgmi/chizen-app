@@ -12914,10 +12914,11 @@ html+='<div class="tb">'+cp+'<div class="tr"><span><span data-i18n="cart.subtota
   },
 
   selectBank:function(id){
-    var bank = (this.banks||[]).find(function(b){ return b && b.id === id; });
+    var banks = (this.banks && this.banks.length) ? this.banks : (typeof DEFAULT_BANKS !== 'undefined' ? DEFAULT_BANKS : []);
+    var bank = banks.find(function(b){ return b && b.id === id; });
     this.selectedBank = bank || id;
     document.querySelectorAll('.bank').forEach(function(b){ b.classList.remove('selected'); });
-    document.querySelectorAll('.bank').forEach(function(b, i){ if (APP.banks && APP.banks[i] && APP.banks[i].id === id) b.classList.add('selected'); });
+    document.querySelectorAll('.bank').forEach(function(b, i){ if (banks[i] && banks[i].id === id) b.classList.add('selected'); });
     var msg = document.getElementById('bank-confirm-msg');
     if (msg && bank) {
       msg.style.display = 'block';
